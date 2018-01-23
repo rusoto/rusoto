@@ -151,7 +151,7 @@ pub struct CreateFleetRequest {
     /// <p>Unique name of the image used by the fleet.</p>
     #[serde(rename = "ImageName")]
     pub image_name: String,
-    /// <p>The instance type of compute resources for the fleet. Fleet instances are launched from this instance type. Available instance types are:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> </ul>
+    /// <p><p>The instance type of compute resources for the fleet. Fleet instances are launched from this instance type. Available instance types are:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> </ul></p>
     #[serde(rename = "InstanceType")]
     pub instance_type: String,
     /// <p>The maximum time for which a streaming session can run. The input can be any numeric value in seconds between 600 and 57600.</p>
@@ -813,7 +813,7 @@ pub struct UpdateFleetRequest {
     #[serde(rename = "ImageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_name: Option<String>,
-    /// <p>The instance type of compute resources for the fleet. Fleet instances are launched from this instance type. Available instance types are:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> </ul>
+    /// <p><p>The instance type of compute resources for the fleet. Fleet instances are launched from this instance type. Available instance types are:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> </ul></p>
     #[serde(rename = "InstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_type: Option<String>,
@@ -885,15 +885,15 @@ pub struct VpcConfig {
 /// Errors returned by AssociateFleet
 #[derive(Debug, PartialEq)]
 pub enum AssociateFleetError {
-    ///<p>An API error occurred. Wait a few minutes and try again.</p>
+    /// <p>An API error occurred. Wait a few minutes and try again.</p>
     ConcurrentModification(String),
-    ///<p>The image does not support storage connectors.</p>
+    /// <p>The image does not support storage connectors.</p>
     IncompatibleImage(String),
-    ///<p>The requested limit exceeds the permitted limit for an account.</p>
+    /// <p>The requested limit exceeds the permitted limit for an account.</p>
     LimitExceeded(String),
-    ///<p>The attempted operation is not permitted.</p>
+    /// <p>The attempted operation is not permitted.</p>
     OperationNotPermitted(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -987,9 +987,9 @@ impl Error for AssociateFleetError {
 /// Errors returned by CreateDirectoryConfig
 #[derive(Debug, PartialEq)]
 pub enum CreateDirectoryConfigError {
-    ///<p>The requested limit exceeds the permitted limit for an account.</p>
+    /// <p>The requested limit exceeds the permitted limit for an account.</p>
     LimitExceeded(String),
-    ///<p>The specified resource already exists.</p>
+    /// <p>The specified resource already exists.</p>
     ResourceAlreadyExists(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1075,21 +1075,21 @@ impl Error for CreateDirectoryConfigError {
 /// Errors returned by CreateFleet
 #[derive(Debug, PartialEq)]
 pub enum CreateFleetError {
-    ///<p>An API error occurred. Wait a few minutes and try again.</p>
+    /// <p>An API error occurred. Wait a few minutes and try again.</p>
     ConcurrentModification(String),
-    ///<p>The image does not support storage connectors.</p>
+    /// <p>The image does not support storage connectors.</p>
     IncompatibleImage(String),
-    ///<p>Indicates an incorrect combination of parameters, or a missing parameter.</p>
+    /// <p>Indicates an incorrect combination of parameters, or a missing parameter.</p>
     InvalidParameterCombination(String),
-    ///<p>The specified role is invalid.</p>
+    /// <p>The specified role is invalid.</p>
     InvalidRole(String),
-    ///<p>The requested limit exceeds the permitted limit for an account.</p>
+    /// <p>The requested limit exceeds the permitted limit for an account.</p>
     LimitExceeded(String),
-    ///<p>The specified resource already exists.</p>
+    /// <p>The specified resource already exists.</p>
     ResourceAlreadyExists(String),
-    ///<p>The specified resource exists and is not in use, but isn't available.</p>
+    /// <p>The specified resource exists and is not in use, but isn't available.</p>
     ResourceNotAvailable(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1195,17 +1195,17 @@ impl Error for CreateFleetError {
 /// Errors returned by CreateStack
 #[derive(Debug, PartialEq)]
 pub enum CreateStackError {
-    ///<p>An API error occurred. Wait a few minutes and try again.</p>
+    /// <p>An API error occurred. Wait a few minutes and try again.</p>
     ConcurrentModification(String),
-    ///<p>Indicates an incorrect combination of parameters, or a missing parameter.</p>
+    /// <p>Indicates an incorrect combination of parameters, or a missing parameter.</p>
     InvalidParameterCombination(String),
-    ///<p>The specified role is invalid.</p>
+    /// <p>The specified role is invalid.</p>
     InvalidRole(String),
-    ///<p>The requested limit exceeds the permitted limit for an account.</p>
+    /// <p>The requested limit exceeds the permitted limit for an account.</p>
     LimitExceeded(String),
-    ///<p>The specified resource already exists.</p>
+    /// <p>The specified resource already exists.</p>
     ResourceAlreadyExists(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1303,13 +1303,13 @@ impl Error for CreateStackError {
 /// Errors returned by CreateStreamingURL
 #[derive(Debug, PartialEq)]
 pub enum CreateStreamingURLError {
-    ///<p>Indicates an incorrect combination of parameters, or a missing parameter.</p>
+    /// <p>Indicates an incorrect combination of parameters, or a missing parameter.</p>
     InvalidParameterCombination(String),
-    ///<p>The attempted operation is not permitted.</p>
+    /// <p>The attempted operation is not permitted.</p>
     OperationNotPermitted(String),
-    ///<p>The specified resource exists and is not in use, but isn't available.</p>
+    /// <p>The specified resource exists and is not in use, but isn't available.</p>
     ResourceNotAvailable(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1403,9 +1403,9 @@ impl Error for CreateStreamingURLError {
 /// Errors returned by DeleteDirectoryConfig
 #[derive(Debug, PartialEq)]
 pub enum DeleteDirectoryConfigError {
-    ///<p>The specified resource is in use.</p>
+    /// <p>The specified resource is in use.</p>
     ResourceInUse(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1489,11 +1489,11 @@ impl Error for DeleteDirectoryConfigError {
 /// Errors returned by DeleteFleet
 #[derive(Debug, PartialEq)]
 pub enum DeleteFleetError {
-    ///<p>An API error occurred. Wait a few minutes and try again.</p>
+    /// <p>An API error occurred. Wait a few minutes and try again.</p>
     ConcurrentModification(String),
-    ///<p>The specified resource is in use.</p>
+    /// <p>The specified resource is in use.</p>
     ResourceInUse(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1579,11 +1579,11 @@ impl Error for DeleteFleetError {
 /// Errors returned by DeleteStack
 #[derive(Debug, PartialEq)]
 pub enum DeleteStackError {
-    ///<p>An API error occurred. Wait a few minutes and try again.</p>
+    /// <p>An API error occurred. Wait a few minutes and try again.</p>
     ConcurrentModification(String),
-    ///<p>The specified resource is in use.</p>
+    /// <p>The specified resource is in use.</p>
     ResourceInUse(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1669,7 +1669,7 @@ impl Error for DeleteStackError {
 /// Errors returned by DescribeDirectoryConfigs
 #[derive(Debug, PartialEq)]
 pub enum DescribeDirectoryConfigsError {
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1749,7 +1749,7 @@ impl Error for DescribeDirectoryConfigsError {
 /// Errors returned by DescribeFleets
 #[derive(Debug, PartialEq)]
 pub enum DescribeFleetsError {
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1827,7 +1827,7 @@ impl Error for DescribeFleetsError {
 /// Errors returned by DescribeImages
 #[derive(Debug, PartialEq)]
 pub enum DescribeImagesError {
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1905,7 +1905,7 @@ impl Error for DescribeImagesError {
 /// Errors returned by DescribeSessions
 #[derive(Debug, PartialEq)]
 pub enum DescribeSessionsError {
-    ///<p>Indicates an incorrect combination of parameters, or a missing parameter.</p>
+    /// <p>Indicates an incorrect combination of parameters, or a missing parameter.</p>
     InvalidParameterCombination(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1985,7 +1985,7 @@ impl Error for DescribeSessionsError {
 /// Errors returned by DescribeStacks
 #[derive(Debug, PartialEq)]
 pub enum DescribeStacksError {
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2063,11 +2063,11 @@ impl Error for DescribeStacksError {
 /// Errors returned by DisassociateFleet
 #[derive(Debug, PartialEq)]
 pub enum DisassociateFleetError {
-    ///<p>An API error occurred. Wait a few minutes and try again.</p>
+    /// <p>An API error occurred. Wait a few minutes and try again.</p>
     ConcurrentModification(String),
-    ///<p>The specified resource is in use.</p>
+    /// <p>The specified resource is in use.</p>
     ResourceInUse(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2375,13 +2375,13 @@ impl Error for ListAssociatedStacksError {
 /// Errors returned by StartFleet
 #[derive(Debug, PartialEq)]
 pub enum StartFleetError {
-    ///<p>An API error occurred. Wait a few minutes and try again.</p>
+    /// <p>An API error occurred. Wait a few minutes and try again.</p>
     ConcurrentModification(String),
-    ///<p>The requested limit exceeds the permitted limit for an account.</p>
+    /// <p>The requested limit exceeds the permitted limit for an account.</p>
     LimitExceeded(String),
-    ///<p>The attempted operation is not permitted.</p>
+    /// <p>The attempted operation is not permitted.</p>
     OperationNotPermitted(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2469,9 +2469,9 @@ impl Error for StartFleetError {
 /// Errors returned by StopFleet
 #[derive(Debug, PartialEq)]
 pub enum StopFleetError {
-    ///<p>An API error occurred. Wait a few minutes and try again.</p>
+    /// <p>An API error occurred. Wait a few minutes and try again.</p>
     ConcurrentModification(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2551,11 +2551,11 @@ impl Error for StopFleetError {
 /// Errors returned by UpdateDirectoryConfig
 #[derive(Debug, PartialEq)]
 pub enum UpdateDirectoryConfigError {
-    ///<p>An API error occurred. Wait a few minutes and try again.</p>
+    /// <p>An API error occurred. Wait a few minutes and try again.</p>
     ConcurrentModification(String),
-    ///<p>The specified resource is in use.</p>
+    /// <p>The specified resource is in use.</p>
     ResourceInUse(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2645,23 +2645,23 @@ impl Error for UpdateDirectoryConfigError {
 /// Errors returned by UpdateFleet
 #[derive(Debug, PartialEq)]
 pub enum UpdateFleetError {
-    ///<p>An API error occurred. Wait a few minutes and try again.</p>
+    /// <p>An API error occurred. Wait a few minutes and try again.</p>
     ConcurrentModification(String),
-    ///<p>The image does not support storage connectors.</p>
+    /// <p>The image does not support storage connectors.</p>
     IncompatibleImage(String),
-    ///<p>Indicates an incorrect combination of parameters, or a missing parameter.</p>
+    /// <p>Indicates an incorrect combination of parameters, or a missing parameter.</p>
     InvalidParameterCombination(String),
-    ///<p>The specified role is invalid.</p>
+    /// <p>The specified role is invalid.</p>
     InvalidRole(String),
-    ///<p>The requested limit exceeds the permitted limit for an account.</p>
+    /// <p>The requested limit exceeds the permitted limit for an account.</p>
     LimitExceeded(String),
-    ///<p>The attempted operation is not permitted.</p>
+    /// <p>The attempted operation is not permitted.</p>
     OperationNotPermitted(String),
-    ///<p>The specified resource is in use.</p>
+    /// <p>The specified resource is in use.</p>
     ResourceInUse(String),
-    ///<p>The specified resource exists and is not in use, but isn't available.</p>
+    /// <p>The specified resource exists and is not in use, but isn't available.</p>
     ResourceNotAvailable(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2771,17 +2771,17 @@ impl Error for UpdateFleetError {
 /// Errors returned by UpdateStack
 #[derive(Debug, PartialEq)]
 pub enum UpdateStackError {
-    ///<p>The image does not support storage connectors.</p>
+    /// <p>The image does not support storage connectors.</p>
     IncompatibleImage(String),
-    ///<p>Indicates an incorrect combination of parameters, or a missing parameter.</p>
+    /// <p>Indicates an incorrect combination of parameters, or a missing parameter.</p>
     InvalidParameterCombination(String),
-    ///<p>The specified role is invalid.</p>
+    /// <p>The specified role is invalid.</p>
     InvalidRole(String),
-    ///<p>The requested limit exceeds the permitted limit for an account.</p>
+    /// <p>The requested limit exceeds the permitted limit for an account.</p>
     LimitExceeded(String),
-    ///<p>The specified resource is in use.</p>
+    /// <p>The specified resource is in use.</p>
     ResourceInUse(String),
-    ///<p>The specified resource was not found.</p>
+    /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2878,127 +2878,127 @@ impl Error for UpdateStackError {
 }
 /// Trait representing the capabilities of the Amazon AppStream API. Amazon AppStream clients implement this trait.
 pub trait AppStream {
-    #[doc = "<p>Associate a fleet to a stack.</p>"]
+    /// <p>Associate a fleet to a stack.</p>
     fn associate_fleet(
         &self,
         input: &AssociateFleetRequest,
     ) -> Result<AssociateFleetResult, AssociateFleetError>;
 
-    #[doc = "<p>Creates a directory configuration with the given parameters.</p>"]
+    /// <p>Creates a directory configuration with the given parameters.</p>
     fn create_directory_config(
         &self,
         input: &CreateDirectoryConfigRequest,
     ) -> Result<CreateDirectoryConfigResult, CreateDirectoryConfigError>;
 
-    #[doc = "<p>Creates a new fleet.</p>"]
+    /// <p>Creates a new fleet.</p>
     fn create_fleet(
         &self,
         input: &CreateFleetRequest,
     ) -> Result<CreateFleetResult, CreateFleetError>;
 
-    #[doc = "<p>Create a new stack.</p>"]
+    /// <p>Create a new stack.</p>
     fn create_stack(
         &self,
         input: &CreateStackRequest,
     ) -> Result<CreateStackResult, CreateStackError>;
 
-    #[doc="<p>Creates a URL to start an AppStream 2.0 streaming session for a user. By default, the URL is valid only for 1 minute from the time that it is generated.</p>"]
+    /// <p>Creates a URL to start an AppStream 2.0 streaming session for a user. By default, the URL is valid only for 1 minute from the time that it is generated.</p>
     fn create_streaming_url(
         &self,
         input: &CreateStreamingURLRequest,
     ) -> Result<CreateStreamingURLResult, CreateStreamingURLError>;
 
-    #[doc = "<p>Deletes the directory configuration with the given parameters.</p>"]
+    /// <p>Deletes the directory configuration with the given parameters.</p>
     fn delete_directory_config(
         &self,
         input: &DeleteDirectoryConfigRequest,
     ) -> Result<DeleteDirectoryConfigResult, DeleteDirectoryConfigError>;
 
-    #[doc = "<p>Deletes a fleet.</p>"]
+    /// <p>Deletes a fleet.</p>
     fn delete_fleet(
         &self,
         input: &DeleteFleetRequest,
     ) -> Result<DeleteFleetResult, DeleteFleetError>;
 
-    #[doc="<p>Deletes the stack. After this operation completes, the environment can no longer be activated, and any reservations made for the stack are released.</p>"]
+    /// <p>Deletes the stack. After this operation completes, the environment can no longer be activated, and any reservations made for the stack are released.</p>
     fn delete_stack(
         &self,
         input: &DeleteStackRequest,
     ) -> Result<DeleteStackResult, DeleteStackError>;
 
-    #[doc = "<p>Returns a list describing the specified directory configurations.</p>"]
+    /// <p>Returns a list describing the specified directory configurations.</p>
     fn describe_directory_configs(
         &self,
         input: &DescribeDirectoryConfigsRequest,
     ) -> Result<DescribeDirectoryConfigsResult, DescribeDirectoryConfigsError>;
 
-    #[doc="<p>If fleet names are provided, this operation describes the specified fleets; otherwise, all the fleets in the account are described.</p>"]
+    /// <p>If fleet names are provided, this operation describes the specified fleets; otherwise, all the fleets in the account are described.</p>
     fn describe_fleets(
         &self,
         input: &DescribeFleetsRequest,
     ) -> Result<DescribeFleetsResult, DescribeFleetsError>;
 
-    #[doc="<p>Describes the images. If a list of names is not provided, all images in your account are returned. This operation does not return a paginated result.</p>"]
+    /// <p>Describes the images. If a list of names is not provided, all images in your account are returned. This operation does not return a paginated result.</p>
     fn describe_images(
         &self,
         input: &DescribeImagesRequest,
     ) -> Result<DescribeImagesResult, DescribeImagesError>;
 
-    #[doc="<p>Describes the streaming sessions for a stack and a fleet. If a user ID is provided, this operation returns streaming sessions for only that user. To retrieve the next set of items, pass this value for the <code>nextToken</code> parameter in a subsequent call to this operation. If an authentication type is not provided, the operation defaults to users authenticated using a streaming URL.</p>"]
+    /// <p>Describes the streaming sessions for a stack and a fleet. If a user ID is provided, this operation returns streaming sessions for only that user. To retrieve the next set of items, pass this value for the <code>nextToken</code> parameter in a subsequent call to this operation. If an authentication type is not provided, the operation defaults to users authenticated using a streaming URL.</p>
     fn describe_sessions(
         &self,
         input: &DescribeSessionsRequest,
     ) -> Result<DescribeSessionsResult, DescribeSessionsError>;
 
-    #[doc="<p>If stack names are not provided, this operation describes the specified stacks; otherwise, all stacks in the account are described. To retrieve the next set of items, pass the <code>nextToken</code> value in a subsequent call to this operation.</p>"]
+    /// <p>If stack names are not provided, this operation describes the specified stacks; otherwise, all stacks in the account are described. To retrieve the next set of items, pass the <code>nextToken</code> value in a subsequent call to this operation.</p>
     fn describe_stacks(
         &self,
         input: &DescribeStacksRequest,
     ) -> Result<DescribeStacksResult, DescribeStacksError>;
 
-    #[doc = "<p>Disassociates a fleet from a stack.</p>"]
+    /// <p>Disassociates a fleet from a stack.</p>
     fn disassociate_fleet(
         &self,
         input: &DisassociateFleetRequest,
     ) -> Result<DisassociateFleetResult, DisassociateFleetError>;
 
-    #[doc = "<p>This operation immediately stops a streaming session.</p>"]
+    /// <p>This operation immediately stops a streaming session.</p>
     fn expire_session(
         &self,
         input: &ExpireSessionRequest,
     ) -> Result<ExpireSessionResult, ExpireSessionError>;
 
-    #[doc = "<p>Lists all fleets associated with the stack.</p>"]
+    /// <p>Lists all fleets associated with the stack.</p>
     fn list_associated_fleets(
         &self,
         input: &ListAssociatedFleetsRequest,
     ) -> Result<ListAssociatedFleetsResult, ListAssociatedFleetsError>;
 
-    #[doc = "<p>Lists all stacks to which the specified fleet is associated.</p>"]
+    /// <p>Lists all stacks to which the specified fleet is associated.</p>
     fn list_associated_stacks(
         &self,
         input: &ListAssociatedStacksRequest,
     ) -> Result<ListAssociatedStacksResult, ListAssociatedStacksError>;
 
-    #[doc = "<p>Starts a fleet.</p>"]
+    /// <p>Starts a fleet.</p>
     fn start_fleet(&self, input: &StartFleetRequest) -> Result<StartFleetResult, StartFleetError>;
 
-    #[doc = "<p>Stops a fleet.</p>"]
+    /// <p>Stops a fleet.</p>
     fn stop_fleet(&self, input: &StopFleetRequest) -> Result<StopFleetResult, StopFleetError>;
 
-    #[doc = "<p>Updates the directory configuration with the given parameters.</p>"]
+    /// <p>Updates the directory configuration with the given parameters.</p>
     fn update_directory_config(
         &self,
         input: &UpdateDirectoryConfigRequest,
     ) -> Result<UpdateDirectoryConfigResult, UpdateDirectoryConfigError>;
 
-    #[doc="<p>Updates an existing fleet. All the attributes except the fleet name can be updated in the <b>STOPPED</b> state. When a fleet is in the <b>RUNNING</b> state, only <code>DisplayName</code> and <code>ComputeCapacity</code> can be updated. A fleet cannot be updated in a status of <b>STARTING</b> or <b>STOPPING</b>.</p>"]
+    /// <p>Updates an existing fleet. All the attributes except the fleet name can be updated in the <b>STOPPED</b> state. When a fleet is in the <b>RUNNING</b> state, only <code>DisplayName</code> and <code>ComputeCapacity</code> can be updated. A fleet cannot be updated in a status of <b>STARTING</b> or <b>STOPPING</b>.</p>
     fn update_fleet(
         &self,
         input: &UpdateFleetRequest,
     ) -> Result<UpdateFleetResult, UpdateFleetError>;
 
-    #[doc = "<p>Updates the specified fields in the stack with the specified name.</p>"]
+    /// <p>Updates the specified fields in the stack with the specified name.</p>
     fn update_stack(
         &self,
         input: &UpdateStackRequest,
@@ -3034,7 +3034,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc = "<p>Associate a fleet to a stack.</p>"]
+    /// <p>Associate a fleet to a stack.</p>
     fn associate_fleet(
         &self,
         input: &AssociateFleetRequest,
@@ -3068,7 +3068,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a directory configuration with the given parameters.</p>"]
+    /// <p>Creates a directory configuration with the given parameters.</p>
     fn create_directory_config(
         &self,
         input: &CreateDirectoryConfigRequest,
@@ -3105,7 +3105,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a new fleet.</p>"]
+    /// <p>Creates a new fleet.</p>
     fn create_fleet(
         &self,
         input: &CreateFleetRequest,
@@ -3139,7 +3139,7 @@ where
         }
     }
 
-    #[doc = "<p>Create a new stack.</p>"]
+    /// <p>Create a new stack.</p>
     fn create_stack(
         &self,
         input: &CreateStackRequest,
@@ -3173,7 +3173,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a URL to start an AppStream 2.0 streaming session for a user. By default, the URL is valid only for 1 minute from the time that it is generated.</p>"]
+    /// <p>Creates a URL to start an AppStream 2.0 streaming session for a user. By default, the URL is valid only for 1 minute from the time that it is generated.</p>
     fn create_streaming_url(
         &self,
         input: &CreateStreamingURLRequest,
@@ -3207,7 +3207,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the directory configuration with the given parameters.</p>"]
+    /// <p>Deletes the directory configuration with the given parameters.</p>
     fn delete_directory_config(
         &self,
         input: &DeleteDirectoryConfigRequest,
@@ -3244,7 +3244,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a fleet.</p>"]
+    /// <p>Deletes a fleet.</p>
     fn delete_fleet(
         &self,
         input: &DeleteFleetRequest,
@@ -3278,7 +3278,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the stack. After this operation completes, the environment can no longer be activated, and any reservations made for the stack are released.</p>"]
+    /// <p>Deletes the stack. After this operation completes, the environment can no longer be activated, and any reservations made for the stack are released.</p>
     fn delete_stack(
         &self,
         input: &DeleteStackRequest,
@@ -3312,7 +3312,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns a list describing the specified directory configurations.</p>"]
+    /// <p>Returns a list describing the specified directory configurations.</p>
     fn describe_directory_configs(
         &self,
         input: &DescribeDirectoryConfigsRequest,
@@ -3349,7 +3349,7 @@ where
         }
     }
 
-    #[doc="<p>If fleet names are provided, this operation describes the specified fleets; otherwise, all the fleets in the account are described.</p>"]
+    /// <p>If fleet names are provided, this operation describes the specified fleets; otherwise, all the fleets in the account are described.</p>
     fn describe_fleets(
         &self,
         input: &DescribeFleetsRequest,
@@ -3383,7 +3383,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the images. If a list of names is not provided, all images in your account are returned. This operation does not return a paginated result.</p>"]
+    /// <p>Describes the images. If a list of names is not provided, all images in your account are returned. This operation does not return a paginated result.</p>
     fn describe_images(
         &self,
         input: &DescribeImagesRequest,
@@ -3417,7 +3417,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the streaming sessions for a stack and a fleet. If a user ID is provided, this operation returns streaming sessions for only that user. To retrieve the next set of items, pass this value for the <code>nextToken</code> parameter in a subsequent call to this operation. If an authentication type is not provided, the operation defaults to users authenticated using a streaming URL.</p>"]
+    /// <p>Describes the streaming sessions for a stack and a fleet. If a user ID is provided, this operation returns streaming sessions for only that user. To retrieve the next set of items, pass this value for the <code>nextToken</code> parameter in a subsequent call to this operation. If an authentication type is not provided, the operation defaults to users authenticated using a streaming URL.</p>
     fn describe_sessions(
         &self,
         input: &DescribeSessionsRequest,
@@ -3451,7 +3451,7 @@ where
         }
     }
 
-    #[doc="<p>If stack names are not provided, this operation describes the specified stacks; otherwise, all stacks in the account are described. To retrieve the next set of items, pass the <code>nextToken</code> value in a subsequent call to this operation.</p>"]
+    /// <p>If stack names are not provided, this operation describes the specified stacks; otherwise, all stacks in the account are described. To retrieve the next set of items, pass the <code>nextToken</code> value in a subsequent call to this operation.</p>
     fn describe_stacks(
         &self,
         input: &DescribeStacksRequest,
@@ -3485,7 +3485,7 @@ where
         }
     }
 
-    #[doc = "<p>Disassociates a fleet from a stack.</p>"]
+    /// <p>Disassociates a fleet from a stack.</p>
     fn disassociate_fleet(
         &self,
         input: &DisassociateFleetRequest,
@@ -3519,7 +3519,7 @@ where
         }
     }
 
-    #[doc = "<p>This operation immediately stops a streaming session.</p>"]
+    /// <p>This operation immediately stops a streaming session.</p>
     fn expire_session(
         &self,
         input: &ExpireSessionRequest,
@@ -3553,7 +3553,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists all fleets associated with the stack.</p>"]
+    /// <p>Lists all fleets associated with the stack.</p>
     fn list_associated_fleets(
         &self,
         input: &ListAssociatedFleetsRequest,
@@ -3590,7 +3590,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists all stacks to which the specified fleet is associated.</p>"]
+    /// <p>Lists all stacks to which the specified fleet is associated.</p>
     fn list_associated_stacks(
         &self,
         input: &ListAssociatedStacksRequest,
@@ -3627,7 +3627,7 @@ where
         }
     }
 
-    #[doc = "<p>Starts a fleet.</p>"]
+    /// <p>Starts a fleet.</p>
     fn start_fleet(&self, input: &StartFleetRequest) -> Result<StartFleetResult, StartFleetError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
@@ -3658,7 +3658,7 @@ where
         }
     }
 
-    #[doc = "<p>Stops a fleet.</p>"]
+    /// <p>Stops a fleet.</p>
     fn stop_fleet(&self, input: &StopFleetRequest) -> Result<StopFleetResult, StopFleetError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
@@ -3691,7 +3691,7 @@ where
         }
     }
 
-    #[doc = "<p>Updates the directory configuration with the given parameters.</p>"]
+    /// <p>Updates the directory configuration with the given parameters.</p>
     fn update_directory_config(
         &self,
         input: &UpdateDirectoryConfigRequest,
@@ -3728,7 +3728,7 @@ where
         }
     }
 
-    #[doc="<p>Updates an existing fleet. All the attributes except the fleet name can be updated in the <b>STOPPED</b> state. When a fleet is in the <b>RUNNING</b> state, only <code>DisplayName</code> and <code>ComputeCapacity</code> can be updated. A fleet cannot be updated in a status of <b>STARTING</b> or <b>STOPPING</b>.</p>"]
+    /// <p>Updates an existing fleet. All the attributes except the fleet name can be updated in the <b>STOPPED</b> state. When a fleet is in the <b>RUNNING</b> state, only <code>DisplayName</code> and <code>ComputeCapacity</code> can be updated. A fleet cannot be updated in a status of <b>STARTING</b> or <b>STOPPING</b>.</p>
     fn update_fleet(
         &self,
         input: &UpdateFleetRequest,
@@ -3762,7 +3762,7 @@ where
         }
     }
 
-    #[doc = "<p>Updates the specified fields in the stack with the specified name.</p>"]
+    /// <p>Updates the specified fields in the stack with the specified name.</p>
     fn update_stack(
         &self,
         input: &UpdateStackRequest,

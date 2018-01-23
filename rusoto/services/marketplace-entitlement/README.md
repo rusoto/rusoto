@@ -23,7 +23,7 @@ To use `rusoto_marketplace_entitlement` in your application, add it as a depende
 
 ```toml
 [dependencies]
-rusoto_marketplace_entitlement = "0.30.0"
+rusoto_marketplace_entitlement = "0.31.0"
 ```
 
 ## Contributing

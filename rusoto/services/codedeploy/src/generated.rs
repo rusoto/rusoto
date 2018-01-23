@@ -58,7 +58,7 @@ pub struct AlarmConfiguration {
     #[serde(rename = "enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    /// <p>Indicates whether a deployment should continue if information about the current state of alarms cannot be retrieved from Amazon CloudWatch. The default value is false.</p> <ul> <li> <p>true: The deployment will proceed even if alarm status information can't be retrieved from Amazon CloudWatch.</p> </li> <li> <p>false: The deployment will stop if alarm status information can't be retrieved from Amazon CloudWatch.</p> </li> </ul>
+    /// <p><p>Indicates whether a deployment should continue if information about the current state of alarms cannot be retrieved from Amazon CloudWatch. The default value is false.</p> <ul> <li> <p>true: The deployment will proceed even if alarm status information can&#39;t be retrieved from Amazon CloudWatch.</p> </li> <li> <p>false: The deployment will stop if alarm status information can&#39;t be retrieved from Amazon CloudWatch.</p> </li> </ul></p>
     #[serde(rename = "ignorePollAlarmFailure")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ignore_poll_alarm_failure: Option<bool>,
@@ -265,7 +265,7 @@ pub struct BlueGreenDeploymentConfiguration {
 /// <p>Information about whether instances in the original environment are terminated when a blue/green deployment is successful.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct BlueInstanceTerminationOption {
-    /// <p>The action to take on instances in the original environment after a successful blue/green deployment.</p> <ul> <li> <p>TERMINATE: Instances are terminated after a specified wait time.</p> </li> <li> <p>KEEP_ALIVE: Instances are left running after they are deregistered from the load balancer and removed from the deployment group.</p> </li> </ul>
+    /// <p><p>The action to take on instances in the original environment after a successful blue/green deployment.</p> <ul> <li> <p>TERMINATE: Instances are terminated after a specified wait time.</p> </li> <li> <p>KEEP_ALIVE: Instances are left running after they are deregistered from the load balancer and removed from the deployment group.</p> </li> </ul></p>
     #[serde(rename = "action")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action: Option<String>,
@@ -413,7 +413,7 @@ pub struct CreateDeploymentInput {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Information about how AWS CodeDeploy handles files that already exist in a deployment target location but weren't part of the previous successful deployment.</p> <p>The fileExistsBehavior parameter takes any of the following values:</p> <ul> <li> <p>DISALLOW: The deployment fails. This is also the default behavior if no option is specified.</p> </li> <li> <p>OVERWRITE: The version of the file from the application revision currently being deployed replaces the version already on the instance.</p> </li> <li> <p>RETAIN: The version of the file already on the instance is kept and used as part of the new deployment.</p> </li> </ul>
+    /// <p><p>Information about how AWS CodeDeploy handles files that already exist in a deployment target location but weren&#39;t part of the previous successful deployment.</p> <p>The fileExistsBehavior parameter takes any of the following values:</p> <ul> <li> <p>DISALLOW: The deployment fails. This is also the default behavior if no option is specified.</p> </li> <li> <p>OVERWRITE: The version of the file from the application revision currently being deployed replaces the version already on the instance.</p> </li> <li> <p>RETAIN: The version of the file already on the instance is kept and used as part of the new deployment.</p> </li> </ul></p>
     #[serde(rename = "fileExistsBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_exists_behavior: Option<String>,
@@ -609,7 +609,7 @@ pub struct DeploymentInfo {
     #[serde(rename = "createTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<f64>,
-    /// <p>The means by which the deployment was created:</p> <ul> <li> <p>user: A user created the deployment.</p> </li> <li> <p>autoscaling: Auto Scaling created the deployment.</p> </li> <li> <p>codeDeployRollback: A rollback process created the deployment.</p> </li> </ul>
+    /// <p><p>The means by which the deployment was created:</p> <ul> <li> <p>user: A user created the deployment.</p> </li> <li> <p>autoscaling: Auto Scaling created the deployment.</p> </li> <li> <p>codeDeployRollback: A rollback process created the deployment.</p> </li> </ul></p>
     #[serde(rename = "creator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creator: Option<String>,
@@ -641,7 +641,7 @@ pub struct DeploymentInfo {
     #[serde(rename = "errorInformation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_information: Option<ErrorInformation>,
-    /// <p>Information about how AWS CodeDeploy handles files that already exist in a deployment target location but weren't part of the previous successful deployment.</p> <ul> <li> <p>DISALLOW: The deployment fails. This is also the default behavior if no option is specified.</p> </li> <li> <p>OVERWRITE: The version of the file from the application revision currently being deployed replaces the version already on the instance.</p> </li> <li> <p>RETAIN: The version of the file already on the instance is kept and used as part of the new deployment.</p> </li> </ul>
+    /// <p><p>Information about how AWS CodeDeploy handles files that already exist in a deployment target location but weren&#39;t part of the previous successful deployment.</p> <ul> <li> <p>DISALLOW: The deployment fails. This is also the default behavior if no option is specified.</p> </li> <li> <p>OVERWRITE: The version of the file from the application revision currently being deployed replaces the version already on the instance.</p> </li> <li> <p>RETAIN: The version of the file already on the instance is kept and used as part of the new deployment.</p> </li> </ul></p>
     #[serde(rename = "fileExistsBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_exists_behavior: Option<String>,
@@ -719,7 +719,7 @@ pub struct DeploymentOverview {
 /// <p>Information about how traffic is rerouted to instances in a replacement environment in a blue/green deployment.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct DeploymentReadyOption {
-    /// <p>Information about when to reroute traffic from an original environment to a replacement environment in a blue/green deployment.</p> <ul> <li> <p>CONTINUE_DEPLOYMENT: Register new instances with the load balancer immediately after the new application revision is installed on the instances in the replacement environment.</p> </li> <li> <p>STOP_DEPLOYMENT: Do not register new instances with load balancer unless traffic is rerouted manually. If traffic is not rerouted manually before the end of the specified wait period, the deployment status is changed to Stopped.</p> </li> </ul>
+    /// <p><p>Information about when to reroute traffic from an original environment to a replacement environment in a blue/green deployment.</p> <ul> <li> <p>CONTINUE<em>DEPLOYMENT: Register new instances with the load balancer immediately after the new application revision is installed on the instances in the replacement environment.</p> </li> <li> <p>STOP</em>DEPLOYMENT: Do not register new instances with load balancer unless traffic is rerouted manually. If traffic is not rerouted manually before the end of the specified wait period, the deployment status is changed to Stopped.</p> </li> </ul></p>
     #[serde(rename = "actionOnTimeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action_on_timeout: Option<String>,
@@ -753,7 +753,7 @@ pub struct DeregisterOnPremisesInstanceInput {
 /// <p>Diagnostic information about executable scripts that are part of a deployment.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Diagnostics {
-    /// <p>The associated error code:</p> <ul> <li> <p>Success: The specified script ran.</p> </li> <li> <p>ScriptMissing: The specified script was not found in the specified location.</p> </li> <li> <p>ScriptNotExecutable: The specified script is not a recognized executable file type.</p> </li> <li> <p>ScriptTimedOut: The specified script did not finish running in the specified time period.</p> </li> <li> <p>ScriptFailed: The specified script failed to run as expected.</p> </li> <li> <p>UnknownError: The specified script did not run for an unknown reason.</p> </li> </ul>
+    /// <p><p>The associated error code:</p> <ul> <li> <p>Success: The specified script ran.</p> </li> <li> <p>ScriptMissing: The specified script was not found in the specified location.</p> </li> <li> <p>ScriptNotExecutable: The specified script is not a recognized executable file type.</p> </li> <li> <p>ScriptTimedOut: The specified script did not finish running in the specified time period.</p> </li> <li> <p>ScriptFailed: The specified script failed to run as expected.</p> </li> <li> <p>UnknownError: The specified script did not run for an unknown reason.</p> </li> </ul></p>
     #[serde(rename = "errorCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_code: Option<String>,
@@ -778,7 +778,7 @@ pub struct EC2TagFilter {
     #[serde(rename = "Key")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    /// <p>The tag filter type:</p> <ul> <li> <p>KEY_ONLY: Key only.</p> </li> <li> <p>VALUE_ONLY: Value only.</p> </li> <li> <p>KEY_AND_VALUE: Key and value.</p> </li> </ul>
+    /// <p><p>The tag filter type:</p> <ul> <li> <p>KEY<em>ONLY: Key only.</p> </li> <li> <p>VALUE</em>ONLY: Value only.</p> </li> <li> <p>KEY<em>AND</em>VALUE: Key and value.</p> </li> </ul></p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -809,7 +809,7 @@ pub struct ELBInfo {
 /// <p>Information about a deployment error.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ErrorInformation {
-    /// <p>For information about additional error codes, see <a href="http://docs.aws.amazon.com/codedeploy/latest/userguide/error-codes.html">Error Codes for AWS CodeDeploy</a> in the <a href="http://docs.aws.amazon.com/codedeploy/latest/userguide">AWS CodeDeploy User Guide</a>.</p> <p>The error code:</p> <ul> <li> <p>APPLICATION_MISSING: The application was missing. This error code will most likely be raised if the application is deleted after the deployment is created but before it is started.</p> </li> <li> <p>DEPLOYMENT_GROUP_MISSING: The deployment group was missing. This error code will most likely be raised if the deployment group is deleted after the deployment is created but before it is started.</p> </li> <li> <p>HEALTH_CONSTRAINTS: The deployment failed on too many instances to be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>HEALTH_CONSTRAINTS_INVALID: The revision cannot be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>IAM_ROLE_MISSING: The service role cannot be accessed.</p> </li> <li> <p>IAM_ROLE_PERMISSIONS: The service role does not have the correct permissions.</p> </li> <li> <p>INTERNAL_ERROR: There was an internal error.</p> </li> <li> <p>NO_EC2_SUBSCRIPTION: The calling account is not subscribed to the Amazon EC2 service.</p> </li> <li> <p>NO_INSTANCES: No instance were specified, or no instance can be found.</p> </li> <li> <p>OVER_MAX_INSTANCES: The maximum number of instance was exceeded.</p> </li> <li> <p>THROTTLED: The operation was throttled because the calling account exceeded the throttling limits of one or more AWS services.</p> </li> <li> <p>TIMEOUT: The deployment has timed out.</p> </li> <li> <p>REVISION_MISSING: The revision ID was missing. This error code will most likely be raised if the revision is deleted after the deployment is created but before it is started.</p> </li> </ul>
+    /// <p><p>For information about additional error codes, see <a href="http://docs.aws.amazon.com/codedeploy/latest/userguide/error-codes.html">Error Codes for AWS CodeDeploy</a> in the <a href="http://docs.aws.amazon.com/codedeploy/latest/userguide">AWS CodeDeploy User Guide</a>.</p> <p>The error code:</p> <ul> <li> <p>APPLICATION<em>MISSING: The application was missing. This error code will most likely be raised if the application is deleted after the deployment is created but before it is started.</p> </li> <li> <p>DEPLOYMENT</em>GROUP<em>MISSING: The deployment group was missing. This error code will most likely be raised if the deployment group is deleted after the deployment is created but before it is started.</p> </li> <li> <p>HEALTH</em>CONSTRAINTS: The deployment failed on too many instances to be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>HEALTH<em>CONSTRAINTS</em>INVALID: The revision cannot be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>IAM<em>ROLE</em>MISSING: The service role cannot be accessed.</p> </li> <li> <p>IAM<em>ROLE</em>PERMISSIONS: The service role does not have the correct permissions.</p> </li> <li> <p>INTERNAL<em>ERROR: There was an internal error.</p> </li> <li> <p>NO</em>EC2<em>SUBSCRIPTION: The calling account is not subscribed to the Amazon EC2 service.</p> </li> <li> <p>NO</em>INSTANCES: No instance were specified, or no instance can be found.</p> </li> <li> <p>OVER<em>MAX</em>INSTANCES: The maximum number of instance was exceeded.</p> </li> <li> <p>THROTTLED: The operation was throttled because the calling account exceeded the throttling limits of one or more AWS services.</p> </li> <li> <p>TIMEOUT: The deployment has timed out.</p> </li> <li> <p>REVISION_MISSING: The revision ID was missing. This error code will most likely be raised if the revision is deleted after the deployment is created but before it is started.</p> </li> </ul></p>
     #[serde(rename = "code")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub code: Option<String>,
@@ -996,7 +996,7 @@ pub struct GitHubLocation {
 /// <p>Information about the instances that belong to the replacement environment in a blue/green deployment.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct GreenFleetProvisioningOption {
-    /// <p>The method used to add instances to a replacement environment.</p> <ul> <li> <p>DISCOVER_EXISTING: Use instances that already exist or will be created manually.</p> </li> <li> <p>COPY_AUTO_SCALING_GROUP: Use settings from a specified Auto Scaling group to define and create instances in a new Auto Scaling group.</p> </li> </ul>
+    /// <p><p>The method used to add instances to a replacement environment.</p> <ul> <li> <p>DISCOVER<em>EXISTING: Use instances that already exist or will be created manually.</p> </li> <li> <p>COPY</em>AUTO<em>SCALING</em>GROUP: Use settings from a specified Auto Scaling group to define and create instances in a new Auto Scaling group.</p> </li> </ul></p>
     #[serde(rename = "action")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action: Option<String>,
@@ -1046,7 +1046,7 @@ pub struct InstanceSummary {
     #[serde(rename = "instanceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
-    /// <p>Information about which environment an instance belongs to in a blue/green deployment.</p> <ul> <li> <p>BLUE: The instance is part of the original environment.</p> </li> <li> <p>GREEN: The instance is part of the replacement environment.</p> </li> </ul>
+    /// <p><p>Information about which environment an instance belongs to in a blue/green deployment.</p> <ul> <li> <p>BLUE: The instance is part of the original environment.</p> </li> <li> <p>GREEN: The instance is part of the replacement environment.</p> </li> </ul></p>
     #[serde(rename = "instanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_type: Option<String>,
@@ -1058,7 +1058,7 @@ pub struct InstanceSummary {
     #[serde(rename = "lifecycleEvents")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lifecycle_events: Option<Vec<LifecycleEvent>>,
-    /// <p>The deployment status for this instance:</p> <ul> <li> <p>Pending: The deployment is pending for this instance.</p> </li> <li> <p>In Progress: The deployment is in progress for this instance.</p> </li> <li> <p>Succeeded: The deployment has succeeded for this instance.</p> </li> <li> <p>Failed: The deployment has failed for this instance.</p> </li> <li> <p>Skipped: The deployment has been skipped for this instance.</p> </li> <li> <p>Unknown: The deployment status is unknown for this instance.</p> </li> </ul>
+    /// <p><p>The deployment status for this instance:</p> <ul> <li> <p>Pending: The deployment is pending for this instance.</p> </li> <li> <p>In Progress: The deployment is in progress for this instance.</p> </li> <li> <p>Succeeded: The deployment has succeeded for this instance.</p> </li> <li> <p>Failed: The deployment has failed for this instance.</p> </li> <li> <p>Skipped: The deployment has been skipped for this instance.</p> </li> <li> <p>Unknown: The deployment status is unknown for this instance.</p> </li> </ul></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1104,7 +1104,7 @@ pub struct LifecycleEvent {
     #[serde(rename = "startTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
-    /// <p>The deployment lifecycle event status:</p> <ul> <li> <p>Pending: The deployment lifecycle event is pending.</p> </li> <li> <p>InProgress: The deployment lifecycle event is in progress.</p> </li> <li> <p>Succeeded: The deployment lifecycle event ran successfully.</p> </li> <li> <p>Failed: The deployment lifecycle event has failed.</p> </li> <li> <p>Skipped: The deployment lifecycle event has been skipped.</p> </li> <li> <p>Unknown: The deployment lifecycle event is unknown.</p> </li> </ul>
+    /// <p><p>The deployment lifecycle event status:</p> <ul> <li> <p>Pending: The deployment lifecycle event is pending.</p> </li> <li> <p>InProgress: The deployment lifecycle event is in progress.</p> </li> <li> <p>Succeeded: The deployment lifecycle event ran successfully.</p> </li> <li> <p>Failed: The deployment lifecycle event has failed.</p> </li> <li> <p>Skipped: The deployment lifecycle event has been skipped.</p> </li> <li> <p>Unknown: The deployment lifecycle event is unknown.</p> </li> </ul></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1116,7 +1116,7 @@ pub struct ListApplicationRevisionsInput {
     /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
     pub application_name: String,
-    /// <p>Whether to list revisions based on whether the revision is the target revision of an deployment group:</p> <ul> <li> <p>include: List revisions that are target revisions of a deployment group.</p> </li> <li> <p>exclude: Do not list revisions that are target revisions of a deployment group.</p> </li> <li> <p>ignore: List all revisions.</p> </li> </ul>
+    /// <p><p>Whether to list revisions based on whether the revision is the target revision of an deployment group:</p> <ul> <li> <p>include: List revisions that are target revisions of a deployment group.</p> </li> <li> <p>exclude: Do not list revisions that are target revisions of a deployment group.</p> </li> <li> <p>ignore: List all revisions.</p> </li> </ul></p>
     #[serde(rename = "deployed")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployed: Option<String>,
@@ -1234,7 +1234,7 @@ pub struct ListDeploymentInstancesInput {
     /// <p>The unique ID of a deployment.</p>
     #[serde(rename = "deploymentId")]
     pub deployment_id: String,
-    /// <p>A subset of instances to list by status:</p> <ul> <li> <p>Pending: Include those instance with pending deployments.</p> </li> <li> <p>InProgress: Include those instance where deployments are still in progress.</p> </li> <li> <p>Succeeded: Include those instances with successful deployments.</p> </li> <li> <p>Failed: Include those instance with failed deployments.</p> </li> <li> <p>Skipped: Include those instance with skipped deployments.</p> </li> <li> <p>Unknown: Include those instance with deployments in an unknown state.</p> </li> </ul>
+    /// <p><p>A subset of instances to list by status:</p> <ul> <li> <p>Pending: Include those instance with pending deployments.</p> </li> <li> <p>InProgress: Include those instance where deployments are still in progress.</p> </li> <li> <p>Succeeded: Include those instances with successful deployments.</p> </li> <li> <p>Failed: Include those instance with failed deployments.</p> </li> <li> <p>Skipped: Include those instance with skipped deployments.</p> </li> <li> <p>Unknown: Include those instance with deployments in an unknown state.</p> </li> </ul></p>
     #[serde(rename = "instanceStatusFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_status_filter: Option<Vec<String>>,
@@ -1276,7 +1276,7 @@ pub struct ListDeploymentsInput {
     #[serde(rename = "deploymentGroupName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_group_name: Option<String>,
-    /// <p>A subset of deployments to list by status:</p> <ul> <li> <p>Created: Include created deployments in the resulting list.</p> </li> <li> <p>Queued: Include queued deployments in the resulting list.</p> </li> <li> <p>In Progress: Include in-progress deployments in the resulting list.</p> </li> <li> <p>Succeeded: Include successful deployments in the resulting list.</p> </li> <li> <p>Failed: Include failed deployments in the resulting list.</p> </li> <li> <p>Stopped: Include stopped deployments in the resulting list.</p> </li> </ul>
+    /// <p><p>A subset of deployments to list by status:</p> <ul> <li> <p>Created: Include created deployments in the resulting list.</p> </li> <li> <p>Queued: Include queued deployments in the resulting list.</p> </li> <li> <p>In Progress: Include in-progress deployments in the resulting list.</p> </li> <li> <p>Succeeded: Include successful deployments in the resulting list.</p> </li> <li> <p>Failed: Include failed deployments in the resulting list.</p> </li> <li> <p>Stopped: Include stopped deployments in the resulting list.</p> </li> </ul></p>
     #[serde(rename = "includeOnlyStatuses")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_only_statuses: Option<Vec<String>>,
@@ -1328,7 +1328,7 @@ pub struct ListOnPremisesInstancesInput {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The registration status of the on-premises instances:</p> <ul> <li> <p>Deregistered: Include deregistered on-premises instances in the resulting list.</p> </li> <li> <p>Registered: Include registered on-premises instances in the resulting list.</p> </li> </ul>
+    /// <p><p>The registration status of the on-premises instances:</p> <ul> <li> <p>Deregistered: Include deregistered on-premises instances in the resulting list.</p> </li> <li> <p>Registered: Include registered on-premises instances in the resulting list.</p> </li> </ul></p>
     #[serde(rename = "registrationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub registration_status: Option<String>,
@@ -1448,7 +1448,7 @@ pub struct RevisionLocation {
     #[serde(rename = "gitHubLocation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub git_hub_location: Option<GitHubLocation>,
-    /// <p>The type of application revision:</p> <ul> <li> <p>S3: An application revision stored in Amazon S3.</p> </li> <li> <p>GitHub: An application revision stored in GitHub.</p> </li> </ul>
+    /// <p><p>The type of application revision:</p> <ul> <li> <p>S3: An application revision stored in Amazon S3.</p> </li> <li> <p>GitHub: An application revision stored in GitHub.</p> </li> </ul></p>
     #[serde(rename = "revisionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub revision_type: Option<String>,
@@ -1482,7 +1482,7 @@ pub struct S3Location {
     #[serde(rename = "bucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bucket: Option<String>,
-    /// <p>The file type of the application revision. Must be one of the following:</p> <ul> <li> <p>tar: A tar archive file.</p> </li> <li> <p>tgz: A compressed tar archive file.</p> </li> <li> <p>zip: A zip archive file.</p> </li> </ul>
+    /// <p><p>The file type of the application revision. Must be one of the following:</p> <ul> <li> <p>tar: A tar archive file.</p> </li> <li> <p>tgz: A compressed tar archive file.</p> </li> <li> <p>zip: A zip archive file.</p> </li> </ul></p>
     #[serde(rename = "bundleType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bundle_type: Option<String>,
@@ -1523,7 +1523,7 @@ pub struct StopDeploymentInput {
 /// <p>Represents the output of a StopDeployment operation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct StopDeploymentOutput {
-    /// <p>The status of the stop deployment operation:</p> <ul> <li> <p>Pending: The stop operation is pending.</p> </li> <li> <p>Succeeded: The stop operation was successful.</p> </li> </ul>
+    /// <p><p>The status of the stop deployment operation:</p> <ul> <li> <p>Pending: The stop operation is pending.</p> </li> <li> <p>Succeeded: The stop operation was successful.</p> </li> </ul></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1553,7 +1553,7 @@ pub struct TagFilter {
     #[serde(rename = "Key")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    /// <p>The on-premises instance tag filter type:</p> <ul> <li> <p>KEY_ONLY: Key only.</p> </li> <li> <p>VALUE_ONLY: Value only.</p> </li> <li> <p>KEY_AND_VALUE: Key and value.</p> </li> </ul>
+    /// <p><p>The on-premises instance tag filter type:</p> <ul> <li> <p>KEY<em>ONLY: Key only.</p> </li> <li> <p>VALUE</em>ONLY: Value only.</p> </li> <li> <p>KEY<em>AND</em>VALUE: Key and value.</p> </li> </ul></p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -1592,11 +1592,11 @@ pub struct TargetInstances {
 /// <p>Information about a time range.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct TimeRange {
-    /// <p>The end time of the time range.</p> <note> <p>Specify null to leave the end time open-ended.</p> </note>
+    /// <p><p>The end time of the time range.</p> <note> <p>Specify null to leave the end time open-ended.</p> </note></p>
     #[serde(rename = "end")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end: Option<f64>,
-    /// <p>The start time of the time range.</p> <note> <p>Specify null to leave the start time open-ended.</p> </note>
+    /// <p><p>The start time of the time range.</p> <note> <p>Specify null to leave the start time open-ended.</p> </note></p>
     #[serde(rename = "start")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start: Option<f64>,
@@ -1711,17 +1711,17 @@ pub struct UpdateDeploymentGroupOutput {
 /// Errors returned by AddTagsToOnPremisesInstances
 #[derive(Debug, PartialEq)]
 pub enum AddTagsToOnPremisesInstancesError {
-    ///<p>The maximum number of allowed on-premises instances in a single call was exceeded.</p>
+    /// <p>The maximum number of allowed on-premises instances in a single call was exceeded.</p>
     InstanceLimitExceeded(String),
-    ///<p>An on-premises instance name was not specified.</p>
+    /// <p>An on-premises instance name was not specified.</p>
     InstanceNameRequired(String),
-    ///<p>The specified on-premises instance is not registered.</p>
+    /// <p>The specified on-premises instance is not registered.</p>
     InstanceNotRegistered(String),
-    ///<p>The specified tag was specified in an invalid format.</p>
+    /// <p>The specified tag was specified in an invalid format.</p>
     InvalidTag(String),
-    ///<p>The maximum allowed number of tags was exceeded.</p>
+    /// <p>The maximum allowed number of tags was exceeded.</p>
     TagLimitExceeded(String),
-    ///<p>A tag was not specified.</p>
+    /// <p>A tag was not specified.</p>
     TagRequired(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1829,17 +1829,17 @@ impl Error for AddTagsToOnPremisesInstancesError {
 /// Errors returned by BatchGetApplicationRevisions
 #[derive(Debug, PartialEq)]
 pub enum BatchGetApplicationRevisionsError {
-    ///<p>The application does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The application does not exist with the applicable IAM user or AWS account.</p>
     ApplicationDoesNotExist(String),
-    ///<p>The minimum number of required application names was not specified.</p>
+    /// <p>The minimum number of required application names was not specified.</p>
     ApplicationNameRequired(String),
-    ///<p>The maximum number of names or IDs allowed for this request (100) was exceeded.</p>
+    /// <p>The maximum number of names or IDs allowed for this request (100) was exceeded.</p>
     BatchLimitExceeded(String),
-    ///<p>The application name was specified in an invalid format.</p>
+    /// <p>The application name was specified in an invalid format.</p>
     InvalidApplicationName(String),
-    ///<p>The revision was specified in an invalid format.</p>
+    /// <p>The revision was specified in an invalid format.</p>
     InvalidRevision(String),
-    ///<p>The revision ID was not specified.</p>
+    /// <p>The revision ID was not specified.</p>
     RevisionRequired(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1951,13 +1951,13 @@ impl Error for BatchGetApplicationRevisionsError {
 /// Errors returned by BatchGetApplications
 #[derive(Debug, PartialEq)]
 pub enum BatchGetApplicationsError {
-    ///<p>The application does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The application does not exist with the applicable IAM user or AWS account.</p>
     ApplicationDoesNotExist(String),
-    ///<p>The minimum number of required application names was not specified.</p>
+    /// <p>The minimum number of required application names was not specified.</p>
     ApplicationNameRequired(String),
-    ///<p>The maximum number of names or IDs allowed for this request (100) was exceeded.</p>
+    /// <p>The maximum number of names or IDs allowed for this request (100) was exceeded.</p>
     BatchLimitExceeded(String),
-    ///<p>The application name was specified in an invalid format.</p>
+    /// <p>The application name was specified in an invalid format.</p>
     InvalidApplicationName(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2055,17 +2055,17 @@ impl Error for BatchGetApplicationsError {
 /// Errors returned by BatchGetDeploymentGroups
 #[derive(Debug, PartialEq)]
 pub enum BatchGetDeploymentGroupsError {
-    ///<p>The application does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The application does not exist with the applicable IAM user or AWS account.</p>
     ApplicationDoesNotExist(String),
-    ///<p>The minimum number of required application names was not specified.</p>
+    /// <p>The minimum number of required application names was not specified.</p>
     ApplicationNameRequired(String),
-    ///<p>The maximum number of names or IDs allowed for this request (100) was exceeded.</p>
+    /// <p>The maximum number of names or IDs allowed for this request (100) was exceeded.</p>
     BatchLimitExceeded(String),
-    ///<p>The deployment group name was not specified.</p>
+    /// <p>The deployment group name was not specified.</p>
     DeploymentGroupNameRequired(String),
-    ///<p>The application name was specified in an invalid format.</p>
+    /// <p>The application name was specified in an invalid format.</p>
     InvalidApplicationName(String),
-    ///<p>The deployment group name was specified in an invalid format.</p>
+    /// <p>The deployment group name was specified in an invalid format.</p>
     InvalidDeploymentGroupName(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2177,17 +2177,17 @@ impl Error for BatchGetDeploymentGroupsError {
 /// Errors returned by BatchGetDeploymentInstances
 #[derive(Debug, PartialEq)]
 pub enum BatchGetDeploymentInstancesError {
-    ///<p>The maximum number of names or IDs allowed for this request (100) was exceeded.</p>
+    /// <p>The maximum number of names or IDs allowed for this request (100) was exceeded.</p>
     BatchLimitExceeded(String),
-    ///<p>The deployment does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The deployment does not exist with the applicable IAM user or AWS account.</p>
     DeploymentDoesNotExist(String),
-    ///<p>At least one deployment ID must be specified.</p>
+    /// <p>At least one deployment ID must be specified.</p>
     DeploymentIdRequired(String),
-    ///<p>The instance ID was not specified.</p>
+    /// <p>The instance ID was not specified.</p>
     InstanceIdRequired(String),
-    ///<p>At least one of the deployment IDs was specified in an invalid format.</p>
+    /// <p>At least one of the deployment IDs was specified in an invalid format.</p>
     InvalidDeploymentId(String),
-    ///<p>The specified on-premises instance name was specified in an invalid format.</p>
+    /// <p>The specified on-premises instance name was specified in an invalid format.</p>
     InvalidInstanceName(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2299,11 +2299,11 @@ impl Error for BatchGetDeploymentInstancesError {
 /// Errors returned by BatchGetDeployments
 #[derive(Debug, PartialEq)]
 pub enum BatchGetDeploymentsError {
-    ///<p>The maximum number of names or IDs allowed for this request (100) was exceeded.</p>
+    /// <p>The maximum number of names or IDs allowed for this request (100) was exceeded.</p>
     BatchLimitExceeded(String),
-    ///<p>At least one deployment ID must be specified.</p>
+    /// <p>At least one deployment ID must be specified.</p>
     DeploymentIdRequired(String),
-    ///<p>At least one of the deployment IDs was specified in an invalid format.</p>
+    /// <p>At least one of the deployment IDs was specified in an invalid format.</p>
     InvalidDeploymentId(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2391,11 +2391,11 @@ impl Error for BatchGetDeploymentsError {
 /// Errors returned by BatchGetOnPremisesInstances
 #[derive(Debug, PartialEq)]
 pub enum BatchGetOnPremisesInstancesError {
-    ///<p>The maximum number of names or IDs allowed for this request (100) was exceeded.</p>
+    /// <p>The maximum number of names or IDs allowed for this request (100) was exceeded.</p>
     BatchLimitExceeded(String),
-    ///<p>An on-premises instance name was not specified.</p>
+    /// <p>An on-premises instance name was not specified.</p>
     InstanceNameRequired(String),
-    ///<p>The specified on-premises instance name was specified in an invalid format.</p>
+    /// <p>The specified on-premises instance name was specified in an invalid format.</p>
     InvalidInstanceName(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2489,17 +2489,17 @@ impl Error for BatchGetOnPremisesInstancesError {
 /// Errors returned by ContinueDeployment
 #[derive(Debug, PartialEq)]
 pub enum ContinueDeploymentError {
-    ///<p>The deployment is already complete.</p>
+    /// <p>The deployment is already complete.</p>
     DeploymentAlreadyCompleted(String),
-    ///<p>The deployment does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The deployment does not exist with the applicable IAM user or AWS account.</p>
     DeploymentDoesNotExist(String),
-    ///<p>At least one deployment ID must be specified.</p>
+    /// <p>At least one deployment ID must be specified.</p>
     DeploymentIdRequired(String),
-    ///<p>The deployment does not have a status of Ready and can't continue yet.</p>
+    /// <p>The deployment does not have a status of Ready and can't continue yet.</p>
     DeploymentIsNotInReadyState(String),
-    ///<p>At least one of the deployment IDs was specified in an invalid format.</p>
+    /// <p>At least one of the deployment IDs was specified in an invalid format.</p>
     InvalidDeploymentId(String),
-    ///<p>A call was submitted that is not supported for the specified deployment type.</p>
+    /// <p>A call was submitted that is not supported for the specified deployment type.</p>
     UnsupportedActionForDeploymentType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2605,13 +2605,13 @@ impl Error for ContinueDeploymentError {
 /// Errors returned by CreateApplication
 #[derive(Debug, PartialEq)]
 pub enum CreateApplicationError {
-    ///<p>An application with the specified name already exists with the applicable IAM user or AWS account.</p>
+    /// <p>An application with the specified name already exists with the applicable IAM user or AWS account.</p>
     ApplicationAlreadyExists(String),
-    ///<p>More applications were attempted to be created than are allowed.</p>
+    /// <p>More applications were attempted to be created than are allowed.</p>
     ApplicationLimitExceeded(String),
-    ///<p>The minimum number of required application names was not specified.</p>
+    /// <p>The minimum number of required application names was not specified.</p>
     ApplicationNameRequired(String),
-    ///<p>The application name was specified in an invalid format.</p>
+    /// <p>The application name was specified in an invalid format.</p>
     InvalidApplicationName(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2707,39 +2707,39 @@ impl Error for CreateApplicationError {
 /// Errors returned by CreateDeployment
 #[derive(Debug, PartialEq)]
 pub enum CreateDeploymentError {
-    ///<p>The application does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The application does not exist with the applicable IAM user or AWS account.</p>
     ApplicationDoesNotExist(String),
-    ///<p>The minimum number of required application names was not specified.</p>
+    /// <p>The minimum number of required application names was not specified.</p>
     ApplicationNameRequired(String),
-    ///<p>The deployment configuration does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The deployment configuration does not exist with the applicable IAM user or AWS account.</p>
     DeploymentConfigDoesNotExist(String),
-    ///<p>The named deployment group does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The named deployment group does not exist with the applicable IAM user or AWS account.</p>
     DeploymentGroupDoesNotExist(String),
-    ///<p>The deployment group name was not specified.</p>
+    /// <p>The deployment group name was not specified.</p>
     DeploymentGroupNameRequired(String),
-    ///<p>The number of allowed deployments was exceeded.</p>
+    /// <p>The number of allowed deployments was exceeded.</p>
     DeploymentLimitExceeded(String),
-    ///<p>The description is too long.</p>
+    /// <p>The description is too long.</p>
     DescriptionTooLong(String),
-    ///<p>The application name was specified in an invalid format.</p>
+    /// <p>The application name was specified in an invalid format.</p>
     InvalidApplicationName(String),
-    ///<p>The automatic rollback configuration was specified in an invalid format. For example, automatic rollback is enabled but an invalid triggering event type or no event types were listed.</p>
+    /// <p>The automatic rollback configuration was specified in an invalid format. For example, automatic rollback is enabled but an invalid triggering event type or no event types were listed.</p>
     InvalidAutoRollbackConfig(String),
-    ///<p>The deployment configuration name was specified in an invalid format.</p>
+    /// <p>The deployment configuration name was specified in an invalid format.</p>
     InvalidDeploymentConfigName(String),
-    ///<p>The deployment group name was specified in an invalid format.</p>
+    /// <p>The deployment group name was specified in an invalid format.</p>
     InvalidDeploymentGroupName(String),
-    ///<p>An invalid fileExistsBehavior option was specified to determine how AWS CodeDeploy handles files or directories that already exist in a deployment target location but weren't part of the previous successful deployment. Valid values include "DISALLOW", "OVERWRITE", and "RETAIN".</p>
+    /// <p>An invalid fileExistsBehavior option was specified to determine how AWS CodeDeploy handles files or directories that already exist in a deployment target location but weren't part of the previous successful deployment. Valid values include "DISALLOW", "OVERWRITE", and "RETAIN".</p>
     InvalidFileExistsBehavior(String),
-    ///<p>An invalid load balancer name, or no load balancer name, was specified.</p>
+    /// <p>An invalid load balancer name, or no load balancer name, was specified.</p>
     InvalidLoadBalancerInfo(String),
-    ///<p>The revision was specified in an invalid format.</p>
+    /// <p>The revision was specified in an invalid format.</p>
     InvalidRevision(String),
-    ///<p>The target instance configuration is invalid. Possible causes include:</p> <ul> <li> <p>Configuration data for target instances was entered for an in-place deployment.</p> </li> <li> <p>The limit of 10 tags for a tag type was exceeded.</p> </li> <li> <p>The combined length of the tag names exceeded the limit. </p> </li> <li> <p>A specified tag is not currently applied to any instances.</p> </li> </ul>
+    /// <p><p>The target instance configuration is invalid. Possible causes include:</p> <ul> <li> <p>Configuration data for target instances was entered for an in-place deployment.</p> </li> <li> <p>The limit of 10 tags for a tag type was exceeded.</p> </li> <li> <p>The combined length of the tag names exceeded the limit. </p> </li> <li> <p>A specified tag is not currently applied to any instances.</p> </li> </ul></p>
     InvalidTargetInstances(String),
-    ///<p>The named revision does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The named revision does not exist with the applicable IAM user or AWS account.</p>
     RevisionDoesNotExist(String),
-    ///<p>The revision ID was not specified.</p>
+    /// <p>The revision ID was not specified.</p>
     RevisionRequired(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2895,15 +2895,15 @@ impl Error for CreateDeploymentError {
 /// Errors returned by CreateDeploymentConfig
 #[derive(Debug, PartialEq)]
 pub enum CreateDeploymentConfigError {
-    ///<p>A deployment configuration with the specified name already exists with the applicable IAM user or AWS account.</p>
+    /// <p>A deployment configuration with the specified name already exists with the applicable IAM user or AWS account.</p>
     DeploymentConfigAlreadyExists(String),
-    ///<p>The deployment configurations limit was exceeded.</p>
+    /// <p>The deployment configurations limit was exceeded.</p>
     DeploymentConfigLimitExceeded(String),
-    ///<p>The deployment configuration name was not specified.</p>
+    /// <p>The deployment configuration name was not specified.</p>
     DeploymentConfigNameRequired(String),
-    ///<p>The deployment configuration name was specified in an invalid format.</p>
+    /// <p>The deployment configuration name was specified in an invalid format.</p>
     InvalidDeploymentConfigName(String),
-    ///<p>The minimum healthy instance value was specified in an invalid format.</p>
+    /// <p>The minimum healthy instance value was specified in an invalid format.</p>
     InvalidMinimumHealthyHostValue(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3009,57 +3009,57 @@ impl Error for CreateDeploymentConfigError {
 /// Errors returned by CreateDeploymentGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateDeploymentGroupError {
-    ///<p>The maximum number of alarms for a deployment group (10) was exceeded.</p>
+    /// <p>The maximum number of alarms for a deployment group (10) was exceeded.</p>
     AlarmsLimitExceeded(String),
-    ///<p>The application does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The application does not exist with the applicable IAM user or AWS account.</p>
     ApplicationDoesNotExist(String),
-    ///<p>The minimum number of required application names was not specified.</p>
+    /// <p>The minimum number of required application names was not specified.</p>
     ApplicationNameRequired(String),
-    ///<p>The deployment configuration does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The deployment configuration does not exist with the applicable IAM user or AWS account.</p>
     DeploymentConfigDoesNotExist(String),
-    ///<p>A deployment group with the specified name already exists with the applicable IAM user or AWS account.</p>
+    /// <p>A deployment group with the specified name already exists with the applicable IAM user or AWS account.</p>
     DeploymentGroupAlreadyExists(String),
-    ///<p> The deployment groups limit was exceeded.</p>
+    /// <p> The deployment groups limit was exceeded.</p>
     DeploymentGroupLimitExceeded(String),
-    ///<p>The deployment group name was not specified.</p>
+    /// <p>The deployment group name was not specified.</p>
     DeploymentGroupNameRequired(String),
-    ///<p>The format of the alarm configuration is invalid. Possible causes include:</p> <ul> <li> <p>The alarm list is null.</p> </li> <li> <p>The alarm object is null.</p> </li> <li> <p>The alarm name is empty or null or exceeds the 255 character limit.</p> </li> <li> <p>Two alarms with the same name have been specified.</p> </li> <li> <p>The alarm configuration is enabled but the alarm list is empty.</p> </li> </ul>
+    /// <p><p>The format of the alarm configuration is invalid. Possible causes include:</p> <ul> <li> <p>The alarm list is null.</p> </li> <li> <p>The alarm object is null.</p> </li> <li> <p>The alarm name is empty or null or exceeds the 255 character limit.</p> </li> <li> <p>Two alarms with the same name have been specified.</p> </li> <li> <p>The alarm configuration is enabled but the alarm list is empty.</p> </li> </ul></p>
     InvalidAlarmConfig(String),
-    ///<p>The application name was specified in an invalid format.</p>
+    /// <p>The application name was specified in an invalid format.</p>
     InvalidApplicationName(String),
-    ///<p>The automatic rollback configuration was specified in an invalid format. For example, automatic rollback is enabled but an invalid triggering event type or no event types were listed.</p>
+    /// <p>The automatic rollback configuration was specified in an invalid format. For example, automatic rollback is enabled but an invalid triggering event type or no event types were listed.</p>
     InvalidAutoRollbackConfig(String),
-    ///<p>The Auto Scaling group was specified in an invalid format or does not exist.</p>
+    /// <p>The Auto Scaling group was specified in an invalid format or does not exist.</p>
     InvalidAutoScalingGroup(String),
-    ///<p>The configuration for the blue/green deployment group was provided in an invalid format. For information about deployment configuration format, see <a>CreateDeploymentConfig</a>.</p>
+    /// <p>The configuration for the blue/green deployment group was provided in an invalid format. For information about deployment configuration format, see <a>CreateDeploymentConfig</a>.</p>
     InvalidBlueGreenDeploymentConfiguration(String),
-    ///<p>The deployment configuration name was specified in an invalid format.</p>
+    /// <p>The deployment configuration name was specified in an invalid format.</p>
     InvalidDeploymentConfigName(String),
-    ///<p>The deployment group name was specified in an invalid format.</p>
+    /// <p>The deployment group name was specified in an invalid format.</p>
     InvalidDeploymentGroupName(String),
-    ///<p>An invalid deployment style was specified. Valid deployment types include "IN_PLACE" and "BLUE_GREEN". Valid deployment options include "WITH_TRAFFIC_CONTROL" and "WITHOUT_TRAFFIC_CONTROL".</p>
+    /// <p>An invalid deployment style was specified. Valid deployment types include "IN_PLACE" and "BLUE_GREEN". Valid deployment options include "WITH_TRAFFIC_CONTROL" and "WITHOUT_TRAFFIC_CONTROL".</p>
     InvalidDeploymentStyle(String),
-    ///<p>A call was submitted that specified both Ec2TagFilters and Ec2TagSet, but only one of these data types can be used in a single call.</p>
+    /// <p>A call was submitted that specified both Ec2TagFilters and Ec2TagSet, but only one of these data types can be used in a single call.</p>
     InvalidEC2TagCombination(String),
-    ///<p>The tag was specified in an invalid format.</p>
+    /// <p>The tag was specified in an invalid format.</p>
     InvalidEC2Tag(String),
-    ///<p>An invalid load balancer name, or no load balancer name, was specified.</p>
+    /// <p>An invalid load balancer name, or no load balancer name, was specified.</p>
     InvalidLoadBalancerInfo(String),
-    ///<p>A call was submitted that specified both OnPremisesTagFilters and OnPremisesTagSet, but only one of these data types can be used in a single call.</p>
+    /// <p>A call was submitted that specified both OnPremisesTagFilters and OnPremisesTagSet, but only one of these data types can be used in a single call.</p>
     InvalidOnPremisesTagCombination(String),
-    ///<p>The service role ARN was specified in an invalid format. Or, if an Auto Scaling group was specified, the specified service role does not grant the appropriate permissions to Auto Scaling.</p>
+    /// <p>The service role ARN was specified in an invalid format. Or, if an Auto Scaling group was specified, the specified service role does not grant the appropriate permissions to Auto Scaling.</p>
     InvalidRole(String),
-    ///<p>The specified tag was specified in an invalid format.</p>
+    /// <p>The specified tag was specified in an invalid format.</p>
     InvalidTag(String),
-    ///<p>The trigger was specified in an invalid format.</p>
+    /// <p>The trigger was specified in an invalid format.</p>
     InvalidTriggerConfig(String),
-    ///<p>The limit for lifecycle hooks was exceeded.</p>
+    /// <p>The limit for lifecycle hooks was exceeded.</p>
     LifecycleHookLimitExceeded(String),
-    ///<p>The role ID was not specified.</p>
+    /// <p>The role ID was not specified.</p>
     RoleRequired(String),
-    ///<p>The number of tag groups included in the tag set list exceeded the maximum allowed limit of 3.</p>
+    /// <p>The number of tag groups included in the tag set list exceeded the maximum allowed limit of 3.</p>
     TagSetListLimitExceeded(String),
-    ///<p>The maximum allowed number of triggers was exceeded.</p>
+    /// <p>The maximum allowed number of triggers was exceeded.</p>
     TriggerTargetsLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3279,9 +3279,9 @@ impl Error for CreateDeploymentGroupError {
 /// Errors returned by DeleteApplication
 #[derive(Debug, PartialEq)]
 pub enum DeleteApplicationError {
-    ///<p>The minimum number of required application names was not specified.</p>
+    /// <p>The minimum number of required application names was not specified.</p>
     ApplicationNameRequired(String),
-    ///<p>The application name was specified in an invalid format.</p>
+    /// <p>The application name was specified in an invalid format.</p>
     InvalidApplicationName(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3365,13 +3365,13 @@ impl Error for DeleteApplicationError {
 /// Errors returned by DeleteDeploymentConfig
 #[derive(Debug, PartialEq)]
 pub enum DeleteDeploymentConfigError {
-    ///<p>The deployment configuration is still in use.</p>
+    /// <p>The deployment configuration is still in use.</p>
     DeploymentConfigInUse(String),
-    ///<p>The deployment configuration name was not specified.</p>
+    /// <p>The deployment configuration name was not specified.</p>
     DeploymentConfigNameRequired(String),
-    ///<p>The deployment configuration name was specified in an invalid format.</p>
+    /// <p>The deployment configuration name was specified in an invalid format.</p>
     InvalidDeploymentConfigName(String),
-    ///<p>An invalid operation was detected.</p>
+    /// <p>An invalid operation was detected.</p>
     InvalidOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3469,15 +3469,15 @@ impl Error for DeleteDeploymentConfigError {
 /// Errors returned by DeleteDeploymentGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteDeploymentGroupError {
-    ///<p>The minimum number of required application names was not specified.</p>
+    /// <p>The minimum number of required application names was not specified.</p>
     ApplicationNameRequired(String),
-    ///<p>The deployment group name was not specified.</p>
+    /// <p>The deployment group name was not specified.</p>
     DeploymentGroupNameRequired(String),
-    ///<p>The application name was specified in an invalid format.</p>
+    /// <p>The application name was specified in an invalid format.</p>
     InvalidApplicationName(String),
-    ///<p>The deployment group name was specified in an invalid format.</p>
+    /// <p>The deployment group name was specified in an invalid format.</p>
     InvalidDeploymentGroupName(String),
-    ///<p>The service role ARN was specified in an invalid format. Or, if an Auto Scaling group was specified, the specified service role does not grant the appropriate permissions to Auto Scaling.</p>
+    /// <p>The service role ARN was specified in an invalid format. Or, if an Auto Scaling group was specified, the specified service role does not grant the appropriate permissions to Auto Scaling.</p>
     InvalidRole(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3581,9 +3581,9 @@ impl Error for DeleteDeploymentGroupError {
 /// Errors returned by DeregisterOnPremisesInstance
 #[derive(Debug, PartialEq)]
 pub enum DeregisterOnPremisesInstanceError {
-    ///<p>An on-premises instance name was not specified.</p>
+    /// <p>An on-premises instance name was not specified.</p>
     InstanceNameRequired(String),
-    ///<p>The specified on-premises instance name was specified in an invalid format.</p>
+    /// <p>The specified on-premises instance name was specified in an invalid format.</p>
     InvalidInstanceName(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3671,11 +3671,11 @@ impl Error for DeregisterOnPremisesInstanceError {
 /// Errors returned by GetApplication
 #[derive(Debug, PartialEq)]
 pub enum GetApplicationError {
-    ///<p>The application does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The application does not exist with the applicable IAM user or AWS account.</p>
     ApplicationDoesNotExist(String),
-    ///<p>The minimum number of required application names was not specified.</p>
+    /// <p>The minimum number of required application names was not specified.</p>
     ApplicationNameRequired(String),
-    ///<p>The application name was specified in an invalid format.</p>
+    /// <p>The application name was specified in an invalid format.</p>
     InvalidApplicationName(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3761,17 +3761,17 @@ impl Error for GetApplicationError {
 /// Errors returned by GetApplicationRevision
 #[derive(Debug, PartialEq)]
 pub enum GetApplicationRevisionError {
-    ///<p>The application does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The application does not exist with the applicable IAM user or AWS account.</p>
     ApplicationDoesNotExist(String),
-    ///<p>The minimum number of required application names was not specified.</p>
+    /// <p>The minimum number of required application names was not specified.</p>
     ApplicationNameRequired(String),
-    ///<p>The application name was specified in an invalid format.</p>
+    /// <p>The application name was specified in an invalid format.</p>
     InvalidApplicationName(String),
-    ///<p>The revision was specified in an invalid format.</p>
+    /// <p>The revision was specified in an invalid format.</p>
     InvalidRevision(String),
-    ///<p>The named revision does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The named revision does not exist with the applicable IAM user or AWS account.</p>
     RevisionDoesNotExist(String),
-    ///<p>The revision ID was not specified.</p>
+    /// <p>The revision ID was not specified.</p>
     RevisionRequired(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3879,11 +3879,11 @@ impl Error for GetApplicationRevisionError {
 /// Errors returned by GetDeployment
 #[derive(Debug, PartialEq)]
 pub enum GetDeploymentError {
-    ///<p>The deployment does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The deployment does not exist with the applicable IAM user or AWS account.</p>
     DeploymentDoesNotExist(String),
-    ///<p>At least one deployment ID must be specified.</p>
+    /// <p>At least one deployment ID must be specified.</p>
     DeploymentIdRequired(String),
-    ///<p>At least one of the deployment IDs was specified in an invalid format.</p>
+    /// <p>At least one of the deployment IDs was specified in an invalid format.</p>
     InvalidDeploymentId(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3969,11 +3969,11 @@ impl Error for GetDeploymentError {
 /// Errors returned by GetDeploymentConfig
 #[derive(Debug, PartialEq)]
 pub enum GetDeploymentConfigError {
-    ///<p>The deployment configuration does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The deployment configuration does not exist with the applicable IAM user or AWS account.</p>
     DeploymentConfigDoesNotExist(String),
-    ///<p>The deployment configuration name was not specified.</p>
+    /// <p>The deployment configuration name was not specified.</p>
     DeploymentConfigNameRequired(String),
-    ///<p>The deployment configuration name was specified in an invalid format.</p>
+    /// <p>The deployment configuration name was specified in an invalid format.</p>
     InvalidDeploymentConfigName(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4067,17 +4067,17 @@ impl Error for GetDeploymentConfigError {
 /// Errors returned by GetDeploymentGroup
 #[derive(Debug, PartialEq)]
 pub enum GetDeploymentGroupError {
-    ///<p>The application does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The application does not exist with the applicable IAM user or AWS account.</p>
     ApplicationDoesNotExist(String),
-    ///<p>The minimum number of required application names was not specified.</p>
+    /// <p>The minimum number of required application names was not specified.</p>
     ApplicationNameRequired(String),
-    ///<p>The named deployment group does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The named deployment group does not exist with the applicable IAM user or AWS account.</p>
     DeploymentGroupDoesNotExist(String),
-    ///<p>The deployment group name was not specified.</p>
+    /// <p>The deployment group name was not specified.</p>
     DeploymentGroupNameRequired(String),
-    ///<p>The application name was specified in an invalid format.</p>
+    /// <p>The application name was specified in an invalid format.</p>
     InvalidApplicationName(String),
-    ///<p>The deployment group name was specified in an invalid format.</p>
+    /// <p>The deployment group name was specified in an invalid format.</p>
     InvalidDeploymentGroupName(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4187,17 +4187,17 @@ impl Error for GetDeploymentGroupError {
 /// Errors returned by GetDeploymentInstance
 #[derive(Debug, PartialEq)]
 pub enum GetDeploymentInstanceError {
-    ///<p>The deployment does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The deployment does not exist with the applicable IAM user or AWS account.</p>
     DeploymentDoesNotExist(String),
-    ///<p>At least one deployment ID must be specified.</p>
+    /// <p>At least one deployment ID must be specified.</p>
     DeploymentIdRequired(String),
-    ///<p>The specified instance does not exist in the deployment group.</p>
+    /// <p>The specified instance does not exist in the deployment group.</p>
     InstanceDoesNotExist(String),
-    ///<p>The instance ID was not specified.</p>
+    /// <p>The instance ID was not specified.</p>
     InstanceIdRequired(String),
-    ///<p>At least one of the deployment IDs was specified in an invalid format.</p>
+    /// <p>At least one of the deployment IDs was specified in an invalid format.</p>
     InvalidDeploymentId(String),
-    ///<p>The specified on-premises instance name was specified in an invalid format.</p>
+    /// <p>The specified on-premises instance name was specified in an invalid format.</p>
     InvalidInstanceName(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4303,11 +4303,11 @@ impl Error for GetDeploymentInstanceError {
 /// Errors returned by GetOnPremisesInstance
 #[derive(Debug, PartialEq)]
 pub enum GetOnPremisesInstanceError {
-    ///<p>An on-premises instance name was not specified.</p>
+    /// <p>An on-premises instance name was not specified.</p>
     InstanceNameRequired(String),
-    ///<p>The specified on-premises instance is not registered.</p>
+    /// <p>The specified on-premises instance is not registered.</p>
     InstanceNotRegistered(String),
-    ///<p>The specified on-premises instance name was specified in an invalid format.</p>
+    /// <p>The specified on-premises instance name was specified in an invalid format.</p>
     InvalidInstanceName(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4399,25 +4399,25 @@ impl Error for GetOnPremisesInstanceError {
 /// Errors returned by ListApplicationRevisions
 #[derive(Debug, PartialEq)]
 pub enum ListApplicationRevisionsError {
-    ///<p>The application does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The application does not exist with the applicable IAM user or AWS account.</p>
     ApplicationDoesNotExist(String),
-    ///<p>The minimum number of required application names was not specified.</p>
+    /// <p>The minimum number of required application names was not specified.</p>
     ApplicationNameRequired(String),
-    ///<p>A bucket name is required, but was not provided.</p>
+    /// <p>A bucket name is required, but was not provided.</p>
     BucketNameFilterRequired(String),
-    ///<p>The application name was specified in an invalid format.</p>
+    /// <p>The application name was specified in an invalid format.</p>
     InvalidApplicationName(String),
-    ///<p>The bucket name either doesn't exist or was specified in an invalid format.</p>
+    /// <p>The bucket name either doesn't exist or was specified in an invalid format.</p>
     InvalidBucketNameFilter(String),
-    ///<p>The deployed state filter was specified in an invalid format.</p>
+    /// <p>The deployed state filter was specified in an invalid format.</p>
     InvalidDeployedStateFilter(String),
-    ///<p>The specified key prefix filter was specified in an invalid format.</p>
+    /// <p>The specified key prefix filter was specified in an invalid format.</p>
     InvalidKeyPrefixFilter(String),
-    ///<p>The next token was specified in an invalid format.</p>
+    /// <p>The next token was specified in an invalid format.</p>
     InvalidNextToken(String),
-    ///<p>The column name to sort by is either not present or was specified in an invalid format.</p>
+    /// <p>The column name to sort by is either not present or was specified in an invalid format.</p>
     InvalidSortBy(String),
-    ///<p>The sort order was specified in an invalid format.</p>
+    /// <p>The sort order was specified in an invalid format.</p>
     InvalidSortOrder(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4547,7 +4547,7 @@ impl Error for ListApplicationRevisionsError {
 /// Errors returned by ListApplications
 #[derive(Debug, PartialEq)]
 pub enum ListApplicationsError {
-    ///<p>The next token was specified in an invalid format.</p>
+    /// <p>The next token was specified in an invalid format.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4625,7 +4625,7 @@ impl Error for ListApplicationsError {
 /// Errors returned by ListDeploymentConfigs
 #[derive(Debug, PartialEq)]
 pub enum ListDeploymentConfigsError {
-    ///<p>The next token was specified in an invalid format.</p>
+    /// <p>The next token was specified in an invalid format.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4705,13 +4705,13 @@ impl Error for ListDeploymentConfigsError {
 /// Errors returned by ListDeploymentGroups
 #[derive(Debug, PartialEq)]
 pub enum ListDeploymentGroupsError {
-    ///<p>The application does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The application does not exist with the applicable IAM user or AWS account.</p>
     ApplicationDoesNotExist(String),
-    ///<p>The minimum number of required application names was not specified.</p>
+    /// <p>The minimum number of required application names was not specified.</p>
     ApplicationNameRequired(String),
-    ///<p>The application name was specified in an invalid format.</p>
+    /// <p>The application name was specified in an invalid format.</p>
     InvalidApplicationName(String),
-    ///<p>The next token was specified in an invalid format.</p>
+    /// <p>The next token was specified in an invalid format.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4809,21 +4809,21 @@ impl Error for ListDeploymentGroupsError {
 /// Errors returned by ListDeploymentInstances
 #[derive(Debug, PartialEq)]
 pub enum ListDeploymentInstancesError {
-    ///<p>The deployment does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The deployment does not exist with the applicable IAM user or AWS account.</p>
     DeploymentDoesNotExist(String),
-    ///<p>At least one deployment ID must be specified.</p>
+    /// <p>At least one deployment ID must be specified.</p>
     DeploymentIdRequired(String),
-    ///<p>The specified deployment has not started.</p>
+    /// <p>The specified deployment has not started.</p>
     DeploymentNotStarted(String),
-    ///<p>At least one of the deployment IDs was specified in an invalid format.</p>
+    /// <p>At least one of the deployment IDs was specified in an invalid format.</p>
     InvalidDeploymentId(String),
-    ///<p>An instance type was specified for an in-place deployment. Instance types are supported for blue/green deployments only.</p>
+    /// <p>An instance type was specified for an in-place deployment. Instance types are supported for blue/green deployments only.</p>
     InvalidDeploymentInstanceType(String),
-    ///<p>The specified instance status does not exist.</p>
+    /// <p>The specified instance status does not exist.</p>
     InvalidInstanceStatus(String),
-    ///<p>An invalid instance type was specified for instances in a blue/green deployment. Valid values include "Blue" for an original environment and "Green" for a replacement environment.</p>
+    /// <p>An invalid instance type was specified for instances in a blue/green deployment. Valid values include "Blue" for an original environment and "Green" for a replacement environment.</p>
     InvalidInstanceType(String),
-    ///<p>The next token was specified in an invalid format.</p>
+    /// <p>The next token was specified in an invalid format.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4945,23 +4945,23 @@ impl Error for ListDeploymentInstancesError {
 /// Errors returned by ListDeployments
 #[derive(Debug, PartialEq)]
 pub enum ListDeploymentsError {
-    ///<p>The application does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The application does not exist with the applicable IAM user or AWS account.</p>
     ApplicationDoesNotExist(String),
-    ///<p>The minimum number of required application names was not specified.</p>
+    /// <p>The minimum number of required application names was not specified.</p>
     ApplicationNameRequired(String),
-    ///<p>The named deployment group does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The named deployment group does not exist with the applicable IAM user or AWS account.</p>
     DeploymentGroupDoesNotExist(String),
-    ///<p>The deployment group name was not specified.</p>
+    /// <p>The deployment group name was not specified.</p>
     DeploymentGroupNameRequired(String),
-    ///<p>The application name was specified in an invalid format.</p>
+    /// <p>The application name was specified in an invalid format.</p>
     InvalidApplicationName(String),
-    ///<p>The deployment group name was specified in an invalid format.</p>
+    /// <p>The deployment group name was specified in an invalid format.</p>
     InvalidDeploymentGroupName(String),
-    ///<p>The specified deployment status doesn't exist or cannot be determined.</p>
+    /// <p>The specified deployment status doesn't exist or cannot be determined.</p>
     InvalidDeploymentStatus(String),
-    ///<p>The next token was specified in an invalid format.</p>
+    /// <p>The next token was specified in an invalid format.</p>
     InvalidNextToken(String),
-    ///<p>The specified time range was specified in an invalid format.</p>
+    /// <p>The specified time range was specified in an invalid format.</p>
     InvalidTimeRange(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5077,9 +5077,9 @@ impl Error for ListDeploymentsError {
 /// Errors returned by ListGitHubAccountTokenNames
 #[derive(Debug, PartialEq)]
 pub enum ListGitHubAccountTokenNamesError {
-    ///<p>The next token was specified in an invalid format.</p>
+    /// <p>The next token was specified in an invalid format.</p>
     InvalidNextToken(String),
-    ///<p>The specified resource could not be validated.</p>
+    /// <p>The specified resource could not be validated.</p>
     ResourceValidation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5167,11 +5167,11 @@ impl Error for ListGitHubAccountTokenNamesError {
 /// Errors returned by ListOnPremisesInstances
 #[derive(Debug, PartialEq)]
 pub enum ListOnPremisesInstancesError {
-    ///<p>The next token was specified in an invalid format.</p>
+    /// <p>The next token was specified in an invalid format.</p>
     InvalidNextToken(String),
-    ///<p>The registration status was specified in an invalid format.</p>
+    /// <p>The registration status was specified in an invalid format.</p>
     InvalidRegistrationStatus(String),
-    ///<p>The specified tag filter was specified in an invalid format.</p>
+    /// <p>The specified tag filter was specified in an invalid format.</p>
     InvalidTagFilter(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5261,17 +5261,17 @@ impl Error for ListOnPremisesInstancesError {
 /// Errors returned by RegisterApplicationRevision
 #[derive(Debug, PartialEq)]
 pub enum RegisterApplicationRevisionError {
-    ///<p>The application does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The application does not exist with the applicable IAM user or AWS account.</p>
     ApplicationDoesNotExist(String),
-    ///<p>The minimum number of required application names was not specified.</p>
+    /// <p>The minimum number of required application names was not specified.</p>
     ApplicationNameRequired(String),
-    ///<p>The description is too long.</p>
+    /// <p>The description is too long.</p>
     DescriptionTooLong(String),
-    ///<p>The application name was specified in an invalid format.</p>
+    /// <p>The application name was specified in an invalid format.</p>
     InvalidApplicationName(String),
-    ///<p>The revision was specified in an invalid format.</p>
+    /// <p>The revision was specified in an invalid format.</p>
     InvalidRevision(String),
-    ///<p>The revision ID was not specified.</p>
+    /// <p>The revision ID was not specified.</p>
     RevisionRequired(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5383,25 +5383,25 @@ impl Error for RegisterApplicationRevisionError {
 /// Errors returned by RegisterOnPremisesInstance
 #[derive(Debug, PartialEq)]
 pub enum RegisterOnPremisesInstanceError {
-    ///<p>No IAM ARN was included in the request. You must use an IAM session ARN or IAM user ARN in the request.</p>
+    /// <p>No IAM ARN was included in the request. You must use an IAM session ARN or IAM user ARN in the request.</p>
     IamArnRequired(String),
-    ///<p>The request included an IAM session ARN that has already been used to register a different instance.</p>
+    /// <p>The request included an IAM session ARN that has already been used to register a different instance.</p>
     IamSessionArnAlreadyRegistered(String),
-    ///<p>The specified IAM user ARN is already registered with an on-premises instance.</p>
+    /// <p>The specified IAM user ARN is already registered with an on-premises instance.</p>
     IamUserArnAlreadyRegistered(String),
-    ///<p>An IAM user ARN was not specified.</p>
+    /// <p>An IAM user ARN was not specified.</p>
     IamUserArnRequired(String),
-    ///<p>The specified on-premises instance name is already registered.</p>
+    /// <p>The specified on-premises instance name is already registered.</p>
     InstanceNameAlreadyRegistered(String),
-    ///<p>An on-premises instance name was not specified.</p>
+    /// <p>An on-premises instance name was not specified.</p>
     InstanceNameRequired(String),
-    ///<p>The IAM session ARN was specified in an invalid format.</p>
+    /// <p>The IAM session ARN was specified in an invalid format.</p>
     InvalidIamSessionArn(String),
-    ///<p>The IAM user ARN was specified in an invalid format.</p>
+    /// <p>The IAM user ARN was specified in an invalid format.</p>
     InvalidIamUserArn(String),
-    ///<p>The specified on-premises instance name was specified in an invalid format.</p>
+    /// <p>The specified on-premises instance name was specified in an invalid format.</p>
     InvalidInstanceName(String),
-    ///<p>Both an IAM user ARN and an IAM session ARN were included in the request. Use only one ARN type.</p>
+    /// <p>Both an IAM user ARN and an IAM session ARN were included in the request. Use only one ARN type.</p>
     MultipleIamArnsProvided(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5535,17 +5535,17 @@ impl Error for RegisterOnPremisesInstanceError {
 /// Errors returned by RemoveTagsFromOnPremisesInstances
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsFromOnPremisesInstancesError {
-    ///<p>The maximum number of allowed on-premises instances in a single call was exceeded.</p>
+    /// <p>The maximum number of allowed on-premises instances in a single call was exceeded.</p>
     InstanceLimitExceeded(String),
-    ///<p>An on-premises instance name was not specified.</p>
+    /// <p>An on-premises instance name was not specified.</p>
     InstanceNameRequired(String),
-    ///<p>The specified on-premises instance is not registered.</p>
+    /// <p>The specified on-premises instance is not registered.</p>
     InstanceNotRegistered(String),
-    ///<p>The specified tag was specified in an invalid format.</p>
+    /// <p>The specified tag was specified in an invalid format.</p>
     InvalidTag(String),
-    ///<p>The maximum allowed number of tags was exceeded.</p>
+    /// <p>The maximum allowed number of tags was exceeded.</p>
     TagLimitExceeded(String),
-    ///<p>A tag was not specified.</p>
+    /// <p>A tag was not specified.</p>
     TagRequired(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5653,17 +5653,17 @@ impl Error for RemoveTagsFromOnPremisesInstancesError {
 /// Errors returned by SkipWaitTimeForInstanceTermination
 #[derive(Debug, PartialEq)]
 pub enum SkipWaitTimeForInstanceTerminationError {
-    ///<p>The deployment is already complete.</p>
+    /// <p>The deployment is already complete.</p>
     DeploymentAlreadyCompleted(String),
-    ///<p>The deployment does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The deployment does not exist with the applicable IAM user or AWS account.</p>
     DeploymentDoesNotExist(String),
-    ///<p>At least one deployment ID must be specified.</p>
+    /// <p>At least one deployment ID must be specified.</p>
     DeploymentIdRequired(String),
-    ///<p>The specified deployment has not started.</p>
+    /// <p>The specified deployment has not started.</p>
     DeploymentNotStarted(String),
-    ///<p>At least one of the deployment IDs was specified in an invalid format.</p>
+    /// <p>At least one of the deployment IDs was specified in an invalid format.</p>
     InvalidDeploymentId(String),
-    ///<p>A call was submitted that is not supported for the specified deployment type.</p>
+    /// <p>A call was submitted that is not supported for the specified deployment type.</p>
     UnsupportedActionForDeploymentType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5751,13 +5751,13 @@ impl Error for SkipWaitTimeForInstanceTerminationError {
 /// Errors returned by StopDeployment
 #[derive(Debug, PartialEq)]
 pub enum StopDeploymentError {
-    ///<p>The deployment is already complete.</p>
+    /// <p>The deployment is already complete.</p>
     DeploymentAlreadyCompleted(String),
-    ///<p>The deployment does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The deployment does not exist with the applicable IAM user or AWS account.</p>
     DeploymentDoesNotExist(String),
-    ///<p>At least one deployment ID must be specified.</p>
+    /// <p>At least one deployment ID must be specified.</p>
     DeploymentIdRequired(String),
-    ///<p>At least one of the deployment IDs was specified in an invalid format.</p>
+    /// <p>At least one of the deployment IDs was specified in an invalid format.</p>
     InvalidDeploymentId(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5847,13 +5847,13 @@ impl Error for StopDeploymentError {
 /// Errors returned by UpdateApplication
 #[derive(Debug, PartialEq)]
 pub enum UpdateApplicationError {
-    ///<p>An application with the specified name already exists with the applicable IAM user or AWS account.</p>
+    /// <p>An application with the specified name already exists with the applicable IAM user or AWS account.</p>
     ApplicationAlreadyExists(String),
-    ///<p>The application does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The application does not exist with the applicable IAM user or AWS account.</p>
     ApplicationDoesNotExist(String),
-    ///<p>The minimum number of required application names was not specified.</p>
+    /// <p>The minimum number of required application names was not specified.</p>
     ApplicationNameRequired(String),
-    ///<p>The application name was specified in an invalid format.</p>
+    /// <p>The application name was specified in an invalid format.</p>
     InvalidApplicationName(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5947,55 +5947,55 @@ impl Error for UpdateApplicationError {
 /// Errors returned by UpdateDeploymentGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateDeploymentGroupError {
-    ///<p>The maximum number of alarms for a deployment group (10) was exceeded.</p>
+    /// <p>The maximum number of alarms for a deployment group (10) was exceeded.</p>
     AlarmsLimitExceeded(String),
-    ///<p>The application does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The application does not exist with the applicable IAM user or AWS account.</p>
     ApplicationDoesNotExist(String),
-    ///<p>The minimum number of required application names was not specified.</p>
+    /// <p>The minimum number of required application names was not specified.</p>
     ApplicationNameRequired(String),
-    ///<p>The deployment configuration does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The deployment configuration does not exist with the applicable IAM user or AWS account.</p>
     DeploymentConfigDoesNotExist(String),
-    ///<p>A deployment group with the specified name already exists with the applicable IAM user or AWS account.</p>
+    /// <p>A deployment group with the specified name already exists with the applicable IAM user or AWS account.</p>
     DeploymentGroupAlreadyExists(String),
-    ///<p>The named deployment group does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The named deployment group does not exist with the applicable IAM user or AWS account.</p>
     DeploymentGroupDoesNotExist(String),
-    ///<p>The deployment group name was not specified.</p>
+    /// <p>The deployment group name was not specified.</p>
     DeploymentGroupNameRequired(String),
-    ///<p>The format of the alarm configuration is invalid. Possible causes include:</p> <ul> <li> <p>The alarm list is null.</p> </li> <li> <p>The alarm object is null.</p> </li> <li> <p>The alarm name is empty or null or exceeds the 255 character limit.</p> </li> <li> <p>Two alarms with the same name have been specified.</p> </li> <li> <p>The alarm configuration is enabled but the alarm list is empty.</p> </li> </ul>
+    /// <p><p>The format of the alarm configuration is invalid. Possible causes include:</p> <ul> <li> <p>The alarm list is null.</p> </li> <li> <p>The alarm object is null.</p> </li> <li> <p>The alarm name is empty or null or exceeds the 255 character limit.</p> </li> <li> <p>Two alarms with the same name have been specified.</p> </li> <li> <p>The alarm configuration is enabled but the alarm list is empty.</p> </li> </ul></p>
     InvalidAlarmConfig(String),
-    ///<p>The application name was specified in an invalid format.</p>
+    /// <p>The application name was specified in an invalid format.</p>
     InvalidApplicationName(String),
-    ///<p>The automatic rollback configuration was specified in an invalid format. For example, automatic rollback is enabled but an invalid triggering event type or no event types were listed.</p>
+    /// <p>The automatic rollback configuration was specified in an invalid format. For example, automatic rollback is enabled but an invalid triggering event type or no event types were listed.</p>
     InvalidAutoRollbackConfig(String),
-    ///<p>The Auto Scaling group was specified in an invalid format or does not exist.</p>
+    /// <p>The Auto Scaling group was specified in an invalid format or does not exist.</p>
     InvalidAutoScalingGroup(String),
-    ///<p>The configuration for the blue/green deployment group was provided in an invalid format. For information about deployment configuration format, see <a>CreateDeploymentConfig</a>.</p>
+    /// <p>The configuration for the blue/green deployment group was provided in an invalid format. For information about deployment configuration format, see <a>CreateDeploymentConfig</a>.</p>
     InvalidBlueGreenDeploymentConfiguration(String),
-    ///<p>The deployment configuration name was specified in an invalid format.</p>
+    /// <p>The deployment configuration name was specified in an invalid format.</p>
     InvalidDeploymentConfigName(String),
-    ///<p>The deployment group name was specified in an invalid format.</p>
+    /// <p>The deployment group name was specified in an invalid format.</p>
     InvalidDeploymentGroupName(String),
-    ///<p>An invalid deployment style was specified. Valid deployment types include "IN_PLACE" and "BLUE_GREEN". Valid deployment options include "WITH_TRAFFIC_CONTROL" and "WITHOUT_TRAFFIC_CONTROL".</p>
+    /// <p>An invalid deployment style was specified. Valid deployment types include "IN_PLACE" and "BLUE_GREEN". Valid deployment options include "WITH_TRAFFIC_CONTROL" and "WITHOUT_TRAFFIC_CONTROL".</p>
     InvalidDeploymentStyle(String),
-    ///<p>A call was submitted that specified both Ec2TagFilters and Ec2TagSet, but only one of these data types can be used in a single call.</p>
+    /// <p>A call was submitted that specified both Ec2TagFilters and Ec2TagSet, but only one of these data types can be used in a single call.</p>
     InvalidEC2TagCombination(String),
-    ///<p>The tag was specified in an invalid format.</p>
+    /// <p>The tag was specified in an invalid format.</p>
     InvalidEC2Tag(String),
-    ///<p>An invalid load balancer name, or no load balancer name, was specified.</p>
+    /// <p>An invalid load balancer name, or no load balancer name, was specified.</p>
     InvalidLoadBalancerInfo(String),
-    ///<p>A call was submitted that specified both OnPremisesTagFilters and OnPremisesTagSet, but only one of these data types can be used in a single call.</p>
+    /// <p>A call was submitted that specified both OnPremisesTagFilters and OnPremisesTagSet, but only one of these data types can be used in a single call.</p>
     InvalidOnPremisesTagCombination(String),
-    ///<p>The service role ARN was specified in an invalid format. Or, if an Auto Scaling group was specified, the specified service role does not grant the appropriate permissions to Auto Scaling.</p>
+    /// <p>The service role ARN was specified in an invalid format. Or, if an Auto Scaling group was specified, the specified service role does not grant the appropriate permissions to Auto Scaling.</p>
     InvalidRole(String),
-    ///<p>The specified tag was specified in an invalid format.</p>
+    /// <p>The specified tag was specified in an invalid format.</p>
     InvalidTag(String),
-    ///<p>The trigger was specified in an invalid format.</p>
+    /// <p>The trigger was specified in an invalid format.</p>
     InvalidTriggerConfig(String),
-    ///<p>The limit for lifecycle hooks was exceeded.</p>
+    /// <p>The limit for lifecycle hooks was exceeded.</p>
     LifecycleHookLimitExceeded(String),
-    ///<p>The number of tag groups included in the tag set list exceeded the maximum allowed limit of 3.</p>
+    /// <p>The number of tag groups included in the tag set list exceeded the maximum allowed limit of 3.</p>
     TagSetListLimitExceeded(String),
-    ///<p>The maximum allowed number of triggers was exceeded.</p>
+    /// <p>The maximum allowed number of triggers was exceeded.</p>
     TriggerTargetsLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6210,229 +6210,229 @@ impl Error for UpdateDeploymentGroupError {
 }
 /// Trait representing the capabilities of the CodeDeploy API. CodeDeploy clients implement this trait.
 pub trait CodeDeploy {
-    #[doc = "<p>Adds tags to on-premises instances.</p>"]
+    /// <p>Adds tags to on-premises instances.</p>
     fn add_tags_to_on_premises_instances(
         &self,
         input: &AddTagsToOnPremisesInstancesInput,
     ) -> Result<(), AddTagsToOnPremisesInstancesError>;
 
-    #[doc = "<p>Gets information about one or more application revisions.</p>"]
+    /// <p>Gets information about one or more application revisions.</p>
     fn batch_get_application_revisions(
         &self,
         input: &BatchGetApplicationRevisionsInput,
     ) -> Result<BatchGetApplicationRevisionsOutput, BatchGetApplicationRevisionsError>;
 
-    #[doc = "<p>Gets information about one or more applications.</p>"]
+    /// <p>Gets information about one or more applications.</p>
     fn batch_get_applications(
         &self,
         input: &BatchGetApplicationsInput,
     ) -> Result<BatchGetApplicationsOutput, BatchGetApplicationsError>;
 
-    #[doc = "<p>Gets information about one or more deployment groups.</p>"]
+    /// <p>Gets information about one or more deployment groups.</p>
     fn batch_get_deployment_groups(
         &self,
         input: &BatchGetDeploymentGroupsInput,
     ) -> Result<BatchGetDeploymentGroupsOutput, BatchGetDeploymentGroupsError>;
 
-    #[doc="<p>Gets information about one or more instance that are part of a deployment group.</p>"]
+    /// <p>Gets information about one or more instance that are part of a deployment group.</p>
     fn batch_get_deployment_instances(
         &self,
         input: &BatchGetDeploymentInstancesInput,
     ) -> Result<BatchGetDeploymentInstancesOutput, BatchGetDeploymentInstancesError>;
 
-    #[doc = "<p>Gets information about one or more deployments.</p>"]
+    /// <p>Gets information about one or more deployments.</p>
     fn batch_get_deployments(
         &self,
         input: &BatchGetDeploymentsInput,
     ) -> Result<BatchGetDeploymentsOutput, BatchGetDeploymentsError>;
 
-    #[doc = "<p>Gets information about one or more on-premises instances.</p>"]
+    /// <p>Gets information about one or more on-premises instances.</p>
     fn batch_get_on_premises_instances(
         &self,
         input: &BatchGetOnPremisesInstancesInput,
     ) -> Result<BatchGetOnPremisesInstancesOutput, BatchGetOnPremisesInstancesError>;
 
-    #[doc="<p>For a blue/green deployment, starts the process of rerouting traffic from instances in the original environment to instances in the replacement environment without waiting for a specified wait time to elapse. (Traffic rerouting, which is achieved by registering instances in the replacement environment with the load balancer, can start as soon as all instances have a status of Ready.) </p>"]
+    /// <p>For a blue/green deployment, starts the process of rerouting traffic from instances in the original environment to instances in the replacement environment without waiting for a specified wait time to elapse. (Traffic rerouting, which is achieved by registering instances in the replacement environment with the load balancer, can start as soon as all instances have a status of Ready.) </p>
     fn continue_deployment(
         &self,
         input: &ContinueDeploymentInput,
     ) -> Result<(), ContinueDeploymentError>;
 
-    #[doc = "<p>Creates an application.</p>"]
+    /// <p>Creates an application.</p>
     fn create_application(
         &self,
         input: &CreateApplicationInput,
     ) -> Result<CreateApplicationOutput, CreateApplicationError>;
 
-    #[doc = "<p>Deploys an application revision through the specified deployment group.</p>"]
+    /// <p>Deploys an application revision through the specified deployment group.</p>
     fn create_deployment(
         &self,
         input: &CreateDeploymentInput,
     ) -> Result<CreateDeploymentOutput, CreateDeploymentError>;
 
-    #[doc = "<p>Creates a deployment configuration.</p>"]
+    /// <p>Creates a deployment configuration.</p>
     fn create_deployment_config(
         &self,
         input: &CreateDeploymentConfigInput,
     ) -> Result<CreateDeploymentConfigOutput, CreateDeploymentConfigError>;
 
-    #[doc = "<p>Creates a deployment group to which application revisions will be deployed.</p>"]
+    /// <p>Creates a deployment group to which application revisions will be deployed.</p>
     fn create_deployment_group(
         &self,
         input: &CreateDeploymentGroupInput,
     ) -> Result<CreateDeploymentGroupOutput, CreateDeploymentGroupError>;
 
-    #[doc = "<p>Deletes an application.</p>"]
+    /// <p>Deletes an application.</p>
     fn delete_application(
         &self,
         input: &DeleteApplicationInput,
     ) -> Result<(), DeleteApplicationError>;
 
-    #[doc="<p>Deletes a deployment configuration.</p> <note> <p>A deployment configuration cannot be deleted if it is currently in use. Predefined configurations cannot be deleted.</p> </note>"]
+    /// <p><p>Deletes a deployment configuration.</p> <note> <p>A deployment configuration cannot be deleted if it is currently in use. Predefined configurations cannot be deleted.</p> </note></p>
     fn delete_deployment_config(
         &self,
         input: &DeleteDeploymentConfigInput,
     ) -> Result<(), DeleteDeploymentConfigError>;
 
-    #[doc = "<p>Deletes a deployment group.</p>"]
+    /// <p>Deletes a deployment group.</p>
     fn delete_deployment_group(
         &self,
         input: &DeleteDeploymentGroupInput,
     ) -> Result<DeleteDeploymentGroupOutput, DeleteDeploymentGroupError>;
 
-    #[doc = "<p>Deregisters an on-premises instance.</p>"]
+    /// <p>Deregisters an on-premises instance.</p>
     fn deregister_on_premises_instance(
         &self,
         input: &DeregisterOnPremisesInstanceInput,
     ) -> Result<(), DeregisterOnPremisesInstanceError>;
 
-    #[doc = "<p>Gets information about an application.</p>"]
+    /// <p>Gets information about an application.</p>
     fn get_application(
         &self,
         input: &GetApplicationInput,
     ) -> Result<GetApplicationOutput, GetApplicationError>;
 
-    #[doc = "<p>Gets information about an application revision.</p>"]
+    /// <p>Gets information about an application revision.</p>
     fn get_application_revision(
         &self,
         input: &GetApplicationRevisionInput,
     ) -> Result<GetApplicationRevisionOutput, GetApplicationRevisionError>;
 
-    #[doc = "<p>Gets information about a deployment.</p>"]
+    /// <p>Gets information about a deployment.</p>
     fn get_deployment(
         &self,
         input: &GetDeploymentInput,
     ) -> Result<GetDeploymentOutput, GetDeploymentError>;
 
-    #[doc = "<p>Gets information about a deployment configuration.</p>"]
+    /// <p>Gets information about a deployment configuration.</p>
     fn get_deployment_config(
         &self,
         input: &GetDeploymentConfigInput,
     ) -> Result<GetDeploymentConfigOutput, GetDeploymentConfigError>;
 
-    #[doc = "<p>Gets information about a deployment group.</p>"]
+    /// <p>Gets information about a deployment group.</p>
     fn get_deployment_group(
         &self,
         input: &GetDeploymentGroupInput,
     ) -> Result<GetDeploymentGroupOutput, GetDeploymentGroupError>;
 
-    #[doc = "<p>Gets information about an instance as part of a deployment.</p>"]
+    /// <p>Gets information about an instance as part of a deployment.</p>
     fn get_deployment_instance(
         &self,
         input: &GetDeploymentInstanceInput,
     ) -> Result<GetDeploymentInstanceOutput, GetDeploymentInstanceError>;
 
-    #[doc = "<p>Gets information about an on-premises instance.</p>"]
+    /// <p>Gets information about an on-premises instance.</p>
     fn get_on_premises_instance(
         &self,
         input: &GetOnPremisesInstanceInput,
     ) -> Result<GetOnPremisesInstanceOutput, GetOnPremisesInstanceError>;
 
-    #[doc = "<p>Lists information about revisions for an application.</p>"]
+    /// <p>Lists information about revisions for an application.</p>
     fn list_application_revisions(
         &self,
         input: &ListApplicationRevisionsInput,
     ) -> Result<ListApplicationRevisionsOutput, ListApplicationRevisionsError>;
 
-    #[doc = "<p>Lists the applications registered with the applicable IAM user or AWS account.</p>"]
+    /// <p>Lists the applications registered with the applicable IAM user or AWS account.</p>
     fn list_applications(
         &self,
         input: &ListApplicationsInput,
     ) -> Result<ListApplicationsOutput, ListApplicationsError>;
 
-    #[doc="<p>Lists the deployment configurations with the applicable IAM user or AWS account.</p>"]
+    /// <p>Lists the deployment configurations with the applicable IAM user or AWS account.</p>
     fn list_deployment_configs(
         &self,
         input: &ListDeploymentConfigsInput,
     ) -> Result<ListDeploymentConfigsOutput, ListDeploymentConfigsError>;
 
-    #[doc="<p>Lists the deployment groups for an application registered with the applicable IAM user or AWS account.</p>"]
+    /// <p>Lists the deployment groups for an application registered with the applicable IAM user or AWS account.</p>
     fn list_deployment_groups(
         &self,
         input: &ListDeploymentGroupsInput,
     ) -> Result<ListDeploymentGroupsOutput, ListDeploymentGroupsError>;
 
-    #[doc="<p>Lists the instance for a deployment associated with the applicable IAM user or AWS account.</p>"]
+    /// <p>Lists the instance for a deployment associated with the applicable IAM user or AWS account.</p>
     fn list_deployment_instances(
         &self,
         input: &ListDeploymentInstancesInput,
     ) -> Result<ListDeploymentInstancesOutput, ListDeploymentInstancesError>;
 
-    #[doc="<p>Lists the deployments in a deployment group for an application registered with the applicable IAM user or AWS account.</p>"]
+    /// <p>Lists the deployments in a deployment group for an application registered with the applicable IAM user or AWS account.</p>
     fn list_deployments(
         &self,
         input: &ListDeploymentsInput,
     ) -> Result<ListDeploymentsOutput, ListDeploymentsError>;
 
-    #[doc = "<p>Lists the names of stored connections to GitHub accounts.</p>"]
+    /// <p>Lists the names of stored connections to GitHub accounts.</p>
     fn list_git_hub_account_token_names(
         &self,
         input: &ListGitHubAccountTokenNamesInput,
     ) -> Result<ListGitHubAccountTokenNamesOutput, ListGitHubAccountTokenNamesError>;
 
-    #[doc="<p>Gets a list of names for one or more on-premises instances.</p> <p>Unless otherwise specified, both registered and deregistered on-premises instance names will be listed. To list only registered or deregistered on-premises instance names, use the registration status parameter.</p>"]
+    /// <p>Gets a list of names for one or more on-premises instances.</p> <p>Unless otherwise specified, both registered and deregistered on-premises instance names will be listed. To list only registered or deregistered on-premises instance names, use the registration status parameter.</p>
     fn list_on_premises_instances(
         &self,
         input: &ListOnPremisesInstancesInput,
     ) -> Result<ListOnPremisesInstancesOutput, ListOnPremisesInstancesError>;
 
-    #[doc = "<p>Registers with AWS CodeDeploy a revision for the specified application.</p>"]
+    /// <p>Registers with AWS CodeDeploy a revision for the specified application.</p>
     fn register_application_revision(
         &self,
         input: &RegisterApplicationRevisionInput,
     ) -> Result<(), RegisterApplicationRevisionError>;
 
-    #[doc="<p>Registers an on-premises instance.</p> <note> <p>Only one IAM ARN (an IAM session ARN or IAM user ARN) is supported in the request. You cannot use both.</p> </note>"]
+    /// <p><p>Registers an on-premises instance.</p> <note> <p>Only one IAM ARN (an IAM session ARN or IAM user ARN) is supported in the request. You cannot use both.</p> </note></p>
     fn register_on_premises_instance(
         &self,
         input: &RegisterOnPremisesInstanceInput,
     ) -> Result<(), RegisterOnPremisesInstanceError>;
 
-    #[doc = "<p>Removes one or more tags from one or more on-premises instances.</p>"]
+    /// <p>Removes one or more tags from one or more on-premises instances.</p>
     fn remove_tags_from_on_premises_instances(
         &self,
         input: &RemoveTagsFromOnPremisesInstancesInput,
     ) -> Result<(), RemoveTagsFromOnPremisesInstancesError>;
 
-    #[doc="<p>In a blue/green deployment, overrides any specified wait time and starts terminating instances immediately after the traffic routing is completed.</p>"]
+    /// <p>In a blue/green deployment, overrides any specified wait time and starts terminating instances immediately after the traffic routing is completed.</p>
     fn skip_wait_time_for_instance_termination(
         &self,
         input: &SkipWaitTimeForInstanceTerminationInput,
     ) -> Result<(), SkipWaitTimeForInstanceTerminationError>;
 
-    #[doc = "<p>Attempts to stop an ongoing deployment.</p>"]
+    /// <p>Attempts to stop an ongoing deployment.</p>
     fn stop_deployment(
         &self,
         input: &StopDeploymentInput,
     ) -> Result<StopDeploymentOutput, StopDeploymentError>;
 
-    #[doc = "<p>Changes the name of an application.</p>"]
+    /// <p>Changes the name of an application.</p>
     fn update_application(
         &self,
         input: &UpdateApplicationInput,
     ) -> Result<(), UpdateApplicationError>;
 
-    #[doc = "<p>Changes information about a deployment group.</p>"]
+    /// <p>Changes information about a deployment group.</p>
     fn update_deployment_group(
         &self,
         input: &UpdateDeploymentGroupInput,
@@ -6468,7 +6468,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc = "<p>Adds tags to on-premises instances.</p>"]
+    /// <p>Adds tags to on-premises instances.</p>
     fn add_tags_to_on_premises_instances(
         &self,
         input: &AddTagsToOnPremisesInstancesInput,
@@ -6499,7 +6499,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about one or more application revisions.</p>"]
+    /// <p>Gets information about one or more application revisions.</p>
     fn batch_get_application_revisions(
         &self,
         input: &BatchGetApplicationRevisionsInput,
@@ -6536,7 +6536,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about one or more applications.</p>"]
+    /// <p>Gets information about one or more applications.</p>
     fn batch_get_applications(
         &self,
         input: &BatchGetApplicationsInput,
@@ -6570,7 +6570,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about one or more deployment groups.</p>"]
+    /// <p>Gets information about one or more deployment groups.</p>
     fn batch_get_deployment_groups(
         &self,
         input: &BatchGetDeploymentGroupsInput,
@@ -6607,7 +6607,7 @@ where
         }
     }
 
-    #[doc="<p>Gets information about one or more instance that are part of a deployment group.</p>"]
+    /// <p>Gets information about one or more instance that are part of a deployment group.</p>
     fn batch_get_deployment_instances(
         &self,
         input: &BatchGetDeploymentInstancesInput,
@@ -6644,7 +6644,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about one or more deployments.</p>"]
+    /// <p>Gets information about one or more deployments.</p>
     fn batch_get_deployments(
         &self,
         input: &BatchGetDeploymentsInput,
@@ -6678,7 +6678,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about one or more on-premises instances.</p>"]
+    /// <p>Gets information about one or more on-premises instances.</p>
     fn batch_get_on_premises_instances(
         &self,
         input: &BatchGetOnPremisesInstancesInput,
@@ -6715,7 +6715,7 @@ where
         }
     }
 
-    #[doc="<p>For a blue/green deployment, starts the process of rerouting traffic from instances in the original environment to instances in the replacement environment without waiting for a specified wait time to elapse. (Traffic rerouting, which is achieved by registering instances in the replacement environment with the load balancer, can start as soon as all instances have a status of Ready.) </p>"]
+    /// <p>For a blue/green deployment, starts the process of rerouting traffic from instances in the original environment to instances in the replacement environment without waiting for a specified wait time to elapse. (Traffic rerouting, which is achieved by registering instances in the replacement environment with the load balancer, can start as soon as all instances have a status of Ready.) </p>
     fn continue_deployment(
         &self,
         input: &ContinueDeploymentInput,
@@ -6743,7 +6743,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates an application.</p>"]
+    /// <p>Creates an application.</p>
     fn create_application(
         &self,
         input: &CreateApplicationInput,
@@ -6777,7 +6777,7 @@ where
         }
     }
 
-    #[doc = "<p>Deploys an application revision through the specified deployment group.</p>"]
+    /// <p>Deploys an application revision through the specified deployment group.</p>
     fn create_deployment(
         &self,
         input: &CreateDeploymentInput,
@@ -6811,7 +6811,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a deployment configuration.</p>"]
+    /// <p>Creates a deployment configuration.</p>
     fn create_deployment_config(
         &self,
         input: &CreateDeploymentConfigInput,
@@ -6845,7 +6845,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a deployment group to which application revisions will be deployed.</p>"]
+    /// <p>Creates a deployment group to which application revisions will be deployed.</p>
     fn create_deployment_group(
         &self,
         input: &CreateDeploymentGroupInput,
@@ -6879,7 +6879,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes an application.</p>"]
+    /// <p>Deletes an application.</p>
     fn delete_application(
         &self,
         input: &DeleteApplicationInput,
@@ -6907,7 +6907,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a deployment configuration.</p> <note> <p>A deployment configuration cannot be deleted if it is currently in use. Predefined configurations cannot be deleted.</p> </note>"]
+    /// <p><p>Deletes a deployment configuration.</p> <note> <p>A deployment configuration cannot be deleted if it is currently in use. Predefined configurations cannot be deleted.</p> </note></p>
     fn delete_deployment_config(
         &self,
         input: &DeleteDeploymentConfigInput,
@@ -6935,7 +6935,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a deployment group.</p>"]
+    /// <p>Deletes a deployment group.</p>
     fn delete_deployment_group(
         &self,
         input: &DeleteDeploymentGroupInput,
@@ -6969,7 +6969,7 @@ where
         }
     }
 
-    #[doc = "<p>Deregisters an on-premises instance.</p>"]
+    /// <p>Deregisters an on-premises instance.</p>
     fn deregister_on_premises_instance(
         &self,
         input: &DeregisterOnPremisesInstanceInput,
@@ -7000,7 +7000,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about an application.</p>"]
+    /// <p>Gets information about an application.</p>
     fn get_application(
         &self,
         input: &GetApplicationInput,
@@ -7034,7 +7034,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about an application revision.</p>"]
+    /// <p>Gets information about an application revision.</p>
     fn get_application_revision(
         &self,
         input: &GetApplicationRevisionInput,
@@ -7068,7 +7068,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about a deployment.</p>"]
+    /// <p>Gets information about a deployment.</p>
     fn get_deployment(
         &self,
         input: &GetDeploymentInput,
@@ -7102,7 +7102,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about a deployment configuration.</p>"]
+    /// <p>Gets information about a deployment configuration.</p>
     fn get_deployment_config(
         &self,
         input: &GetDeploymentConfigInput,
@@ -7136,7 +7136,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about a deployment group.</p>"]
+    /// <p>Gets information about a deployment group.</p>
     fn get_deployment_group(
         &self,
         input: &GetDeploymentGroupInput,
@@ -7170,7 +7170,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about an instance as part of a deployment.</p>"]
+    /// <p>Gets information about an instance as part of a deployment.</p>
     fn get_deployment_instance(
         &self,
         input: &GetDeploymentInstanceInput,
@@ -7204,7 +7204,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about an on-premises instance.</p>"]
+    /// <p>Gets information about an on-premises instance.</p>
     fn get_on_premises_instance(
         &self,
         input: &GetOnPremisesInstanceInput,
@@ -7238,7 +7238,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists information about revisions for an application.</p>"]
+    /// <p>Lists information about revisions for an application.</p>
     fn list_application_revisions(
         &self,
         input: &ListApplicationRevisionsInput,
@@ -7275,7 +7275,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists the applications registered with the applicable IAM user or AWS account.</p>"]
+    /// <p>Lists the applications registered with the applicable IAM user or AWS account.</p>
     fn list_applications(
         &self,
         input: &ListApplicationsInput,
@@ -7309,7 +7309,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the deployment configurations with the applicable IAM user or AWS account.</p>"]
+    /// <p>Lists the deployment configurations with the applicable IAM user or AWS account.</p>
     fn list_deployment_configs(
         &self,
         input: &ListDeploymentConfigsInput,
@@ -7343,7 +7343,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the deployment groups for an application registered with the applicable IAM user or AWS account.</p>"]
+    /// <p>Lists the deployment groups for an application registered with the applicable IAM user or AWS account.</p>
     fn list_deployment_groups(
         &self,
         input: &ListDeploymentGroupsInput,
@@ -7377,7 +7377,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the instance for a deployment associated with the applicable IAM user or AWS account.</p>"]
+    /// <p>Lists the instance for a deployment associated with the applicable IAM user or AWS account.</p>
     fn list_deployment_instances(
         &self,
         input: &ListDeploymentInstancesInput,
@@ -7414,7 +7414,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the deployments in a deployment group for an application registered with the applicable IAM user or AWS account.</p>"]
+    /// <p>Lists the deployments in a deployment group for an application registered with the applicable IAM user or AWS account.</p>
     fn list_deployments(
         &self,
         input: &ListDeploymentsInput,
@@ -7448,7 +7448,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists the names of stored connections to GitHub accounts.</p>"]
+    /// <p>Lists the names of stored connections to GitHub accounts.</p>
     fn list_git_hub_account_token_names(
         &self,
         input: &ListGitHubAccountTokenNamesInput,
@@ -7485,7 +7485,7 @@ where
         }
     }
 
-    #[doc="<p>Gets a list of names for one or more on-premises instances.</p> <p>Unless otherwise specified, both registered and deregistered on-premises instance names will be listed. To list only registered or deregistered on-premises instance names, use the registration status parameter.</p>"]
+    /// <p>Gets a list of names for one or more on-premises instances.</p> <p>Unless otherwise specified, both registered and deregistered on-premises instance names will be listed. To list only registered or deregistered on-premises instance names, use the registration status parameter.</p>
     fn list_on_premises_instances(
         &self,
         input: &ListOnPremisesInstancesInput,
@@ -7522,7 +7522,7 @@ where
         }
     }
 
-    #[doc = "<p>Registers with AWS CodeDeploy a revision for the specified application.</p>"]
+    /// <p>Registers with AWS CodeDeploy a revision for the specified application.</p>
     fn register_application_revision(
         &self,
         input: &RegisterApplicationRevisionInput,
@@ -7553,7 +7553,7 @@ where
         }
     }
 
-    #[doc="<p>Registers an on-premises instance.</p> <note> <p>Only one IAM ARN (an IAM session ARN or IAM user ARN) is supported in the request. You cannot use both.</p> </note>"]
+    /// <p><p>Registers an on-premises instance.</p> <note> <p>Only one IAM ARN (an IAM session ARN or IAM user ARN) is supported in the request. You cannot use both.</p> </note></p>
     fn register_on_premises_instance(
         &self,
         input: &RegisterOnPremisesInstanceInput,
@@ -7584,7 +7584,7 @@ where
         }
     }
 
-    #[doc = "<p>Removes one or more tags from one or more on-premises instances.</p>"]
+    /// <p>Removes one or more tags from one or more on-premises instances.</p>
     fn remove_tags_from_on_premises_instances(
         &self,
         input: &RemoveTagsFromOnPremisesInstancesInput,
@@ -7615,7 +7615,7 @@ where
         }
     }
 
-    #[doc="<p>In a blue/green deployment, overrides any specified wait time and starts terminating instances immediately after the traffic routing is completed.</p>"]
+    /// <p>In a blue/green deployment, overrides any specified wait time and starts terminating instances immediately after the traffic routing is completed.</p>
     fn skip_wait_time_for_instance_termination(
         &self,
         input: &SkipWaitTimeForInstanceTerminationInput,
@@ -7646,7 +7646,7 @@ where
         }
     }
 
-    #[doc = "<p>Attempts to stop an ongoing deployment.</p>"]
+    /// <p>Attempts to stop an ongoing deployment.</p>
     fn stop_deployment(
         &self,
         input: &StopDeploymentInput,
@@ -7680,7 +7680,7 @@ where
         }
     }
 
-    #[doc = "<p>Changes the name of an application.</p>"]
+    /// <p>Changes the name of an application.</p>
     fn update_application(
         &self,
         input: &UpdateApplicationInput,
@@ -7708,7 +7708,7 @@ where
         }
     }
 
-    #[doc = "<p>Changes information about a deployment group.</p>"]
+    /// <p>Changes information about a deployment group.</p>
     fn update_deployment_group(
         &self,
         input: &UpdateDeploymentGroupInput,

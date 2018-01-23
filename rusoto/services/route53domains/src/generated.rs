@@ -67,7 +67,7 @@ pub struct CheckDomainAvailabilityRequest {
 /// <p>The CheckDomainAvailability response includes the following elements.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct CheckDomainAvailabilityResponse {
-    /// <p>Whether the domain name is available for registering.</p> <note> <p>You can only register domains designated as <code>AVAILABLE</code>.</p> </note> <p>Valid values:</p> <dl> <dt>AVAILABLE</dt> <dd> <p>The domain name is available.</p> </dd> <dt>AVAILABLE_RESERVED</dt> <dd> <p>The domain name is reserved under specific conditions.</p> </dd> <dt>AVAILABLE_PREORDER</dt> <dd> <p>The domain name is available and can be preordered.</p> </dd> <dt>DONT_KNOW</dt> <dd> <p>The TLD registry didn't reply with a definitive answer about whether the domain name is available. Amazon Route 53 can return this response for a variety of reasons, for example, the registry is performing maintenance. Try again later.</p> </dd> <dt>PENDING</dt> <dd> <p>The TLD registry didn't return a response in the expected amount of time. When the response is delayed, it usually takes just a few extra seconds. You can resubmit the request immediately.</p> </dd> <dt>RESERVED</dt> <dd> <p>The domain name has been reserved for another person or organization.</p> </dd> <dt>UNAVAILABLE</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE_PREMIUM</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE_RESTRICTED</dt> <dd> <p>The domain name is forbidden.</p> </dd> </dl>
+    /// <p><p>Whether the domain name is available for registering.</p> <note> <p>You can only register domains designated as <code>AVAILABLE</code>.</p> </note> <p>Valid values:</p> <dl> <dt>AVAILABLE</dt> <dd> <p>The domain name is available.</p> </dd> <dt>AVAILABLE<em>RESERVED</dt> <dd> <p>The domain name is reserved under specific conditions.</p> </dd> <dt>AVAILABLE</em>PREORDER</dt> <dd> <p>The domain name is available and can be preordered.</p> </dd> <dt>DONT<em>KNOW</dt> <dd> <p>The TLD registry didn&#39;t reply with a definitive answer about whether the domain name is available. Amazon Route 53 can return this response for a variety of reasons, for example, the registry is performing maintenance. Try again later.</p> </dd> <dt>PENDING</dt> <dd> <p>The TLD registry didn&#39;t return a response in the expected amount of time. When the response is delayed, it usually takes just a few extra seconds. You can resubmit the request immediately.</p> </dd> <dt>RESERVED</dt> <dd> <p>The domain name has been reserved for another person or organization.</p> </dd> <dt>UNAVAILABLE</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE</em>PREMIUM</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE_RESTRICTED</dt> <dd> <p>The domain name is forbidden.</p> </dd> </dl></p>
     #[serde(rename = "Availability")]
     pub availability: String,
 }
@@ -176,7 +176,7 @@ pub struct DisableDomainTransferLockResponse {
 /// <p>Information about one suggested domain name.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DomainSuggestion {
-    /// <p>Whether the domain name is available for registering.</p> <note> <p>You can register only the domains that are designated as <code>AVAILABLE</code>.</p> </note> <p>Valid values:</p> <dl> <dt>AVAILABLE</dt> <dd> <p>The domain name is available.</p> </dd> <dt>AVAILABLE_RESERVED</dt> <dd> <p>The domain name is reserved under specific conditions.</p> </dd> <dt>AVAILABLE_PREORDER</dt> <dd> <p>The domain name is available and can be preordered.</p> </dd> <dt>DONT_KNOW</dt> <dd> <p>The TLD registry didn't reply with a definitive answer about whether the domain name is available. Amazon Route 53 can return this response for a variety of reasons, for example, the registry is performing maintenance. Try again later.</p> </dd> <dt>PENDING</dt> <dd> <p>The TLD registry didn't return a response in the expected amount of time. When the response is delayed, it usually takes just a few extra seconds. You can resubmit the request immediately.</p> </dd> <dt>RESERVED</dt> <dd> <p>The domain name has been reserved for another person or organization.</p> </dd> <dt>UNAVAILABLE</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE_PREMIUM</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE_RESTRICTED</dt> <dd> <p>The domain name is forbidden.</p> </dd> </dl>
+    /// <p><p>Whether the domain name is available for registering.</p> <note> <p>You can register only the domains that are designated as <code>AVAILABLE</code>.</p> </note> <p>Valid values:</p> <dl> <dt>AVAILABLE</dt> <dd> <p>The domain name is available.</p> </dd> <dt>AVAILABLE<em>RESERVED</dt> <dd> <p>The domain name is reserved under specific conditions.</p> </dd> <dt>AVAILABLE</em>PREORDER</dt> <dd> <p>The domain name is available and can be preordered.</p> </dd> <dt>DONT<em>KNOW</dt> <dd> <p>The TLD registry didn&#39;t reply with a definitive answer about whether the domain name is available. Amazon Route 53 can return this response for a variety of reasons, for example, the registry is performing maintenance. Try again later.</p> </dd> <dt>PENDING</dt> <dd> <p>The TLD registry didn&#39;t return a response in the expected amount of time. When the response is delayed, it usually takes just a few extra seconds. You can resubmit the request immediately.</p> </dd> <dt>RESERVED</dt> <dd> <p>The domain name has been reserved for another person or organization.</p> </dd> <dt>UNAVAILABLE</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE</em>PREMIUM</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE_RESTRICTED</dt> <dd> <p>The domain name is forbidden.</p> </dd> </dl></p>
     #[serde(rename = "Availability")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub availability: Option<String>,
@@ -257,7 +257,7 @@ pub struct GetContactReachabilityStatusResponse {
     #[serde(rename = "domainName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name: Option<String>,
-    /// <p>Whether the registrant contact has responded. Values include the following:</p> <dl> <dt>PENDING</dt> <dd> <p>We sent the confirmation email and haven't received a response yet.</p> </dd> <dt>DONE</dt> <dd> <p>We sent the email and got confirmation from the registrant contact.</p> </dd> <dt>EXPIRED</dt> <dd> <p>The time limit expired before the registrant contact responded.</p> </dd> </dl>
+    /// <p><p>Whether the registrant contact has responded. Values include the following:</p> <dl> <dt>PENDING</dt> <dd> <p>We sent the confirmation email and haven&#39;t received a response yet.</p> </dd> <dt>DONE</dt> <dd> <p>We sent the email and got confirmation from the registrant contact.</p> </dd> <dt>EXPIRED</dt> <dd> <p>The time limit expired before the registrant contact responded.</p> </dd> </dl></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -818,9 +818,9 @@ pub struct ViewBillingResponse {
 /// Errors returned by CheckDomainAvailability
 #[derive(Debug, PartialEq)]
 pub enum CheckDomainAvailabilityError {
-    ///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
-    ///<p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain.</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -904,11 +904,11 @@ impl Error for CheckDomainAvailabilityError {
 /// Errors returned by DeleteTagsForDomain
 #[derive(Debug, PartialEq)]
 pub enum DeleteTagsForDomainError {
-    ///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
-    ///<p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
+    /// <p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
     OperationLimitExceeded(String),
-    ///<p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain.</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -996,9 +996,9 @@ impl Error for DeleteTagsForDomainError {
 /// Errors returned by DisableDomainAutoRenew
 #[derive(Debug, PartialEq)]
 pub enum DisableDomainAutoRenewError {
-    ///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
-    ///<p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain.</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1082,15 +1082,15 @@ impl Error for DisableDomainAutoRenewError {
 /// Errors returned by DisableDomainTransferLock
 #[derive(Debug, PartialEq)]
 pub enum DisableDomainTransferLockError {
-    ///<p>The request is already in progress for the domain.</p>
+    /// <p>The request is already in progress for the domain.</p>
     DuplicateRequest(String),
-    ///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
-    ///<p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
+    /// <p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
     OperationLimitExceeded(String),
-    ///<p>The top-level domain does not support this operation.</p>
+    /// <p>The top-level domain does not support this operation.</p>
     TLDRulesViolation(String),
-    ///<p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain.</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1188,11 +1188,11 @@ impl Error for DisableDomainTransferLockError {
 /// Errors returned by EnableDomainAutoRenew
 #[derive(Debug, PartialEq)]
 pub enum EnableDomainAutoRenewError {
-    ///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
-    ///<p>The top-level domain does not support this operation.</p>
+    /// <p>The top-level domain does not support this operation.</p>
     TLDRulesViolation(String),
-    ///<p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain.</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1280,15 +1280,15 @@ impl Error for EnableDomainAutoRenewError {
 /// Errors returned by EnableDomainTransferLock
 #[derive(Debug, PartialEq)]
 pub enum EnableDomainTransferLockError {
-    ///<p>The request is already in progress for the domain.</p>
+    /// <p>The request is already in progress for the domain.</p>
     DuplicateRequest(String),
-    ///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
-    ///<p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
+    /// <p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
     OperationLimitExceeded(String),
-    ///<p>The top-level domain does not support this operation.</p>
+    /// <p>The top-level domain does not support this operation.</p>
     TLDRulesViolation(String),
-    ///<p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain.</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1386,11 +1386,11 @@ impl Error for EnableDomainTransferLockError {
 /// Errors returned by GetContactReachabilityStatus
 #[derive(Debug, PartialEq)]
 pub enum GetContactReachabilityStatusError {
-    ///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
-    ///<p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
+    /// <p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
     OperationLimitExceeded(String),
-    ///<p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain.</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1480,9 +1480,9 @@ impl Error for GetContactReachabilityStatusError {
 /// Errors returned by GetDomainDetail
 #[derive(Debug, PartialEq)]
 pub enum GetDomainDetailError {
-    ///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
-    ///<p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain.</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1564,9 +1564,9 @@ impl Error for GetDomainDetailError {
 /// Errors returned by GetDomainSuggestions
 #[derive(Debug, PartialEq)]
 pub enum GetDomainSuggestionsError {
-    ///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
-    ///<p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain.</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1650,7 +1650,7 @@ impl Error for GetDomainSuggestionsError {
 /// Errors returned by GetOperationDetail
 #[derive(Debug, PartialEq)]
 pub enum GetOperationDetailError {
-    ///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1730,7 +1730,7 @@ impl Error for GetOperationDetailError {
 /// Errors returned by ListDomains
 #[derive(Debug, PartialEq)]
 pub enum ListDomainsError {
-    ///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1806,7 +1806,7 @@ impl Error for ListDomainsError {
 /// Errors returned by ListOperations
 #[derive(Debug, PartialEq)]
 pub enum ListOperationsError {
-    ///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1884,11 +1884,11 @@ impl Error for ListOperationsError {
 /// Errors returned by ListTagsForDomain
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForDomainError {
-    ///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
-    ///<p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
+    /// <p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
     OperationLimitExceeded(String),
-    ///<p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain.</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1976,17 +1976,17 @@ impl Error for ListTagsForDomainError {
 /// Errors returned by RegisterDomain
 #[derive(Debug, PartialEq)]
 pub enum RegisterDomainError {
-    ///<p>The number of domains has exceeded the allowed threshold for the account.</p>
+    /// <p>The number of domains has exceeded the allowed threshold for the account.</p>
     DomainLimitExceeded(String),
-    ///<p>The request is already in progress for the domain.</p>
+    /// <p>The request is already in progress for the domain.</p>
     DuplicateRequest(String),
-    ///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
-    ///<p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
+    /// <p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
     OperationLimitExceeded(String),
-    ///<p>The top-level domain does not support this operation.</p>
+    /// <p>The top-level domain does not support this operation.</p>
     TLDRulesViolation(String),
-    ///<p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain.</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2084,15 +2084,15 @@ impl Error for RegisterDomainError {
 /// Errors returned by RenewDomain
 #[derive(Debug, PartialEq)]
 pub enum RenewDomainError {
-    ///<p>The request is already in progress for the domain.</p>
+    /// <p>The request is already in progress for the domain.</p>
     DuplicateRequest(String),
-    ///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
-    ///<p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
+    /// <p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
     OperationLimitExceeded(String),
-    ///<p>The top-level domain does not support this operation.</p>
+    /// <p>The top-level domain does not support this operation.</p>
     TLDRulesViolation(String),
-    ///<p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain.</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2184,11 +2184,11 @@ impl Error for RenewDomainError {
 /// Errors returned by ResendContactReachabilityEmail
 #[derive(Debug, PartialEq)]
 pub enum ResendContactReachabilityEmailError {
-    ///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
-    ///<p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
+    /// <p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
     OperationLimitExceeded(String),
-    ///<p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain.</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2278,9 +2278,9 @@ impl Error for ResendContactReachabilityEmailError {
 /// Errors returned by RetrieveDomainAuthCode
 #[derive(Debug, PartialEq)]
 pub enum RetrieveDomainAuthCodeError {
-    ///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
-    ///<p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain.</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2364,17 +2364,17 @@ impl Error for RetrieveDomainAuthCodeError {
 /// Errors returned by TransferDomain
 #[derive(Debug, PartialEq)]
 pub enum TransferDomainError {
-    ///<p>The number of domains has exceeded the allowed threshold for the account.</p>
+    /// <p>The number of domains has exceeded the allowed threshold for the account.</p>
     DomainLimitExceeded(String),
-    ///<p>The request is already in progress for the domain.</p>
+    /// <p>The request is already in progress for the domain.</p>
     DuplicateRequest(String),
-    ///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
-    ///<p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
+    /// <p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
     OperationLimitExceeded(String),
-    ///<p>The top-level domain does not support this operation.</p>
+    /// <p>The top-level domain does not support this operation.</p>
     TLDRulesViolation(String),
-    ///<p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain.</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2472,15 +2472,15 @@ impl Error for TransferDomainError {
 /// Errors returned by UpdateDomainContact
 #[derive(Debug, PartialEq)]
 pub enum UpdateDomainContactError {
-    ///<p>The request is already in progress for the domain.</p>
+    /// <p>The request is already in progress for the domain.</p>
     DuplicateRequest(String),
-    ///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
-    ///<p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
+    /// <p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
     OperationLimitExceeded(String),
-    ///<p>The top-level domain does not support this operation.</p>
+    /// <p>The top-level domain does not support this operation.</p>
     TLDRulesViolation(String),
-    ///<p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain.</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2576,15 +2576,15 @@ impl Error for UpdateDomainContactError {
 /// Errors returned by UpdateDomainContactPrivacy
 #[derive(Debug, PartialEq)]
 pub enum UpdateDomainContactPrivacyError {
-    ///<p>The request is already in progress for the domain.</p>
+    /// <p>The request is already in progress for the domain.</p>
     DuplicateRequest(String),
-    ///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
-    ///<p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
+    /// <p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
     OperationLimitExceeded(String),
-    ///<p>The top-level domain does not support this operation.</p>
+    /// <p>The top-level domain does not support this operation.</p>
     TLDRulesViolation(String),
-    ///<p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain.</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2682,15 +2682,15 @@ impl Error for UpdateDomainContactPrivacyError {
 /// Errors returned by UpdateDomainNameservers
 #[derive(Debug, PartialEq)]
 pub enum UpdateDomainNameserversError {
-    ///<p>The request is already in progress for the domain.</p>
+    /// <p>The request is already in progress for the domain.</p>
     DuplicateRequest(String),
-    ///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
-    ///<p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
+    /// <p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
     OperationLimitExceeded(String),
-    ///<p>The top-level domain does not support this operation.</p>
+    /// <p>The top-level domain does not support this operation.</p>
     TLDRulesViolation(String),
-    ///<p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain.</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2788,11 +2788,11 @@ impl Error for UpdateDomainNameserversError {
 /// Errors returned by UpdateTagsForDomain
 #[derive(Debug, PartialEq)]
 pub enum UpdateTagsForDomainError {
-    ///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
-    ///<p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
+    /// <p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
     OperationLimitExceeded(String),
-    ///<p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain.</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2880,7 +2880,7 @@ impl Error for UpdateTagsForDomainError {
 /// Errors returned by ViewBilling
 #[derive(Debug, PartialEq)]
 pub enum ViewBillingError {
-    ///<p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2955,139 +2955,139 @@ impl Error for ViewBillingError {
 }
 /// Trait representing the capabilities of the Amazon Route 53 Domains API. Amazon Route 53 Domains clients implement this trait.
 pub trait Route53Domains {
-    #[doc="<p>This operation checks the availability of one domain name. Note that if the availability status of a domain is pending, you must submit another request to determine the availability of the domain name.</p>"]
+    /// <p>This operation checks the availability of one domain name. Note that if the availability status of a domain is pending, you must submit another request to determine the availability of the domain name.</p>
     fn check_domain_availability(
         &self,
         input: &CheckDomainAvailabilityRequest,
     ) -> Result<CheckDomainAvailabilityResponse, CheckDomainAvailabilityError>;
 
-    #[doc="<p>This operation deletes the specified tags for a domain.</p> <p>All tag operations are eventually consistent; subsequent operations may not immediately represent all issued operations.</p>"]
+    /// <p>This operation deletes the specified tags for a domain.</p> <p>All tag operations are eventually consistent; subsequent operations may not immediately represent all issued operations.</p>
     fn delete_tags_for_domain(
         &self,
         input: &DeleteTagsForDomainRequest,
     ) -> Result<DeleteTagsForDomainResponse, DeleteTagsForDomainError>;
 
-    #[doc="<p>This operation disables automatic renewal of domain registration for the specified domain.</p>"]
+    /// <p>This operation disables automatic renewal of domain registration for the specified domain.</p>
     fn disable_domain_auto_renew(
         &self,
         input: &DisableDomainAutoRenewRequest,
     ) -> Result<DisableDomainAutoRenewResponse, DisableDomainAutoRenewError>;
 
-    #[doc="<p>This operation removes the transfer lock on the domain (specifically the <code>clientTransferProhibited</code> status) to allow domain transfers. We recommend you refrain from performing this action unless you intend to transfer the domain to a different registrar. Successful submission returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>"]
+    /// <p>This operation removes the transfer lock on the domain (specifically the <code>clientTransferProhibited</code> status) to allow domain transfers. We recommend you refrain from performing this action unless you intend to transfer the domain to a different registrar. Successful submission returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>
     fn disable_domain_transfer_lock(
         &self,
         input: &DisableDomainTransferLockRequest,
     ) -> Result<DisableDomainTransferLockResponse, DisableDomainTransferLockError>;
 
-    #[doc="<p>This operation configures Amazon Route 53 to automatically renew the specified domain before the domain registration expires. The cost of renewing your domain registration is billed to your AWS account.</p> <p>The period during which you can renew a domain name varies by TLD. For a list of TLDs and their renewal policies, see <a href=\"http://wiki.gandi.net/en/domains/renew#renewal_restoration_and_deletion_times\">\"Renewal, restoration, and deletion times\"</a> on the website for our registrar partner, Gandi. Route 53 requires that you renew before the end of the renewal period that is listed on the Gandi website so we can complete processing before the deadline.</p>"]
+    /// <p>This operation configures Amazon Route 53 to automatically renew the specified domain before the domain registration expires. The cost of renewing your domain registration is billed to your AWS account.</p> <p>The period during which you can renew a domain name varies by TLD. For a list of TLDs and their renewal policies, see <a href="http://wiki.gandi.net/en/domains/renew#renewal_restoration_and_deletion_times">"Renewal, restoration, and deletion times"</a> on the website for our registrar partner, Gandi. Route 53 requires that you renew before the end of the renewal period that is listed on the Gandi website so we can complete processing before the deadline.</p>
     fn enable_domain_auto_renew(
         &self,
         input: &EnableDomainAutoRenewRequest,
     ) -> Result<EnableDomainAutoRenewResponse, EnableDomainAutoRenewError>;
 
-    #[doc="<p>This operation sets the transfer lock on the domain (specifically the <code>clientTransferProhibited</code> status) to prevent domain transfers. Successful submission returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>"]
+    /// <p>This operation sets the transfer lock on the domain (specifically the <code>clientTransferProhibited</code> status) to prevent domain transfers. Successful submission returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>
     fn enable_domain_transfer_lock(
         &self,
         input: &EnableDomainTransferLockRequest,
     ) -> Result<EnableDomainTransferLockResponse, EnableDomainTransferLockError>;
 
-    #[doc="<p>For operations that require confirmation that the email address for the registrant contact is valid, such as registering a new domain, this operation returns information about whether the registrant contact has responded.</p> <p>If you want us to resend the email, use the <code>ResendContactReachabilityEmail</code> operation.</p>"]
+    /// <p>For operations that require confirmation that the email address for the registrant contact is valid, such as registering a new domain, this operation returns information about whether the registrant contact has responded.</p> <p>If you want us to resend the email, use the <code>ResendContactReachabilityEmail</code> operation.</p>
     fn get_contact_reachability_status(
         &self,
         input: &GetContactReachabilityStatusRequest,
     ) -> Result<GetContactReachabilityStatusResponse, GetContactReachabilityStatusError>;
 
-    #[doc="<p>This operation returns detailed information about a specified domain that is associated with the current AWS account. Contact information for the domain is also returned as part of the output.</p>"]
+    /// <p>This operation returns detailed information about a specified domain that is associated with the current AWS account. Contact information for the domain is also returned as part of the output.</p>
     fn get_domain_detail(
         &self,
         input: &GetDomainDetailRequest,
     ) -> Result<GetDomainDetailResponse, GetDomainDetailError>;
 
-    #[doc="<p>The GetDomainSuggestions operation returns a list of suggested domain names given a string, which can either be a domain name or simply a word or phrase (without spaces).</p>"]
+    /// <p>The GetDomainSuggestions operation returns a list of suggested domain names given a string, which can either be a domain name or simply a word or phrase (without spaces).</p>
     fn get_domain_suggestions(
         &self,
         input: &GetDomainSuggestionsRequest,
     ) -> Result<GetDomainSuggestionsResponse, GetDomainSuggestionsError>;
 
-    #[doc="<p>This operation returns the current status of an operation that is not completed.</p>"]
+    /// <p>This operation returns the current status of an operation that is not completed.</p>
     fn get_operation_detail(
         &self,
         input: &GetOperationDetailRequest,
     ) -> Result<GetOperationDetailResponse, GetOperationDetailError>;
 
-    #[doc="<p>This operation returns all the domain names registered with Amazon Route 53 for the current AWS account.</p>"]
+    /// <p>This operation returns all the domain names registered with Amazon Route 53 for the current AWS account.</p>
     fn list_domains(
         &self,
         input: &ListDomainsRequest,
     ) -> Result<ListDomainsResponse, ListDomainsError>;
 
-    #[doc="<p>This operation returns the operation IDs of operations that are not yet complete.</p>"]
+    /// <p>This operation returns the operation IDs of operations that are not yet complete.</p>
     fn list_operations(
         &self,
         input: &ListOperationsRequest,
     ) -> Result<ListOperationsResponse, ListOperationsError>;
 
-    #[doc="<p>This operation returns all of the tags that are associated with the specified domain.</p> <p>All tag operations are eventually consistent; subsequent operations may not immediately represent all issued operations.</p>"]
+    /// <p>This operation returns all of the tags that are associated with the specified domain.</p> <p>All tag operations are eventually consistent; subsequent operations may not immediately represent all issued operations.</p>
     fn list_tags_for_domain(
         &self,
         input: &ListTagsForDomainRequest,
     ) -> Result<ListTagsForDomainResponse, ListTagsForDomainError>;
 
-    #[doc="<p>This operation registers a domain. Domains are registered by the AWS registrar partner, Gandi. For some top-level domains (TLDs), this operation requires extra parameters.</p> <p>When you register a domain, Amazon Route 53 does the following:</p> <ul> <li> <p>Creates a Amazon Route 53 hosted zone that has the same name as the domain. Amazon Route 53 assigns four name servers to your hosted zone and automatically updates your domain registration with the names of these name servers.</p> </li> <li> <p>Enables autorenew, so your domain registration will renew automatically each year. We'll notify you in advance of the renewal date so you can choose whether to renew the registration.</p> </li> <li> <p>Optionally enables privacy protection, so WHOIS queries return contact information for our registrar partner, Gandi, instead of the information you entered for registrant, admin, and tech contacts.</p> </li> <li> <p>If registration is successful, returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant is notified by email.</p> </li> <li> <p>Charges your AWS account an amount based on the top-level domain. For more information, see <a href=\"http://aws.amazon.com/route53/pricing/\">Amazon Route 53 Pricing</a>.</p> </li> </ul>"]
+    /// <p><p>This operation registers a domain. Domains are registered by the AWS registrar partner, Gandi. For some top-level domains (TLDs), this operation requires extra parameters.</p> <p>When you register a domain, Amazon Route 53 does the following:</p> <ul> <li> <p>Creates a Amazon Route 53 hosted zone that has the same name as the domain. Amazon Route 53 assigns four name servers to your hosted zone and automatically updates your domain registration with the names of these name servers.</p> </li> <li> <p>Enables autorenew, so your domain registration will renew automatically each year. We&#39;ll notify you in advance of the renewal date so you can choose whether to renew the registration.</p> </li> <li> <p>Optionally enables privacy protection, so WHOIS queries return contact information for our registrar partner, Gandi, instead of the information you entered for registrant, admin, and tech contacts.</p> </li> <li> <p>If registration is successful, returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant is notified by email.</p> </li> <li> <p>Charges your AWS account an amount based on the top-level domain. For more information, see <a href="http://aws.amazon.com/route53/pricing/">Amazon Route 53 Pricing</a>.</p> </li> </ul></p>
     fn register_domain(
         &self,
         input: &RegisterDomainRequest,
     ) -> Result<RegisterDomainResponse, RegisterDomainError>;
 
-    #[doc="<p>This operation renews a domain for the specified number of years. The cost of renewing your domain is billed to your AWS account.</p> <p>We recommend that you renew your domain several weeks before the expiration date. Some TLD registries delete domains before the expiration date if you haven't renewed far enough in advance. For more information about renewing domain registration, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-renew.html\">Renewing Registration for a Domain</a> in the Amazon Route 53 Developer Guide.</p>"]
+    /// <p>This operation renews a domain for the specified number of years. The cost of renewing your domain is billed to your AWS account.</p> <p>We recommend that you renew your domain several weeks before the expiration date. Some TLD registries delete domains before the expiration date if you haven't renewed far enough in advance. For more information about renewing domain registration, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-renew.html">Renewing Registration for a Domain</a> in the Amazon Route 53 Developer Guide.</p>
     fn renew_domain(
         &self,
         input: &RenewDomainRequest,
     ) -> Result<RenewDomainResponse, RenewDomainError>;
 
-    #[doc="<p>For operations that require confirmation that the email address for the registrant contact is valid, such as registering a new domain, this operation resends the confirmation email to the current email address for the registrant contact.</p>"]
+    /// <p>For operations that require confirmation that the email address for the registrant contact is valid, such as registering a new domain, this operation resends the confirmation email to the current email address for the registrant contact.</p>
     fn resend_contact_reachability_email(
         &self,
         input: &ResendContactReachabilityEmailRequest,
     ) -> Result<ResendContactReachabilityEmailResponse, ResendContactReachabilityEmailError>;
 
-    #[doc="<p>This operation returns the AuthCode for the domain. To transfer a domain to another registrar, you provide this value to the new registrar.</p>"]
+    /// <p>This operation returns the AuthCode for the domain. To transfer a domain to another registrar, you provide this value to the new registrar.</p>
     fn retrieve_domain_auth_code(
         &self,
         input: &RetrieveDomainAuthCodeRequest,
     ) -> Result<RetrieveDomainAuthCodeResponse, RetrieveDomainAuthCodeError>;
 
-    #[doc="<p>This operation transfers a domain from another registrar to Amazon Route 53. When the transfer is complete, the domain is registered with the AWS registrar partner, Gandi.</p> <p>For transfer requirements, a detailed procedure, and information about viewing the status of a domain transfer, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-transfer-to-route-53.html\">Transferring Registration for a Domain to Amazon Route 53</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>If the registrar for your domain is also the DNS service provider for the domain, we highly recommend that you consider transferring your DNS service to Amazon Route 53 or to another DNS service provider before you transfer your registration. Some registrars provide free DNS service when you purchase a domain registration. When you transfer the registration, the previous registrar will not renew your domain registration and could end your DNS service at any time.</p> <important> <p>If the registrar for your domain is also the DNS service provider for the domain and you don't transfer DNS service to another provider, your website, email, and the web applications associated with the domain might become unavailable.</p> </important> <p>If the transfer is successful, this method returns an operation ID that you can use to track the progress and completion of the action. If the transfer doesn't complete successfully, the domain registrant will be notified by email.</p>"]
+    /// <p>This operation transfers a domain from another registrar to Amazon Route 53. When the transfer is complete, the domain is registered with the AWS registrar partner, Gandi.</p> <p>For transfer requirements, a detailed procedure, and information about viewing the status of a domain transfer, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-transfer-to-route-53.html">Transferring Registration for a Domain to Amazon Route 53</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>If the registrar for your domain is also the DNS service provider for the domain, we highly recommend that you consider transferring your DNS service to Amazon Route 53 or to another DNS service provider before you transfer your registration. Some registrars provide free DNS service when you purchase a domain registration. When you transfer the registration, the previous registrar will not renew your domain registration and could end your DNS service at any time.</p> <important> <p>If the registrar for your domain is also the DNS service provider for the domain and you don't transfer DNS service to another provider, your website, email, and the web applications associated with the domain might become unavailable.</p> </important> <p>If the transfer is successful, this method returns an operation ID that you can use to track the progress and completion of the action. If the transfer doesn't complete successfully, the domain registrant will be notified by email.</p>
     fn transfer_domain(
         &self,
         input: &TransferDomainRequest,
     ) -> Result<TransferDomainResponse, TransferDomainError>;
 
-    #[doc="<p>This operation updates the contact information for a particular domain. Information for at least one contact (registrant, administrator, or technical) must be supplied for update.</p> <p>If the update is successful, this method returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>"]
+    /// <p>This operation updates the contact information for a particular domain. Information for at least one contact (registrant, administrator, or technical) must be supplied for update.</p> <p>If the update is successful, this method returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>
     fn update_domain_contact(
         &self,
         input: &UpdateDomainContactRequest,
     ) -> Result<UpdateDomainContactResponse, UpdateDomainContactError>;
 
-    #[doc="<p>This operation updates the specified domain contact's privacy setting. When the privacy option is enabled, personal information such as postal or email address is hidden from the results of a public WHOIS query. The privacy services are provided by the AWS registrar, Gandi. For more information, see the <a href=\"http://www.gandi.net/domain/whois/?currency=USD&amp;amp;lang=en\">Gandi privacy features</a>.</p> <p>This operation only affects the privacy of the specified contact type (registrant, administrator, or tech). Successful acceptance returns an operation ID that you can use with <a>GetOperationDetail</a> to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>"]
+    /// <p>This operation updates the specified domain contact's privacy setting. When the privacy option is enabled, personal information such as postal or email address is hidden from the results of a public WHOIS query. The privacy services are provided by the AWS registrar, Gandi. For more information, see the <a href="http://www.gandi.net/domain/whois/?currency=USD&amp;amp;lang=en">Gandi privacy features</a>.</p> <p>This operation only affects the privacy of the specified contact type (registrant, administrator, or tech). Successful acceptance returns an operation ID that you can use with <a>GetOperationDetail</a> to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>
     fn update_domain_contact_privacy(
         &self,
         input: &UpdateDomainContactPrivacyRequest,
     ) -> Result<UpdateDomainContactPrivacyResponse, UpdateDomainContactPrivacyError>;
 
-    #[doc="<p>This operation replaces the current set of name servers for the domain with the specified set of name servers. If you use Amazon Route 53 as your DNS service, specify the four name servers in the delegation set for the hosted zone for the domain.</p> <p>If successful, this operation returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>"]
+    /// <p>This operation replaces the current set of name servers for the domain with the specified set of name servers. If you use Amazon Route 53 as your DNS service, specify the four name servers in the delegation set for the hosted zone for the domain.</p> <p>If successful, this operation returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>
     fn update_domain_nameservers(
         &self,
         input: &UpdateDomainNameserversRequest,
     ) -> Result<UpdateDomainNameserversResponse, UpdateDomainNameserversError>;
 
-    #[doc="<p>This operation adds or updates tags for a specified domain.</p> <p>All tag operations are eventually consistent; subsequent operations may not immediately represent all issued operations.</p>"]
+    /// <p>This operation adds or updates tags for a specified domain.</p> <p>All tag operations are eventually consistent; subsequent operations may not immediately represent all issued operations.</p>
     fn update_tags_for_domain(
         &self,
         input: &UpdateTagsForDomainRequest,
     ) -> Result<UpdateTagsForDomainResponse, UpdateTagsForDomainError>;
 
-    #[doc="<p>Returns all the domain-related billing records for the current AWS account for a specified period</p>"]
+    /// <p>Returns all the domain-related billing records for the current AWS account for a specified period</p>
     fn view_billing(
         &self,
         input: &ViewBillingRequest,
@@ -3123,7 +3123,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>This operation checks the availability of one domain name. Note that if the availability status of a domain is pending, you must submit another request to determine the availability of the domain name.</p>"]
+    /// <p>This operation checks the availability of one domain name. Note that if the availability status of a domain is pending, you must submit another request to determine the availability of the domain name.</p>
     fn check_domain_availability(
         &self,
         input: &CheckDomainAvailabilityRequest,
@@ -3160,7 +3160,7 @@ where
         }
     }
 
-    #[doc="<p>This operation deletes the specified tags for a domain.</p> <p>All tag operations are eventually consistent; subsequent operations may not immediately represent all issued operations.</p>"]
+    /// <p>This operation deletes the specified tags for a domain.</p> <p>All tag operations are eventually consistent; subsequent operations may not immediately represent all issued operations.</p>
     fn delete_tags_for_domain(
         &self,
         input: &DeleteTagsForDomainRequest,
@@ -3197,7 +3197,7 @@ where
         }
     }
 
-    #[doc="<p>This operation disables automatic renewal of domain registration for the specified domain.</p>"]
+    /// <p>This operation disables automatic renewal of domain registration for the specified domain.</p>
     fn disable_domain_auto_renew(
         &self,
         input: &DisableDomainAutoRenewRequest,
@@ -3234,7 +3234,7 @@ where
         }
     }
 
-    #[doc="<p>This operation removes the transfer lock on the domain (specifically the <code>clientTransferProhibited</code> status) to allow domain transfers. We recommend you refrain from performing this action unless you intend to transfer the domain to a different registrar. Successful submission returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>"]
+    /// <p>This operation removes the transfer lock on the domain (specifically the <code>clientTransferProhibited</code> status) to allow domain transfers. We recommend you refrain from performing this action unless you intend to transfer the domain to a different registrar. Successful submission returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>
     fn disable_domain_transfer_lock(
         &self,
         input: &DisableDomainTransferLockRequest,
@@ -3271,7 +3271,7 @@ where
         }
     }
 
-    #[doc="<p>This operation configures Amazon Route 53 to automatically renew the specified domain before the domain registration expires. The cost of renewing your domain registration is billed to your AWS account.</p> <p>The period during which you can renew a domain name varies by TLD. For a list of TLDs and their renewal policies, see <a href=\"http://wiki.gandi.net/en/domains/renew#renewal_restoration_and_deletion_times\">\"Renewal, restoration, and deletion times\"</a> on the website for our registrar partner, Gandi. Route 53 requires that you renew before the end of the renewal period that is listed on the Gandi website so we can complete processing before the deadline.</p>"]
+    /// <p>This operation configures Amazon Route 53 to automatically renew the specified domain before the domain registration expires. The cost of renewing your domain registration is billed to your AWS account.</p> <p>The period during which you can renew a domain name varies by TLD. For a list of TLDs and their renewal policies, see <a href="http://wiki.gandi.net/en/domains/renew#renewal_restoration_and_deletion_times">"Renewal, restoration, and deletion times"</a> on the website for our registrar partner, Gandi. Route 53 requires that you renew before the end of the renewal period that is listed on the Gandi website so we can complete processing before the deadline.</p>
     fn enable_domain_auto_renew(
         &self,
         input: &EnableDomainAutoRenewRequest,
@@ -3308,7 +3308,7 @@ where
         }
     }
 
-    #[doc="<p>This operation sets the transfer lock on the domain (specifically the <code>clientTransferProhibited</code> status) to prevent domain transfers. Successful submission returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>"]
+    /// <p>This operation sets the transfer lock on the domain (specifically the <code>clientTransferProhibited</code> status) to prevent domain transfers. Successful submission returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>
     fn enable_domain_transfer_lock(
         &self,
         input: &EnableDomainTransferLockRequest,
@@ -3345,7 +3345,7 @@ where
         }
     }
 
-    #[doc="<p>For operations that require confirmation that the email address for the registrant contact is valid, such as registering a new domain, this operation returns information about whether the registrant contact has responded.</p> <p>If you want us to resend the email, use the <code>ResendContactReachabilityEmail</code> operation.</p>"]
+    /// <p>For operations that require confirmation that the email address for the registrant contact is valid, such as registering a new domain, this operation returns information about whether the registrant contact has responded.</p> <p>If you want us to resend the email, use the <code>ResendContactReachabilityEmail</code> operation.</p>
     fn get_contact_reachability_status(
         &self,
         input: &GetContactReachabilityStatusRequest,
@@ -3384,7 +3384,7 @@ where
         }
     }
 
-    #[doc="<p>This operation returns detailed information about a specified domain that is associated with the current AWS account. Contact information for the domain is also returned as part of the output.</p>"]
+    /// <p>This operation returns detailed information about a specified domain that is associated with the current AWS account. Contact information for the domain is also returned as part of the output.</p>
     fn get_domain_detail(
         &self,
         input: &GetDomainDetailRequest,
@@ -3418,7 +3418,7 @@ where
         }
     }
 
-    #[doc="<p>The GetDomainSuggestions operation returns a list of suggested domain names given a string, which can either be a domain name or simply a word or phrase (without spaces).</p>"]
+    /// <p>The GetDomainSuggestions operation returns a list of suggested domain names given a string, which can either be a domain name or simply a word or phrase (without spaces).</p>
     fn get_domain_suggestions(
         &self,
         input: &GetDomainSuggestionsRequest,
@@ -3455,7 +3455,7 @@ where
         }
     }
 
-    #[doc="<p>This operation returns the current status of an operation that is not completed.</p>"]
+    /// <p>This operation returns the current status of an operation that is not completed.</p>
     fn get_operation_detail(
         &self,
         input: &GetOperationDetailRequest,
@@ -3492,7 +3492,7 @@ where
         }
     }
 
-    #[doc="<p>This operation returns all the domain names registered with Amazon Route 53 for the current AWS account.</p>"]
+    /// <p>This operation returns all the domain names registered with Amazon Route 53 for the current AWS account.</p>
     fn list_domains(
         &self,
         input: &ListDomainsRequest,
@@ -3526,7 +3526,7 @@ where
         }
     }
 
-    #[doc="<p>This operation returns the operation IDs of operations that are not yet complete.</p>"]
+    /// <p>This operation returns the operation IDs of operations that are not yet complete.</p>
     fn list_operations(
         &self,
         input: &ListOperationsRequest,
@@ -3560,7 +3560,7 @@ where
         }
     }
 
-    #[doc="<p>This operation returns all of the tags that are associated with the specified domain.</p> <p>All tag operations are eventually consistent; subsequent operations may not immediately represent all issued operations.</p>"]
+    /// <p>This operation returns all of the tags that are associated with the specified domain.</p> <p>All tag operations are eventually consistent; subsequent operations may not immediately represent all issued operations.</p>
     fn list_tags_for_domain(
         &self,
         input: &ListTagsForDomainRequest,
@@ -3594,7 +3594,7 @@ where
         }
     }
 
-    #[doc="<p>This operation registers a domain. Domains are registered by the AWS registrar partner, Gandi. For some top-level domains (TLDs), this operation requires extra parameters.</p> <p>When you register a domain, Amazon Route 53 does the following:</p> <ul> <li> <p>Creates a Amazon Route 53 hosted zone that has the same name as the domain. Amazon Route 53 assigns four name servers to your hosted zone and automatically updates your domain registration with the names of these name servers.</p> </li> <li> <p>Enables autorenew, so your domain registration will renew automatically each year. We'll notify you in advance of the renewal date so you can choose whether to renew the registration.</p> </li> <li> <p>Optionally enables privacy protection, so WHOIS queries return contact information for our registrar partner, Gandi, instead of the information you entered for registrant, admin, and tech contacts.</p> </li> <li> <p>If registration is successful, returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant is notified by email.</p> </li> <li> <p>Charges your AWS account an amount based on the top-level domain. For more information, see <a href=\"http://aws.amazon.com/route53/pricing/\">Amazon Route 53 Pricing</a>.</p> </li> </ul>"]
+    /// <p><p>This operation registers a domain. Domains are registered by the AWS registrar partner, Gandi. For some top-level domains (TLDs), this operation requires extra parameters.</p> <p>When you register a domain, Amazon Route 53 does the following:</p> <ul> <li> <p>Creates a Amazon Route 53 hosted zone that has the same name as the domain. Amazon Route 53 assigns four name servers to your hosted zone and automatically updates your domain registration with the names of these name servers.</p> </li> <li> <p>Enables autorenew, so your domain registration will renew automatically each year. We&#39;ll notify you in advance of the renewal date so you can choose whether to renew the registration.</p> </li> <li> <p>Optionally enables privacy protection, so WHOIS queries return contact information for our registrar partner, Gandi, instead of the information you entered for registrant, admin, and tech contacts.</p> </li> <li> <p>If registration is successful, returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant is notified by email.</p> </li> <li> <p>Charges your AWS account an amount based on the top-level domain. For more information, see <a href="http://aws.amazon.com/route53/pricing/">Amazon Route 53 Pricing</a>.</p> </li> </ul></p>
     fn register_domain(
         &self,
         input: &RegisterDomainRequest,
@@ -3628,7 +3628,7 @@ where
         }
     }
 
-    #[doc="<p>This operation renews a domain for the specified number of years. The cost of renewing your domain is billed to your AWS account.</p> <p>We recommend that you renew your domain several weeks before the expiration date. Some TLD registries delete domains before the expiration date if you haven't renewed far enough in advance. For more information about renewing domain registration, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-renew.html\">Renewing Registration for a Domain</a> in the Amazon Route 53 Developer Guide.</p>"]
+    /// <p>This operation renews a domain for the specified number of years. The cost of renewing your domain is billed to your AWS account.</p> <p>We recommend that you renew your domain several weeks before the expiration date. Some TLD registries delete domains before the expiration date if you haven't renewed far enough in advance. For more information about renewing domain registration, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-renew.html">Renewing Registration for a Domain</a> in the Amazon Route 53 Developer Guide.</p>
     fn renew_domain(
         &self,
         input: &RenewDomainRequest,
@@ -3662,7 +3662,7 @@ where
         }
     }
 
-    #[doc="<p>For operations that require confirmation that the email address for the registrant contact is valid, such as registering a new domain, this operation resends the confirmation email to the current email address for the registrant contact.</p>"]
+    /// <p>For operations that require confirmation that the email address for the registrant contact is valid, such as registering a new domain, this operation resends the confirmation email to the current email address for the registrant contact.</p>
     fn resend_contact_reachability_email(
         &self,
         input: &ResendContactReachabilityEmailRequest,
@@ -3701,7 +3701,7 @@ where
         }
     }
 
-    #[doc="<p>This operation returns the AuthCode for the domain. To transfer a domain to another registrar, you provide this value to the new registrar.</p>"]
+    /// <p>This operation returns the AuthCode for the domain. To transfer a domain to another registrar, you provide this value to the new registrar.</p>
     fn retrieve_domain_auth_code(
         &self,
         input: &RetrieveDomainAuthCodeRequest,
@@ -3738,7 +3738,7 @@ where
         }
     }
 
-    #[doc="<p>This operation transfers a domain from another registrar to Amazon Route 53. When the transfer is complete, the domain is registered with the AWS registrar partner, Gandi.</p> <p>For transfer requirements, a detailed procedure, and information about viewing the status of a domain transfer, see <a href=\"http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-transfer-to-route-53.html\">Transferring Registration for a Domain to Amazon Route 53</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>If the registrar for your domain is also the DNS service provider for the domain, we highly recommend that you consider transferring your DNS service to Amazon Route 53 or to another DNS service provider before you transfer your registration. Some registrars provide free DNS service when you purchase a domain registration. When you transfer the registration, the previous registrar will not renew your domain registration and could end your DNS service at any time.</p> <important> <p>If the registrar for your domain is also the DNS service provider for the domain and you don't transfer DNS service to another provider, your website, email, and the web applications associated with the domain might become unavailable.</p> </important> <p>If the transfer is successful, this method returns an operation ID that you can use to track the progress and completion of the action. If the transfer doesn't complete successfully, the domain registrant will be notified by email.</p>"]
+    /// <p>This operation transfers a domain from another registrar to Amazon Route 53. When the transfer is complete, the domain is registered with the AWS registrar partner, Gandi.</p> <p>For transfer requirements, a detailed procedure, and information about viewing the status of a domain transfer, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/domain-transfer-to-route-53.html">Transferring Registration for a Domain to Amazon Route 53</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>If the registrar for your domain is also the DNS service provider for the domain, we highly recommend that you consider transferring your DNS service to Amazon Route 53 or to another DNS service provider before you transfer your registration. Some registrars provide free DNS service when you purchase a domain registration. When you transfer the registration, the previous registrar will not renew your domain registration and could end your DNS service at any time.</p> <important> <p>If the registrar for your domain is also the DNS service provider for the domain and you don't transfer DNS service to another provider, your website, email, and the web applications associated with the domain might become unavailable.</p> </important> <p>If the transfer is successful, this method returns an operation ID that you can use to track the progress and completion of the action. If the transfer doesn't complete successfully, the domain registrant will be notified by email.</p>
     fn transfer_domain(
         &self,
         input: &TransferDomainRequest,
@@ -3772,7 +3772,7 @@ where
         }
     }
 
-    #[doc="<p>This operation updates the contact information for a particular domain. Information for at least one contact (registrant, administrator, or technical) must be supplied for update.</p> <p>If the update is successful, this method returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>"]
+    /// <p>This operation updates the contact information for a particular domain. Information for at least one contact (registrant, administrator, or technical) must be supplied for update.</p> <p>If the update is successful, this method returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>
     fn update_domain_contact(
         &self,
         input: &UpdateDomainContactRequest,
@@ -3809,7 +3809,7 @@ where
         }
     }
 
-    #[doc="<p>This operation updates the specified domain contact's privacy setting. When the privacy option is enabled, personal information such as postal or email address is hidden from the results of a public WHOIS query. The privacy services are provided by the AWS registrar, Gandi. For more information, see the <a href=\"http://www.gandi.net/domain/whois/?currency=USD&amp;amp;lang=en\">Gandi privacy features</a>.</p> <p>This operation only affects the privacy of the specified contact type (registrant, administrator, or tech). Successful acceptance returns an operation ID that you can use with <a>GetOperationDetail</a> to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>"]
+    /// <p>This operation updates the specified domain contact's privacy setting. When the privacy option is enabled, personal information such as postal or email address is hidden from the results of a public WHOIS query. The privacy services are provided by the AWS registrar, Gandi. For more information, see the <a href="http://www.gandi.net/domain/whois/?currency=USD&amp;amp;lang=en">Gandi privacy features</a>.</p> <p>This operation only affects the privacy of the specified contact type (registrant, administrator, or tech). Successful acceptance returns an operation ID that you can use with <a>GetOperationDetail</a> to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>
     fn update_domain_contact_privacy(
         &self,
         input: &UpdateDomainContactPrivacyRequest,
@@ -3846,7 +3846,7 @@ where
         }
     }
 
-    #[doc="<p>This operation replaces the current set of name servers for the domain with the specified set of name servers. If you use Amazon Route 53 as your DNS service, specify the four name servers in the delegation set for the hosted zone for the domain.</p> <p>If successful, this operation returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>"]
+    /// <p>This operation replaces the current set of name servers for the domain with the specified set of name servers. If you use Amazon Route 53 as your DNS service, specify the four name servers in the delegation set for the hosted zone for the domain.</p> <p>If successful, this operation returns an operation ID that you can use to track the progress and completion of the action. If the request is not completed successfully, the domain registrant will be notified by email.</p>
     fn update_domain_nameservers(
         &self,
         input: &UpdateDomainNameserversRequest,
@@ -3883,7 +3883,7 @@ where
         }
     }
 
-    #[doc="<p>This operation adds or updates tags for a specified domain.</p> <p>All tag operations are eventually consistent; subsequent operations may not immediately represent all issued operations.</p>"]
+    /// <p>This operation adds or updates tags for a specified domain.</p> <p>All tag operations are eventually consistent; subsequent operations may not immediately represent all issued operations.</p>
     fn update_tags_for_domain(
         &self,
         input: &UpdateTagsForDomainRequest,
@@ -3920,7 +3920,7 @@ where
         }
     }
 
-    #[doc="<p>Returns all the domain-related billing records for the current AWS account for a specified period</p>"]
+    /// <p>Returns all the domain-related billing records for the current AWS account for a specified period</p>
     fn view_billing(
         &self,
         input: &ViewBillingRequest,

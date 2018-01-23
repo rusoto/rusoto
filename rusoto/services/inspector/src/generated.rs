@@ -453,7 +453,8 @@ pub struct DescribeAssessmentTargetsResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeAssessmentTemplatesRequest {
-    #[serde(rename = "assessmentTemplateArns")] pub assessment_template_arns: Vec<String>,
+    #[serde(rename = "assessmentTemplateArns")]
+    pub assessment_template_arns: Vec<String>,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -1183,13 +1184,13 @@ pub struct UpdateAssessmentTargetRequest {
 /// Errors returned by AddAttributesToFindings
 #[derive(Debug, PartialEq)]
 pub enum AddAttributesToFindingsError {
-    ///<p>You do not have required permissions to access the requested resource.</p>
+    /// <p>You do not have required permissions to access the requested resource.</p>
     AccessDenied(String),
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1281,15 +1282,15 @@ impl Error for AddAttributesToFindingsError {
 /// Errors returned by CreateAssessmentTarget
 #[derive(Debug, PartialEq)]
 pub enum CreateAssessmentTargetError {
-    ///<p>You do not have required permissions to access the requested resource.</p>
+    /// <p>You do not have required permissions to access the requested resource.</p>
     AccessDenied(String),
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error code describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error code describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1385,15 +1386,15 @@ impl Error for CreateAssessmentTargetError {
 /// Errors returned by CreateAssessmentTemplate
 #[derive(Debug, PartialEq)]
 pub enum CreateAssessmentTemplateError {
-    ///<p>You do not have required permissions to access the requested resource.</p>
+    /// <p>You do not have required permissions to access the requested resource.</p>
     AccessDenied(String),
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error code describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error code describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1489,13 +1490,13 @@ impl Error for CreateAssessmentTemplateError {
 /// Errors returned by CreateResourceGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateResourceGroupError {
-    ///<p>You do not have required permissions to access the requested resource.</p>
+    /// <p>You do not have required permissions to access the requested resource.</p>
     AccessDenied(String),
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error code describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error code describes the limit exceeded.</p>
     LimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1587,15 +1588,15 @@ impl Error for CreateResourceGroupError {
 /// Errors returned by DeleteAssessmentRun
 #[derive(Debug, PartialEq)]
 pub enum DeleteAssessmentRunError {
-    ///<p>You do not have required permissions to access the requested resource.</p>
+    /// <p>You do not have required permissions to access the requested resource.</p>
     AccessDenied(String),
-    ///<p>You cannot perform a specified action if an assessment run is currently in progress.</p>
+    /// <p>You cannot perform a specified action if an assessment run is currently in progress.</p>
     AssessmentRunInProgress(String),
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1693,15 +1694,15 @@ impl Error for DeleteAssessmentRunError {
 /// Errors returned by DeleteAssessmentTarget
 #[derive(Debug, PartialEq)]
 pub enum DeleteAssessmentTargetError {
-    ///<p>You do not have required permissions to access the requested resource.</p>
+    /// <p>You do not have required permissions to access the requested resource.</p>
     AccessDenied(String),
-    ///<p>You cannot perform a specified action if an assessment run is currently in progress.</p>
+    /// <p>You cannot perform a specified action if an assessment run is currently in progress.</p>
     AssessmentRunInProgress(String),
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1799,15 +1800,15 @@ impl Error for DeleteAssessmentTargetError {
 /// Errors returned by DeleteAssessmentTemplate
 #[derive(Debug, PartialEq)]
 pub enum DeleteAssessmentTemplateError {
-    ///<p>You do not have required permissions to access the requested resource.</p>
+    /// <p>You do not have required permissions to access the requested resource.</p>
     AccessDenied(String),
-    ///<p>You cannot perform a specified action if an assessment run is currently in progress.</p>
+    /// <p>You cannot perform a specified action if an assessment run is currently in progress.</p>
     AssessmentRunInProgress(String),
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1905,9 +1906,9 @@ impl Error for DeleteAssessmentTemplateError {
 /// Errors returned by DescribeAssessmentRuns
 #[derive(Debug, PartialEq)]
 pub enum DescribeAssessmentRunsError {
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1991,9 +1992,9 @@ impl Error for DescribeAssessmentRunsError {
 /// Errors returned by DescribeAssessmentTargets
 #[derive(Debug, PartialEq)]
 pub enum DescribeAssessmentTargetsError {
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2077,9 +2078,9 @@ impl Error for DescribeAssessmentTargetsError {
 /// Errors returned by DescribeAssessmentTemplates
 #[derive(Debug, PartialEq)]
 pub enum DescribeAssessmentTemplatesError {
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2163,7 +2164,7 @@ impl Error for DescribeAssessmentTemplatesError {
 /// Errors returned by DescribeCrossAccountAccessRole
 #[derive(Debug, PartialEq)]
 pub enum DescribeCrossAccountAccessRoleError {
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2243,9 +2244,9 @@ impl Error for DescribeCrossAccountAccessRoleError {
 /// Errors returned by DescribeFindings
 #[derive(Debug, PartialEq)]
 pub enum DescribeFindingsError {
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2327,9 +2328,9 @@ impl Error for DescribeFindingsError {
 /// Errors returned by DescribeResourceGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeResourceGroupsError {
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2413,9 +2414,9 @@ impl Error for DescribeResourceGroupsError {
 /// Errors returned by DescribeRulesPackages
 #[derive(Debug, PartialEq)]
 pub enum DescribeRulesPackagesError {
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2499,17 +2500,17 @@ impl Error for DescribeRulesPackagesError {
 /// Errors returned by GetAssessmentReport
 #[derive(Debug, PartialEq)]
 pub enum GetAssessmentReportError {
-    ///<p>You do not have required permissions to access the requested resource.</p>
+    /// <p>You do not have required permissions to access the requested resource.</p>
     AccessDenied(String),
-    ///<p>You cannot perform a specified action if an assessment run is currently in progress.</p>
+    /// <p>You cannot perform a specified action if an assessment run is currently in progress.</p>
     AssessmentRunInProgress(String),
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
-    ///<p>Used by the <a>GetAssessmentReport</a> API. The request was rejected because you tried to generate a report for an assessment run that existed before reporting was supported in Amazon Inspector. You can only generate reports for assessment runs that took place or will take place after generating reports in Amazon Inspector became available.</p>
+    /// <p>Used by the <a>GetAssessmentReport</a> API. The request was rejected because you tried to generate a report for an assessment run that existed before reporting was supported in Amazon Inspector. You can only generate reports for assessment runs that took place or will take place after generating reports in Amazon Inspector became available.</p>
     UnsupportedFeature(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2611,13 +2612,13 @@ impl Error for GetAssessmentReportError {
 /// Errors returned by GetTelemetryMetadata
 #[derive(Debug, PartialEq)]
 pub enum GetTelemetryMetadataError {
-    ///<p>You do not have required permissions to access the requested resource.</p>
+    /// <p>You do not have required permissions to access the requested resource.</p>
     AccessDenied(String),
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2709,13 +2710,13 @@ impl Error for GetTelemetryMetadataError {
 /// Errors returned by ListAssessmentRunAgents
 #[derive(Debug, PartialEq)]
 pub enum ListAssessmentRunAgentsError {
-    ///<p>You do not have required permissions to access the requested resource.</p>
+    /// <p>You do not have required permissions to access the requested resource.</p>
     AccessDenied(String),
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2807,13 +2808,13 @@ impl Error for ListAssessmentRunAgentsError {
 /// Errors returned by ListAssessmentRuns
 #[derive(Debug, PartialEq)]
 pub enum ListAssessmentRunsError {
-    ///<p>You do not have required permissions to access the requested resource.</p>
+    /// <p>You do not have required permissions to access the requested resource.</p>
     AccessDenied(String),
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2905,11 +2906,11 @@ impl Error for ListAssessmentRunsError {
 /// Errors returned by ListAssessmentTargets
 #[derive(Debug, PartialEq)]
 pub enum ListAssessmentTargetsError {
-    ///<p>You do not have required permissions to access the requested resource.</p>
+    /// <p>You do not have required permissions to access the requested resource.</p>
     AccessDenied(String),
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2997,13 +2998,13 @@ impl Error for ListAssessmentTargetsError {
 /// Errors returned by ListAssessmentTemplates
 #[derive(Debug, PartialEq)]
 pub enum ListAssessmentTemplatesError {
-    ///<p>You do not have required permissions to access the requested resource.</p>
+    /// <p>You do not have required permissions to access the requested resource.</p>
     AccessDenied(String),
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3095,13 +3096,13 @@ impl Error for ListAssessmentTemplatesError {
 /// Errors returned by ListEventSubscriptions
 #[derive(Debug, PartialEq)]
 pub enum ListEventSubscriptionsError {
-    ///<p>You do not have required permissions to access the requested resource.</p>
+    /// <p>You do not have required permissions to access the requested resource.</p>
     AccessDenied(String),
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3193,13 +3194,13 @@ impl Error for ListEventSubscriptionsError {
 /// Errors returned by ListFindings
 #[derive(Debug, PartialEq)]
 pub enum ListFindingsError {
-    ///<p>You do not have required permissions to access the requested resource.</p>
+    /// <p>You do not have required permissions to access the requested resource.</p>
     AccessDenied(String),
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3287,11 +3288,11 @@ impl Error for ListFindingsError {
 /// Errors returned by ListRulesPackages
 #[derive(Debug, PartialEq)]
 pub enum ListRulesPackagesError {
-    ///<p>You do not have required permissions to access the requested resource.</p>
+    /// <p>You do not have required permissions to access the requested resource.</p>
     AccessDenied(String),
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3379,13 +3380,13 @@ impl Error for ListRulesPackagesError {
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
-    ///<p>You do not have required permissions to access the requested resource.</p>
+    /// <p>You do not have required permissions to access the requested resource.</p>
     AccessDenied(String),
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3477,15 +3478,15 @@ impl Error for ListTagsForResourceError {
 /// Errors returned by PreviewAgents
 #[derive(Debug, PartialEq)]
 pub enum PreviewAgentsError {
-    ///<p>You do not have required permissions to access the requested resource.</p>
+    /// <p>You do not have required permissions to access the requested resource.</p>
     AccessDenied(String),
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>Amazon Inspector cannot assume the cross-account role that it needs to list your EC2 instances during the assessment run.</p>
+    /// <p>Amazon Inspector cannot assume the cross-account role that it needs to list your EC2 instances during the assessment run.</p>
     InvalidCrossAccountRole(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3579,13 +3580,13 @@ impl Error for PreviewAgentsError {
 /// Errors returned by RegisterCrossAccountAccessRole
 #[derive(Debug, PartialEq)]
 pub enum RegisterCrossAccountAccessRoleError {
-    ///<p>You do not have required permissions to access the requested resource.</p>
+    /// <p>You do not have required permissions to access the requested resource.</p>
     AccessDenied(String),
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>Amazon Inspector cannot assume the cross-account role that it needs to list your EC2 instances during the assessment run.</p>
+    /// <p>Amazon Inspector cannot assume the cross-account role that it needs to list your EC2 instances during the assessment run.</p>
     InvalidCrossAccountRole(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3679,13 +3680,13 @@ impl Error for RegisterCrossAccountAccessRoleError {
 /// Errors returned by RemoveAttributesFromFindings
 #[derive(Debug, PartialEq)]
 pub enum RemoveAttributesFromFindingsError {
-    ///<p>You do not have required permissions to access the requested resource.</p>
+    /// <p>You do not have required permissions to access the requested resource.</p>
     AccessDenied(String),
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3777,13 +3778,13 @@ impl Error for RemoveAttributesFromFindingsError {
 /// Errors returned by SetTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum SetTagsForResourceError {
-    ///<p>You do not have required permissions to access the requested resource.</p>
+    /// <p>You do not have required permissions to access the requested resource.</p>
     AccessDenied(String),
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3875,19 +3876,19 @@ impl Error for SetTagsForResourceError {
 /// Errors returned by StartAssessmentRun
 #[derive(Debug, PartialEq)]
 pub enum StartAssessmentRunError {
-    ///<p>You do not have required permissions to access the requested resource.</p>
+    /// <p>You do not have required permissions to access the requested resource.</p>
     AccessDenied(String),
-    ///<p>You started an assessment run, but one of the instances is already participating in another assessment run.</p>
+    /// <p>You started an assessment run, but one of the instances is already participating in another assessment run.</p>
     AgentsAlreadyRunningAssessment(String),
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>Amazon Inspector cannot assume the cross-account role that it needs to list your EC2 instances during the assessment run.</p>
+    /// <p>Amazon Inspector cannot assume the cross-account role that it needs to list your EC2 instances during the assessment run.</p>
     InvalidCrossAccountRole(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error code describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error code describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3995,13 +3996,13 @@ impl Error for StartAssessmentRunError {
 /// Errors returned by StopAssessmentRun
 #[derive(Debug, PartialEq)]
 pub enum StopAssessmentRunError {
-    ///<p>You do not have required permissions to access the requested resource.</p>
+    /// <p>You do not have required permissions to access the requested resource.</p>
     AccessDenied(String),
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4093,15 +4094,15 @@ impl Error for StopAssessmentRunError {
 /// Errors returned by SubscribeToEvent
 #[derive(Debug, PartialEq)]
 pub enum SubscribeToEventError {
-    ///<p>You do not have required permissions to access the requested resource.</p>
+    /// <p>You do not have required permissions to access the requested resource.</p>
     AccessDenied(String),
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error code describes the limit exceeded.</p>
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error code describes the limit exceeded.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4195,13 +4196,13 @@ impl Error for SubscribeToEventError {
 /// Errors returned by UnsubscribeFromEvent
 #[derive(Debug, PartialEq)]
 pub enum UnsubscribeFromEventError {
-    ///<p>You do not have required permissions to access the requested resource.</p>
+    /// <p>You do not have required permissions to access the requested resource.</p>
     AccessDenied(String),
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4293,13 +4294,13 @@ impl Error for UnsubscribeFromEventError {
 /// Errors returned by UpdateAssessmentTarget
 #[derive(Debug, PartialEq)]
 pub enum UpdateAssessmentTargetError {
-    ///<p>You do not have required permissions to access the requested resource.</p>
+    /// <p>You do not have required permissions to access the requested resource.</p>
     AccessDenied(String),
-    ///<p>Internal server error.</p>
+    /// <p>Internal server error.</p>
     Internal(String),
-    ///<p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    ///<p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error code describes the entity.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4390,198 +4391,198 @@ impl Error for UpdateAssessmentTargetError {
 }
 /// Trait representing the capabilities of the Amazon Inspector API. Amazon Inspector clients implement this trait.
 pub trait Inspector {
-    #[doc="<p>Assigns attributes (key and value pairs) to the findings that are specified by the ARNs of the findings.</p>"]
+    /// <p>Assigns attributes (key and value pairs) to the findings that are specified by the ARNs of the findings.</p>
     fn add_attributes_to_findings(
         &self,
         input: &AddAttributesToFindingsRequest,
     ) -> Result<AddAttributesToFindingsResponse, AddAttributesToFindingsError>;
 
-    #[doc="<p>Creates a new assessment target using the ARN of the resource group that is generated by <a>CreateResourceGroup</a>. You can create up to 50 assessment targets per AWS account. You can run up to 500 concurrent agents per AWS account. For more information, see <a href=\"http://docs.aws.amazon.com/inspector/latest/userguide/inspector_applications.html\"> Amazon Inspector Assessment Targets</a>.</p>"]
+    /// <p>Creates a new assessment target using the ARN of the resource group that is generated by <a>CreateResourceGroup</a>. You can create up to 50 assessment targets per AWS account. You can run up to 500 concurrent agents per AWS account. For more information, see <a href="http://docs.aws.amazon.com/inspector/latest/userguide/inspector_applications.html"> Amazon Inspector Assessment Targets</a>.</p>
     fn create_assessment_target(
         &self,
         input: &CreateAssessmentTargetRequest,
     ) -> Result<CreateAssessmentTargetResponse, CreateAssessmentTargetError>;
 
-    #[doc="<p>Creates an assessment template for the assessment target that is specified by the ARN of the assessment target.</p>"]
+    /// <p>Creates an assessment template for the assessment target that is specified by the ARN of the assessment target.</p>
     fn create_assessment_template(
         &self,
         input: &CreateAssessmentTemplateRequest,
     ) -> Result<CreateAssessmentTemplateResponse, CreateAssessmentTemplateError>;
 
-    #[doc="<p>Creates a resource group using the specified set of tags (key and value pairs) that are used to select the EC2 instances to be included in an Amazon Inspector assessment target. The created resource group is then used to create an Amazon Inspector assessment target. For more information, see <a>CreateAssessmentTarget</a>.</p>"]
+    /// <p>Creates a resource group using the specified set of tags (key and value pairs) that are used to select the EC2 instances to be included in an Amazon Inspector assessment target. The created resource group is then used to create an Amazon Inspector assessment target. For more information, see <a>CreateAssessmentTarget</a>.</p>
     fn create_resource_group(
         &self,
         input: &CreateResourceGroupRequest,
     ) -> Result<CreateResourceGroupResponse, CreateResourceGroupError>;
 
-    #[doc = "<p>Deletes the assessment run that is specified by the ARN of the assessment run.</p>"]
+    /// <p>Deletes the assessment run that is specified by the ARN of the assessment run.</p>
     fn delete_assessment_run(
         &self,
         input: &DeleteAssessmentRunRequest,
     ) -> Result<(), DeleteAssessmentRunError>;
 
-    #[doc="<p>Deletes the assessment target that is specified by the ARN of the assessment target.</p>"]
+    /// <p>Deletes the assessment target that is specified by the ARN of the assessment target.</p>
     fn delete_assessment_target(
         &self,
         input: &DeleteAssessmentTargetRequest,
     ) -> Result<(), DeleteAssessmentTargetError>;
 
-    #[doc="<p>Deletes the assessment template that is specified by the ARN of the assessment template.</p>"]
+    /// <p>Deletes the assessment template that is specified by the ARN of the assessment template.</p>
     fn delete_assessment_template(
         &self,
         input: &DeleteAssessmentTemplateRequest,
     ) -> Result<(), DeleteAssessmentTemplateError>;
 
-    #[doc="<p>Describes the assessment runs that are specified by the ARNs of the assessment runs.</p>"]
+    /// <p>Describes the assessment runs that are specified by the ARNs of the assessment runs.</p>
     fn describe_assessment_runs(
         &self,
         input: &DescribeAssessmentRunsRequest,
     ) -> Result<DescribeAssessmentRunsResponse, DescribeAssessmentRunsError>;
 
-    #[doc="<p>Describes the assessment targets that are specified by the ARNs of the assessment targets.</p>"]
+    /// <p>Describes the assessment targets that are specified by the ARNs of the assessment targets.</p>
     fn describe_assessment_targets(
         &self,
         input: &DescribeAssessmentTargetsRequest,
     ) -> Result<DescribeAssessmentTargetsResponse, DescribeAssessmentTargetsError>;
 
-    #[doc="<p>Describes the assessment templates that are specified by the ARNs of the assessment templates.</p>"]
+    /// <p>Describes the assessment templates that are specified by the ARNs of the assessment templates.</p>
     fn describe_assessment_templates(
         &self,
         input: &DescribeAssessmentTemplatesRequest,
     ) -> Result<DescribeAssessmentTemplatesResponse, DescribeAssessmentTemplatesError>;
 
-    #[doc="<p>Describes the IAM role that enables Amazon Inspector to access your AWS account.</p>"]
+    /// <p>Describes the IAM role that enables Amazon Inspector to access your AWS account.</p>
     fn describe_cross_account_access_role(
         &self,
     ) -> Result<DescribeCrossAccountAccessRoleResponse, DescribeCrossAccountAccessRoleError>;
 
-    #[doc = "<p>Describes the findings that are specified by the ARNs of the findings.</p>"]
+    /// <p>Describes the findings that are specified by the ARNs of the findings.</p>
     fn describe_findings(
         &self,
         input: &DescribeFindingsRequest,
     ) -> Result<DescribeFindingsResponse, DescribeFindingsError>;
 
-    #[doc="<p>Describes the resource groups that are specified by the ARNs of the resource groups.</p>"]
+    /// <p>Describes the resource groups that are specified by the ARNs of the resource groups.</p>
     fn describe_resource_groups(
         &self,
         input: &DescribeResourceGroupsRequest,
     ) -> Result<DescribeResourceGroupsResponse, DescribeResourceGroupsError>;
 
-    #[doc="<p>Describes the rules packages that are specified by the ARNs of the rules packages.</p>"]
+    /// <p>Describes the rules packages that are specified by the ARNs of the rules packages.</p>
     fn describe_rules_packages(
         &self,
         input: &DescribeRulesPackagesRequest,
     ) -> Result<DescribeRulesPackagesResponse, DescribeRulesPackagesError>;
 
-    #[doc="<p>Produces an assessment report that includes detailed and comprehensive results of a specified assessment run. </p>"]
+    /// <p>Produces an assessment report that includes detailed and comprehensive results of a specified assessment run. </p>
     fn get_assessment_report(
         &self,
         input: &GetAssessmentReportRequest,
     ) -> Result<GetAssessmentReportResponse, GetAssessmentReportError>;
 
-    #[doc = "<p>Information about the data that is collected for the specified assessment run.</p>"]
+    /// <p>Information about the data that is collected for the specified assessment run.</p>
     fn get_telemetry_metadata(
         &self,
         input: &GetTelemetryMetadataRequest,
     ) -> Result<GetTelemetryMetadataResponse, GetTelemetryMetadataError>;
 
-    #[doc="<p>Lists the agents of the assessment runs that are specified by the ARNs of the assessment runs.</p>"]
+    /// <p>Lists the agents of the assessment runs that are specified by the ARNs of the assessment runs.</p>
     fn list_assessment_run_agents(
         &self,
         input: &ListAssessmentRunAgentsRequest,
     ) -> Result<ListAssessmentRunAgentsResponse, ListAssessmentRunAgentsError>;
 
-    #[doc="<p>Lists the assessment runs that correspond to the assessment templates that are specified by the ARNs of the assessment templates.</p>"]
+    /// <p>Lists the assessment runs that correspond to the assessment templates that are specified by the ARNs of the assessment templates.</p>
     fn list_assessment_runs(
         &self,
         input: &ListAssessmentRunsRequest,
     ) -> Result<ListAssessmentRunsResponse, ListAssessmentRunsError>;
 
-    #[doc="<p>Lists the ARNs of the assessment targets within this AWS account. For more information about assessment targets, see <a href=\"http://docs.aws.amazon.com/inspector/latest/userguide/inspector_applications.html\">Amazon Inspector Assessment Targets</a>.</p>"]
+    /// <p>Lists the ARNs of the assessment targets within this AWS account. For more information about assessment targets, see <a href="http://docs.aws.amazon.com/inspector/latest/userguide/inspector_applications.html">Amazon Inspector Assessment Targets</a>.</p>
     fn list_assessment_targets(
         &self,
         input: &ListAssessmentTargetsRequest,
     ) -> Result<ListAssessmentTargetsResponse, ListAssessmentTargetsError>;
 
-    #[doc="<p>Lists the assessment templates that correspond to the assessment targets that are specified by the ARNs of the assessment targets.</p>"]
+    /// <p>Lists the assessment templates that correspond to the assessment targets that are specified by the ARNs of the assessment targets.</p>
     fn list_assessment_templates(
         &self,
         input: &ListAssessmentTemplatesRequest,
     ) -> Result<ListAssessmentTemplatesResponse, ListAssessmentTemplatesError>;
 
-    #[doc="<p>Lists all the event subscriptions for the assessment template that is specified by the ARN of the assessment template. For more information, see <a>SubscribeToEvent</a> and <a>UnsubscribeFromEvent</a>.</p>"]
+    /// <p>Lists all the event subscriptions for the assessment template that is specified by the ARN of the assessment template. For more information, see <a>SubscribeToEvent</a> and <a>UnsubscribeFromEvent</a>.</p>
     fn list_event_subscriptions(
         &self,
         input: &ListEventSubscriptionsRequest,
     ) -> Result<ListEventSubscriptionsResponse, ListEventSubscriptionsError>;
 
-    #[doc="<p>Lists findings that are generated by the assessment runs that are specified by the ARNs of the assessment runs.</p>"]
+    /// <p>Lists findings that are generated by the assessment runs that are specified by the ARNs of the assessment runs.</p>
     fn list_findings(
         &self,
         input: &ListFindingsRequest,
     ) -> Result<ListFindingsResponse, ListFindingsError>;
 
-    #[doc = "<p>Lists all available Amazon Inspector rules packages.</p>"]
+    /// <p>Lists all available Amazon Inspector rules packages.</p>
     fn list_rules_packages(
         &self,
         input: &ListRulesPackagesRequest,
     ) -> Result<ListRulesPackagesResponse, ListRulesPackagesError>;
 
-    #[doc = "<p>Lists all tags associated with an assessment template.</p>"]
+    /// <p>Lists all tags associated with an assessment template.</p>
     fn list_tags_for_resource(
         &self,
         input: &ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, ListTagsForResourceError>;
 
-    #[doc="<p>Previews the agents installed on the EC2 instances that are part of the specified assessment target.</p>"]
+    /// <p>Previews the agents installed on the EC2 instances that are part of the specified assessment target.</p>
     fn preview_agents(
         &self,
         input: &PreviewAgentsRequest,
     ) -> Result<PreviewAgentsResponse, PreviewAgentsError>;
 
-    #[doc="<p>Registers the IAM role that Amazon Inspector uses to list your EC2 instances at the start of the assessment run or when you call the <a>PreviewAgents</a> action.</p>"]
+    /// <p>Registers the IAM role that Amazon Inspector uses to list your EC2 instances at the start of the assessment run or when you call the <a>PreviewAgents</a> action.</p>
     fn register_cross_account_access_role(
         &self,
         input: &RegisterCrossAccountAccessRoleRequest,
     ) -> Result<(), RegisterCrossAccountAccessRoleError>;
 
-    #[doc="<p>Removes entire attributes (key and value pairs) from the findings that are specified by the ARNs of the findings where an attribute with the specified key exists.</p>"]
+    /// <p>Removes entire attributes (key and value pairs) from the findings that are specified by the ARNs of the findings where an attribute with the specified key exists.</p>
     fn remove_attributes_from_findings(
         &self,
         input: &RemoveAttributesFromFindingsRequest,
     ) -> Result<RemoveAttributesFromFindingsResponse, RemoveAttributesFromFindingsError>;
 
-    #[doc="<p>Sets tags (key and value pairs) to the assessment template that is specified by the ARN of the assessment template.</p>"]
+    /// <p>Sets tags (key and value pairs) to the assessment template that is specified by the ARN of the assessment template.</p>
     fn set_tags_for_resource(
         &self,
         input: &SetTagsForResourceRequest,
     ) -> Result<(), SetTagsForResourceError>;
 
-    #[doc="<p>Starts the assessment run specified by the ARN of the assessment template. For this API to function properly, you must not exceed the limit of running up to 500 concurrent agents per AWS account.</p>"]
+    /// <p>Starts the assessment run specified by the ARN of the assessment template. For this API to function properly, you must not exceed the limit of running up to 500 concurrent agents per AWS account.</p>
     fn start_assessment_run(
         &self,
         input: &StartAssessmentRunRequest,
     ) -> Result<StartAssessmentRunResponse, StartAssessmentRunError>;
 
-    #[doc = "<p>Stops the assessment run that is specified by the ARN of the assessment run.</p>"]
+    /// <p>Stops the assessment run that is specified by the ARN of the assessment run.</p>
     fn stop_assessment_run(
         &self,
         input: &StopAssessmentRunRequest,
     ) -> Result<(), StopAssessmentRunError>;
 
-    #[doc="<p>Enables the process of sending Amazon Simple Notification Service (SNS) notifications about a specified event to a specified SNS topic.</p>"]
+    /// <p>Enables the process of sending Amazon Simple Notification Service (SNS) notifications about a specified event to a specified SNS topic.</p>
     fn subscribe_to_event(
         &self,
         input: &SubscribeToEventRequest,
     ) -> Result<(), SubscribeToEventError>;
 
-    #[doc="<p>Disables the process of sending Amazon Simple Notification Service (SNS) notifications about a specified event to a specified SNS topic.</p>"]
+    /// <p>Disables the process of sending Amazon Simple Notification Service (SNS) notifications about a specified event to a specified SNS topic.</p>
     fn unsubscribe_from_event(
         &self,
         input: &UnsubscribeFromEventRequest,
     ) -> Result<(), UnsubscribeFromEventError>;
 
-    #[doc="<p>Updates the assessment target that is specified by the ARN of the assessment target.</p>"]
+    /// <p>Updates the assessment target that is specified by the ARN of the assessment target.</p>
     fn update_assessment_target(
         &self,
         input: &UpdateAssessmentTargetRequest,
@@ -4617,7 +4618,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Assigns attributes (key and value pairs) to the findings that are specified by the ARNs of the findings.</p>"]
+    /// <p>Assigns attributes (key and value pairs) to the findings that are specified by the ARNs of the findings.</p>
     fn add_attributes_to_findings(
         &self,
         input: &AddAttributesToFindingsRequest,
@@ -4651,7 +4652,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new assessment target using the ARN of the resource group that is generated by <a>CreateResourceGroup</a>. You can create up to 50 assessment targets per AWS account. You can run up to 500 concurrent agents per AWS account. For more information, see <a href=\"http://docs.aws.amazon.com/inspector/latest/userguide/inspector_applications.html\"> Amazon Inspector Assessment Targets</a>.</p>"]
+    /// <p>Creates a new assessment target using the ARN of the resource group that is generated by <a>CreateResourceGroup</a>. You can create up to 50 assessment targets per AWS account. You can run up to 500 concurrent agents per AWS account. For more information, see <a href="http://docs.aws.amazon.com/inspector/latest/userguide/inspector_applications.html"> Amazon Inspector Assessment Targets</a>.</p>
     fn create_assessment_target(
         &self,
         input: &CreateAssessmentTargetRequest,
@@ -4685,7 +4686,7 @@ where
         }
     }
 
-    #[doc="<p>Creates an assessment template for the assessment target that is specified by the ARN of the assessment target.</p>"]
+    /// <p>Creates an assessment template for the assessment target that is specified by the ARN of the assessment target.</p>
     fn create_assessment_template(
         &self,
         input: &CreateAssessmentTemplateRequest,
@@ -4719,7 +4720,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a resource group using the specified set of tags (key and value pairs) that are used to select the EC2 instances to be included in an Amazon Inspector assessment target. The created resource group is then used to create an Amazon Inspector assessment target. For more information, see <a>CreateAssessmentTarget</a>.</p>"]
+    /// <p>Creates a resource group using the specified set of tags (key and value pairs) that are used to select the EC2 instances to be included in an Amazon Inspector assessment target. The created resource group is then used to create an Amazon Inspector assessment target. For more information, see <a>CreateAssessmentTarget</a>.</p>
     fn create_resource_group(
         &self,
         input: &CreateResourceGroupRequest,
@@ -4753,7 +4754,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the assessment run that is specified by the ARN of the assessment run.</p>"]
+    /// <p>Deletes the assessment run that is specified by the ARN of the assessment run.</p>
     fn delete_assessment_run(
         &self,
         input: &DeleteAssessmentRunRequest,
@@ -4781,7 +4782,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the assessment target that is specified by the ARN of the assessment target.</p>"]
+    /// <p>Deletes the assessment target that is specified by the ARN of the assessment target.</p>
     fn delete_assessment_target(
         &self,
         input: &DeleteAssessmentTargetRequest,
@@ -4809,7 +4810,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the assessment template that is specified by the ARN of the assessment template.</p>"]
+    /// <p>Deletes the assessment template that is specified by the ARN of the assessment template.</p>
     fn delete_assessment_template(
         &self,
         input: &DeleteAssessmentTemplateRequest,
@@ -4837,7 +4838,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the assessment runs that are specified by the ARNs of the assessment runs.</p>"]
+    /// <p>Describes the assessment runs that are specified by the ARNs of the assessment runs.</p>
     fn describe_assessment_runs(
         &self,
         input: &DescribeAssessmentRunsRequest,
@@ -4871,7 +4872,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the assessment targets that are specified by the ARNs of the assessment targets.</p>"]
+    /// <p>Describes the assessment targets that are specified by the ARNs of the assessment targets.</p>
     fn describe_assessment_targets(
         &self,
         input: &DescribeAssessmentTargetsRequest,
@@ -4905,7 +4906,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the assessment templates that are specified by the ARNs of the assessment templates.</p>"]
+    /// <p>Describes the assessment templates that are specified by the ARNs of the assessment templates.</p>
     fn describe_assessment_templates(
         &self,
         input: &DescribeAssessmentTemplatesRequest,
@@ -4942,7 +4943,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the IAM role that enables Amazon Inspector to access your AWS account.</p>"]
+    /// <p>Describes the IAM role that enables Amazon Inspector to access your AWS account.</p>
     fn describe_cross_account_access_role(
         &self,
     ) -> Result<DescribeCrossAccountAccessRoleResponse, DescribeCrossAccountAccessRoleError> {
@@ -4979,7 +4980,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes the findings that are specified by the ARNs of the findings.</p>"]
+    /// <p>Describes the findings that are specified by the ARNs of the findings.</p>
     fn describe_findings(
         &self,
         input: &DescribeFindingsRequest,
@@ -5013,7 +5014,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the resource groups that are specified by the ARNs of the resource groups.</p>"]
+    /// <p>Describes the resource groups that are specified by the ARNs of the resource groups.</p>
     fn describe_resource_groups(
         &self,
         input: &DescribeResourceGroupsRequest,
@@ -5047,7 +5048,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the rules packages that are specified by the ARNs of the rules packages.</p>"]
+    /// <p>Describes the rules packages that are specified by the ARNs of the rules packages.</p>
     fn describe_rules_packages(
         &self,
         input: &DescribeRulesPackagesRequest,
@@ -5081,7 +5082,7 @@ where
         }
     }
 
-    #[doc="<p>Produces an assessment report that includes detailed and comprehensive results of a specified assessment run. </p>"]
+    /// <p>Produces an assessment report that includes detailed and comprehensive results of a specified assessment run. </p>
     fn get_assessment_report(
         &self,
         input: &GetAssessmentReportRequest,
@@ -5115,7 +5116,7 @@ where
         }
     }
 
-    #[doc = "<p>Information about the data that is collected for the specified assessment run.</p>"]
+    /// <p>Information about the data that is collected for the specified assessment run.</p>
     fn get_telemetry_metadata(
         &self,
         input: &GetTelemetryMetadataRequest,
@@ -5149,7 +5150,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the agents of the assessment runs that are specified by the ARNs of the assessment runs.</p>"]
+    /// <p>Lists the agents of the assessment runs that are specified by the ARNs of the assessment runs.</p>
     fn list_assessment_run_agents(
         &self,
         input: &ListAssessmentRunAgentsRequest,
@@ -5183,7 +5184,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the assessment runs that correspond to the assessment templates that are specified by the ARNs of the assessment templates.</p>"]
+    /// <p>Lists the assessment runs that correspond to the assessment templates that are specified by the ARNs of the assessment templates.</p>
     fn list_assessment_runs(
         &self,
         input: &ListAssessmentRunsRequest,
@@ -5217,7 +5218,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the ARNs of the assessment targets within this AWS account. For more information about assessment targets, see <a href=\"http://docs.aws.amazon.com/inspector/latest/userguide/inspector_applications.html\">Amazon Inspector Assessment Targets</a>.</p>"]
+    /// <p>Lists the ARNs of the assessment targets within this AWS account. For more information about assessment targets, see <a href="http://docs.aws.amazon.com/inspector/latest/userguide/inspector_applications.html">Amazon Inspector Assessment Targets</a>.</p>
     fn list_assessment_targets(
         &self,
         input: &ListAssessmentTargetsRequest,
@@ -5251,7 +5252,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the assessment templates that correspond to the assessment targets that are specified by the ARNs of the assessment targets.</p>"]
+    /// <p>Lists the assessment templates that correspond to the assessment targets that are specified by the ARNs of the assessment targets.</p>
     fn list_assessment_templates(
         &self,
         input: &ListAssessmentTemplatesRequest,
@@ -5285,7 +5286,7 @@ where
         }
     }
 
-    #[doc="<p>Lists all the event subscriptions for the assessment template that is specified by the ARN of the assessment template. For more information, see <a>SubscribeToEvent</a> and <a>UnsubscribeFromEvent</a>.</p>"]
+    /// <p>Lists all the event subscriptions for the assessment template that is specified by the ARN of the assessment template. For more information, see <a>SubscribeToEvent</a> and <a>UnsubscribeFromEvent</a>.</p>
     fn list_event_subscriptions(
         &self,
         input: &ListEventSubscriptionsRequest,
@@ -5319,7 +5320,7 @@ where
         }
     }
 
-    #[doc="<p>Lists findings that are generated by the assessment runs that are specified by the ARNs of the assessment runs.</p>"]
+    /// <p>Lists findings that are generated by the assessment runs that are specified by the ARNs of the assessment runs.</p>
     fn list_findings(
         &self,
         input: &ListFindingsRequest,
@@ -5353,7 +5354,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists all available Amazon Inspector rules packages.</p>"]
+    /// <p>Lists all available Amazon Inspector rules packages.</p>
     fn list_rules_packages(
         &self,
         input: &ListRulesPackagesRequest,
@@ -5387,7 +5388,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists all tags associated with an assessment template.</p>"]
+    /// <p>Lists all tags associated with an assessment template.</p>
     fn list_tags_for_resource(
         &self,
         input: &ListTagsForResourceRequest,
@@ -5421,7 +5422,7 @@ where
         }
     }
 
-    #[doc="<p>Previews the agents installed on the EC2 instances that are part of the specified assessment target.</p>"]
+    /// <p>Previews the agents installed on the EC2 instances that are part of the specified assessment target.</p>
     fn preview_agents(
         &self,
         input: &PreviewAgentsRequest,
@@ -5455,7 +5456,7 @@ where
         }
     }
 
-    #[doc="<p>Registers the IAM role that Amazon Inspector uses to list your EC2 instances at the start of the assessment run or when you call the <a>PreviewAgents</a> action.</p>"]
+    /// <p>Registers the IAM role that Amazon Inspector uses to list your EC2 instances at the start of the assessment run or when you call the <a>PreviewAgents</a> action.</p>
     fn register_cross_account_access_role(
         &self,
         input: &RegisterCrossAccountAccessRoleRequest,
@@ -5486,7 +5487,7 @@ where
         }
     }
 
-    #[doc="<p>Removes entire attributes (key and value pairs) from the findings that are specified by the ARNs of the findings where an attribute with the specified key exists.</p>"]
+    /// <p>Removes entire attributes (key and value pairs) from the findings that are specified by the ARNs of the findings where an attribute with the specified key exists.</p>
     fn remove_attributes_from_findings(
         &self,
         input: &RemoveAttributesFromFindingsRequest,
@@ -5525,7 +5526,7 @@ where
         }
     }
 
-    #[doc="<p>Sets tags (key and value pairs) to the assessment template that is specified by the ARN of the assessment template.</p>"]
+    /// <p>Sets tags (key and value pairs) to the assessment template that is specified by the ARN of the assessment template.</p>
     fn set_tags_for_resource(
         &self,
         input: &SetTagsForResourceRequest,
@@ -5553,7 +5554,7 @@ where
         }
     }
 
-    #[doc="<p>Starts the assessment run specified by the ARN of the assessment template. For this API to function properly, you must not exceed the limit of running up to 500 concurrent agents per AWS account.</p>"]
+    /// <p>Starts the assessment run specified by the ARN of the assessment template. For this API to function properly, you must not exceed the limit of running up to 500 concurrent agents per AWS account.</p>
     fn start_assessment_run(
         &self,
         input: &StartAssessmentRunRequest,
@@ -5587,7 +5588,7 @@ where
         }
     }
 
-    #[doc = "<p>Stops the assessment run that is specified by the ARN of the assessment run.</p>"]
+    /// <p>Stops the assessment run that is specified by the ARN of the assessment run.</p>
     fn stop_assessment_run(
         &self,
         input: &StopAssessmentRunRequest,
@@ -5615,7 +5616,7 @@ where
         }
     }
 
-    #[doc="<p>Enables the process of sending Amazon Simple Notification Service (SNS) notifications about a specified event to a specified SNS topic.</p>"]
+    /// <p>Enables the process of sending Amazon Simple Notification Service (SNS) notifications about a specified event to a specified SNS topic.</p>
     fn subscribe_to_event(
         &self,
         input: &SubscribeToEventRequest,
@@ -5643,7 +5644,7 @@ where
         }
     }
 
-    #[doc="<p>Disables the process of sending Amazon Simple Notification Service (SNS) notifications about a specified event to a specified SNS topic.</p>"]
+    /// <p>Disables the process of sending Amazon Simple Notification Service (SNS) notifications about a specified event to a specified SNS topic.</p>
     fn unsubscribe_from_event(
         &self,
         input: &UnsubscribeFromEventRequest,
@@ -5671,7 +5672,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the assessment target that is specified by the ARN of the assessment target.</p>"]
+    /// <p>Updates the assessment target that is specified by the ARN of the assessment target.</p>
     fn update_assessment_target(
         &self,
         input: &UpdateAssessmentTargetRequest,

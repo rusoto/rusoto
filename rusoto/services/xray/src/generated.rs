@@ -61,30 +61,30 @@ pub struct AnnotationValue {
     pub string_value: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct BackendConnectionErrors {
-    /// <p/>
+    /// <p><p/></p>
     #[serde(rename = "ConnectionRefusedCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_refused_count: Option<i64>,
-    /// <p/>
+    /// <p><p/></p>
     #[serde(rename = "HTTPCode4XXCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub http_code_4xx_count: Option<i64>,
-    /// <p/>
+    /// <p><p/></p>
     #[serde(rename = "HTTPCode5XXCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub http_code_5xx_count: Option<i64>,
-    /// <p/>
+    /// <p><p/></p>
     #[serde(rename = "OtherCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub other_count: Option<i64>,
-    /// <p/>
+    /// <p><p/></p>
     #[serde(rename = "TimeoutCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_count: Option<i64>,
-    /// <p/>
+    /// <p><p/></p>
     #[serde(rename = "UnknownHostCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unknown_host_count: Option<i64>,
@@ -340,19 +340,19 @@ pub struct Http {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct PutTelemetryRecordsRequest {
-    /// <p/>
+    /// <p><p/></p>
     #[serde(rename = "EC2InstanceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ec2_instance_id: Option<String>,
-    /// <p/>
+    /// <p><p/></p>
     #[serde(rename = "Hostname")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hostname: Option<String>,
-    /// <p/>
+    /// <p><p/></p>
     #[serde(rename = "ResourceARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_arn: Option<String>,
-    /// <p/>
+    /// <p><p/></p>
     #[serde(rename = "TelemetryRecords")]
     pub telemetry_records: Vec<TelemetryRecord>,
 }
@@ -439,28 +439,28 @@ pub struct Service {
     #[serde(rename = "SummaryStatistics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub summary_statistics: Option<ServiceStatistics>,
-    /// <p>The type of service.</p> <ul> <li> <p>AWS Resource - The type of an AWS resource. For example, <code>AWS::EC2::Instance</code> for a application running on Amazon EC2 or <code>AWS::DynamoDB::Table</code> for an Amazon DynamoDB table that the application used.</p> </li> <li> <p>AWS Service - The type of an AWS service. For example, <code>AWS::DynamoDB</code> for downstream calls to Amazon DynamoDB that didn't target a specific table.</p> </li> <li> <p> <code>client</code> - Represents the clients that sent requests to a root service.</p> </li> <li> <p> <code>remote</code> - A downstream service of indeterminate type.</p> </li> </ul>
+    /// <p><p>The type of service.</p> <ul> <li> <p>AWS Resource - The type of an AWS resource. For example, <code>AWS::EC2::Instance</code> for a application running on Amazon EC2 or <code>AWS::DynamoDB::Table</code> for an Amazon DynamoDB table that the application used.</p> </li> <li> <p>AWS Service - The type of an AWS service. For example, <code>AWS::DynamoDB</code> for downstream calls to Amazon DynamoDB that didn&#39;t target a specific table.</p> </li> <li> <p> <code>client</code> - Represents the clients that sent requests to a root service.</p> </li> <li> <p> <code>remote</code> - A downstream service of indeterminate type.</p> </li> </ul></p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ServiceId {
-    /// <p/>
+    /// <p><p/></p>
     #[serde(rename = "AccountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_id: Option<String>,
-    /// <p/>
+    /// <p><p/></p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p/>
+    /// <p><p/></p>
     #[serde(rename = "Names")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub names: Option<Vec<String>>,
-    /// <p/>
+    /// <p><p/></p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -491,30 +491,30 @@ pub struct ServiceStatistics {
     pub total_response_time: Option<f64>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct TelemetryRecord {
-    /// <p/>
+    /// <p><p/></p>
     #[serde(rename = "BackendConnectionErrors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backend_connection_errors: Option<BackendConnectionErrors>,
-    /// <p/>
+    /// <p><p/></p>
     #[serde(rename = "SegmentsReceivedCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub segments_received_count: Option<i64>,
-    /// <p/>
+    /// <p><p/></p>
     #[serde(rename = "SegmentsRejectedCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub segments_rejected_count: Option<i64>,
-    /// <p/>
+    /// <p><p/></p>
     #[serde(rename = "SegmentsSentCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub segments_sent_count: Option<i64>,
-    /// <p/>
+    /// <p><p/></p>
     #[serde(rename = "SegmentsSpilloverCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub segments_spillover_count: Option<i64>,
-    /// <p/>
+    /// <p><p/></p>
     #[serde(rename = "Timestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timestamp: Option<f64>,
@@ -632,9 +632,9 @@ pub struct ValueWithServiceIds {
 /// Errors returned by BatchGetTraces
 #[derive(Debug, PartialEq)]
 pub enum BatchGetTracesError {
-    ///<p>The request is missing required parameters or has invalid parameters.</p>
+    /// <p>The request is missing required parameters or has invalid parameters.</p>
     InvalidRequest(String),
-    ///<p>The request exceeds the maximum number of requests per second.</p>
+    /// <p>The request exceeds the maximum number of requests per second.</p>
     Throttled(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -716,9 +716,9 @@ impl Error for BatchGetTracesError {
 /// Errors returned by GetServiceGraph
 #[derive(Debug, PartialEq)]
 pub enum GetServiceGraphError {
-    ///<p>The request is missing required parameters or has invalid parameters.</p>
+    /// <p>The request is missing required parameters or has invalid parameters.</p>
     InvalidRequest(String),
-    ///<p>The request exceeds the maximum number of requests per second.</p>
+    /// <p>The request exceeds the maximum number of requests per second.</p>
     Throttled(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -800,9 +800,9 @@ impl Error for GetServiceGraphError {
 /// Errors returned by GetTraceGraph
 #[derive(Debug, PartialEq)]
 pub enum GetTraceGraphError {
-    ///<p>The request is missing required parameters or has invalid parameters.</p>
+    /// <p>The request is missing required parameters or has invalid parameters.</p>
     InvalidRequest(String),
-    ///<p>The request exceeds the maximum number of requests per second.</p>
+    /// <p>The request exceeds the maximum number of requests per second.</p>
     Throttled(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -884,9 +884,9 @@ impl Error for GetTraceGraphError {
 /// Errors returned by GetTraceSummaries
 #[derive(Debug, PartialEq)]
 pub enum GetTraceSummariesError {
-    ///<p>The request is missing required parameters or has invalid parameters.</p>
+    /// <p>The request is missing required parameters or has invalid parameters.</p>
     InvalidRequest(String),
-    ///<p>The request exceeds the maximum number of requests per second.</p>
+    /// <p>The request exceeds the maximum number of requests per second.</p>
     Throttled(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -970,9 +970,9 @@ impl Error for GetTraceSummariesError {
 /// Errors returned by PutTelemetryRecords
 #[derive(Debug, PartialEq)]
 pub enum PutTelemetryRecordsError {
-    ///<p>The request is missing required parameters or has invalid parameters.</p>
+    /// <p>The request is missing required parameters or has invalid parameters.</p>
     InvalidRequest(String),
-    ///<p>The request exceeds the maximum number of requests per second.</p>
+    /// <p>The request exceeds the maximum number of requests per second.</p>
     Throttled(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1056,9 +1056,9 @@ impl Error for PutTelemetryRecordsError {
 /// Errors returned by PutTraceSegments
 #[derive(Debug, PartialEq)]
 pub enum PutTraceSegmentsError {
-    ///<p>The request is missing required parameters or has invalid parameters.</p>
+    /// <p>The request is missing required parameters or has invalid parameters.</p>
     InvalidRequest(String),
-    ///<p>The request exceeds the maximum number of requests per second.</p>
+    /// <p>The request exceeds the maximum number of requests per second.</p>
     Throttled(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1139,37 +1139,37 @@ impl Error for PutTraceSegmentsError {
 }
 /// Trait representing the capabilities of the AWS X-Ray API. AWS X-Ray clients implement this trait.
 pub trait XRay {
-    #[doc="<p>Retrieves a list of traces specified by ID. Each trace is a collection of segment documents that originates from a single request. Use <code>GetTraceSummaries</code> to get a list of trace IDs.</p>"]
+    /// <p>Retrieves a list of traces specified by ID. Each trace is a collection of segment documents that originates from a single request. Use <code>GetTraceSummaries</code> to get a list of trace IDs.</p>
     fn batch_get_traces(
         &self,
         input: &BatchGetTracesRequest,
     ) -> Result<BatchGetTracesResult, BatchGetTracesError>;
 
-    #[doc="<p>Retrieves a document that describes services that process incoming requests, and downstream services that they call as a result. Root services process incoming requests and make calls to downstream services. Root services are applications that use the AWS X-Ray SDK. Downstream services can be other applications, AWS resources, HTTP web APIs, or SQL databases.</p>"]
+    /// <p>Retrieves a document that describes services that process incoming requests, and downstream services that they call as a result. Root services process incoming requests and make calls to downstream services. Root services are applications that use the AWS X-Ray SDK. Downstream services can be other applications, AWS resources, HTTP web APIs, or SQL databases.</p>
     fn get_service_graph(
         &self,
         input: &GetServiceGraphRequest,
     ) -> Result<GetServiceGraphResult, GetServiceGraphError>;
 
-    #[doc = "<p>Retrieves a service graph for one or more specific trace IDs.</p>"]
+    /// <p>Retrieves a service graph for one or more specific trace IDs.</p>
     fn get_trace_graph(
         &self,
         input: &GetTraceGraphRequest,
     ) -> Result<GetTraceGraphResult, GetTraceGraphError>;
 
-    #[doc="<p>Retrieves IDs and metadata for traces available for a specified time frame using an optional filter. To get the full traces, pass the trace IDs to <code>BatchGetTraces</code>.</p> <p>A filter expression can target traced requests that hit specific service nodes or edges, have errors, or come from a known user. For example, the following filter expression targets traces that pass through <code>api.example.com</code>:</p> <p> <code>service(\"api.example.com\")</code> </p> <p>This filter expression finds traces that have an annotation named <code>account</code> with the value <code>12345</code>:</p> <p> <code>annotation.account = \"12345\"</code> </p> <p>For a full list of indexed fields and keywords that you can use in filter expressions, see <a href=\"http://docs.aws.amazon.com/xray/latest/devguide/xray-console-filters.html\">Using Filter Expressions</a> in the <i>AWS X-Ray Developer Guide</i>.</p>"]
+    /// <p>Retrieves IDs and metadata for traces available for a specified time frame using an optional filter. To get the full traces, pass the trace IDs to <code>BatchGetTraces</code>.</p> <p>A filter expression can target traced requests that hit specific service nodes or edges, have errors, or come from a known user. For example, the following filter expression targets traces that pass through <code>api.example.com</code>:</p> <p> <code>service("api.example.com")</code> </p> <p>This filter expression finds traces that have an annotation named <code>account</code> with the value <code>12345</code>:</p> <p> <code>annotation.account = "12345"</code> </p> <p>For a full list of indexed fields and keywords that you can use in filter expressions, see <a href="http://docs.aws.amazon.com/xray/latest/devguide/xray-console-filters.html">Using Filter Expressions</a> in the <i>AWS X-Ray Developer Guide</i>.</p>
     fn get_trace_summaries(
         &self,
         input: &GetTraceSummariesRequest,
     ) -> Result<GetTraceSummariesResult, GetTraceSummariesError>;
 
-    #[doc = "<p>Used by the AWS X-Ray daemon to upload telemetry.</p>"]
+    /// <p>Used by the AWS X-Ray daemon to upload telemetry.</p>
     fn put_telemetry_records(
         &self,
         input: &PutTelemetryRecordsRequest,
     ) -> Result<PutTelemetryRecordsResult, PutTelemetryRecordsError>;
 
-    #[doc="<p>Uploads segment documents to AWS X-Ray. The X-Ray SDK generates segment documents and sends them to the X-Ray daemon, which uploads them in batches. A segment document can be a completed segment, an in-progress segment, or an array of subsegments.</p> <p>Segments must include the following fields. For the full segment document schema, see <a href=\"http://docs.aws.amazon.com/xray/latest/devguide/xray-api-segmentdocuments.html\">AWS X-Ray Segment Documents</a> in the <i>AWS X-Ray Developer Guide</i>.</p> <p class=\"title\"> <b>Required Segment Document Fields</b> </p> <ul> <li> <p> <code>name</code> - The name of the service that handled the request.</p> </li> <li> <p> <code>id</code> - A 64-bit identifier for the segment, unique among segments in the same trace, in 16 hexadecimal digits.</p> </li> <li> <p> <code>trace_id</code> - A unique identifier that connects all segments and subsegments originating from a single client request.</p> </li> <li> <p> <code>start_time</code> - Time the segment or subsegment was created, in floating point seconds in epoch time, accurate to milliseconds. For example, <code>1480615200.010</code> or <code>1.480615200010E9</code>.</p> </li> <li> <p> <code>end_time</code> - Time the segment or subsegment was closed. For example, <code>1480615200.090</code> or <code>1.480615200090E9</code>. Specify either an <code>end_time</code> or <code>in_progress</code>.</p> </li> <li> <p> <code>in_progress</code> - Set to <code>true</code> instead of specifying an <code>end_time</code> to record that a segment has been started, but is not complete. Send an in progress segment when your application receives a request that will take a long time to serve, to trace the fact that the request was received. When the response is sent, send the complete segment to overwrite the in-progress segment.</p> </li> </ul> <p>A <code>trace_id</code> consists of three numbers separated by hyphens. For example, 1-58406520-a006649127e371903a2de979. This includes:</p> <p class=\"title\"> <b>Trace ID Format</b> </p> <ul> <li> <p>The version number, i.e. <code>1</code>.</p> </li> <li> <p>The time of the original request, in Unix epoch time, in 8 hexadecimal digits. For example, 10:00AM December 2nd, 2016 PST in epoch time is <code>1480615200</code> seconds, or <code>58406520</code> in hexadecimal.</p> </li> <li> <p>A 96-bit identifier for the trace, globally unique, in 24 hexadecimal digits.</p> </li> </ul>"]
+    /// <p><p>Uploads segment documents to AWS X-Ray. The X-Ray SDK generates segment documents and sends them to the X-Ray daemon, which uploads them in batches. A segment document can be a completed segment, an in-progress segment, or an array of subsegments.</p> <p>Segments must include the following fields. For the full segment document schema, see <a href="http://docs.aws.amazon.com/xray/latest/devguide/xray-api-segmentdocuments.html">AWS X-Ray Segment Documents</a> in the <i>AWS X-Ray Developer Guide</i>.</p> <p class="title"> <b>Required Segment Document Fields</b> </p> <ul> <li> <p> <code>name</code> - The name of the service that handled the request.</p> </li> <li> <p> <code>id</code> - A 64-bit identifier for the segment, unique among segments in the same trace, in 16 hexadecimal digits.</p> </li> <li> <p> <code>trace<em>id</code> - A unique identifier that connects all segments and subsegments originating from a single client request.</p> </li> <li> <p> <code>start</em>time</code> - Time the segment or subsegment was created, in floating point seconds in epoch time, accurate to milliseconds. For example, <code>1480615200.010</code> or <code>1.480615200010E9</code>.</p> </li> <li> <p> <code>end<em>time</code> - Time the segment or subsegment was closed. For example, <code>1480615200.090</code> or <code>1.480615200090E9</code>. Specify either an <code>end</em>time</code> or <code>in<em>progress</code>.</p> </li> <li> <p> <code>in</em>progress</code> - Set to <code>true</code> instead of specifying an <code>end<em>time</code> to record that a segment has been started, but is not complete. Send an in progress segment when your application receives a request that will take a long time to serve, to trace the fact that the request was received. When the response is sent, send the complete segment to overwrite the in-progress segment.</p> </li> </ul> <p>A <code>trace</em>id</code> consists of three numbers separated by hyphens. For example, 1-58406520-a006649127e371903a2de979. This includes:</p> <p class="title"> <b>Trace ID Format</b> </p> <ul> <li> <p>The version number, i.e. <code>1</code>.</p> </li> <li> <p>The time of the original request, in Unix epoch time, in 8 hexadecimal digits. For example, 10:00AM December 2nd, 2016 PST in epoch time is <code>1480615200</code> seconds, or <code>58406520</code> in hexadecimal.</p> </li> <li> <p>A 96-bit identifier for the trace, globally unique, in 24 hexadecimal digits.</p> </li> </ul></p>
     fn put_trace_segments(
         &self,
         input: &PutTraceSegmentsRequest,
@@ -1205,7 +1205,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Retrieves a list of traces specified by ID. Each trace is a collection of segment documents that originates from a single request. Use <code>GetTraceSummaries</code> to get a list of trace IDs.</p>"]
+    /// <p>Retrieves a list of traces specified by ID. Each trace is a collection of segment documents that originates from a single request. Use <code>GetTraceSummaries</code> to get a list of trace IDs.</p>
     fn batch_get_traces(
         &self,
         input: &BatchGetTracesRequest,
@@ -1246,7 +1246,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves a document that describes services that process incoming requests, and downstream services that they call as a result. Root services process incoming requests and make calls to downstream services. Root services are applications that use the AWS X-Ray SDK. Downstream services can be other applications, AWS resources, HTTP web APIs, or SQL databases.</p>"]
+    /// <p>Retrieves a document that describes services that process incoming requests, and downstream services that they call as a result. Root services process incoming requests and make calls to downstream services. Root services are applications that use the AWS X-Ray SDK. Downstream services can be other applications, AWS resources, HTTP web APIs, or SQL databases.</p>
     fn get_service_graph(
         &self,
         input: &GetServiceGraphRequest,
@@ -1287,7 +1287,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves a service graph for one or more specific trace IDs.</p>"]
+    /// <p>Retrieves a service graph for one or more specific trace IDs.</p>
     fn get_trace_graph(
         &self,
         input: &GetTraceGraphRequest,
@@ -1328,7 +1328,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves IDs and metadata for traces available for a specified time frame using an optional filter. To get the full traces, pass the trace IDs to <code>BatchGetTraces</code>.</p> <p>A filter expression can target traced requests that hit specific service nodes or edges, have errors, or come from a known user. For example, the following filter expression targets traces that pass through <code>api.example.com</code>:</p> <p> <code>service(\"api.example.com\")</code> </p> <p>This filter expression finds traces that have an annotation named <code>account</code> with the value <code>12345</code>:</p> <p> <code>annotation.account = \"12345\"</code> </p> <p>For a full list of indexed fields and keywords that you can use in filter expressions, see <a href=\"http://docs.aws.amazon.com/xray/latest/devguide/xray-console-filters.html\">Using Filter Expressions</a> in the <i>AWS X-Ray Developer Guide</i>.</p>"]
+    /// <p>Retrieves IDs and metadata for traces available for a specified time frame using an optional filter. To get the full traces, pass the trace IDs to <code>BatchGetTraces</code>.</p> <p>A filter expression can target traced requests that hit specific service nodes or edges, have errors, or come from a known user. For example, the following filter expression targets traces that pass through <code>api.example.com</code>:</p> <p> <code>service("api.example.com")</code> </p> <p>This filter expression finds traces that have an annotation named <code>account</code> with the value <code>12345</code>:</p> <p> <code>annotation.account = "12345"</code> </p> <p>For a full list of indexed fields and keywords that you can use in filter expressions, see <a href="http://docs.aws.amazon.com/xray/latest/devguide/xray-console-filters.html">Using Filter Expressions</a> in the <i>AWS X-Ray Developer Guide</i>.</p>
     fn get_trace_summaries(
         &self,
         input: &GetTraceSummariesRequest,
@@ -1369,7 +1369,7 @@ where
         }
     }
 
-    #[doc = "<p>Used by the AWS X-Ray daemon to upload telemetry.</p>"]
+    /// <p>Used by the AWS X-Ray daemon to upload telemetry.</p>
     fn put_telemetry_records(
         &self,
         input: &PutTelemetryRecordsRequest,
@@ -1410,7 +1410,7 @@ where
         }
     }
 
-    #[doc="<p>Uploads segment documents to AWS X-Ray. The X-Ray SDK generates segment documents and sends them to the X-Ray daemon, which uploads them in batches. A segment document can be a completed segment, an in-progress segment, or an array of subsegments.</p> <p>Segments must include the following fields. For the full segment document schema, see <a href=\"http://docs.aws.amazon.com/xray/latest/devguide/xray-api-segmentdocuments.html\">AWS X-Ray Segment Documents</a> in the <i>AWS X-Ray Developer Guide</i>.</p> <p class=\"title\"> <b>Required Segment Document Fields</b> </p> <ul> <li> <p> <code>name</code> - The name of the service that handled the request.</p> </li> <li> <p> <code>id</code> - A 64-bit identifier for the segment, unique among segments in the same trace, in 16 hexadecimal digits.</p> </li> <li> <p> <code>trace_id</code> - A unique identifier that connects all segments and subsegments originating from a single client request.</p> </li> <li> <p> <code>start_time</code> - Time the segment or subsegment was created, in floating point seconds in epoch time, accurate to milliseconds. For example, <code>1480615200.010</code> or <code>1.480615200010E9</code>.</p> </li> <li> <p> <code>end_time</code> - Time the segment or subsegment was closed. For example, <code>1480615200.090</code> or <code>1.480615200090E9</code>. Specify either an <code>end_time</code> or <code>in_progress</code>.</p> </li> <li> <p> <code>in_progress</code> - Set to <code>true</code> instead of specifying an <code>end_time</code> to record that a segment has been started, but is not complete. Send an in progress segment when your application receives a request that will take a long time to serve, to trace the fact that the request was received. When the response is sent, send the complete segment to overwrite the in-progress segment.</p> </li> </ul> <p>A <code>trace_id</code> consists of three numbers separated by hyphens. For example, 1-58406520-a006649127e371903a2de979. This includes:</p> <p class=\"title\"> <b>Trace ID Format</b> </p> <ul> <li> <p>The version number, i.e. <code>1</code>.</p> </li> <li> <p>The time of the original request, in Unix epoch time, in 8 hexadecimal digits. For example, 10:00AM December 2nd, 2016 PST in epoch time is <code>1480615200</code> seconds, or <code>58406520</code> in hexadecimal.</p> </li> <li> <p>A 96-bit identifier for the trace, globally unique, in 24 hexadecimal digits.</p> </li> </ul>"]
+    /// <p><p>Uploads segment documents to AWS X-Ray. The X-Ray SDK generates segment documents and sends them to the X-Ray daemon, which uploads them in batches. A segment document can be a completed segment, an in-progress segment, or an array of subsegments.</p> <p>Segments must include the following fields. For the full segment document schema, see <a href="http://docs.aws.amazon.com/xray/latest/devguide/xray-api-segmentdocuments.html">AWS X-Ray Segment Documents</a> in the <i>AWS X-Ray Developer Guide</i>.</p> <p class="title"> <b>Required Segment Document Fields</b> </p> <ul> <li> <p> <code>name</code> - The name of the service that handled the request.</p> </li> <li> <p> <code>id</code> - A 64-bit identifier for the segment, unique among segments in the same trace, in 16 hexadecimal digits.</p> </li> <li> <p> <code>trace<em>id</code> - A unique identifier that connects all segments and subsegments originating from a single client request.</p> </li> <li> <p> <code>start</em>time</code> - Time the segment or subsegment was created, in floating point seconds in epoch time, accurate to milliseconds. For example, <code>1480615200.010</code> or <code>1.480615200010E9</code>.</p> </li> <li> <p> <code>end<em>time</code> - Time the segment or subsegment was closed. For example, <code>1480615200.090</code> or <code>1.480615200090E9</code>. Specify either an <code>end</em>time</code> or <code>in<em>progress</code>.</p> </li> <li> <p> <code>in</em>progress</code> - Set to <code>true</code> instead of specifying an <code>end<em>time</code> to record that a segment has been started, but is not complete. Send an in progress segment when your application receives a request that will take a long time to serve, to trace the fact that the request was received. When the response is sent, send the complete segment to overwrite the in-progress segment.</p> </li> </ul> <p>A <code>trace</em>id</code> consists of three numbers separated by hyphens. For example, 1-58406520-a006649127e371903a2de979. This includes:</p> <p class="title"> <b>Trace ID Format</b> </p> <ul> <li> <p>The version number, i.e. <code>1</code>.</p> </li> <li> <p>The time of the original request, in Unix epoch time, in 8 hexadecimal digits. For example, 10:00AM December 2nd, 2016 PST in epoch time is <code>1480615200</code> seconds, or <code>58406520</code> in hexadecimal.</p> </li> <li> <p>A 96-bit identifier for the trace, globally unique, in 24 hexadecimal digits.</p> </li> </ul></p>
     fn put_trace_segments(
         &self,
         input: &PutTraceSegmentsRequest,

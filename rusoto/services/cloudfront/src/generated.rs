@@ -443,7 +443,7 @@ pub struct CacheBehavior {
     pub target_origin_id: String,
     /// <p>A complex type that specifies the AWS accounts, if any, that you want to allow to create signed URLs for private content.</p> <p>If you want to require signed URLs in requests for objects in the target origin that match the <code>PathPattern</code> for this cache behavior, specify <code>true</code> for <code>Enabled</code>, and specify the applicable values for <code>Quantity</code> and <code>Items</code>. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon Amazon CloudFront Developer Guide</i>.</p> <p>If you don't want to require signed URLs in requests for objects that match <code>PathPattern</code>, specify <code>false</code> for <code>Enabled</code> and <code>0</code> for <code>Quantity</code>. Omit <code>Items</code>.</p> <p>To add, change, or remove one or more trusted signers, change <code>Enabled</code> to <code>true</code> (if it's currently <code>false</code>), change <code>Quantity</code> as applicable, and specify all of the trusted signers that you want to include in the updated distribution.</p>
     pub trusted_signers: TrustedSigners,
-    /// <p>The protocol that viewers can use to access the files in the origin specified by <code>TargetOriginId</code> when a request matches the path pattern in <code>PathPattern</code>. You can specify the following options:</p> <ul> <li> <p> <code>allow-all</code>: Viewers can use HTTP or HTTPS.</p> </li> <li> <p> <code>redirect-to-https</code>: If a viewer submits an HTTP request, CloudFront returns an HTTP status code of 301 (Moved Permanently) to the viewer along with the HTTPS URL. The viewer then resubmits the request using the new URL. </p> </li> <li> <p> <code>https-only</code>: If a viewer sends an HTTP request, CloudFront returns an HTTP status code of 403 (Forbidden). </p> </li> </ul> <p>For more information about requiring the HTTPS protocol, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html">Using an HTTPS Connection to Access Your Objects</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <note> <p>The only way to guarantee that viewers retrieve an object that was fetched from the origin using HTTPS is never to use any other protocol to fetch the object. If you have recently changed from HTTP to HTTPS, we recommend that you clear your objects' cache because cached objects are protocol agnostic. That means that an edge location will return an object from the cache regardless of whether the current request protocol matches the protocol used previously. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Specifying How Long Objects and Errors Stay in a CloudFront Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </note>
+    /// <p><p>The protocol that viewers can use to access the files in the origin specified by <code>TargetOriginId</code> when a request matches the path pattern in <code>PathPattern</code>. You can specify the following options:</p> <ul> <li> <p> <code>allow-all</code>: Viewers can use HTTP or HTTPS.</p> </li> <li> <p> <code>redirect-to-https</code>: If a viewer submits an HTTP request, CloudFront returns an HTTP status code of 301 (Moved Permanently) to the viewer along with the HTTPS URL. The viewer then resubmits the request using the new URL. </p> </li> <li> <p> <code>https-only</code>: If a viewer sends an HTTP request, CloudFront returns an HTTP status code of 403 (Forbidden). </p> </li> </ul> <p>For more information about requiring the HTTPS protocol, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html">Using an HTTPS Connection to Access Your Objects</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <note> <p>The only way to guarantee that viewers retrieve an object that was fetched from the origin using HTTPS is never to use any other protocol to fetch the object. If you have recently changed from HTTP to HTTPS, we recommend that you clear your objects&#39; cache because cached objects are protocol agnostic. That means that an edge location will return an object from the cache regardless of whether the current request protocol matches the protocol used previously. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Specifying How Long Objects and Errors Stay in a CloudFront Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </note></p>
     pub viewer_protocol_policy: String,
 }
 
@@ -2258,7 +2258,7 @@ pub struct DefaultCacheBehavior {
     pub target_origin_id: String,
     /// <p>A complex type that specifies the AWS accounts, if any, that you want to allow to create signed URLs for private content.</p> <p>If you want to require signed URLs in requests for objects in the target origin that match the <code>PathPattern</code> for this cache behavior, specify <code>true</code> for <code>Enabled</code>, and specify the applicable values for <code>Quantity</code> and <code>Items</code>. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon Amazon CloudFront Developer Guide</i>.</p> <p>If you don't want to require signed URLs in requests for objects that match <code>PathPattern</code>, specify <code>false</code> for <code>Enabled</code> and <code>0</code> for <code>Quantity</code>. Omit <code>Items</code>.</p> <p>To add, change, or remove one or more trusted signers, change <code>Enabled</code> to <code>true</code> (if it's currently <code>false</code>), change <code>Quantity</code> as applicable, and specify all of the trusted signers that you want to include in the updated distribution.</p>
     pub trusted_signers: TrustedSigners,
-    /// <p>The protocol that viewers can use to access the files in the origin specified by <code>TargetOriginId</code> when a request matches the path pattern in <code>PathPattern</code>. You can specify the following options:</p> <ul> <li> <p> <code>allow-all</code>: Viewers can use HTTP or HTTPS.</p> </li> <li> <p> <code>redirect-to-https</code>: If a viewer submits an HTTP request, CloudFront returns an HTTP status code of 301 (Moved Permanently) to the viewer along with the HTTPS URL. The viewer then resubmits the request using the new URL.</p> </li> <li> <p> <code>https-only</code>: If a viewer sends an HTTP request, CloudFront returns an HTTP status code of 403 (Forbidden).</p> </li> </ul> <p>For more information about requiring the HTTPS protocol, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html">Using an HTTPS Connection to Access Your Objects</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <note> <p>The only way to guarantee that viewers retrieve an object that was fetched from the origin using HTTPS is never to use any other protocol to fetch the object. If you have recently changed from HTTP to HTTPS, we recommend that you clear your objects' cache because cached objects are protocol agnostic. That means that an edge location will return an object from the cache regardless of whether the current request protocol matches the protocol used previously. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Specifying How Long Objects and Errors Stay in a CloudFront Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </note>
+    /// <p><p>The protocol that viewers can use to access the files in the origin specified by <code>TargetOriginId</code> when a request matches the path pattern in <code>PathPattern</code>. You can specify the following options:</p> <ul> <li> <p> <code>allow-all</code>: Viewers can use HTTP or HTTPS.</p> </li> <li> <p> <code>redirect-to-https</code>: If a viewer submits an HTTP request, CloudFront returns an HTTP status code of 301 (Moved Permanently) to the viewer along with the HTTPS URL. The viewer then resubmits the request using the new URL.</p> </li> <li> <p> <code>https-only</code>: If a viewer sends an HTTP request, CloudFront returns an HTTP status code of 403 (Forbidden).</p> </li> </ul> <p>For more information about requiring the HTTPS protocol, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html">Using an HTTPS Connection to Access Your Objects</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <note> <p>The only way to guarantee that viewers retrieve an object that was fetched from the origin using HTTPS is never to use any other protocol to fetch the object. If you have recently changed from HTTP to HTTPS, we recommend that you clear your objects&#39; cache because cached objects are protocol agnostic. That means that an edge location will return an object from the cache regardless of whether the current request protocol matches the protocol used previously. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Specifying How Long Objects and Errors Stay in a CloudFront Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </note></p>
     pub viewer_protocol_policy: String,
 }
 
@@ -3253,7 +3253,7 @@ pub struct GeoRestriction {
     pub items: Option<Vec<String>>,
     /// <p>When geo restriction is <code>enabled</code>, this is the number of countries in your <code>whitelist</code> or <code>blacklist</code>. Otherwise, when it is not enabled, <code>Quantity</code> is <code>0</code>, and you can omit <code>Items</code>.</p>
     pub quantity: i64,
-    /// <p>The method that you want to use to restrict distribution of your content by country:</p> <ul> <li> <p> <code>none</code>: No geo restriction is enabled, meaning access to content is not restricted by client geo location.</p> </li> <li> <p> <code>blacklist</code>: The <code>Location</code> elements specify the countries in which you do not want CloudFront to distribute your content.</p> </li> <li> <p> <code>whitelist</code>: The <code>Location</code> elements specify the countries in which you want CloudFront to distribute your content.</p> </li> </ul>
+    /// <p><p>The method that you want to use to restrict distribution of your content by country:</p> <ul> <li> <p> <code>none</code>: No geo restriction is enabled, meaning access to content is not restricted by client geo location.</p> </li> <li> <p> <code>blacklist</code>: The <code>Location</code> elements specify the countries in which you do not want CloudFront to distribute your content.</p> </li> <li> <p> <code>whitelist</code>: The <code>Location</code> elements specify the countries in which you want CloudFront to distribute your content.</p> </li> </ul></p>
     pub restriction_type: String,
 }
 
@@ -3852,7 +3852,7 @@ impl HeaderListSerializer {
 pub struct Headers {
     /// <p>A complex type that contains one <code>Name</code> element for each header that you want CloudFront to forward to the origin and to vary on for this cache behavior. If <code>Quantity</code> is <code>0</code>, omit <code>Items</code>.</p>
     pub items: Option<Vec<String>>,
-    /// <p>The number of different headers that you want CloudFront to forward to the origin for this cache behavior. You can configure each cache behavior in a web distribution to do one of the following:</p> <ul> <li> <p> <b>Forward all headers to your origin</b>: Specify <code>1</code> for <code>Quantity</code> and <code>*</code> for <code>Name</code>.</p> <important> <p>If you configure CloudFront to forward all headers to your origin, CloudFront doesn't cache the objects associated with this cache behavior. Instead, it sends every request to the origin.</p> </important> </li> <li> <p> <i>Forward a whitelist of headers you specify</i>: Specify the number of headers that you want to forward, and specify the header names in <code>Name</code> elements. CloudFront caches your objects based on the values in all of the specified headers. CloudFront also forwards the headers that it forwards by default, but it caches your objects based only on the headers that you specify. </p> </li> <li> <p> <b>Forward only the default headers</b>: Specify <code>0</code> for <code>Quantity</code> and omit <code>Items</code>. In this configuration, CloudFront doesn't cache based on the values in the request headers.</p> </li> </ul>
+    /// <p><p>The number of different headers that you want CloudFront to forward to the origin for this cache behavior. You can configure each cache behavior in a web distribution to do one of the following:</p> <ul> <li> <p> <b>Forward all headers to your origin</b>: Specify <code>1</code> for <code>Quantity</code> and <code>*</code> for <code>Name</code>.</p> <important> <p>If you configure CloudFront to forward all headers to your origin, CloudFront doesn&#39;t cache the objects associated with this cache behavior. Instead, it sends every request to the origin.</p> </important> </li> <li> <p> <i>Forward a whitelist of headers you specify</i>: Specify the number of headers that you want to forward, and specify the header names in <code>Name</code> elements. CloudFront caches your objects based on the values in all of the specified headers. CloudFront also forwards the headers that it forwards by default, but it caches your objects based only on the headers that you specify. </p> </li> <li> <p> <b>Forward only the default headers</b>: Specify <code>0</code> for <code>Quantity</code> and omit <code>Items</code>. In this configuration, CloudFront doesn&#39;t cache based on the values in the request headers.</p> </li> </ul></p>
     pub quantity: i64,
 }
 
@@ -4440,7 +4440,7 @@ impl KeyPairIdsDeserializer {
 /// <p>A complex type that contains a Lambda function association.</p>
 #[derive(Default, Debug)]
 pub struct LambdaFunctionAssociation {
-    /// <p>Specifies the event type that triggers a Lambda function invocation. Valid values are:</p> <ul> <li> <p> <code>viewer-request</code> </p> </li> <li> <p> <code>origin-request</code> </p> </li> <li> <p> <code>viewer-response</code> </p> </li> <li> <p> <code>origin-response</code> </p> </li> </ul>
+    /// <p><p>Specifies the event type that triggers a Lambda function invocation. Valid values are:</p> <ul> <li> <p> <code>viewer-request</code> </p> </li> <li> <p> <code>origin-request</code> </p> </li> <li> <p> <code>viewer-response</code> </p> </li> <li> <p> <code>origin-response</code> </p> </li> </ul></p>
     pub event_type: Option<String>,
     /// <p>The ARN of the Lambda function.</p>
     pub lambda_function_arn: Option<String>,
@@ -5356,7 +5356,7 @@ pub struct Origin {
     pub custom_headers: Option<CustomHeaders>,
     /// <p>A complex type that contains information about a custom origin. If the origin is an Amazon S3 bucket, use the <code>S3OriginConfig</code> element instead.</p>
     pub custom_origin_config: Option<CustomOriginConfig>,
-    /// <p> <b>Amazon S3 origins</b>: The DNS name of the Amazon S3 bucket from which you want CloudFront to get objects for this origin, for example, <code>myawsbucket.s3.amazonaws.com</code>.</p> <p>Constraints for Amazon S3 origins: </p> <ul> <li> <p>If you configured Amazon S3 Transfer Acceleration for your bucket, do not specify the <code>s3-accelerate</code> endpoint for <code>DomainName</code>.</p> </li> <li> <p>The bucket name must be between 3 and 63 characters long (inclusive).</p> </li> <li> <p>The bucket name must contain only lowercase characters, numbers, periods, underscores, and dashes.</p> </li> <li> <p>The bucket name must not contain adjacent periods.</p> </li> </ul> <p> <b>Custom Origins</b>: The DNS domain name for the HTTP server from which you want CloudFront to get objects for this origin, for example, <code>www.example.com</code>. </p> <p>Constraints for custom origins:</p> <ul> <li> <p> <code>DomainName</code> must be a valid DNS name that contains only a-z, A-Z, 0-9, dot (.), hyphen (-), or underscore (_) characters.</p> </li> <li> <p>The name cannot exceed 128 characters.</p> </li> </ul>
+    /// <p><p> <b>Amazon S3 origins</b>: The DNS name of the Amazon S3 bucket from which you want CloudFront to get objects for this origin, for example, <code>myawsbucket.s3.amazonaws.com</code>.</p> <p>Constraints for Amazon S3 origins: </p> <ul> <li> <p>If you configured Amazon S3 Transfer Acceleration for your bucket, do not specify the <code>s3-accelerate</code> endpoint for <code>DomainName</code>.</p> </li> <li> <p>The bucket name must be between 3 and 63 characters long (inclusive).</p> </li> <li> <p>The bucket name must contain only lowercase characters, numbers, periods, underscores, and dashes.</p> </li> <li> <p>The bucket name must not contain adjacent periods.</p> </li> </ul> <p> <b>Custom Origins</b>: The DNS domain name for the HTTP server from which you want CloudFront to get objects for this origin, for example, <code>www.example.com</code>. </p> <p>Constraints for custom origins:</p> <ul> <li> <p> <code>DomainName</code> must be a valid DNS name that contains only a-z, A-Z, 0-9, dot (.), hyphen (-), or underscore (_) characters.</p> </li> <li> <p>The name cannot exceed 128 characters.</p> </li> </ul></p>
     pub domain_name: String,
     /// <p>A unique identifier for the origin. The value of <code>Id</code> must be unique within the distribution.</p> <p>When you specify the value of <code>TargetOriginId</code> for the default cache behavior or for another cache behavior, you indicate the origin to which you want the cache behavior to route requests by specifying the value of the <code>Id</code> element for that origin. When a request matches the path pattern for that cache behavior, CloudFront routes the request to the specified origin. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesCacheBehavior">Cache Behavior Settings</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub id: String,
@@ -6464,7 +6464,7 @@ impl SSLSupportMethodSerializer {
 /// <p>A complex type that lists the AWS accounts that were included in the <code>TrustedSigners</code> complex type, as well as their active CloudFront key pair IDs, if any. </p>
 #[derive(Default, Debug)]
 pub struct Signer {
-    /// <p>An AWS account that is included in the <code>TrustedSigners</code> complex type for this RTMP distribution. Valid values include:</p> <ul> <li> <p> <code>self</code>, which is the AWS account used to create the distribution.</p> </li> <li> <p>An AWS account number.</p> </li> </ul>
+    /// <p><p>An AWS account that is included in the <code>TrustedSigners</code> complex type for this RTMP distribution. Valid values include:</p> <ul> <li> <p> <code>self</code>, which is the AWS account used to create the distribution.</p> </li> <li> <p>An AWS account number.</p> </li> </ul></p>
     pub aws_account_number: Option<String>,
     /// <p>A complex type that lists the active CloudFront key pairs, if any, that are associated with <code>AwsAccountNumber</code>.</p>
     pub key_pair_ids: Option<KeyPairIds>,
@@ -7913,7 +7913,7 @@ pub struct ViewerCertificate {
     pub acm_certificate_arn: Option<String>,
     pub cloud_front_default_certificate: Option<bool>,
     pub iam_certificate_id: Option<String>,
-    /// <p>Specify the minimum version of the SSL/TLS protocol that you want CloudFront to use for HTTPS connections between viewers and CloudFront: <code>SSLv3</code> or <code>TLSv1</code>. CloudFront serves your objects only to viewers that support SSL/TLS version that you specify and later versions. The <code>TLSv1</code> protocol is more secure, so we recommend that you specify <code>SSLv3</code> only if your users are using browsers or devices that don't support <code>TLSv1</code>. Note the following:</p> <ul> <li> <p>If you specify &lt;CloudFrontDefaultCertificate&gt;true&lt;CloudFrontDefaultCertificate&gt;, the minimum SSL protocol version is <code>TLSv1</code> and can't be changed.</p> </li> <li> <p>If you're using a custom certificate (if you specify a value for <code>ACMCertificateArn</code> or for <code>IAMCertificateId</code>) and if you're using SNI (if you specify <code>sni-only</code> for <code>SSLSupportMethod</code>), you must specify <code>TLSv1</code> for <code>MinimumProtocolVersion</code>.</p> </li> </ul>
+    /// <p><p>Specify the minimum version of the SSL/TLS protocol that you want CloudFront to use for HTTPS connections between viewers and CloudFront: <code>SSLv3</code> or <code>TLSv1</code>. CloudFront serves your objects only to viewers that support SSL/TLS version that you specify and later versions. The <code>TLSv1</code> protocol is more secure, so we recommend that you specify <code>SSLv3</code> only if your users are using browsers or devices that don&#39;t support <code>TLSv1</code>. Note the following:</p> <ul> <li> <p>If you specify &lt;CloudFrontDefaultCertificate&gt;true&lt;CloudFrontDefaultCertificate&gt;, the minimum SSL protocol version is <code>TLSv1</code> and can&#39;t be changed.</p> </li> <li> <p>If you&#39;re using a custom certificate (if you specify a value for <code>ACMCertificateArn</code> or for <code>IAMCertificateId</code>) and if you&#39;re using SNI (if you specify <code>sni-only</code> for <code>SSLSupportMethod</code>), you must specify <code>TLSv1</code> for <code>MinimumProtocolVersion</code>.</p> </li> </ul></p>
     pub minimum_protocol_version: Option<String>,
     /// <p>If you specify a value for <code>ACMCertificateArn</code> or for <code>IAMCertificateId</code>, you must also specify how you want CloudFront to serve HTTPS requests: using a method that works for all clients or one that works for most clients:</p> <ul> <li> <p> <code>vip</code>: CloudFront uses dedicated IP addresses for your content and can respond to HTTPS requests from any viewer. However, you will incur additional monthly charges.</p> </li> <li> <p> <code>sni-only</code>: CloudFront can respond to HTTPS requests from viewers that support Server Name Indication (SNI). All modern browsers support SNI, but some browsers still in use don't support SNI. If some of your users' browsers don't support SNI, we recommend that you do one of the following:</p> <ul> <li> <p>Use the <code>vip</code> option (dedicated IP addresses) instead of <code>sni-only</code>.</p> </li> <li> <p>Use the CloudFront SSL/TLS certificate instead of a custom certificate. This requires that you use the CloudFront domain name of your distribution in the URLs for your objects, for example, <code>https://d111111abcdef8.cloudfront.net/logo.png</code>.</p> </li> <li> <p>If you can control which browser your users use, upgrade the browser to one that supports SNI.</p> </li> <li> <p>Use HTTP instead of HTTPS.</p> </li> </ul> </li> </ul> <p>Do not specify a value for <code>SSLSupportMethod</code> if you specified <code>&lt;CloudFrontDefaultCertificate&gt;true&lt;CloudFrontDefaultCertificate&gt;</code>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html#CNAMEsAndHTTPS.html">Using Alternate Domain Names and HTTPS</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub ssl_support_method: Option<String>,
@@ -8083,15 +8083,15 @@ impl ViewerProtocolPolicySerializer {
 /// Errors returned by CreateCloudFrontOriginAccessIdentity
 #[derive(Debug, PartialEq)]
 pub enum CreateCloudFrontOriginAccessIdentityError {
-    ///<p>If the <code>CallerReference</code> is a value you already sent in a previous request to create an identity but the content of the <code>CloudFrontOriginAccessIdentityConfig</code> is different from the original request, CloudFront returns a <code>CloudFrontOriginAccessIdentityAlreadyExists</code> error. </p>
+    /// <p>If the <code>CallerReference</code> is a value you already sent in a previous request to create an identity but the content of the <code>CloudFrontOriginAccessIdentityConfig</code> is different from the original request, CloudFront returns a <code>CloudFrontOriginAccessIdentityAlreadyExists</code> error. </p>
     CloudFrontOriginAccessIdentityAlreadyExists(String),
-    ///<p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
+    /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
     InconsistentQuantities(String),
-    ///<p>The argument is invalid.</p>
+    /// <p>The argument is invalid.</p>
     InvalidArgument(String),
-    ///<p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
+    /// <p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
     MissingBody(String),
-    ///<p>Processing your request would cause you to exceed the maximum number of origin access identities allowed.</p>
+    /// <p>Processing your request would cause you to exceed the maximum number of origin access identities allowed.</p>
     TooManyCloudFrontOriginAccessIdentities(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8163,85 +8163,85 @@ CreateCloudFrontOriginAccessIdentityError::Unknown(ref cause) => cause
 /// Errors returned by CreateDistribution
 #[derive(Debug, PartialEq)]
 pub enum CreateDistributionError {
-    ///<p>Access denied.</p>
+    /// <p>Access denied.</p>
     AccessDenied(String),
-    ///
+
     CNAMEAlreadyExists(String),
-    ///<p>The caller reference you attempted to create the distribution with is associated with another distribution.</p>
+    /// <p>The caller reference you attempted to create the distribution with is associated with another distribution.</p>
     DistributionAlreadyExists(String),
-    ///<p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
+    /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
     InconsistentQuantities(String),
-    ///<p>The argument is invalid.</p>
+    /// <p>The argument is invalid.</p>
     InvalidArgument(String),
-    ///<p>The default root object file name is too big or contains an invalid character.</p>
+    /// <p>The default root object file name is too big or contains an invalid character.</p>
     InvalidDefaultRootObject(String),
-    ///
+
     InvalidErrorCode(String),
-    ///<p>Your request contains forward cookies option which doesn't match with the expectation for the <code>whitelisted</code> list of cookie names. Either list of cookie names has been specified when not allowed or list of cookie names is missing when expected.</p>
+    /// <p>Your request contains forward cookies option which doesn't match with the expectation for the <code>whitelisted</code> list of cookie names. Either list of cookie names has been specified when not allowed or list of cookie names is missing when expected.</p>
     InvalidForwardCookies(String),
-    ///
+
     InvalidGeoRestrictionParameter(String),
-    ///
+
     InvalidHeadersForS3Origin(String),
-    ///<p>The specified Lambda function association is invalid.</p>
+    /// <p>The specified Lambda function association is invalid.</p>
     InvalidLambdaFunctionAssociation(String),
-    ///
+
     InvalidLocationCode(String),
-    ///
+
     InvalidMinimumProtocolVersion(String),
-    ///<p>The Amazon S3 origin server specified does not refer to a valid Amazon S3 bucket.</p>
+    /// <p>The Amazon S3 origin server specified does not refer to a valid Amazon S3 bucket.</p>
     InvalidOrigin(String),
-    ///<p>The origin access identity is not valid or doesn't exist.</p>
+    /// <p>The origin access identity is not valid or doesn't exist.</p>
     InvalidOriginAccessIdentity(String),
-    ///
+
     InvalidOriginKeepaliveTimeout(String),
-    ///
+
     InvalidOriginReadTimeout(String),
-    ///<p>You cannot specify SSLv3 as the minimum protocol version if you only want to support only clients that support Server Name Indication (SNI).</p>
+    /// <p>You cannot specify SSLv3 as the minimum protocol version if you only want to support only clients that support Server Name Indication (SNI).</p>
     InvalidProtocolSettings(String),
-    ///
+
     InvalidQueryStringParameters(String),
-    ///<p>The relative path is too big, is not URL-encoded, or does not begin with a slash (/).</p>
+    /// <p>The relative path is too big, is not URL-encoded, or does not begin with a slash (/).</p>
     InvalidRelativePath(String),
-    ///<p>This operation requires the HTTPS protocol. Ensure that you specify the HTTPS protocol in your request, or omit the <code>RequiredProtocols</code> element from your distribution configuration.</p>
+    /// <p>This operation requires the HTTPS protocol. Ensure that you specify the HTTPS protocol in your request, or omit the <code>RequiredProtocols</code> element from your distribution configuration.</p>
     InvalidRequiredProtocol(String),
-    ///
+
     InvalidResponseCode(String),
-    ///
+
     InvalidTTLOrder(String),
-    ///
+
     InvalidViewerCertificate(String),
-    ///
+
     InvalidWebACLId(String),
-    ///<p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
+    /// <p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
     MissingBody(String),
-    ///<p>No origin exists with the specified <code>Origin Id</code>. </p>
+    /// <p>No origin exists with the specified <code>Origin Id</code>. </p>
     NoSuchOrigin(String),
-    ///<p>You cannot create more cache behaviors for the distribution.</p>
+    /// <p>You cannot create more cache behaviors for the distribution.</p>
     TooManyCacheBehaviors(String),
-    ///<p>You cannot create anymore custom SSL/TLS certificates.</p>
+    /// <p>You cannot create anymore custom SSL/TLS certificates.</p>
     TooManyCertificates(String),
-    ///<p>Your request contains more cookie names in the whitelist than are allowed per cache behavior.</p>
+    /// <p>Your request contains more cookie names in the whitelist than are allowed per cache behavior.</p>
     TooManyCookieNamesInWhiteList(String),
-    ///<p>Your request contains more CNAMEs than are allowed per distribution.</p>
+    /// <p>Your request contains more CNAMEs than are allowed per distribution.</p>
     TooManyDistributionCNAMEs(String),
-    ///<p>Processing your request would cause you to exceed the maximum number of distributions allowed.</p>
+    /// <p>Processing your request would cause you to exceed the maximum number of distributions allowed.</p>
     TooManyDistributions(String),
-    ///<p>Processing your request would cause the maximum number of distributions with Lambda function associations per owner to be exceeded.</p>
+    /// <p>Processing your request would cause the maximum number of distributions with Lambda function associations per owner to be exceeded.</p>
     TooManyDistributionsWithLambdaAssociations(String),
-    ///
+
     TooManyHeadersInForwardedValues(String),
-    ///<p>Your request contains more Lambda function associations than are allowed per distribution.</p>
+    /// <p>Your request contains more Lambda function associations than are allowed per distribution.</p>
     TooManyLambdaFunctionAssociations(String),
-    ///
+
     TooManyOriginCustomHeaders(String),
-    ///<p>You cannot create more origins for the distribution.</p>
+    /// <p>You cannot create more origins for the distribution.</p>
     TooManyOrigins(String),
-    ///
+
     TooManyQueryStringParameters(String),
-    ///<p>Your request contains more trusted signers than are allowed per distribution.</p>
+    /// <p>Your request contains more trusted signers than are allowed per distribution.</p>
     TooManyTrustedSigners(String),
-    ///<p>One or more of your trusted signers do not exist.</p>
+    /// <p>One or more of your trusted signers do not exist.</p>
     TrustedSignerDoesNotExist(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8492,87 +8492,87 @@ impl Error for CreateDistributionError {
 /// Errors returned by CreateDistributionWithTags
 #[derive(Debug, PartialEq)]
 pub enum CreateDistributionWithTagsError {
-    ///<p>Access denied.</p>
+    /// <p>Access denied.</p>
     AccessDenied(String),
-    ///
+
     CNAMEAlreadyExists(String),
-    ///<p>The caller reference you attempted to create the distribution with is associated with another distribution.</p>
+    /// <p>The caller reference you attempted to create the distribution with is associated with another distribution.</p>
     DistributionAlreadyExists(String),
-    ///<p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
+    /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
     InconsistentQuantities(String),
-    ///<p>The argument is invalid.</p>
+    /// <p>The argument is invalid.</p>
     InvalidArgument(String),
-    ///<p>The default root object file name is too big or contains an invalid character.</p>
+    /// <p>The default root object file name is too big or contains an invalid character.</p>
     InvalidDefaultRootObject(String),
-    ///
+
     InvalidErrorCode(String),
-    ///<p>Your request contains forward cookies option which doesn't match with the expectation for the <code>whitelisted</code> list of cookie names. Either list of cookie names has been specified when not allowed or list of cookie names is missing when expected.</p>
+    /// <p>Your request contains forward cookies option which doesn't match with the expectation for the <code>whitelisted</code> list of cookie names. Either list of cookie names has been specified when not allowed or list of cookie names is missing when expected.</p>
     InvalidForwardCookies(String),
-    ///
+
     InvalidGeoRestrictionParameter(String),
-    ///
+
     InvalidHeadersForS3Origin(String),
-    ///<p>The specified Lambda function association is invalid.</p>
+    /// <p>The specified Lambda function association is invalid.</p>
     InvalidLambdaFunctionAssociation(String),
-    ///
+
     InvalidLocationCode(String),
-    ///
+
     InvalidMinimumProtocolVersion(String),
-    ///<p>The Amazon S3 origin server specified does not refer to a valid Amazon S3 bucket.</p>
+    /// <p>The Amazon S3 origin server specified does not refer to a valid Amazon S3 bucket.</p>
     InvalidOrigin(String),
-    ///<p>The origin access identity is not valid or doesn't exist.</p>
+    /// <p>The origin access identity is not valid or doesn't exist.</p>
     InvalidOriginAccessIdentity(String),
-    ///
+
     InvalidOriginKeepaliveTimeout(String),
-    ///
+
     InvalidOriginReadTimeout(String),
-    ///<p>You cannot specify SSLv3 as the minimum protocol version if you only want to support only clients that support Server Name Indication (SNI).</p>
+    /// <p>You cannot specify SSLv3 as the minimum protocol version if you only want to support only clients that support Server Name Indication (SNI).</p>
     InvalidProtocolSettings(String),
-    ///
+
     InvalidQueryStringParameters(String),
-    ///<p>The relative path is too big, is not URL-encoded, or does not begin with a slash (/).</p>
+    /// <p>The relative path is too big, is not URL-encoded, or does not begin with a slash (/).</p>
     InvalidRelativePath(String),
-    ///<p>This operation requires the HTTPS protocol. Ensure that you specify the HTTPS protocol in your request, or omit the <code>RequiredProtocols</code> element from your distribution configuration.</p>
+    /// <p>This operation requires the HTTPS protocol. Ensure that you specify the HTTPS protocol in your request, or omit the <code>RequiredProtocols</code> element from your distribution configuration.</p>
     InvalidRequiredProtocol(String),
-    ///
+
     InvalidResponseCode(String),
-    ///
+
     InvalidTTLOrder(String),
-    ///
+
     InvalidTagging(String),
-    ///
+
     InvalidViewerCertificate(String),
-    ///
+
     InvalidWebACLId(String),
-    ///<p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
+    /// <p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
     MissingBody(String),
-    ///<p>No origin exists with the specified <code>Origin Id</code>. </p>
+    /// <p>No origin exists with the specified <code>Origin Id</code>. </p>
     NoSuchOrigin(String),
-    ///<p>You cannot create more cache behaviors for the distribution.</p>
+    /// <p>You cannot create more cache behaviors for the distribution.</p>
     TooManyCacheBehaviors(String),
-    ///<p>You cannot create anymore custom SSL/TLS certificates.</p>
+    /// <p>You cannot create anymore custom SSL/TLS certificates.</p>
     TooManyCertificates(String),
-    ///<p>Your request contains more cookie names in the whitelist than are allowed per cache behavior.</p>
+    /// <p>Your request contains more cookie names in the whitelist than are allowed per cache behavior.</p>
     TooManyCookieNamesInWhiteList(String),
-    ///<p>Your request contains more CNAMEs than are allowed per distribution.</p>
+    /// <p>Your request contains more CNAMEs than are allowed per distribution.</p>
     TooManyDistributionCNAMEs(String),
-    ///<p>Processing your request would cause you to exceed the maximum number of distributions allowed.</p>
+    /// <p>Processing your request would cause you to exceed the maximum number of distributions allowed.</p>
     TooManyDistributions(String),
-    ///<p>Processing your request would cause the maximum number of distributions with Lambda function associations per owner to be exceeded.</p>
+    /// <p>Processing your request would cause the maximum number of distributions with Lambda function associations per owner to be exceeded.</p>
     TooManyDistributionsWithLambdaAssociations(String),
-    ///
+
     TooManyHeadersInForwardedValues(String),
-    ///<p>Your request contains more Lambda function associations than are allowed per distribution.</p>
+    /// <p>Your request contains more Lambda function associations than are allowed per distribution.</p>
     TooManyLambdaFunctionAssociations(String),
-    ///
+
     TooManyOriginCustomHeaders(String),
-    ///<p>You cannot create more origins for the distribution.</p>
+    /// <p>You cannot create more origins for the distribution.</p>
     TooManyOrigins(String),
-    ///
+
     TooManyQueryStringParameters(String),
-    ///<p>Your request contains more trusted signers than are allowed per distribution.</p>
+    /// <p>Your request contains more trusted signers than are allowed per distribution.</p>
     TooManyTrustedSigners(String),
-    ///<p>One or more of your trusted signers do not exist.</p>
+    /// <p>One or more of your trusted signers do not exist.</p>
     TrustedSignerDoesNotExist(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8849,19 +8849,19 @@ impl Error for CreateDistributionWithTagsError {
 /// Errors returned by CreateInvalidation
 #[derive(Debug, PartialEq)]
 pub enum CreateInvalidationError {
-    ///<p>Access denied.</p>
+    /// <p>Access denied.</p>
     AccessDenied(String),
-    ///
+
     BatchTooLarge(String),
-    ///<p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
+    /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
     InconsistentQuantities(String),
-    ///<p>The argument is invalid.</p>
+    /// <p>The argument is invalid.</p>
     InvalidArgument(String),
-    ///<p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
+    /// <p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
     MissingBody(String),
-    ///<p>The specified distribution does not exist.</p>
+    /// <p>The specified distribution does not exist.</p>
     NoSuchDistribution(String),
-    ///<p>You have exceeded the maximum number of allowable InProgress invalidation batch requests, or invalidation objects.</p>
+    /// <p>You have exceeded the maximum number of allowable InProgress invalidation batch requests, or invalidation objects.</p>
     TooManyInvalidationsInProgress(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8958,29 +8958,29 @@ impl Error for CreateInvalidationError {
 /// Errors returned by CreateStreamingDistribution
 #[derive(Debug, PartialEq)]
 pub enum CreateStreamingDistributionError {
-    ///<p>Access denied.</p>
+    /// <p>Access denied.</p>
     AccessDenied(String),
-    ///
+
     CNAMEAlreadyExists(String),
-    ///<p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
+    /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
     InconsistentQuantities(String),
-    ///<p>The argument is invalid.</p>
+    /// <p>The argument is invalid.</p>
     InvalidArgument(String),
-    ///<p>The Amazon S3 origin server specified does not refer to a valid Amazon S3 bucket.</p>
+    /// <p>The Amazon S3 origin server specified does not refer to a valid Amazon S3 bucket.</p>
     InvalidOrigin(String),
-    ///<p>The origin access identity is not valid or doesn't exist.</p>
+    /// <p>The origin access identity is not valid or doesn't exist.</p>
     InvalidOriginAccessIdentity(String),
-    ///<p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
+    /// <p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
     MissingBody(String),
-    ///
+
     StreamingDistributionAlreadyExists(String),
-    ///
+
     TooManyStreamingDistributionCNAMEs(String),
-    ///<p>Processing your request would cause you to exceed the maximum number of streaming distributions allowed.</p>
+    /// <p>Processing your request would cause you to exceed the maximum number of streaming distributions allowed.</p>
     TooManyStreamingDistributions(String),
-    ///<p>Your request contains more trusted signers than are allowed per distribution.</p>
+    /// <p>Your request contains more trusted signers than are allowed per distribution.</p>
     TooManyTrustedSigners(String),
-    ///<p>One or more of your trusted signers do not exist.</p>
+    /// <p>One or more of your trusted signers do not exist.</p>
     TrustedSignerDoesNotExist(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9113,31 +9113,31 @@ impl Error for CreateStreamingDistributionError {
 /// Errors returned by CreateStreamingDistributionWithTags
 #[derive(Debug, PartialEq)]
 pub enum CreateStreamingDistributionWithTagsError {
-    ///<p>Access denied.</p>
+    /// <p>Access denied.</p>
     AccessDenied(String),
-    ///
+
     CNAMEAlreadyExists(String),
-    ///<p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
+    /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
     InconsistentQuantities(String),
-    ///<p>The argument is invalid.</p>
+    /// <p>The argument is invalid.</p>
     InvalidArgument(String),
-    ///<p>The Amazon S3 origin server specified does not refer to a valid Amazon S3 bucket.</p>
+    /// <p>The Amazon S3 origin server specified does not refer to a valid Amazon S3 bucket.</p>
     InvalidOrigin(String),
-    ///<p>The origin access identity is not valid or doesn't exist.</p>
+    /// <p>The origin access identity is not valid or doesn't exist.</p>
     InvalidOriginAccessIdentity(String),
-    ///
+
     InvalidTagging(String),
-    ///<p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
+    /// <p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
     MissingBody(String),
-    ///
+
     StreamingDistributionAlreadyExists(String),
-    ///
+
     TooManyStreamingDistributionCNAMEs(String),
-    ///<p>Processing your request would cause you to exceed the maximum number of streaming distributions allowed.</p>
+    /// <p>Processing your request would cause you to exceed the maximum number of streaming distributions allowed.</p>
     TooManyStreamingDistributions(String),
-    ///<p>Your request contains more trusted signers than are allowed per distribution.</p>
+    /// <p>Your request contains more trusted signers than are allowed per distribution.</p>
     TooManyTrustedSigners(String),
-    ///<p>One or more of your trusted signers do not exist.</p>
+    /// <p>One or more of your trusted signers do not exist.</p>
     TrustedSignerDoesNotExist(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9280,15 +9280,15 @@ impl Error for CreateStreamingDistributionWithTagsError {
 /// Errors returned by DeleteCloudFrontOriginAccessIdentity
 #[derive(Debug, PartialEq)]
 pub enum DeleteCloudFrontOriginAccessIdentityError {
-    ///<p>Access denied.</p>
+    /// <p>Access denied.</p>
     AccessDenied(String),
-    ///
+
     CloudFrontOriginAccessIdentityInUse(String),
-    ///<p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
+    /// <p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
     InvalidIfMatchVersion(String),
-    ///<p>The specified origin access identity does not exist.</p>
+    /// <p>The specified origin access identity does not exist.</p>
     NoSuchCloudFrontOriginAccessIdentity(String),
-    ///<p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+    /// <p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
     PreconditionFailed(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9366,15 +9366,15 @@ impl Error for DeleteCloudFrontOriginAccessIdentityError {
 /// Errors returned by DeleteDistribution
 #[derive(Debug, PartialEq)]
 pub enum DeleteDistributionError {
-    ///<p>Access denied.</p>
+    /// <p>Access denied.</p>
     AccessDenied(String),
-    ///
+
     DistributionNotDisabled(String),
-    ///<p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
+    /// <p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
     InvalidIfMatchVersion(String),
-    ///<p>The specified distribution does not exist.</p>
+    /// <p>The specified distribution does not exist.</p>
     NoSuchDistribution(String),
-    ///<p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+    /// <p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
     PreconditionFailed(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9461,15 +9461,15 @@ impl Error for DeleteDistributionError {
 /// Errors returned by DeleteStreamingDistribution
 #[derive(Debug, PartialEq)]
 pub enum DeleteStreamingDistributionError {
-    ///<p>Access denied.</p>
+    /// <p>Access denied.</p>
     AccessDenied(String),
-    ///<p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
+    /// <p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
     InvalidIfMatchVersion(String),
-    ///<p>The specified streaming distribution does not exist.</p>
+    /// <p>The specified streaming distribution does not exist.</p>
     NoSuchStreamingDistribution(String),
-    ///<p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+    /// <p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
     PreconditionFailed(String),
-    ///
+
     StreamingDistributionNotDisabled(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9562,9 +9562,9 @@ impl Error for DeleteStreamingDistributionError {
 /// Errors returned by GetCloudFrontOriginAccessIdentity
 #[derive(Debug, PartialEq)]
 pub enum GetCloudFrontOriginAccessIdentityError {
-    ///<p>Access denied.</p>
+    /// <p>Access denied.</p>
     AccessDenied(String),
-    ///<p>The specified origin access identity does not exist.</p>
+    /// <p>The specified origin access identity does not exist.</p>
     NoSuchCloudFrontOriginAccessIdentity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9643,9 +9643,9 @@ impl Error for GetCloudFrontOriginAccessIdentityError {
 /// Errors returned by GetCloudFrontOriginAccessIdentityConfig
 #[derive(Debug, PartialEq)]
 pub enum GetCloudFrontOriginAccessIdentityConfigError {
-    ///<p>Access denied.</p>
+    /// <p>Access denied.</p>
     AccessDenied(String),
-    ///<p>The specified origin access identity does not exist.</p>
+    /// <p>The specified origin access identity does not exist.</p>
     NoSuchCloudFrontOriginAccessIdentity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9714,9 +9714,9 @@ GetCloudFrontOriginAccessIdentityConfigError::Unknown(ref cause) => cause
 /// Errors returned by GetDistribution
 #[derive(Debug, PartialEq)]
 pub enum GetDistributionError {
-    ///<p>Access denied.</p>
+    /// <p>Access denied.</p>
     AccessDenied(String),
-    ///<p>The specified distribution does not exist.</p>
+    /// <p>The specified distribution does not exist.</p>
     NoSuchDistribution(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9789,9 +9789,9 @@ impl Error for GetDistributionError {
 /// Errors returned by GetDistributionConfig
 #[derive(Debug, PartialEq)]
 pub enum GetDistributionConfigError {
-    ///<p>Access denied.</p>
+    /// <p>Access denied.</p>
     AccessDenied(String),
-    ///<p>The specified distribution does not exist.</p>
+    /// <p>The specified distribution does not exist.</p>
     NoSuchDistribution(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9866,11 +9866,11 @@ impl Error for GetDistributionConfigError {
 /// Errors returned by GetInvalidation
 #[derive(Debug, PartialEq)]
 pub enum GetInvalidationError {
-    ///<p>Access denied.</p>
+    /// <p>Access denied.</p>
     AccessDenied(String),
-    ///<p>The specified distribution does not exist.</p>
+    /// <p>The specified distribution does not exist.</p>
     NoSuchDistribution(String),
-    ///<p>The specified invalidation does not exist.</p>
+    /// <p>The specified invalidation does not exist.</p>
     NoSuchInvalidation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9947,9 +9947,9 @@ impl Error for GetInvalidationError {
 /// Errors returned by GetStreamingDistribution
 #[derive(Debug, PartialEq)]
 pub enum GetStreamingDistributionError {
-    ///<p>Access denied.</p>
+    /// <p>Access denied.</p>
     AccessDenied(String),
-    ///<p>The specified streaming distribution does not exist.</p>
+    /// <p>The specified streaming distribution does not exist.</p>
     NoSuchStreamingDistribution(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10026,9 +10026,9 @@ impl Error for GetStreamingDistributionError {
 /// Errors returned by GetStreamingDistributionConfig
 #[derive(Debug, PartialEq)]
 pub enum GetStreamingDistributionConfigError {
-    ///<p>Access denied.</p>
+    /// <p>Access denied.</p>
     AccessDenied(String),
-    ///<p>The specified streaming distribution does not exist.</p>
+    /// <p>The specified streaming distribution does not exist.</p>
     NoSuchStreamingDistribution(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10105,7 +10105,7 @@ impl Error for GetStreamingDistributionConfigError {
 /// Errors returned by ListCloudFrontOriginAccessIdentities
 #[derive(Debug, PartialEq)]
 pub enum ListCloudFrontOriginAccessIdentitiesError {
-    ///<p>The argument is invalid.</p>
+    /// <p>The argument is invalid.</p>
     InvalidArgument(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10176,7 +10176,7 @@ impl Error for ListCloudFrontOriginAccessIdentitiesError {
 /// Errors returned by ListDistributions
 #[derive(Debug, PartialEq)]
 pub enum ListDistributionsError {
-    ///<p>The argument is invalid.</p>
+    /// <p>The argument is invalid.</p>
     InvalidArgument(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10247,9 +10247,9 @@ impl Error for ListDistributionsError {
 /// Errors returned by ListDistributionsByWebACLId
 #[derive(Debug, PartialEq)]
 pub enum ListDistributionsByWebACLIdError {
-    ///<p>The argument is invalid.</p>
+    /// <p>The argument is invalid.</p>
     InvalidArgument(String),
-    ///
+
     InvalidWebACLId(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10324,11 +10324,11 @@ impl Error for ListDistributionsByWebACLIdError {
 /// Errors returned by ListInvalidations
 #[derive(Debug, PartialEq)]
 pub enum ListInvalidationsError {
-    ///<p>Access denied.</p>
+    /// <p>Access denied.</p>
     AccessDenied(String),
-    ///<p>The argument is invalid.</p>
+    /// <p>The argument is invalid.</p>
     InvalidArgument(String),
-    ///<p>The specified distribution does not exist.</p>
+    /// <p>The specified distribution does not exist.</p>
     NoSuchDistribution(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10407,7 +10407,7 @@ impl Error for ListInvalidationsError {
 /// Errors returned by ListStreamingDistributions
 #[derive(Debug, PartialEq)]
 pub enum ListStreamingDistributionsError {
-    ///<p>The argument is invalid.</p>
+    /// <p>The argument is invalid.</p>
     InvalidArgument(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10478,13 +10478,13 @@ impl Error for ListStreamingDistributionsError {
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
-    ///<p>Access denied.</p>
+    /// <p>Access denied.</p>
     AccessDenied(String),
-    ///<p>The argument is invalid.</p>
+    /// <p>The argument is invalid.</p>
     InvalidArgument(String),
-    ///
+
     InvalidTagging(String),
-    ///
+
     NoSuchResource(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10567,13 +10567,13 @@ impl Error for ListTagsForResourceError {
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
-    ///<p>Access denied.</p>
+    /// <p>Access denied.</p>
     AccessDenied(String),
-    ///<p>The argument is invalid.</p>
+    /// <p>The argument is invalid.</p>
     InvalidArgument(String),
-    ///
+
     InvalidTagging(String),
-    ///
+
     NoSuchResource(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10654,13 +10654,13 @@ impl Error for TagResourceError {
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
-    ///<p>Access denied.</p>
+    /// <p>Access denied.</p>
     AccessDenied(String),
-    ///<p>The argument is invalid.</p>
+    /// <p>The argument is invalid.</p>
     InvalidArgument(String),
-    ///
+
     InvalidTagging(String),
-    ///
+
     NoSuchResource(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10741,21 +10741,21 @@ impl Error for UntagResourceError {
 /// Errors returned by UpdateCloudFrontOriginAccessIdentity
 #[derive(Debug, PartialEq)]
 pub enum UpdateCloudFrontOriginAccessIdentityError {
-    ///<p>Access denied.</p>
+    /// <p>Access denied.</p>
     AccessDenied(String),
-    ///<p>Origin and <code>CallerReference</code> cannot be updated. </p>
+    /// <p>Origin and <code>CallerReference</code> cannot be updated. </p>
     IllegalUpdate(String),
-    ///<p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
+    /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
     InconsistentQuantities(String),
-    ///<p>The argument is invalid.</p>
+    /// <p>The argument is invalid.</p>
     InvalidArgument(String),
-    ///<p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
+    /// <p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
     InvalidIfMatchVersion(String),
-    ///<p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
+    /// <p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
     MissingBody(String),
-    ///<p>The specified origin access identity does not exist.</p>
+    /// <p>The specified origin access identity does not exist.</p>
     NoSuchCloudFrontOriginAccessIdentity(String),
-    ///<p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+    /// <p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
     PreconditionFailed(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10834,85 +10834,85 @@ impl Error for UpdateCloudFrontOriginAccessIdentityError {
 /// Errors returned by UpdateDistribution
 #[derive(Debug, PartialEq)]
 pub enum UpdateDistributionError {
-    ///<p>Access denied.</p>
+    /// <p>Access denied.</p>
     AccessDenied(String),
-    ///
+
     CNAMEAlreadyExists(String),
-    ///<p>Origin and <code>CallerReference</code> cannot be updated. </p>
+    /// <p>Origin and <code>CallerReference</code> cannot be updated. </p>
     IllegalUpdate(String),
-    ///<p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
+    /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
     InconsistentQuantities(String),
-    ///<p>The argument is invalid.</p>
+    /// <p>The argument is invalid.</p>
     InvalidArgument(String),
-    ///<p>The default root object file name is too big or contains an invalid character.</p>
+    /// <p>The default root object file name is too big or contains an invalid character.</p>
     InvalidDefaultRootObject(String),
-    ///
+
     InvalidErrorCode(String),
-    ///<p>Your request contains forward cookies option which doesn't match with the expectation for the <code>whitelisted</code> list of cookie names. Either list of cookie names has been specified when not allowed or list of cookie names is missing when expected.</p>
+    /// <p>Your request contains forward cookies option which doesn't match with the expectation for the <code>whitelisted</code> list of cookie names. Either list of cookie names has been specified when not allowed or list of cookie names is missing when expected.</p>
     InvalidForwardCookies(String),
-    ///
+
     InvalidGeoRestrictionParameter(String),
-    ///
+
     InvalidHeadersForS3Origin(String),
-    ///<p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
+    /// <p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
     InvalidIfMatchVersion(String),
-    ///<p>The specified Lambda function association is invalid.</p>
+    /// <p>The specified Lambda function association is invalid.</p>
     InvalidLambdaFunctionAssociation(String),
-    ///
+
     InvalidLocationCode(String),
-    ///
+
     InvalidMinimumProtocolVersion(String),
-    ///<p>The origin access identity is not valid or doesn't exist.</p>
+    /// <p>The origin access identity is not valid or doesn't exist.</p>
     InvalidOriginAccessIdentity(String),
-    ///
+
     InvalidOriginKeepaliveTimeout(String),
-    ///
+
     InvalidOriginReadTimeout(String),
-    ///
+
     InvalidQueryStringParameters(String),
-    ///<p>The relative path is too big, is not URL-encoded, or does not begin with a slash (/).</p>
+    /// <p>The relative path is too big, is not URL-encoded, or does not begin with a slash (/).</p>
     InvalidRelativePath(String),
-    ///<p>This operation requires the HTTPS protocol. Ensure that you specify the HTTPS protocol in your request, or omit the <code>RequiredProtocols</code> element from your distribution configuration.</p>
+    /// <p>This operation requires the HTTPS protocol. Ensure that you specify the HTTPS protocol in your request, or omit the <code>RequiredProtocols</code> element from your distribution configuration.</p>
     InvalidRequiredProtocol(String),
-    ///
+
     InvalidResponseCode(String),
-    ///
+
     InvalidTTLOrder(String),
-    ///
+
     InvalidViewerCertificate(String),
-    ///
+
     InvalidWebACLId(String),
-    ///<p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
+    /// <p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
     MissingBody(String),
-    ///<p>The specified distribution does not exist.</p>
+    /// <p>The specified distribution does not exist.</p>
     NoSuchDistribution(String),
-    ///<p>No origin exists with the specified <code>Origin Id</code>. </p>
+    /// <p>No origin exists with the specified <code>Origin Id</code>. </p>
     NoSuchOrigin(String),
-    ///<p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+    /// <p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
     PreconditionFailed(String),
-    ///<p>You cannot create more cache behaviors for the distribution.</p>
+    /// <p>You cannot create more cache behaviors for the distribution.</p>
     TooManyCacheBehaviors(String),
-    ///<p>You cannot create anymore custom SSL/TLS certificates.</p>
+    /// <p>You cannot create anymore custom SSL/TLS certificates.</p>
     TooManyCertificates(String),
-    ///<p>Your request contains more cookie names in the whitelist than are allowed per cache behavior.</p>
+    /// <p>Your request contains more cookie names in the whitelist than are allowed per cache behavior.</p>
     TooManyCookieNamesInWhiteList(String),
-    ///<p>Your request contains more CNAMEs than are allowed per distribution.</p>
+    /// <p>Your request contains more CNAMEs than are allowed per distribution.</p>
     TooManyDistributionCNAMEs(String),
-    ///<p>Processing your request would cause the maximum number of distributions with Lambda function associations per owner to be exceeded.</p>
+    /// <p>Processing your request would cause the maximum number of distributions with Lambda function associations per owner to be exceeded.</p>
     TooManyDistributionsWithLambdaAssociations(String),
-    ///
+
     TooManyHeadersInForwardedValues(String),
-    ///<p>Your request contains more Lambda function associations than are allowed per distribution.</p>
+    /// <p>Your request contains more Lambda function associations than are allowed per distribution.</p>
     TooManyLambdaFunctionAssociations(String),
-    ///
+
     TooManyOriginCustomHeaders(String),
-    ///<p>You cannot create more origins for the distribution.</p>
+    /// <p>You cannot create more origins for the distribution.</p>
     TooManyOrigins(String),
-    ///
+
     TooManyQueryStringParameters(String),
-    ///<p>Your request contains more trusted signers than are allowed per distribution.</p>
+    /// <p>Your request contains more trusted signers than are allowed per distribution.</p>
     TooManyTrustedSigners(String),
-    ///<p>One or more of your trusted signers do not exist.</p>
+    /// <p>One or more of your trusted signers do not exist.</p>
     TrustedSignerDoesNotExist(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11163,31 +11163,31 @@ impl Error for UpdateDistributionError {
 /// Errors returned by UpdateStreamingDistribution
 #[derive(Debug, PartialEq)]
 pub enum UpdateStreamingDistributionError {
-    ///<p>Access denied.</p>
+    /// <p>Access denied.</p>
     AccessDenied(String),
-    ///
+
     CNAMEAlreadyExists(String),
-    ///<p>Origin and <code>CallerReference</code> cannot be updated. </p>
+    /// <p>Origin and <code>CallerReference</code> cannot be updated. </p>
     IllegalUpdate(String),
-    ///<p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
+    /// <p>The value of <code>Quantity</code> and the size of <code>Items</code> do not match.</p>
     InconsistentQuantities(String),
-    ///<p>The argument is invalid.</p>
+    /// <p>The argument is invalid.</p>
     InvalidArgument(String),
-    ///<p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
+    /// <p>The <code>If-Match</code> version is missing or not valid for the distribution.</p>
     InvalidIfMatchVersion(String),
-    ///<p>The origin access identity is not valid or doesn't exist.</p>
+    /// <p>The origin access identity is not valid or doesn't exist.</p>
     InvalidOriginAccessIdentity(String),
-    ///<p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
+    /// <p>This operation requires a body. Ensure that the body is present and the Content-Type header is set.</p>
     MissingBody(String),
-    ///<p>The specified streaming distribution does not exist.</p>
+    /// <p>The specified streaming distribution does not exist.</p>
     NoSuchStreamingDistribution(String),
-    ///<p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
+    /// <p>The precondition given in one or more of the request-header fields evaluated to <code>false</code>. </p>
     PreconditionFailed(String),
-    ///
+
     TooManyStreamingDistributionCNAMEs(String),
-    ///<p>Your request contains more trusted signers than are allowed per distribution.</p>
+    /// <p>Your request contains more trusted signers than are allowed per distribution.</p>
     TooManyTrustedSigners(String),
-    ///<p>One or more of your trusted signers do not exist.</p>
+    /// <p>One or more of your trusted signers do not exist.</p>
     TrustedSignerDoesNotExist(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11321,67 +11321,67 @@ impl Error for UpdateStreamingDistributionError {
 }
 /// Trait representing the capabilities of the CloudFront API. CloudFront clients implement this trait.
 pub trait CloudFront {
-    #[doc="<p>Creates a new origin access identity. If you're using Amazon S3 for your origin, you can use an origin access identity to require users to access your content using a CloudFront URL instead of the Amazon S3 URL. For more information about how to use origin access identities, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html\">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
+    /// <p>Creates a new origin access identity. If you're using Amazon S3 for your origin, you can use an origin access identity to require users to access your content using a CloudFront URL instead of the Amazon S3 URL. For more information about how to use origin access identities, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     fn create_cloud_front_origin_access_identity(
         &self,
         input: &CreateCloudFrontOriginAccessIdentityRequest,
     ) -> Result<CreateCloudFrontOriginAccessIdentityResult, CreateCloudFrontOriginAccessIdentityError>;
 
-    #[doc="<p>Creates a new web distribution. Send a <code>POST</code> request to the <code>/<i>CloudFront API version</i>/distribution</code>/<code>distribution ID</code> resource.</p>"]
+    /// <p>Creates a new web distribution. Send a <code>POST</code> request to the <code>/<i>CloudFront API version</i>/distribution</code>/<code>distribution ID</code> resource.</p>
     fn create_distribution(
         &self,
         input: &CreateDistributionRequest,
     ) -> Result<CreateDistributionResult, CreateDistributionError>;
 
-    #[doc = "<p>Create a new distribution with tags.</p>"]
+    /// <p>Create a new distribution with tags.</p>
     fn create_distribution_with_tags(
         &self,
         input: &CreateDistributionWithTagsRequest,
     ) -> Result<CreateDistributionWithTagsResult, CreateDistributionWithTagsError>;
 
-    #[doc = "<p>Create a new invalidation. </p>"]
+    /// <p>Create a new invalidation. </p>
     fn create_invalidation(
         &self,
         input: &CreateInvalidationRequest,
     ) -> Result<CreateInvalidationResult, CreateInvalidationError>;
 
-    #[doc="<p>Creates a new RMTP distribution. An RTMP distribution is similar to a web distribution, but an RTMP distribution streams media files using the Adobe Real-Time Messaging Protocol (RTMP) instead of serving files using HTTP. </p> <p>To create a new web distribution, submit a <code>POST</code> request to the <i>CloudFront API version</i>/distribution resource. The request body must include a document with a <i>StreamingDistributionConfig</i> element. The response echoes the <code>StreamingDistributionConfig</code> element and returns other information about the RTMP distribution.</p> <p>To get the status of your request, use the <i>GET StreamingDistribution</i> API action. When the value of <code>Enabled</code> is <code>true</code> and the value of <code>Status</code> is <code>Deployed</code>, your distribution is ready. A distribution usually deploys in less than 15 minutes.</p> <p>For more information about web distributions, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-rtmp.html\">Working with RTMP Distributions</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <important> <p>Beginning with the 2012-05-05 version of the CloudFront API, we made substantial changes to the format of the XML document that you include in the request body when you create or update a web distribution or an RTMP distribution, and when you invalidate objects. With previous versions of the API, we discovered that it was too easy to accidentally delete one or more values for an element that accepts multiple values, for example, CNAMEs and trusted signers. Our changes for the 2012-05-05 release are intended to prevent these accidental deletions and to notify you when there's a mismatch between the number of values you say you're specifying in the <code>Quantity</code> element and the number of values specified.</p> </important>"]
+    /// <p><p>Creates a new RMTP distribution. An RTMP distribution is similar to a web distribution, but an RTMP distribution streams media files using the Adobe Real-Time Messaging Protocol (RTMP) instead of serving files using HTTP. </p> <p>To create a new web distribution, submit a <code>POST</code> request to the <i>CloudFront API version</i>/distribution resource. The request body must include a document with a <i>StreamingDistributionConfig</i> element. The response echoes the <code>StreamingDistributionConfig</code> element and returns other information about the RTMP distribution.</p> <p>To get the status of your request, use the <i>GET StreamingDistribution</i> API action. When the value of <code>Enabled</code> is <code>true</code> and the value of <code>Status</code> is <code>Deployed</code>, your distribution is ready. A distribution usually deploys in less than 15 minutes.</p> <p>For more information about web distributions, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-rtmp.html">Working with RTMP Distributions</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <important> <p>Beginning with the 2012-05-05 version of the CloudFront API, we made substantial changes to the format of the XML document that you include in the request body when you create or update a web distribution or an RTMP distribution, and when you invalidate objects. With previous versions of the API, we discovered that it was too easy to accidentally delete one or more values for an element that accepts multiple values, for example, CNAMEs and trusted signers. Our changes for the 2012-05-05 release are intended to prevent these accidental deletions and to notify you when there&#39;s a mismatch between the number of values you say you&#39;re specifying in the <code>Quantity</code> element and the number of values specified.</p> </important></p>
     fn create_streaming_distribution(
         &self,
         input: &CreateStreamingDistributionRequest,
     ) -> Result<CreateStreamingDistributionResult, CreateStreamingDistributionError>;
 
-    #[doc = "<p>Create a new streaming distribution with tags.</p>"]
+    /// <p>Create a new streaming distribution with tags.</p>
     fn create_streaming_distribution_with_tags(
         &self,
         input: &CreateStreamingDistributionWithTagsRequest,
     ) -> Result<CreateStreamingDistributionWithTagsResult, CreateStreamingDistributionWithTagsError>;
 
-    #[doc = "<p>Delete an origin access identity. </p>"]
+    /// <p>Delete an origin access identity. </p>
     fn delete_cloud_front_origin_access_identity(
         &self,
         input: &DeleteCloudFrontOriginAccessIdentityRequest,
     ) -> Result<(), DeleteCloudFrontOriginAccessIdentityError>;
 
-    #[doc = "<p>Delete a distribution. </p>"]
+    /// <p>Delete a distribution. </p>
     fn delete_distribution(
         &self,
         input: &DeleteDistributionRequest,
     ) -> Result<(), DeleteDistributionError>;
 
-    #[doc="<p>Delete a streaming distribution. To delete an RTMP distribution using the CloudFront API, perform the following steps.</p> <p> <b>To delete an RTMP distribution using the CloudFront API</b>:</p> <ol> <li> <p>Disable the RTMP distribution.</p> </li> <li> <p>Submit a <code>GET Streaming Distribution Config</code> request to get the current configuration and the <code>Etag</code> header for the distribution. </p> </li> <li> <p>Update the XML document that was returned in the response to your <code>GET Streaming Distribution Config</code> request to change the value of <code>Enabled</code> to <code>false</code>.</p> </li> <li> <p>Submit a <code>PUT Streaming Distribution Config</code> request to update the configuration for your distribution. In the request body, include the XML document that you updated in Step 3. Then set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Streaming Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to the <code>PUT Streaming Distribution Config</code> request to confirm that the distribution was successfully disabled.</p> </li> <li> <p>Submit a <code>GET Streaming Distribution Config</code> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> </li> <li> <p>Submit a <code>DELETE Streaming Distribution</code> request. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Streaming Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to your <code>DELETE Streaming Distribution</code> request to confirm that the distribution was successfully deleted.</p> </li> </ol> <p>For information about deleting a distribution using the CloudFront console, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToDeleteDistribution.html\">Deleting a Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
+    /// <p>Delete a streaming distribution. To delete an RTMP distribution using the CloudFront API, perform the following steps.</p> <p> <b>To delete an RTMP distribution using the CloudFront API</b>:</p> <ol> <li> <p>Disable the RTMP distribution.</p> </li> <li> <p>Submit a <code>GET Streaming Distribution Config</code> request to get the current configuration and the <code>Etag</code> header for the distribution. </p> </li> <li> <p>Update the XML document that was returned in the response to your <code>GET Streaming Distribution Config</code> request to change the value of <code>Enabled</code> to <code>false</code>.</p> </li> <li> <p>Submit a <code>PUT Streaming Distribution Config</code> request to update the configuration for your distribution. In the request body, include the XML document that you updated in Step 3. Then set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Streaming Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to the <code>PUT Streaming Distribution Config</code> request to confirm that the distribution was successfully disabled.</p> </li> <li> <p>Submit a <code>GET Streaming Distribution Config</code> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> </li> <li> <p>Submit a <code>DELETE Streaming Distribution</code> request. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Streaming Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to your <code>DELETE Streaming Distribution</code> request to confirm that the distribution was successfully deleted.</p> </li> </ol> <p>For information about deleting a distribution using the CloudFront console, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToDeleteDistribution.html">Deleting a Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     fn delete_streaming_distribution(
         &self,
         input: &DeleteStreamingDistributionRequest,
     ) -> Result<(), DeleteStreamingDistributionError>;
 
-    #[doc = "<p>Get the information about an origin access identity. </p>"]
+    /// <p>Get the information about an origin access identity. </p>
     fn get_cloud_front_origin_access_identity(
         &self,
         input: &GetCloudFrontOriginAccessIdentityRequest,
     ) -> Result<GetCloudFrontOriginAccessIdentityResult, GetCloudFrontOriginAccessIdentityError>;
 
-    #[doc = "<p>Get the configuration information about an origin access identity. </p>"]
+    /// <p>Get the configuration information about an origin access identity. </p>
     fn get_cloud_front_origin_access_identity_config(
         &self,
         input: &GetCloudFrontOriginAccessIdentityConfigRequest,
@@ -11390,91 +11390,91 @@ pub trait CloudFront {
         GetCloudFrontOriginAccessIdentityConfigError,
     >;
 
-    #[doc = "<p>Get the information about a distribution. </p>"]
+    /// <p>Get the information about a distribution. </p>
     fn get_distribution(
         &self,
         input: &GetDistributionRequest,
     ) -> Result<GetDistributionResult, GetDistributionError>;
 
-    #[doc = "<p>Get the configuration information about a distribution. </p>"]
+    /// <p>Get the configuration information about a distribution. </p>
     fn get_distribution_config(
         &self,
         input: &GetDistributionConfigRequest,
     ) -> Result<GetDistributionConfigResult, GetDistributionConfigError>;
 
-    #[doc = "<p>Get the information about an invalidation. </p>"]
+    /// <p>Get the information about an invalidation. </p>
     fn get_invalidation(
         &self,
         input: &GetInvalidationRequest,
     ) -> Result<GetInvalidationResult, GetInvalidationError>;
 
-    #[doc="<p>Gets information about a specified RTMP distribution, including the distribution configuration.</p>"]
+    /// <p>Gets information about a specified RTMP distribution, including the distribution configuration.</p>
     fn get_streaming_distribution(
         &self,
         input: &GetStreamingDistributionRequest,
     ) -> Result<GetStreamingDistributionResult, GetStreamingDistributionError>;
 
-    #[doc = "<p>Get the configuration information about a streaming distribution. </p>"]
+    /// <p>Get the configuration information about a streaming distribution. </p>
     fn get_streaming_distribution_config(
         &self,
         input: &GetStreamingDistributionConfigRequest,
     ) -> Result<GetStreamingDistributionConfigResult, GetStreamingDistributionConfigError>;
 
-    #[doc = "<p>Lists origin access identities.</p>"]
+    /// <p>Lists origin access identities.</p>
     fn list_cloud_front_origin_access_identities(
         &self,
         input: &ListCloudFrontOriginAccessIdentitiesRequest,
     ) -> Result<ListCloudFrontOriginAccessIdentitiesResult, ListCloudFrontOriginAccessIdentitiesError>;
 
-    #[doc = "<p>List distributions. </p>"]
+    /// <p>List distributions. </p>
     fn list_distributions(
         &self,
         input: &ListDistributionsRequest,
     ) -> Result<ListDistributionsResult, ListDistributionsError>;
 
-    #[doc = "<p>List the distributions that are associated with a specified AWS WAF web ACL. </p>"]
+    /// <p>List the distributions that are associated with a specified AWS WAF web ACL. </p>
     fn list_distributions_by_web_acl_id(
         &self,
         input: &ListDistributionsByWebACLIdRequest,
     ) -> Result<ListDistributionsByWebACLIdResult, ListDistributionsByWebACLIdError>;
 
-    #[doc = "<p>Lists invalidation batches. </p>"]
+    /// <p>Lists invalidation batches. </p>
     fn list_invalidations(
         &self,
         input: &ListInvalidationsRequest,
     ) -> Result<ListInvalidationsResult, ListInvalidationsError>;
 
-    #[doc = "<p>List streaming distributions. </p>"]
+    /// <p>List streaming distributions. </p>
     fn list_streaming_distributions(
         &self,
         input: &ListStreamingDistributionsRequest,
     ) -> Result<ListStreamingDistributionsResult, ListStreamingDistributionsError>;
 
-    #[doc = "<p>List tags for a CloudFront resource.</p>"]
+    /// <p>List tags for a CloudFront resource.</p>
     fn list_tags_for_resource(
         &self,
         input: &ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResult, ListTagsForResourceError>;
 
-    #[doc = "<p>Add tags to a CloudFront resource.</p>"]
+    /// <p>Add tags to a CloudFront resource.</p>
     fn tag_resource(&self, input: &TagResourceRequest) -> Result<(), TagResourceError>;
 
-    #[doc = "<p>Remove tags from a CloudFront resource.</p>"]
+    /// <p>Remove tags from a CloudFront resource.</p>
     fn untag_resource(&self, input: &UntagResourceRequest) -> Result<(), UntagResourceError>;
 
-    #[doc = "<p>Update an origin access identity. </p>"]
+    /// <p>Update an origin access identity. </p>
     fn update_cloud_front_origin_access_identity(
         &self,
         input: &UpdateCloudFrontOriginAccessIdentityRequest,
     ) -> Result<UpdateCloudFrontOriginAccessIdentityResult, UpdateCloudFrontOriginAccessIdentityError>;
 
-    #[doc="<p>Updates the configuration for a web distribution. Perform the following steps.</p> <p>For information about updating a distribution using the CloudFront console, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-creating-console.html\">Creating or Updating a Web Distribution Using the CloudFront Console </a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p> <b>To update a web distribution using the CloudFront API</b> </p> <ol> <li> <p>Submit a <a>GetDistributionConfig</a> request to get the current configuration and an <code>Etag</code> header for the distribution.</p> <note> <p>If you update the distribution again, you need to get a new <code>Etag</code> header.</p> </note> </li> <li> <p>Update the XML document that was returned in the response to your <code>GetDistributionConfig</code> request to include the desired changes. You can't change the value of <code>CallerReference</code>. If you try to change this value, CloudFront returns an <code>IllegalUpdate</code> error.</p> <important> <p>The new configuration replaces the existing configuration; the values that you specify in an <code>UpdateDistribution</code> request are not merged into the existing configuration. When you add, delete, or replace values in an element that allows multiple values (for example, <code>CNAME</code>), you must specify all of the values that you want to appear in the updated distribution. In addition, you must update the corresponding <code>Quantity</code> element.</p> </important> </li> <li> <p>Submit an <code>UpdateDistribution</code> request to update the configuration for your distribution:</p> <ul> <li> <p>In the request body, include the XML document that you updated in Step 2. The request body must include an XML document with a <code>DistributionConfig</code> element.</p> </li> <li> <p>Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GetDistributionConfig</code> request in Step 1.</p> </li> </ul> </li> <li> <p>Review the response to the <code>UpdateDistribution</code> request to confirm that the configuration was successfully updated.</p> </li> <li> <p>Optional: Submit a <a>GetDistribution</a> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> <important> <p>Beginning with the 2012-05-05 version of the CloudFront API, we made substantial changes to the format of the XML document that you include in the request body when you create or update a distribution. With previous versions of the API, we discovered that it was too easy to accidentally delete one or more values for an element that accepts multiple values, for example, CNAMEs and trusted signers. Our changes for the 2012-05-05 release are intended to prevent these accidental deletions and to notify you when there's a mismatch between the number of values you say you're specifying in the <code>Quantity</code> element and the number of values you're actually specifying.</p> </important> </li> </ol>"]
+    /// <p><p>Updates the configuration for a web distribution. Perform the following steps.</p> <p>For information about updating a distribution using the CloudFront console, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-creating-console.html">Creating or Updating a Web Distribution Using the CloudFront Console </a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p> <b>To update a web distribution using the CloudFront API</b> </p> <ol> <li> <p>Submit a <a>GetDistributionConfig</a> request to get the current configuration and an <code>Etag</code> header for the distribution.</p> <note> <p>If you update the distribution again, you need to get a new <code>Etag</code> header.</p> </note> </li> <li> <p>Update the XML document that was returned in the response to your <code>GetDistributionConfig</code> request to include the desired changes. You can&#39;t change the value of <code>CallerReference</code>. If you try to change this value, CloudFront returns an <code>IllegalUpdate</code> error.</p> <important> <p>The new configuration replaces the existing configuration; the values that you specify in an <code>UpdateDistribution</code> request are not merged into the existing configuration. When you add, delete, or replace values in an element that allows multiple values (for example, <code>CNAME</code>), you must specify all of the values that you want to appear in the updated distribution. In addition, you must update the corresponding <code>Quantity</code> element.</p> </important> </li> <li> <p>Submit an <code>UpdateDistribution</code> request to update the configuration for your distribution:</p> <ul> <li> <p>In the request body, include the XML document that you updated in Step 2. The request body must include an XML document with a <code>DistributionConfig</code> element.</p> </li> <li> <p>Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GetDistributionConfig</code> request in Step 1.</p> </li> </ul> </li> <li> <p>Review the response to the <code>UpdateDistribution</code> request to confirm that the configuration was successfully updated.</p> </li> <li> <p>Optional: Submit a <a>GetDistribution</a> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> <important> <p>Beginning with the 2012-05-05 version of the CloudFront API, we made substantial changes to the format of the XML document that you include in the request body when you create or update a distribution. With previous versions of the API, we discovered that it was too easy to accidentally delete one or more values for an element that accepts multiple values, for example, CNAMEs and trusted signers. Our changes for the 2012-05-05 release are intended to prevent these accidental deletions and to notify you when there&#39;s a mismatch between the number of values you say you&#39;re specifying in the <code>Quantity</code> element and the number of values you&#39;re actually specifying.</p> </important> </li> </ol></p>
     fn update_distribution(
         &self,
         input: &UpdateDistributionRequest,
     ) -> Result<UpdateDistributionResult, UpdateDistributionError>;
 
-    #[doc = "<p>Update a streaming distribution. </p>"]
+    /// <p>Update a streaming distribution. </p>
     fn update_streaming_distribution(
         &self,
         input: &UpdateStreamingDistributionRequest,
@@ -11510,8 +11510,8 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Creates a new origin access identity. If you're using Amazon S3 for your origin, you can use an origin access identity to require users to access your content using a CloudFront URL instead of the Amazon S3 URL. For more information about how to use origin access identities, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html\">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-                    #[allow(unused_variables, warnings)]
+    /// <p>Creates a new origin access identity. If you're using Amazon S3 for your origin, you can use an origin access identity to require users to access your content using a CloudFront URL instead of the Amazon S3 URL. For more information about how to use origin access identities, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    #[allow(unused_variables, warnings)]
     fn create_cloud_front_origin_access_identity(
         &self,
         input: &CreateCloudFrontOriginAccessIdentityRequest,
@@ -11579,8 +11579,8 @@ where
         }
     }
 
-    #[doc="<p>Creates a new web distribution. Send a <code>POST</code> request to the <code>/<i>CloudFront API version</i>/distribution</code>/<code>distribution ID</code> resource.</p>"]
-                    #[allow(unused_variables, warnings)]
+    /// <p>Creates a new web distribution. Send a <code>POST</code> request to the <code>/<i>CloudFront API version</i>/distribution</code>/<code>distribution ID</code> resource.</p>
+    #[allow(unused_variables, warnings)]
     fn create_distribution(
         &self,
         input: &CreateDistributionRequest,
@@ -11645,7 +11645,7 @@ where
         }
     }
 
-    #[doc = "<p>Create a new distribution with tags.</p>"]
+    /// <p>Create a new distribution with tags.</p>
     #[allow(unused_variables, warnings)]
     fn create_distribution_with_tags(
         &self,
@@ -11714,7 +11714,7 @@ where
         }
     }
 
-    #[doc = "<p>Create a new invalidation. </p>"]
+    /// <p>Create a new invalidation. </p>
     #[allow(unused_variables, warnings)]
     fn create_invalidation(
         &self,
@@ -11779,8 +11779,8 @@ where
         }
     }
 
-    #[doc="<p>Creates a new RMTP distribution. An RTMP distribution is similar to a web distribution, but an RTMP distribution streams media files using the Adobe Real-Time Messaging Protocol (RTMP) instead of serving files using HTTP. </p> <p>To create a new web distribution, submit a <code>POST</code> request to the <i>CloudFront API version</i>/distribution resource. The request body must include a document with a <i>StreamingDistributionConfig</i> element. The response echoes the <code>StreamingDistributionConfig</code> element and returns other information about the RTMP distribution.</p> <p>To get the status of your request, use the <i>GET StreamingDistribution</i> API action. When the value of <code>Enabled</code> is <code>true</code> and the value of <code>Status</code> is <code>Deployed</code>, your distribution is ready. A distribution usually deploys in less than 15 minutes.</p> <p>For more information about web distributions, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-rtmp.html\">Working with RTMP Distributions</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <important> <p>Beginning with the 2012-05-05 version of the CloudFront API, we made substantial changes to the format of the XML document that you include in the request body when you create or update a web distribution or an RTMP distribution, and when you invalidate objects. With previous versions of the API, we discovered that it was too easy to accidentally delete one or more values for an element that accepts multiple values, for example, CNAMEs and trusted signers. Our changes for the 2012-05-05 release are intended to prevent these accidental deletions and to notify you when there's a mismatch between the number of values you say you're specifying in the <code>Quantity</code> element and the number of values specified.</p> </important>"]
-                    #[allow(unused_variables, warnings)]
+    /// <p><p>Creates a new RMTP distribution. An RTMP distribution is similar to a web distribution, but an RTMP distribution streams media files using the Adobe Real-Time Messaging Protocol (RTMP) instead of serving files using HTTP. </p> <p>To create a new web distribution, submit a <code>POST</code> request to the <i>CloudFront API version</i>/distribution resource. The request body must include a document with a <i>StreamingDistributionConfig</i> element. The response echoes the <code>StreamingDistributionConfig</code> element and returns other information about the RTMP distribution.</p> <p>To get the status of your request, use the <i>GET StreamingDistribution</i> API action. When the value of <code>Enabled</code> is <code>true</code> and the value of <code>Status</code> is <code>Deployed</code>, your distribution is ready. A distribution usually deploys in less than 15 minutes.</p> <p>For more information about web distributions, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-rtmp.html">Working with RTMP Distributions</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <important> <p>Beginning with the 2012-05-05 version of the CloudFront API, we made substantial changes to the format of the XML document that you include in the request body when you create or update a web distribution or an RTMP distribution, and when you invalidate objects. With previous versions of the API, we discovered that it was too easy to accidentally delete one or more values for an element that accepts multiple values, for example, CNAMEs and trusted signers. Our changes for the 2012-05-05 release are intended to prevent these accidental deletions and to notify you when there&#39;s a mismatch between the number of values you say you&#39;re specifying in the <code>Quantity</code> element and the number of values specified.</p> </important></p>
+    #[allow(unused_variables, warnings)]
     fn create_streaming_distribution(
         &self,
         input: &CreateStreamingDistributionRequest,
@@ -11845,7 +11845,7 @@ where
         }
     }
 
-    #[doc = "<p>Create a new streaming distribution with tags.</p>"]
+    /// <p>Create a new streaming distribution with tags.</p>
     #[allow(unused_variables, warnings)]
     fn create_streaming_distribution_with_tags(
         &self,
@@ -11917,7 +11917,7 @@ where
         }
     }
 
-    #[doc = "<p>Delete an origin access identity. </p>"]
+    /// <p>Delete an origin access identity. </p>
     #[allow(unused_variables, warnings)]
     fn delete_cloud_front_origin_access_identity(
         &self,
@@ -11954,7 +11954,7 @@ where
         }
     }
 
-    #[doc = "<p>Delete a distribution. </p>"]
+    /// <p>Delete a distribution. </p>
     #[allow(unused_variables, warnings)]
     fn delete_distribution(
         &self,
@@ -11988,8 +11988,8 @@ where
         }
     }
 
-    #[doc="<p>Delete a streaming distribution. To delete an RTMP distribution using the CloudFront API, perform the following steps.</p> <p> <b>To delete an RTMP distribution using the CloudFront API</b>:</p> <ol> <li> <p>Disable the RTMP distribution.</p> </li> <li> <p>Submit a <code>GET Streaming Distribution Config</code> request to get the current configuration and the <code>Etag</code> header for the distribution. </p> </li> <li> <p>Update the XML document that was returned in the response to your <code>GET Streaming Distribution Config</code> request to change the value of <code>Enabled</code> to <code>false</code>.</p> </li> <li> <p>Submit a <code>PUT Streaming Distribution Config</code> request to update the configuration for your distribution. In the request body, include the XML document that you updated in Step 3. Then set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Streaming Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to the <code>PUT Streaming Distribution Config</code> request to confirm that the distribution was successfully disabled.</p> </li> <li> <p>Submit a <code>GET Streaming Distribution Config</code> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> </li> <li> <p>Submit a <code>DELETE Streaming Distribution</code> request. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Streaming Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to your <code>DELETE Streaming Distribution</code> request to confirm that the distribution was successfully deleted.</p> </li> </ol> <p>For information about deleting a distribution using the CloudFront console, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToDeleteDistribution.html\">Deleting a Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>"]
-                    #[allow(unused_variables, warnings)]
+    /// <p>Delete a streaming distribution. To delete an RTMP distribution using the CloudFront API, perform the following steps.</p> <p> <b>To delete an RTMP distribution using the CloudFront API</b>:</p> <ol> <li> <p>Disable the RTMP distribution.</p> </li> <li> <p>Submit a <code>GET Streaming Distribution Config</code> request to get the current configuration and the <code>Etag</code> header for the distribution. </p> </li> <li> <p>Update the XML document that was returned in the response to your <code>GET Streaming Distribution Config</code> request to change the value of <code>Enabled</code> to <code>false</code>.</p> </li> <li> <p>Submit a <code>PUT Streaming Distribution Config</code> request to update the configuration for your distribution. In the request body, include the XML document that you updated in Step 3. Then set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Streaming Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to the <code>PUT Streaming Distribution Config</code> request to confirm that the distribution was successfully disabled.</p> </li> <li> <p>Submit a <code>GET Streaming Distribution Config</code> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> </li> <li> <p>Submit a <code>DELETE Streaming Distribution</code> request. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Streaming Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to your <code>DELETE Streaming Distribution</code> request to confirm that the distribution was successfully deleted.</p> </li> </ol> <p>For information about deleting a distribution using the CloudFront console, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToDeleteDistribution.html">Deleting a Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    #[allow(unused_variables, warnings)]
     fn delete_streaming_distribution(
         &self,
         input: &DeleteStreamingDistributionRequest,
@@ -12022,7 +12022,7 @@ where
         }
     }
 
-    #[doc = "<p>Get the information about an origin access identity. </p>"]
+    /// <p>Get the information about an origin access identity. </p>
     #[allow(unused_variables, warnings)]
     fn get_cloud_front_origin_access_identity(
         &self,
@@ -12079,7 +12079,7 @@ where
         }
     }
 
-    #[doc = "<p>Get the configuration information about an origin access identity. </p>"]
+    /// <p>Get the configuration information about an origin access identity. </p>
     #[allow(unused_variables, warnings)]
     fn get_cloud_front_origin_access_identity_config(
         &self,
@@ -12138,7 +12138,7 @@ where
         }
     }
 
-    #[doc = "<p>Get the information about a distribution. </p>"]
+    /// <p>Get the information about a distribution. </p>
     #[allow(unused_variables, warnings)]
     fn get_distribution(
         &self,
@@ -12189,7 +12189,7 @@ where
         }
     }
 
-    #[doc = "<p>Get the configuration information about a distribution. </p>"]
+    /// <p>Get the configuration information about a distribution. </p>
     #[allow(unused_variables, warnings)]
     fn get_distribution_config(
         &self,
@@ -12240,7 +12240,7 @@ where
         }
     }
 
-    #[doc = "<p>Get the information about an invalidation. </p>"]
+    /// <p>Get the information about an invalidation. </p>
     #[allow(unused_variables, warnings)]
     fn get_invalidation(
         &self,
@@ -12292,8 +12292,8 @@ where
         }
     }
 
-    #[doc="<p>Gets information about a specified RTMP distribution, including the distribution configuration.</p>"]
-                    #[allow(unused_variables, warnings)]
+    /// <p>Gets information about a specified RTMP distribution, including the distribution configuration.</p>
+    #[allow(unused_variables, warnings)]
     fn get_streaming_distribution(
         &self,
         input: &GetStreamingDistributionRequest,
@@ -12343,7 +12343,7 @@ where
         }
     }
 
-    #[doc = "<p>Get the configuration information about a streaming distribution. </p>"]
+    /// <p>Get the configuration information about a streaming distribution. </p>
     #[allow(unused_variables, warnings)]
     fn get_streaming_distribution_config(
         &self,
@@ -12399,7 +12399,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists origin access identities.</p>"]
+    /// <p>Lists origin access identities.</p>
     #[allow(unused_variables, warnings)]
     fn list_cloud_front_origin_access_identities(
         &self,
@@ -12459,7 +12459,7 @@ where
         }
     }
 
-    #[doc = "<p>List distributions. </p>"]
+    /// <p>List distributions. </p>
     #[allow(unused_variables, warnings)]
     fn list_distributions(
         &self,
@@ -12516,7 +12516,7 @@ where
         }
     }
 
-    #[doc = "<p>List the distributions that are associated with a specified AWS WAF web ACL. </p>"]
+    /// <p>List the distributions that are associated with a specified AWS WAF web ACL. </p>
     #[allow(unused_variables, warnings)]
     fn list_distributions_by_web_acl_id(
         &self,
@@ -12576,7 +12576,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists invalidation batches. </p>"]
+    /// <p>Lists invalidation batches. </p>
     #[allow(unused_variables, warnings)]
     fn list_invalidations(
         &self,
@@ -12636,7 +12636,7 @@ where
         }
     }
 
-    #[doc = "<p>List streaming distributions. </p>"]
+    /// <p>List streaming distributions. </p>
     #[allow(unused_variables, warnings)]
     fn list_streaming_distributions(
         &self,
@@ -12693,7 +12693,7 @@ where
         }
     }
 
-    #[doc = "<p>List tags for a CloudFront resource.</p>"]
+    /// <p>List tags for a CloudFront resource.</p>
     #[allow(unused_variables, warnings)]
     fn list_tags_for_resource(
         &self,
@@ -12745,7 +12745,7 @@ where
         }
     }
 
-    #[doc = "<p>Add tags to a CloudFront resource.</p>"]
+    /// <p>Add tags to a CloudFront resource.</p>
     #[allow(unused_variables, warnings)]
     fn tag_resource(&self, input: &TagResourceRequest) -> Result<(), TagResourceError> {
         let request_uri = "/2017-03-25/tagging";
@@ -12783,7 +12783,7 @@ where
         }
     }
 
-    #[doc = "<p>Remove tags from a CloudFront resource.</p>"]
+    /// <p>Remove tags from a CloudFront resource.</p>
     #[allow(unused_variables, warnings)]
     fn untag_resource(&self, input: &UntagResourceRequest) -> Result<(), UntagResourceError> {
         let request_uri = "/2017-03-25/tagging";
@@ -12821,7 +12821,7 @@ where
         }
     }
 
-    #[doc = "<p>Update an origin access identity. </p>"]
+    /// <p>Update an origin access identity. </p>
     #[allow(unused_variables, warnings)]
     fn update_cloud_front_origin_access_identity(
         &self,
@@ -12893,8 +12893,8 @@ where
         }
     }
 
-    #[doc="<p>Updates the configuration for a web distribution. Perform the following steps.</p> <p>For information about updating a distribution using the CloudFront console, see <a href=\"http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-creating-console.html\">Creating or Updating a Web Distribution Using the CloudFront Console </a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p> <b>To update a web distribution using the CloudFront API</b> </p> <ol> <li> <p>Submit a <a>GetDistributionConfig</a> request to get the current configuration and an <code>Etag</code> header for the distribution.</p> <note> <p>If you update the distribution again, you need to get a new <code>Etag</code> header.</p> </note> </li> <li> <p>Update the XML document that was returned in the response to your <code>GetDistributionConfig</code> request to include the desired changes. You can't change the value of <code>CallerReference</code>. If you try to change this value, CloudFront returns an <code>IllegalUpdate</code> error.</p> <important> <p>The new configuration replaces the existing configuration; the values that you specify in an <code>UpdateDistribution</code> request are not merged into the existing configuration. When you add, delete, or replace values in an element that allows multiple values (for example, <code>CNAME</code>), you must specify all of the values that you want to appear in the updated distribution. In addition, you must update the corresponding <code>Quantity</code> element.</p> </important> </li> <li> <p>Submit an <code>UpdateDistribution</code> request to update the configuration for your distribution:</p> <ul> <li> <p>In the request body, include the XML document that you updated in Step 2. The request body must include an XML document with a <code>DistributionConfig</code> element.</p> </li> <li> <p>Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GetDistributionConfig</code> request in Step 1.</p> </li> </ul> </li> <li> <p>Review the response to the <code>UpdateDistribution</code> request to confirm that the configuration was successfully updated.</p> </li> <li> <p>Optional: Submit a <a>GetDistribution</a> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> <important> <p>Beginning with the 2012-05-05 version of the CloudFront API, we made substantial changes to the format of the XML document that you include in the request body when you create or update a distribution. With previous versions of the API, we discovered that it was too easy to accidentally delete one or more values for an element that accepts multiple values, for example, CNAMEs and trusted signers. Our changes for the 2012-05-05 release are intended to prevent these accidental deletions and to notify you when there's a mismatch between the number of values you say you're specifying in the <code>Quantity</code> element and the number of values you're actually specifying.</p> </important> </li> </ol>"]
-                    #[allow(unused_variables, warnings)]
+    /// <p><p>Updates the configuration for a web distribution. Perform the following steps.</p> <p>For information about updating a distribution using the CloudFront console, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-creating-console.html">Creating or Updating a Web Distribution Using the CloudFront Console </a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p> <b>To update a web distribution using the CloudFront API</b> </p> <ol> <li> <p>Submit a <a>GetDistributionConfig</a> request to get the current configuration and an <code>Etag</code> header for the distribution.</p> <note> <p>If you update the distribution again, you need to get a new <code>Etag</code> header.</p> </note> </li> <li> <p>Update the XML document that was returned in the response to your <code>GetDistributionConfig</code> request to include the desired changes. You can&#39;t change the value of <code>CallerReference</code>. If you try to change this value, CloudFront returns an <code>IllegalUpdate</code> error.</p> <important> <p>The new configuration replaces the existing configuration; the values that you specify in an <code>UpdateDistribution</code> request are not merged into the existing configuration. When you add, delete, or replace values in an element that allows multiple values (for example, <code>CNAME</code>), you must specify all of the values that you want to appear in the updated distribution. In addition, you must update the corresponding <code>Quantity</code> element.</p> </important> </li> <li> <p>Submit an <code>UpdateDistribution</code> request to update the configuration for your distribution:</p> <ul> <li> <p>In the request body, include the XML document that you updated in Step 2. The request body must include an XML document with a <code>DistributionConfig</code> element.</p> </li> <li> <p>Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GetDistributionConfig</code> request in Step 1.</p> </li> </ul> </li> <li> <p>Review the response to the <code>UpdateDistribution</code> request to confirm that the configuration was successfully updated.</p> </li> <li> <p>Optional: Submit a <a>GetDistribution</a> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> <important> <p>Beginning with the 2012-05-05 version of the CloudFront API, we made substantial changes to the format of the XML document that you include in the request body when you create or update a distribution. With previous versions of the API, we discovered that it was too easy to accidentally delete one or more values for an element that accepts multiple values, for example, CNAMEs and trusted signers. Our changes for the 2012-05-05 release are intended to prevent these accidental deletions and to notify you when there&#39;s a mismatch between the number of values you say you&#39;re specifying in the <code>Quantity</code> element and the number of values you&#39;re actually specifying.</p> </important> </li> </ol></p>
+    #[allow(unused_variables, warnings)]
     fn update_distribution(
         &self,
         input: &UpdateDistributionRequest,
@@ -12959,7 +12959,7 @@ where
         }
     }
 
-    #[doc = "<p>Update a streaming distribution. </p>"]
+    /// <p>Update a streaming distribution. </p>
     #[allow(unused_variables, warnings)]
     fn update_streaming_distribution(
         &self,

@@ -3510,7 +3510,7 @@ impl DetachLoadBalancersTypeSerializer {
 pub struct DisableMetricsCollectionQuery {
     /// <p>The name or Amazon Resource Name (ARN) of the group.</p>
     pub auto_scaling_group_name: String,
-    /// <p>One or more of the following metrics. If you omit this parameter, all metrics are disabled.</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> </ul>
+    /// <p><p>One or more of the following metrics. If you omit this parameter, all metrics are disabled.</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> </ul></p>
     pub metrics: Option<Vec<String>>,
 }
 
@@ -3705,7 +3705,7 @@ pub struct EnableMetricsCollectionQuery {
     pub auto_scaling_group_name: String,
     /// <p>The granularity to associate with the metrics to collect. The only valid value is <code>1Minute</code>.</p>
     pub granularity: String,
-    /// <p>One or more of the following metrics. If you omit this parameter, all metrics are enabled.</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> </ul>
+    /// <p><p>One or more of the following metrics. If you omit this parameter, all metrics are enabled.</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> </ul></p>
     pub metrics: Option<Vec<String>>,
 }
 
@@ -3737,7 +3737,7 @@ impl EnableMetricsCollectionQuerySerializer {
 pub struct EnabledMetric {
     /// <p>The granularity of the metric. The only valid value is <code>1Minute</code>.</p>
     pub granularity: Option<String>,
-    /// <p>One of the following metrics:</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> </ul>
+    /// <p><p>One of the following metrics:</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> </ul></p>
     pub metric: Option<String>,
 }
 
@@ -4778,7 +4778,7 @@ pub struct LifecycleHook {
     pub lifecycle_transition: Option<String>,
     /// <p>Additional information that you want to include any time Auto Scaling sends a message to the notification target.</p>
     pub notification_metadata: Option<String>,
-    /// <p>The ARN of the notification target that Auto Scaling uses to notify you when an instance is in the transition state for the lifecycle hook. This ARN target can be either an SQS queue or an SNS topic. The notification message sent to the target includes the following:</p> <ul> <li> <p>Lifecycle action token</p> </li> <li> <p>User account ID</p> </li> <li> <p>Name of the Auto Scaling group</p> </li> <li> <p>Lifecycle hook name</p> </li> <li> <p>EC2 instance ID</p> </li> <li> <p>Lifecycle transition</p> </li> <li> <p>Notification metadata</p> </li> </ul>
+    /// <p><p>The ARN of the notification target that Auto Scaling uses to notify you when an instance is in the transition state for the lifecycle hook. This ARN target can be either an SQS queue or an SNS topic. The notification message sent to the target includes the following:</p> <ul> <li> <p>Lifecycle action token</p> </li> <li> <p>User account ID</p> </li> <li> <p>Name of the Auto Scaling group</p> </li> <li> <p>Lifecycle hook name</p> </li> <li> <p>EC2 instance ID</p> </li> <li> <p>Lifecycle transition</p> </li> <li> <p>Notification metadata</p> </li> </ul></p>
     pub notification_target_arn: Option<String>,
     /// <p>The ARN of the IAM role that allows the Auto Scaling group to publish to the specified notification target.</p>
     pub role_arn: Option<String>,
@@ -5016,7 +5016,7 @@ impl LoadBalancerNamesSerializer {
 pub struct LoadBalancerState {
     /// <p>The name of the load balancer.</p>
     pub load_balancer_name: Option<String>,
-    /// <p>One of the following load balancer states:</p> <ul> <li> <p> <code>Adding</code> - The instances in the group are being registered with the load balancer.</p> </li> <li> <p> <code>Added</code> - All instances in the group are registered with the load balancer.</p> </li> <li> <p> <code>InService</code> - At least one instance in the group passed an ELB health check.</p> </li> <li> <p> <code>Removing</code> - The instances in the group are being deregistered from the load balancer. If connection draining is enabled, Elastic Load Balancing waits for in-flight requests to complete before deregistering the instances.</p> </li> <li> <p> <code>Removed</code> - All instances in the group are deregistered from the load balancer.</p> </li> </ul>
+    /// <p><p>One of the following load balancer states:</p> <ul> <li> <p> <code>Adding</code> - The instances in the group are being registered with the load balancer.</p> </li> <li> <p> <code>Added</code> - All instances in the group are registered with the load balancer.</p> </li> <li> <p> <code>InService</code> - At least one instance in the group passed an ELB health check.</p> </li> <li> <p> <code>Removing</code> - The instances in the group are being deregistered from the load balancer. If connection draining is enabled, Elastic Load Balancing waits for in-flight requests to complete before deregistering the instances.</p> </li> <li> <p> <code>Removed</code> - All instances in the group are deregistered from the load balancer.</p> </li> </ul></p>
     pub state: Option<String>,
 }
 
@@ -5115,7 +5115,7 @@ impl LoadBalancerStatesDeserializer {
 pub struct LoadBalancerTargetGroupState {
     /// <p>The Amazon Resource Name (ARN) of the target group.</p>
     pub load_balancer_target_group_arn: Option<String>,
-    /// <p>The state of the target group.</p> <ul> <li> <p> <code>Adding</code> - The Auto Scaling instances are being registered with the target group.</p> </li> <li> <p> <code>Added</code> - All Auto Scaling instances are registered with the target group.</p> </li> <li> <p> <code>InService</code> - At least one Auto Scaling instance passed an ELB health check.</p> </li> <li> <p> <code>Removing</code> - The Auto Scaling instances are being deregistered from the target group. If connection draining is enabled, Elastic Load Balancing waits for in-flight requests to complete before deregistering the instances.</p> </li> <li> <p> <code>Removed</code> - All Auto Scaling instances are deregistered from the target group.</p> </li> </ul>
+    /// <p><p>The state of the target group.</p> <ul> <li> <p> <code>Adding</code> - The Auto Scaling instances are being registered with the target group.</p> </li> <li> <p> <code>Added</code> - All Auto Scaling instances are registered with the target group.</p> </li> <li> <p> <code>InService</code> - At least one Auto Scaling instance passed an ELB health check.</p> </li> <li> <p> <code>Removing</code> - The Auto Scaling instances are being deregistered from the target group. If connection draining is enabled, Elastic Load Balancing waits for in-flight requests to complete before deregistering the instances.</p> </li> <li> <p> <code>Removed</code> - All Auto Scaling instances are deregistered from the target group.</p> </li> </ul></p>
     pub state: Option<String>,
 }
 
@@ -5241,7 +5241,7 @@ impl MaxNumberOfLaunchConfigurationsDeserializer {
 /// <p>Describes a metric.</p>
 #[derive(Default, Debug, Clone)]
 pub struct MetricCollectionType {
-    /// <p>One of the following metrics:</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> </ul>
+    /// <p><p>One of the following metrics:</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> </ul></p>
     pub metric: Option<String>,
 }
 
@@ -5738,7 +5738,7 @@ impl NoDeviceDeserializer {
 pub struct NotificationConfiguration {
     /// <p>The name of the group.</p>
     pub auto_scaling_group_name: Option<String>,
-    /// <p>One of the following event notification types:</p> <ul> <li> <p> <code>autoscaling:EC2_INSTANCE_LAUNCH</code> </p> </li> <li> <p> <code>autoscaling:EC2_INSTANCE_LAUNCH_ERROR</code> </p> </li> <li> <p> <code>autoscaling:EC2_INSTANCE_TERMINATE</code> </p> </li> <li> <p> <code>autoscaling:EC2_INSTANCE_TERMINATE_ERROR</code> </p> </li> <li> <p> <code>autoscaling:TEST_NOTIFICATION</code> </p> </li> </ul>
+    /// <p><p>One of the following event notification types:</p> <ul> <li> <p> <code>autoscaling:EC2<em>INSTANCE</em>LAUNCH</code> </p> </li> <li> <p> <code>autoscaling:EC2<em>INSTANCE</em>LAUNCH<em>ERROR</code> </p> </li> <li> <p> <code>autoscaling:EC2</em>INSTANCE<em>TERMINATE</code> </p> </li> <li> <p> <code>autoscaling:EC2</em>INSTANCE<em>TERMINATE</em>ERROR</code> </p> </li> <li> <p> <code>autoscaling:TEST_NOTIFICATION</code> </p> </li> </ul></p>
     pub notification_type: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) topic.</p>
     pub topic_arn: Option<String>,
@@ -6012,7 +6012,7 @@ impl PolicyTypesSerializer {
     }
 }
 
-/// <p>Configures a predefined metric for a target tracking policy. The following predefined metrics are available:</p> <ul> <li> <p> <code>ASGAverageCPUUtilization</code> - average CPU utilization of the Auto Scaling group</p> </li> <li> <p> <code>ASGAverageNetworkIn</code> - average number of bytes received on all network interfaces by the Auto Scaling group</p> </li> <li> <p> <code>ASGAverageNetworkOut</code> - average number of bytes sent out on all network interfaces by the Auto Scaling group</p> </li> <li> <p> <code>ALBRequestCountPerTarget</code> - number of requests completed per target in an Application Load Balancer target group</p> </li> </ul>
+/// <p><p>Configures a predefined metric for a target tracking policy. The following predefined metrics are available:</p> <ul> <li> <p> <code>ASGAverageCPUUtilization</code> - average CPU utilization of the Auto Scaling group</p> </li> <li> <p> <code>ASGAverageNetworkIn</code> - average number of bytes received on all network interfaces by the Auto Scaling group</p> </li> <li> <p> <code>ASGAverageNetworkOut</code> - average number of bytes sent out on all network interfaces by the Auto Scaling group</p> </li> <li> <p> <code>ALBRequestCountPerTarget</code> - number of requests completed per target in an Application Load Balancer target group</p> </li> </ul></p>
 #[derive(Default, Debug, Clone)]
 pub struct PredefinedMetricSpecification {
     /// <p>The metric type.</p>
@@ -6105,7 +6105,7 @@ impl ProcessNamesSerializer {
 /// <p>Describes a process type.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/as-suspend-resume-processes.html#process-types">Auto Scaling Processes</a> in the <i>Auto Scaling User Guide</i>.</p>
 #[derive(Default, Debug, Clone)]
 pub struct ProcessType {
-    /// <p>One of the following processes:</p> <ul> <li> <p> <code>Launch</code> </p> </li> <li> <p> <code>Terminate</code> </p> </li> <li> <p> <code>AddToLoadBalancer</code> </p> </li> <li> <p> <code>AlarmNotification</code> </p> </li> <li> <p> <code>AZRebalance</code> </p> </li> <li> <p> <code>HealthCheck</code> </p> </li> <li> <p> <code>ReplaceUnhealthy</code> </p> </li> <li> <p> <code>ScheduledActions</code> </p> </li> </ul>
+    /// <p><p>One of the following processes:</p> <ul> <li> <p> <code>Launch</code> </p> </li> <li> <p> <code>Terminate</code> </p> </li> <li> <p> <code>AddToLoadBalancer</code> </p> </li> <li> <p> <code>AlarmNotification</code> </p> </li> <li> <p> <code>AZRebalance</code> </p> </li> <li> <p> <code>HealthCheck</code> </p> </li> <li> <p> <code>ReplaceUnhealthy</code> </p> </li> <li> <p> <code>ScheduledActions</code> </p> </li> </ul></p>
     pub process_name: String,
 }
 
@@ -6885,7 +6885,7 @@ impl ScalingPolicyDeserializer {
 pub struct ScalingProcessQuery {
     /// <p>The name or Amazon Resource Name (ARN) of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
-    /// <p>One or more of the following processes. If you omit this parameter, all processes are specified.</p> <ul> <li> <p> <code>Launch</code> </p> </li> <li> <p> <code>Terminate</code> </p> </li> <li> <p> <code>HealthCheck</code> </p> </li> <li> <p> <code>ReplaceUnhealthy</code> </p> </li> <li> <p> <code>AZRebalance</code> </p> </li> <li> <p> <code>AlarmNotification</code> </p> </li> <li> <p> <code>ScheduledActions</code> </p> </li> <li> <p> <code>AddToLoadBalancer</code> </p> </li> </ul>
+    /// <p><p>One or more of the following processes. If you omit this parameter, all processes are specified.</p> <ul> <li> <p> <code>Launch</code> </p> </li> <li> <p> <code>Terminate</code> </p> </li> <li> <p> <code>HealthCheck</code> </p> </li> <li> <p> <code>ReplaceUnhealthy</code> </p> </li> <li> <p> <code>AZRebalance</code> </p> </li> <li> <p> <code>AlarmNotification</code> </p> </li> <li> <p> <code>ScheduledActions</code> </p> </li> <li> <p> <code>AddToLoadBalancer</code> </p> </li> </ul></p>
     pub scaling_processes: Option<Vec<String>>,
 }
 
@@ -7338,7 +7338,7 @@ impl SpotPriceDeserializer {
         Ok(obj)
     }
 }
-/// <p>Describes an adjustment based on the difference between the value of the aggregated CloudWatch metric and the breach threshold that you've defined for the alarm.</p> <p>For the following examples, suppose that you have an alarm with a breach threshold of 50:</p> <ul> <li> <p>If you want the adjustment to be triggered when the metric is greater than or equal to 50 and less than 60, specify a lower bound of 0 and an upper bound of 10.</p> </li> <li> <p>If you want the adjustment to be triggered when the metric is greater than 40 and less than or equal to 50, specify a lower bound of -10 and an upper bound of 0.</p> </li> </ul> <p>There are a few rules for the step adjustments for your step policy:</p> <ul> <li> <p>The ranges of your step adjustments can't overlap or have a gap.</p> </li> <li> <p>At most one step adjustment can have a null lower bound. If one step adjustment has a negative lower bound, then there must be a step adjustment with a null lower bound.</p> </li> <li> <p>At most one step adjustment can have a null upper bound. If one step adjustment has a positive upper bound, then there must be a step adjustment with a null upper bound.</p> </li> <li> <p>The upper and lower bound can't be null in the same step adjustment.</p> </li> </ul>
+/// <p><p>Describes an adjustment based on the difference between the value of the aggregated CloudWatch metric and the breach threshold that you&#39;ve defined for the alarm.</p> <p>For the following examples, suppose that you have an alarm with a breach threshold of 50:</p> <ul> <li> <p>If you want the adjustment to be triggered when the metric is greater than or equal to 50 and less than 60, specify a lower bound of 0 and an upper bound of 10.</p> </li> <li> <p>If you want the adjustment to be triggered when the metric is greater than 40 and less than or equal to 50, specify a lower bound of -10 and an upper bound of 0.</p> </li> </ul> <p>There are a few rules for the step adjustments for your step policy:</p> <ul> <li> <p>The ranges of your step adjustments can&#39;t overlap or have a gap.</p> </li> <li> <p>At most one step adjustment can have a null lower bound. If one step adjustment has a negative lower bound, then there must be a step adjustment with a null lower bound.</p> </li> <li> <p>At most one step adjustment can have a null upper bound. If one step adjustment has a positive upper bound, then there must be a step adjustment with a null upper bound.</p> </li> <li> <p>The upper and lower bound can&#39;t be null in the same step adjustment.</p> </li> </ul></p>
 #[derive(Default, Debug, Clone)]
 pub struct StepAdjustment {
     /// <p>The lower bound for the difference between the alarm threshold and the CloudWatch metric. If the metric value is above the breach threshold, the lower bound is inclusive (the metric must be greater than or equal to the threshold plus the lower bound). Otherwise, it is exclusive (the metric must be greater than the threshold plus the lower bound). A null value indicates negative infinity.</p>
@@ -8391,7 +8391,7 @@ impl XmlStringUserDataDeserializer {
 /// Errors returned by AttachInstances
 #[derive(Debug, PartialEq)]
 pub enum AttachInstancesError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8460,7 +8460,7 @@ impl Error for AttachInstancesError {
 /// Errors returned by AttachLoadBalancerTargetGroups
 #[derive(Debug, PartialEq)]
 pub enum AttachLoadBalancerTargetGroupsError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8533,7 +8533,7 @@ impl Error for AttachLoadBalancerTargetGroupsError {
 /// Errors returned by AttachLoadBalancers
 #[derive(Debug, PartialEq)]
 pub enum AttachLoadBalancersError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8604,7 +8604,7 @@ impl Error for AttachLoadBalancersError {
 /// Errors returned by CompleteLifecycleAction
 #[derive(Debug, PartialEq)]
 pub enum CompleteLifecycleActionError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8677,11 +8677,11 @@ impl Error for CompleteLifecycleActionError {
 /// Errors returned by CreateAutoScalingGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateAutoScalingGroupError {
-    ///<p>You already have an Auto Scaling group or launch configuration with this name.</p>
+    /// <p>You already have an Auto Scaling group or launch configuration with this name.</p>
     AlreadyExistsFault(String),
-    ///<p>You have already reached a limit for your Auto Scaling resources (for example, groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
+    /// <p>You have already reached a limit for your Auto Scaling resources (for example, groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
     LimitExceededFault(String),
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8760,11 +8760,11 @@ impl Error for CreateAutoScalingGroupError {
 /// Errors returned by CreateLaunchConfiguration
 #[derive(Debug, PartialEq)]
 pub enum CreateLaunchConfigurationError {
-    ///<p>You already have an Auto Scaling group or launch configuration with this name.</p>
+    /// <p>You already have an Auto Scaling group or launch configuration with this name.</p>
     AlreadyExistsFault(String),
-    ///<p>You have already reached a limit for your Auto Scaling resources (for example, groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
+    /// <p>You have already reached a limit for your Auto Scaling resources (for example, groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
     LimitExceededFault(String),
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8845,13 +8845,13 @@ impl Error for CreateLaunchConfigurationError {
 /// Errors returned by CreateOrUpdateTags
 #[derive(Debug, PartialEq)]
 pub enum CreateOrUpdateTagsError {
-    ///<p>You already have an Auto Scaling group or launch configuration with this name.</p>
+    /// <p>You already have an Auto Scaling group or launch configuration with this name.</p>
     AlreadyExistsFault(String),
-    ///<p>You have already reached a limit for your Auto Scaling resources (for example, groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
+    /// <p>You have already reached a limit for your Auto Scaling resources (for example, groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
     LimitExceededFault(String),
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
-    ///<p>The operation can't be performed because the resource is in use.</p>
+    /// <p>The operation can't be performed because the resource is in use.</p>
     ResourceInUseFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8934,11 +8934,11 @@ impl Error for CreateOrUpdateTagsError {
 /// Errors returned by DeleteAutoScalingGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteAutoScalingGroupError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
-    ///<p>The operation can't be performed because the resource is in use.</p>
+    /// <p>The operation can't be performed because the resource is in use.</p>
     ResourceInUseFault(String),
-    ///<p>The operation can't be performed because there are scaling activities in progress.</p>
+    /// <p>The operation can't be performed because there are scaling activities in progress.</p>
     ScalingActivityInProgressFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9019,9 +9019,9 @@ impl Error for DeleteAutoScalingGroupError {
 /// Errors returned by DeleteLaunchConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteLaunchConfigurationError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
-    ///<p>The operation can't be performed because the resource is in use.</p>
+    /// <p>The operation can't be performed because the resource is in use.</p>
     ResourceInUseFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9098,7 +9098,7 @@ impl Error for DeleteLaunchConfigurationError {
 /// Errors returned by DeleteLifecycleHook
 #[derive(Debug, PartialEq)]
 pub enum DeleteLifecycleHookError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9169,7 +9169,7 @@ impl Error for DeleteLifecycleHookError {
 /// Errors returned by DeleteNotificationConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteNotificationConfigurationError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9242,7 +9242,7 @@ impl Error for DeleteNotificationConfigurationError {
 /// Errors returned by DeletePolicy
 #[derive(Debug, PartialEq)]
 pub enum DeletePolicyError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9311,7 +9311,7 @@ impl Error for DeletePolicyError {
 /// Errors returned by DeleteScheduledAction
 #[derive(Debug, PartialEq)]
 pub enum DeleteScheduledActionError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9382,9 +9382,9 @@ impl Error for DeleteScheduledActionError {
 /// Errors returned by DeleteTags
 #[derive(Debug, PartialEq)]
 pub enum DeleteTagsError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
-    ///<p>The operation can't be performed because the resource is in use.</p>
+    /// <p>The operation can't be performed because the resource is in use.</p>
     ResourceInUseFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9457,7 +9457,7 @@ impl Error for DeleteTagsError {
 /// Errors returned by DescribeAccountLimits
 #[derive(Debug, PartialEq)]
 pub enum DescribeAccountLimitsError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9528,7 +9528,7 @@ impl Error for DescribeAccountLimitsError {
 /// Errors returned by DescribeAdjustmentTypes
 #[derive(Debug, PartialEq)]
 pub enum DescribeAdjustmentTypesError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9601,9 +9601,9 @@ impl Error for DescribeAdjustmentTypesError {
 /// Errors returned by DescribeAutoScalingGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeAutoScalingGroupsError {
-    ///<p>The <code>NextToken</code> value is not valid.</p>
+    /// <p>The <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9680,9 +9680,9 @@ impl Error for DescribeAutoScalingGroupsError {
 /// Errors returned by DescribeAutoScalingInstances
 #[derive(Debug, PartialEq)]
 pub enum DescribeAutoScalingInstancesError {
-    ///<p>The <code>NextToken</code> value is not valid.</p>
+    /// <p>The <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9759,7 +9759,7 @@ impl Error for DescribeAutoScalingInstancesError {
 /// Errors returned by DescribeAutoScalingNotificationTypes
 #[derive(Debug, PartialEq)]
 pub enum DescribeAutoScalingNotificationTypesError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9832,9 +9832,9 @@ impl Error for DescribeAutoScalingNotificationTypesError {
 /// Errors returned by DescribeLaunchConfigurations
 #[derive(Debug, PartialEq)]
 pub enum DescribeLaunchConfigurationsError {
-    ///<p>The <code>NextToken</code> value is not valid.</p>
+    /// <p>The <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9911,7 +9911,7 @@ impl Error for DescribeLaunchConfigurationsError {
 /// Errors returned by DescribeLifecycleHookTypes
 #[derive(Debug, PartialEq)]
 pub enum DescribeLifecycleHookTypesError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9984,7 +9984,7 @@ impl Error for DescribeLifecycleHookTypesError {
 /// Errors returned by DescribeLifecycleHooks
 #[derive(Debug, PartialEq)]
 pub enum DescribeLifecycleHooksError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10055,7 +10055,7 @@ impl Error for DescribeLifecycleHooksError {
 /// Errors returned by DescribeLoadBalancerTargetGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeLoadBalancerTargetGroupsError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10128,7 +10128,7 @@ impl Error for DescribeLoadBalancerTargetGroupsError {
 /// Errors returned by DescribeLoadBalancers
 #[derive(Debug, PartialEq)]
 pub enum DescribeLoadBalancersError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10199,7 +10199,7 @@ impl Error for DescribeLoadBalancersError {
 /// Errors returned by DescribeMetricCollectionTypes
 #[derive(Debug, PartialEq)]
 pub enum DescribeMetricCollectionTypesError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10272,9 +10272,9 @@ impl Error for DescribeMetricCollectionTypesError {
 /// Errors returned by DescribeNotificationConfigurations
 #[derive(Debug, PartialEq)]
 pub enum DescribeNotificationConfigurationsError {
-    ///<p>The <code>NextToken</code> value is not valid.</p>
+    /// <p>The <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10351,9 +10351,9 @@ impl Error for DescribeNotificationConfigurationsError {
 /// Errors returned by DescribePolicies
 #[derive(Debug, PartialEq)]
 pub enum DescribePoliciesError {
-    ///<p>The <code>NextToken</code> value is not valid.</p>
+    /// <p>The <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10426,9 +10426,9 @@ impl Error for DescribePoliciesError {
 /// Errors returned by DescribeScalingActivities
 #[derive(Debug, PartialEq)]
 pub enum DescribeScalingActivitiesError {
-    ///<p>The <code>NextToken</code> value is not valid.</p>
+    /// <p>The <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10505,7 +10505,7 @@ impl Error for DescribeScalingActivitiesError {
 /// Errors returned by DescribeScalingProcessTypes
 #[derive(Debug, PartialEq)]
 pub enum DescribeScalingProcessTypesError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10578,9 +10578,9 @@ impl Error for DescribeScalingProcessTypesError {
 /// Errors returned by DescribeScheduledActions
 #[derive(Debug, PartialEq)]
 pub enum DescribeScheduledActionsError {
-    ///<p>The <code>NextToken</code> value is not valid.</p>
+    /// <p>The <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10657,9 +10657,9 @@ impl Error for DescribeScheduledActionsError {
 /// Errors returned by DescribeTags
 #[derive(Debug, PartialEq)]
 pub enum DescribeTagsError {
-    ///<p>The <code>NextToken</code> value is not valid.</p>
+    /// <p>The <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10732,7 +10732,7 @@ impl Error for DescribeTagsError {
 /// Errors returned by DescribeTerminationPolicyTypes
 #[derive(Debug, PartialEq)]
 pub enum DescribeTerminationPolicyTypesError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10805,7 +10805,7 @@ impl Error for DescribeTerminationPolicyTypesError {
 /// Errors returned by DetachInstances
 #[derive(Debug, PartialEq)]
 pub enum DetachInstancesError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10874,7 +10874,7 @@ impl Error for DetachInstancesError {
 /// Errors returned by DetachLoadBalancerTargetGroups
 #[derive(Debug, PartialEq)]
 pub enum DetachLoadBalancerTargetGroupsError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10947,7 +10947,7 @@ impl Error for DetachLoadBalancerTargetGroupsError {
 /// Errors returned by DetachLoadBalancers
 #[derive(Debug, PartialEq)]
 pub enum DetachLoadBalancersError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11018,7 +11018,7 @@ impl Error for DetachLoadBalancersError {
 /// Errors returned by DisableMetricsCollection
 #[derive(Debug, PartialEq)]
 pub enum DisableMetricsCollectionError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11091,7 +11091,7 @@ impl Error for DisableMetricsCollectionError {
 /// Errors returned by EnableMetricsCollection
 #[derive(Debug, PartialEq)]
 pub enum EnableMetricsCollectionError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11164,7 +11164,7 @@ impl Error for EnableMetricsCollectionError {
 /// Errors returned by EnterStandby
 #[derive(Debug, PartialEq)]
 pub enum EnterStandbyError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11233,9 +11233,9 @@ impl Error for EnterStandbyError {
 /// Errors returned by ExecutePolicy
 #[derive(Debug, PartialEq)]
 pub enum ExecutePolicyError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
-    ///<p>The operation can't be performed because there are scaling activities in progress.</p>
+    /// <p>The operation can't be performed because there are scaling activities in progress.</p>
     ScalingActivityInProgressFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11310,7 +11310,7 @@ impl Error for ExecutePolicyError {
 /// Errors returned by ExitStandby
 #[derive(Debug, PartialEq)]
 pub enum ExitStandbyError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11379,9 +11379,9 @@ impl Error for ExitStandbyError {
 /// Errors returned by PutLifecycleHook
 #[derive(Debug, PartialEq)]
 pub enum PutLifecycleHookError {
-    ///<p>You have already reached a limit for your Auto Scaling resources (for example, groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
+    /// <p>You have already reached a limit for your Auto Scaling resources (for example, groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
     LimitExceededFault(String),
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11454,9 +11454,9 @@ impl Error for PutLifecycleHookError {
 /// Errors returned by PutNotificationConfiguration
 #[derive(Debug, PartialEq)]
 pub enum PutNotificationConfigurationError {
-    ///<p>You have already reached a limit for your Auto Scaling resources (for example, groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
+    /// <p>You have already reached a limit for your Auto Scaling resources (for example, groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
     LimitExceededFault(String),
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11533,9 +11533,9 @@ impl Error for PutNotificationConfigurationError {
 /// Errors returned by PutScalingPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutScalingPolicyError {
-    ///<p>You have already reached a limit for your Auto Scaling resources (for example, groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
+    /// <p>You have already reached a limit for your Auto Scaling resources (for example, groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
     LimitExceededFault(String),
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11608,11 +11608,11 @@ impl Error for PutScalingPolicyError {
 /// Errors returned by PutScheduledUpdateGroupAction
 #[derive(Debug, PartialEq)]
 pub enum PutScheduledUpdateGroupActionError {
-    ///<p>You already have an Auto Scaling group or launch configuration with this name.</p>
+    /// <p>You already have an Auto Scaling group or launch configuration with this name.</p>
     AlreadyExistsFault(String),
-    ///<p>You have already reached a limit for your Auto Scaling resources (for example, groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
+    /// <p>You have already reached a limit for your Auto Scaling resources (for example, groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
     LimitExceededFault(String),
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11693,7 +11693,7 @@ impl Error for PutScheduledUpdateGroupActionError {
 /// Errors returned by RecordLifecycleActionHeartbeat
 #[derive(Debug, PartialEq)]
 pub enum RecordLifecycleActionHeartbeatError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11766,9 +11766,9 @@ impl Error for RecordLifecycleActionHeartbeatError {
 /// Errors returned by ResumeProcesses
 #[derive(Debug, PartialEq)]
 pub enum ResumeProcessesError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
-    ///<p>The operation can't be performed because the resource is in use.</p>
+    /// <p>The operation can't be performed because the resource is in use.</p>
     ResourceInUseFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11841,9 +11841,9 @@ impl Error for ResumeProcessesError {
 /// Errors returned by SetDesiredCapacity
 #[derive(Debug, PartialEq)]
 pub enum SetDesiredCapacityError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
-    ///<p>The operation can't be performed because there are scaling activities in progress.</p>
+    /// <p>The operation can't be performed because there are scaling activities in progress.</p>
     ScalingActivityInProgressFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11920,7 +11920,7 @@ impl Error for SetDesiredCapacityError {
 /// Errors returned by SetInstanceHealth
 #[derive(Debug, PartialEq)]
 pub enum SetInstanceHealthError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11991,9 +11991,9 @@ impl Error for SetInstanceHealthError {
 /// Errors returned by SetInstanceProtection
 #[derive(Debug, PartialEq)]
 pub enum SetInstanceProtectionError {
-    ///<p>You have already reached a limit for your Auto Scaling resources (for example, groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
+    /// <p>You have already reached a limit for your Auto Scaling resources (for example, groups, launch configurations, or lifecycle hooks). For more information, see <a>DescribeAccountLimits</a>.</p>
     LimitExceededFault(String),
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12068,9 +12068,9 @@ impl Error for SetInstanceProtectionError {
 /// Errors returned by SuspendProcesses
 #[derive(Debug, PartialEq)]
 pub enum SuspendProcessesError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
-    ///<p>The operation can't be performed because the resource is in use.</p>
+    /// <p>The operation can't be performed because the resource is in use.</p>
     ResourceInUseFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12143,9 +12143,9 @@ impl Error for SuspendProcessesError {
 /// Errors returned by TerminateInstanceInAutoScalingGroup
 #[derive(Debug, PartialEq)]
 pub enum TerminateInstanceInAutoScalingGroupError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
-    ///<p>The operation can't be performed because there are scaling activities in progress.</p>
+    /// <p>The operation can't be performed because there are scaling activities in progress.</p>
     ScalingActivityInProgressFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12226,9 +12226,9 @@ impl Error for TerminateInstanceInAutoScalingGroupError {
 /// Errors returned by UpdateAutoScalingGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateAutoScalingGroupError {
-    ///<p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
+    /// <p>You already have a pending update to an Auto Scaling resource (for example, a group, instance, or load balancer).</p>
     ResourceContentionFault(String),
-    ///<p>The operation can't be performed because there are scaling activities in progress.</p>
+    /// <p>The operation can't be performed because there are scaling activities in progress.</p>
     ScalingActivityInProgressFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12304,283 +12304,283 @@ impl Error for UpdateAutoScalingGroupError {
 }
 /// Trait representing the capabilities of the Auto Scaling API. Auto Scaling clients implement this trait.
 pub trait Autoscaling {
-    #[doc="<p>Attaches one or more EC2 instances to the specified Auto Scaling group.</p> <p>When you attach instances, Auto Scaling increases the desired capacity of the group by the number of instances being attached. If the number of instances being attached plus the desired capacity of the group exceeds the maximum size of the group, the operation fails.</p> <p>If there is a Classic Load Balancer attached to your Auto Scaling group, the instances are also registered with the load balancer. If there are target groups attached to your Auto Scaling group, the instances are also registered with the target groups.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/attach-instance-asg.html\">Attach EC2 Instances to Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Attaches one or more EC2 instances to the specified Auto Scaling group.</p> <p>When you attach instances, Auto Scaling increases the desired capacity of the group by the number of instances being attached. If the number of instances being attached plus the desired capacity of the group exceeds the maximum size of the group, the operation fails.</p> <p>If there is a Classic Load Balancer attached to your Auto Scaling group, the instances are also registered with the load balancer. If there are target groups attached to your Auto Scaling group, the instances are also registered with the target groups.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/attach-instance-asg.html">Attach EC2 Instances to Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn attach_instances(&self, input: &AttachInstancesQuery) -> Result<(), AttachInstancesError>;
 
-    #[doc="<p>Attaches one or more target groups to the specified Auto Scaling group.</p> <p>To describe the target groups for an Auto Scaling group, use <a>DescribeLoadBalancerTargetGroups</a>. To detach the target group from the Auto Scaling group, use <a>DetachLoadBalancerTargetGroups</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/attach-load-balancer-asg.html\">Attach a Load Balancer to Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Attaches one or more target groups to the specified Auto Scaling group.</p> <p>To describe the target groups for an Auto Scaling group, use <a>DescribeLoadBalancerTargetGroups</a>. To detach the target group from the Auto Scaling group, use <a>DetachLoadBalancerTargetGroups</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/attach-load-balancer-asg.html">Attach a Load Balancer to Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn attach_load_balancer_target_groups(
         &self,
         input: &AttachLoadBalancerTargetGroupsType,
     ) -> Result<AttachLoadBalancerTargetGroupsResultType, AttachLoadBalancerTargetGroupsError>;
 
-    #[doc="<p>Attaches one or more Classic Load Balancers to the specified Auto Scaling group.</p> <p>To attach an Application Load Balancer instead, see <a>AttachLoadBalancerTargetGroups</a>.</p> <p>To describe the load balancers for an Auto Scaling group, use <a>DescribeLoadBalancers</a>. To detach the load balancer from the Auto Scaling group, use <a>DetachLoadBalancers</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/attach-load-balancer-asg.html\">Attach a Load Balancer to Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Attaches one or more Classic Load Balancers to the specified Auto Scaling group.</p> <p>To attach an Application Load Balancer instead, see <a>AttachLoadBalancerTargetGroups</a>.</p> <p>To describe the load balancers for an Auto Scaling group, use <a>DescribeLoadBalancers</a>. To detach the load balancer from the Auto Scaling group, use <a>DetachLoadBalancers</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/attach-load-balancer-asg.html">Attach a Load Balancer to Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn attach_load_balancers(
         &self,
         input: &AttachLoadBalancersType,
     ) -> Result<AttachLoadBalancersResultType, AttachLoadBalancersError>;
 
-    #[doc="<p>Completes the lifecycle action for the specified token or instance with the specified result.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</p> </li> <li> <p> <b>If you finish before the timeout period ends, complete the lifecycle action.</b> </p> </li> </ol> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html\">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Completes the lifecycle action for the specified token or instance with the specified result.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</p> </li> <li> <p> <b>If you finish before the timeout period ends, complete the lifecycle action.</b> </p> </li> </ol> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn complete_lifecycle_action(
         &self,
         input: &CompleteLifecycleActionType,
     ) -> Result<CompleteLifecycleActionAnswer, CompleteLifecycleActionError>;
 
-    #[doc="<p>Creates an Auto Scaling group with the specified name and attributes.</p> <p>If you exceed your maximum limit of Auto Scaling groups, which by default is 20 per region, the call fails. For information about viewing and updating this limit, see <a>DescribeAccountLimits</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroup.html\">Auto Scaling Groups</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Creates an Auto Scaling group with the specified name and attributes.</p> <p>If you exceed your maximum limit of Auto Scaling groups, which by default is 20 per region, the call fails. For information about viewing and updating this limit, see <a>DescribeAccountLimits</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroup.html">Auto Scaling Groups</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn create_auto_scaling_group(
         &self,
         input: &CreateAutoScalingGroupType,
     ) -> Result<(), CreateAutoScalingGroupError>;
 
-    #[doc="<p>Creates a launch configuration.</p> <p>If you exceed your maximum limit of launch configurations, which by default is 100 per region, the call fails. For information about viewing and updating this limit, see <a>DescribeAccountLimits</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/LaunchConfiguration.html\">Launch Configurations</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Creates a launch configuration.</p> <p>If you exceed your maximum limit of launch configurations, which by default is 100 per region, the call fails. For information about viewing and updating this limit, see <a>DescribeAccountLimits</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/LaunchConfiguration.html">Launch Configurations</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn create_launch_configuration(
         &self,
         input: &CreateLaunchConfigurationType,
     ) -> Result<(), CreateLaunchConfigurationError>;
 
-    #[doc="<p>Creates or updates tags for the specified Auto Scaling group.</p> <p>When you specify a tag with a key that already exists, the operation overwrites the previous tag definition, and you do not get an error message.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/autoscaling-tagging.html\">Tagging Auto Scaling Groups and Instances</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Creates or updates tags for the specified Auto Scaling group.</p> <p>When you specify a tag with a key that already exists, the operation overwrites the previous tag definition, and you do not get an error message.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/autoscaling-tagging.html">Tagging Auto Scaling Groups and Instances</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn create_or_update_tags(
         &self,
         input: &CreateOrUpdateTagsType,
     ) -> Result<(), CreateOrUpdateTagsError>;
 
-    #[doc="<p>Deletes the specified Auto Scaling group.</p> <p>If the group has instances or scaling activities in progress, you must specify the option to force the deletion in order for it to succeed.</p> <p>If the group has policies, deleting the group deletes the policies, the underlying alarm actions, and any alarm that no longer has an associated action.</p> <p>To remove instances from the Auto Scaling group before deleting it, call <a>DetachInstances</a> with the list of instances and the option to decrement the desired capacity so that Auto Scaling does not launch replacement instances.</p> <p>To terminate all instances before deleting the Auto Scaling group, call <a>UpdateAutoScalingGroup</a> and set the minimum size and desired capacity of the Auto Scaling group to zero.</p>"]
+    /// <p>Deletes the specified Auto Scaling group.</p> <p>If the group has instances or scaling activities in progress, you must specify the option to force the deletion in order for it to succeed.</p> <p>If the group has policies, deleting the group deletes the policies, the underlying alarm actions, and any alarm that no longer has an associated action.</p> <p>To remove instances from the Auto Scaling group before deleting it, call <a>DetachInstances</a> with the list of instances and the option to decrement the desired capacity so that Auto Scaling does not launch replacement instances.</p> <p>To terminate all instances before deleting the Auto Scaling group, call <a>UpdateAutoScalingGroup</a> and set the minimum size and desired capacity of the Auto Scaling group to zero.</p>
     fn delete_auto_scaling_group(
         &self,
         input: &DeleteAutoScalingGroupType,
     ) -> Result<(), DeleteAutoScalingGroupError>;
 
-    #[doc="<p>Deletes the specified launch configuration.</p> <p>The launch configuration must not be attached to an Auto Scaling group. When this call completes, the launch configuration is no longer available for use.</p>"]
+    /// <p>Deletes the specified launch configuration.</p> <p>The launch configuration must not be attached to an Auto Scaling group. When this call completes, the launch configuration is no longer available for use.</p>
     fn delete_launch_configuration(
         &self,
         input: &LaunchConfigurationNameType,
     ) -> Result<(), DeleteLaunchConfigurationError>;
 
-    #[doc="<p>Deletes the specified lifecycle hook.</p> <p>If there are any outstanding lifecycle actions, they are completed first (<code>ABANDON</code> for launching instances, <code>CONTINUE</code> for terminating instances).</p>"]
+    /// <p>Deletes the specified lifecycle hook.</p> <p>If there are any outstanding lifecycle actions, they are completed first (<code>ABANDON</code> for launching instances, <code>CONTINUE</code> for terminating instances).</p>
     fn delete_lifecycle_hook(
         &self,
         input: &DeleteLifecycleHookType,
     ) -> Result<DeleteLifecycleHookAnswer, DeleteLifecycleHookError>;
 
-    #[doc = "<p>Deletes the specified notification.</p>"]
+    /// <p>Deletes the specified notification.</p>
     fn delete_notification_configuration(
         &self,
         input: &DeleteNotificationConfigurationType,
     ) -> Result<(), DeleteNotificationConfigurationError>;
 
-    #[doc="<p>Deletes the specified Auto Scaling policy.</p> <p>Deleting a policy deletes the underlying alarm action, but does not delete the alarm, even if it no longer has an associated action.</p>"]
+    /// <p>Deletes the specified Auto Scaling policy.</p> <p>Deleting a policy deletes the underlying alarm action, but does not delete the alarm, even if it no longer has an associated action.</p>
     fn delete_policy(&self, input: &DeletePolicyType) -> Result<(), DeletePolicyError>;
 
-    #[doc = "<p>Deletes the specified scheduled action.</p>"]
+    /// <p>Deletes the specified scheduled action.</p>
     fn delete_scheduled_action(
         &self,
         input: &DeleteScheduledActionType,
     ) -> Result<(), DeleteScheduledActionError>;
 
-    #[doc = "<p>Deletes the specified tags.</p>"]
+    /// <p>Deletes the specified tags.</p>
     fn delete_tags(&self, input: &DeleteTagsType) -> Result<(), DeleteTagsError>;
 
-    #[doc="<p>Describes the current Auto Scaling resource limits for your AWS account.</p> <p>For information about requesting an increase in these limits, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html\">AWS Service Limits</a> in the <i>Amazon Web Services General Reference</i>.</p>"]
+    /// <p>Describes the current Auto Scaling resource limits for your AWS account.</p> <p>For information about requesting an increase in these limits, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html">AWS Service Limits</a> in the <i>Amazon Web Services General Reference</i>.</p>
     fn describe_account_limits(
         &self,
     ) -> Result<DescribeAccountLimitsAnswer, DescribeAccountLimitsError>;
 
-    #[doc = "<p>Describes the policy adjustment types for use with <a>PutScalingPolicy</a>.</p>"]
+    /// <p>Describes the policy adjustment types for use with <a>PutScalingPolicy</a>.</p>
     fn describe_adjustment_types(
         &self,
     ) -> Result<DescribeAdjustmentTypesAnswer, DescribeAdjustmentTypesError>;
 
-    #[doc = "<p>Describes one or more Auto Scaling groups.</p>"]
+    /// <p>Describes one or more Auto Scaling groups.</p>
     fn describe_auto_scaling_groups(
         &self,
         input: &AutoScalingGroupNamesType,
     ) -> Result<AutoScalingGroupsType, DescribeAutoScalingGroupsError>;
 
-    #[doc = "<p>Describes one or more Auto Scaling instances.</p>"]
+    /// <p>Describes one or more Auto Scaling instances.</p>
     fn describe_auto_scaling_instances(
         &self,
         input: &DescribeAutoScalingInstancesType,
     ) -> Result<AutoScalingInstancesType, DescribeAutoScalingInstancesError>;
 
-    #[doc = "<p>Describes the notification types that are supported by Auto Scaling.</p>"]
+    /// <p>Describes the notification types that are supported by Auto Scaling.</p>
     fn describe_auto_scaling_notification_types(
         &self,
     ) -> Result<DescribeAutoScalingNotificationTypesAnswer, DescribeAutoScalingNotificationTypesError>;
 
-    #[doc = "<p>Describes one or more launch configurations.</p>"]
+    /// <p>Describes one or more launch configurations.</p>
     fn describe_launch_configurations(
         &self,
         input: &LaunchConfigurationNamesType,
     ) -> Result<LaunchConfigurationsType, DescribeLaunchConfigurationsError>;
 
-    #[doc = "<p>Describes the available types of lifecycle hooks.</p>"]
+    /// <p>Describes the available types of lifecycle hooks.</p>
     fn describe_lifecycle_hook_types(
         &self,
     ) -> Result<DescribeLifecycleHookTypesAnswer, DescribeLifecycleHookTypesError>;
 
-    #[doc = "<p>Describes the lifecycle hooks for the specified Auto Scaling group.</p>"]
+    /// <p>Describes the lifecycle hooks for the specified Auto Scaling group.</p>
     fn describe_lifecycle_hooks(
         &self,
         input: &DescribeLifecycleHooksType,
     ) -> Result<DescribeLifecycleHooksAnswer, DescribeLifecycleHooksError>;
 
-    #[doc = "<p>Describes the target groups for the specified Auto Scaling group.</p>"]
+    /// <p>Describes the target groups for the specified Auto Scaling group.</p>
     fn describe_load_balancer_target_groups(
         &self,
         input: &DescribeLoadBalancerTargetGroupsRequest,
     ) -> Result<DescribeLoadBalancerTargetGroupsResponse, DescribeLoadBalancerTargetGroupsError>;
 
-    #[doc="<p>Describes the load balancers for the specified Auto Scaling group.</p> <p>Note that this operation describes only Classic Load Balancers. If you have Application Load Balancers, use <a>DescribeLoadBalancerTargetGroups</a> instead.</p>"]
+    /// <p>Describes the load balancers for the specified Auto Scaling group.</p> <p>Note that this operation describes only Classic Load Balancers. If you have Application Load Balancers, use <a>DescribeLoadBalancerTargetGroups</a> instead.</p>
     fn describe_load_balancers(
         &self,
         input: &DescribeLoadBalancersRequest,
     ) -> Result<DescribeLoadBalancersResponse, DescribeLoadBalancersError>;
 
-    #[doc="<p>Describes the available CloudWatch metrics for Auto Scaling.</p> <p>Note that the <code>GroupStandbyInstances</code> metric is not returned by default. You must explicitly request this metric when calling <a>EnableMetricsCollection</a>.</p>"]
+    /// <p>Describes the available CloudWatch metrics for Auto Scaling.</p> <p>Note that the <code>GroupStandbyInstances</code> metric is not returned by default. You must explicitly request this metric when calling <a>EnableMetricsCollection</a>.</p>
     fn describe_metric_collection_types(
         &self,
     ) -> Result<DescribeMetricCollectionTypesAnswer, DescribeMetricCollectionTypesError>;
 
-    #[doc="<p>Describes the notification actions associated with the specified Auto Scaling group.</p>"]
+    /// <p>Describes the notification actions associated with the specified Auto Scaling group.</p>
     fn describe_notification_configurations(
         &self,
         input: &DescribeNotificationConfigurationsType,
     ) -> Result<DescribeNotificationConfigurationsAnswer, DescribeNotificationConfigurationsError>;
 
-    #[doc = "<p>Describes the policies for the specified Auto Scaling group.</p>"]
+    /// <p>Describes the policies for the specified Auto Scaling group.</p>
     fn describe_policies(
         &self,
         input: &DescribePoliciesType,
     ) -> Result<PoliciesType, DescribePoliciesError>;
 
-    #[doc = "<p>Describes one or more scaling activities for the specified Auto Scaling group.</p>"]
+    /// <p>Describes one or more scaling activities for the specified Auto Scaling group.</p>
     fn describe_scaling_activities(
         &self,
         input: &DescribeScalingActivitiesType,
     ) -> Result<ActivitiesType, DescribeScalingActivitiesError>;
 
-    #[doc="<p>Describes the scaling process types for use with <a>ResumeProcesses</a> and <a>SuspendProcesses</a>.</p>"]
+    /// <p>Describes the scaling process types for use with <a>ResumeProcesses</a> and <a>SuspendProcesses</a>.</p>
     fn describe_scaling_process_types(
         &self,
     ) -> Result<ProcessesType, DescribeScalingProcessTypesError>;
 
-    #[doc="<p>Describes the actions scheduled for your Auto Scaling group that haven't run. To describe the actions that have already run, use <a>DescribeScalingActivities</a>.</p>"]
+    /// <p>Describes the actions scheduled for your Auto Scaling group that haven't run. To describe the actions that have already run, use <a>DescribeScalingActivities</a>.</p>
     fn describe_scheduled_actions(
         &self,
         input: &DescribeScheduledActionsType,
     ) -> Result<ScheduledActionsType, DescribeScheduledActionsError>;
 
-    #[doc="<p>Describes the specified tags.</p> <p>You can use filters to limit the results. For example, you can query for the tags for a specific Auto Scaling group. You can specify multiple values for a filter. A tag must match at least one of the specified values for it to be included in the results.</p> <p>You can also specify multiple filters. The result includes information for a particular tag only if it matches all the filters. If there's no match, no special message is returned.</p>"]
+    /// <p>Describes the specified tags.</p> <p>You can use filters to limit the results. For example, you can query for the tags for a specific Auto Scaling group. You can specify multiple values for a filter. A tag must match at least one of the specified values for it to be included in the results.</p> <p>You can also specify multiple filters. The result includes information for a particular tag only if it matches all the filters. If there's no match, no special message is returned.</p>
     fn describe_tags(&self, input: &DescribeTagsType) -> Result<TagsType, DescribeTagsError>;
 
-    #[doc = "<p>Describes the termination policies supported by Auto Scaling.</p>"]
+    /// <p>Describes the termination policies supported by Auto Scaling.</p>
     fn describe_termination_policy_types(
         &self,
     ) -> Result<DescribeTerminationPolicyTypesAnswer, DescribeTerminationPolicyTypesError>;
 
-    #[doc="<p>Removes one or more instances from the specified Auto Scaling group.</p> <p>After the instances are detached, you can manage them independently from the rest of the Auto Scaling group.</p> <p>If you do not specify the option to decrement the desired capacity, Auto Scaling launches instances to replace the ones that are detached.</p> <p>If there is a Classic Load Balancer attached to the Auto Scaling group, the instances are deregistered from the load balancer. If there are target groups attached to the Auto Scaling group, the instances are deregistered from the target groups.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/detach-instance-asg.html\">Detach EC2 Instances from Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Removes one or more instances from the specified Auto Scaling group.</p> <p>After the instances are detached, you can manage them independently from the rest of the Auto Scaling group.</p> <p>If you do not specify the option to decrement the desired capacity, Auto Scaling launches instances to replace the ones that are detached.</p> <p>If there is a Classic Load Balancer attached to the Auto Scaling group, the instances are deregistered from the load balancer. If there are target groups attached to the Auto Scaling group, the instances are deregistered from the target groups.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/detach-instance-asg.html">Detach EC2 Instances from Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn detach_instances(
         &self,
         input: &DetachInstancesQuery,
     ) -> Result<DetachInstancesAnswer, DetachInstancesError>;
 
-    #[doc = "<p>Detaches one or more target groups from the specified Auto Scaling group.</p>"]
+    /// <p>Detaches one or more target groups from the specified Auto Scaling group.</p>
     fn detach_load_balancer_target_groups(
         &self,
         input: &DetachLoadBalancerTargetGroupsType,
     ) -> Result<DetachLoadBalancerTargetGroupsResultType, DetachLoadBalancerTargetGroupsError>;
 
-    #[doc="<p>Detaches one or more Classic Load Balancers from the specified Auto Scaling group.</p> <p>Note that this operation detaches only Classic Load Balancers. If you have Application Load Balancers, use <a>DetachLoadBalancerTargetGroups</a> instead.</p> <p>When you detach a load balancer, it enters the <code>Removing</code> state while deregistering the instances in the group. When all instances are deregistered, then you can no longer describe the load balancer using <a>DescribeLoadBalancers</a>. Note that the instances remain running.</p>"]
+    /// <p>Detaches one or more Classic Load Balancers from the specified Auto Scaling group.</p> <p>Note that this operation detaches only Classic Load Balancers. If you have Application Load Balancers, use <a>DetachLoadBalancerTargetGroups</a> instead.</p> <p>When you detach a load balancer, it enters the <code>Removing</code> state while deregistering the instances in the group. When all instances are deregistered, then you can no longer describe the load balancer using <a>DescribeLoadBalancers</a>. Note that the instances remain running.</p>
     fn detach_load_balancers(
         &self,
         input: &DetachLoadBalancersType,
     ) -> Result<DetachLoadBalancersResultType, DetachLoadBalancersError>;
 
-    #[doc = "<p>Disables group metrics for the specified Auto Scaling group.</p>"]
+    /// <p>Disables group metrics for the specified Auto Scaling group.</p>
     fn disable_metrics_collection(
         &self,
         input: &DisableMetricsCollectionQuery,
     ) -> Result<(), DisableMetricsCollectionError>;
 
-    #[doc="<p>Enables group metrics for the specified Auto Scaling group. For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-instance-monitoring.html\">Monitoring Your Auto Scaling Groups and Instances</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Enables group metrics for the specified Auto Scaling group. For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/as-instance-monitoring.html">Monitoring Your Auto Scaling Groups and Instances</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn enable_metrics_collection(
         &self,
         input: &EnableMetricsCollectionQuery,
     ) -> Result<(), EnableMetricsCollectionError>;
 
-    #[doc="<p>Moves the specified instances into <code>Standby</code> mode.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html\">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Moves the specified instances into <code>Standby</code> mode.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn enter_standby(
         &self,
         input: &EnterStandbyQuery,
     ) -> Result<EnterStandbyAnswer, EnterStandbyError>;
 
-    #[doc = "<p>Executes the specified policy.</p>"]
+    /// <p>Executes the specified policy.</p>
     fn execute_policy(&self, input: &ExecutePolicyType) -> Result<(), ExecutePolicyError>;
 
-    #[doc="<p>Moves the specified instances out of <code>Standby</code> mode.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html\">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Moves the specified instances out of <code>Standby</code> mode.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn exit_standby(&self, input: &ExitStandbyQuery)
         -> Result<ExitStandbyAnswer, ExitStandbyError>;
 
-    #[doc="<p>Creates or updates a lifecycle hook for the specified Auto Scaling Group.</p> <p>A lifecycle hook tells Auto Scaling that you want to perform an action on an instance that is not actively in service; for example, either when the instance launches or before the instance terminates.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p> <b>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</b> </p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/lifecycle-hooks.html\">Auto Scaling Lifecycle Hooks</a> in the <i>Auto Scaling User Guide</i>.</p> <p>If you exceed your maximum limit of lifecycle hooks, which by default is 50 per Auto Scaling group, the call fails. For information about updating this limit, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html\">AWS Service Limits</a> in the <i>Amazon Web Services General Reference</i>.</p>"]
+    /// <p>Creates or updates a lifecycle hook for the specified Auto Scaling Group.</p> <p>A lifecycle hook tells Auto Scaling that you want to perform an action on an instance that is not actively in service; for example, either when the instance launches or before the instance terminates.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p> <b>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</b> </p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/lifecycle-hooks.html">Auto Scaling Lifecycle Hooks</a> in the <i>Auto Scaling User Guide</i>.</p> <p>If you exceed your maximum limit of lifecycle hooks, which by default is 50 per Auto Scaling group, the call fails. For information about updating this limit, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html">AWS Service Limits</a> in the <i>Amazon Web Services General Reference</i>.</p>
     fn put_lifecycle_hook(
         &self,
         input: &PutLifecycleHookType,
     ) -> Result<PutLifecycleHookAnswer, PutLifecycleHookError>;
 
-    #[doc="<p>Configures an Auto Scaling group to send notifications when specified events take place. Subscribers to the specified topic can have messages delivered to an endpoint such as a web server or an email address.</p> <p>This configuration overwrites any existing configuration.</p> <p>For more information see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/ASGettingNotifications.html\">Getting SNS Notifications When Your Auto Scaling Group Scales</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Configures an Auto Scaling group to send notifications when specified events take place. Subscribers to the specified topic can have messages delivered to an endpoint such as a web server or an email address.</p> <p>This configuration overwrites any existing configuration.</p> <p>For more information see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/ASGettingNotifications.html">Getting SNS Notifications When Your Auto Scaling Group Scales</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn put_notification_configuration(
         &self,
         input: &PutNotificationConfigurationType,
     ) -> Result<(), PutNotificationConfigurationError>;
 
-    #[doc="<p>Creates or updates a policy for an Auto Scaling group. To update an existing policy, use the existing policy name and set the parameters you want to change. Any existing parameter not changed in an update to an existing policy is not changed in this update request.</p> <p>If you exceed your maximum limit of step adjustments, which by default is 20 per region, the call fails. For information about updating this limit, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html\">AWS Service Limits</a> in the <i>Amazon Web Services General Reference</i>.</p>"]
+    /// <p>Creates or updates a policy for an Auto Scaling group. To update an existing policy, use the existing policy name and set the parameters you want to change. Any existing parameter not changed in an update to an existing policy is not changed in this update request.</p> <p>If you exceed your maximum limit of step adjustments, which by default is 20 per region, the call fails. For information about updating this limit, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html">AWS Service Limits</a> in the <i>Amazon Web Services General Reference</i>.</p>
     fn put_scaling_policy(
         &self,
         input: &PutScalingPolicyType,
     ) -> Result<PolicyARNType, PutScalingPolicyError>;
 
-    #[doc="<p>Creates or updates a scheduled scaling action for an Auto Scaling group. When updating a scheduled scaling action, if you leave a parameter unspecified, the corresponding value remains unchanged.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/schedule_time.html\">Scheduled Scaling</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Creates or updates a scheduled scaling action for an Auto Scaling group. When updating a scheduled scaling action, if you leave a parameter unspecified, the corresponding value remains unchanged.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/schedule_time.html">Scheduled Scaling</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn put_scheduled_update_group_action(
         &self,
         input: &PutScheduledUpdateGroupActionType,
     ) -> Result<(), PutScheduledUpdateGroupActionError>;
 
-    #[doc="<p>Records a heartbeat for the lifecycle action associated with the specified token or instance. This extends the timeout by the length of time defined using <a>PutLifecycleHook</a>.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p> <b>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</b> </p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html\">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Records a heartbeat for the lifecycle action associated with the specified token or instance. This extends the timeout by the length of time defined using <a>PutLifecycleHook</a>.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p> <b>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</b> </p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn record_lifecycle_action_heartbeat(
         &self,
         input: &RecordLifecycleActionHeartbeatType,
     ) -> Result<RecordLifecycleActionHeartbeatAnswer, RecordLifecycleActionHeartbeatError>;
 
-    #[doc="<p>Resumes the specified suspended Auto Scaling processes, or all suspended process, for the specified Auto Scaling group.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-suspend-resume-processes.html\">Suspending and Resuming Auto Scaling Processes</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Resumes the specified suspended Auto Scaling processes, or all suspended process, for the specified Auto Scaling group.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/as-suspend-resume-processes.html">Suspending and Resuming Auto Scaling Processes</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn resume_processes(&self, input: &ScalingProcessQuery) -> Result<(), ResumeProcessesError>;
 
-    #[doc="<p>Sets the size of the specified Auto Scaling group.</p> <p>For more information about desired capacity, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/WhatIsAutoScaling.html\">What Is Auto Scaling?</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Sets the size of the specified Auto Scaling group.</p> <p>For more information about desired capacity, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/WhatIsAutoScaling.html">What Is Auto Scaling?</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn set_desired_capacity(
         &self,
         input: &SetDesiredCapacityType,
     ) -> Result<(), SetDesiredCapacityError>;
 
-    #[doc="<p>Sets the health status of the specified instance.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/healthcheck.html\">Health Checks</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Sets the health status of the specified instance.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/healthcheck.html">Health Checks</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn set_instance_health(
         &self,
         input: &SetInstanceHealthQuery,
     ) -> Result<(), SetInstanceHealthError>;
 
-    #[doc="<p>Updates the instance protection settings of the specified instances.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-instance-termination.html#instance-protection\">Instance Protection</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Updates the instance protection settings of the specified instances.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/as-instance-termination.html#instance-protection">Instance Protection</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn set_instance_protection(
         &self,
         input: &SetInstanceProtectionQuery,
     ) -> Result<SetInstanceProtectionAnswer, SetInstanceProtectionError>;
 
-    #[doc="<p>Suspends the specified Auto Scaling processes, or all processes, for the specified Auto Scaling group.</p> <p>Note that if you suspend either the <code>Launch</code> or <code>Terminate</code> process types, it can prevent other process types from functioning properly.</p> <p>To resume processes that have been suspended, use <a>ResumeProcesses</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-suspend-resume-processes.html\">Suspending and Resuming Auto Scaling Processes</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Suspends the specified Auto Scaling processes, or all processes, for the specified Auto Scaling group.</p> <p>Note that if you suspend either the <code>Launch</code> or <code>Terminate</code> process types, it can prevent other process types from functioning properly.</p> <p>To resume processes that have been suspended, use <a>ResumeProcesses</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/as-suspend-resume-processes.html">Suspending and Resuming Auto Scaling Processes</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn suspend_processes(&self, input: &ScalingProcessQuery) -> Result<(), SuspendProcessesError>;
 
-    #[doc="<p>Terminates the specified instance and optionally adjusts the desired group size.</p> <p>This call simply makes a termination request. The instance is not terminated immediately.</p>"]
+    /// <p>Terminates the specified instance and optionally adjusts the desired group size.</p> <p>This call simply makes a termination request. The instance is not terminated immediately.</p>
     fn terminate_instance_in_auto_scaling_group(
         &self,
         input: &TerminateInstanceInAutoScalingGroupType,
     ) -> Result<ActivityType, TerminateInstanceInAutoScalingGroupError>;
 
-    #[doc="<p>Updates the configuration for the specified Auto Scaling group.</p> <p>To update an Auto Scaling group with a launch configuration with <code>InstanceMonitoring</code> set to <code>False</code>, you must first disable the collection of group metrics. Otherwise, you will get an error. If you have previously enabled the collection of group metrics, you can disable it using <a>DisableMetricsCollection</a>.</p> <p>The new settings are registered upon the completion of this call. Any launch configuration settings take effect on any triggers after this call returns. Scaling activities that are currently in progress aren't affected.</p> <p>Note the following:</p> <ul> <li> <p>If you specify a new value for <code>MinSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MinSize</code> is larger than the current size of the group, we implicitly call <a>SetDesiredCapacity</a> to set the size of the group to the new value of <code>MinSize</code>.</p> </li> <li> <p>If you specify a new value for <code>MaxSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MaxSize</code> is smaller than the current size of the group, we implicitly call <a>SetDesiredCapacity</a> to set the size of the group to the new value of <code>MaxSize</code>.</p> </li> <li> <p>All other optional parameters are left unchanged if not specified.</p> </li> </ul>"]
+    /// <p><p>Updates the configuration for the specified Auto Scaling group.</p> <p>To update an Auto Scaling group with a launch configuration with <code>InstanceMonitoring</code> set to <code>False</code>, you must first disable the collection of group metrics. Otherwise, you will get an error. If you have previously enabled the collection of group metrics, you can disable it using <a>DisableMetricsCollection</a>.</p> <p>The new settings are registered upon the completion of this call. Any launch configuration settings take effect on any triggers after this call returns. Scaling activities that are currently in progress aren&#39;t affected.</p> <p>Note the following:</p> <ul> <li> <p>If you specify a new value for <code>MinSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MinSize</code> is larger than the current size of the group, we implicitly call <a>SetDesiredCapacity</a> to set the size of the group to the new value of <code>MinSize</code>.</p> </li> <li> <p>If you specify a new value for <code>MaxSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MaxSize</code> is smaller than the current size of the group, we implicitly call <a>SetDesiredCapacity</a> to set the size of the group to the new value of <code>MaxSize</code>.</p> </li> <li> <p>All other optional parameters are left unchanged if not specified.</p> </li> </ul></p>
     fn update_auto_scaling_group(
         &self,
         input: &UpdateAutoScalingGroupType,
@@ -12616,7 +12616,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Attaches one or more EC2 instances to the specified Auto Scaling group.</p> <p>When you attach instances, Auto Scaling increases the desired capacity of the group by the number of instances being attached. If the number of instances being attached plus the desired capacity of the group exceeds the maximum size of the group, the operation fails.</p> <p>If there is a Classic Load Balancer attached to your Auto Scaling group, the instances are also registered with the load balancer. If there are target groups attached to your Auto Scaling group, the instances are also registered with the target groups.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/attach-instance-asg.html\">Attach EC2 Instances to Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Attaches one or more EC2 instances to the specified Auto Scaling group.</p> <p>When you attach instances, Auto Scaling increases the desired capacity of the group by the number of instances being attached. If the number of instances being attached plus the desired capacity of the group exceeds the maximum size of the group, the operation fails.</p> <p>If there is a Classic Load Balancer attached to your Auto Scaling group, the instances are also registered with the load balancer. If there are target groups attached to your Auto Scaling group, the instances are also registered with the target groups.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/attach-instance-asg.html">Attach EC2 Instances to Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn attach_instances(&self, input: &AttachInstancesQuery) -> Result<(), AttachInstancesError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
@@ -12643,7 +12643,7 @@ where
         }
     }
 
-    #[doc="<p>Attaches one or more target groups to the specified Auto Scaling group.</p> <p>To describe the target groups for an Auto Scaling group, use <a>DescribeLoadBalancerTargetGroups</a>. To detach the target group from the Auto Scaling group, use <a>DetachLoadBalancerTargetGroups</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/attach-load-balancer-asg.html\">Attach a Load Balancer to Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Attaches one or more target groups to the specified Auto Scaling group.</p> <p>To describe the target groups for an Auto Scaling group, use <a>DescribeLoadBalancerTargetGroups</a>. To detach the target group from the Auto Scaling group, use <a>DetachLoadBalancerTargetGroups</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/attach-load-balancer-asg.html">Attach a Load Balancer to Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn attach_load_balancer_target_groups(
         &self,
         input: &AttachLoadBalancerTargetGroupsType,
@@ -12696,7 +12696,7 @@ where
         }
     }
 
-    #[doc="<p>Attaches one or more Classic Load Balancers to the specified Auto Scaling group.</p> <p>To attach an Application Load Balancer instead, see <a>AttachLoadBalancerTargetGroups</a>.</p> <p>To describe the load balancers for an Auto Scaling group, use <a>DescribeLoadBalancers</a>. To detach the load balancer from the Auto Scaling group, use <a>DetachLoadBalancers</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/attach-load-balancer-asg.html\">Attach a Load Balancer to Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Attaches one or more Classic Load Balancers to the specified Auto Scaling group.</p> <p>To attach an Application Load Balancer instead, see <a>AttachLoadBalancerTargetGroups</a>.</p> <p>To describe the load balancers for an Auto Scaling group, use <a>DescribeLoadBalancers</a>. To detach the load balancer from the Auto Scaling group, use <a>DetachLoadBalancers</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/attach-load-balancer-asg.html">Attach a Load Balancer to Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn attach_load_balancers(
         &self,
         input: &AttachLoadBalancersType,
@@ -12747,7 +12747,7 @@ where
         }
     }
 
-    #[doc="<p>Completes the lifecycle action for the specified token or instance with the specified result.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</p> </li> <li> <p> <b>If you finish before the timeout period ends, complete the lifecycle action.</b> </p> </li> </ol> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html\">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Completes the lifecycle action for the specified token or instance with the specified result.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</p> </li> <li> <p> <b>If you finish before the timeout period ends, complete the lifecycle action.</b> </p> </li> </ol> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn complete_lifecycle_action(
         &self,
         input: &CompleteLifecycleActionType,
@@ -12798,7 +12798,7 @@ where
         }
     }
 
-    #[doc="<p>Creates an Auto Scaling group with the specified name and attributes.</p> <p>If you exceed your maximum limit of Auto Scaling groups, which by default is 20 per region, the call fails. For information about viewing and updating this limit, see <a>DescribeAccountLimits</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroup.html\">Auto Scaling Groups</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Creates an Auto Scaling group with the specified name and attributes.</p> <p>If you exceed your maximum limit of Auto Scaling groups, which by default is 20 per region, the call fails. For information about viewing and updating this limit, see <a>DescribeAccountLimits</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroup.html">Auto Scaling Groups</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn create_auto_scaling_group(
         &self,
         input: &CreateAutoScalingGroupType,
@@ -12828,7 +12828,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a launch configuration.</p> <p>If you exceed your maximum limit of launch configurations, which by default is 100 per region, the call fails. For information about viewing and updating this limit, see <a>DescribeAccountLimits</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/LaunchConfiguration.html\">Launch Configurations</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Creates a launch configuration.</p> <p>If you exceed your maximum limit of launch configurations, which by default is 100 per region, the call fails. For information about viewing and updating this limit, see <a>DescribeAccountLimits</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/LaunchConfiguration.html">Launch Configurations</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn create_launch_configuration(
         &self,
         input: &CreateLaunchConfigurationType,
@@ -12858,7 +12858,7 @@ where
         }
     }
 
-    #[doc="<p>Creates or updates tags for the specified Auto Scaling group.</p> <p>When you specify a tag with a key that already exists, the operation overwrites the previous tag definition, and you do not get an error message.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/autoscaling-tagging.html\">Tagging Auto Scaling Groups and Instances</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Creates or updates tags for the specified Auto Scaling group.</p> <p>When you specify a tag with a key that already exists, the operation overwrites the previous tag definition, and you do not get an error message.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/autoscaling-tagging.html">Tagging Auto Scaling Groups and Instances</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn create_or_update_tags(
         &self,
         input: &CreateOrUpdateTagsType,
@@ -12888,7 +12888,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified Auto Scaling group.</p> <p>If the group has instances or scaling activities in progress, you must specify the option to force the deletion in order for it to succeed.</p> <p>If the group has policies, deleting the group deletes the policies, the underlying alarm actions, and any alarm that no longer has an associated action.</p> <p>To remove instances from the Auto Scaling group before deleting it, call <a>DetachInstances</a> with the list of instances and the option to decrement the desired capacity so that Auto Scaling does not launch replacement instances.</p> <p>To terminate all instances before deleting the Auto Scaling group, call <a>UpdateAutoScalingGroup</a> and set the minimum size and desired capacity of the Auto Scaling group to zero.</p>"]
+    /// <p>Deletes the specified Auto Scaling group.</p> <p>If the group has instances or scaling activities in progress, you must specify the option to force the deletion in order for it to succeed.</p> <p>If the group has policies, deleting the group deletes the policies, the underlying alarm actions, and any alarm that no longer has an associated action.</p> <p>To remove instances from the Auto Scaling group before deleting it, call <a>DetachInstances</a> with the list of instances and the option to decrement the desired capacity so that Auto Scaling does not launch replacement instances.</p> <p>To terminate all instances before deleting the Auto Scaling group, call <a>UpdateAutoScalingGroup</a> and set the minimum size and desired capacity of the Auto Scaling group to zero.</p>
     fn delete_auto_scaling_group(
         &self,
         input: &DeleteAutoScalingGroupType,
@@ -12918,7 +12918,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified launch configuration.</p> <p>The launch configuration must not be attached to an Auto Scaling group. When this call completes, the launch configuration is no longer available for use.</p>"]
+    /// <p>Deletes the specified launch configuration.</p> <p>The launch configuration must not be attached to an Auto Scaling group. When this call completes, the launch configuration is no longer available for use.</p>
     fn delete_launch_configuration(
         &self,
         input: &LaunchConfigurationNameType,
@@ -12948,7 +12948,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified lifecycle hook.</p> <p>If there are any outstanding lifecycle actions, they are completed first (<code>ABANDON</code> for launching instances, <code>CONTINUE</code> for terminating instances).</p>"]
+    /// <p>Deletes the specified lifecycle hook.</p> <p>If there are any outstanding lifecycle actions, they are completed first (<code>ABANDON</code> for launching instances, <code>CONTINUE</code> for terminating instances).</p>
     fn delete_lifecycle_hook(
         &self,
         input: &DeleteLifecycleHookType,
@@ -12999,7 +12999,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the specified notification.</p>"]
+    /// <p>Deletes the specified notification.</p>
     fn delete_notification_configuration(
         &self,
         input: &DeleteNotificationConfigurationType,
@@ -13029,7 +13029,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified Auto Scaling policy.</p> <p>Deleting a policy deletes the underlying alarm action, but does not delete the alarm, even if it no longer has an associated action.</p>"]
+    /// <p>Deletes the specified Auto Scaling policy.</p> <p>Deleting a policy deletes the underlying alarm action, but does not delete the alarm, even if it no longer has an associated action.</p>
     fn delete_policy(&self, input: &DeletePolicyType) -> Result<(), DeletePolicyError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
@@ -13056,7 +13056,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the specified scheduled action.</p>"]
+    /// <p>Deletes the specified scheduled action.</p>
     fn delete_scheduled_action(
         &self,
         input: &DeleteScheduledActionType,
@@ -13086,7 +13086,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the specified tags.</p>"]
+    /// <p>Deletes the specified tags.</p>
     fn delete_tags(&self, input: &DeleteTagsType) -> Result<(), DeleteTagsError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
@@ -13113,7 +13113,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the current Auto Scaling resource limits for your AWS account.</p> <p>For information about requesting an increase in these limits, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html\">AWS Service Limits</a> in the <i>Amazon Web Services General Reference</i>.</p>"]
+    /// <p>Describes the current Auto Scaling resource limits for your AWS account.</p> <p>For information about requesting an increase in these limits, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html">AWS Service Limits</a> in the <i>Amazon Web Services General Reference</i>.</p>
     fn describe_account_limits(
         &self,
     ) -> Result<DescribeAccountLimitsAnswer, DescribeAccountLimitsError> {
@@ -13163,7 +13163,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes the policy adjustment types for use with <a>PutScalingPolicy</a>.</p>"]
+    /// <p>Describes the policy adjustment types for use with <a>PutScalingPolicy</a>.</p>
     fn describe_adjustment_types(
         &self,
     ) -> Result<DescribeAdjustmentTypesAnswer, DescribeAdjustmentTypesError> {
@@ -13213,7 +13213,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes one or more Auto Scaling groups.</p>"]
+    /// <p>Describes one or more Auto Scaling groups.</p>
     fn describe_auto_scaling_groups(
         &self,
         input: &AutoScalingGroupNamesType,
@@ -13264,7 +13264,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes one or more Auto Scaling instances.</p>"]
+    /// <p>Describes one or more Auto Scaling instances.</p>
     fn describe_auto_scaling_instances(
         &self,
         input: &DescribeAutoScalingInstancesType,
@@ -13315,7 +13315,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes the notification types that are supported by Auto Scaling.</p>"]
+    /// <p>Describes the notification types that are supported by Auto Scaling.</p>
     fn describe_auto_scaling_notification_types(
         &self,
     ) -> Result<DescribeAutoScalingNotificationTypesAnswer, DescribeAutoScalingNotificationTypesError>
@@ -13368,7 +13368,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes one or more launch configurations.</p>"]
+    /// <p>Describes one or more launch configurations.</p>
     fn describe_launch_configurations(
         &self,
         input: &LaunchConfigurationNamesType,
@@ -13419,7 +13419,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes the available types of lifecycle hooks.</p>"]
+    /// <p>Describes the available types of lifecycle hooks.</p>
     fn describe_lifecycle_hook_types(
         &self,
     ) -> Result<DescribeLifecycleHookTypesAnswer, DescribeLifecycleHookTypesError> {
@@ -13469,7 +13469,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes the lifecycle hooks for the specified Auto Scaling group.</p>"]
+    /// <p>Describes the lifecycle hooks for the specified Auto Scaling group.</p>
     fn describe_lifecycle_hooks(
         &self,
         input: &DescribeLifecycleHooksType,
@@ -13520,7 +13520,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes the target groups for the specified Auto Scaling group.</p>"]
+    /// <p>Describes the target groups for the specified Auto Scaling group.</p>
     fn describe_load_balancer_target_groups(
         &self,
         input: &DescribeLoadBalancerTargetGroupsRequest,
@@ -13574,7 +13574,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the load balancers for the specified Auto Scaling group.</p> <p>Note that this operation describes only Classic Load Balancers. If you have Application Load Balancers, use <a>DescribeLoadBalancerTargetGroups</a> instead.</p>"]
+    /// <p>Describes the load balancers for the specified Auto Scaling group.</p> <p>Note that this operation describes only Classic Load Balancers. If you have Application Load Balancers, use <a>DescribeLoadBalancerTargetGroups</a> instead.</p>
     fn describe_load_balancers(
         &self,
         input: &DescribeLoadBalancersRequest,
@@ -13625,7 +13625,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the available CloudWatch metrics for Auto Scaling.</p> <p>Note that the <code>GroupStandbyInstances</code> metric is not returned by default. You must explicitly request this metric when calling <a>EnableMetricsCollection</a>.</p>"]
+    /// <p>Describes the available CloudWatch metrics for Auto Scaling.</p> <p>Note that the <code>GroupStandbyInstances</code> metric is not returned by default. You must explicitly request this metric when calling <a>EnableMetricsCollection</a>.</p>
     fn describe_metric_collection_types(
         &self,
     ) -> Result<DescribeMetricCollectionTypesAnswer, DescribeMetricCollectionTypesError> {
@@ -13677,7 +13677,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the notification actions associated with the specified Auto Scaling group.</p>"]
+    /// <p>Describes the notification actions associated with the specified Auto Scaling group.</p>
     fn describe_notification_configurations(
         &self,
         input: &DescribeNotificationConfigurationsType,
@@ -13731,7 +13731,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes the policies for the specified Auto Scaling group.</p>"]
+    /// <p>Describes the policies for the specified Auto Scaling group.</p>
     fn describe_policies(
         &self,
         input: &DescribePoliciesType,
@@ -13782,7 +13782,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes one or more scaling activities for the specified Auto Scaling group.</p>"]
+    /// <p>Describes one or more scaling activities for the specified Auto Scaling group.</p>
     fn describe_scaling_activities(
         &self,
         input: &DescribeScalingActivitiesType,
@@ -13833,7 +13833,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the scaling process types for use with <a>ResumeProcesses</a> and <a>SuspendProcesses</a>.</p>"]
+    /// <p>Describes the scaling process types for use with <a>ResumeProcesses</a> and <a>SuspendProcesses</a>.</p>
     fn describe_scaling_process_types(
         &self,
     ) -> Result<ProcessesType, DescribeScalingProcessTypesError> {
@@ -13883,7 +13883,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the actions scheduled for your Auto Scaling group that haven't run. To describe the actions that have already run, use <a>DescribeScalingActivities</a>.</p>"]
+    /// <p>Describes the actions scheduled for your Auto Scaling group that haven't run. To describe the actions that have already run, use <a>DescribeScalingActivities</a>.</p>
     fn describe_scheduled_actions(
         &self,
         input: &DescribeScheduledActionsType,
@@ -13934,7 +13934,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the specified tags.</p> <p>You can use filters to limit the results. For example, you can query for the tags for a specific Auto Scaling group. You can specify multiple values for a filter. A tag must match at least one of the specified values for it to be included in the results.</p> <p>You can also specify multiple filters. The result includes information for a particular tag only if it matches all the filters. If there's no match, no special message is returned.</p>"]
+    /// <p>Describes the specified tags.</p> <p>You can use filters to limit the results. For example, you can query for the tags for a specific Auto Scaling group. You can specify multiple values for a filter. A tag must match at least one of the specified values for it to be included in the results.</p> <p>You can also specify multiple filters. The result includes information for a particular tag only if it matches all the filters. If there's no match, no special message is returned.</p>
     fn describe_tags(&self, input: &DescribeTagsType) -> Result<TagsType, DescribeTagsError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
@@ -13982,7 +13982,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes the termination policies supported by Auto Scaling.</p>"]
+    /// <p>Describes the termination policies supported by Auto Scaling.</p>
     fn describe_termination_policy_types(
         &self,
     ) -> Result<DescribeTerminationPolicyTypesAnswer, DescribeTerminationPolicyTypesError> {
@@ -14034,7 +14034,7 @@ where
         }
     }
 
-    #[doc="<p>Removes one or more instances from the specified Auto Scaling group.</p> <p>After the instances are detached, you can manage them independently from the rest of the Auto Scaling group.</p> <p>If you do not specify the option to decrement the desired capacity, Auto Scaling launches instances to replace the ones that are detached.</p> <p>If there is a Classic Load Balancer attached to the Auto Scaling group, the instances are deregistered from the load balancer. If there are target groups attached to the Auto Scaling group, the instances are deregistered from the target groups.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/detach-instance-asg.html\">Detach EC2 Instances from Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Removes one or more instances from the specified Auto Scaling group.</p> <p>After the instances are detached, you can manage them independently from the rest of the Auto Scaling group.</p> <p>If you do not specify the option to decrement the desired capacity, Auto Scaling launches instances to replace the ones that are detached.</p> <p>If there is a Classic Load Balancer attached to the Auto Scaling group, the instances are deregistered from the load balancer. If there are target groups attached to the Auto Scaling group, the instances are deregistered from the target groups.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/detach-instance-asg.html">Detach EC2 Instances from Your Auto Scaling Group</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn detach_instances(
         &self,
         input: &DetachInstancesQuery,
@@ -14085,7 +14085,7 @@ where
         }
     }
 
-    #[doc = "<p>Detaches one or more target groups from the specified Auto Scaling group.</p>"]
+    /// <p>Detaches one or more target groups from the specified Auto Scaling group.</p>
     fn detach_load_balancer_target_groups(
         &self,
         input: &DetachLoadBalancerTargetGroupsType,
@@ -14138,7 +14138,7 @@ where
         }
     }
 
-    #[doc="<p>Detaches one or more Classic Load Balancers from the specified Auto Scaling group.</p> <p>Note that this operation detaches only Classic Load Balancers. If you have Application Load Balancers, use <a>DetachLoadBalancerTargetGroups</a> instead.</p> <p>When you detach a load balancer, it enters the <code>Removing</code> state while deregistering the instances in the group. When all instances are deregistered, then you can no longer describe the load balancer using <a>DescribeLoadBalancers</a>. Note that the instances remain running.</p>"]
+    /// <p>Detaches one or more Classic Load Balancers from the specified Auto Scaling group.</p> <p>Note that this operation detaches only Classic Load Balancers. If you have Application Load Balancers, use <a>DetachLoadBalancerTargetGroups</a> instead.</p> <p>When you detach a load balancer, it enters the <code>Removing</code> state while deregistering the instances in the group. When all instances are deregistered, then you can no longer describe the load balancer using <a>DescribeLoadBalancers</a>. Note that the instances remain running.</p>
     fn detach_load_balancers(
         &self,
         input: &DetachLoadBalancersType,
@@ -14189,7 +14189,7 @@ where
         }
     }
 
-    #[doc = "<p>Disables group metrics for the specified Auto Scaling group.</p>"]
+    /// <p>Disables group metrics for the specified Auto Scaling group.</p>
     fn disable_metrics_collection(
         &self,
         input: &DisableMetricsCollectionQuery,
@@ -14219,7 +14219,7 @@ where
         }
     }
 
-    #[doc="<p>Enables group metrics for the specified Auto Scaling group. For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-instance-monitoring.html\">Monitoring Your Auto Scaling Groups and Instances</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Enables group metrics for the specified Auto Scaling group. For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/as-instance-monitoring.html">Monitoring Your Auto Scaling Groups and Instances</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn enable_metrics_collection(
         &self,
         input: &EnableMetricsCollectionQuery,
@@ -14249,7 +14249,7 @@ where
         }
     }
 
-    #[doc="<p>Moves the specified instances into <code>Standby</code> mode.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html\">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Moves the specified instances into <code>Standby</code> mode.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn enter_standby(
         &self,
         input: &EnterStandbyQuery,
@@ -14300,7 +14300,7 @@ where
         }
     }
 
-    #[doc = "<p>Executes the specified policy.</p>"]
+    /// <p>Executes the specified policy.</p>
     fn execute_policy(&self, input: &ExecutePolicyType) -> Result<(), ExecutePolicyError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
@@ -14327,7 +14327,7 @@ where
         }
     }
 
-    #[doc="<p>Moves the specified instances out of <code>Standby</code> mode.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html\">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Moves the specified instances out of <code>Standby</code> mode.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn exit_standby(
         &self,
         input: &ExitStandbyQuery,
@@ -14378,7 +14378,7 @@ where
         }
     }
 
-    #[doc="<p>Creates or updates a lifecycle hook for the specified Auto Scaling Group.</p> <p>A lifecycle hook tells Auto Scaling that you want to perform an action on an instance that is not actively in service; for example, either when the instance launches or before the instance terminates.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p> <b>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</b> </p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/lifecycle-hooks.html\">Auto Scaling Lifecycle Hooks</a> in the <i>Auto Scaling User Guide</i>.</p> <p>If you exceed your maximum limit of lifecycle hooks, which by default is 50 per Auto Scaling group, the call fails. For information about updating this limit, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html\">AWS Service Limits</a> in the <i>Amazon Web Services General Reference</i>.</p>"]
+    /// <p>Creates or updates a lifecycle hook for the specified Auto Scaling Group.</p> <p>A lifecycle hook tells Auto Scaling that you want to perform an action on an instance that is not actively in service; for example, either when the instance launches or before the instance terminates.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p> <b>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</b> </p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/lifecycle-hooks.html">Auto Scaling Lifecycle Hooks</a> in the <i>Auto Scaling User Guide</i>.</p> <p>If you exceed your maximum limit of lifecycle hooks, which by default is 50 per Auto Scaling group, the call fails. For information about updating this limit, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html">AWS Service Limits</a> in the <i>Amazon Web Services General Reference</i>.</p>
     fn put_lifecycle_hook(
         &self,
         input: &PutLifecycleHookType,
@@ -14429,7 +14429,7 @@ where
         }
     }
 
-    #[doc="<p>Configures an Auto Scaling group to send notifications when specified events take place. Subscribers to the specified topic can have messages delivered to an endpoint such as a web server or an email address.</p> <p>This configuration overwrites any existing configuration.</p> <p>For more information see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/ASGettingNotifications.html\">Getting SNS Notifications When Your Auto Scaling Group Scales</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Configures an Auto Scaling group to send notifications when specified events take place. Subscribers to the specified topic can have messages delivered to an endpoint such as a web server or an email address.</p> <p>This configuration overwrites any existing configuration.</p> <p>For more information see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/ASGettingNotifications.html">Getting SNS Notifications When Your Auto Scaling Group Scales</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn put_notification_configuration(
         &self,
         input: &PutNotificationConfigurationType,
@@ -14459,7 +14459,7 @@ where
         }
     }
 
-    #[doc="<p>Creates or updates a policy for an Auto Scaling group. To update an existing policy, use the existing policy name and set the parameters you want to change. Any existing parameter not changed in an update to an existing policy is not changed in this update request.</p> <p>If you exceed your maximum limit of step adjustments, which by default is 20 per region, the call fails. For information about updating this limit, see <a href=\"http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html\">AWS Service Limits</a> in the <i>Amazon Web Services General Reference</i>.</p>"]
+    /// <p>Creates or updates a policy for an Auto Scaling group. To update an existing policy, use the existing policy name and set the parameters you want to change. Any existing parameter not changed in an update to an existing policy is not changed in this update request.</p> <p>If you exceed your maximum limit of step adjustments, which by default is 20 per region, the call fails. For information about updating this limit, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html">AWS Service Limits</a> in the <i>Amazon Web Services General Reference</i>.</p>
     fn put_scaling_policy(
         &self,
         input: &PutScalingPolicyType,
@@ -14510,7 +14510,7 @@ where
         }
     }
 
-    #[doc="<p>Creates or updates a scheduled scaling action for an Auto Scaling group. When updating a scheduled scaling action, if you leave a parameter unspecified, the corresponding value remains unchanged.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/schedule_time.html\">Scheduled Scaling</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Creates or updates a scheduled scaling action for an Auto Scaling group. When updating a scheduled scaling action, if you leave a parameter unspecified, the corresponding value remains unchanged.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/schedule_time.html">Scheduled Scaling</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn put_scheduled_update_group_action(
         &self,
         input: &PutScheduledUpdateGroupActionType,
@@ -14540,7 +14540,7 @@ where
         }
     }
 
-    #[doc="<p>Records a heartbeat for the lifecycle action associated with the specified token or instance. This extends the timeout by the length of time defined using <a>PutLifecycleHook</a>.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p> <b>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</b> </p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html\">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Records a heartbeat for the lifecycle action associated with the specified token or instance. This extends the timeout by the length of time defined using <a>PutLifecycleHook</a>.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p> <b>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</b> </p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/AutoScalingGroupLifecycle.html">Auto Scaling Lifecycle</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn record_lifecycle_action_heartbeat(
         &self,
         input: &RecordLifecycleActionHeartbeatType,
@@ -14593,7 +14593,7 @@ where
         }
     }
 
-    #[doc="<p>Resumes the specified suspended Auto Scaling processes, or all suspended process, for the specified Auto Scaling group.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-suspend-resume-processes.html\">Suspending and Resuming Auto Scaling Processes</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Resumes the specified suspended Auto Scaling processes, or all suspended process, for the specified Auto Scaling group.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/as-suspend-resume-processes.html">Suspending and Resuming Auto Scaling Processes</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn resume_processes(&self, input: &ScalingProcessQuery) -> Result<(), ResumeProcessesError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
@@ -14620,7 +14620,7 @@ where
         }
     }
 
-    #[doc="<p>Sets the size of the specified Auto Scaling group.</p> <p>For more information about desired capacity, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/WhatIsAutoScaling.html\">What Is Auto Scaling?</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Sets the size of the specified Auto Scaling group.</p> <p>For more information about desired capacity, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/WhatIsAutoScaling.html">What Is Auto Scaling?</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn set_desired_capacity(
         &self,
         input: &SetDesiredCapacityType,
@@ -14650,7 +14650,7 @@ where
         }
     }
 
-    #[doc="<p>Sets the health status of the specified instance.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/healthcheck.html\">Health Checks</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Sets the health status of the specified instance.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/healthcheck.html">Health Checks</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn set_instance_health(
         &self,
         input: &SetInstanceHealthQuery,
@@ -14680,7 +14680,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the instance protection settings of the specified instances.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-instance-termination.html#instance-protection\">Instance Protection</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Updates the instance protection settings of the specified instances.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/as-instance-termination.html#instance-protection">Instance Protection</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn set_instance_protection(
         &self,
         input: &SetInstanceProtectionQuery,
@@ -14731,7 +14731,7 @@ where
         }
     }
 
-    #[doc="<p>Suspends the specified Auto Scaling processes, or all processes, for the specified Auto Scaling group.</p> <p>Note that if you suspend either the <code>Launch</code> or <code>Terminate</code> process types, it can prevent other process types from functioning properly.</p> <p>To resume processes that have been suspended, use <a>ResumeProcesses</a>.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/autoscaling/latest/userguide/as-suspend-resume-processes.html\">Suspending and Resuming Auto Scaling Processes</a> in the <i>Auto Scaling User Guide</i>.</p>"]
+    /// <p>Suspends the specified Auto Scaling processes, or all processes, for the specified Auto Scaling group.</p> <p>Note that if you suspend either the <code>Launch</code> or <code>Terminate</code> process types, it can prevent other process types from functioning properly.</p> <p>To resume processes that have been suspended, use <a>ResumeProcesses</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/autoscaling/latest/userguide/as-suspend-resume-processes.html">Suspending and Resuming Auto Scaling Processes</a> in the <i>Auto Scaling User Guide</i>.</p>
     fn suspend_processes(&self, input: &ScalingProcessQuery) -> Result<(), SuspendProcessesError> {
         let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
         let mut params = Params::new();
@@ -14758,7 +14758,7 @@ where
         }
     }
 
-    #[doc="<p>Terminates the specified instance and optionally adjusts the desired group size.</p> <p>This call simply makes a termination request. The instance is not terminated immediately.</p>"]
+    /// <p>Terminates the specified instance and optionally adjusts the desired group size.</p> <p>This call simply makes a termination request. The instance is not terminated immediately.</p>
     fn terminate_instance_in_auto_scaling_group(
         &self,
         input: &TerminateInstanceInAutoScalingGroupType,
@@ -14809,7 +14809,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the configuration for the specified Auto Scaling group.</p> <p>To update an Auto Scaling group with a launch configuration with <code>InstanceMonitoring</code> set to <code>False</code>, you must first disable the collection of group metrics. Otherwise, you will get an error. If you have previously enabled the collection of group metrics, you can disable it using <a>DisableMetricsCollection</a>.</p> <p>The new settings are registered upon the completion of this call. Any launch configuration settings take effect on any triggers after this call returns. Scaling activities that are currently in progress aren't affected.</p> <p>Note the following:</p> <ul> <li> <p>If you specify a new value for <code>MinSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MinSize</code> is larger than the current size of the group, we implicitly call <a>SetDesiredCapacity</a> to set the size of the group to the new value of <code>MinSize</code>.</p> </li> <li> <p>If you specify a new value for <code>MaxSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MaxSize</code> is smaller than the current size of the group, we implicitly call <a>SetDesiredCapacity</a> to set the size of the group to the new value of <code>MaxSize</code>.</p> </li> <li> <p>All other optional parameters are left unchanged if not specified.</p> </li> </ul>"]
+    /// <p><p>Updates the configuration for the specified Auto Scaling group.</p> <p>To update an Auto Scaling group with a launch configuration with <code>InstanceMonitoring</code> set to <code>False</code>, you must first disable the collection of group metrics. Otherwise, you will get an error. If you have previously enabled the collection of group metrics, you can disable it using <a>DisableMetricsCollection</a>.</p> <p>The new settings are registered upon the completion of this call. Any launch configuration settings take effect on any triggers after this call returns. Scaling activities that are currently in progress aren&#39;t affected.</p> <p>Note the following:</p> <ul> <li> <p>If you specify a new value for <code>MinSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MinSize</code> is larger than the current size of the group, we implicitly call <a>SetDesiredCapacity</a> to set the size of the group to the new value of <code>MinSize</code>.</p> </li> <li> <p>If you specify a new value for <code>MaxSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MaxSize</code> is smaller than the current size of the group, we implicitly call <a>SetDesiredCapacity</a> to set the size of the group to the new value of <code>MaxSize</code>.</p> </li> <li> <p>All other optional parameters are left unchanged if not specified.</p> </li> </ul></p>
     fn update_auto_scaling_group(
         &self,
         input: &UpdateAutoScalingGroupType,

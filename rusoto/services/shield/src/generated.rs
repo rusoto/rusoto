@@ -351,19 +351,19 @@ pub struct TimeRange {
 /// Errors returned by CreateProtection
 #[derive(Debug, PartialEq)]
 pub enum CreateProtectionError {
-    ///<p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
     InternalError(String),
-    ///<p>Exception that indicates that the operation would not cause any change to occur.</p>
+    /// <p>Exception that indicates that the operation would not cause any change to occur.</p>
     InvalidOperation(String),
-    ///<p>Exception that indicates that the resource is invalid. You might not have access to the resource, or the resource might not exist.</p>
+    /// <p>Exception that indicates that the resource is invalid. You might not have access to the resource, or the resource might not exist.</p>
     InvalidResource(String),
-    ///<p>Exception that indicates that the operation would exceed a limit.</p>
+    /// <p>Exception that indicates that the operation would exceed a limit.</p>
     LimitsExceeded(String),
-    ///<p>Exception that indicates that the protection state has been modified by another client. You can retry the request.</p>
+    /// <p>Exception that indicates that the protection state has been modified by another client. You can retry the request.</p>
     OptimisticLock(String),
-    ///<p>Exception indicating the specified resource already exists.</p>
+    /// <p>Exception indicating the specified resource already exists.</p>
     ResourceAlreadyExists(String),
-    ///<p>Exception indicating the specified resource does not exist.</p>
+    /// <p>Exception indicating the specified resource does not exist.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -465,9 +465,9 @@ impl Error for CreateProtectionError {
 /// Errors returned by CreateSubscription
 #[derive(Debug, PartialEq)]
 pub enum CreateSubscriptionError {
-    ///<p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
     InternalError(String),
-    ///<p>Exception indicating the specified resource already exists.</p>
+    /// <p>Exception indicating the specified resource already exists.</p>
     ResourceAlreadyExists(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -551,11 +551,11 @@ impl Error for CreateSubscriptionError {
 /// Errors returned by DeleteProtection
 #[derive(Debug, PartialEq)]
 pub enum DeleteProtectionError {
-    ///<p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
     InternalError(String),
-    ///<p>Exception that indicates that the protection state has been modified by another client. You can retry the request.</p>
+    /// <p>Exception that indicates that the protection state has been modified by another client. You can retry the request.</p>
     OptimisticLock(String),
-    ///<p>Exception indicating the specified resource does not exist.</p>
+    /// <p>Exception indicating the specified resource does not exist.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -641,11 +641,11 @@ impl Error for DeleteProtectionError {
 /// Errors returned by DeleteSubscription
 #[derive(Debug, PartialEq)]
 pub enum DeleteSubscriptionError {
-    ///<p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
     InternalError(String),
-    ///<p>Exception that indicates that the subscription has been modified by another client. You can retry the request.</p>
+    /// <p>Exception that indicates that the subscription has been modified by another client. You can retry the request.</p>
     LockedSubscription(String),
-    ///<p>Exception indicating the specified resource does not exist.</p>
+    /// <p>Exception indicating the specified resource does not exist.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -733,9 +733,9 @@ impl Error for DeleteSubscriptionError {
 /// Errors returned by DescribeAttack
 #[derive(Debug, PartialEq)]
 pub enum DescribeAttackError {
-    ///<p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
     InternalError(String),
-    ///<p>Exception that indicates that the parameters passed to the API are invalid. </p>
+    /// <p>Exception that indicates that the parameters passed to the API are invalid. </p>
     InvalidParameter(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -817,9 +817,9 @@ impl Error for DescribeAttackError {
 /// Errors returned by DescribeProtection
 #[derive(Debug, PartialEq)]
 pub enum DescribeProtectionError {
-    ///<p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
     InternalError(String),
-    ///<p>Exception indicating the specified resource does not exist.</p>
+    /// <p>Exception indicating the specified resource does not exist.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -903,9 +903,9 @@ impl Error for DescribeProtectionError {
 /// Errors returned by DescribeSubscription
 #[derive(Debug, PartialEq)]
 pub enum DescribeSubscriptionError {
-    ///<p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
     InternalError(String),
-    ///<p>Exception indicating the specified resource does not exist.</p>
+    /// <p>Exception indicating the specified resource does not exist.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -989,11 +989,11 @@ impl Error for DescribeSubscriptionError {
 /// Errors returned by ListAttacks
 #[derive(Debug, PartialEq)]
 pub enum ListAttacksError {
-    ///<p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
     InternalError(String),
-    ///<p>Exception that indicates that the operation would not cause any change to occur.</p>
+    /// <p>Exception that indicates that the operation would not cause any change to occur.</p>
     InvalidOperation(String),
-    ///<p>Exception that indicates that the parameters passed to the API are invalid. </p>
+    /// <p>Exception that indicates that the parameters passed to the API are invalid. </p>
     InvalidParameter(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1079,9 +1079,9 @@ impl Error for ListAttacksError {
 /// Errors returned by ListProtections
 #[derive(Debug, PartialEq)]
 pub enum ListProtectionsError {
-    ///<p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
     InternalError(String),
-    ///<p>Exception indicating the specified resource does not exist.</p>
+    /// <p>Exception indicating the specified resource does not exist.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1162,48 +1162,48 @@ impl Error for ListProtectionsError {
 }
 /// Trait representing the capabilities of the AWS Shield API. AWS Shield clients implement this trait.
 pub trait Shield {
-    #[doc="<p>Enables AWS Shield Advanced for a specific AWS resource. The resource can be an Amazon CloudFront distribution, Elastic Load Balancing load balancer, or an Amazon Route 53 hosted zone.</p>"]
+    /// <p>Enables AWS Shield Advanced for a specific AWS resource. The resource can be an Amazon CloudFront distribution, Elastic Load Balancing load balancer, or an Amazon Route 53 hosted zone.</p>
     fn create_protection(
         &self,
         input: &CreateProtectionRequest,
     ) -> Result<CreateProtectionResponse, CreateProtectionError>;
 
-    #[doc = "<p>Activates AWS Shield Advanced for an account.</p>"]
+    /// <p>Activates AWS Shield Advanced for an account.</p>
     fn create_subscription(&self) -> Result<CreateSubscriptionResponse, CreateSubscriptionError>;
 
-    #[doc = "<p>Deletes an AWS Shield Advanced <a>Protection</a>.</p>"]
+    /// <p>Deletes an AWS Shield Advanced <a>Protection</a>.</p>
     fn delete_protection(
         &self,
         input: &DeleteProtectionRequest,
     ) -> Result<DeleteProtectionResponse, DeleteProtectionError>;
 
-    #[doc = "<p>Removes AWS Shield Advanced from an account.</p>"]
+    /// <p>Removes AWS Shield Advanced from an account.</p>
     fn delete_subscription(&self) -> Result<DeleteSubscriptionResponse, DeleteSubscriptionError>;
 
-    #[doc = "<p>Describes the details of a DDoS attack. </p>"]
+    /// <p>Describes the details of a DDoS attack. </p>
     fn describe_attack(
         &self,
         input: &DescribeAttackRequest,
     ) -> Result<DescribeAttackResponse, DescribeAttackError>;
 
-    #[doc = "<p>Lists the details of a <a>Protection</a> object.</p>"]
+    /// <p>Lists the details of a <a>Protection</a> object.</p>
     fn describe_protection(
         &self,
         input: &DescribeProtectionRequest,
     ) -> Result<DescribeProtectionResponse, DescribeProtectionError>;
 
-    #[doc = "<p>Provides details about the AWS Shield Advanced subscription for an account.</p>"]
+    /// <p>Provides details about the AWS Shield Advanced subscription for an account.</p>
     fn describe_subscription(
         &self,
     ) -> Result<DescribeSubscriptionResponse, DescribeSubscriptionError>;
 
-    #[doc="<p>Returns all ongoing DDoS attacks or all DDoS attacks during a specified time period.</p>"]
+    /// <p>Returns all ongoing DDoS attacks or all DDoS attacks during a specified time period.</p>
     fn list_attacks(
         &self,
         input: &ListAttacksRequest,
     ) -> Result<ListAttacksResponse, ListAttacksError>;
 
-    #[doc = "<p>Lists all <a>Protection</a> objects for the account.</p>"]
+    /// <p>Lists all <a>Protection</a> objects for the account.</p>
     fn list_protections(
         &self,
         input: &ListProtectionsRequest,
@@ -1239,7 +1239,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Enables AWS Shield Advanced for a specific AWS resource. The resource can be an Amazon CloudFront distribution, Elastic Load Balancing load balancer, or an Amazon Route 53 hosted zone.</p>"]
+    /// <p>Enables AWS Shield Advanced for a specific AWS resource. The resource can be an Amazon CloudFront distribution, Elastic Load Balancing load balancer, or an Amazon Route 53 hosted zone.</p>
     fn create_protection(
         &self,
         input: &CreateProtectionRequest,
@@ -1273,7 +1273,7 @@ where
         }
     }
 
-    #[doc = "<p>Activates AWS Shield Advanced for an account.</p>"]
+    /// <p>Activates AWS Shield Advanced for an account.</p>
     fn create_subscription(&self) -> Result<CreateSubscriptionResponse, CreateSubscriptionError> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
@@ -1303,7 +1303,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes an AWS Shield Advanced <a>Protection</a>.</p>"]
+    /// <p>Deletes an AWS Shield Advanced <a>Protection</a>.</p>
     fn delete_protection(
         &self,
         input: &DeleteProtectionRequest,
@@ -1337,7 +1337,7 @@ where
         }
     }
 
-    #[doc = "<p>Removes AWS Shield Advanced from an account.</p>"]
+    /// <p>Removes AWS Shield Advanced from an account.</p>
     fn delete_subscription(&self) -> Result<DeleteSubscriptionResponse, DeleteSubscriptionError> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
@@ -1367,7 +1367,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes the details of a DDoS attack. </p>"]
+    /// <p>Describes the details of a DDoS attack. </p>
     fn describe_attack(
         &self,
         input: &DescribeAttackRequest,
@@ -1401,7 +1401,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists the details of a <a>Protection</a> object.</p>"]
+    /// <p>Lists the details of a <a>Protection</a> object.</p>
     fn describe_protection(
         &self,
         input: &DescribeProtectionRequest,
@@ -1435,7 +1435,7 @@ where
         }
     }
 
-    #[doc = "<p>Provides details about the AWS Shield Advanced subscription for an account.</p>"]
+    /// <p>Provides details about the AWS Shield Advanced subscription for an account.</p>
     fn describe_subscription(
         &self,
     ) -> Result<DescribeSubscriptionResponse, DescribeSubscriptionError> {
@@ -1467,7 +1467,7 @@ where
         }
     }
 
-    #[doc="<p>Returns all ongoing DDoS attacks or all DDoS attacks during a specified time period.</p>"]
+    /// <p>Returns all ongoing DDoS attacks or all DDoS attacks during a specified time period.</p>
     fn list_attacks(
         &self,
         input: &ListAttacksRequest,
@@ -1501,7 +1501,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists all <a>Protection</a> objects for the account.</p>"]
+    /// <p>Lists all <a>Protection</a> objects for the account.</p>
     fn list_protections(
         &self,
         input: &ListProtectionsRequest,

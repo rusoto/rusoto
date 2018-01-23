@@ -28,184 +28,184 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
-/// The input for the BulkPublish operation.
+/// <p>The input for the BulkPublish operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct BulkPublishRequest {
-    /// A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.
+    /// <p>A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.</p>
     #[serde(rename = "IdentityPoolId")]
     pub identity_pool_id: String,
 }
 
-/// The output for the BulkPublish operation.
+/// <p>The output for the BulkPublish operation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct BulkPublishResponse {
-    /// A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.
+    /// <p>A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.</p>
     #[serde(rename = "IdentityPoolId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_pool_id: Option<String>,
 }
 
-/// Configuration options for configure Cognito streams.
+/// <p>Configuration options for configure Cognito streams.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct CognitoStreams {
-    /// The ARN of the role Amazon Cognito can assume in order to publish to the stream. This role must grant access to Amazon Cognito (cognito-sync) to invoke PutRecord on your Cognito stream.
+    /// <p>The ARN of the role Amazon Cognito can assume in order to publish to the stream. This role must grant access to Amazon Cognito (cognito-sync) to invoke PutRecord on your Cognito stream.</p>
     #[serde(rename = "RoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
-    /// The name of the Cognito stream to receive updates. This stream must be in the developers account and in the same region as the identity pool.
+    /// <p>The name of the Cognito stream to receive updates. This stream must be in the developers account and in the same region as the identity pool.</p>
     #[serde(rename = "StreamName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stream_name: Option<String>,
-    /// Status of the Cognito streams. Valid values are: <p>ENABLED - Streaming of updates to identity pool is enabled.</p> <p>DISABLED - Streaming of updates to identity pool is disabled. Bulk publish will also fail if StreamingStatus is DISABLED.</p>
+    /// <p>Status of the Cognito streams. Valid values are: <p>ENABLED - Streaming of updates to identity pool is enabled.</p> <p>DISABLED - Streaming of updates to identity pool is disabled. Bulk publish will also fail if StreamingStatus is DISABLED.</p></p>
     #[serde(rename = "StreamingStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub streaming_status: Option<String>,
 }
 
-/// A collection of data for an identity pool. An identity pool can have multiple datasets. A dataset is per identity and can be general or associated with a particular entity in an application (like a saved game). Datasets are automatically created if they don't exist. Data is synced by dataset, and a dataset can hold up to 1MB of key-value pairs.
+/// <p>A collection of data for an identity pool. An identity pool can have multiple datasets. A dataset is per identity and can be general or associated with a particular entity in an application (like a saved game). Datasets are automatically created if they don&#39;t exist. Data is synced by dataset, and a dataset can hold up to 1MB of key-value pairs.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Dataset {
-    /// Date on which the dataset was created.
+    /// <p>Date on which the dataset was created.</p>
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
-    /// Total size in bytes of the records in this dataset.
+    /// <p>Total size in bytes of the records in this dataset.</p>
     #[serde(rename = "DataStorage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_storage: Option<i64>,
-    /// A string of up to 128 characters. Allowed characters are a-z, A-Z, 0-9, '_' (underscore), '-' (dash), and '.' (dot).
+    /// <p>A string of up to 128 characters. Allowed characters are a-z, A-Z, 0-9, &#39;_&#39; (underscore), &#39;-&#39; (dash), and &#39;.&#39; (dot).</p>
     #[serde(rename = "DatasetName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dataset_name: Option<String>,
-    /// A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.
+    /// <p>A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.</p>
     #[serde(rename = "IdentityId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_id: Option<String>,
-    /// The device that made the last change to this dataset.
+    /// <p>The device that made the last change to this dataset.</p>
     #[serde(rename = "LastModifiedBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_by: Option<String>,
-    /// Date when the dataset was last modified.
+    /// <p>Date when the dataset was last modified.</p>
     #[serde(rename = "LastModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_date: Option<f64>,
-    /// Number of records in this dataset.
+    /// <p>Number of records in this dataset.</p>
     #[serde(rename = "NumRecords")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub num_records: Option<i64>,
 }
 
-/// A request to delete the specific dataset.
+/// <p>A request to delete the specific dataset.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteDatasetRequest {
-    /// A string of up to 128 characters. Allowed characters are a-z, A-Z, 0-9, '_' (underscore), '-' (dash), and '.' (dot).
+    /// <p>A string of up to 128 characters. Allowed characters are a-z, A-Z, 0-9, &#39;_&#39; (underscore), &#39;-&#39; (dash), and &#39;.&#39; (dot).</p>
     #[serde(rename = "DatasetName")]
     pub dataset_name: String,
-    /// A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.
+    /// <p>A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.</p>
     #[serde(rename = "IdentityId")]
     pub identity_id: String,
-    /// A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.
+    /// <p>A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.</p>
     #[serde(rename = "IdentityPoolId")]
     pub identity_pool_id: String,
 }
 
-/// Response to a successful DeleteDataset request.
+/// <p>Response to a successful DeleteDataset request.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteDatasetResponse {
-    /// A collection of data for an identity pool. An identity pool can have multiple datasets. A dataset is per identity and can be general or associated with a particular entity in an application (like a saved game). Datasets are automatically created if they don't exist. Data is synced by dataset, and a dataset can hold up to 1MB of key-value pairs.
+    /// <p>A collection of data for an identity pool. An identity pool can have multiple datasets. A dataset is per identity and can be general or associated with a particular entity in an application (like a saved game). Datasets are automatically created if they don&#39;t exist. Data is synced by dataset, and a dataset can hold up to 1MB of key-value pairs.</p>
     #[serde(rename = "Dataset")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dataset: Option<Dataset>,
 }
 
-/// A request for meta data about a dataset (creation date, number of records, size) by owner and dataset name.
+/// <p>A request for meta data about a dataset (creation date, number of records, size) by owner and dataset name.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeDatasetRequest {
-    /// A string of up to 128 characters. Allowed characters are a-z, A-Z, 0-9, '_' (underscore), '-' (dash), and '.' (dot).
+    /// <p>A string of up to 128 characters. Allowed characters are a-z, A-Z, 0-9, &#39;_&#39; (underscore), &#39;-&#39; (dash), and &#39;.&#39; (dot).</p>
     #[serde(rename = "DatasetName")]
     pub dataset_name: String,
-    /// A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.
+    /// <p>A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.</p>
     #[serde(rename = "IdentityId")]
     pub identity_id: String,
-    /// A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.
+    /// <p>A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.</p>
     #[serde(rename = "IdentityPoolId")]
     pub identity_pool_id: String,
 }
 
-/// Response to a successful DescribeDataset request.
+/// <p>Response to a successful DescribeDataset request.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeDatasetResponse {
-    /// Meta data for a collection of data for an identity. An identity can have multiple datasets. A dataset can be general or associated with a particular entity in an application (like a saved game). Datasets are automatically created if they don't exist. Data is synced by dataset, and a dataset can hold up to 1MB of key-value pairs.
+    /// <p>Meta data for a collection of data for an identity. An identity can have multiple datasets. A dataset can be general or associated with a particular entity in an application (like a saved game). Datasets are automatically created if they don&#39;t exist. Data is synced by dataset, and a dataset can hold up to 1MB of key-value pairs.</p>
     #[serde(rename = "Dataset")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dataset: Option<Dataset>,
 }
 
-/// A request for usage information about the identity pool.
+/// <p>A request for usage information about the identity pool.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeIdentityPoolUsageRequest {
-    /// A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.
+    /// <p>A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.</p>
     #[serde(rename = "IdentityPoolId")]
     pub identity_pool_id: String,
 }
 
-/// Response to a successful DescribeIdentityPoolUsage request.
+/// <p>Response to a successful DescribeIdentityPoolUsage request.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeIdentityPoolUsageResponse {
-    /// Information about the usage of the identity pool.
+    /// <p>Information about the usage of the identity pool.</p>
     #[serde(rename = "IdentityPoolUsage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_pool_usage: Option<IdentityPoolUsage>,
 }
 
-/// A request for information about the usage of an identity pool.
+/// <p>A request for information about the usage of an identity pool.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeIdentityUsageRequest {
-    /// A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.
+    /// <p>A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.</p>
     #[serde(rename = "IdentityId")]
     pub identity_id: String,
-    /// A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.
+    /// <p>A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.</p>
     #[serde(rename = "IdentityPoolId")]
     pub identity_pool_id: String,
 }
 
-/// The response to a successful DescribeIdentityUsage request.
+/// <p>The response to a successful DescribeIdentityUsage request.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeIdentityUsageResponse {
-    /// Usage information for the identity.
+    /// <p>Usage information for the identity.</p>
     #[serde(rename = "IdentityUsage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_usage: Option<IdentityUsage>,
 }
 
-/// The input for the GetBulkPublishDetails operation.
+/// <p>The input for the GetBulkPublishDetails operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetBulkPublishDetailsRequest {
-    /// A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.
+    /// <p>A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.</p>
     #[serde(rename = "IdentityPoolId")]
     pub identity_pool_id: String,
 }
 
-/// The output for the GetBulkPublishDetails operation.
+/// <p>The output for the GetBulkPublishDetails operation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetBulkPublishDetailsResponse {
-    /// If BulkPublishStatus is SUCCEEDED, the time the last bulk publish operation completed.
+    /// <p>If BulkPublishStatus is SUCCEEDED, the time the last bulk publish operation completed.</p>
     #[serde(rename = "BulkPublishCompleteTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bulk_publish_complete_time: Option<f64>,
-    /// The date/time at which the last bulk publish was initiated.
+    /// <p>The date/time at which the last bulk publish was initiated.</p>
     #[serde(rename = "BulkPublishStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bulk_publish_start_time: Option<f64>,
-    /// Status of the last bulk publish operation, valid values are: <p>NOT_STARTED - No bulk publish has been requested for this identity pool</p> <p>IN_PROGRESS - Data is being published to the configured stream</p> <p>SUCCEEDED - All data for the identity pool has been published to the configured stream</p> <p>FAILED - Some portion of the data has failed to publish, check FailureMessage for the cause.</p>
+    /// <p>Status of the last bulk publish operation, valid values are: <p>NOT<em>STARTED - No bulk publish has been requested for this identity pool</p> <p>IN</em>PROGRESS - Data is being published to the configured stream</p> <p>SUCCEEDED - All data for the identity pool has been published to the configured stream</p> <p>FAILED - Some portion of the data has failed to publish, check FailureMessage for the cause.</p></p>
     #[serde(rename = "BulkPublishStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bulk_publish_status: Option<String>,
-    /// If BulkPublishStatus is FAILED this field will contain the error message that caused the bulk publish to fail.
+    /// <p>If BulkPublishStatus is FAILED this field will contain the error message that caused the bulk publish to fail.</p>
     #[serde(rename = "FailureMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_message: Option<String>,
-    /// A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.
+    /// <p>A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.</p>
     #[serde(rename = "IdentityPoolId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_pool_id: Option<String>,
@@ -239,7 +239,7 @@ pub struct GetIdentityPoolConfigurationRequest {
 /// <p>The output for the GetIdentityPoolConfiguration operation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetIdentityPoolConfigurationResponse {
-    /// Options to apply to this identity pool for Amazon Cognito streams.
+    /// <p>Options to apply to this identity pool for Amazon Cognito streams.</p>
     #[serde(rename = "CognitoStreams")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cognito_streams: Option<CognitoStreams>,
@@ -253,188 +253,188 @@ pub struct GetIdentityPoolConfigurationResponse {
     pub push_sync: Option<PushSync>,
 }
 
-/// Usage information for the identity pool.
+/// <p>Usage information for the identity pool.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct IdentityPoolUsage {
-    /// Data storage information for the identity pool.
+    /// <p>Data storage information for the identity pool.</p>
     #[serde(rename = "DataStorage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_storage: Option<i64>,
-    /// A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.
+    /// <p>A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.</p>
     #[serde(rename = "IdentityPoolId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_pool_id: Option<String>,
-    /// Date on which the identity pool was last modified.
+    /// <p>Date on which the identity pool was last modified.</p>
     #[serde(rename = "LastModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_date: Option<f64>,
-    /// Number of sync sessions for the identity pool.
+    /// <p>Number of sync sessions for the identity pool.</p>
     #[serde(rename = "SyncSessionsCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sync_sessions_count: Option<i64>,
 }
 
-/// Usage information for the identity.
+/// <p>Usage information for the identity.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct IdentityUsage {
-    /// Total data storage for this identity.
+    /// <p>Total data storage for this identity.</p>
     #[serde(rename = "DataStorage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_storage: Option<i64>,
-    /// Number of datasets for the identity.
+    /// <p>Number of datasets for the identity.</p>
     #[serde(rename = "DatasetCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dataset_count: Option<i64>,
-    /// A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.
+    /// <p>A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.</p>
     #[serde(rename = "IdentityId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_id: Option<String>,
-    /// A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.
+    /// <p>A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.</p>
     #[serde(rename = "IdentityPoolId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_pool_id: Option<String>,
-    /// Date on which the identity was last modified.
+    /// <p>Date on which the identity was last modified.</p>
     #[serde(rename = "LastModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_date: Option<f64>,
 }
 
-/// Request for a list of datasets for an identity.
+/// <p>Request for a list of datasets for an identity.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListDatasetsRequest {
-    /// A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.
+    /// <p>A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.</p>
     #[serde(rename = "IdentityId")]
     pub identity_id: String,
-    /// A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.
+    /// <p>A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.</p>
     #[serde(rename = "IdentityPoolId")]
     pub identity_pool_id: String,
-    /// The maximum number of results to be returned.
+    /// <p>The maximum number of results to be returned.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// A pagination token for obtaining the next page of results.
+    /// <p>A pagination token for obtaining the next page of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-/// Returned for a successful ListDatasets request.
+/// <p>Returned for a successful ListDatasets request.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListDatasetsResponse {
-    /// Number of datasets returned.
+    /// <p>Number of datasets returned.</p>
     #[serde(rename = "Count")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub count: Option<i64>,
-    /// A set of datasets.
+    /// <p>A set of datasets.</p>
     #[serde(rename = "Datasets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub datasets: Option<Vec<Dataset>>,
-    /// A pagination token for obtaining the next page of results.
+    /// <p>A pagination token for obtaining the next page of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-/// A request for usage information on an identity pool.
+/// <p>A request for usage information on an identity pool.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListIdentityPoolUsageRequest {
-    /// The maximum number of results to be returned.
+    /// <p>The maximum number of results to be returned.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// A pagination token for obtaining the next page of results.
+    /// <p>A pagination token for obtaining the next page of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-/// Returned for a successful ListIdentityPoolUsage request.
+/// <p>Returned for a successful ListIdentityPoolUsage request.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListIdentityPoolUsageResponse {
-    /// Total number of identities for the identity pool.
+    /// <p>Total number of identities for the identity pool.</p>
     #[serde(rename = "Count")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub count: Option<i64>,
-    /// Usage information for the identity pools.
+    /// <p>Usage information for the identity pools.</p>
     #[serde(rename = "IdentityPoolUsages")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_pool_usages: Option<Vec<IdentityPoolUsage>>,
-    /// The maximum number of results to be returned.
+    /// <p>The maximum number of results to be returned.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// A pagination token for obtaining the next page of results.
+    /// <p>A pagination token for obtaining the next page of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-/// A request for a list of records.
+/// <p>A request for a list of records.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListRecordsRequest {
-    /// A string of up to 128 characters. Allowed characters are a-z, A-Z, 0-9, '_' (underscore), '-' (dash), and '.' (dot).
+    /// <p>A string of up to 128 characters. Allowed characters are a-z, A-Z, 0-9, &#39;_&#39; (underscore), &#39;-&#39; (dash), and &#39;.&#39; (dot).</p>
     #[serde(rename = "DatasetName")]
     pub dataset_name: String,
-    /// A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.
+    /// <p>A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.</p>
     #[serde(rename = "IdentityId")]
     pub identity_id: String,
-    /// A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.
+    /// <p>A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.</p>
     #[serde(rename = "IdentityPoolId")]
     pub identity_pool_id: String,
-    /// The last server sync count for this record.
+    /// <p>The last server sync count for this record.</p>
     #[serde(rename = "LastSyncCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_sync_count: Option<i64>,
-    /// The maximum number of results to be returned.
+    /// <p>The maximum number of results to be returned.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// A pagination token for obtaining the next page of results.
+    /// <p>A pagination token for obtaining the next page of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// A token containing a session ID, identity ID, and expiration.
+    /// <p>A token containing a session ID, identity ID, and expiration.</p>
     #[serde(rename = "SyncSessionToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sync_session_token: Option<String>,
 }
 
-/// Returned for a successful ListRecordsRequest.
+/// <p>Returned for a successful ListRecordsRequest.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListRecordsResponse {
-    /// Total number of records.
+    /// <p>Total number of records.</p>
     #[serde(rename = "Count")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub count: Option<i64>,
-    /// A boolean value specifying whether to delete the dataset locally.
+    /// <p>A boolean value specifying whether to delete the dataset locally.</p>
     #[serde(rename = "DatasetDeletedAfterRequestedSyncCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dataset_deleted_after_requested_sync_count: Option<bool>,
-    /// Indicates whether the dataset exists.
+    /// <p>Indicates whether the dataset exists.</p>
     #[serde(rename = "DatasetExists")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dataset_exists: Option<bool>,
-    /// Server sync count for this dataset.
+    /// <p>Server sync count for this dataset.</p>
     #[serde(rename = "DatasetSyncCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dataset_sync_count: Option<i64>,
-    /// The user/device that made the last change to this record.
+    /// <p>The user/device that made the last change to this record.</p>
     #[serde(rename = "LastModifiedBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_by: Option<String>,
-    /// Names of merged datasets.
+    /// <p>Names of merged datasets.</p>
     #[serde(rename = "MergedDatasetNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub merged_dataset_names: Option<Vec<String>>,
-    /// A pagination token for obtaining the next page of results.
+    /// <p>A pagination token for obtaining the next page of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// A list of all records.
+    /// <p>A list of all records.</p>
     #[serde(rename = "Records")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub records: Option<Vec<Record>>,
-    /// A token containing a session ID, identity ID, and expiration.
+    /// <p>A token containing a session ID, identity ID, and expiration.</p>
     #[serde(rename = "SyncSessionToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sync_session_token: Option<String>,
@@ -453,52 +453,52 @@ pub struct PushSync {
     pub role_arn: Option<String>,
 }
 
-/// The basic data structure of a dataset.
+/// <p>The basic data structure of a dataset.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Record {
-    /// The last modified date of the client device.
+    /// <p>The last modified date of the client device.</p>
     #[serde(rename = "DeviceLastModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub device_last_modified_date: Option<f64>,
-    /// The key for the record.
+    /// <p>The key for the record.</p>
     #[serde(rename = "Key")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    /// The user/device that made the last change to this record.
+    /// <p>The user/device that made the last change to this record.</p>
     #[serde(rename = "LastModifiedBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_by: Option<String>,
-    /// The date on which the record was last modified.
+    /// <p>The date on which the record was last modified.</p>
     #[serde(rename = "LastModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_date: Option<f64>,
-    /// The server sync count for this record.
+    /// <p>The server sync count for this record.</p>
     #[serde(rename = "SyncCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sync_count: Option<i64>,
-    /// The value for the record.
+    /// <p>The value for the record.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-/// An update operation for a record.
+/// <p>An update operation for a record.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct RecordPatch {
-    /// The last modified date of the client device.
+    /// <p>The last modified date of the client device.</p>
     #[serde(rename = "DeviceLastModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub device_last_modified_date: Option<f64>,
-    /// The key associated with the record patch.
+    /// <p>The key associated with the record patch.</p>
     #[serde(rename = "Key")]
     pub key: String,
-    /// An operation, either replace or remove.
+    /// <p>An operation, either replace or remove.</p>
     #[serde(rename = "Op")]
     pub op: String,
-    /// Last known server sync count for this record. Set to 0 if unknown.
+    /// <p>Last known server sync count for this record. Set to 0 if unknown.</p>
     #[serde(rename = "SyncCount")]
     pub sync_count: i64,
-    /// The value associated with the record patch.
+    /// <p>The value associated with the record patch.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
@@ -530,7 +530,7 @@ pub struct RegisterDeviceResponse {
     pub device_id: Option<String>,
 }
 
-/// <p>A request to configure Cognito Events"</p>"
+/// <p>A request to configure Cognito Events</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct SetCognitoEventsRequest {
     /// <p>The events to configure</p>
@@ -544,7 +544,7 @@ pub struct SetCognitoEventsRequest {
 /// <p>The input for the SetIdentityPoolConfiguration operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct SetIdentityPoolConfigurationRequest {
-    /// Options to apply to this identity pool for Amazon Cognito streams.
+    /// <p>Options to apply to this identity pool for Amazon Cognito streams.</p>
     #[serde(rename = "CognitoStreams")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cognito_streams: Option<CognitoStreams>,
@@ -560,7 +560,7 @@ pub struct SetIdentityPoolConfigurationRequest {
 /// <p>The output for the SetIdentityPoolConfiguration operation</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct SetIdentityPoolConfigurationResponse {
-    /// Options to apply to this identity pool for Amazon Cognito streams.
+    /// <p>Options to apply to this identity pool for Amazon Cognito streams.</p>
     #[serde(rename = "CognitoStreams")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cognito_streams: Option<CognitoStreams>,
@@ -616,39 +616,39 @@ pub struct UnsubscribeFromDatasetRequest {
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UnsubscribeFromDatasetResponse;
 
-/// A request to post updates to records or add and delete records for a dataset and user.
+/// <p>A request to post updates to records or add and delete records for a dataset and user.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateRecordsRequest {
-    /// Intended to supply a device ID that will populate the lastModifiedBy field referenced in other methods. The ClientContext field is not yet implemented.
+    /// <p>Intended to supply a device ID that will populate the lastModifiedBy field referenced in other methods. The ClientContext field is not yet implemented.</p>
     #[serde(rename = "ClientContext")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_context: Option<String>,
-    /// A string of up to 128 characters. Allowed characters are a-z, A-Z, 0-9, '_' (underscore), '-' (dash), and '.' (dot).
+    /// <p>A string of up to 128 characters. Allowed characters are a-z, A-Z, 0-9, &#39;_&#39; (underscore), &#39;-&#39; (dash), and &#39;.&#39; (dot).</p>
     #[serde(rename = "DatasetName")]
     pub dataset_name: String,
     /// <p>The unique ID generated for this device by Cognito.</p>
     #[serde(rename = "DeviceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub device_id: Option<String>,
-    /// A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.
+    /// <p>A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.</p>
     #[serde(rename = "IdentityId")]
     pub identity_id: String,
-    /// A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.
+    /// <p>A name-spaced GUID (for example, us-east-1:23EC4050-6AEA-7089-A2DD-08002EXAMPLE) created by Amazon Cognito. GUID generation is unique within a region.</p>
     #[serde(rename = "IdentityPoolId")]
     pub identity_pool_id: String,
-    /// A list of patch operations.
+    /// <p>A list of patch operations.</p>
     #[serde(rename = "RecordPatches")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub record_patches: Option<Vec<RecordPatch>>,
-    /// The SyncSessionToken returned by a previous call to ListRecords for this dataset and identity.
+    /// <p>The SyncSessionToken returned by a previous call to ListRecords for this dataset and identity.</p>
     #[serde(rename = "SyncSessionToken")]
     pub sync_session_token: String,
 }
 
-/// Returned for a successful UpdateRecordsRequest.
+/// <p>Returned for a successful UpdateRecordsRequest.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateRecordsResponse {
-    /// A list of records that have been updated.
+    /// <p>A list of records that have been updated.</p>
     #[serde(rename = "Records")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub records: Option<Vec<Record>>,
@@ -657,17 +657,17 @@ pub struct UpdateRecordsResponse {
 /// Errors returned by BulkPublish
 #[derive(Debug, PartialEq)]
 pub enum BulkPublishError {
-    ///An exception thrown when a bulk publish operation is requested less than 24 hours after a previous bulk publish operation completed successfully.
+    /// <p>An exception thrown when a bulk publish operation is requested less than 24 hours after a previous bulk publish operation completed successfully.</p>
     AlreadyStreamed(String),
-    ///An exception thrown when there is an IN_PROGRESS bulk publish operation for the given identity pool.
+    /// <p>An exception thrown when there is an IN_PROGRESS bulk publish operation for the given identity pool.</p>
     DuplicateRequest(String),
-    ///Indicates an internal service error.
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///Thrown if the resource doesn't exist.
+    /// <p>Thrown if the resource doesn&#39;t exist.</p>
     ResourceNotFound(String),
-    ///Thrown when a request parameter does not comply with the associated constraints.
+    /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///Thrown when a user is not authorized to access the requested resource.
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -765,17 +765,17 @@ impl Error for BulkPublishError {
 /// Errors returned by DeleteDataset
 #[derive(Debug, PartialEq)]
 pub enum DeleteDatasetError {
-    ///Indicates an internal service error.
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///Thrown if an update can't be applied because the resource was changed by another call and this would result in a conflict.
+    /// <p>Thrown if an update can&#39;t be applied because the resource was changed by another call and this would result in a conflict.</p>
     ResourceConflict(String),
-    ///Thrown if the request is throttled.
+    /// <p>Thrown if the request is throttled.</p>
     TooManyRequests(String),
-    ///Thrown if the resource doesn't exist.
+    /// <p>Thrown if the resource doesn&#39;t exist.</p>
     ResourceNotFound(String),
-    ///Thrown when a request parameter does not comply with the associated constraints.
+    /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///Thrown when a user is not authorized to access the requested resource.
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -873,15 +873,15 @@ impl Error for DeleteDatasetError {
 /// Errors returned by DescribeDataset
 #[derive(Debug, PartialEq)]
 pub enum DescribeDatasetError {
-    ///Indicates an internal service error.
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///Thrown if the request is throttled.
+    /// <p>Thrown if the request is throttled.</p>
     TooManyRequests(String),
-    ///Thrown if the resource doesn't exist.
+    /// <p>Thrown if the resource doesn&#39;t exist.</p>
     ResourceNotFound(String),
-    ///Thrown when a request parameter does not comply with the associated constraints.
+    /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///Thrown when a user is not authorized to access the requested resource.
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -975,15 +975,15 @@ impl Error for DescribeDatasetError {
 /// Errors returned by DescribeIdentityPoolUsage
 #[derive(Debug, PartialEq)]
 pub enum DescribeIdentityPoolUsageError {
-    ///Indicates an internal service error.
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///Thrown if the request is throttled.
+    /// <p>Thrown if the request is throttled.</p>
     TooManyRequests(String),
-    ///Thrown if the resource doesn't exist.
+    /// <p>Thrown if the resource doesn&#39;t exist.</p>
     ResourceNotFound(String),
-    ///Thrown when a request parameter does not comply with the associated constraints.
+    /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///Thrown when a user is not authorized to access the requested resource.
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1083,15 +1083,15 @@ impl Error for DescribeIdentityPoolUsageError {
 /// Errors returned by DescribeIdentityUsage
 #[derive(Debug, PartialEq)]
 pub enum DescribeIdentityUsageError {
-    ///Indicates an internal service error.
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///Thrown if the request is throttled.
+    /// <p>Thrown if the request is throttled.</p>
     TooManyRequests(String),
-    ///Thrown if the resource doesn't exist.
+    /// <p>Thrown if the resource doesn&#39;t exist.</p>
     ResourceNotFound(String),
-    ///Thrown when a request parameter does not comply with the associated constraints.
+    /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///Thrown when a user is not authorized to access the requested resource.
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1187,13 +1187,13 @@ impl Error for DescribeIdentityUsageError {
 /// Errors returned by GetBulkPublishDetails
 #[derive(Debug, PartialEq)]
 pub enum GetBulkPublishDetailsError {
-    ///Indicates an internal service error.
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///Thrown if the resource doesn't exist.
+    /// <p>Thrown if the resource doesn&#39;t exist.</p>
     ResourceNotFound(String),
-    ///Thrown when a request parameter does not comply with the associated constraints.
+    /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///Thrown when a user is not authorized to access the requested resource.
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1285,15 +1285,15 @@ impl Error for GetBulkPublishDetailsError {
 /// Errors returned by GetCognitoEvents
 #[derive(Debug, PartialEq)]
 pub enum GetCognitoEventsError {
-    ///Indicates an internal service error.
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///Thrown if the request is throttled.
+    /// <p>Thrown if the request is throttled.</p>
     TooManyRequests(String),
-    ///Thrown if the resource doesn't exist.
+    /// <p>Thrown if the resource doesn&#39;t exist.</p>
     ResourceNotFound(String),
-    ///Thrown when a request parameter does not comply with the associated constraints.
+    /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///Thrown when a user is not authorized to access the requested resource.
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1387,15 +1387,15 @@ impl Error for GetCognitoEventsError {
 /// Errors returned by GetIdentityPoolConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetIdentityPoolConfigurationError {
-    ///Indicates an internal service error.
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///Thrown if the request is throttled.
+    /// <p>Thrown if the request is throttled.</p>
     TooManyRequests(String),
-    ///Thrown if the resource doesn't exist.
+    /// <p>Thrown if the resource doesn&#39;t exist.</p>
     ResourceNotFound(String),
-    ///Thrown when a request parameter does not comply with the associated constraints.
+    /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///Thrown when a user is not authorized to access the requested resource.
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1497,13 +1497,13 @@ impl Error for GetIdentityPoolConfigurationError {
 /// Errors returned by ListDatasets
 #[derive(Debug, PartialEq)]
 pub enum ListDatasetsError {
-    ///Indicates an internal service error.
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///Thrown if the request is throttled.
+    /// <p>Thrown if the request is throttled.</p>
     TooManyRequests(String),
-    ///Thrown when a request parameter does not comply with the associated constraints.
+    /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///Thrown when a user is not authorized to access the requested resource.
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1593,13 +1593,13 @@ impl Error for ListDatasetsError {
 /// Errors returned by ListIdentityPoolUsage
 #[derive(Debug, PartialEq)]
 pub enum ListIdentityPoolUsageError {
-    ///Indicates an internal service error.
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///Thrown if the request is throttled.
+    /// <p>Thrown if the request is throttled.</p>
     TooManyRequests(String),
-    ///Thrown when a request parameter does not comply with the associated constraints.
+    /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///Thrown when a user is not authorized to access the requested resource.
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1691,13 +1691,13 @@ impl Error for ListIdentityPoolUsageError {
 /// Errors returned by ListRecords
 #[derive(Debug, PartialEq)]
 pub enum ListRecordsError {
-    ///Indicates an internal service error.
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///Thrown if the request is throttled.
+    /// <p>Thrown if the request is throttled.</p>
     TooManyRequests(String),
-    ///Thrown when a request parameter does not comply with the associated constraints.
+    /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///Thrown when a user is not authorized to access the requested resource.
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1787,17 +1787,16 @@ impl Error for ListRecordsError {
 /// Errors returned by RegisterDevice
 #[derive(Debug, PartialEq)]
 pub enum RegisterDeviceError {
-    ///
     InvalidConfiguration(String),
-    ///Indicates an internal service error.
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///Thrown if the request is throttled.
+    /// <p>Thrown if the request is throttled.</p>
     TooManyRequests(String),
-    ///Thrown if the resource doesn't exist.
+    /// <p>Thrown if the resource doesn&#39;t exist.</p>
     ResourceNotFound(String),
-    ///Thrown when a request parameter does not comply with the associated constraints.
+    /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///Thrown when a user is not authorized to access the requested resource.
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1895,15 +1894,15 @@ impl Error for RegisterDeviceError {
 /// Errors returned by SetCognitoEvents
 #[derive(Debug, PartialEq)]
 pub enum SetCognitoEventsError {
-    ///Indicates an internal service error.
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///Thrown if the request is throttled.
+    /// <p>Thrown if the request is throttled.</p>
     TooManyRequests(String),
-    ///Thrown if the resource doesn't exist.
+    /// <p>Thrown if the resource doesn&#39;t exist.</p>
     ResourceNotFound(String),
-    ///Thrown when a request parameter does not comply with the associated constraints.
+    /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///Thrown when a user is not authorized to access the requested resource.
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1997,17 +1996,17 @@ impl Error for SetCognitoEventsError {
 /// Errors returned by SetIdentityPoolConfiguration
 #[derive(Debug, PartialEq)]
 pub enum SetIdentityPoolConfigurationError {
-    ///<p>Thrown if there are parallel requests to modify a resource.</p>
+    /// <p>Thrown if there are parallel requests to modify a resource.</p>
     ConcurrentModification(String),
-    ///Indicates an internal service error.
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///Thrown if the request is throttled.
+    /// <p>Thrown if the request is throttled.</p>
     TooManyRequests(String),
-    ///Thrown if the resource doesn't exist.
+    /// <p>Thrown if the resource doesn&#39;t exist.</p>
     ResourceNotFound(String),
-    ///Thrown when a request parameter does not comply with the associated constraints.
+    /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///Thrown when a user is not authorized to access the requested resource.
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2115,17 +2114,16 @@ impl Error for SetIdentityPoolConfigurationError {
 /// Errors returned by SubscribeToDataset
 #[derive(Debug, PartialEq)]
 pub enum SubscribeToDatasetError {
-    ///
     InvalidConfiguration(String),
-    ///Indicates an internal service error.
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///Thrown if the request is throttled.
+    /// <p>Thrown if the request is throttled.</p>
     TooManyRequests(String),
-    ///Thrown if the resource doesn't exist.
+    /// <p>Thrown if the resource doesn&#39;t exist.</p>
     ResourceNotFound(String),
-    ///Thrown when a request parameter does not comply with the associated constraints.
+    /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///Thrown when a user is not authorized to access the requested resource.
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2225,17 +2223,16 @@ impl Error for SubscribeToDatasetError {
 /// Errors returned by UnsubscribeFromDataset
 #[derive(Debug, PartialEq)]
 pub enum UnsubscribeFromDatasetError {
-    ///
     InvalidConfiguration(String),
-    ///Indicates an internal service error.
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///Thrown if the request is throttled.
+    /// <p>Thrown if the request is throttled.</p>
     TooManyRequests(String),
-    ///Thrown if the resource doesn't exist.
+    /// <p>Thrown if the resource doesn&#39;t exist.</p>
     ResourceNotFound(String),
-    ///Thrown when a request parameter does not comply with the associated constraints.
+    /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///Thrown when a user is not authorized to access the requested resource.
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2337,23 +2334,23 @@ impl Error for UnsubscribeFromDatasetError {
 /// Errors returned by UpdateRecords
 #[derive(Debug, PartialEq)]
 pub enum UpdateRecordsError {
-    ///<p>AWS Lambda throttled your account, please contact AWS Support</p>
+    /// <p>AWS Lambda throttled your account, please contact AWS Support</p>
     LambdaThrottled(String),
-    ///<p>The AWS Lambda function returned invalid output or an exception.</p>
+    /// <p>The AWS Lambda function returned invalid output or an exception.</p>
     InvalidLambdaFunctionOutput(String),
-    ///Indicates an internal service error.
+    /// <p>Indicates an internal service error.</p>
     InternalError(String),
-    ///Thrown if an update can't be applied because the resource was changed by another call and this would result in a conflict.
+    /// <p>Thrown if an update can&#39;t be applied because the resource was changed by another call and this would result in a conflict.</p>
     ResourceConflict(String),
-    ///Thrown if the request is throttled.
+    /// <p>Thrown if the request is throttled.</p>
     TooManyRequests(String),
-    ///Thrown if the resource doesn't exist.
+    /// <p>Thrown if the resource doesn&#39;t exist.</p>
     ResourceNotFound(String),
-    ///Thrown when a request parameter does not comply with the associated constraints.
+    /// <p>Thrown when a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    ///Thrown when a user is not authorized to access the requested resource.
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
     NotAuthorized(String),
-    ///Thrown when the limit on the number of objects or operations has been exceeded.
+    /// <p>Thrown when the limit on the number of objects or operations has been exceeded.</p>
     LimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2462,103 +2459,103 @@ impl Error for UpdateRecordsError {
 }
 /// Trait representing the capabilities of the Amazon Cognito Sync API. Amazon Cognito Sync clients implement this trait.
 pub trait CognitoSync {
-    #[doc="<p>Initiates a bulk publish of all existing datasets for an Identity Pool to the configured stream. Customers are limited to one successful bulk publish per 24 hours. Bulk publish is an asynchronous request, customers can see the status of the request via the GetBulkPublishDetails operation.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>"]
+    /// <p>Initiates a bulk publish of all existing datasets for an Identity Pool to the configured stream. Customers are limited to one successful bulk publish per 24 hours. Bulk publish is an asynchronous request, customers can see the status of the request via the GetBulkPublishDetails operation.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
     fn bulk_publish(
         &self,
         input: &BulkPublishRequest,
     ) -> Result<BulkPublishResponse, BulkPublishError>;
 
-    #[doc="<p>Deletes the specific dataset. The dataset will be deleted permanently, and the action can't be undone. Datasets that this dataset was merged with will no longer report the merge. Any subsequent operation on this dataset will result in a ResourceNotFoundException.</p> <p>This API can be called with temporary user credentials provided by Cognito Identity or with developer credentials.</p>"]
+    /// <p>Deletes the specific dataset. The dataset will be deleted permanently, and the action can't be undone. Datasets that this dataset was merged with will no longer report the merge. Any subsequent operation on this dataset will result in a ResourceNotFoundException.</p> <p>This API can be called with temporary user credentials provided by Cognito Identity or with developer credentials.</p>
     fn delete_dataset(
         &self,
         input: &DeleteDatasetRequest,
     ) -> Result<DeleteDatasetResponse, DeleteDatasetError>;
 
-    #[doc="<p>Gets meta data about a dataset by identity and dataset name. With Amazon Cognito Sync, each identity has access only to its own data. Thus, the credentials used to make this API call need to have access to the identity data.</p> <p>This API can be called with temporary user credentials provided by Cognito Identity or with developer credentials. You should use Cognito Identity credentials to make this API call.</p>"]
+    /// <p>Gets meta data about a dataset by identity and dataset name. With Amazon Cognito Sync, each identity has access only to its own data. Thus, the credentials used to make this API call need to have access to the identity data.</p> <p>This API can be called with temporary user credentials provided by Cognito Identity or with developer credentials. You should use Cognito Identity credentials to make this API call.</p>
     fn describe_dataset(
         &self,
         input: &DescribeDatasetRequest,
     ) -> Result<DescribeDatasetResponse, DescribeDatasetError>;
 
-    #[doc="<p>Gets usage details (for example, data storage) about a particular identity pool.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>"]
+    /// <p>Gets usage details (for example, data storage) about a particular identity pool.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
     fn describe_identity_pool_usage(
         &self,
         input: &DescribeIdentityPoolUsageRequest,
     ) -> Result<DescribeIdentityPoolUsageResponse, DescribeIdentityPoolUsageError>;
 
-    #[doc="<p>Gets usage information for an identity, including number of datasets and data usage.</p> <p>This API can be called with temporary user credentials provided by Cognito Identity or with developer credentials.</p>"]
+    /// <p>Gets usage information for an identity, including number of datasets and data usage.</p> <p>This API can be called with temporary user credentials provided by Cognito Identity or with developer credentials.</p>
     fn describe_identity_usage(
         &self,
         input: &DescribeIdentityUsageRequest,
     ) -> Result<DescribeIdentityUsageResponse, DescribeIdentityUsageError>;
 
-    #[doc="<p>Get the status of the last BulkPublish operation for an identity pool.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>"]
+    /// <p>Get the status of the last BulkPublish operation for an identity pool.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
     fn get_bulk_publish_details(
         &self,
         input: &GetBulkPublishDetailsRequest,
     ) -> Result<GetBulkPublishDetailsResponse, GetBulkPublishDetailsError>;
 
-    #[doc="<p>Gets the events and the corresponding Lambda functions associated with an identity pool.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>"]
+    /// <p>Gets the events and the corresponding Lambda functions associated with an identity pool.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
     fn get_cognito_events(
         &self,
         input: &GetCognitoEventsRequest,
     ) -> Result<GetCognitoEventsResponse, GetCognitoEventsError>;
 
-    #[doc="<p>Gets the configuration settings of an identity pool.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>"]
+    /// <p>Gets the configuration settings of an identity pool.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
     fn get_identity_pool_configuration(
         &self,
         input: &GetIdentityPoolConfigurationRequest,
     ) -> Result<GetIdentityPoolConfigurationResponse, GetIdentityPoolConfigurationError>;
 
-    #[doc="<p>Lists datasets for an identity. With Amazon Cognito Sync, each identity has access only to its own data. Thus, the credentials used to make this API call need to have access to the identity data.</p> <p>ListDatasets can be called with temporary user credentials provided by Cognito Identity or with developer credentials. You should use the Cognito Identity credentials to make this API call.</p>"]
+    /// <p>Lists datasets for an identity. With Amazon Cognito Sync, each identity has access only to its own data. Thus, the credentials used to make this API call need to have access to the identity data.</p> <p>ListDatasets can be called with temporary user credentials provided by Cognito Identity or with developer credentials. You should use the Cognito Identity credentials to make this API call.</p>
     fn list_datasets(
         &self,
         input: &ListDatasetsRequest,
     ) -> Result<ListDatasetsResponse, ListDatasetsError>;
 
-    #[doc="<p>Gets a list of identity pools registered with Cognito.</p> <p>ListIdentityPoolUsage can only be called with developer credentials. You cannot make this API call with the temporary user credentials provided by Cognito Identity.</p>"]
+    /// <p>Gets a list of identity pools registered with Cognito.</p> <p>ListIdentityPoolUsage can only be called with developer credentials. You cannot make this API call with the temporary user credentials provided by Cognito Identity.</p>
     fn list_identity_pool_usage(
         &self,
         input: &ListIdentityPoolUsageRequest,
     ) -> Result<ListIdentityPoolUsageResponse, ListIdentityPoolUsageError>;
 
-    #[doc="<p>Gets paginated records, optionally changed after a particular sync count for a dataset and identity. With Amazon Cognito Sync, each identity has access only to its own data. Thus, the credentials used to make this API call need to have access to the identity data.</p> <p>ListRecords can be called with temporary user credentials provided by Cognito Identity or with developer credentials. You should use Cognito Identity credentials to make this API call.</p>"]
+    /// <p>Gets paginated records, optionally changed after a particular sync count for a dataset and identity. With Amazon Cognito Sync, each identity has access only to its own data. Thus, the credentials used to make this API call need to have access to the identity data.</p> <p>ListRecords can be called with temporary user credentials provided by Cognito Identity or with developer credentials. You should use Cognito Identity credentials to make this API call.</p>
     fn list_records(
         &self,
         input: &ListRecordsRequest,
     ) -> Result<ListRecordsResponse, ListRecordsError>;
 
-    #[doc="<p>Registers a device to receive push sync notifications.</p> <p>This API can only be called with temporary credentials provided by Cognito Identity. You cannot call this API with developer credentials.</p>"]
+    /// <p>Registers a device to receive push sync notifications.</p> <p>This API can only be called with temporary credentials provided by Cognito Identity. You cannot call this API with developer credentials.</p>
     fn register_device(
         &self,
         input: &RegisterDeviceRequest,
     ) -> Result<RegisterDeviceResponse, RegisterDeviceError>;
 
-    #[doc="<p>Sets the AWS Lambda function for a given event type for an identity pool. This request only updates the key/value pair specified. Other key/values pairs are not updated. To remove a key value pair, pass a empty value for the particular key.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>"]
+    /// <p>Sets the AWS Lambda function for a given event type for an identity pool. This request only updates the key/value pair specified. Other key/values pairs are not updated. To remove a key value pair, pass a empty value for the particular key.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
     fn set_cognito_events(
         &self,
         input: &SetCognitoEventsRequest,
     ) -> Result<(), SetCognitoEventsError>;
 
-    #[doc="<p>Sets the necessary configuration for push sync.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>"]
+    /// <p>Sets the necessary configuration for push sync.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
     fn set_identity_pool_configuration(
         &self,
         input: &SetIdentityPoolConfigurationRequest,
     ) -> Result<SetIdentityPoolConfigurationResponse, SetIdentityPoolConfigurationError>;
 
-    #[doc="<p>Subscribes to receive notifications when a dataset is modified by another device.</p> <p>This API can only be called with temporary credentials provided by Cognito Identity. You cannot call this API with developer credentials.</p>"]
+    /// <p>Subscribes to receive notifications when a dataset is modified by another device.</p> <p>This API can only be called with temporary credentials provided by Cognito Identity. You cannot call this API with developer credentials.</p>
     fn subscribe_to_dataset(
         &self,
         input: &SubscribeToDatasetRequest,
     ) -> Result<SubscribeToDatasetResponse, SubscribeToDatasetError>;
 
-    #[doc="<p>Unsubscribes from receiving notifications when a dataset is modified by another device.</p> <p>This API can only be called with temporary credentials provided by Cognito Identity. You cannot call this API with developer credentials.</p>"]
+    /// <p>Unsubscribes from receiving notifications when a dataset is modified by another device.</p> <p>This API can only be called with temporary credentials provided by Cognito Identity. You cannot call this API with developer credentials.</p>
     fn unsubscribe_from_dataset(
         &self,
         input: &UnsubscribeFromDatasetRequest,
     ) -> Result<UnsubscribeFromDatasetResponse, UnsubscribeFromDatasetError>;
 
-    #[doc="<p>Posts updates to records and adds and deletes records for a dataset and user.</p> <p>The sync count in the record patch is your last known sync count for that record. The server will reject an UpdateRecords request with a ResourceConflictException if you try to patch a record with a new value but a stale sync count.</p> <p>For example, if the sync count on the server is 5 for a key called highScore and you try and submit a new highScore with sync count of 4, the request will be rejected. To obtain the current sync count for a record, call ListRecords. On a successful update of the record, the response returns the new sync count for that record. You should present that sync count the next time you try to update that same record. When the record does not exist, specify the sync count as 0.</p> <p>This API can be called with temporary user credentials provided by Cognito Identity or with developer credentials.</p>"]
+    /// <p>Posts updates to records and adds and deletes records for a dataset and user.</p> <p>The sync count in the record patch is your last known sync count for that record. The server will reject an UpdateRecords request with a ResourceConflictException if you try to patch a record with a new value but a stale sync count.</p> <p>For example, if the sync count on the server is 5 for a key called highScore and you try and submit a new highScore with sync count of 4, the request will be rejected. To obtain the current sync count for a record, call ListRecords. On a successful update of the record, the response returns the new sync count for that record. You should present that sync count the next time you try to update that same record. When the record does not exist, specify the sync count as 0.</p> <p>This API can be called with temporary user credentials provided by Cognito Identity or with developer credentials.</p>
     fn update_records(
         &self,
         input: &UpdateRecordsRequest,
@@ -2594,7 +2591,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Initiates a bulk publish of all existing datasets for an Identity Pool to the configured stream. Customers are limited to one successful bulk publish per 24 hours. Bulk publish is an asynchronous request, customers can see the status of the request via the GetBulkPublishDetails operation.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>"]
+    /// <p>Initiates a bulk publish of all existing datasets for an Identity Pool to the configured stream. Customers are limited to one successful bulk publish per 24 hours. Bulk publish is an asynchronous request, customers can see the status of the request via the GetBulkPublishDetails operation.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
     fn bulk_publish(
         &self,
         input: &BulkPublishRequest,
@@ -2635,7 +2632,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specific dataset. The dataset will be deleted permanently, and the action can't be undone. Datasets that this dataset was merged with will no longer report the merge. Any subsequent operation on this dataset will result in a ResourceNotFoundException.</p> <p>This API can be called with temporary user credentials provided by Cognito Identity or with developer credentials.</p>"]
+    /// <p>Deletes the specific dataset. The dataset will be deleted permanently, and the action can't be undone. Datasets that this dataset was merged with will no longer report the merge. Any subsequent operation on this dataset will result in a ResourceNotFoundException.</p> <p>This API can be called with temporary user credentials provided by Cognito Identity or with developer credentials.</p>
     fn delete_dataset(
         &self,
         input: &DeleteDatasetRequest,
@@ -2678,7 +2675,7 @@ where
         }
     }
 
-    #[doc="<p>Gets meta data about a dataset by identity and dataset name. With Amazon Cognito Sync, each identity has access only to its own data. Thus, the credentials used to make this API call need to have access to the identity data.</p> <p>This API can be called with temporary user credentials provided by Cognito Identity or with developer credentials. You should use Cognito Identity credentials to make this API call.</p>"]
+    /// <p>Gets meta data about a dataset by identity and dataset name. With Amazon Cognito Sync, each identity has access only to its own data. Thus, the credentials used to make this API call need to have access to the identity data.</p> <p>This API can be called with temporary user credentials provided by Cognito Identity or with developer credentials. You should use Cognito Identity credentials to make this API call.</p>
     fn describe_dataset(
         &self,
         input: &DescribeDatasetRequest,
@@ -2721,7 +2718,7 @@ where
         }
     }
 
-    #[doc="<p>Gets usage details (for example, data storage) about a particular identity pool.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>"]
+    /// <p>Gets usage details (for example, data storage) about a particular identity pool.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
     fn describe_identity_pool_usage(
         &self,
         input: &DescribeIdentityPoolUsageRequest,
@@ -2763,7 +2760,7 @@ where
         }
     }
 
-    #[doc="<p>Gets usage information for an identity, including number of datasets and data usage.</p> <p>This API can be called with temporary user credentials provided by Cognito Identity or with developer credentials.</p>"]
+    /// <p>Gets usage information for an identity, including number of datasets and data usage.</p> <p>This API can be called with temporary user credentials provided by Cognito Identity or with developer credentials.</p>
     fn describe_identity_usage(
         &self,
         input: &DescribeIdentityUsageRequest,
@@ -2806,7 +2803,7 @@ where
         }
     }
 
-    #[doc="<p>Get the status of the last BulkPublish operation for an identity pool.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>"]
+    /// <p>Get the status of the last BulkPublish operation for an identity pool.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
     fn get_bulk_publish_details(
         &self,
         input: &GetBulkPublishDetailsRequest,
@@ -2848,7 +2845,7 @@ where
         }
     }
 
-    #[doc="<p>Gets the events and the corresponding Lambda functions associated with an identity pool.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>"]
+    /// <p>Gets the events and the corresponding Lambda functions associated with an identity pool.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
     fn get_cognito_events(
         &self,
         input: &GetCognitoEventsRequest,
@@ -2889,7 +2886,7 @@ where
         }
     }
 
-    #[doc="<p>Gets the configuration settings of an identity pool.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>"]
+    /// <p>Gets the configuration settings of an identity pool.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
     fn get_identity_pool_configuration(
         &self,
         input: &GetIdentityPoolConfigurationRequest,
@@ -2931,7 +2928,7 @@ where
         }
     }
 
-    #[doc="<p>Lists datasets for an identity. With Amazon Cognito Sync, each identity has access only to its own data. Thus, the credentials used to make this API call need to have access to the identity data.</p> <p>ListDatasets can be called with temporary user credentials provided by Cognito Identity or with developer credentials. You should use the Cognito Identity credentials to make this API call.</p>"]
+    /// <p>Lists datasets for an identity. With Amazon Cognito Sync, each identity has access only to its own data. Thus, the credentials used to make this API call need to have access to the identity data.</p> <p>ListDatasets can be called with temporary user credentials provided by Cognito Identity or with developer credentials. You should use the Cognito Identity credentials to make this API call.</p>
     fn list_datasets(
         &self,
         input: &ListDatasetsRequest,
@@ -2982,7 +2979,7 @@ where
         }
     }
 
-    #[doc="<p>Gets a list of identity pools registered with Cognito.</p> <p>ListIdentityPoolUsage can only be called with developer credentials. You cannot make this API call with the temporary user credentials provided by Cognito Identity.</p>"]
+    /// <p>Gets a list of identity pools registered with Cognito.</p> <p>ListIdentityPoolUsage can only be called with developer credentials. You cannot make this API call with the temporary user credentials provided by Cognito Identity.</p>
     fn list_identity_pool_usage(
         &self,
         input: &ListIdentityPoolUsageRequest,
@@ -3030,7 +3027,7 @@ where
         }
     }
 
-    #[doc="<p>Gets paginated records, optionally changed after a particular sync count for a dataset and identity. With Amazon Cognito Sync, each identity has access only to its own data. Thus, the credentials used to make this API call need to have access to the identity data.</p> <p>ListRecords can be called with temporary user credentials provided by Cognito Identity or with developer credentials. You should use Cognito Identity credentials to make this API call.</p>"]
+    /// <p>Gets paginated records, optionally changed after a particular sync count for a dataset and identity. With Amazon Cognito Sync, each identity has access only to its own data. Thus, the credentials used to make this API call need to have access to the identity data.</p> <p>ListRecords can be called with temporary user credentials provided by Cognito Identity or with developer credentials. You should use Cognito Identity credentials to make this API call.</p>
     fn list_records(
         &self,
         input: &ListRecordsRequest,
@@ -3083,7 +3080,7 @@ where
         }
     }
 
-    #[doc="<p>Registers a device to receive push sync notifications.</p> <p>This API can only be called with temporary credentials provided by Cognito Identity. You cannot call this API with developer credentials.</p>"]
+    /// <p>Registers a device to receive push sync notifications.</p> <p>This API can only be called with temporary credentials provided by Cognito Identity. You cannot call this API with developer credentials.</p>
     fn register_device(
         &self,
         input: &RegisterDeviceRequest,
@@ -3128,7 +3125,7 @@ where
         }
     }
 
-    #[doc="<p>Sets the AWS Lambda function for a given event type for an identity pool. This request only updates the key/value pair specified. Other key/values pairs are not updated. To remove a key value pair, pass a empty value for the particular key.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>"]
+    /// <p>Sets the AWS Lambda function for a given event type for an identity pool. This request only updates the key/value pair specified. Other key/values pairs are not updated. To remove a key value pair, pass a empty value for the particular key.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
     fn set_cognito_events(
         &self,
         input: &SetCognitoEventsRequest,
@@ -3163,7 +3160,7 @@ where
         }
     }
 
-    #[doc="<p>Sets the necessary configuration for push sync.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>"]
+    /// <p>Sets the necessary configuration for push sync.</p> <p>This API can only be called with developer credentials. You cannot call this API with the temporary user credentials provided by Cognito Identity.</p>
     fn set_identity_pool_configuration(
         &self,
         input: &SetIdentityPoolConfigurationRequest,
@@ -3208,7 +3205,7 @@ where
         }
     }
 
-    #[doc="<p>Subscribes to receive notifications when a dataset is modified by another device.</p> <p>This API can only be called with temporary credentials provided by Cognito Identity. You cannot call this API with developer credentials.</p>"]
+    /// <p>Subscribes to receive notifications when a dataset is modified by another device.</p> <p>This API can only be called with temporary credentials provided by Cognito Identity. You cannot call this API with developer credentials.</p>
     fn subscribe_to_dataset(
         &self,
         input: &SubscribeToDatasetRequest,
@@ -3246,7 +3243,7 @@ where
         }
     }
 
-    #[doc="<p>Unsubscribes from receiving notifications when a dataset is modified by another device.</p> <p>This API can only be called with temporary credentials provided by Cognito Identity. You cannot call this API with developer credentials.</p>"]
+    /// <p>Unsubscribes from receiving notifications when a dataset is modified by another device.</p> <p>This API can only be called with temporary credentials provided by Cognito Identity. You cannot call this API with developer credentials.</p>
     fn unsubscribe_from_dataset(
         &self,
         input: &UnsubscribeFromDatasetRequest,
@@ -3285,7 +3282,7 @@ where
         }
     }
 
-    #[doc="<p>Posts updates to records and adds and deletes records for a dataset and user.</p> <p>The sync count in the record patch is your last known sync count for that record. The server will reject an UpdateRecords request with a ResourceConflictException if you try to patch a record with a new value but a stale sync count.</p> <p>For example, if the sync count on the server is 5 for a key called highScore and you try and submit a new highScore with sync count of 4, the request will be rejected. To obtain the current sync count for a record, call ListRecords. On a successful update of the record, the response returns the new sync count for that record. You should present that sync count the next time you try to update that same record. When the record does not exist, specify the sync count as 0.</p> <p>This API can be called with temporary user credentials provided by Cognito Identity or with developer credentials.</p>"]
+    /// <p>Posts updates to records and adds and deletes records for a dataset and user.</p> <p>The sync count in the record patch is your last known sync count for that record. The server will reject an UpdateRecords request with a ResourceConflictException if you try to patch a record with a new value but a stale sync count.</p> <p>For example, if the sync count on the server is 5 for a key called highScore and you try and submit a new highScore with sync count of 4, the request will be rejected. To obtain the current sync count for a record, call ListRecords. On a successful update of the record, the response returns the new sync count for that record. You should present that sync count the next time you try to update that same record. When the record does not exist, specify the sync count as 0.</p> <p>This API can be called with temporary user credentials provided by Cognito Identity or with developer credentials.</p>
     fn update_records(
         &self,
         input: &UpdateRecordsRequest,

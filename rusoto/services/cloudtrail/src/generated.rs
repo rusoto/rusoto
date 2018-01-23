@@ -54,7 +54,7 @@ pub struct CreateTrailRequest {
     #[serde(rename = "CloudWatchLogsRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cloud_watch_logs_role_arn: Option<String>,
-    /// <p>Specifies whether log file integrity validation is enabled. The default is false.</p> <note> <p>When you disable log file integrity validation, the chain of digest files is broken after one hour. CloudTrail will not create digest files for log files that were delivered during a period in which log file integrity validation was disabled. For example, if you enable log file integrity validation at noon on January 1, disable it at noon on January 2, and re-enable it at noon on January 10, digest files will not be created for the log files delivered from noon on January 2 to noon on January 10. The same applies whenever you stop CloudTrail logging or delete a trail.</p> </note>
+    /// <p><p>Specifies whether log file integrity validation is enabled. The default is false.</p> <note> <p>When you disable log file integrity validation, the chain of digest files is broken after one hour. CloudTrail will not create digest files for log files that were delivered during a period in which log file integrity validation was disabled. For example, if you enable log file integrity validation at noon on January 1, disable it at noon on January 2, and re-enable it at noon on January 10, digest files will not be created for the log files delivered from noon on January 2 to noon on January 10. The same applies whenever you stop CloudTrail logging or delete a trail.</p> </note></p>
     #[serde(rename = "EnableLogFileValidation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_log_file_validation: Option<bool>,
@@ -66,11 +66,11 @@ pub struct CreateTrailRequest {
     #[serde(rename = "IsMultiRegionTrail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_multi_region_trail: Option<bool>,
-    /// <p>Specifies the KMS key ID to use to encrypt the logs delivered by CloudTrail. The value can be an alias name prefixed by "alias/", a fully specified ARN to an alias, a fully specified ARN to a key, or a globally unique identifier.</p> <p>Examples:</p> <ul> <li> <p>alias/MyAliasName</p> </li> <li> <p>arn:aws:kms:us-east-1:123456789012:alias/MyAliasName</p> </li> <li> <p>arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>12345678-1234-1234-1234-123456789012</p> </li> </ul>
+    /// <p><p>Specifies the KMS key ID to use to encrypt the logs delivered by CloudTrail. The value can be an alias name prefixed by &quot;alias/&quot;, a fully specified ARN to an alias, a fully specified ARN to a key, or a globally unique identifier.</p> <p>Examples:</p> <ul> <li> <p>alias/MyAliasName</p> </li> <li> <p>arn:aws:kms:us-east-1:123456789012:alias/MyAliasName</p> </li> <li> <p>arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>12345678-1234-1234-1234-123456789012</p> </li> </ul></p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
-    /// <p>Specifies the name of the trail. The name must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul>
+    /// <p><p>Specifies the name of the trail. The name must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (<em>), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-</em>namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul></p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>Specifies the name of the Amazon S3 bucket designated for publishing log files. See <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/create_trail_naming_policy.html">Amazon S3 Bucket Naming Requirements</a>.</p>
@@ -135,7 +135,7 @@ pub struct CreateTrailResponse {
     pub trail_arn: Option<String>,
 }
 
-/// <p>The Amazon S3 objects that you specify in your event selectors for your trail to log data events. Data events are object-level API operations that access S3 objects, such as <code>GetObject</code>, <code>DeleteObject</code>, and <code>PutObject</code>. You can specify up to 250 S3 buckets and object prefixes for a trail. </p> <p>Example</p> <ol> <li> <p>You create an event selector for a trail and specify an S3 bucket and an empty prefix, such as <code>arn:aws:s3:::bucket-1/</code>.</p> </li> <li> <p>You upload an image file to <code>bucket-1</code>.</p> </li> <li> <p>The <code>PutObject</code> API operation occurs on an object in the S3 bucket that you specified in the event selector. The trail processes and logs the event.</p> </li> <li> <p>You upload another image file to a different S3 bucket named <code>arn:aws:s3:::bucket-2</code>.</p> </li> <li> <p>The event occurs on an object in an S3 bucket that you didn't specify in the event selector. The trail doesn’t log the event.</p> </li> </ol>
+/// <p><p>The Amazon S3 objects that you specify in your event selectors for your trail to log data events. Data events are object-level API operations that access S3 objects, such as <code>GetObject</code>, <code>DeleteObject</code>, and <code>PutObject</code>. You can specify up to 250 S3 buckets and object prefixes for a trail. </p> <p>Example</p> <ol> <li> <p>You create an event selector for a trail and specify an S3 bucket and an empty prefix, such as <code>arn:aws:s3:::bucket-1/</code>.</p> </li> <li> <p>You upload an image file to <code>bucket-1</code>.</p> </li> <li> <p>The <code>PutObject</code> API operation occurs on an object in the S3 bucket that you specified in the event selector. The trail processes and logs the event.</p> </li> <li> <p>You upload another image file to a different S3 bucket named <code>arn:aws:s3:::bucket-2</code>.</p> </li> <li> <p>The event occurs on an object in an S3 bucket that you didn&#39;t specify in the event selector. The trail doesn’t log the event.</p> </li> </ol></p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct DataResource {
     /// <p>The resource type in which you want to log data events. You can specify only the following value: <code>AWS::S3::Object</code>.</p>
@@ -167,7 +167,7 @@ pub struct DescribeTrailsRequest {
     #[serde(rename = "includeShadowTrails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_shadow_trails: Option<bool>,
-    /// <p>Specifies a list of trail names, trail ARNs, or both, of the trails to describe. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p> <p>If an empty list is specified, information for the trail in the current region is returned.</p> <ul> <li> <p>If an empty list is specified and <code>IncludeShadowTrails</code> is false, then information for all trails in the current region is returned.</p> </li> <li> <p>If an empty list is specified and IncludeShadowTrails is null or true, then information for all trails in the current region and any associated shadow trails in other regions is returned.</p> </li> </ul> <note> <p>If one or more trail names are specified, information is returned only if the names match the names of trails belonging only to the current region. To return information about a trail in another region, you must specify its trail ARN.</p> </note>
+    /// <p><p>Specifies a list of trail names, trail ARNs, or both, of the trails to describe. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p> <p>If an empty list is specified, information for the trail in the current region is returned.</p> <ul> <li> <p>If an empty list is specified and <code>IncludeShadowTrails</code> is false, then information for all trails in the current region is returned.</p> </li> <li> <p>If an empty list is specified and IncludeShadowTrails is null or true, then information for all trails in the current region and any associated shadow trails in other regions is returned.</p> </li> </ul> <note> <p>If one or more trail names are specified, information is returned only if the names match the names of trails belonging only to the current region. To return information about a trail in another region, you must specify its trail ARN.</p> </note></p>
     #[serde(rename = "trailNameList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trail_name_list: Option<Vec<String>>,
@@ -282,7 +282,7 @@ pub struct GetTrailStatusResponse {
     #[serde(rename = "LatestDeliveryAttemptTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_delivery_attempt_time: Option<String>,
-    /// <p>Displays any Amazon S3 error that CloudTrail encountered when attempting to deliver log files to the designated bucket. For more information see the topic <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html">Error Responses</a> in the Amazon S3 API Reference. </p> <note> <p>This error occurs only when there is a problem with the destination S3 bucket and will not occur for timeouts. To resolve the issue, create a new bucket and call <code>UpdateTrail</code> to specify the new bucket, or fix the existing objects so that CloudTrail can again write to the bucket.</p> </note>
+    /// <p><p>Displays any Amazon S3 error that CloudTrail encountered when attempting to deliver log files to the designated bucket. For more information see the topic <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html">Error Responses</a> in the Amazon S3 API Reference. </p> <note> <p>This error occurs only when there is a problem with the destination S3 bucket and will not occur for timeouts. To resolve the issue, create a new bucket and call <code>UpdateTrail</code> to specify the new bucket, or fix the existing objects so that CloudTrail can again write to the bucket.</p> </note></p>
     #[serde(rename = "LatestDeliveryError")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_delivery_error: Option<String>,
@@ -290,7 +290,7 @@ pub struct GetTrailStatusResponse {
     #[serde(rename = "LatestDeliveryTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_delivery_time: Option<f64>,
-    /// <p>Displays any Amazon S3 error that CloudTrail encountered when attempting to deliver a digest file to the designated bucket. For more information see the topic <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html">Error Responses</a> in the Amazon S3 API Reference. </p> <note> <p>This error occurs only when there is a problem with the destination S3 bucket and will not occur for timeouts. To resolve the issue, create a new bucket and call <code>UpdateTrail</code> to specify the new bucket, or fix the existing objects so that CloudTrail can again write to the bucket.</p> </note>
+    /// <p><p>Displays any Amazon S3 error that CloudTrail encountered when attempting to deliver a digest file to the designated bucket. For more information see the topic <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/ErrorResponses.html">Error Responses</a> in the Amazon S3 API Reference. </p> <note> <p>This error occurs only when there is a problem with the destination S3 bucket and will not occur for timeouts. To resolve the issue, create a new bucket and call <code>UpdateTrail</code> to specify the new bucket, or fix the existing objects so that CloudTrail can again write to the bucket.</p> </note></p>
     #[serde(rename = "LatestDigestDeliveryError")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_digest_delivery_error: Option<String>,
@@ -356,7 +356,7 @@ pub struct ListPublicKeysResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Contains an array of PublicKey objects.</p> <note> <p>The returned public keys may have validity time ranges that overlap.</p> </note>
+    /// <p><p>Contains an array of PublicKey objects.</p> <note> <p>The returned public keys may have validity time ranges that overlap.</p> </note></p>
     #[serde(rename = "PublicKeyList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub public_key_list: Option<Vec<PublicKey>>,
@@ -626,7 +626,7 @@ pub struct UpdateTrailRequest {
     #[serde(rename = "CloudWatchLogsRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cloud_watch_logs_role_arn: Option<String>,
-    /// <p>Specifies whether log file validation is enabled. The default is false.</p> <note> <p>When you disable log file integrity validation, the chain of digest files is broken after one hour. CloudTrail will not create digest files for log files that were delivered during a period in which log file integrity validation was disabled. For example, if you enable log file integrity validation at noon on January 1, disable it at noon on January 2, and re-enable it at noon on January 10, digest files will not be created for the log files delivered from noon on January 2 to noon on January 10. The same applies whenever you stop CloudTrail logging or delete a trail.</p> </note>
+    /// <p><p>Specifies whether log file validation is enabled. The default is false.</p> <note> <p>When you disable log file integrity validation, the chain of digest files is broken after one hour. CloudTrail will not create digest files for log files that were delivered during a period in which log file integrity validation was disabled. For example, if you enable log file integrity validation at noon on January 1, disable it at noon on January 2, and re-enable it at noon on January 10, digest files will not be created for the log files delivered from noon on January 2 to noon on January 10. The same applies whenever you stop CloudTrail logging or delete a trail.</p> </note></p>
     #[serde(rename = "EnableLogFileValidation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_log_file_validation: Option<bool>,
@@ -638,7 +638,7 @@ pub struct UpdateTrailRequest {
     #[serde(rename = "IsMultiRegionTrail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_multi_region_trail: Option<bool>,
-    /// <p>Specifies the KMS key ID to use to encrypt the logs delivered by CloudTrail. The value can be an alias name prefixed by "alias/", a fully specified ARN to an alias, a fully specified ARN to a key, or a globally unique identifier.</p> <p>Examples:</p> <ul> <li> <p>alias/MyAliasName</p> </li> <li> <p>arn:aws:kms:us-east-1:123456789012:alias/MyAliasName</p> </li> <li> <p>arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>12345678-1234-1234-1234-123456789012</p> </li> </ul>
+    /// <p><p>Specifies the KMS key ID to use to encrypt the logs delivered by CloudTrail. The value can be an alias name prefixed by &quot;alias/&quot;, a fully specified ARN to an alias, a fully specified ARN to a key, or a globally unique identifier.</p> <p>Examples:</p> <ul> <li> <p>alias/MyAliasName</p> </li> <li> <p>arn:aws:kms:us-east-1:123456789012:alias/MyAliasName</p> </li> <li> <p>arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>12345678-1234-1234-1234-123456789012</p> </li> </ul></p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
@@ -711,21 +711,21 @@ pub struct UpdateTrailResponse {
 /// Errors returned by AddTags
 #[derive(Debug, PartialEq)]
 pub enum AddTagsError {
-    ///<p>This exception is thrown when an operation is called with an invalid trail ARN. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p>
+    /// <p>This exception is thrown when an operation is called with an invalid trail ARN. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p>
     CloudTrailARNInvalid(String),
-    ///<p>This exception is thrown when the key or value specified for the tag does not match the regular expression <code>^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$</code>.</p>
+    /// <p>This exception is thrown when the key or value specified for the tag does not match the regular expression <code>^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$</code>.</p>
     InvalidTagParameter(String),
-    ///<p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul>
+    /// <p><p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (<em>), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-</em>namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul></p>
     InvalidTrailName(String),
-    ///<p>This exception is thrown when the requested operation is not permitted.</p>
+    /// <p>This exception is thrown when the requested operation is not permitted.</p>
     OperationNotPermitted(String),
-    ///<p>This exception is thrown when the specified resource is not found.</p>
+    /// <p>This exception is thrown when the specified resource is not found.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the specified resource type is not supported by CloudTrail.</p>
+    /// <p>This exception is thrown when the specified resource type is not supported by CloudTrail.</p>
     ResourceTypeNotSupported(String),
-    ///<p>The number of tags per trail has exceeded the permitted amount. Currently, the limit is 50.</p>
+    /// <p>The number of tags per trail has exceeded the permitted amount. Currently, the limit is 50.</p>
     TagsLimitExceeded(String),
-    ///<p>This exception is thrown when the requested operation is not supported.</p>
+    /// <p>This exception is thrown when the requested operation is not supported.</p>
     UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -829,47 +829,47 @@ impl Error for AddTagsError {
 /// Errors returned by CreateTrail
 #[derive(Debug, PartialEq)]
 pub enum CreateTrailError {
-    ///<p>Cannot set a CloudWatch Logs delivery for this region.</p>
+    /// <p>Cannot set a CloudWatch Logs delivery for this region.</p>
     CloudWatchLogsDeliveryUnavailable(String),
-    ///<p>This exception is thrown when the policy on the S3 bucket or KMS key is not sufficient.</p>
+    /// <p>This exception is thrown when the policy on the S3 bucket or KMS key is not sufficient.</p>
     InsufficientEncryptionPolicy(String),
-    ///<p>This exception is thrown when the policy on the S3 bucket is not sufficient.</p>
+    /// <p>This exception is thrown when the policy on the S3 bucket is not sufficient.</p>
     InsufficientS3BucketPolicy(String),
-    ///<p>This exception is thrown when the policy on the SNS topic is not sufficient.</p>
+    /// <p>This exception is thrown when the policy on the SNS topic is not sufficient.</p>
     InsufficientSnsTopicPolicy(String),
-    ///<p>This exception is thrown when the provided CloudWatch log group is not valid.</p>
+    /// <p>This exception is thrown when the provided CloudWatch log group is not valid.</p>
     InvalidCloudWatchLogsLogGroupArn(String),
-    ///<p>This exception is thrown when the provided role is not valid.</p>
+    /// <p>This exception is thrown when the provided role is not valid.</p>
     InvalidCloudWatchLogsRoleArn(String),
-    ///<p>This exception is thrown when the KMS key ARN is invalid.</p>
+    /// <p>This exception is thrown when the KMS key ARN is invalid.</p>
     InvalidKmsKeyId(String),
-    ///<p>This exception is thrown when the combination of parameters provided is not valid.</p>
+    /// <p>This exception is thrown when the combination of parameters provided is not valid.</p>
     InvalidParameterCombination(String),
-    ///<p>This exception is thrown when the provided S3 bucket name is not valid.</p>
+    /// <p>This exception is thrown when the provided S3 bucket name is not valid.</p>
     InvalidS3BucketName(String),
-    ///<p>This exception is thrown when the provided S3 prefix is not valid.</p>
+    /// <p>This exception is thrown when the provided S3 prefix is not valid.</p>
     InvalidS3Prefix(String),
-    ///<p>This exception is thrown when the provided SNS topic name is not valid.</p>
+    /// <p>This exception is thrown when the provided SNS topic name is not valid.</p>
     InvalidSnsTopicName(String),
-    ///<p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul>
+    /// <p><p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (<em>), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-</em>namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul></p>
     InvalidTrailName(String),
-    ///<p>This exception is thrown when there is an issue with the specified KMS key and the trail can’t be updated.</p>
+    /// <p>This exception is thrown when there is an issue with the specified KMS key and the trail can’t be updated.</p>
     Kms(String),
-    ///<p>This exception is deprecated.</p>
+    /// <p>This exception is deprecated.</p>
     KmsKeyDisabled(String),
-    ///<p>This exception is thrown when the KMS key does not exist, or when the S3 bucket and the KMS key are not in the same region.</p>
+    /// <p>This exception is thrown when the KMS key does not exist, or when the S3 bucket and the KMS key are not in the same region.</p>
     KmsKeyNotFound(String),
-    ///<p>This exception is thrown when the maximum number of trails is reached.</p>
+    /// <p>This exception is thrown when the maximum number of trails is reached.</p>
     MaximumNumberOfTrailsExceeded(String),
-    ///<p>This exception is thrown when the requested operation is not permitted.</p>
+    /// <p>This exception is thrown when the requested operation is not permitted.</p>
     OperationNotPermitted(String),
-    ///<p>This exception is thrown when the specified S3 bucket does not exist.</p>
+    /// <p>This exception is thrown when the specified S3 bucket does not exist.</p>
     S3BucketDoesNotExist(String),
-    ///<p>This exception is thrown when the specified trail already exists.</p>
+    /// <p>This exception is thrown when the specified trail already exists.</p>
     TrailAlreadyExists(String),
-    ///<p>This exception is deprecated.</p>
+    /// <p>This exception is deprecated.</p>
     TrailNotProvided(String),
-    ///<p>This exception is thrown when the requested operation is not supported.</p>
+    /// <p>This exception is thrown when the requested operation is not supported.</p>
     UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1029,11 +1029,11 @@ impl Error for CreateTrailError {
 /// Errors returned by DeleteTrail
 #[derive(Debug, PartialEq)]
 pub enum DeleteTrailError {
-    ///<p>This exception is thrown when an operation is called on a trail from a region other than the region in which the trail was created.</p>
+    /// <p>This exception is thrown when an operation is called on a trail from a region other than the region in which the trail was created.</p>
     InvalidHomeRegion(String),
-    ///<p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul>
+    /// <p><p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (<em>), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-</em>namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul></p>
     InvalidTrailName(String),
-    ///<p>This exception is thrown when the trail with the given name is not found.</p>
+    /// <p>This exception is thrown when the trail with the given name is not found.</p>
     TrailNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1119,9 +1119,9 @@ impl Error for DeleteTrailError {
 /// Errors returned by DescribeTrails
 #[derive(Debug, PartialEq)]
 pub enum DescribeTrailsError {
-    ///<p>This exception is thrown when the requested operation is not permitted.</p>
+    /// <p>This exception is thrown when the requested operation is not permitted.</p>
     OperationNotPermitted(String),
-    ///<p>This exception is thrown when the requested operation is not supported.</p>
+    /// <p>This exception is thrown when the requested operation is not supported.</p>
     UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1203,13 +1203,13 @@ impl Error for DescribeTrailsError {
 /// Errors returned by GetEventSelectors
 #[derive(Debug, PartialEq)]
 pub enum GetEventSelectorsError {
-    ///<p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul>
+    /// <p><p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (<em>), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-</em>namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul></p>
     InvalidTrailName(String),
-    ///<p>This exception is thrown when the requested operation is not permitted.</p>
+    /// <p>This exception is thrown when the requested operation is not permitted.</p>
     OperationNotPermitted(String),
-    ///<p>This exception is thrown when the trail with the given name is not found.</p>
+    /// <p>This exception is thrown when the trail with the given name is not found.</p>
     TrailNotFound(String),
-    ///<p>This exception is thrown when the requested operation is not supported.</p>
+    /// <p>This exception is thrown when the requested operation is not supported.</p>
     UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1301,9 +1301,9 @@ impl Error for GetEventSelectorsError {
 /// Errors returned by GetTrailStatus
 #[derive(Debug, PartialEq)]
 pub enum GetTrailStatusError {
-    ///<p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul>
+    /// <p><p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (<em>), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-</em>namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul></p>
     InvalidTrailName(String),
-    ///<p>This exception is thrown when the trail with the given name is not found.</p>
+    /// <p>This exception is thrown when the trail with the given name is not found.</p>
     TrailNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1385,13 +1385,13 @@ impl Error for GetTrailStatusError {
 /// Errors returned by ListPublicKeys
 #[derive(Debug, PartialEq)]
 pub enum ListPublicKeysError {
-    ///<p>Occurs if the timestamp values are invalid. Either the start time occurs after the end time or the time range is outside the range of possible values.</p>
+    /// <p>Occurs if the timestamp values are invalid. Either the start time occurs after the end time or the time range is outside the range of possible values.</p>
     InvalidTimeRange(String),
-    ///<p>Reserved for future use.</p>
+    /// <p>Reserved for future use.</p>
     InvalidToken(String),
-    ///<p>This exception is thrown when the requested operation is not permitted.</p>
+    /// <p>This exception is thrown when the requested operation is not permitted.</p>
     OperationNotPermitted(String),
-    ///<p>This exception is thrown when the requested operation is not supported.</p>
+    /// <p>This exception is thrown when the requested operation is not supported.</p>
     UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1481,19 +1481,19 @@ impl Error for ListPublicKeysError {
 /// Errors returned by ListTags
 #[derive(Debug, PartialEq)]
 pub enum ListTagsError {
-    ///<p>This exception is thrown when an operation is called with an invalid trail ARN. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p>
+    /// <p>This exception is thrown when an operation is called with an invalid trail ARN. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p>
     CloudTrailARNInvalid(String),
-    ///<p>Reserved for future use.</p>
+    /// <p>Reserved for future use.</p>
     InvalidToken(String),
-    ///<p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul>
+    /// <p><p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (<em>), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-</em>namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul></p>
     InvalidTrailName(String),
-    ///<p>This exception is thrown when the requested operation is not permitted.</p>
+    /// <p>This exception is thrown when the requested operation is not permitted.</p>
     OperationNotPermitted(String),
-    ///<p>This exception is thrown when the specified resource is not found.</p>
+    /// <p>This exception is thrown when the specified resource is not found.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the specified resource type is not supported by CloudTrail.</p>
+    /// <p>This exception is thrown when the specified resource type is not supported by CloudTrail.</p>
     ResourceTypeNotSupported(String),
-    ///<p>This exception is thrown when the requested operation is not supported.</p>
+    /// <p>This exception is thrown when the requested operation is not supported.</p>
     UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1593,13 +1593,13 @@ impl Error for ListTagsError {
 /// Errors returned by LookupEvents
 #[derive(Debug, PartialEq)]
 pub enum LookupEventsError {
-    ///<p>Occurs when an invalid lookup attribute is specified.</p>
+    /// <p>Occurs when an invalid lookup attribute is specified.</p>
     InvalidLookupAttributes(String),
-    ///<p>This exception is thrown if the limit specified is invalid.</p>
+    /// <p>This exception is thrown if the limit specified is invalid.</p>
     InvalidMaxResults(String),
-    ///<p>Invalid token or token that was previously used in a request with different parameters. This exception is thrown if the token is invalid.</p>
+    /// <p>Invalid token or token that was previously used in a request with different parameters. This exception is thrown if the token is invalid.</p>
     InvalidNextToken(String),
-    ///<p>Occurs if the timestamp values are invalid. Either the start time occurs after the end time or the time range is outside the range of possible values.</p>
+    /// <p>Occurs if the timestamp values are invalid. Either the start time occurs after the end time or the time range is outside the range of possible values.</p>
     InvalidTimeRange(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1689,17 +1689,17 @@ impl Error for LookupEventsError {
 /// Errors returned by PutEventSelectors
 #[derive(Debug, PartialEq)]
 pub enum PutEventSelectorsError {
-    ///<p>This exception is thrown when the <code>PutEventSelectors</code> operation is called with an invalid number of event selectors, data resources, or an invalid value for a parameter:</p> <ul> <li> <p>Specify a valid number of event selectors (1 to 5) for a trail.</p> </li> <li> <p>Specify a valid number of data resources (1 to 250) for an event selector.</p> </li> <li> <p>Specify a valid value for a parameter. For example, specifying the <code>ReadWriteType</code> parameter with a value of <code>read-only</code> is invalid.</p> </li> </ul>
+    /// <p><p>This exception is thrown when the <code>PutEventSelectors</code> operation is called with an invalid number of event selectors, data resources, or an invalid value for a parameter:</p> <ul> <li> <p>Specify a valid number of event selectors (1 to 5) for a trail.</p> </li> <li> <p>Specify a valid number of data resources (1 to 250) for an event selector.</p> </li> <li> <p>Specify a valid value for a parameter. For example, specifying the <code>ReadWriteType</code> parameter with a value of <code>read-only</code> is invalid.</p> </li> </ul></p>
     InvalidEventSelectors(String),
-    ///<p>This exception is thrown when an operation is called on a trail from a region other than the region in which the trail was created.</p>
+    /// <p>This exception is thrown when an operation is called on a trail from a region other than the region in which the trail was created.</p>
     InvalidHomeRegion(String),
-    ///<p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul>
+    /// <p><p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (<em>), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-</em>namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul></p>
     InvalidTrailName(String),
-    ///<p>This exception is thrown when the requested operation is not permitted.</p>
+    /// <p>This exception is thrown when the requested operation is not permitted.</p>
     OperationNotPermitted(String),
-    ///<p>This exception is thrown when the trail with the given name is not found.</p>
+    /// <p>This exception is thrown when the trail with the given name is not found.</p>
     TrailNotFound(String),
-    ///<p>This exception is thrown when the requested operation is not supported.</p>
+    /// <p>This exception is thrown when the requested operation is not supported.</p>
     UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1799,19 +1799,19 @@ impl Error for PutEventSelectorsError {
 /// Errors returned by RemoveTags
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsError {
-    ///<p>This exception is thrown when an operation is called with an invalid trail ARN. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p>
+    /// <p>This exception is thrown when an operation is called with an invalid trail ARN. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p>
     CloudTrailARNInvalid(String),
-    ///<p>This exception is thrown when the key or value specified for the tag does not match the regular expression <code>^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$</code>.</p>
+    /// <p>This exception is thrown when the key or value specified for the tag does not match the regular expression <code>^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$</code>.</p>
     InvalidTagParameter(String),
-    ///<p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul>
+    /// <p><p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (<em>), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-</em>namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul></p>
     InvalidTrailName(String),
-    ///<p>This exception is thrown when the requested operation is not permitted.</p>
+    /// <p>This exception is thrown when the requested operation is not permitted.</p>
     OperationNotPermitted(String),
-    ///<p>This exception is thrown when the specified resource is not found.</p>
+    /// <p>This exception is thrown when the specified resource is not found.</p>
     ResourceNotFound(String),
-    ///<p>This exception is thrown when the specified resource type is not supported by CloudTrail.</p>
+    /// <p>This exception is thrown when the specified resource type is not supported by CloudTrail.</p>
     ResourceTypeNotSupported(String),
-    ///<p>This exception is thrown when the requested operation is not supported.</p>
+    /// <p>This exception is thrown when the requested operation is not supported.</p>
     UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1911,11 +1911,11 @@ impl Error for RemoveTagsError {
 /// Errors returned by StartLogging
 #[derive(Debug, PartialEq)]
 pub enum StartLoggingError {
-    ///<p>This exception is thrown when an operation is called on a trail from a region other than the region in which the trail was created.</p>
+    /// <p>This exception is thrown when an operation is called on a trail from a region other than the region in which the trail was created.</p>
     InvalidHomeRegion(String),
-    ///<p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul>
+    /// <p><p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (<em>), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-</em>namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul></p>
     InvalidTrailName(String),
-    ///<p>This exception is thrown when the trail with the given name is not found.</p>
+    /// <p>This exception is thrown when the trail with the given name is not found.</p>
     TrailNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2001,11 +2001,11 @@ impl Error for StartLoggingError {
 /// Errors returned by StopLogging
 #[derive(Debug, PartialEq)]
 pub enum StopLoggingError {
-    ///<p>This exception is thrown when an operation is called on a trail from a region other than the region in which the trail was created.</p>
+    /// <p>This exception is thrown when an operation is called on a trail from a region other than the region in which the trail was created.</p>
     InvalidHomeRegion(String),
-    ///<p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul>
+    /// <p><p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (<em>), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-</em>namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul></p>
     InvalidTrailName(String),
-    ///<p>This exception is thrown when the trail with the given name is not found.</p>
+    /// <p>This exception is thrown when the trail with the given name is not found.</p>
     TrailNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2091,47 +2091,47 @@ impl Error for StopLoggingError {
 /// Errors returned by UpdateTrail
 #[derive(Debug, PartialEq)]
 pub enum UpdateTrailError {
-    ///<p>Cannot set a CloudWatch Logs delivery for this region.</p>
+    /// <p>Cannot set a CloudWatch Logs delivery for this region.</p>
     CloudWatchLogsDeliveryUnavailable(String),
-    ///<p>This exception is thrown when the policy on the S3 bucket or KMS key is not sufficient.</p>
+    /// <p>This exception is thrown when the policy on the S3 bucket or KMS key is not sufficient.</p>
     InsufficientEncryptionPolicy(String),
-    ///<p>This exception is thrown when the policy on the S3 bucket is not sufficient.</p>
+    /// <p>This exception is thrown when the policy on the S3 bucket is not sufficient.</p>
     InsufficientS3BucketPolicy(String),
-    ///<p>This exception is thrown when the policy on the SNS topic is not sufficient.</p>
+    /// <p>This exception is thrown when the policy on the SNS topic is not sufficient.</p>
     InsufficientSnsTopicPolicy(String),
-    ///<p>This exception is thrown when the provided CloudWatch log group is not valid.</p>
+    /// <p>This exception is thrown when the provided CloudWatch log group is not valid.</p>
     InvalidCloudWatchLogsLogGroupArn(String),
-    ///<p>This exception is thrown when the provided role is not valid.</p>
+    /// <p>This exception is thrown when the provided role is not valid.</p>
     InvalidCloudWatchLogsRoleArn(String),
-    ///<p>This exception is thrown when an operation is called on a trail from a region other than the region in which the trail was created.</p>
+    /// <p>This exception is thrown when an operation is called on a trail from a region other than the region in which the trail was created.</p>
     InvalidHomeRegion(String),
-    ///<p>This exception is thrown when the KMS key ARN is invalid.</p>
+    /// <p>This exception is thrown when the KMS key ARN is invalid.</p>
     InvalidKmsKeyId(String),
-    ///<p>This exception is thrown when the combination of parameters provided is not valid.</p>
+    /// <p>This exception is thrown when the combination of parameters provided is not valid.</p>
     InvalidParameterCombination(String),
-    ///<p>This exception is thrown when the provided S3 bucket name is not valid.</p>
+    /// <p>This exception is thrown when the provided S3 bucket name is not valid.</p>
     InvalidS3BucketName(String),
-    ///<p>This exception is thrown when the provided S3 prefix is not valid.</p>
+    /// <p>This exception is thrown when the provided S3 prefix is not valid.</p>
     InvalidS3Prefix(String),
-    ///<p>This exception is thrown when the provided SNS topic name is not valid.</p>
+    /// <p>This exception is thrown when the provided SNS topic name is not valid.</p>
     InvalidSnsTopicName(String),
-    ///<p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul>
+    /// <p><p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (<em>), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-</em>namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul></p>
     InvalidTrailName(String),
-    ///<p>This exception is thrown when there is an issue with the specified KMS key and the trail can’t be updated.</p>
+    /// <p>This exception is thrown when there is an issue with the specified KMS key and the trail can’t be updated.</p>
     Kms(String),
-    ///<p>This exception is deprecated.</p>
+    /// <p>This exception is deprecated.</p>
     KmsKeyDisabled(String),
-    ///<p>This exception is thrown when the KMS key does not exist, or when the S3 bucket and the KMS key are not in the same region.</p>
+    /// <p>This exception is thrown when the KMS key does not exist, or when the S3 bucket and the KMS key are not in the same region.</p>
     KmsKeyNotFound(String),
-    ///<p>This exception is thrown when the requested operation is not permitted.</p>
+    /// <p>This exception is thrown when the requested operation is not permitted.</p>
     OperationNotPermitted(String),
-    ///<p>This exception is thrown when the specified S3 bucket does not exist.</p>
+    /// <p>This exception is thrown when the specified S3 bucket does not exist.</p>
     S3BucketDoesNotExist(String),
-    ///<p>This exception is thrown when the trail with the given name is not found.</p>
+    /// <p>This exception is thrown when the trail with the given name is not found.</p>
     TrailNotFound(String),
-    ///<p>This exception is deprecated.</p>
+    /// <p>This exception is deprecated.</p>
     TrailNotProvided(String),
-    ///<p>This exception is thrown when the requested operation is not supported.</p>
+    /// <p>This exception is thrown when the requested operation is not supported.</p>
     UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2290,77 +2290,77 @@ impl Error for UpdateTrailError {
 }
 /// Trait representing the capabilities of the CloudTrail API. CloudTrail clients implement this trait.
 pub trait CloudTrail {
-    #[doc="<p>Adds one or more tags to a trail, up to a limit of 50. Tags must be unique per trail. Overwrites an existing tag's value when a new value is specified for an existing tag key. If you specify a key without a value, the tag will be created with the specified key and a value of null. You can tag a trail that applies to all regions only from the region in which the trail was created (that is, from its home region).</p>"]
+    /// <p>Adds one or more tags to a trail, up to a limit of 50. Tags must be unique per trail. Overwrites an existing tag's value when a new value is specified for an existing tag key. If you specify a key without a value, the tag will be created with the specified key and a value of null. You can tag a trail that applies to all regions only from the region in which the trail was created (that is, from its home region).</p>
     fn add_tags(&self, input: &AddTagsRequest) -> Result<AddTagsResponse, AddTagsError>;
 
-    #[doc="<p>Creates a trail that specifies the settings for delivery of log data to an Amazon S3 bucket. A maximum of five trails can exist in a region, irrespective of the region in which they were created.</p>"]
+    /// <p>Creates a trail that specifies the settings for delivery of log data to an Amazon S3 bucket. A maximum of five trails can exist in a region, irrespective of the region in which they were created.</p>
     fn create_trail(
         &self,
         input: &CreateTrailRequest,
     ) -> Result<CreateTrailResponse, CreateTrailError>;
 
-    #[doc="<p>Deletes a trail. This operation must be called from the region in which the trail was created. <code>DeleteTrail</code> cannot be called on the shadow trails (replicated trails in other regions) of a trail that is enabled in all regions.</p>"]
+    /// <p>Deletes a trail. This operation must be called from the region in which the trail was created. <code>DeleteTrail</code> cannot be called on the shadow trails (replicated trails in other regions) of a trail that is enabled in all regions.</p>
     fn delete_trail(
         &self,
         input: &DeleteTrailRequest,
     ) -> Result<DeleteTrailResponse, DeleteTrailError>;
 
-    #[doc="<p>Retrieves settings for the trail associated with the current region for your account.</p>"]
+    /// <p>Retrieves settings for the trail associated with the current region for your account.</p>
     fn describe_trails(
         &self,
         input: &DescribeTrailsRequest,
     ) -> Result<DescribeTrailsResponse, DescribeTrailsError>;
 
-    #[doc="<p>Describes the settings for the event selectors that you configured for your trail. The information returned for your event selectors includes the following:</p> <ul> <li> <p>The S3 objects that you are logging for data events.</p> </li> <li> <p>If your event selector includes management events.</p> </li> <li> <p>If your event selector includes read-only events, write-only events, or all. </p> </li> </ul> <p>For more information, see <a href=\"http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html\">Logging Data and Management Events for Trails </a> in the <i>AWS CloudTrail User Guide</i>.</p>"]
+    /// <p>Describes the settings for the event selectors that you configured for your trail. The information returned for your event selectors includes the following:</p> <ul> <li> <p>The S3 objects that you are logging for data events.</p> </li> <li> <p>If your event selector includes management events.</p> </li> <li> <p>If your event selector includes read-only events, write-only events, or all. </p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html">Logging Data and Management Events for Trails </a> in the <i>AWS CloudTrail User Guide</i>.</p>
     fn get_event_selectors(
         &self,
         input: &GetEventSelectorsRequest,
     ) -> Result<GetEventSelectorsResponse, GetEventSelectorsError>;
 
-    #[doc="<p>Returns a JSON-formatted list of information about the specified trail. Fields include information on delivery errors, Amazon SNS and Amazon S3 errors, and start and stop logging times for each trail. This operation returns trail status from a single region. To return trail status from all regions, you must call the operation on each region.</p>"]
+    /// <p>Returns a JSON-formatted list of information about the specified trail. Fields include information on delivery errors, Amazon SNS and Amazon S3 errors, and start and stop logging times for each trail. This operation returns trail status from a single region. To return trail status from all regions, you must call the operation on each region.</p>
     fn get_trail_status(
         &self,
         input: &GetTrailStatusRequest,
     ) -> Result<GetTrailStatusResponse, GetTrailStatusError>;
 
-    #[doc="<p>Returns all public keys whose private keys were used to sign the digest files within the specified time range. The public key is needed to validate digest files that were signed with its corresponding private key.</p> <note> <p>CloudTrail uses different private/public key pairs per region. Each digest file is signed with a private key unique to its region. Therefore, when you validate a digest file from a particular region, you must look in the same region for its corresponding public key.</p> </note>"]
+    /// <p><p>Returns all public keys whose private keys were used to sign the digest files within the specified time range. The public key is needed to validate digest files that were signed with its corresponding private key.</p> <note> <p>CloudTrail uses different private/public key pairs per region. Each digest file is signed with a private key unique to its region. Therefore, when you validate a digest file from a particular region, you must look in the same region for its corresponding public key.</p> </note></p>
     fn list_public_keys(
         &self,
         input: &ListPublicKeysRequest,
     ) -> Result<ListPublicKeysResponse, ListPublicKeysError>;
 
-    #[doc = "<p>Lists the tags for the trail in the current region.</p>"]
+    /// <p>Lists the tags for the trail in the current region.</p>
     fn list_tags(&self, input: &ListTagsRequest) -> Result<ListTagsResponse, ListTagsError>;
 
-    #[doc="<p>Looks up API activity events captured by CloudTrail that create, update, or delete resources in your account. Events for a region can be looked up for the times in which you had CloudTrail turned on in that region during the last seven days. Lookup supports the following attributes:</p> <ul> <li> <p>Event ID</p> </li> <li> <p>Event name</p> </li> <li> <p>Event source</p> </li> <li> <p>Resource name</p> </li> <li> <p>Resource type</p> </li> <li> <p>User name</p> </li> </ul> <p>All attributes are optional. The default number of results returned is 10, with a maximum of 50 possible. The response includes a token that you can use to get the next page of results.</p> <important> <p>The rate of lookup requests is limited to one per second per account. If this limit is exceeded, a throttling error occurs.</p> </important> <important> <p>Events that occurred during the selected time range will not be available for lookup if CloudTrail logging was not enabled when the events occurred.</p> </important>"]
+    /// <p><p>Looks up API activity events captured by CloudTrail that create, update, or delete resources in your account. Events for a region can be looked up for the times in which you had CloudTrail turned on in that region during the last seven days. Lookup supports the following attributes:</p> <ul> <li> <p>Event ID</p> </li> <li> <p>Event name</p> </li> <li> <p>Event source</p> </li> <li> <p>Resource name</p> </li> <li> <p>Resource type</p> </li> <li> <p>User name</p> </li> </ul> <p>All attributes are optional. The default number of results returned is 10, with a maximum of 50 possible. The response includes a token that you can use to get the next page of results.</p> <important> <p>The rate of lookup requests is limited to one per second per account. If this limit is exceeded, a throttling error occurs.</p> </important> <important> <p>Events that occurred during the selected time range will not be available for lookup if CloudTrail logging was not enabled when the events occurred.</p> </important></p>
     fn lookup_events(
         &self,
         input: &LookupEventsRequest,
     ) -> Result<LookupEventsResponse, LookupEventsError>;
 
-    #[doc="<p>Configures an event selector for your trail. Use event selectors to specify whether you want your trail to log management and/or data events. When an event occurs in your account, CloudTrail evaluates the event selectors in all trails. For each trail, if the event matches any event selector, the trail processes and logs the event. If the event doesn't match any event selector, the trail doesn't log the event. </p> <p>Example</p> <ol> <li> <p>You create an event selector for a trail and specify that you want write-only events.</p> </li> <li> <p>The EC2 <code>GetConsoleOutput</code> and <code>RunInstances</code> API operations occur in your account.</p> </li> <li> <p>CloudTrail evaluates whether the events match your event selectors.</p> </li> <li> <p>The <code>RunInstances</code> is a write-only event and it matches your event selector. The trail logs the event.</p> </li> <li> <p>The <code>GetConsoleOutput</code> is a read-only event but it doesn't match your event selector. The trail doesn't log the event. </p> </li> </ol> <p>The <code>PutEventSelectors</code> operation must be called from the region in which the trail was created; otherwise, an <code>InvalidHomeRegionException</code> is thrown.</p> <p>You can configure up to five event selectors for each trail. For more information, see <a href=\"http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html\">Logging Data and Management Events for Trails </a> in the <i>AWS CloudTrail User Guide</i>.</p>"]
+    /// <p>Configures an event selector for your trail. Use event selectors to specify whether you want your trail to log management and/or data events. When an event occurs in your account, CloudTrail evaluates the event selectors in all trails. For each trail, if the event matches any event selector, the trail processes and logs the event. If the event doesn't match any event selector, the trail doesn't log the event. </p> <p>Example</p> <ol> <li> <p>You create an event selector for a trail and specify that you want write-only events.</p> </li> <li> <p>The EC2 <code>GetConsoleOutput</code> and <code>RunInstances</code> API operations occur in your account.</p> </li> <li> <p>CloudTrail evaluates whether the events match your event selectors.</p> </li> <li> <p>The <code>RunInstances</code> is a write-only event and it matches your event selector. The trail logs the event.</p> </li> <li> <p>The <code>GetConsoleOutput</code> is a read-only event but it doesn't match your event selector. The trail doesn't log the event. </p> </li> </ol> <p>The <code>PutEventSelectors</code> operation must be called from the region in which the trail was created; otherwise, an <code>InvalidHomeRegionException</code> is thrown.</p> <p>You can configure up to five event selectors for each trail. For more information, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html">Logging Data and Management Events for Trails </a> in the <i>AWS CloudTrail User Guide</i>.</p>
     fn put_event_selectors(
         &self,
         input: &PutEventSelectorsRequest,
     ) -> Result<PutEventSelectorsResponse, PutEventSelectorsError>;
 
-    #[doc = "<p>Removes the specified tags from a trail.</p>"]
+    /// <p>Removes the specified tags from a trail.</p>
     fn remove_tags(&self, input: &RemoveTagsRequest)
         -> Result<RemoveTagsResponse, RemoveTagsError>;
 
-    #[doc="<p>Starts the recording of AWS API calls and log file delivery for a trail. For a trail that is enabled in all regions, this operation must be called from the region in which the trail was created. This operation cannot be called on the shadow trails (replicated trails in other regions) of a trail that is enabled in all regions.</p>"]
+    /// <p>Starts the recording of AWS API calls and log file delivery for a trail. For a trail that is enabled in all regions, this operation must be called from the region in which the trail was created. This operation cannot be called on the shadow trails (replicated trails in other regions) of a trail that is enabled in all regions.</p>
     fn start_logging(
         &self,
         input: &StartLoggingRequest,
     ) -> Result<StartLoggingResponse, StartLoggingError>;
 
-    #[doc="<p>Suspends the recording of AWS API calls and log file delivery for the specified trail. Under most circumstances, there is no need to use this action. You can update a trail without stopping it first. This action is the only way to stop recording. For a trail enabled in all regions, this operation must be called from the region in which the trail was created, or an <code>InvalidHomeRegionException</code> will occur. This operation cannot be called on the shadow trails (replicated trails in other regions) of a trail enabled in all regions.</p>"]
+    /// <p>Suspends the recording of AWS API calls and log file delivery for the specified trail. Under most circumstances, there is no need to use this action. You can update a trail without stopping it first. This action is the only way to stop recording. For a trail enabled in all regions, this operation must be called from the region in which the trail was created, or an <code>InvalidHomeRegionException</code> will occur. This operation cannot be called on the shadow trails (replicated trails in other regions) of a trail enabled in all regions.</p>
     fn stop_logging(
         &self,
         input: &StopLoggingRequest,
     ) -> Result<StopLoggingResponse, StopLoggingError>;
 
-    #[doc="<p>Updates the settings that specify delivery of log files. Changes to a trail do not require stopping the CloudTrail service. Use this action to designate an existing bucket for log delivery. If the existing bucket has previously been a target for CloudTrail log files, an IAM policy exists for the bucket. <code>UpdateTrail</code> must be called from the region in which the trail was created; otherwise, an <code>InvalidHomeRegionException</code> is thrown.</p>"]
+    /// <p>Updates the settings that specify delivery of log files. Changes to a trail do not require stopping the CloudTrail service. Use this action to designate an existing bucket for log delivery. If the existing bucket has previously been a target for CloudTrail log files, an IAM policy exists for the bucket. <code>UpdateTrail</code> must be called from the region in which the trail was created; otherwise, an <code>InvalidHomeRegionException</code> is thrown.</p>
     fn update_trail(
         &self,
         input: &UpdateTrailRequest,
@@ -2396,7 +2396,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Adds one or more tags to a trail, up to a limit of 50. Tags must be unique per trail. Overwrites an existing tag's value when a new value is specified for an existing tag key. If you specify a key without a value, the tag will be created with the specified key and a value of null. You can tag a trail that applies to all regions only from the region in which the trail was created (that is, from its home region).</p>"]
+    /// <p>Adds one or more tags to a trail, up to a limit of 50. Tags must be unique per trail. Overwrites an existing tag's value when a new value is specified for an existing tag key. If you specify a key without a value, the tag will be created with the specified key and a value of null. You can tag a trail that applies to all regions only from the region in which the trail was created (that is, from its home region).</p>
     fn add_tags(&self, input: &AddTagsRequest) -> Result<AddTagsResponse, AddTagsError> {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
@@ -2432,7 +2432,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a trail that specifies the settings for delivery of log data to an Amazon S3 bucket. A maximum of five trails can exist in a region, irrespective of the region in which they were created.</p>"]
+    /// <p>Creates a trail that specifies the settings for delivery of log data to an Amazon S3 bucket. A maximum of five trails can exist in a region, irrespective of the region in which they were created.</p>
     fn create_trail(
         &self,
         input: &CreateTrailRequest,
@@ -2469,7 +2469,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a trail. This operation must be called from the region in which the trail was created. <code>DeleteTrail</code> cannot be called on the shadow trails (replicated trails in other regions) of a trail that is enabled in all regions.</p>"]
+    /// <p>Deletes a trail. This operation must be called from the region in which the trail was created. <code>DeleteTrail</code> cannot be called on the shadow trails (replicated trails in other regions) of a trail that is enabled in all regions.</p>
     fn delete_trail(
         &self,
         input: &DeleteTrailRequest,
@@ -2506,7 +2506,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves settings for the trail associated with the current region for your account.</p>"]
+    /// <p>Retrieves settings for the trail associated with the current region for your account.</p>
     fn describe_trails(
         &self,
         input: &DescribeTrailsRequest,
@@ -2543,7 +2543,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the settings for the event selectors that you configured for your trail. The information returned for your event selectors includes the following:</p> <ul> <li> <p>The S3 objects that you are logging for data events.</p> </li> <li> <p>If your event selector includes management events.</p> </li> <li> <p>If your event selector includes read-only events, write-only events, or all. </p> </li> </ul> <p>For more information, see <a href=\"http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html\">Logging Data and Management Events for Trails </a> in the <i>AWS CloudTrail User Guide</i>.</p>"]
+    /// <p>Describes the settings for the event selectors that you configured for your trail. The information returned for your event selectors includes the following:</p> <ul> <li> <p>The S3 objects that you are logging for data events.</p> </li> <li> <p>If your event selector includes management events.</p> </li> <li> <p>If your event selector includes read-only events, write-only events, or all. </p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html">Logging Data and Management Events for Trails </a> in the <i>AWS CloudTrail User Guide</i>.</p>
     fn get_event_selectors(
         &self,
         input: &GetEventSelectorsRequest,
@@ -2580,7 +2580,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a JSON-formatted list of information about the specified trail. Fields include information on delivery errors, Amazon SNS and Amazon S3 errors, and start and stop logging times for each trail. This operation returns trail status from a single region. To return trail status from all regions, you must call the operation on each region.</p>"]
+    /// <p>Returns a JSON-formatted list of information about the specified trail. Fields include information on delivery errors, Amazon SNS and Amazon S3 errors, and start and stop logging times for each trail. This operation returns trail status from a single region. To return trail status from all regions, you must call the operation on each region.</p>
     fn get_trail_status(
         &self,
         input: &GetTrailStatusRequest,
@@ -2617,7 +2617,7 @@ where
         }
     }
 
-    #[doc="<p>Returns all public keys whose private keys were used to sign the digest files within the specified time range. The public key is needed to validate digest files that were signed with its corresponding private key.</p> <note> <p>CloudTrail uses different private/public key pairs per region. Each digest file is signed with a private key unique to its region. Therefore, when you validate a digest file from a particular region, you must look in the same region for its corresponding public key.</p> </note>"]
+    /// <p><p>Returns all public keys whose private keys were used to sign the digest files within the specified time range. The public key is needed to validate digest files that were signed with its corresponding private key.</p> <note> <p>CloudTrail uses different private/public key pairs per region. Each digest file is signed with a private key unique to its region. Therefore, when you validate a digest file from a particular region, you must look in the same region for its corresponding public key.</p> </note></p>
     fn list_public_keys(
         &self,
         input: &ListPublicKeysRequest,
@@ -2654,7 +2654,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists the tags for the trail in the current region.</p>"]
+    /// <p>Lists the tags for the trail in the current region.</p>
     fn list_tags(&self, input: &ListTagsRequest) -> Result<ListTagsResponse, ListTagsError> {
         let mut request = SignedRequest::new("POST", "cloudtrail", &self.region, "/");
 
@@ -2688,7 +2688,7 @@ where
         }
     }
 
-    #[doc="<p>Looks up API activity events captured by CloudTrail that create, update, or delete resources in your account. Events for a region can be looked up for the times in which you had CloudTrail turned on in that region during the last seven days. Lookup supports the following attributes:</p> <ul> <li> <p>Event ID</p> </li> <li> <p>Event name</p> </li> <li> <p>Event source</p> </li> <li> <p>Resource name</p> </li> <li> <p>Resource type</p> </li> <li> <p>User name</p> </li> </ul> <p>All attributes are optional. The default number of results returned is 10, with a maximum of 50 possible. The response includes a token that you can use to get the next page of results.</p> <important> <p>The rate of lookup requests is limited to one per second per account. If this limit is exceeded, a throttling error occurs.</p> </important> <important> <p>Events that occurred during the selected time range will not be available for lookup if CloudTrail logging was not enabled when the events occurred.</p> </important>"]
+    /// <p><p>Looks up API activity events captured by CloudTrail that create, update, or delete resources in your account. Events for a region can be looked up for the times in which you had CloudTrail turned on in that region during the last seven days. Lookup supports the following attributes:</p> <ul> <li> <p>Event ID</p> </li> <li> <p>Event name</p> </li> <li> <p>Event source</p> </li> <li> <p>Resource name</p> </li> <li> <p>Resource type</p> </li> <li> <p>User name</p> </li> </ul> <p>All attributes are optional. The default number of results returned is 10, with a maximum of 50 possible. The response includes a token that you can use to get the next page of results.</p> <important> <p>The rate of lookup requests is limited to one per second per account. If this limit is exceeded, a throttling error occurs.</p> </important> <important> <p>Events that occurred during the selected time range will not be available for lookup if CloudTrail logging was not enabled when the events occurred.</p> </important></p>
     fn lookup_events(
         &self,
         input: &LookupEventsRequest,
@@ -2725,7 +2725,7 @@ where
         }
     }
 
-    #[doc="<p>Configures an event selector for your trail. Use event selectors to specify whether you want your trail to log management and/or data events. When an event occurs in your account, CloudTrail evaluates the event selectors in all trails. For each trail, if the event matches any event selector, the trail processes and logs the event. If the event doesn't match any event selector, the trail doesn't log the event. </p> <p>Example</p> <ol> <li> <p>You create an event selector for a trail and specify that you want write-only events.</p> </li> <li> <p>The EC2 <code>GetConsoleOutput</code> and <code>RunInstances</code> API operations occur in your account.</p> </li> <li> <p>CloudTrail evaluates whether the events match your event selectors.</p> </li> <li> <p>The <code>RunInstances</code> is a write-only event and it matches your event selector. The trail logs the event.</p> </li> <li> <p>The <code>GetConsoleOutput</code> is a read-only event but it doesn't match your event selector. The trail doesn't log the event. </p> </li> </ol> <p>The <code>PutEventSelectors</code> operation must be called from the region in which the trail was created; otherwise, an <code>InvalidHomeRegionException</code> is thrown.</p> <p>You can configure up to five event selectors for each trail. For more information, see <a href=\"http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html\">Logging Data and Management Events for Trails </a> in the <i>AWS CloudTrail User Guide</i>.</p>"]
+    /// <p>Configures an event selector for your trail. Use event selectors to specify whether you want your trail to log management and/or data events. When an event occurs in your account, CloudTrail evaluates the event selectors in all trails. For each trail, if the event matches any event selector, the trail processes and logs the event. If the event doesn't match any event selector, the trail doesn't log the event. </p> <p>Example</p> <ol> <li> <p>You create an event selector for a trail and specify that you want write-only events.</p> </li> <li> <p>The EC2 <code>GetConsoleOutput</code> and <code>RunInstances</code> API operations occur in your account.</p> </li> <li> <p>CloudTrail evaluates whether the events match your event selectors.</p> </li> <li> <p>The <code>RunInstances</code> is a write-only event and it matches your event selector. The trail logs the event.</p> </li> <li> <p>The <code>GetConsoleOutput</code> is a read-only event but it doesn't match your event selector. The trail doesn't log the event. </p> </li> </ol> <p>The <code>PutEventSelectors</code> operation must be called from the region in which the trail was created; otherwise, an <code>InvalidHomeRegionException</code> is thrown.</p> <p>You can configure up to five event selectors for each trail. For more information, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html">Logging Data and Management Events for Trails </a> in the <i>AWS CloudTrail User Guide</i>.</p>
     fn put_event_selectors(
         &self,
         input: &PutEventSelectorsRequest,
@@ -2762,7 +2762,7 @@ where
         }
     }
 
-    #[doc = "<p>Removes the specified tags from a trail.</p>"]
+    /// <p>Removes the specified tags from a trail.</p>
     fn remove_tags(
         &self,
         input: &RemoveTagsRequest,
@@ -2799,7 +2799,7 @@ where
         }
     }
 
-    #[doc="<p>Starts the recording of AWS API calls and log file delivery for a trail. For a trail that is enabled in all regions, this operation must be called from the region in which the trail was created. This operation cannot be called on the shadow trails (replicated trails in other regions) of a trail that is enabled in all regions.</p>"]
+    /// <p>Starts the recording of AWS API calls and log file delivery for a trail. For a trail that is enabled in all regions, this operation must be called from the region in which the trail was created. This operation cannot be called on the shadow trails (replicated trails in other regions) of a trail that is enabled in all regions.</p>
     fn start_logging(
         &self,
         input: &StartLoggingRequest,
@@ -2836,7 +2836,7 @@ where
         }
     }
 
-    #[doc="<p>Suspends the recording of AWS API calls and log file delivery for the specified trail. Under most circumstances, there is no need to use this action. You can update a trail without stopping it first. This action is the only way to stop recording. For a trail enabled in all regions, this operation must be called from the region in which the trail was created, or an <code>InvalidHomeRegionException</code> will occur. This operation cannot be called on the shadow trails (replicated trails in other regions) of a trail enabled in all regions.</p>"]
+    /// <p>Suspends the recording of AWS API calls and log file delivery for the specified trail. Under most circumstances, there is no need to use this action. You can update a trail without stopping it first. This action is the only way to stop recording. For a trail enabled in all regions, this operation must be called from the region in which the trail was created, or an <code>InvalidHomeRegionException</code> will occur. This operation cannot be called on the shadow trails (replicated trails in other regions) of a trail enabled in all regions.</p>
     fn stop_logging(
         &self,
         input: &StopLoggingRequest,
@@ -2873,7 +2873,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the settings that specify delivery of log files. Changes to a trail do not require stopping the CloudTrail service. Use this action to designate an existing bucket for log delivery. If the existing bucket has previously been a target for CloudTrail log files, an IAM policy exists for the bucket. <code>UpdateTrail</code> must be called from the region in which the trail was created; otherwise, an <code>InvalidHomeRegionException</code> is thrown.</p>"]
+    /// <p>Updates the settings that specify delivery of log files. Changes to a trail do not require stopping the CloudTrail service. Use this action to designate an existing bucket for log delivery. If the existing bucket has previously been a target for CloudTrail log files, an IAM policy exists for the bucket. <code>UpdateTrail</code> must be called from the region in which the trail was created; otherwise, an <code>InvalidHomeRegionException</code> is thrown.</p>
     fn update_trail(
         &self,
         input: &UpdateTrailRequest,

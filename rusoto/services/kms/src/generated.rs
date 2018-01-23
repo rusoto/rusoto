@@ -64,7 +64,7 @@ pub struct CreateAliasRequest {
     /// <p>String that contains the display name. The name must start with the word "alias" followed by a forward slash (alias/). Aliases that begin with "alias/AWS" are reserved.</p>
     #[serde(rename = "AliasName")]
     pub alias_name: String,
-    /// <p>An identifier of the key for which you are creating the alias. This value cannot be another alias but can be a globally unique identifier or a fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul>
+    /// <p><p>An identifier of the key for which you are creating the alias. This value cannot be another alias but can be a globally unique identifier or a fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul></p>
     #[serde(rename = "TargetKeyId")]
     pub target_key_id: String,
 }
@@ -82,7 +82,7 @@ pub struct CreateGrantRequest {
     /// <p>The principal that is given permission to perform the operations that the grant permits.</p> <p>To specify the principal, use the <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Name (ARN)</a> of an AWS principal. Valid AWS principals include AWS accounts (root), IAM users, IAM roles, federated users, and assumed role users. For examples of the ARN syntax to use for specifying a principal, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-iam">AWS Identity and Access Management (IAM)</a> in the Example ARNs section of the <i>AWS General Reference</i>.</p>
     #[serde(rename = "GranteePrincipal")]
     pub grantee_principal: String,
-    /// <p>The unique identifier for the customer master key (CMK) that the grant applies to.</p> <p>To specify this value, use the globally unique key ID or the Amazon Resource Name (ARN) of the key. Examples:</p> <ul> <li> <p>Globally unique key ID: 12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Key ARN: arn:aws:kms:us-west-2:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> </ul>
+    /// <p><p>The unique identifier for the customer master key (CMK) that the grant applies to.</p> <p>To specify this value, use the globally unique key ID or the Amazon Resource Name (ARN) of the key. Examples:</p> <ul> <li> <p>Globally unique key ID: 12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Key ARN: arn:aws:kms:us-west-2:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> </ul></p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
     /// <p>A friendly name for identifying the grant. Use this value to prevent unintended creation of duplicate grants when retrying this request.</p> <p>When this value is absent, all <code>CreateGrant</code> requests result in a new grant with a unique <code>GrantId</code> even if all the supplied parameters are identical. This can result in unintended duplicates when you retry the <code>CreateGrant</code> request.</p> <p>When this value is present, you can retry a <code>CreateGrant</code> request with identical parameters; if the grant already exists, the original <code>GrantId</code> is returned without creating a new grant. Note that the returned grant token is unique with every <code>CreateGrant</code> request, even when a duplicate <code>GrantId</code> is returned. All grant tokens obtained in this way can be used interchangeably.</p>
@@ -186,7 +186,7 @@ pub struct DeleteAliasRequest {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteImportedKeyMaterialRequest {
-    /// <p>The identifier of the CMK whose key material to delete. The CMK's <code>Origin</code> must be <code>EXTERNAL</code>.</p> <p>A valid identifier is the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul>
+    /// <p><p>The identifier of the CMK whose key material to delete. The CMK&#39;s <code>Origin</code> must be <code>EXTERNAL</code>.</p> <p>A valid identifier is the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul></p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
 }
@@ -197,7 +197,7 @@ pub struct DescribeKeyRequest {
     #[serde(rename = "GrantTokens")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub grant_tokens: Option<Vec<String>>,
-    /// <p>A unique identifier for the customer master key. This value can be a globally unique identifier, a fully specified ARN to either an alias or a key, or an alias name prefixed by "alias/".</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Alias ARN Example - arn:aws:kms:us-east-1:123456789012:alias/MyAliasName</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Alias Name Example - alias/MyAliasName</p> </li> </ul>
+    /// <p><p>A unique identifier for the customer master key. This value can be a globally unique identifier, a fully specified ARN to either an alias or a key, or an alias name prefixed by &quot;alias/&quot;.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Alias ARN Example - arn:aws:kms:us-east-1:123456789012:alias/MyAliasName</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Alias Name Example - alias/MyAliasName</p> </li> </ul></p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
 }
@@ -212,28 +212,28 @@ pub struct DescribeKeyResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DisableKeyRequest {
-    /// <p>A unique identifier for the CMK.</p> <p>Use the CMK's unique identifier or its Amazon Resource Name (ARN). For example:</p> <ul> <li> <p>Unique ID: 1234abcd-12ab-34cd-56ef-1234567890ab</p> </li> <li> <p>ARN: arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</p> </li> </ul>
+    /// <p><p>A unique identifier for the CMK.</p> <p>Use the CMK&#39;s unique identifier or its Amazon Resource Name (ARN). For example:</p> <ul> <li> <p>Unique ID: 1234abcd-12ab-34cd-56ef-1234567890ab</p> </li> <li> <p>ARN: arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</p> </li> </ul></p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DisableKeyRotationRequest {
-    /// <p>A unique identifier for the customer master key. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul>
+    /// <p><p>A unique identifier for the customer master key. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul></p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct EnableKeyRequest {
-    /// <p>A unique identifier for the customer master key. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul>
+    /// <p><p>A unique identifier for the customer master key. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul></p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct EnableKeyRotationRequest {
-    /// <p>A unique identifier for the customer master key. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul>
+    /// <p><p>A unique identifier for the customer master key. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul></p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
 }
@@ -248,7 +248,7 @@ pub struct EncryptRequest {
     #[serde(rename = "GrantTokens")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub grant_tokens: Option<Vec<String>>,
-    /// <p>A unique identifier for the customer master key. This value can be a globally unique identifier, a fully specified ARN to either an alias or a key, or an alias name prefixed by "alias/".</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Alias ARN Example - arn:aws:kms:us-east-1:123456789012:alias/MyAliasName</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Alias Name Example - alias/MyAliasName</p> </li> </ul>
+    /// <p><p>A unique identifier for the customer master key. This value can be a globally unique identifier, a fully specified ARN to either an alias or a key, or an alias name prefixed by &quot;alias/&quot;.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Alias ARN Example - arn:aws:kms:us-east-1:123456789012:alias/MyAliasName</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Alias Name Example - alias/MyAliasName</p> </li> </ul></p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
     /// <p>Data to be encrypted.</p>
@@ -281,7 +281,7 @@ pub struct GenerateDataKeyRequest {
     #[serde(rename = "GrantTokens")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub grant_tokens: Option<Vec<String>>,
-    /// <p>The identifier of the CMK under which to generate and encrypt the data encryption key.</p> <p>A valid identifier is the unique key ID or the Amazon Resource Name (ARN) of the CMK, or the alias name or ARN of an alias that refers to the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>CMK ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Alias name: <code>alias/ExampleAlias</code> </p> </li> <li> <p>Alias ARN: <code>arn:aws:kms:us-east-2:111122223333:alias/ExampleAlias</code> </p> </li> </ul>
+    /// <p><p>The identifier of the CMK under which to generate and encrypt the data encryption key.</p> <p>A valid identifier is the unique key ID or the Amazon Resource Name (ARN) of the CMK, or the alias name or ARN of an alias that refers to the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>CMK ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Alias name: <code>alias/ExampleAlias</code> </p> </li> <li> <p>Alias ARN: <code>arn:aws:kms:us-east-2:111122223333:alias/ExampleAlias</code> </p> </li> </ul></p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
     /// <p>The length of the data encryption key. Use <code>AES_128</code> to generate a 128-bit symmetric key, or <code>AES_256</code> to generate a 256-bit symmetric key.</p>
@@ -322,7 +322,7 @@ pub struct GenerateDataKeyWithoutPlaintextRequest {
     #[serde(rename = "GrantTokens")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub grant_tokens: Option<Vec<String>>,
-    /// <p>The identifier of the CMK under which to generate and encrypt the data encryption key.</p> <p>A valid identifier is the unique key ID or the Amazon Resource Name (ARN) of the CMK, or the alias name or ARN of an alias that refers to the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>CMK ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Alias name: <code>alias/ExampleAlias</code> </p> </li> <li> <p>Alias ARN: <code>arn:aws:kms:us-east-2:111122223333:alias/ExampleAlias</code> </p> </li> </ul>
+    /// <p><p>The identifier of the CMK under which to generate and encrypt the data encryption key.</p> <p>A valid identifier is the unique key ID or the Amazon Resource Name (ARN) of the CMK, or the alias name or ARN of an alias that refers to the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>CMK ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Alias name: <code>alias/ExampleAlias</code> </p> </li> <li> <p>Alias ARN: <code>arn:aws:kms:us-east-2:111122223333:alias/ExampleAlias</code> </p> </li> </ul></p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
     /// <p>The length of the data encryption key. Use <code>AES_128</code> to generate a 128-bit symmetric key, or <code>AES_256</code> to generate a 256-bit symmetric key.</p>
@@ -367,7 +367,7 @@ pub struct GenerateRandomResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetKeyPolicyRequest {
-    /// <p>A unique identifier for the customer master key. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul>
+    /// <p><p>A unique identifier for the customer master key. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul></p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
     /// <p>String that contains the name of the policy. Currently, this must be "default". Policy names can be discovered by calling <a>ListKeyPolicies</a>.</p>
@@ -385,7 +385,7 @@ pub struct GetKeyPolicyResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetKeyRotationStatusRequest {
-    /// <p>A unique identifier for the customer master key. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul>
+    /// <p><p>A unique identifier for the customer master key. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul></p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
 }
@@ -400,7 +400,7 @@ pub struct GetKeyRotationStatusResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetParametersForImportRequest {
-    /// <p>The identifier of the CMK into which you will import key material. The CMK's <code>Origin</code> must be <code>EXTERNAL</code>.</p> <p>A valid identifier is the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul>
+    /// <p><p>The identifier of the CMK into which you will import key material. The CMK&#39;s <code>Origin</code> must be <code>EXTERNAL</code>.</p> <p>A valid identifier is the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul></p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
     /// <p>The algorithm you will use to encrypt the key material before importing it with <a>ImportKeyMaterial</a>. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys-encrypt-key-material.html">Encrypt the Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
@@ -503,7 +503,7 @@ pub struct ImportKeyMaterialRequest {
     #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
             serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
     pub import_token: Vec<u8>,
-    /// <p>The identifier of the CMK to import the key material into. The CMK's <code>Origin</code> must be <code>EXTERNAL</code>.</p> <p>A valid identifier is the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul>
+    /// <p><p>The identifier of the CMK to import the key material into. The CMK&#39;s <code>Origin</code> must be <code>EXTERNAL</code>.</p> <p>A valid identifier is the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul></p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
     /// <p>The time at which the imported key material expires. When the key material expires, AWS KMS deletes the key material and the CMK becomes unusable. You must omit this parameter when the <code>ExpirationModel</code> parameter is set to <code>KEY_MATERIAL_DOES_NOT_EXPIRE</code>. Otherwise it is required.</p>
@@ -614,7 +614,7 @@ pub struct ListAliasesResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListGrantsRequest {
-    /// <p>A unique identifier for the customer master key. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul>
+    /// <p><p>A unique identifier for the customer master key. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul></p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
     /// <p>Use this parameter to specify the maximum number of items to return. When this value is present, AWS KMS does not return more than the specified number of items, but it might return fewer.</p> <p>This value is optional. If you include a value, it must be between 1 and 100, inclusive. If you do not include a value, it defaults to 50.</p>
@@ -645,7 +645,7 @@ pub struct ListGrantsResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListKeyPoliciesRequest {
-    /// <p>A unique identifier for the customer master key (CMK). You can use the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul>
+    /// <p><p>A unique identifier for the customer master key (CMK). You can use the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul></p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
     /// <p>Use this parameter to specify the maximum number of items to return. When this value is present, AWS KMS does not return more than the specified number of items, but it might return fewer.</p> <p>This value is optional. If you include a value, it must be between 1 and 1000, inclusive. If you do not include a value, it defaults to 100.</p> <p>Currently only 1 policy can be attached to a key.</p>
@@ -704,7 +704,7 @@ pub struct ListKeysResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListResourceTagsRequest {
-    /// <p>A unique identifier for the CMK whose tags you are listing. You can use the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul>
+    /// <p><p>A unique identifier for the CMK whose tags you are listing. You can use the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul></p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
     /// <p>Use this parameter to specify the maximum number of items to return. When this value is present, AWS KMS does not return more than the specified number of items, but it might return fewer.</p> <p>This value is optional. If you include a value, it must be between 1 and 50, inclusive. If you do not include a value, it defaults to 50.</p>
@@ -754,7 +754,7 @@ pub struct PutKeyPolicyRequest {
     #[serde(rename = "BypassPolicyLockoutSafetyCheck")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bypass_policy_lockout_safety_check: Option<bool>,
-    /// <p>A unique identifier for the CMK.</p> <p>Use the CMK's unique identifier or its Amazon Resource Name (ARN). For example:</p> <ul> <li> <p>Unique ID: 1234abcd-12ab-34cd-56ef-1234567890ab</p> </li> <li> <p>ARN: arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</p> </li> </ul>
+    /// <p><p>A unique identifier for the CMK.</p> <p>Use the CMK&#39;s unique identifier or its Amazon Resource Name (ARN). For example:</p> <ul> <li> <p>Unique ID: 1234abcd-12ab-34cd-56ef-1234567890ab</p> </li> <li> <p>ARN: arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</p> </li> </ul></p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
     /// <p>The key policy to attach to the CMK.</p> <p>If you do not set <code>BypassPolicyLockoutSafetyCheck</code> to true, the policy must meet the following criteria:</p> <ul> <li> <p>It must allow the principal that is making the <code>PutKeyPolicy</code> request to make a subsequent <code>PutKeyPolicy</code> request on the CMK. This reduces the likelihood that the CMK becomes unmanageable. For more information, refer to the scenario in the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-root-enable-iam">Default Key Policy</a> section in the <i>AWS Key Management Service Developer Guide</i>.</p> </li> <li> <p>The principals that are specified in the key policy must exist and be visible to AWS KMS. When you create a new AWS principal (for example, an IAM user or role), you might need to enforce a delay before specifying the new principal in a key policy because the new principal might not immediately be visible to AWS KMS. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_general.html#troubleshoot_general_eventual-consistency">Changes that I make are not always immediately visible</a> in the <i>IAM User Guide</i>.</p> </li> </ul> <p>The policy size limit is 32 KiB (32768 bytes).</p>
@@ -776,7 +776,7 @@ pub struct ReEncryptRequest {
     #[serde(rename = "DestinationEncryptionContext")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_encryption_context: Option<::std::collections::HashMap<String, String>>,
-    /// <p>A unique identifier for the CMK to use to reencrypt the data. This value can be a globally unique identifier, a fully specified ARN to either an alias or a key, or an alias name prefixed by "alias/".</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Alias ARN Example - arn:aws:kms:us-east-1:123456789012:alias/MyAliasName</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Alias Name Example - alias/MyAliasName</p> </li> </ul>
+    /// <p><p>A unique identifier for the CMK to use to reencrypt the data. This value can be a globally unique identifier, a fully specified ARN to either an alias or a key, or an alias name prefixed by &quot;alias/&quot;.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Alias ARN Example - arn:aws:kms:us-east-1:123456789012:alias/MyAliasName</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Alias Name Example - alias/MyAliasName</p> </li> </ul></p>
     #[serde(rename = "DestinationKeyId")]
     pub destination_key_id: String,
     /// <p>A list of grant tokens.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#grant_token">Grant Tokens</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
@@ -808,7 +808,7 @@ pub struct ReEncryptResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct RetireGrantRequest {
-    /// <p>Unique identifier of the grant to retire. The grant ID is returned in the response to a <code>CreateGrant</code> operation.</p> <ul> <li> <p>Grant ID Example - 0123456789012345678901234567890123456789012345678901234567890123</p> </li> </ul>
+    /// <p><p>Unique identifier of the grant to retire. The grant ID is returned in the response to a <code>CreateGrant</code> operation.</p> <ul> <li> <p>Grant ID Example - 0123456789012345678901234567890123456789012345678901234567890123</p> </li> </ul></p>
     #[serde(rename = "GrantId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub grant_id: Option<String>,
@@ -816,7 +816,7 @@ pub struct RetireGrantRequest {
     #[serde(rename = "GrantToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub grant_token: Option<String>,
-    /// <p>The Amazon Resource Name of the CMK associated with the grant. Example:</p> <ul> <li> <p>arn:aws:kms:us-east-2:444455556666:key/1234abcd-12ab-34cd-56ef-1234567890ab</p> </li> </ul>
+    /// <p><p>The Amazon Resource Name of the CMK associated with the grant. Example:</p> <ul> <li> <p>arn:aws:kms:us-east-2:444455556666:key/1234abcd-12ab-34cd-56ef-1234567890ab</p> </li> </ul></p>
     #[serde(rename = "KeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_id: Option<String>,
@@ -827,7 +827,7 @@ pub struct RevokeGrantRequest {
     /// <p>Identifier of the grant to be revoked.</p>
     #[serde(rename = "GrantId")]
     pub grant_id: String,
-    /// <p>A unique identifier for the customer master key associated with the grant. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul>
+    /// <p><p>A unique identifier for the customer master key associated with the grant. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul></p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
 }
@@ -868,7 +868,7 @@ pub struct Tag {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct TagResourceRequest {
-    /// <p>A unique identifier for the CMK you are tagging. You can use the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul>
+    /// <p><p>A unique identifier for the CMK you are tagging. You can use the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul></p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
     /// <p>One or more tags. Each tag consists of a tag key and a tag value.</p>
@@ -878,7 +878,7 @@ pub struct TagResourceRequest {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UntagResourceRequest {
-    /// <p>A unique identifier for the CMK from which you are removing tags. You can use the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul>
+    /// <p><p>A unique identifier for the CMK from which you are removing tags. You can use the unique key ID or the Amazon Resource Name (ARN) of the CMK. Examples:</p> <ul> <li> <p>Unique key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul></p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
     /// <p>One or more tag keys. Specify only the tag keys, not the tag values.</p>
@@ -901,7 +901,7 @@ pub struct UpdateKeyDescriptionRequest {
     /// <p>New description for the CMK.</p>
     #[serde(rename = "Description")]
     pub description: String,
-    /// <p>A unique identifier for the CMK. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul>
+    /// <p><p>A unique identifier for the CMK. This value can be a globally unique identifier or the fully specified ARN to a key.</p> <ul> <li> <p>Key ARN Example - arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>Globally Unique Key ID Example - 12345678-1234-1234-1234-123456789012</p> </li> </ul></p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
 }
@@ -909,15 +909,15 @@ pub struct UpdateKeyDescriptionRequest {
 /// Errors returned by CancelKeyDeletion
 #[derive(Debug, PartialEq)]
 pub enum CancelKeyDeletionError {
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because a specified ARN was not valid.</p>
+    /// <p>The request was rejected because a specified ARN was not valid.</p>
     InvalidArn(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     KMSInvalidState(String),
-    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1013,19 +1013,19 @@ impl Error for CancelKeyDeletionError {
 /// Errors returned by CreateAlias
 #[derive(Debug, PartialEq)]
 pub enum CreateAliasError {
-    ///<p>The request was rejected because it attempted to create a resource that already exists.</p>
+    /// <p>The request was rejected because it attempted to create a resource that already exists.</p>
     AlreadyExists(String),
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because the specified alias name is not valid.</p>
+    /// <p>The request was rejected because the specified alias name is not valid.</p>
     InvalidAliasName(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     KMSInvalidState(String),
-    ///<p>The request was rejected because a limit was exceeded. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html">Limits</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because a limit was exceeded. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html">Limits</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1125,21 +1125,21 @@ impl Error for CreateAliasError {
 /// Errors returned by CreateGrant
 #[derive(Debug, PartialEq)]
 pub enum CreateGrantError {
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because the specified CMK is not enabled.</p>
+    /// <p>The request was rejected because the specified CMK is not enabled.</p>
     Disabled(String),
-    ///<p>The request was rejected because a specified ARN was not valid.</p>
+    /// <p>The request was rejected because a specified ARN was not valid.</p>
     InvalidArn(String),
-    ///<p>The request was rejected because the specified grant token is not valid.</p>
+    /// <p>The request was rejected because the specified grant token is not valid.</p>
     InvalidGrantToken(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     KMSInvalidState(String),
-    ///<p>The request was rejected because a limit was exceeded. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html">Limits</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because a limit was exceeded. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html">Limits</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1241,19 +1241,19 @@ impl Error for CreateGrantError {
 /// Errors returned by CreateKey
 #[derive(Debug, PartialEq)]
 pub enum CreateKeyError {
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because a specified ARN was not valid.</p>
+    /// <p>The request was rejected because a specified ARN was not valid.</p>
     InvalidArn(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because a limit was exceeded. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html">Limits</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because a limit was exceeded. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html">Limits</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because the specified policy is not syntactically or semantically correct.</p>
+    /// <p>The request was rejected because the specified policy is not syntactically or semantically correct.</p>
     MalformedPolicyDocument(String),
-    ///<p>The request was rejected because one or more tags are not valid.</p>
+    /// <p>The request was rejected because one or more tags are not valid.</p>
     Tag(String),
-    ///<p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
+    /// <p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
     UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1351,21 +1351,21 @@ impl Error for CreateKeyError {
 /// Errors returned by Decrypt
 #[derive(Debug, PartialEq)]
 pub enum DecryptError {
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because the specified CMK is not enabled.</p>
+    /// <p>The request was rejected because the specified CMK is not enabled.</p>
     Disabled(String),
-    ///<p>The request was rejected because the specified ciphertext has been corrupted or is otherwise invalid.</p>
+    /// <p>The request was rejected because the specified ciphertext has been corrupted or is otherwise invalid.</p>
     InvalidCiphertext(String),
-    ///<p>The request was rejected because the specified grant token is not valid.</p>
+    /// <p>The request was rejected because the specified grant token is not valid.</p>
     InvalidGrantToken(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     KMSInvalidState(String),
-    ///<p>The request was rejected because the specified CMK was not available. The request can be retried.</p>
+    /// <p>The request was rejected because the specified CMK was not available. The request can be retried.</p>
     KeyUnavailable(String),
-    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1465,13 +1465,13 @@ impl Error for DecryptError {
 /// Errors returned by DeleteAlias
 #[derive(Debug, PartialEq)]
 pub enum DeleteAliasError {
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     KMSInvalidState(String),
-    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1559,17 +1559,17 @@ impl Error for DeleteAliasError {
 /// Errors returned by DeleteImportedKeyMaterial
 #[derive(Debug, PartialEq)]
 pub enum DeleteImportedKeyMaterialError {
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because a specified ARN was not valid.</p>
+    /// <p>The request was rejected because a specified ARN was not valid.</p>
     InvalidArn(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     KMSInvalidState(String),
-    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    ///<p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
+    /// <p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
     UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1673,13 +1673,13 @@ impl Error for DeleteImportedKeyMaterialError {
 /// Errors returned by DescribeKey
 #[derive(Debug, PartialEq)]
 pub enum DescribeKeyError {
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because a specified ARN was not valid.</p>
+    /// <p>The request was rejected because a specified ARN was not valid.</p>
     InvalidArn(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1767,15 +1767,15 @@ impl Error for DescribeKeyError {
 /// Errors returned by DisableKey
 #[derive(Debug, PartialEq)]
 pub enum DisableKeyError {
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because a specified ARN was not valid.</p>
+    /// <p>The request was rejected because a specified ARN was not valid.</p>
     InvalidArn(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     KMSInvalidState(String),
-    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1865,19 +1865,19 @@ impl Error for DisableKeyError {
 /// Errors returned by DisableKeyRotation
 #[derive(Debug, PartialEq)]
 pub enum DisableKeyRotationError {
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because the specified CMK is not enabled.</p>
+    /// <p>The request was rejected because the specified CMK is not enabled.</p>
     Disabled(String),
-    ///<p>The request was rejected because a specified ARN was not valid.</p>
+    /// <p>The request was rejected because a specified ARN was not valid.</p>
     InvalidArn(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     KMSInvalidState(String),
-    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    ///<p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
+    /// <p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
     UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1981,17 +1981,17 @@ impl Error for DisableKeyRotationError {
 /// Errors returned by EnableKey
 #[derive(Debug, PartialEq)]
 pub enum EnableKeyError {
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because a specified ARN was not valid.</p>
+    /// <p>The request was rejected because a specified ARN was not valid.</p>
     InvalidArn(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     KMSInvalidState(String),
-    ///<p>The request was rejected because a limit was exceeded. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html">Limits</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because a limit was exceeded. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html">Limits</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2085,19 +2085,19 @@ impl Error for EnableKeyError {
 /// Errors returned by EnableKeyRotation
 #[derive(Debug, PartialEq)]
 pub enum EnableKeyRotationError {
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because the specified CMK is not enabled.</p>
+    /// <p>The request was rejected because the specified CMK is not enabled.</p>
     Disabled(String),
-    ///<p>The request was rejected because a specified ARN was not valid.</p>
+    /// <p>The request was rejected because a specified ARN was not valid.</p>
     InvalidArn(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     KMSInvalidState(String),
-    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    ///<p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
+    /// <p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
     UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2201,21 +2201,21 @@ impl Error for EnableKeyRotationError {
 /// Errors returned by Encrypt
 #[derive(Debug, PartialEq)]
 pub enum EncryptError {
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because the specified CMK is not enabled.</p>
+    /// <p>The request was rejected because the specified CMK is not enabled.</p>
     Disabled(String),
-    ///<p>The request was rejected because the specified grant token is not valid.</p>
+    /// <p>The request was rejected because the specified grant token is not valid.</p>
     InvalidGrantToken(String),
-    ///<p>The request was rejected because the specified <code>KeySpec</code> value is not valid.</p>
+    /// <p>The request was rejected because the specified <code>KeySpec</code> value is not valid.</p>
     InvalidKeyUsage(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     KMSInvalidState(String),
-    ///<p>The request was rejected because the specified CMK was not available. The request can be retried.</p>
+    /// <p>The request was rejected because the specified CMK was not available. The request can be retried.</p>
     KeyUnavailable(String),
-    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2315,21 +2315,21 @@ impl Error for EncryptError {
 /// Errors returned by GenerateDataKey
 #[derive(Debug, PartialEq)]
 pub enum GenerateDataKeyError {
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because the specified CMK is not enabled.</p>
+    /// <p>The request was rejected because the specified CMK is not enabled.</p>
     Disabled(String),
-    ///<p>The request was rejected because the specified grant token is not valid.</p>
+    /// <p>The request was rejected because the specified grant token is not valid.</p>
     InvalidGrantToken(String),
-    ///<p>The request was rejected because the specified <code>KeySpec</code> value is not valid.</p>
+    /// <p>The request was rejected because the specified <code>KeySpec</code> value is not valid.</p>
     InvalidKeyUsage(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     KMSInvalidState(String),
-    ///<p>The request was rejected because the specified CMK was not available. The request can be retried.</p>
+    /// <p>The request was rejected because the specified CMK was not available. The request can be retried.</p>
     KeyUnavailable(String),
-    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2435,21 +2435,21 @@ impl Error for GenerateDataKeyError {
 /// Errors returned by GenerateDataKeyWithoutPlaintext
 #[derive(Debug, PartialEq)]
 pub enum GenerateDataKeyWithoutPlaintextError {
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because the specified CMK is not enabled.</p>
+    /// <p>The request was rejected because the specified CMK is not enabled.</p>
     Disabled(String),
-    ///<p>The request was rejected because the specified grant token is not valid.</p>
+    /// <p>The request was rejected because the specified grant token is not valid.</p>
     InvalidGrantToken(String),
-    ///<p>The request was rejected because the specified <code>KeySpec</code> value is not valid.</p>
+    /// <p>The request was rejected because the specified <code>KeySpec</code> value is not valid.</p>
     InvalidKeyUsage(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     KMSInvalidState(String),
-    ///<p>The request was rejected because the specified CMK was not available. The request can be retried.</p>
+    /// <p>The request was rejected because the specified CMK was not available. The request can be retried.</p>
     KeyUnavailable(String),
-    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2567,9 +2567,9 @@ impl Error for GenerateDataKeyWithoutPlaintextError {
 /// Errors returned by GenerateRandom
 #[derive(Debug, PartialEq)]
 pub enum GenerateRandomError {
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2651,15 +2651,15 @@ impl Error for GenerateRandomError {
 /// Errors returned by GetKeyPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetKeyPolicyError {
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because a specified ARN was not valid.</p>
+    /// <p>The request was rejected because a specified ARN was not valid.</p>
     InvalidArn(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     KMSInvalidState(String),
-    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2751,17 +2751,17 @@ impl Error for GetKeyPolicyError {
 /// Errors returned by GetKeyRotationStatus
 #[derive(Debug, PartialEq)]
 pub enum GetKeyRotationStatusError {
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because a specified ARN was not valid.</p>
+    /// <p>The request was rejected because a specified ARN was not valid.</p>
     InvalidArn(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     KMSInvalidState(String),
-    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    ///<p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
+    /// <p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
     UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2861,17 +2861,17 @@ impl Error for GetKeyRotationStatusError {
 /// Errors returned by GetParametersForImport
 #[derive(Debug, PartialEq)]
 pub enum GetParametersForImportError {
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because a specified ARN was not valid.</p>
+    /// <p>The request was rejected because a specified ARN was not valid.</p>
     InvalidArn(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     KMSInvalidState(String),
-    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    ///<p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
+    /// <p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
     UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2973,25 +2973,25 @@ impl Error for GetParametersForImportError {
 /// Errors returned by ImportKeyMaterial
 #[derive(Debug, PartialEq)]
 pub enum ImportKeyMaterialError {
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because the provided import token is expired. Use <a>GetParametersForImport</a> to retrieve a new import token and public key, use the new public key to encrypt the key material, and then try the request again.</p>
+    /// <p>The request was rejected because the provided import token is expired. Use <a>GetParametersForImport</a> to retrieve a new import token and public key, use the new public key to encrypt the key material, and then try the request again.</p>
     ExpiredImportToken(String),
-    ///<p>The request was rejected because the provided key material is invalid or is not the same key material that was previously imported into this customer master key (CMK).</p>
+    /// <p>The request was rejected because the provided key material is invalid or is not the same key material that was previously imported into this customer master key (CMK).</p>
     IncorrectKeyMaterial(String),
-    ///<p>The request was rejected because a specified ARN was not valid.</p>
+    /// <p>The request was rejected because a specified ARN was not valid.</p>
     InvalidArn(String),
-    ///<p>The request was rejected because the specified ciphertext has been corrupted or is otherwise invalid.</p>
+    /// <p>The request was rejected because the specified ciphertext has been corrupted or is otherwise invalid.</p>
     InvalidCiphertext(String),
-    ///<p>The request was rejected because the provided import token is invalid or is associated with a different customer master key (CMK).</p>
+    /// <p>The request was rejected because the provided import token is invalid or is associated with a different customer master key (CMK).</p>
     InvalidImportToken(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     KMSInvalidState(String),
-    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    ///<p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
+    /// <p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
     UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3107,11 +3107,11 @@ impl Error for ImportKeyMaterialError {
 /// Errors returned by ListAliases
 #[derive(Debug, PartialEq)]
 pub enum ListAliasesError {
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because the marker that specifies where pagination should next begin is not valid.</p>
+    /// <p>The request was rejected because the marker that specifies where pagination should next begin is not valid.</p>
     InvalidMarker(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3197,17 +3197,17 @@ impl Error for ListAliasesError {
 /// Errors returned by ListGrants
 #[derive(Debug, PartialEq)]
 pub enum ListGrantsError {
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because a specified ARN was not valid.</p>
+    /// <p>The request was rejected because a specified ARN was not valid.</p>
     InvalidArn(String),
-    ///<p>The request was rejected because the marker that specifies where pagination should next begin is not valid.</p>
+    /// <p>The request was rejected because the marker that specifies where pagination should next begin is not valid.</p>
     InvalidMarker(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     KMSInvalidState(String),
-    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3301,15 +3301,15 @@ impl Error for ListGrantsError {
 /// Errors returned by ListKeyPolicies
 #[derive(Debug, PartialEq)]
 pub enum ListKeyPoliciesError {
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because a specified ARN was not valid.</p>
+    /// <p>The request was rejected because a specified ARN was not valid.</p>
     InvalidArn(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     KMSInvalidState(String),
-    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3403,11 +3403,11 @@ impl Error for ListKeyPoliciesError {
 /// Errors returned by ListKeys
 #[derive(Debug, PartialEq)]
 pub enum ListKeysError {
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because the marker that specifies where pagination should next begin is not valid.</p>
+    /// <p>The request was rejected because the marker that specifies where pagination should next begin is not valid.</p>
     InvalidMarker(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3491,13 +3491,13 @@ impl Error for ListKeysError {
 /// Errors returned by ListResourceTags
 #[derive(Debug, PartialEq)]
 pub enum ListResourceTagsError {
-    ///<p>The request was rejected because a specified ARN was not valid.</p>
+    /// <p>The request was rejected because a specified ARN was not valid.</p>
     InvalidArn(String),
-    ///<p>The request was rejected because the marker that specifies where pagination should next begin is not valid.</p>
+    /// <p>The request was rejected because the marker that specifies where pagination should next begin is not valid.</p>
     InvalidMarker(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3587,15 +3587,15 @@ impl Error for ListResourceTagsError {
 /// Errors returned by ListRetirableGrants
 #[derive(Debug, PartialEq)]
 pub enum ListRetirableGrantsError {
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because a specified ARN was not valid.</p>
+    /// <p>The request was rejected because a specified ARN was not valid.</p>
     InvalidArn(String),
-    ///<p>The request was rejected because the marker that specifies where pagination should next begin is not valid.</p>
+    /// <p>The request was rejected because the marker that specifies where pagination should next begin is not valid.</p>
     InvalidMarker(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3691,21 +3691,21 @@ impl Error for ListRetirableGrantsError {
 /// Errors returned by PutKeyPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutKeyPolicyError {
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because a specified ARN was not valid.</p>
+    /// <p>The request was rejected because a specified ARN was not valid.</p>
     InvalidArn(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     KMSInvalidState(String),
-    ///<p>The request was rejected because a limit was exceeded. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html">Limits</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because a limit was exceeded. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html">Limits</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because the specified policy is not syntactically or semantically correct.</p>
+    /// <p>The request was rejected because the specified policy is not syntactically or semantically correct.</p>
     MalformedPolicyDocument(String),
-    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    ///<p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
+    /// <p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation.</p>
     UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3809,23 +3809,23 @@ impl Error for PutKeyPolicyError {
 /// Errors returned by ReEncrypt
 #[derive(Debug, PartialEq)]
 pub enum ReEncryptError {
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because the specified CMK is not enabled.</p>
+    /// <p>The request was rejected because the specified CMK is not enabled.</p>
     Disabled(String),
-    ///<p>The request was rejected because the specified ciphertext has been corrupted or is otherwise invalid.</p>
+    /// <p>The request was rejected because the specified ciphertext has been corrupted or is otherwise invalid.</p>
     InvalidCiphertext(String),
-    ///<p>The request was rejected because the specified grant token is not valid.</p>
+    /// <p>The request was rejected because the specified grant token is not valid.</p>
     InvalidGrantToken(String),
-    ///<p>The request was rejected because the specified <code>KeySpec</code> value is not valid.</p>
+    /// <p>The request was rejected because the specified <code>KeySpec</code> value is not valid.</p>
     InvalidKeyUsage(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     KMSInvalidState(String),
-    ///<p>The request was rejected because the specified CMK was not available. The request can be retried.</p>
+    /// <p>The request was rejected because the specified CMK was not available. The request can be retried.</p>
     KeyUnavailable(String),
-    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3929,17 +3929,17 @@ impl Error for ReEncryptError {
 /// Errors returned by RetireGrant
 #[derive(Debug, PartialEq)]
 pub enum RetireGrantError {
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because the specified <code>GrantId</code> is not valid.</p>
+    /// <p>The request was rejected because the specified <code>GrantId</code> is not valid.</p>
     InvalidGrantId(String),
-    ///<p>The request was rejected because the specified grant token is not valid.</p>
+    /// <p>The request was rejected because the specified grant token is not valid.</p>
     InvalidGrantToken(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     KMSInvalidState(String),
-    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4035,17 +4035,17 @@ impl Error for RetireGrantError {
 /// Errors returned by RevokeGrant
 #[derive(Debug, PartialEq)]
 pub enum RevokeGrantError {
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because a specified ARN was not valid.</p>
+    /// <p>The request was rejected because a specified ARN was not valid.</p>
     InvalidArn(String),
-    ///<p>The request was rejected because the specified <code>GrantId</code> is not valid.</p>
+    /// <p>The request was rejected because the specified <code>GrantId</code> is not valid.</p>
     InvalidGrantId(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     KMSInvalidState(String),
-    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4141,15 +4141,15 @@ impl Error for RevokeGrantError {
 /// Errors returned by ScheduleKeyDeletion
 #[derive(Debug, PartialEq)]
 pub enum ScheduleKeyDeletionError {
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because a specified ARN was not valid.</p>
+    /// <p>The request was rejected because a specified ARN was not valid.</p>
     InvalidArn(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     KMSInvalidState(String),
-    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4245,17 +4245,17 @@ impl Error for ScheduleKeyDeletionError {
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
-    ///<p>The request was rejected because a specified ARN was not valid.</p>
+    /// <p>The request was rejected because a specified ARN was not valid.</p>
     InvalidArn(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     KMSInvalidState(String),
-    ///<p>The request was rejected because a limit was exceeded. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html">Limits</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because a limit was exceeded. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html">Limits</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     LimitExceeded(String),
-    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    ///<p>The request was rejected because one or more tags are not valid.</p>
+    /// <p>The request was rejected because one or more tags are not valid.</p>
     Tag(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4349,15 +4349,15 @@ impl Error for TagResourceError {
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
-    ///<p>The request was rejected because a specified ARN was not valid.</p>
+    /// <p>The request was rejected because a specified ARN was not valid.</p>
     InvalidArn(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     KMSInvalidState(String),
-    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
-    ///<p>The request was rejected because one or more tags are not valid.</p>
+    /// <p>The request was rejected because one or more tags are not valid.</p>
     Tag(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4449,13 +4449,13 @@ impl Error for UntagResourceError {
 /// Errors returned by UpdateAlias
 #[derive(Debug, PartialEq)]
 pub enum UpdateAliasError {
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     KMSInvalidState(String),
-    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4543,15 +4543,15 @@ impl Error for UpdateAliasError {
 /// Errors returned by UpdateKeyDescription
 #[derive(Debug, PartialEq)]
 pub enum UpdateKeyDescriptionError {
-    ///<p>The system timed out while trying to fulfill the request. The request can be retried.</p>
+    /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
-    ///<p>The request was rejected because a specified ARN was not valid.</p>
+    /// <p>The request was rejected because a specified ARN was not valid.</p>
     InvalidArn(String),
-    ///<p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
-    ///<p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The request was rejected because the state of the specified resource is not valid for this request.</p> <p>For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     KMSInvalidState(String),
-    ///<p>The request was rejected because the specified entity or resource could not be found.</p>
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4646,164 +4646,164 @@ impl Error for UpdateKeyDescriptionError {
 }
 /// Trait representing the capabilities of the KMS API. KMS clients implement this trait.
 pub trait Kms {
-    #[doc="<p>Cancels the deletion of a customer master key (CMK). When this operation is successful, the CMK is set to the <code>Disabled</code> state. To enable a CMK, use <a>EnableKey</a>.</p> <p>For more information about scheduling and canceling deletion of a CMK, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/deleting-keys.html\">Deleting Customer Master Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
+    /// <p>Cancels the deletion of a customer master key (CMK). When this operation is successful, the CMK is set to the <code>Disabled</code> state. To enable a CMK, use <a>EnableKey</a>.</p> <p>For more information about scheduling and canceling deletion of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/deleting-keys.html">Deleting Customer Master Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn cancel_key_deletion(
         &self,
         input: &CancelKeyDeletionRequest,
     ) -> Result<CancelKeyDeletionResponse, CancelKeyDeletionError>;
 
-    #[doc="<p>Creates a display name for a customer master key. An alias can be used to identify a key and should be unique. The console enforces a one-to-one mapping between the alias and a key. An alias name can contain only alphanumeric characters, forward slashes (/), underscores (_), and dashes (-). An alias must start with the word \"alias\" followed by a forward slash (alias/). An alias that begins with \"aws\" after the forward slash (alias/aws...) is reserved by Amazon Web Services (AWS).</p> <p>The alias and the key it is mapped to must be in the same AWS account and the same region.</p> <p>To map an alias to a different key, call <a>UpdateAlias</a>.</p>"]
+    /// <p>Creates a display name for a customer master key. An alias can be used to identify a key and should be unique. The console enforces a one-to-one mapping between the alias and a key. An alias name can contain only alphanumeric characters, forward slashes (/), underscores (_), and dashes (-). An alias must start with the word "alias" followed by a forward slash (alias/). An alias that begins with "aws" after the forward slash (alias/aws...) is reserved by Amazon Web Services (AWS).</p> <p>The alias and the key it is mapped to must be in the same AWS account and the same region.</p> <p>To map an alias to a different key, call <a>UpdateAlias</a>.</p>
     fn create_alias(&self, input: &CreateAliasRequest) -> Result<(), CreateAliasError>;
 
-    #[doc="<p>Adds a grant to a key to specify who can use the key and under what conditions. Grants are alternate permission mechanisms to key policies.</p> <p>For more information about grants, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/grants.html\">Grants</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
+    /// <p>Adds a grant to a key to specify who can use the key and under what conditions. Grants are alternate permission mechanisms to key policies.</p> <p>For more information about grants, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/grants.html">Grants</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn create_grant(
         &self,
         input: &CreateGrantRequest,
     ) -> Result<CreateGrantResponse, CreateGrantError>;
 
-    #[doc="<p>Creates a customer master key (CMK).</p> <p>You can use a CMK to encrypt small amounts of data (4 KiB or less) directly, but CMKs are more commonly used to encrypt data encryption keys (DEKs), which are used to encrypt raw data. For more information about DEKs and the difference between CMKs and DEKs, see the following:</p> <ul> <li> <p>The <a>GenerateDataKey</a> operation</p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html\">AWS Key Management Service Concepts</a> in the <i>AWS Key Management Service Developer Guide</i> </p> </li> </ul>"]
+    /// <p><p>Creates a customer master key (CMK).</p> <p>You can use a CMK to encrypt small amounts of data (4 KiB or less) directly, but CMKs are more commonly used to encrypt data encryption keys (DEKs), which are used to encrypt raw data. For more information about DEKs and the difference between CMKs and DEKs, see the following:</p> <ul> <li> <p>The <a>GenerateDataKey</a> operation</p> </li> <li> <p> <a href="http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html">AWS Key Management Service Concepts</a> in the <i>AWS Key Management Service Developer Guide</i> </p> </li> </ul></p>
     fn create_key(&self, input: &CreateKeyRequest) -> Result<CreateKeyResponse, CreateKeyError>;
 
-    #[doc="<p>Decrypts ciphertext. Ciphertext is plaintext that has been previously encrypted by using any of the following functions:</p> <ul> <li> <p> <a>GenerateDataKey</a> </p> </li> <li> <p> <a>GenerateDataKeyWithoutPlaintext</a> </p> </li> <li> <p> <a>Encrypt</a> </p> </li> </ul> <p>Note that if a caller has been granted access permissions to all keys (through, for example, IAM user policies that grant <code>Decrypt</code> permission on all resources), then ciphertext encrypted by using keys in other accounts where the key grants access to the caller can be decrypted. To remedy this, we recommend that you do not grant <code>Decrypt</code> access in an IAM user policy. Instead grant <code>Decrypt</code> access only in key policies. If you must grant <code>Decrypt</code> access in an IAM user policy, you should scope the resource to specific keys or to specific trusted accounts.</p>"]
+    /// <p>Decrypts ciphertext. Ciphertext is plaintext that has been previously encrypted by using any of the following functions:</p> <ul> <li> <p> <a>GenerateDataKey</a> </p> </li> <li> <p> <a>GenerateDataKeyWithoutPlaintext</a> </p> </li> <li> <p> <a>Encrypt</a> </p> </li> </ul> <p>Note that if a caller has been granted access permissions to all keys (through, for example, IAM user policies that grant <code>Decrypt</code> permission on all resources), then ciphertext encrypted by using keys in other accounts where the key grants access to the caller can be decrypted. To remedy this, we recommend that you do not grant <code>Decrypt</code> access in an IAM user policy. Instead grant <code>Decrypt</code> access only in key policies. If you must grant <code>Decrypt</code> access in an IAM user policy, you should scope the resource to specific keys or to specific trusted accounts.</p>
     fn decrypt(&self, input: &DecryptRequest) -> Result<DecryptResponse, DecryptError>;
 
-    #[doc="<p>Deletes the specified alias. To map an alias to a different key, call <a>UpdateAlias</a>.</p>"]
+    /// <p>Deletes the specified alias. To map an alias to a different key, call <a>UpdateAlias</a>.</p>
     fn delete_alias(&self, input: &DeleteAliasRequest) -> Result<(), DeleteAliasError>;
 
-    #[doc="<p>Deletes key material that you previously imported and makes the specified customer master key (CMK) unusable. For more information about importing key material into AWS KMS, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html\">Importing Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>When the specified CMK is in the <code>PendingDeletion</code> state, this operation does not change the CMK's state. Otherwise, it changes the CMK's state to <code>PendingImport</code>.</p> <p>After you delete key material, you can use <a>ImportKeyMaterial</a> to reimport the same key material into the CMK.</p>"]
+    /// <p>Deletes key material that you previously imported and makes the specified customer master key (CMK) unusable. For more information about importing key material into AWS KMS, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html">Importing Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>When the specified CMK is in the <code>PendingDeletion</code> state, this operation does not change the CMK's state. Otherwise, it changes the CMK's state to <code>PendingImport</code>.</p> <p>After you delete key material, you can use <a>ImportKeyMaterial</a> to reimport the same key material into the CMK.</p>
     fn delete_imported_key_material(
         &self,
         input: &DeleteImportedKeyMaterialRequest,
     ) -> Result<(), DeleteImportedKeyMaterialError>;
 
-    #[doc = "<p>Provides detailed information about the specified customer master key.</p>"]
+    /// <p>Provides detailed information about the specified customer master key.</p>
     fn describe_key(
         &self,
         input: &DescribeKeyRequest,
     ) -> Result<DescribeKeyResponse, DescribeKeyError>;
 
-    #[doc="<p>Sets the state of a customer master key (CMK) to disabled, thereby preventing its use for cryptographic operations. For more information about how key state affects the use of a CMK, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html\">How Key State Affects the Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
+    /// <p>Sets the state of a customer master key (CMK) to disabled, thereby preventing its use for cryptographic operations. For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects the Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn disable_key(&self, input: &DisableKeyRequest) -> Result<(), DisableKeyError>;
 
-    #[doc = "<p>Disables rotation of the specified key.</p>"]
+    /// <p>Disables rotation of the specified key.</p>
     fn disable_key_rotation(
         &self,
         input: &DisableKeyRotationRequest,
     ) -> Result<(), DisableKeyRotationError>;
 
-    #[doc = "<p>Marks a key as enabled, thereby permitting its use.</p>"]
+    /// <p>Marks a key as enabled, thereby permitting its use.</p>
     fn enable_key(&self, input: &EnableKeyRequest) -> Result<(), EnableKeyError>;
 
-    #[doc = "<p>Enables rotation of the specified customer master key.</p>"]
+    /// <p>Enables rotation of the specified customer master key.</p>
     fn enable_key_rotation(
         &self,
         input: &EnableKeyRotationRequest,
     ) -> Result<(), EnableKeyRotationError>;
 
-    #[doc="<p>Encrypts plaintext into ciphertext by using a customer master key. The <code>Encrypt</code> function has two primary use cases:</p> <ul> <li> <p>You can encrypt up to 4 KB of arbitrary data such as an RSA key, a database password, or other sensitive customer information.</p> </li> <li> <p>If you are moving encrypted data from one region to another, you can use this API to encrypt in the new region the plaintext data key that was used to encrypt the data in the original region. This provides you with an encrypted copy of the data key that can be decrypted in the new region and used there to decrypt the encrypted data.</p> </li> </ul> <p>Unless you are moving encrypted data from one region to another, you don't use this function to encrypt a generated data key within a region. You retrieve data keys already encrypted by calling the <a>GenerateDataKey</a> or <a>GenerateDataKeyWithoutPlaintext</a> function. Data keys don't need to be encrypted again by calling <code>Encrypt</code>.</p> <p>If you want to encrypt data locally in your application, you can use the <code>GenerateDataKey</code> function to return a plaintext data encryption key and a copy of the key encrypted under the customer master key (CMK) of your choosing.</p>"]
+    /// <p>Encrypts plaintext into ciphertext by using a customer master key. The <code>Encrypt</code> function has two primary use cases:</p> <ul> <li> <p>You can encrypt up to 4 KB of arbitrary data such as an RSA key, a database password, or other sensitive customer information.</p> </li> <li> <p>If you are moving encrypted data from one region to another, you can use this API to encrypt in the new region the plaintext data key that was used to encrypt the data in the original region. This provides you with an encrypted copy of the data key that can be decrypted in the new region and used there to decrypt the encrypted data.</p> </li> </ul> <p>Unless you are moving encrypted data from one region to another, you don't use this function to encrypt a generated data key within a region. You retrieve data keys already encrypted by calling the <a>GenerateDataKey</a> or <a>GenerateDataKeyWithoutPlaintext</a> function. Data keys don't need to be encrypted again by calling <code>Encrypt</code>.</p> <p>If you want to encrypt data locally in your application, you can use the <code>GenerateDataKey</code> function to return a plaintext data encryption key and a copy of the key encrypted under the customer master key (CMK) of your choosing.</p>
     fn encrypt(&self, input: &EncryptRequest) -> Result<EncryptResponse, EncryptError>;
 
-    #[doc="<p>Returns a data encryption key that you can use in your application to encrypt data locally.</p> <p>You must specify the customer master key (CMK) under which to generate the data key. You must also specify the length of the data key using either the <code>KeySpec</code> or <code>NumberOfBytes</code> field. You must specify one field or the other, but not both. For common key lengths (128-bit and 256-bit symmetric keys), we recommend that you use <code>KeySpec</code>.</p> <p>This operation returns a plaintext copy of the data key in the <code>Plaintext</code> field of the response, and an encrypted copy of the data key in the <code>CiphertextBlob</code> field. The data key is encrypted under the CMK specified in the <code>KeyId</code> field of the request.</p> <p>We recommend that you use the following pattern to encrypt data locally in your application:</p> <ol> <li> <p>Use this operation (<code>GenerateDataKey</code>) to retrieve a data encryption key.</p> </li> <li> <p>Use the plaintext data encryption key (returned in the <code>Plaintext</code> field of the response) to encrypt data locally, then erase the plaintext data key from memory.</p> </li> <li> <p>Store the encrypted data key (returned in the <code>CiphertextBlob</code> field of the response) alongside the locally encrypted data.</p> </li> </ol> <p>To decrypt data locally:</p> <ol> <li> <p>Use the <a>Decrypt</a> operation to decrypt the encrypted data key into a plaintext copy of the data key.</p> </li> <li> <p>Use the plaintext data key to decrypt data locally, then erase the plaintext data key from memory.</p> </li> </ol> <p>To return only an encrypted copy of the data key, use <a>GenerateDataKeyWithoutPlaintext</a>. To return a random byte string that is cryptographically secure, use <a>GenerateRandom</a>.</p> <p>If you use the optional <code>EncryptionContext</code> field, you must store at least enough information to be able to reconstruct the full encryption context when you later send the ciphertext to the <a>Decrypt</a> operation. It is a good practice to choose an encryption context that you can reconstruct on the fly to better secure the ciphertext. For more information, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html\">Encryption Context</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
+    /// <p>Returns a data encryption key that you can use in your application to encrypt data locally.</p> <p>You must specify the customer master key (CMK) under which to generate the data key. You must also specify the length of the data key using either the <code>KeySpec</code> or <code>NumberOfBytes</code> field. You must specify one field or the other, but not both. For common key lengths (128-bit and 256-bit symmetric keys), we recommend that you use <code>KeySpec</code>.</p> <p>This operation returns a plaintext copy of the data key in the <code>Plaintext</code> field of the response, and an encrypted copy of the data key in the <code>CiphertextBlob</code> field. The data key is encrypted under the CMK specified in the <code>KeyId</code> field of the request.</p> <p>We recommend that you use the following pattern to encrypt data locally in your application:</p> <ol> <li> <p>Use this operation (<code>GenerateDataKey</code>) to retrieve a data encryption key.</p> </li> <li> <p>Use the plaintext data encryption key (returned in the <code>Plaintext</code> field of the response) to encrypt data locally, then erase the plaintext data key from memory.</p> </li> <li> <p>Store the encrypted data key (returned in the <code>CiphertextBlob</code> field of the response) alongside the locally encrypted data.</p> </li> </ol> <p>To decrypt data locally:</p> <ol> <li> <p>Use the <a>Decrypt</a> operation to decrypt the encrypted data key into a plaintext copy of the data key.</p> </li> <li> <p>Use the plaintext data key to decrypt data locally, then erase the plaintext data key from memory.</p> </li> </ol> <p>To return only an encrypted copy of the data key, use <a>GenerateDataKeyWithoutPlaintext</a>. To return a random byte string that is cryptographically secure, use <a>GenerateRandom</a>.</p> <p>If you use the optional <code>EncryptionContext</code> field, you must store at least enough information to be able to reconstruct the full encryption context when you later send the ciphertext to the <a>Decrypt</a> operation. It is a good practice to choose an encryption context that you can reconstruct on the fly to better secure the ciphertext. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html">Encryption Context</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn generate_data_key(
         &self,
         input: &GenerateDataKeyRequest,
     ) -> Result<GenerateDataKeyResponse, GenerateDataKeyError>;
 
-    #[doc="<p>Returns a data encryption key encrypted under a customer master key (CMK). This operation is identical to <a>GenerateDataKey</a> but returns only the encrypted copy of the data key.</p> <p>This operation is useful in a system that has multiple components with different degrees of trust. For example, consider a system that stores encrypted data in containers. Each container stores the encrypted data and an encrypted copy of the data key. One component of the system, called the <i>control plane</i>, creates new containers. When it creates a new container, it uses this operation (<code>GenerateDataKeyWithoutPlaintext</code>) to get an encrypted data key and then stores it in the container. Later, a different component of the system, called the <i>data plane</i>, puts encrypted data into the containers. To do this, it passes the encrypted data key to the <a>Decrypt</a> operation, then uses the returned plaintext data key to encrypt data, and finally stores the encrypted data in the container. In this system, the control plane never sees the plaintext data key.</p>"]
+    /// <p>Returns a data encryption key encrypted under a customer master key (CMK). This operation is identical to <a>GenerateDataKey</a> but returns only the encrypted copy of the data key.</p> <p>This operation is useful in a system that has multiple components with different degrees of trust. For example, consider a system that stores encrypted data in containers. Each container stores the encrypted data and an encrypted copy of the data key. One component of the system, called the <i>control plane</i>, creates new containers. When it creates a new container, it uses this operation (<code>GenerateDataKeyWithoutPlaintext</code>) to get an encrypted data key and then stores it in the container. Later, a different component of the system, called the <i>data plane</i>, puts encrypted data into the containers. To do this, it passes the encrypted data key to the <a>Decrypt</a> operation, then uses the returned plaintext data key to encrypt data, and finally stores the encrypted data in the container. In this system, the control plane never sees the plaintext data key.</p>
     fn generate_data_key_without_plaintext(
         &self,
         input: &GenerateDataKeyWithoutPlaintextRequest,
     ) -> Result<GenerateDataKeyWithoutPlaintextResponse, GenerateDataKeyWithoutPlaintextError>;
 
-    #[doc="<p>Returns a random byte string that is cryptographically secure.</p> <p>For more information about entropy and random number generation, see the <a href=\"https://d0.awsstatic.com/whitepapers/KMS-Cryptographic-Details.pdf\">AWS Key Management Service Cryptographic Details</a> whitepaper.</p>"]
+    /// <p>Returns a random byte string that is cryptographically secure.</p> <p>For more information about entropy and random number generation, see the <a href="https://d0.awsstatic.com/whitepapers/KMS-Cryptographic-Details.pdf">AWS Key Management Service Cryptographic Details</a> whitepaper.</p>
     fn generate_random(
         &self,
         input: &GenerateRandomRequest,
     ) -> Result<GenerateRandomResponse, GenerateRandomError>;
 
-    #[doc = "<p>Retrieves a policy attached to the specified key.</p>"]
+    /// <p>Retrieves a policy attached to the specified key.</p>
     fn get_key_policy(
         &self,
         input: &GetKeyPolicyRequest,
     ) -> Result<GetKeyPolicyResponse, GetKeyPolicyError>;
 
-    #[doc="<p>Retrieves a Boolean value that indicates whether key rotation is enabled for the specified key.</p>"]
+    /// <p>Retrieves a Boolean value that indicates whether key rotation is enabled for the specified key.</p>
     fn get_key_rotation_status(
         &self,
         input: &GetKeyRotationStatusRequest,
     ) -> Result<GetKeyRotationStatusResponse, GetKeyRotationStatusError>;
 
-    #[doc="<p>Returns the items you need in order to import key material into AWS KMS from your existing key management infrastructure. For more information about importing key material into AWS KMS, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html\">Importing Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>You must specify the key ID of the customer master key (CMK) into which you will import key material. This CMK's <code>Origin</code> must be <code>EXTERNAL</code>. You must also specify the wrapping algorithm and type of wrapping key (public key) that you will use to encrypt the key material.</p> <p>This operation returns a public key and an import token. Use the public key to encrypt the key material. Store the import token to send with a subsequent <a>ImportKeyMaterial</a> request. The public key and import token from the same response must be used together. These items are valid for 24 hours, after which they cannot be used for a subsequent <a>ImportKeyMaterial</a> request. To retrieve new ones, send another <code>GetParametersForImport</code> request.</p>"]
+    /// <p>Returns the items you need in order to import key material into AWS KMS from your existing key management infrastructure. For more information about importing key material into AWS KMS, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html">Importing Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>You must specify the key ID of the customer master key (CMK) into which you will import key material. This CMK's <code>Origin</code> must be <code>EXTERNAL</code>. You must also specify the wrapping algorithm and type of wrapping key (public key) that you will use to encrypt the key material.</p> <p>This operation returns a public key and an import token. Use the public key to encrypt the key material. Store the import token to send with a subsequent <a>ImportKeyMaterial</a> request. The public key and import token from the same response must be used together. These items are valid for 24 hours, after which they cannot be used for a subsequent <a>ImportKeyMaterial</a> request. To retrieve new ones, send another <code>GetParametersForImport</code> request.</p>
     fn get_parameters_for_import(
         &self,
         input: &GetParametersForImportRequest,
     ) -> Result<GetParametersForImportResponse, GetParametersForImportError>;
 
-    #[doc="<p>Imports key material into an AWS KMS customer master key (CMK) from your existing key management infrastructure. For more information about importing key material into AWS KMS, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html\">Importing Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>You must specify the key ID of the CMK to import the key material into. This CMK's <code>Origin</code> must be <code>EXTERNAL</code>. You must also send an import token and the encrypted key material. Send the import token that you received in the same <a>GetParametersForImport</a> response that contained the public key that you used to encrypt the key material. You must also specify whether the key material expires and if so, when. When the key material expires, AWS KMS deletes the key material and the CMK becomes unusable. To use the CMK again, you can reimport the same key material. If you set an expiration date, you can change it only by reimporting the same key material and specifying a new expiration date.</p> <p>When this operation is successful, the specified CMK's key state changes to <code>Enabled</code>, and you can use the CMK.</p> <p>After you successfully import key material into a CMK, you can reimport the same key material into that CMK, but you cannot import different key material.</p>"]
+    /// <p>Imports key material into an AWS KMS customer master key (CMK) from your existing key management infrastructure. For more information about importing key material into AWS KMS, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html">Importing Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>You must specify the key ID of the CMK to import the key material into. This CMK's <code>Origin</code> must be <code>EXTERNAL</code>. You must also send an import token and the encrypted key material. Send the import token that you received in the same <a>GetParametersForImport</a> response that contained the public key that you used to encrypt the key material. You must also specify whether the key material expires and if so, when. When the key material expires, AWS KMS deletes the key material and the CMK becomes unusable. To use the CMK again, you can reimport the same key material. If you set an expiration date, you can change it only by reimporting the same key material and specifying a new expiration date.</p> <p>When this operation is successful, the specified CMK's key state changes to <code>Enabled</code>, and you can use the CMK.</p> <p>After you successfully import key material into a CMK, you can reimport the same key material into that CMK, but you cannot import different key material.</p>
     fn import_key_material(
         &self,
         input: &ImportKeyMaterialRequest,
     ) -> Result<ImportKeyMaterialResponse, ImportKeyMaterialError>;
 
-    #[doc = "<p>Lists all of the key aliases in the account.</p>"]
+    /// <p>Lists all of the key aliases in the account.</p>
     fn list_aliases(
         &self,
         input: &ListAliasesRequest,
     ) -> Result<ListAliasesResponse, ListAliasesError>;
 
-    #[doc = "<p>List the grants for a specified key.</p>"]
+    /// <p>List the grants for a specified key.</p>
     fn list_grants(&self, input: &ListGrantsRequest)
         -> Result<ListGrantsResponse, ListGrantsError>;
 
-    #[doc = "<p>Retrieves a list of policies attached to a key.</p>"]
+    /// <p>Retrieves a list of policies attached to a key.</p>
     fn list_key_policies(
         &self,
         input: &ListKeyPoliciesRequest,
     ) -> Result<ListKeyPoliciesResponse, ListKeyPoliciesError>;
 
-    #[doc = "<p>Lists the customer master keys.</p>"]
+    /// <p>Lists the customer master keys.</p>
     fn list_keys(&self, input: &ListKeysRequest) -> Result<ListKeysResponse, ListKeysError>;
 
-    #[doc = "<p>Returns a list of all tags for the specified customer master key (CMK).</p>"]
+    /// <p>Returns a list of all tags for the specified customer master key (CMK).</p>
     fn list_resource_tags(
         &self,
         input: &ListResourceTagsRequest,
     ) -> Result<ListResourceTagsResponse, ListResourceTagsError>;
 
-    #[doc="<p>Returns a list of all grants for which the grant's <code>RetiringPrincipal</code> matches the one specified.</p> <p>A typical use is to list all grants that you are able to retire. To retire a grant, use <a>RetireGrant</a>.</p>"]
+    /// <p>Returns a list of all grants for which the grant's <code>RetiringPrincipal</code> matches the one specified.</p> <p>A typical use is to list all grants that you are able to retire. To retire a grant, use <a>RetireGrant</a>.</p>
     fn list_retirable_grants(
         &self,
         input: &ListRetirableGrantsRequest,
     ) -> Result<ListGrantsResponse, ListRetirableGrantsError>;
 
-    #[doc="<p>Attaches a key policy to the specified customer master key (CMK).</p> <p>For more information about key policies, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html\">Key Policies</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
+    /// <p>Attaches a key policy to the specified customer master key (CMK).</p> <p>For more information about key policies, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html">Key Policies</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn put_key_policy(&self, input: &PutKeyPolicyRequest) -> Result<(), PutKeyPolicyError>;
 
-    #[doc="<p>Encrypts data on the server side with a new customer master key (CMK) without exposing the plaintext of the data on the client side. The data is first decrypted and then reencrypted. You can also use this operation to change the encryption context of a ciphertext.</p> <p>Unlike other operations, <code>ReEncrypt</code> is authorized twice, once as <code>ReEncryptFrom</code> on the source CMK and once as <code>ReEncryptTo</code> on the destination CMK. We recommend that you include the <code>\"kms:ReEncrypt*\"</code> permission in your <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html\">key policies</a> to permit reencryption from or to the CMK. This permission is automatically included in the key policy when you create a CMK through the console, but you must include it manually when you create a CMK programmatically or when you set a key policy with the <a>PutKeyPolicy</a> operation.</p>"]
+    /// <p>Encrypts data on the server side with a new customer master key (CMK) without exposing the plaintext of the data on the client side. The data is first decrypted and then reencrypted. You can also use this operation to change the encryption context of a ciphertext.</p> <p>Unlike other operations, <code>ReEncrypt</code> is authorized twice, once as <code>ReEncryptFrom</code> on the source CMK and once as <code>ReEncryptTo</code> on the destination CMK. We recommend that you include the <code>"kms:ReEncrypt*"</code> permission in your <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html">key policies</a> to permit reencryption from or to the CMK. This permission is automatically included in the key policy when you create a CMK through the console, but you must include it manually when you create a CMK programmatically or when you set a key policy with the <a>PutKeyPolicy</a> operation.</p>
     fn re_encrypt(&self, input: &ReEncryptRequest) -> Result<ReEncryptResponse, ReEncryptError>;
 
-    #[doc="<p>Retires a grant. To clean up, you can retire a grant when you're done using it. You should revoke a grant when you intend to actively deny operations that depend on it. The following are permitted to call this API:</p> <ul> <li> <p>The AWS account (root user) under which the grant was created</p> </li> <li> <p>The <code>RetiringPrincipal</code>, if present in the grant</p> </li> <li> <p>The <code>GranteePrincipal</code>, if <code>RetireGrant</code> is an operation specified in the grant</p> </li> </ul> <p>You must identify the grant to retire by its grant token or by a combination of the grant ID and the Amazon Resource Name (ARN) of the customer master key (CMK). A grant token is a unique variable-length base64-encoded string. A grant ID is a 64 character unique identifier of a grant. The <a>CreateGrant</a> operation returns both.</p>"]
+    /// <p>Retires a grant. To clean up, you can retire a grant when you're done using it. You should revoke a grant when you intend to actively deny operations that depend on it. The following are permitted to call this API:</p> <ul> <li> <p>The AWS account (root user) under which the grant was created</p> </li> <li> <p>The <code>RetiringPrincipal</code>, if present in the grant</p> </li> <li> <p>The <code>GranteePrincipal</code>, if <code>RetireGrant</code> is an operation specified in the grant</p> </li> </ul> <p>You must identify the grant to retire by its grant token or by a combination of the grant ID and the Amazon Resource Name (ARN) of the customer master key (CMK). A grant token is a unique variable-length base64-encoded string. A grant ID is a 64 character unique identifier of a grant. The <a>CreateGrant</a> operation returns both.</p>
     fn retire_grant(&self, input: &RetireGrantRequest) -> Result<(), RetireGrantError>;
 
-    #[doc="<p>Revokes a grant. You can revoke a grant to actively deny operations that depend on it.</p>"]
+    /// <p>Revokes a grant. You can revoke a grant to actively deny operations that depend on it.</p>
     fn revoke_grant(&self, input: &RevokeGrantRequest) -> Result<(), RevokeGrantError>;
 
-    #[doc="<p>Schedules the deletion of a customer master key (CMK). You may provide a waiting period, specified in days, before deletion occurs. If you do not provide a waiting period, the default period of 30 days is used. When this operation is successful, the state of the CMK changes to <code>PendingDeletion</code>. Before the waiting period ends, you can use <a>CancelKeyDeletion</a> to cancel the deletion of the CMK. After the waiting period ends, AWS KMS deletes the CMK and all AWS KMS data associated with it, including all aliases that refer to it.</p> <important> <p>Deleting a CMK is a destructive and potentially dangerous operation. When a CMK is deleted, all data that was encrypted under the CMK is rendered unrecoverable. To restrict the use of a CMK without deleting it, use <a>DisableKey</a>.</p> </important> <p>For more information about scheduling a CMK for deletion, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/deleting-keys.html\">Deleting Customer Master Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
+    /// <p>Schedules the deletion of a customer master key (CMK). You may provide a waiting period, specified in days, before deletion occurs. If you do not provide a waiting period, the default period of 30 days is used. When this operation is successful, the state of the CMK changes to <code>PendingDeletion</code>. Before the waiting period ends, you can use <a>CancelKeyDeletion</a> to cancel the deletion of the CMK. After the waiting period ends, AWS KMS deletes the CMK and all AWS KMS data associated with it, including all aliases that refer to it.</p> <important> <p>Deleting a CMK is a destructive and potentially dangerous operation. When a CMK is deleted, all data that was encrypted under the CMK is rendered unrecoverable. To restrict the use of a CMK without deleting it, use <a>DisableKey</a>.</p> </important> <p>For more information about scheduling a CMK for deletion, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/deleting-keys.html">Deleting Customer Master Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn schedule_key_deletion(
         &self,
         input: &ScheduleKeyDeletionRequest,
     ) -> Result<ScheduleKeyDeletionResponse, ScheduleKeyDeletionError>;
 
-    #[doc="<p>Adds or overwrites one or more tags for the specified customer master key (CMK). </p> <p>Each tag consists of a tag key and a tag value. Tag keys and tag values are both required, but tag values can be empty (null) strings.</p> <p>You cannot use the same tag key more than once per CMK. For example, consider a CMK with one tag whose tag key is <code>Purpose</code> and tag value is <code>Test</code>. If you send a <code>TagResource</code> request for this CMK with a tag key of <code>Purpose</code> and a tag value of <code>Prod</code>, it does not create a second tag. Instead, the original tag is overwritten with the new tag value.</p>"]
+    /// <p>Adds or overwrites one or more tags for the specified customer master key (CMK). </p> <p>Each tag consists of a tag key and a tag value. Tag keys and tag values are both required, but tag values can be empty (null) strings.</p> <p>You cannot use the same tag key more than once per CMK. For example, consider a CMK with one tag whose tag key is <code>Purpose</code> and tag value is <code>Test</code>. If you send a <code>TagResource</code> request for this CMK with a tag key of <code>Purpose</code> and a tag value of <code>Prod</code>, it does not create a second tag. Instead, the original tag is overwritten with the new tag value.</p>
     fn tag_resource(&self, input: &TagResourceRequest) -> Result<(), TagResourceError>;
 
-    #[doc="<p>Removes the specified tag or tags from the specified customer master key (CMK). </p> <p>To remove a tag, you specify the tag key for each tag to remove. You do not specify the tag value. To overwrite the tag value for an existing tag, use <a>TagResource</a>.</p>"]
+    /// <p>Removes the specified tag or tags from the specified customer master key (CMK). </p> <p>To remove a tag, you specify the tag key for each tag to remove. You do not specify the tag value. To overwrite the tag value for an existing tag, use <a>TagResource</a>.</p>
     fn untag_resource(&self, input: &UntagResourceRequest) -> Result<(), UntagResourceError>;
 
-    #[doc="<p>Updates an alias to map it to a different key.</p> <p>An alias is not a property of a key. Therefore, an alias can be mapped to and unmapped from an existing key without changing the properties of the key.</p> <p>An alias name can contain only alphanumeric characters, forward slashes (/), underscores (_), and dashes (-). An alias must start with the word \"alias\" followed by a forward slash (alias/). An alias that begins with \"aws\" after the forward slash (alias/aws...) is reserved by Amazon Web Services (AWS).</p> <p>The alias and the key it is mapped to must be in the same AWS account and the same region.</p>"]
+    /// <p>Updates an alias to map it to a different key.</p> <p>An alias is not a property of a key. Therefore, an alias can be mapped to and unmapped from an existing key without changing the properties of the key.</p> <p>An alias name can contain only alphanumeric characters, forward slashes (/), underscores (_), and dashes (-). An alias must start with the word "alias" followed by a forward slash (alias/). An alias that begins with "aws" after the forward slash (alias/aws...) is reserved by Amazon Web Services (AWS).</p> <p>The alias and the key it is mapped to must be in the same AWS account and the same region.</p>
     fn update_alias(&self, input: &UpdateAliasRequest) -> Result<(), UpdateAliasError>;
 
-    #[doc = "<p>Updates the description of a customer master key (CMK).</p>"]
+    /// <p>Updates the description of a customer master key (CMK).</p>
     fn update_key_description(
         &self,
         input: &UpdateKeyDescriptionRequest,
@@ -4839,7 +4839,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Cancels the deletion of a customer master key (CMK). When this operation is successful, the CMK is set to the <code>Disabled</code> state. To enable a CMK, use <a>EnableKey</a>.</p> <p>For more information about scheduling and canceling deletion of a CMK, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/deleting-keys.html\">Deleting Customer Master Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
+    /// <p>Cancels the deletion of a customer master key (CMK). When this operation is successful, the CMK is set to the <code>Disabled</code> state. To enable a CMK, use <a>EnableKey</a>.</p> <p>For more information about scheduling and canceling deletion of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/deleting-keys.html">Deleting Customer Master Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn cancel_key_deletion(
         &self,
         input: &CancelKeyDeletionRequest,
@@ -4873,7 +4873,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a display name for a customer master key. An alias can be used to identify a key and should be unique. The console enforces a one-to-one mapping between the alias and a key. An alias name can contain only alphanumeric characters, forward slashes (/), underscores (_), and dashes (-). An alias must start with the word \"alias\" followed by a forward slash (alias/). An alias that begins with \"aws\" after the forward slash (alias/aws...) is reserved by Amazon Web Services (AWS).</p> <p>The alias and the key it is mapped to must be in the same AWS account and the same region.</p> <p>To map an alias to a different key, call <a>UpdateAlias</a>.</p>"]
+    /// <p>Creates a display name for a customer master key. An alias can be used to identify a key and should be unique. The console enforces a one-to-one mapping between the alias and a key. An alias name can contain only alphanumeric characters, forward slashes (/), underscores (_), and dashes (-). An alias must start with the word "alias" followed by a forward slash (alias/). An alias that begins with "aws" after the forward slash (alias/aws...) is reserved by Amazon Web Services (AWS).</p> <p>The alias and the key it is mapped to must be in the same AWS account and the same region.</p> <p>To map an alias to a different key, call <a>UpdateAlias</a>.</p>
     fn create_alias(&self, input: &CreateAliasRequest) -> Result<(), CreateAliasError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
@@ -4898,7 +4898,7 @@ where
         }
     }
 
-    #[doc="<p>Adds a grant to a key to specify who can use the key and under what conditions. Grants are alternate permission mechanisms to key policies.</p> <p>For more information about grants, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/grants.html\">Grants</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
+    /// <p>Adds a grant to a key to specify who can use the key and under what conditions. Grants are alternate permission mechanisms to key policies.</p> <p>For more information about grants, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/grants.html">Grants</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn create_grant(
         &self,
         input: &CreateGrantRequest,
@@ -4932,7 +4932,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a customer master key (CMK).</p> <p>You can use a CMK to encrypt small amounts of data (4 KiB or less) directly, but CMKs are more commonly used to encrypt data encryption keys (DEKs), which are used to encrypt raw data. For more information about DEKs and the difference between CMKs and DEKs, see the following:</p> <ul> <li> <p>The <a>GenerateDataKey</a> operation</p> </li> <li> <p> <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html\">AWS Key Management Service Concepts</a> in the <i>AWS Key Management Service Developer Guide</i> </p> </li> </ul>"]
+    /// <p><p>Creates a customer master key (CMK).</p> <p>You can use a CMK to encrypt small amounts of data (4 KiB or less) directly, but CMKs are more commonly used to encrypt data encryption keys (DEKs), which are used to encrypt raw data. For more information about DEKs and the difference between CMKs and DEKs, see the following:</p> <ul> <li> <p>The <a>GenerateDataKey</a> operation</p> </li> <li> <p> <a href="http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html">AWS Key Management Service Concepts</a> in the <i>AWS Key Management Service Developer Guide</i> </p> </li> </ul></p>
     fn create_key(&self, input: &CreateKeyRequest) -> Result<CreateKeyResponse, CreateKeyError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
@@ -4963,7 +4963,7 @@ where
         }
     }
 
-    #[doc="<p>Decrypts ciphertext. Ciphertext is plaintext that has been previously encrypted by using any of the following functions:</p> <ul> <li> <p> <a>GenerateDataKey</a> </p> </li> <li> <p> <a>GenerateDataKeyWithoutPlaintext</a> </p> </li> <li> <p> <a>Encrypt</a> </p> </li> </ul> <p>Note that if a caller has been granted access permissions to all keys (through, for example, IAM user policies that grant <code>Decrypt</code> permission on all resources), then ciphertext encrypted by using keys in other accounts where the key grants access to the caller can be decrypted. To remedy this, we recommend that you do not grant <code>Decrypt</code> access in an IAM user policy. Instead grant <code>Decrypt</code> access only in key policies. If you must grant <code>Decrypt</code> access in an IAM user policy, you should scope the resource to specific keys or to specific trusted accounts.</p>"]
+    /// <p>Decrypts ciphertext. Ciphertext is plaintext that has been previously encrypted by using any of the following functions:</p> <ul> <li> <p> <a>GenerateDataKey</a> </p> </li> <li> <p> <a>GenerateDataKeyWithoutPlaintext</a> </p> </li> <li> <p> <a>Encrypt</a> </p> </li> </ul> <p>Note that if a caller has been granted access permissions to all keys (through, for example, IAM user policies that grant <code>Decrypt</code> permission on all resources), then ciphertext encrypted by using keys in other accounts where the key grants access to the caller can be decrypted. To remedy this, we recommend that you do not grant <code>Decrypt</code> access in an IAM user policy. Instead grant <code>Decrypt</code> access only in key policies. If you must grant <code>Decrypt</code> access in an IAM user policy, you should scope the resource to specific keys or to specific trusted accounts.</p>
     fn decrypt(&self, input: &DecryptRequest) -> Result<DecryptResponse, DecryptError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
@@ -4996,7 +4996,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified alias. To map an alias to a different key, call <a>UpdateAlias</a>.</p>"]
+    /// <p>Deletes the specified alias. To map an alias to a different key, call <a>UpdateAlias</a>.</p>
     fn delete_alias(&self, input: &DeleteAliasRequest) -> Result<(), DeleteAliasError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
@@ -5021,7 +5021,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes key material that you previously imported and makes the specified customer master key (CMK) unusable. For more information about importing key material into AWS KMS, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html\">Importing Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>When the specified CMK is in the <code>PendingDeletion</code> state, this operation does not change the CMK's state. Otherwise, it changes the CMK's state to <code>PendingImport</code>.</p> <p>After you delete key material, you can use <a>ImportKeyMaterial</a> to reimport the same key material into the CMK.</p>"]
+    /// <p>Deletes key material that you previously imported and makes the specified customer master key (CMK) unusable. For more information about importing key material into AWS KMS, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html">Importing Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>When the specified CMK is in the <code>PendingDeletion</code> state, this operation does not change the CMK's state. Otherwise, it changes the CMK's state to <code>PendingImport</code>.</p> <p>After you delete key material, you can use <a>ImportKeyMaterial</a> to reimport the same key material into the CMK.</p>
     fn delete_imported_key_material(
         &self,
         input: &DeleteImportedKeyMaterialRequest,
@@ -5049,7 +5049,7 @@ where
         }
     }
 
-    #[doc = "<p>Provides detailed information about the specified customer master key.</p>"]
+    /// <p>Provides detailed information about the specified customer master key.</p>
     fn describe_key(
         &self,
         input: &DescribeKeyRequest,
@@ -5083,7 +5083,7 @@ where
         }
     }
 
-    #[doc="<p>Sets the state of a customer master key (CMK) to disabled, thereby preventing its use for cryptographic operations. For more information about how key state affects the use of a CMK, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html\">How Key State Affects the Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
+    /// <p>Sets the state of a customer master key (CMK) to disabled, thereby preventing its use for cryptographic operations. For more information about how key state affects the use of a CMK, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects the Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn disable_key(&self, input: &DisableKeyRequest) -> Result<(), DisableKeyError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
@@ -5108,7 +5108,7 @@ where
         }
     }
 
-    #[doc = "<p>Disables rotation of the specified key.</p>"]
+    /// <p>Disables rotation of the specified key.</p>
     fn disable_key_rotation(
         &self,
         input: &DisableKeyRotationRequest,
@@ -5136,7 +5136,7 @@ where
         }
     }
 
-    #[doc = "<p>Marks a key as enabled, thereby permitting its use.</p>"]
+    /// <p>Marks a key as enabled, thereby permitting its use.</p>
     fn enable_key(&self, input: &EnableKeyRequest) -> Result<(), EnableKeyError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
@@ -5161,7 +5161,7 @@ where
         }
     }
 
-    #[doc = "<p>Enables rotation of the specified customer master key.</p>"]
+    /// <p>Enables rotation of the specified customer master key.</p>
     fn enable_key_rotation(
         &self,
         input: &EnableKeyRotationRequest,
@@ -5189,7 +5189,7 @@ where
         }
     }
 
-    #[doc="<p>Encrypts plaintext into ciphertext by using a customer master key. The <code>Encrypt</code> function has two primary use cases:</p> <ul> <li> <p>You can encrypt up to 4 KB of arbitrary data such as an RSA key, a database password, or other sensitive customer information.</p> </li> <li> <p>If you are moving encrypted data from one region to another, you can use this API to encrypt in the new region the plaintext data key that was used to encrypt the data in the original region. This provides you with an encrypted copy of the data key that can be decrypted in the new region and used there to decrypt the encrypted data.</p> </li> </ul> <p>Unless you are moving encrypted data from one region to another, you don't use this function to encrypt a generated data key within a region. You retrieve data keys already encrypted by calling the <a>GenerateDataKey</a> or <a>GenerateDataKeyWithoutPlaintext</a> function. Data keys don't need to be encrypted again by calling <code>Encrypt</code>.</p> <p>If you want to encrypt data locally in your application, you can use the <code>GenerateDataKey</code> function to return a plaintext data encryption key and a copy of the key encrypted under the customer master key (CMK) of your choosing.</p>"]
+    /// <p>Encrypts plaintext into ciphertext by using a customer master key. The <code>Encrypt</code> function has two primary use cases:</p> <ul> <li> <p>You can encrypt up to 4 KB of arbitrary data such as an RSA key, a database password, or other sensitive customer information.</p> </li> <li> <p>If you are moving encrypted data from one region to another, you can use this API to encrypt in the new region the plaintext data key that was used to encrypt the data in the original region. This provides you with an encrypted copy of the data key that can be decrypted in the new region and used there to decrypt the encrypted data.</p> </li> </ul> <p>Unless you are moving encrypted data from one region to another, you don't use this function to encrypt a generated data key within a region. You retrieve data keys already encrypted by calling the <a>GenerateDataKey</a> or <a>GenerateDataKeyWithoutPlaintext</a> function. Data keys don't need to be encrypted again by calling <code>Encrypt</code>.</p> <p>If you want to encrypt data locally in your application, you can use the <code>GenerateDataKey</code> function to return a plaintext data encryption key and a copy of the key encrypted under the customer master key (CMK) of your choosing.</p>
     fn encrypt(&self, input: &EncryptRequest) -> Result<EncryptResponse, EncryptError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
@@ -5222,7 +5222,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a data encryption key that you can use in your application to encrypt data locally.</p> <p>You must specify the customer master key (CMK) under which to generate the data key. You must also specify the length of the data key using either the <code>KeySpec</code> or <code>NumberOfBytes</code> field. You must specify one field or the other, but not both. For common key lengths (128-bit and 256-bit symmetric keys), we recommend that you use <code>KeySpec</code>.</p> <p>This operation returns a plaintext copy of the data key in the <code>Plaintext</code> field of the response, and an encrypted copy of the data key in the <code>CiphertextBlob</code> field. The data key is encrypted under the CMK specified in the <code>KeyId</code> field of the request.</p> <p>We recommend that you use the following pattern to encrypt data locally in your application:</p> <ol> <li> <p>Use this operation (<code>GenerateDataKey</code>) to retrieve a data encryption key.</p> </li> <li> <p>Use the plaintext data encryption key (returned in the <code>Plaintext</code> field of the response) to encrypt data locally, then erase the plaintext data key from memory.</p> </li> <li> <p>Store the encrypted data key (returned in the <code>CiphertextBlob</code> field of the response) alongside the locally encrypted data.</p> </li> </ol> <p>To decrypt data locally:</p> <ol> <li> <p>Use the <a>Decrypt</a> operation to decrypt the encrypted data key into a plaintext copy of the data key.</p> </li> <li> <p>Use the plaintext data key to decrypt data locally, then erase the plaintext data key from memory.</p> </li> </ol> <p>To return only an encrypted copy of the data key, use <a>GenerateDataKeyWithoutPlaintext</a>. To return a random byte string that is cryptographically secure, use <a>GenerateRandom</a>.</p> <p>If you use the optional <code>EncryptionContext</code> field, you must store at least enough information to be able to reconstruct the full encryption context when you later send the ciphertext to the <a>Decrypt</a> operation. It is a good practice to choose an encryption context that you can reconstruct on the fly to better secure the ciphertext. For more information, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html\">Encryption Context</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
+    /// <p>Returns a data encryption key that you can use in your application to encrypt data locally.</p> <p>You must specify the customer master key (CMK) under which to generate the data key. You must also specify the length of the data key using either the <code>KeySpec</code> or <code>NumberOfBytes</code> field. You must specify one field or the other, but not both. For common key lengths (128-bit and 256-bit symmetric keys), we recommend that you use <code>KeySpec</code>.</p> <p>This operation returns a plaintext copy of the data key in the <code>Plaintext</code> field of the response, and an encrypted copy of the data key in the <code>CiphertextBlob</code> field. The data key is encrypted under the CMK specified in the <code>KeyId</code> field of the request.</p> <p>We recommend that you use the following pattern to encrypt data locally in your application:</p> <ol> <li> <p>Use this operation (<code>GenerateDataKey</code>) to retrieve a data encryption key.</p> </li> <li> <p>Use the plaintext data encryption key (returned in the <code>Plaintext</code> field of the response) to encrypt data locally, then erase the plaintext data key from memory.</p> </li> <li> <p>Store the encrypted data key (returned in the <code>CiphertextBlob</code> field of the response) alongside the locally encrypted data.</p> </li> </ol> <p>To decrypt data locally:</p> <ol> <li> <p>Use the <a>Decrypt</a> operation to decrypt the encrypted data key into a plaintext copy of the data key.</p> </li> <li> <p>Use the plaintext data key to decrypt data locally, then erase the plaintext data key from memory.</p> </li> </ol> <p>To return only an encrypted copy of the data key, use <a>GenerateDataKeyWithoutPlaintext</a>. To return a random byte string that is cryptographically secure, use <a>GenerateRandom</a>.</p> <p>If you use the optional <code>EncryptionContext</code> field, you must store at least enough information to be able to reconstruct the full encryption context when you later send the ciphertext to the <a>Decrypt</a> operation. It is a good practice to choose an encryption context that you can reconstruct on the fly to better secure the ciphertext. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html">Encryption Context</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn generate_data_key(
         &self,
         input: &GenerateDataKeyRequest,
@@ -5256,7 +5256,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a data encryption key encrypted under a customer master key (CMK). This operation is identical to <a>GenerateDataKey</a> but returns only the encrypted copy of the data key.</p> <p>This operation is useful in a system that has multiple components with different degrees of trust. For example, consider a system that stores encrypted data in containers. Each container stores the encrypted data and an encrypted copy of the data key. One component of the system, called the <i>control plane</i>, creates new containers. When it creates a new container, it uses this operation (<code>GenerateDataKeyWithoutPlaintext</code>) to get an encrypted data key and then stores it in the container. Later, a different component of the system, called the <i>data plane</i>, puts encrypted data into the containers. To do this, it passes the encrypted data key to the <a>Decrypt</a> operation, then uses the returned plaintext data key to encrypt data, and finally stores the encrypted data in the container. In this system, the control plane never sees the plaintext data key.</p>"]
+    /// <p>Returns a data encryption key encrypted under a customer master key (CMK). This operation is identical to <a>GenerateDataKey</a> but returns only the encrypted copy of the data key.</p> <p>This operation is useful in a system that has multiple components with different degrees of trust. For example, consider a system that stores encrypted data in containers. Each container stores the encrypted data and an encrypted copy of the data key. One component of the system, called the <i>control plane</i>, creates new containers. When it creates a new container, it uses this operation (<code>GenerateDataKeyWithoutPlaintext</code>) to get an encrypted data key and then stores it in the container. Later, a different component of the system, called the <i>data plane</i>, puts encrypted data into the containers. To do this, it passes the encrypted data key to the <a>Decrypt</a> operation, then uses the returned plaintext data key to encrypt data, and finally stores the encrypted data in the container. In this system, the control plane never sees the plaintext data key.</p>
     fn generate_data_key_without_plaintext(
         &self,
         input: &GenerateDataKeyWithoutPlaintextRequest,
@@ -5295,7 +5295,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a random byte string that is cryptographically secure.</p> <p>For more information about entropy and random number generation, see the <a href=\"https://d0.awsstatic.com/whitepapers/KMS-Cryptographic-Details.pdf\">AWS Key Management Service Cryptographic Details</a> whitepaper.</p>"]
+    /// <p>Returns a random byte string that is cryptographically secure.</p> <p>For more information about entropy and random number generation, see the <a href="https://d0.awsstatic.com/whitepapers/KMS-Cryptographic-Details.pdf">AWS Key Management Service Cryptographic Details</a> whitepaper.</p>
     fn generate_random(
         &self,
         input: &GenerateRandomRequest,
@@ -5329,7 +5329,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves a policy attached to the specified key.</p>"]
+    /// <p>Retrieves a policy attached to the specified key.</p>
     fn get_key_policy(
         &self,
         input: &GetKeyPolicyRequest,
@@ -5363,7 +5363,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves a Boolean value that indicates whether key rotation is enabled for the specified key.</p>"]
+    /// <p>Retrieves a Boolean value that indicates whether key rotation is enabled for the specified key.</p>
     fn get_key_rotation_status(
         &self,
         input: &GetKeyRotationStatusRequest,
@@ -5397,7 +5397,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the items you need in order to import key material into AWS KMS from your existing key management infrastructure. For more information about importing key material into AWS KMS, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html\">Importing Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>You must specify the key ID of the customer master key (CMK) into which you will import key material. This CMK's <code>Origin</code> must be <code>EXTERNAL</code>. You must also specify the wrapping algorithm and type of wrapping key (public key) that you will use to encrypt the key material.</p> <p>This operation returns a public key and an import token. Use the public key to encrypt the key material. Store the import token to send with a subsequent <a>ImportKeyMaterial</a> request. The public key and import token from the same response must be used together. These items are valid for 24 hours, after which they cannot be used for a subsequent <a>ImportKeyMaterial</a> request. To retrieve new ones, send another <code>GetParametersForImport</code> request.</p>"]
+    /// <p>Returns the items you need in order to import key material into AWS KMS from your existing key management infrastructure. For more information about importing key material into AWS KMS, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html">Importing Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>You must specify the key ID of the customer master key (CMK) into which you will import key material. This CMK's <code>Origin</code> must be <code>EXTERNAL</code>. You must also specify the wrapping algorithm and type of wrapping key (public key) that you will use to encrypt the key material.</p> <p>This operation returns a public key and an import token. Use the public key to encrypt the key material. Store the import token to send with a subsequent <a>ImportKeyMaterial</a> request. The public key and import token from the same response must be used together. These items are valid for 24 hours, after which they cannot be used for a subsequent <a>ImportKeyMaterial</a> request. To retrieve new ones, send another <code>GetParametersForImport</code> request.</p>
     fn get_parameters_for_import(
         &self,
         input: &GetParametersForImportRequest,
@@ -5431,7 +5431,7 @@ where
         }
     }
 
-    #[doc="<p>Imports key material into an AWS KMS customer master key (CMK) from your existing key management infrastructure. For more information about importing key material into AWS KMS, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html\">Importing Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>You must specify the key ID of the CMK to import the key material into. This CMK's <code>Origin</code> must be <code>EXTERNAL</code>. You must also send an import token and the encrypted key material. Send the import token that you received in the same <a>GetParametersForImport</a> response that contained the public key that you used to encrypt the key material. You must also specify whether the key material expires and if so, when. When the key material expires, AWS KMS deletes the key material and the CMK becomes unusable. To use the CMK again, you can reimport the same key material. If you set an expiration date, you can change it only by reimporting the same key material and specifying a new expiration date.</p> <p>When this operation is successful, the specified CMK's key state changes to <code>Enabled</code>, and you can use the CMK.</p> <p>After you successfully import key material into a CMK, you can reimport the same key material into that CMK, but you cannot import different key material.</p>"]
+    /// <p>Imports key material into an AWS KMS customer master key (CMK) from your existing key management infrastructure. For more information about importing key material into AWS KMS, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html">Importing Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>You must specify the key ID of the CMK to import the key material into. This CMK's <code>Origin</code> must be <code>EXTERNAL</code>. You must also send an import token and the encrypted key material. Send the import token that you received in the same <a>GetParametersForImport</a> response that contained the public key that you used to encrypt the key material. You must also specify whether the key material expires and if so, when. When the key material expires, AWS KMS deletes the key material and the CMK becomes unusable. To use the CMK again, you can reimport the same key material. If you set an expiration date, you can change it only by reimporting the same key material and specifying a new expiration date.</p> <p>When this operation is successful, the specified CMK's key state changes to <code>Enabled</code>, and you can use the CMK.</p> <p>After you successfully import key material into a CMK, you can reimport the same key material into that CMK, but you cannot import different key material.</p>
     fn import_key_material(
         &self,
         input: &ImportKeyMaterialRequest,
@@ -5465,7 +5465,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists all of the key aliases in the account.</p>"]
+    /// <p>Lists all of the key aliases in the account.</p>
     fn list_aliases(
         &self,
         input: &ListAliasesRequest,
@@ -5499,7 +5499,7 @@ where
         }
     }
 
-    #[doc = "<p>List the grants for a specified key.</p>"]
+    /// <p>List the grants for a specified key.</p>
     fn list_grants(
         &self,
         input: &ListGrantsRequest,
@@ -5533,7 +5533,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves a list of policies attached to a key.</p>"]
+    /// <p>Retrieves a list of policies attached to a key.</p>
     fn list_key_policies(
         &self,
         input: &ListKeyPoliciesRequest,
@@ -5567,7 +5567,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists the customer master keys.</p>"]
+    /// <p>Lists the customer master keys.</p>
     fn list_keys(&self, input: &ListKeysRequest) -> Result<ListKeysResponse, ListKeysError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
@@ -5598,7 +5598,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns a list of all tags for the specified customer master key (CMK).</p>"]
+    /// <p>Returns a list of all tags for the specified customer master key (CMK).</p>
     fn list_resource_tags(
         &self,
         input: &ListResourceTagsRequest,
@@ -5632,7 +5632,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of all grants for which the grant's <code>RetiringPrincipal</code> matches the one specified.</p> <p>A typical use is to list all grants that you are able to retire. To retire a grant, use <a>RetireGrant</a>.</p>"]
+    /// <p>Returns a list of all grants for which the grant's <code>RetiringPrincipal</code> matches the one specified.</p> <p>A typical use is to list all grants that you are able to retire. To retire a grant, use <a>RetireGrant</a>.</p>
     fn list_retirable_grants(
         &self,
         input: &ListRetirableGrantsRequest,
@@ -5666,7 +5666,7 @@ where
         }
     }
 
-    #[doc="<p>Attaches a key policy to the specified customer master key (CMK).</p> <p>For more information about key policies, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html\">Key Policies</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
+    /// <p>Attaches a key policy to the specified customer master key (CMK).</p> <p>For more information about key policies, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html">Key Policies</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn put_key_policy(&self, input: &PutKeyPolicyRequest) -> Result<(), PutKeyPolicyError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
@@ -5691,7 +5691,7 @@ where
         }
     }
 
-    #[doc="<p>Encrypts data on the server side with a new customer master key (CMK) without exposing the plaintext of the data on the client side. The data is first decrypted and then reencrypted. You can also use this operation to change the encryption context of a ciphertext.</p> <p>Unlike other operations, <code>ReEncrypt</code> is authorized twice, once as <code>ReEncryptFrom</code> on the source CMK and once as <code>ReEncryptTo</code> on the destination CMK. We recommend that you include the <code>\"kms:ReEncrypt*\"</code> permission in your <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html\">key policies</a> to permit reencryption from or to the CMK. This permission is automatically included in the key policy when you create a CMK through the console, but you must include it manually when you create a CMK programmatically or when you set a key policy with the <a>PutKeyPolicy</a> operation.</p>"]
+    /// <p>Encrypts data on the server side with a new customer master key (CMK) without exposing the plaintext of the data on the client side. The data is first decrypted and then reencrypted. You can also use this operation to change the encryption context of a ciphertext.</p> <p>Unlike other operations, <code>ReEncrypt</code> is authorized twice, once as <code>ReEncryptFrom</code> on the source CMK and once as <code>ReEncryptTo</code> on the destination CMK. We recommend that you include the <code>"kms:ReEncrypt*"</code> permission in your <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html">key policies</a> to permit reencryption from or to the CMK. This permission is automatically included in the key policy when you create a CMK through the console, but you must include it manually when you create a CMK programmatically or when you set a key policy with the <a>PutKeyPolicy</a> operation.</p>
     fn re_encrypt(&self, input: &ReEncryptRequest) -> Result<ReEncryptResponse, ReEncryptError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
@@ -5722,7 +5722,7 @@ where
         }
     }
 
-    #[doc="<p>Retires a grant. To clean up, you can retire a grant when you're done using it. You should revoke a grant when you intend to actively deny operations that depend on it. The following are permitted to call this API:</p> <ul> <li> <p>The AWS account (root user) under which the grant was created</p> </li> <li> <p>The <code>RetiringPrincipal</code>, if present in the grant</p> </li> <li> <p>The <code>GranteePrincipal</code>, if <code>RetireGrant</code> is an operation specified in the grant</p> </li> </ul> <p>You must identify the grant to retire by its grant token or by a combination of the grant ID and the Amazon Resource Name (ARN) of the customer master key (CMK). A grant token is a unique variable-length base64-encoded string. A grant ID is a 64 character unique identifier of a grant. The <a>CreateGrant</a> operation returns both.</p>"]
+    /// <p>Retires a grant. To clean up, you can retire a grant when you're done using it. You should revoke a grant when you intend to actively deny operations that depend on it. The following are permitted to call this API:</p> <ul> <li> <p>The AWS account (root user) under which the grant was created</p> </li> <li> <p>The <code>RetiringPrincipal</code>, if present in the grant</p> </li> <li> <p>The <code>GranteePrincipal</code>, if <code>RetireGrant</code> is an operation specified in the grant</p> </li> </ul> <p>You must identify the grant to retire by its grant token or by a combination of the grant ID and the Amazon Resource Name (ARN) of the customer master key (CMK). A grant token is a unique variable-length base64-encoded string. A grant ID is a 64 character unique identifier of a grant. The <a>CreateGrant</a> operation returns both.</p>
     fn retire_grant(&self, input: &RetireGrantRequest) -> Result<(), RetireGrantError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
@@ -5747,7 +5747,7 @@ where
         }
     }
 
-    #[doc="<p>Revokes a grant. You can revoke a grant to actively deny operations that depend on it.</p>"]
+    /// <p>Revokes a grant. You can revoke a grant to actively deny operations that depend on it.</p>
     fn revoke_grant(&self, input: &RevokeGrantRequest) -> Result<(), RevokeGrantError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
@@ -5772,7 +5772,7 @@ where
         }
     }
 
-    #[doc="<p>Schedules the deletion of a customer master key (CMK). You may provide a waiting period, specified in days, before deletion occurs. If you do not provide a waiting period, the default period of 30 days is used. When this operation is successful, the state of the CMK changes to <code>PendingDeletion</code>. Before the waiting period ends, you can use <a>CancelKeyDeletion</a> to cancel the deletion of the CMK. After the waiting period ends, AWS KMS deletes the CMK and all AWS KMS data associated with it, including all aliases that refer to it.</p> <important> <p>Deleting a CMK is a destructive and potentially dangerous operation. When a CMK is deleted, all data that was encrypted under the CMK is rendered unrecoverable. To restrict the use of a CMK without deleting it, use <a>DisableKey</a>.</p> </important> <p>For more information about scheduling a CMK for deletion, see <a href=\"http://docs.aws.amazon.com/kms/latest/developerguide/deleting-keys.html\">Deleting Customer Master Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>"]
+    /// <p>Schedules the deletion of a customer master key (CMK). You may provide a waiting period, specified in days, before deletion occurs. If you do not provide a waiting period, the default period of 30 days is used. When this operation is successful, the state of the CMK changes to <code>PendingDeletion</code>. Before the waiting period ends, you can use <a>CancelKeyDeletion</a> to cancel the deletion of the CMK. After the waiting period ends, AWS KMS deletes the CMK and all AWS KMS data associated with it, including all aliases that refer to it.</p> <important> <p>Deleting a CMK is a destructive and potentially dangerous operation. When a CMK is deleted, all data that was encrypted under the CMK is rendered unrecoverable. To restrict the use of a CMK without deleting it, use <a>DisableKey</a>.</p> </important> <p>For more information about scheduling a CMK for deletion, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/deleting-keys.html">Deleting Customer Master Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn schedule_key_deletion(
         &self,
         input: &ScheduleKeyDeletionRequest,
@@ -5806,7 +5806,7 @@ where
         }
     }
 
-    #[doc="<p>Adds or overwrites one or more tags for the specified customer master key (CMK). </p> <p>Each tag consists of a tag key and a tag value. Tag keys and tag values are both required, but tag values can be empty (null) strings.</p> <p>You cannot use the same tag key more than once per CMK. For example, consider a CMK with one tag whose tag key is <code>Purpose</code> and tag value is <code>Test</code>. If you send a <code>TagResource</code> request for this CMK with a tag key of <code>Purpose</code> and a tag value of <code>Prod</code>, it does not create a second tag. Instead, the original tag is overwritten with the new tag value.</p>"]
+    /// <p>Adds or overwrites one or more tags for the specified customer master key (CMK). </p> <p>Each tag consists of a tag key and a tag value. Tag keys and tag values are both required, but tag values can be empty (null) strings.</p> <p>You cannot use the same tag key more than once per CMK. For example, consider a CMK with one tag whose tag key is <code>Purpose</code> and tag value is <code>Test</code>. If you send a <code>TagResource</code> request for this CMK with a tag key of <code>Purpose</code> and a tag value of <code>Prod</code>, it does not create a second tag. Instead, the original tag is overwritten with the new tag value.</p>
     fn tag_resource(&self, input: &TagResourceRequest) -> Result<(), TagResourceError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
@@ -5831,7 +5831,7 @@ where
         }
     }
 
-    #[doc="<p>Removes the specified tag or tags from the specified customer master key (CMK). </p> <p>To remove a tag, you specify the tag key for each tag to remove. You do not specify the tag value. To overwrite the tag value for an existing tag, use <a>TagResource</a>.</p>"]
+    /// <p>Removes the specified tag or tags from the specified customer master key (CMK). </p> <p>To remove a tag, you specify the tag key for each tag to remove. You do not specify the tag value. To overwrite the tag value for an existing tag, use <a>TagResource</a>.</p>
     fn untag_resource(&self, input: &UntagResourceRequest) -> Result<(), UntagResourceError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
@@ -5856,7 +5856,7 @@ where
         }
     }
 
-    #[doc="<p>Updates an alias to map it to a different key.</p> <p>An alias is not a property of a key. Therefore, an alias can be mapped to and unmapped from an existing key without changing the properties of the key.</p> <p>An alias name can contain only alphanumeric characters, forward slashes (/), underscores (_), and dashes (-). An alias must start with the word \"alias\" followed by a forward slash (alias/). An alias that begins with \"aws\" after the forward slash (alias/aws...) is reserved by Amazon Web Services (AWS).</p> <p>The alias and the key it is mapped to must be in the same AWS account and the same region.</p>"]
+    /// <p>Updates an alias to map it to a different key.</p> <p>An alias is not a property of a key. Therefore, an alias can be mapped to and unmapped from an existing key without changing the properties of the key.</p> <p>An alias name can contain only alphanumeric characters, forward slashes (/), underscores (_), and dashes (-). An alias must start with the word "alias" followed by a forward slash (alias/). An alias that begins with "aws" after the forward slash (alias/aws...) is reserved by Amazon Web Services (AWS).</p> <p>The alias and the key it is mapped to must be in the same AWS account and the same region.</p>
     fn update_alias(&self, input: &UpdateAliasRequest) -> Result<(), UpdateAliasError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
@@ -5881,7 +5881,7 @@ where
         }
     }
 
-    #[doc = "<p>Updates the description of a customer master key (CMK).</p>"]
+    /// <p>Updates the description of a customer master key (CMK).</p>
     fn update_key_description(
         &self,
         input: &UpdateKeyDescriptionRequest,

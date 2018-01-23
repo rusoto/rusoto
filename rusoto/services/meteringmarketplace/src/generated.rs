@@ -122,7 +122,7 @@ pub struct UsageRecordResult {
     #[serde(rename = "MeteringRecordId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metering_record_id: Option<String>,
-    /// <p>The UsageRecordResult Status indicates the status of an individual UsageRecord processed by BatchMeterUsage.</p> <ul> <li> <p> <i>Success</i>- The UsageRecord was accepted and honored by BatchMeterUsage.</p> </li> <li> <p> <i>CustomerNotSubscribed</i>- The CustomerIdentifier specified is not subscribed to your product. The UsageRecord was not honored. Future UsageRecords for this customer will fail until the customer subscribes to your product.</p> </li> <li> <p> <i>DuplicateRecord</i>- Indicates that the UsageRecord was invalid and not honored. A previously metered UsageRecord had the same customer, dimension, and time, but a different quantity.</p> </li> </ul>
+    /// <p><p>The UsageRecordResult Status indicates the status of an individual UsageRecord processed by BatchMeterUsage.</p> <ul> <li> <p> <i>Success</i>- The UsageRecord was accepted and honored by BatchMeterUsage.</p> </li> <li> <p> <i>CustomerNotSubscribed</i>- The CustomerIdentifier specified is not subscribed to your product. The UsageRecord was not honored. Future UsageRecords for this customer will fail until the customer subscribes to your product.</p> </li> <li> <p> <i>DuplicateRecord</i>- Indicates that the UsageRecord was invalid and not honored. A previously metered UsageRecord had the same customer, dimension, and time, but a different quantity.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -135,17 +135,17 @@ pub struct UsageRecordResult {
 /// Errors returned by BatchMeterUsage
 #[derive(Debug, PartialEq)]
 pub enum BatchMeterUsageError {
-    ///<p>An internal error has occurred. Retry your request. If the problem persists, post a message with details on the AWS forums.</p>
+    /// <p>An internal error has occurred. Retry your request. If the problem persists, post a message with details on the AWS forums.</p>
     InternalServiceError(String),
-    ///<p>You have metered usage for a CustomerIdentifier that does not exist.</p>
+    /// <p>You have metered usage for a CustomerIdentifier that does not exist.</p>
     InvalidCustomerIdentifier(String),
-    ///<p>The product code passed does not match the product code used for publishing the product.</p>
+    /// <p>The product code passed does not match the product code used for publishing the product.</p>
     InvalidProductCode(String),
-    ///<p>The usage dimension does not match one of the UsageDimensions associated with products.</p>
+    /// <p>The usage dimension does not match one of the UsageDimensions associated with products.</p>
     InvalidUsageDimension(String),
-    ///<p>The calls to the MeterUsage API are throttled.</p>
+    /// <p>The calls to the MeterUsage API are throttled.</p>
     Throttling(String),
-    ///<p>The timestamp value passed in the meterUsage() is out of allowed range.</p>
+    /// <p>The timestamp value passed in the meterUsage() is out of allowed range.</p>
     TimestampOutOfBounds(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -243,19 +243,19 @@ impl Error for BatchMeterUsageError {
 /// Errors returned by MeterUsage
 #[derive(Debug, PartialEq)]
 pub enum MeterUsageError {
-    ///<p>A metering record has already been emitted by the same EC2 instance for the given {usageDimension, timestamp} with a different usageQuantity.</p>
+    /// <p>A metering record has already been emitted by the same EC2 instance for the given {usageDimension, timestamp} with a different usageQuantity.</p>
     DuplicateRequest(String),
-    ///<p>An internal error has occurred. Retry your request. If the problem persists, post a message with details on the AWS forums.</p>
+    /// <p>An internal error has occurred. Retry your request. If the problem persists, post a message with details on the AWS forums.</p>
     InternalServiceError(String),
-    ///<p>The endpoint being called is in a region different from your EC2 instance. The region of the Metering service endpoint and the region of the EC2 instance must match.</p>
+    /// <p>The endpoint being called is in a region different from your EC2 instance. The region of the Metering service endpoint and the region of the EC2 instance must match.</p>
     InvalidEndpointRegion(String),
-    ///<p>The product code passed does not match the product code used for publishing the product.</p>
+    /// <p>The product code passed does not match the product code used for publishing the product.</p>
     InvalidProductCode(String),
-    ///<p>The usage dimension does not match one of the UsageDimensions associated with products.</p>
+    /// <p>The usage dimension does not match one of the UsageDimensions associated with products.</p>
     InvalidUsageDimension(String),
-    ///<p>The calls to the MeterUsage API are throttled.</p>
+    /// <p>The calls to the MeterUsage API are throttled.</p>
     Throttling(String),
-    ///<p>The timestamp value passed in the meterUsage() is out of allowed range.</p>
+    /// <p>The timestamp value passed in the meterUsage() is out of allowed range.</p>
     TimestampOutOfBounds(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -355,13 +355,13 @@ impl Error for MeterUsageError {
 /// Errors returned by ResolveCustomer
 #[derive(Debug, PartialEq)]
 pub enum ResolveCustomerError {
-    ///<p>The submitted registration token has expired. This can happen if the buyer's browser takes too long to redirect to your page, the buyer has resubmitted the registration token, or your application has held on to the registration token for too long. Your SaaS registration website should redeem this token as soon as it is submitted by the buyer's browser.</p>
+    /// <p>The submitted registration token has expired. This can happen if the buyer's browser takes too long to redirect to your page, the buyer has resubmitted the registration token, or your application has held on to the registration token for too long. Your SaaS registration website should redeem this token as soon as it is submitted by the buyer's browser.</p>
     ExpiredToken(String),
-    ///<p>An internal error has occurred. Retry your request. If the problem persists, post a message with details on the AWS forums.</p>
+    /// <p>An internal error has occurred. Retry your request. If the problem persists, post a message with details on the AWS forums.</p>
     InternalServiceError(String),
-    ///
+
     InvalidToken(String),
-    ///<p>The calls to the MeterUsage API are throttled.</p>
+    /// <p>The calls to the MeterUsage API are throttled.</p>
     Throttling(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -450,16 +450,16 @@ impl Error for ResolveCustomerError {
 }
 /// Trait representing the capabilities of the AWSMarketplace Metering API. AWSMarketplace Metering clients implement this trait.
 pub trait MarketplaceMetering {
-    #[doc="<p>BatchMeterUsage is called from a SaaS application listed on the AWS Marketplace to post metering records for a set of customers.</p> <p>For identical requests, the API is idempotent; requests can be retried with the same records or a subset of the input records.</p> <p>Every request to BatchMeterUsage is for one product. If you need to meter usage for multiple products, you must make multiple calls to BatchMeterUsage.</p> <p>BatchMeterUsage can process up to 25 UsageRecords at a time.</p>"]
+    /// <p>BatchMeterUsage is called from a SaaS application listed on the AWS Marketplace to post metering records for a set of customers.</p> <p>For identical requests, the API is idempotent; requests can be retried with the same records or a subset of the input records.</p> <p>Every request to BatchMeterUsage is for one product. If you need to meter usage for multiple products, you must make multiple calls to BatchMeterUsage.</p> <p>BatchMeterUsage can process up to 25 UsageRecords at a time.</p>
     fn batch_meter_usage(
         &self,
         input: &BatchMeterUsageRequest,
     ) -> Result<BatchMeterUsageResult, BatchMeterUsageError>;
 
-    #[doc="<p>API to emit metering records. For identical requests, the API is idempotent. It simply returns the metering record ID.</p> <p>MeterUsage is authenticated on the buyer's AWS account, generally when running from an EC2 instance on the AWS Marketplace.</p>"]
+    /// <p>API to emit metering records. For identical requests, the API is idempotent. It simply returns the metering record ID.</p> <p>MeterUsage is authenticated on the buyer's AWS account, generally when running from an EC2 instance on the AWS Marketplace.</p>
     fn meter_usage(&self, input: &MeterUsageRequest) -> Result<MeterUsageResult, MeterUsageError>;
 
-    #[doc="<p>ResolveCustomer is called by a SaaS application during the registration process. When a buyer visits your website during the registration process, the buyer submits a registration token through their browser. The registration token is resolved through this API to obtain a CustomerIdentifier and product code.</p>"]
+    /// <p>ResolveCustomer is called by a SaaS application during the registration process. When a buyer visits your website during the registration process, the buyer submits a registration token through their browser. The registration token is resolved through this API to obtain a CustomerIdentifier and product code.</p>
     fn resolve_customer(
         &self,
         input: &ResolveCustomerRequest,
@@ -495,7 +495,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>BatchMeterUsage is called from a SaaS application listed on the AWS Marketplace to post metering records for a set of customers.</p> <p>For identical requests, the API is idempotent; requests can be retried with the same records or a subset of the input records.</p> <p>Every request to BatchMeterUsage is for one product. If you need to meter usage for multiple products, you must make multiple calls to BatchMeterUsage.</p> <p>BatchMeterUsage can process up to 25 UsageRecords at a time.</p>"]
+    /// <p>BatchMeterUsage is called from a SaaS application listed on the AWS Marketplace to post metering records for a set of customers.</p> <p>For identical requests, the API is idempotent; requests can be retried with the same records or a subset of the input records.</p> <p>Every request to BatchMeterUsage is for one product. If you need to meter usage for multiple products, you must make multiple calls to BatchMeterUsage.</p> <p>BatchMeterUsage can process up to 25 UsageRecords at a time.</p>
     fn batch_meter_usage(
         &self,
         input: &BatchMeterUsageRequest,
@@ -529,7 +529,7 @@ where
         }
     }
 
-    #[doc="<p>API to emit metering records. For identical requests, the API is idempotent. It simply returns the metering record ID.</p> <p>MeterUsage is authenticated on the buyer's AWS account, generally when running from an EC2 instance on the AWS Marketplace.</p>"]
+    /// <p>API to emit metering records. For identical requests, the API is idempotent. It simply returns the metering record ID.</p> <p>MeterUsage is authenticated on the buyer's AWS account, generally when running from an EC2 instance on the AWS Marketplace.</p>
     fn meter_usage(&self, input: &MeterUsageRequest) -> Result<MeterUsageResult, MeterUsageError> {
         let mut request = SignedRequest::new("POST", "aws-marketplace", &self.region, "/");
         request.set_endpoint_prefix("metering.marketplace".to_string());
@@ -560,7 +560,7 @@ where
         }
     }
 
-    #[doc="<p>ResolveCustomer is called by a SaaS application during the registration process. When a buyer visits your website during the registration process, the buyer submits a registration token through their browser. The registration token is resolved through this API to obtain a CustomerIdentifier and product code.</p>"]
+    /// <p>ResolveCustomer is called by a SaaS application during the registration process. When a buyer visits your website during the registration process, the buyer submits a registration token through their browser. The registration token is resolved through this API to obtain a CustomerIdentifier and product code.</p>
     fn resolve_customer(
         &self,
         input: &ResolveCustomerRequest,

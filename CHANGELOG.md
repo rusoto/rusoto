@@ -4,16 +4,19 @@
 (Please put an entry here in each PR)
 
 - Use ```$AWS_PROFILE``` to obtain default profile name 
+
+## [0.31.0] - 2018-01-21
+
 - Update Rusoto Core ReadMe
 - use correct China-northwest region domain
 - Fix handling of error responses from Ceph (S3)
 - Added integration tests for Ceph and Minio
 - Convert metadata keys to lowercase (only affects third party services, Amazon already converts them)
-- Allow setting both, Region name and endpoint, via `Region::Custom`
+- Allow setting both Region name and endpoint via `Region::Custom`
 - Added China-northwest, US-Gov-West & Paris regions
 - Switched crategen from rustfmt to rustfmt-nightly
 - Removed unused AsciiExt imports
-- S3 StreamingBody now has public constructor 
+- S3 StreamingBody now has public constructor
 
 ## [0.30.0] - 2017-12-02
 

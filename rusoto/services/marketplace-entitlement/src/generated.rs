@@ -109,11 +109,11 @@ pub struct GetEntitlementsResult {
 /// Errors returned by GetEntitlements
 #[derive(Debug, PartialEq)]
 pub enum GetEntitlementsError {
-    ///<p>An internal error has occurred. Retry your request. If the problem persists, post a message with details on the AWS forums.</p>
+    /// <p>An internal error has occurred. Retry your request. If the problem persists, post a message with details on the AWS forums.</p>
     InternalServiceError(String),
-    ///<p>One or more parameters in your request was invalid.</p>
+    /// <p>One or more parameters in your request was invalid.</p>
     InvalidParameter(String),
-    ///<p>The calls to the GetEntitlements API are throttled.</p>
+    /// <p>The calls to the GetEntitlements API are throttled.</p>
     Throttling(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -198,7 +198,7 @@ impl Error for GetEntitlementsError {
 }
 /// Trait representing the capabilities of the AWS Marketplace Entitlement Service API. AWS Marketplace Entitlement Service clients implement this trait.
 pub trait MarketplaceEntitlement {
-    #[doc="<p>GetEntitlements retrieves entitlement values for a given product. The results can be filtered based on customer identifier or product dimensions.</p>"]
+    /// <p>GetEntitlements retrieves entitlement values for a given product. The results can be filtered based on customer identifier or product dimensions.</p>
     fn get_entitlements(
         &self,
         input: &GetEntitlementsRequest,
@@ -234,7 +234,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>GetEntitlements retrieves entitlement values for a given product. The results can be filtered based on customer identifier or product dimensions.</p>"]
+    /// <p>GetEntitlements retrieves entitlement values for a given product. The results can be filtered based on customer identifier or product dimensions.</p>
     fn get_entitlements(
         &self,
         input: &GetEntitlementsRequest,

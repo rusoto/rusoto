@@ -140,7 +140,7 @@ pub struct DescribeWorkspaceBundlesRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The owner of the bundles to retrieve. This parameter cannot be combined with any other filter parameter.</p> <p>This contains one of the following values:</p> <ul> <li> <p>null- Retrieves the bundles that belong to the account making the call.</p> </li> <li> <p> <code>AMAZON</code>- Retrieves the bundles that are provided by AWS.</p> </li> </ul>
+    /// <p><p>The owner of the bundles to retrieve. This parameter cannot be combined with any other filter parameter.</p> <p>This contains one of the following values:</p> <ul> <li> <p>null- Retrieves the bundles that belong to the account making the call.</p> </li> <li> <p> <code>AMAZON</code>- Retrieves the bundles that are provided by AWS.</p> </li> </ul></p>
     #[serde(rename = "Owner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
@@ -654,11 +654,11 @@ pub struct WorkspaceRequest {
 /// Errors returned by CreateTags
 #[derive(Debug, PartialEq)]
 pub enum CreateTagsError {
-    ///<p>One or more parameter values are not valid.</p>
+    /// <p>One or more parameter values are not valid.</p>
     InvalidParameterValues(String),
-    ///<p>Your resource limits have been exceeded.</p>
+    /// <p>Your resource limits have been exceeded.</p>
     ResourceLimitExceeded(String),
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -742,9 +742,9 @@ impl Error for CreateTagsError {
 /// Errors returned by CreateWorkspaces
 #[derive(Debug, PartialEq)]
 pub enum CreateWorkspacesError {
-    ///<p>One or more parameter values are not valid.</p>
+    /// <p>One or more parameter values are not valid.</p>
     InvalidParameterValues(String),
-    ///<p>Your resource limits have been exceeded.</p>
+    /// <p>Your resource limits have been exceeded.</p>
     ResourceLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -826,9 +826,9 @@ impl Error for CreateWorkspacesError {
 /// Errors returned by DeleteTags
 #[derive(Debug, PartialEq)]
 pub enum DeleteTagsError {
-    ///<p>One or more parameter values are not valid.</p>
+    /// <p>One or more parameter values are not valid.</p>
     InvalidParameterValues(String),
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -908,7 +908,7 @@ impl Error for DeleteTagsError {
 /// Errors returned by DescribeTags
 #[derive(Debug, PartialEq)]
 pub enum DescribeTagsError {
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -986,7 +986,7 @@ impl Error for DescribeTagsError {
 /// Errors returned by DescribeWorkspaceBundles
 #[derive(Debug, PartialEq)]
 pub enum DescribeWorkspaceBundlesError {
-    ///<p>One or more parameter values are not valid.</p>
+    /// <p>One or more parameter values are not valid.</p>
     InvalidParameterValues(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1068,7 +1068,7 @@ impl Error for DescribeWorkspaceBundlesError {
 /// Errors returned by DescribeWorkspaceDirectories
 #[derive(Debug, PartialEq)]
 pub enum DescribeWorkspaceDirectoriesError {
-    ///<p>One or more parameter values are not valid.</p>
+    /// <p>One or more parameter values are not valid.</p>
     InvalidParameterValues(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1150,9 +1150,9 @@ impl Error for DescribeWorkspaceDirectoriesError {
 /// Errors returned by DescribeWorkspaces
 #[derive(Debug, PartialEq)]
 pub enum DescribeWorkspacesError {
-    ///<p>One or more parameter values are not valid.</p>
+    /// <p>One or more parameter values are not valid.</p>
     InvalidParameterValues(String),
-    ///<p>The specified resource is not available.</p>
+    /// <p>The specified resource is not available.</p>
     ResourceUnavailable(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1236,7 +1236,7 @@ impl Error for DescribeWorkspacesError {
 /// Errors returned by DescribeWorkspacesConnectionStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeWorkspacesConnectionStatusError {
-    ///<p>One or more parameter values are not valid.</p>
+    /// <p>One or more parameter values are not valid.</p>
     InvalidParameterValues(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1318,19 +1318,19 @@ impl Error for DescribeWorkspacesConnectionStatusError {
 /// Errors returned by ModifyWorkspaceProperties
 #[derive(Debug, PartialEq)]
 pub enum ModifyWorkspacePropertiesError {
-    ///<p>The user is not authorized to access a resource.</p>
+    /// <p>The user is not authorized to access a resource.</p>
     AccessDenied(String),
-    ///<p>One or more parameter values are not valid.</p>
+    /// <p>One or more parameter values are not valid.</p>
     InvalidParameterValues(String),
-    ///<p>The state of the WorkSpace is not valid for this operation.</p>
+    /// <p>The state of the WorkSpace is not valid for this operation.</p>
     InvalidResourceState(String),
-    ///<p>The properties of this WorkSpace are currently being modified. Try again in a moment.</p>
+    /// <p>The properties of this WorkSpace are currently being modified. Try again in a moment.</p>
     OperationInProgress(String),
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>The specified resource is not available.</p>
+    /// <p>The specified resource is not available.</p>
     ResourceUnavailable(String),
-    ///<p>The configuration of this WorkSpace is not supported for this operation. For more information, see the <a href="http://docs.aws.amazon.com/workspaces/latest/adminguide/">Amazon WorkSpaces Administration Guide</a>. </p>
+    /// <p>The configuration of this WorkSpace is not supported for this operation. For more information, see the <a href="http://docs.aws.amazon.com/workspaces/latest/adminguide/">Amazon WorkSpaces Administration Guide</a>. </p>
     UnsupportedWorkspaceConfiguration(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1809,79 +1809,79 @@ impl Error for TerminateWorkspacesError {
 }
 /// Trait representing the capabilities of the Amazon WorkSpaces API. Amazon WorkSpaces clients implement this trait.
 pub trait Workspaces {
-    #[doc = "<p>Creates tags for a WorkSpace.</p>"]
+    /// <p>Creates tags for a WorkSpace.</p>
     fn create_tags(&self, input: &CreateTagsRequest) -> Result<CreateTagsResult, CreateTagsError>;
 
-    #[doc="<p>Creates one or more WorkSpaces.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces are created.</p> </note>"]
+    /// <p><p>Creates one or more WorkSpaces.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces are created.</p> </note></p>
     fn create_workspaces(
         &self,
         input: &CreateWorkspacesRequest,
     ) -> Result<CreateWorkspacesResult, CreateWorkspacesError>;
 
-    #[doc = "<p>Deletes tags from a WorkSpace.</p>"]
+    /// <p>Deletes tags from a WorkSpace.</p>
     fn delete_tags(&self, input: &DeleteTagsRequest) -> Result<DeleteTagsResult, DeleteTagsError>;
 
-    #[doc = "<p>Describes tags for a WorkSpace.</p>"]
+    /// <p>Describes tags for a WorkSpace.</p>
     fn describe_tags(
         &self,
         input: &DescribeTagsRequest,
     ) -> Result<DescribeTagsResult, DescribeTagsError>;
 
-    #[doc="<p>Obtains information about the WorkSpace bundles that are available to your account in the specified region.</p> <p>You can filter the results with either the <code>BundleIds</code> parameter, or the <code>Owner</code> parameter, but not both.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>"]
+    /// <p>Obtains information about the WorkSpace bundles that are available to your account in the specified region.</p> <p>You can filter the results with either the <code>BundleIds</code> parameter, or the <code>Owner</code> parameter, but not both.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>
     fn describe_workspace_bundles(
         &self,
         input: &DescribeWorkspaceBundlesRequest,
     ) -> Result<DescribeWorkspaceBundlesResult, DescribeWorkspaceBundlesError>;
 
-    #[doc="<p>Retrieves information about the AWS Directory Service directories in the region that are registered with Amazon WorkSpaces and are available to your account.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>"]
+    /// <p>Retrieves information about the AWS Directory Service directories in the region that are registered with Amazon WorkSpaces and are available to your account.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>
     fn describe_workspace_directories(
         &self,
         input: &DescribeWorkspaceDirectoriesRequest,
     ) -> Result<DescribeWorkspaceDirectoriesResult, DescribeWorkspaceDirectoriesError>;
 
-    #[doc="<p>Obtains information about the specified WorkSpaces.</p> <p>Only one of the filter parameters, such as <code>BundleId</code>, <code>DirectoryId</code>, or <code>WorkspaceIds</code>, can be specified at a time.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>"]
+    /// <p>Obtains information about the specified WorkSpaces.</p> <p>Only one of the filter parameters, such as <code>BundleId</code>, <code>DirectoryId</code>, or <code>WorkspaceIds</code>, can be specified at a time.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>
     fn describe_workspaces(
         &self,
         input: &DescribeWorkspacesRequest,
     ) -> Result<DescribeWorkspacesResult, DescribeWorkspacesError>;
 
-    #[doc = "<p>Describes the connection status of a specified WorkSpace.</p>"]
+    /// <p>Describes the connection status of a specified WorkSpace.</p>
     fn describe_workspaces_connection_status(
         &self,
         input: &DescribeWorkspacesConnectionStatusRequest,
     ) -> Result<DescribeWorkspacesConnectionStatusResult, DescribeWorkspacesConnectionStatusError>;
 
-    #[doc="<p>Modifies the WorkSpace properties, including the running mode and AutoStop time.</p>"]
+    /// <p>Modifies the WorkSpace properties, including the running mode and AutoStop time.</p>
     fn modify_workspace_properties(
         &self,
         input: &ModifyWorkspacePropertiesRequest,
     ) -> Result<ModifyWorkspacePropertiesResult, ModifyWorkspacePropertiesError>;
 
-    #[doc="<p>Reboots the specified WorkSpaces.</p> <p>To be able to reboot a WorkSpace, the WorkSpace must have a <b>State</b> of <code>AVAILABLE</code>, <code>IMPAIRED</code>, or <code>INOPERABLE</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have rebooted.</p> </note>"]
+    /// <p><p>Reboots the specified WorkSpaces.</p> <p>To be able to reboot a WorkSpace, the WorkSpace must have a <b>State</b> of <code>AVAILABLE</code>, <code>IMPAIRED</code>, or <code>INOPERABLE</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have rebooted.</p> </note></p>
     fn reboot_workspaces(
         &self,
         input: &RebootWorkspacesRequest,
     ) -> Result<RebootWorkspacesResult, RebootWorkspacesError>;
 
-    #[doc="<p>Rebuilds the specified WorkSpaces.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. Rebuilding a WorkSpace causes the following to occur:</p> <ul> <li> <p>The system is restored to the image of the bundle that the WorkSpace is created from. Any applications that have been installed, or system settings that have been made since the WorkSpace was created will be lost.</p> </li> <li> <p>The data drive (D drive) is re-created from the last automatic snapshot taken of the data drive. The current contents of the data drive are overwritten. Automatic snapshots of the data drive are taken every 12 hours, so the snapshot can be as much as 12 hours old.</p> </li> </ul> <p>To be able to rebuild a WorkSpace, the WorkSpace must have a <b>State</b> of <code>AVAILABLE</code> or <code>ERROR</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p> </note>"]
+    /// <p><p>Rebuilds the specified WorkSpaces.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. Rebuilding a WorkSpace causes the following to occur:</p> <ul> <li> <p>The system is restored to the image of the bundle that the WorkSpace is created from. Any applications that have been installed, or system settings that have been made since the WorkSpace was created will be lost.</p> </li> <li> <p>The data drive (D drive) is re-created from the last automatic snapshot taken of the data drive. The current contents of the data drive are overwritten. Automatic snapshots of the data drive are taken every 12 hours, so the snapshot can be as much as 12 hours old.</p> </li> </ul> <p>To be able to rebuild a WorkSpace, the WorkSpace must have a <b>State</b> of <code>AVAILABLE</code> or <code>ERROR</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p> </note></p>
     fn rebuild_workspaces(
         &self,
         input: &RebuildWorkspacesRequest,
     ) -> Result<RebuildWorkspacesResult, RebuildWorkspacesError>;
 
-    #[doc="<p>Starts the specified WorkSpaces. The WorkSpaces must have a running mode of AutoStop and a state of STOPPED.</p>"]
+    /// <p>Starts the specified WorkSpaces. The WorkSpaces must have a running mode of AutoStop and a state of STOPPED.</p>
     fn start_workspaces(
         &self,
         input: &StartWorkspacesRequest,
     ) -> Result<StartWorkspacesResult, StartWorkspacesError>;
 
-    #[doc="<p> Stops the specified WorkSpaces. The WorkSpaces must have a running mode of AutoStop and a state of AVAILABLE, IMPAIRED, UNHEALTHY, or ERROR.</p>"]
+    /// <p> Stops the specified WorkSpaces. The WorkSpaces must have a running mode of AutoStop and a state of AVAILABLE, IMPAIRED, UNHEALTHY, or ERROR.</p>
     fn stop_workspaces(
         &self,
         input: &StopWorkspacesRequest,
     ) -> Result<StopWorkspacesResult, StopWorkspacesError>;
 
-    #[doc="<p>Terminates the specified WorkSpaces.</p> <p>Terminating a WorkSpace is a permanent action and cannot be undone. The user's data is not maintained and will be destroyed. If you need to archive any user data, contact Amazon Web Services before terminating the WorkSpace.</p> <p>You can terminate a WorkSpace that is in any state except <code>SUSPENDED</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have been completely terminated.</p> </note>"]
+    /// <p><p>Terminates the specified WorkSpaces.</p> <p>Terminating a WorkSpace is a permanent action and cannot be undone. The user&#39;s data is not maintained and will be destroyed. If you need to archive any user data, contact Amazon Web Services before terminating the WorkSpace.</p> <p>You can terminate a WorkSpace that is in any state except <code>SUSPENDED</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have been completely terminated.</p> </note></p>
     fn terminate_workspaces(
         &self,
         input: &TerminateWorkspacesRequest,
@@ -1917,7 +1917,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc = "<p>Creates tags for a WorkSpace.</p>"]
+    /// <p>Creates tags for a WorkSpace.</p>
     fn create_tags(&self, input: &CreateTagsRequest) -> Result<CreateTagsResult, CreateTagsError> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
@@ -1948,7 +1948,7 @@ where
         }
     }
 
-    #[doc="<p>Creates one or more WorkSpaces.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces are created.</p> </note>"]
+    /// <p><p>Creates one or more WorkSpaces.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces are created.</p> </note></p>
     fn create_workspaces(
         &self,
         input: &CreateWorkspacesRequest,
@@ -1982,7 +1982,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes tags from a WorkSpace.</p>"]
+    /// <p>Deletes tags from a WorkSpace.</p>
     fn delete_tags(&self, input: &DeleteTagsRequest) -> Result<DeleteTagsResult, DeleteTagsError> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
@@ -2013,7 +2013,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes tags for a WorkSpace.</p>"]
+    /// <p>Describes tags for a WorkSpace.</p>
     fn describe_tags(
         &self,
         input: &DescribeTagsRequest,
@@ -2047,7 +2047,7 @@ where
         }
     }
 
-    #[doc="<p>Obtains information about the WorkSpace bundles that are available to your account in the specified region.</p> <p>You can filter the results with either the <code>BundleIds</code> parameter, or the <code>Owner</code> parameter, but not both.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>"]
+    /// <p>Obtains information about the WorkSpace bundles that are available to your account in the specified region.</p> <p>You can filter the results with either the <code>BundleIds</code> parameter, or the <code>Owner</code> parameter, but not both.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>
     fn describe_workspace_bundles(
         &self,
         input: &DescribeWorkspaceBundlesRequest,
@@ -2081,7 +2081,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves information about the AWS Directory Service directories in the region that are registered with Amazon WorkSpaces and are available to your account.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>"]
+    /// <p>Retrieves information about the AWS Directory Service directories in the region that are registered with Amazon WorkSpaces and are available to your account.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>
     fn describe_workspace_directories(
         &self,
         input: &DescribeWorkspaceDirectoriesRequest,
@@ -2118,7 +2118,7 @@ where
         }
     }
 
-    #[doc="<p>Obtains information about the specified WorkSpaces.</p> <p>Only one of the filter parameters, such as <code>BundleId</code>, <code>DirectoryId</code>, or <code>WorkspaceIds</code>, can be specified at a time.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>"]
+    /// <p>Obtains information about the specified WorkSpaces.</p> <p>Only one of the filter parameters, such as <code>BundleId</code>, <code>DirectoryId</code>, or <code>WorkspaceIds</code>, can be specified at a time.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>
     fn describe_workspaces(
         &self,
         input: &DescribeWorkspacesRequest,
@@ -2152,7 +2152,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes the connection status of a specified WorkSpace.</p>"]
+    /// <p>Describes the connection status of a specified WorkSpace.</p>
     fn describe_workspaces_connection_status(
         &self,
         input: &DescribeWorkspacesConnectionStatusRequest,
@@ -2192,7 +2192,7 @@ where
         }
     }
 
-    #[doc="<p>Modifies the WorkSpace properties, including the running mode and AutoStop time.</p>"]
+    /// <p>Modifies the WorkSpace properties, including the running mode and AutoStop time.</p>
     fn modify_workspace_properties(
         &self,
         input: &ModifyWorkspacePropertiesRequest,
@@ -2229,7 +2229,7 @@ where
         }
     }
 
-    #[doc="<p>Reboots the specified WorkSpaces.</p> <p>To be able to reboot a WorkSpace, the WorkSpace must have a <b>State</b> of <code>AVAILABLE</code>, <code>IMPAIRED</code>, or <code>INOPERABLE</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have rebooted.</p> </note>"]
+    /// <p><p>Reboots the specified WorkSpaces.</p> <p>To be able to reboot a WorkSpace, the WorkSpace must have a <b>State</b> of <code>AVAILABLE</code>, <code>IMPAIRED</code>, or <code>INOPERABLE</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have rebooted.</p> </note></p>
     fn reboot_workspaces(
         &self,
         input: &RebootWorkspacesRequest,
@@ -2263,7 +2263,7 @@ where
         }
     }
 
-    #[doc="<p>Rebuilds the specified WorkSpaces.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. Rebuilding a WorkSpace causes the following to occur:</p> <ul> <li> <p>The system is restored to the image of the bundle that the WorkSpace is created from. Any applications that have been installed, or system settings that have been made since the WorkSpace was created will be lost.</p> </li> <li> <p>The data drive (D drive) is re-created from the last automatic snapshot taken of the data drive. The current contents of the data drive are overwritten. Automatic snapshots of the data drive are taken every 12 hours, so the snapshot can be as much as 12 hours old.</p> </li> </ul> <p>To be able to rebuild a WorkSpace, the WorkSpace must have a <b>State</b> of <code>AVAILABLE</code> or <code>ERROR</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p> </note>"]
+    /// <p><p>Rebuilds the specified WorkSpaces.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. Rebuilding a WorkSpace causes the following to occur:</p> <ul> <li> <p>The system is restored to the image of the bundle that the WorkSpace is created from. Any applications that have been installed, or system settings that have been made since the WorkSpace was created will be lost.</p> </li> <li> <p>The data drive (D drive) is re-created from the last automatic snapshot taken of the data drive. The current contents of the data drive are overwritten. Automatic snapshots of the data drive are taken every 12 hours, so the snapshot can be as much as 12 hours old.</p> </li> </ul> <p>To be able to rebuild a WorkSpace, the WorkSpace must have a <b>State</b> of <code>AVAILABLE</code> or <code>ERROR</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p> </note></p>
     fn rebuild_workspaces(
         &self,
         input: &RebuildWorkspacesRequest,
@@ -2297,7 +2297,7 @@ where
         }
     }
 
-    #[doc="<p>Starts the specified WorkSpaces. The WorkSpaces must have a running mode of AutoStop and a state of STOPPED.</p>"]
+    /// <p>Starts the specified WorkSpaces. The WorkSpaces must have a running mode of AutoStop and a state of STOPPED.</p>
     fn start_workspaces(
         &self,
         input: &StartWorkspacesRequest,
@@ -2331,7 +2331,7 @@ where
         }
     }
 
-    #[doc="<p> Stops the specified WorkSpaces. The WorkSpaces must have a running mode of AutoStop and a state of AVAILABLE, IMPAIRED, UNHEALTHY, or ERROR.</p>"]
+    /// <p> Stops the specified WorkSpaces. The WorkSpaces must have a running mode of AutoStop and a state of AVAILABLE, IMPAIRED, UNHEALTHY, or ERROR.</p>
     fn stop_workspaces(
         &self,
         input: &StopWorkspacesRequest,
@@ -2365,7 +2365,7 @@ where
         }
     }
 
-    #[doc="<p>Terminates the specified WorkSpaces.</p> <p>Terminating a WorkSpace is a permanent action and cannot be undone. The user's data is not maintained and will be destroyed. If you need to archive any user data, contact Amazon Web Services before terminating the WorkSpace.</p> <p>You can terminate a WorkSpace that is in any state except <code>SUSPENDED</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have been completely terminated.</p> </note>"]
+    /// <p><p>Terminates the specified WorkSpaces.</p> <p>Terminating a WorkSpace is a permanent action and cannot be undone. The user&#39;s data is not maintained and will be destroyed. If you need to archive any user data, contact Amazon Web Services before terminating the WorkSpace.</p> <p>You can terminate a WorkSpace that is in any state except <code>SUSPENDED</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have been completely terminated.</p> </note></p>
     fn terminate_workspaces(
         &self,
         input: &TerminateWorkspacesRequest,

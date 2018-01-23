@@ -27,124 +27,155 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-/// AWS Budget model
+/// <p>AWS Budget model</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Budget {
-    #[serde(rename = "BudgetLimit")] pub budget_limit: Spend,
-    #[serde(rename = "BudgetName")] pub budget_name: String,
-    #[serde(rename = "BudgetType")] pub budget_type: String,
+    #[serde(rename = "BudgetLimit")]
+    pub budget_limit: Spend,
+    #[serde(rename = "BudgetName")]
+    pub budget_name: String,
+    #[serde(rename = "BudgetType")]
+    pub budget_type: String,
     #[serde(rename = "CalculatedSpend")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub calculated_spend: Option<CalculatedSpend>,
     #[serde(rename = "CostFilters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cost_filters: Option<::std::collections::HashMap<String, Vec<String>>>,
-    #[serde(rename = "CostTypes")] pub cost_types: CostTypes,
-    #[serde(rename = "TimePeriod")] pub time_period: TimePeriod,
-    #[serde(rename = "TimeUnit")] pub time_unit: String,
+    #[serde(rename = "CostTypes")]
+    pub cost_types: CostTypes,
+    #[serde(rename = "TimePeriod")]
+    pub time_period: TimePeriod,
+    #[serde(rename = "TimeUnit")]
+    pub time_unit: String,
 }
 
-/// A structure holds the actual and forecasted spend for a budget.
+/// <p>A structure holds the actual and forecasted spend for a budget.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct CalculatedSpend {
-    #[serde(rename = "ActualSpend")] pub actual_spend: Spend,
+    #[serde(rename = "ActualSpend")]
+    pub actual_spend: Spend,
     #[serde(rename = "ForecastedSpend")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub forecasted_spend: Option<Spend>,
 }
 
-/// This includes the options for getting the cost of a budget.
+/// <p>This includes the options for getting the cost of a budget.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct CostTypes {
-    #[serde(rename = "IncludeSubscription")] pub include_subscription: bool,
-    #[serde(rename = "IncludeTax")] pub include_tax: bool,
-    #[serde(rename = "UseBlended")] pub use_blended: bool,
+    #[serde(rename = "IncludeSubscription")]
+    pub include_subscription: bool,
+    #[serde(rename = "IncludeTax")]
+    pub include_tax: bool,
+    #[serde(rename = "UseBlended")]
+    pub use_blended: bool,
 }
 
-/// Request of CreateBudget
+/// <p>Request of CreateBudget</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateBudgetRequest {
-    #[serde(rename = "AccountId")] pub account_id: String,
-    #[serde(rename = "Budget")] pub budget: Budget,
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    #[serde(rename = "Budget")]
+    pub budget: Budget,
     #[serde(rename = "NotificationsWithSubscribers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notifications_with_subscribers: Option<Vec<NotificationWithSubscribers>>,
 }
 
-/// Response of CreateBudget
+/// <p>Response of CreateBudget</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateBudgetResponse;
 
-/// Request of CreateNotification
+/// <p>Request of CreateNotification</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateNotificationRequest {
-    #[serde(rename = "AccountId")] pub account_id: String,
-    #[serde(rename = "BudgetName")] pub budget_name: String,
-    #[serde(rename = "Notification")] pub notification: Notification,
-    #[serde(rename = "Subscribers")] pub subscribers: Vec<Subscriber>,
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    #[serde(rename = "BudgetName")]
+    pub budget_name: String,
+    #[serde(rename = "Notification")]
+    pub notification: Notification,
+    #[serde(rename = "Subscribers")]
+    pub subscribers: Vec<Subscriber>,
 }
 
-/// Response of CreateNotification
+/// <p>Response of CreateNotification</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateNotificationResponse;
 
-/// Request of CreateSubscriber
+/// <p>Request of CreateSubscriber</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateSubscriberRequest {
-    #[serde(rename = "AccountId")] pub account_id: String,
-    #[serde(rename = "BudgetName")] pub budget_name: String,
-    #[serde(rename = "Notification")] pub notification: Notification,
-    #[serde(rename = "Subscriber")] pub subscriber: Subscriber,
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    #[serde(rename = "BudgetName")]
+    pub budget_name: String,
+    #[serde(rename = "Notification")]
+    pub notification: Notification,
+    #[serde(rename = "Subscriber")]
+    pub subscriber: Subscriber,
 }
 
-/// Response of CreateSubscriber
+/// <p>Response of CreateSubscriber</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateSubscriberResponse;
 
-/// Request of DeleteBudget
+/// <p>Request of DeleteBudget</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteBudgetRequest {
-    #[serde(rename = "AccountId")] pub account_id: String,
-    #[serde(rename = "BudgetName")] pub budget_name: String,
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    #[serde(rename = "BudgetName")]
+    pub budget_name: String,
 }
 
-/// Response of DeleteBudget
+/// <p>Response of DeleteBudget</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteBudgetResponse;
 
-/// Request of DeleteNotification
+/// <p>Request of DeleteNotification</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteNotificationRequest {
-    #[serde(rename = "AccountId")] pub account_id: String,
-    #[serde(rename = "BudgetName")] pub budget_name: String,
-    #[serde(rename = "Notification")] pub notification: Notification,
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    #[serde(rename = "BudgetName")]
+    pub budget_name: String,
+    #[serde(rename = "Notification")]
+    pub notification: Notification,
 }
 
-/// Response of DeleteNotification
+/// <p>Response of DeleteNotification</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteNotificationResponse;
 
-/// Request of DeleteSubscriber
+/// <p>Request of DeleteSubscriber</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteSubscriberRequest {
-    #[serde(rename = "AccountId")] pub account_id: String,
-    #[serde(rename = "BudgetName")] pub budget_name: String,
-    #[serde(rename = "Notification")] pub notification: Notification,
-    #[serde(rename = "Subscriber")] pub subscriber: Subscriber,
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    #[serde(rename = "BudgetName")]
+    pub budget_name: String,
+    #[serde(rename = "Notification")]
+    pub notification: Notification,
+    #[serde(rename = "Subscriber")]
+    pub subscriber: Subscriber,
 }
 
-/// Response of DeleteSubscriber
+/// <p>Response of DeleteSubscriber</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteSubscriberResponse;
 
-/// Request of DescribeBudget
+/// <p>Request of DescribeBudget</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeBudgetRequest {
-    #[serde(rename = "AccountId")] pub account_id: String,
-    #[serde(rename = "BudgetName")] pub budget_name: String,
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    #[serde(rename = "BudgetName")]
+    pub budget_name: String,
 }
 
-/// Response of DescribeBudget
+/// <p>Response of DescribeBudget</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeBudgetResponse {
     #[serde(rename = "Budget")]
@@ -152,10 +183,11 @@ pub struct DescribeBudgetResponse {
     pub budget: Option<Budget>,
 }
 
-/// Request of DescribeBudgets
+/// <p>Request of DescribeBudgets</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeBudgetsRequest {
-    #[serde(rename = "AccountId")] pub account_id: String,
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -164,7 +196,7 @@ pub struct DescribeBudgetsRequest {
     pub next_token: Option<String>,
 }
 
-/// Response of DescribeBudgets
+/// <p>Response of DescribeBudgets</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeBudgetsResponse {
     #[serde(rename = "Budgets")]
@@ -175,11 +207,13 @@ pub struct DescribeBudgetsResponse {
     pub next_token: Option<String>,
 }
 
-/// Request of DescribeNotificationsForBudget
+/// <p>Request of DescribeNotificationsForBudget</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeNotificationsForBudgetRequest {
-    #[serde(rename = "AccountId")] pub account_id: String,
-    #[serde(rename = "BudgetName")] pub budget_name: String,
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    #[serde(rename = "BudgetName")]
+    pub budget_name: String,
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -188,7 +222,7 @@ pub struct DescribeNotificationsForBudgetRequest {
     pub next_token: Option<String>,
 }
 
-/// Response of GetNotificationsForBudget
+/// <p>Response of GetNotificationsForBudget</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeNotificationsForBudgetResponse {
     #[serde(rename = "NextToken")]
@@ -199,21 +233,24 @@ pub struct DescribeNotificationsForBudgetResponse {
     pub notifications: Option<Vec<Notification>>,
 }
 
-/// Request of DescribeSubscribersForNotification
+/// <p>Request of DescribeSubscribersForNotification</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeSubscribersForNotificationRequest {
-    #[serde(rename = "AccountId")] pub account_id: String,
-    #[serde(rename = "BudgetName")] pub budget_name: String,
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    #[serde(rename = "BudgetName")]
+    pub budget_name: String,
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[serde(rename = "Notification")] pub notification: Notification,
+    #[serde(rename = "Notification")]
+    pub notification: Notification,
 }
 
-/// Response of DescribeSubscribersForNotification
+/// <p>Response of DescribeSubscribersForNotification</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeSubscribersForNotificationResponse {
     #[serde(rename = "NextToken")]
@@ -224,90 +261,112 @@ pub struct DescribeSubscribersForNotificationResponse {
     pub subscribers: Option<Vec<Subscriber>>,
 }
 
-/// Notification model. Each budget may contain multiple notifications with different settings.
+/// <p>Notification model. Each budget may contain multiple notifications with different settings.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Notification {
-    #[serde(rename = "ComparisonOperator")] pub comparison_operator: String,
-    #[serde(rename = "NotificationType")] pub notification_type: String,
-    #[serde(rename = "Threshold")] pub threshold: f64,
+    #[serde(rename = "ComparisonOperator")]
+    pub comparison_operator: String,
+    #[serde(rename = "NotificationType")]
+    pub notification_type: String,
+    #[serde(rename = "Threshold")]
+    pub threshold: f64,
 }
 
-/// A structure to relate notification and a list of subscribers who belong to the notification.
+/// <p>A structure to relate notification and a list of subscribers who belong to the notification.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct NotificationWithSubscribers {
-    #[serde(rename = "Notification")] pub notification: Notification,
-    #[serde(rename = "Subscribers")] pub subscribers: Vec<Subscriber>,
+    #[serde(rename = "Notification")]
+    pub notification: Notification,
+    #[serde(rename = "Subscribers")]
+    pub subscribers: Vec<Subscriber>,
 }
 
-/// A structure represent either a cost spend or usage spend. Contains an amount and a unit.
+/// <p>A structure represent either a cost spend or usage spend. Contains an amount and a unit.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Spend {
-    #[serde(rename = "Amount")] pub amount: String,
-    #[serde(rename = "Unit")] pub unit: String,
+    #[serde(rename = "Amount")]
+    pub amount: String,
+    #[serde(rename = "Unit")]
+    pub unit: String,
 }
 
-/// Subscriber model. Each notification may contain multiple subscribers with different addresses.
+/// <p>Subscriber model. Each notification may contain multiple subscribers with different addresses.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Subscriber {
-    #[serde(rename = "Address")] pub address: String,
-    #[serde(rename = "SubscriptionType")] pub subscription_type: String,
+    #[serde(rename = "Address")]
+    pub address: String,
+    #[serde(rename = "SubscriptionType")]
+    pub subscription_type: String,
 }
 
-/// A time period indicated the start date and end date of a budget.
+/// <p>A time period indicated the start date and end date of a budget.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct TimePeriod {
-    #[serde(rename = "End")] pub end: f64,
-    #[serde(rename = "Start")] pub start: f64,
+    #[serde(rename = "End")]
+    pub end: f64,
+    #[serde(rename = "Start")]
+    pub start: f64,
 }
 
-/// Request of UpdateBudget
+/// <p>Request of UpdateBudget</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateBudgetRequest {
-    #[serde(rename = "AccountId")] pub account_id: String,
-    #[serde(rename = "NewBudget")] pub new_budget: Budget,
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    #[serde(rename = "NewBudget")]
+    pub new_budget: Budget,
 }
 
-/// Response of UpdateBudget
+/// <p>Response of UpdateBudget</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateBudgetResponse;
 
-/// Request of UpdateNotification
+/// <p>Request of UpdateNotification</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateNotificationRequest {
-    #[serde(rename = "AccountId")] pub account_id: String,
-    #[serde(rename = "BudgetName")] pub budget_name: String,
-    #[serde(rename = "NewNotification")] pub new_notification: Notification,
-    #[serde(rename = "OldNotification")] pub old_notification: Notification,
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    #[serde(rename = "BudgetName")]
+    pub budget_name: String,
+    #[serde(rename = "NewNotification")]
+    pub new_notification: Notification,
+    #[serde(rename = "OldNotification")]
+    pub old_notification: Notification,
 }
 
-/// Response of UpdateNotification
+/// <p>Response of UpdateNotification</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateNotificationResponse;
 
-/// Request of UpdateSubscriber
+/// <p>Request of UpdateSubscriber</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateSubscriberRequest {
-    #[serde(rename = "AccountId")] pub account_id: String,
-    #[serde(rename = "BudgetName")] pub budget_name: String,
-    #[serde(rename = "NewSubscriber")] pub new_subscriber: Subscriber,
-    #[serde(rename = "Notification")] pub notification: Notification,
-    #[serde(rename = "OldSubscriber")] pub old_subscriber: Subscriber,
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    #[serde(rename = "BudgetName")]
+    pub budget_name: String,
+    #[serde(rename = "NewSubscriber")]
+    pub new_subscriber: Subscriber,
+    #[serde(rename = "Notification")]
+    pub notification: Notification,
+    #[serde(rename = "OldSubscriber")]
+    pub old_subscriber: Subscriber,
 }
 
-/// Response of UpdateSubscriber
+/// <p>Response of UpdateSubscriber</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateSubscriberResponse;
 
 /// Errors returned by CreateBudget
 #[derive(Debug, PartialEq)]
 pub enum CreateBudgetError {
-    ///The exception is thrown when customer tries to create a record (e.g. budget), but the number this record already exceeds the limitation.
+    /// <p>The exception is thrown when customer tries to create a record (e.g. budget), but the number this record already exceeds the limitation.</p>
     CreationLimitExceeded(String),
-    ///The exception is thrown when customer tries to create a record (e.g. budget) that already exists.
+    /// <p>The exception is thrown when customer tries to create a record (e.g. budget) that already exists.</p>
     DuplicateRecord(String),
-    ///This exception is thrown on an unknown internal failure.
+    /// <p>This exception is thrown on an unknown internal failure.</p>
     InternalError(String),
-    ///This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.
+    /// <p>This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.</p>
     InvalidParameter(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -397,15 +456,15 @@ impl Error for CreateBudgetError {
 /// Errors returned by CreateNotification
 #[derive(Debug, PartialEq)]
 pub enum CreateNotificationError {
-    ///The exception is thrown when customer tries to create a record (e.g. budget), but the number this record already exceeds the limitation.
+    /// <p>The exception is thrown when customer tries to create a record (e.g. budget), but the number this record already exceeds the limitation.</p>
     CreationLimitExceeded(String),
-    ///The exception is thrown when customer tries to create a record (e.g. budget) that already exists.
+    /// <p>The exception is thrown when customer tries to create a record (e.g. budget) that already exists.</p>
     DuplicateRecord(String),
-    ///This exception is thrown on an unknown internal failure.
+    /// <p>This exception is thrown on an unknown internal failure.</p>
     InternalError(String),
-    ///This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.
+    /// <p>This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.</p>
     InvalidParameter(String),
-    ///This exception is thrown if a requested entity is not found. E.g., if a budget id doesn't exist for an account ID.
+    /// <p>This exception is thrown if a requested entity is not found. E.g., if a budget id doesn&#39;t exist for an account ID.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -501,15 +560,15 @@ impl Error for CreateNotificationError {
 /// Errors returned by CreateSubscriber
 #[derive(Debug, PartialEq)]
 pub enum CreateSubscriberError {
-    ///The exception is thrown when customer tries to create a record (e.g. budget), but the number this record already exceeds the limitation.
+    /// <p>The exception is thrown when customer tries to create a record (e.g. budget), but the number this record already exceeds the limitation.</p>
     CreationLimitExceeded(String),
-    ///The exception is thrown when customer tries to create a record (e.g. budget) that already exists.
+    /// <p>The exception is thrown when customer tries to create a record (e.g. budget) that already exists.</p>
     DuplicateRecord(String),
-    ///This exception is thrown on an unknown internal failure.
+    /// <p>This exception is thrown on an unknown internal failure.</p>
     InternalError(String),
-    ///This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.
+    /// <p>This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.</p>
     InvalidParameter(String),
-    ///This exception is thrown if a requested entity is not found. E.g., if a budget id doesn't exist for an account ID.
+    /// <p>This exception is thrown if a requested entity is not found. E.g., if a budget id doesn&#39;t exist for an account ID.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -603,11 +662,11 @@ impl Error for CreateSubscriberError {
 /// Errors returned by DeleteBudget
 #[derive(Debug, PartialEq)]
 pub enum DeleteBudgetError {
-    ///This exception is thrown on an unknown internal failure.
+    /// <p>This exception is thrown on an unknown internal failure.</p>
     InternalError(String),
-    ///This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.
+    /// <p>This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.</p>
     InvalidParameter(String),
-    ///This exception is thrown if a requested entity is not found. E.g., if a budget id doesn't exist for an account ID.
+    /// <p>This exception is thrown if a requested entity is not found. E.g., if a budget id doesn&#39;t exist for an account ID.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -691,11 +750,11 @@ impl Error for DeleteBudgetError {
 /// Errors returned by DeleteNotification
 #[derive(Debug, PartialEq)]
 pub enum DeleteNotificationError {
-    ///This exception is thrown on an unknown internal failure.
+    /// <p>This exception is thrown on an unknown internal failure.</p>
     InternalError(String),
-    ///This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.
+    /// <p>This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.</p>
     InvalidParameter(String),
-    ///This exception is thrown if a requested entity is not found. E.g., if a budget id doesn't exist for an account ID.
+    /// <p>This exception is thrown if a requested entity is not found. E.g., if a budget id doesn&#39;t exist for an account ID.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -783,11 +842,11 @@ impl Error for DeleteNotificationError {
 /// Errors returned by DeleteSubscriber
 #[derive(Debug, PartialEq)]
 pub enum DeleteSubscriberError {
-    ///This exception is thrown on an unknown internal failure.
+    /// <p>This exception is thrown on an unknown internal failure.</p>
     InternalError(String),
-    ///This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.
+    /// <p>This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.</p>
     InvalidParameter(String),
-    ///This exception is thrown if a requested entity is not found. E.g., if a budget id doesn't exist for an account ID.
+    /// <p>This exception is thrown if a requested entity is not found. E.g., if a budget id doesn&#39;t exist for an account ID.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -873,11 +932,11 @@ impl Error for DeleteSubscriberError {
 /// Errors returned by DescribeBudget
 #[derive(Debug, PartialEq)]
 pub enum DescribeBudgetError {
-    ///This exception is thrown on an unknown internal failure.
+    /// <p>This exception is thrown on an unknown internal failure.</p>
     InternalError(String),
-    ///This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.
+    /// <p>This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.</p>
     InvalidParameter(String),
-    ///This exception is thrown if a requested entity is not found. E.g., if a budget id doesn't exist for an account ID.
+    /// <p>This exception is thrown if a requested entity is not found. E.g., if a budget id doesn&#39;t exist for an account ID.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -963,15 +1022,15 @@ impl Error for DescribeBudgetError {
 /// Errors returned by DescribeBudgets
 #[derive(Debug, PartialEq)]
 pub enum DescribeBudgetsError {
-    ///This exception is thrown if the paging token is expired - past its TTL
+    /// <p>This exception is thrown if the paging token is expired - past its TTL</p>
     ExpiredNextToken(String),
-    ///This exception is thrown on an unknown internal failure.
+    /// <p>This exception is thrown on an unknown internal failure.</p>
     InternalError(String),
-    ///This exception is thrown if paging token signature didn't match the token, or the paging token isn't for this request
+    /// <p>This exception is thrown if paging token signature didn&#39;t match the token, or the paging token isn&#39;t for this request</p>
     InvalidNextToken(String),
-    ///This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.
+    /// <p>This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.</p>
     InvalidParameter(String),
-    ///This exception is thrown if a requested entity is not found. E.g., if a budget id doesn't exist for an account ID.
+    /// <p>This exception is thrown if a requested entity is not found. E.g., if a budget id doesn&#39;t exist for an account ID.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1065,15 +1124,15 @@ impl Error for DescribeBudgetsError {
 /// Errors returned by DescribeNotificationsForBudget
 #[derive(Debug, PartialEq)]
 pub enum DescribeNotificationsForBudgetError {
-    ///This exception is thrown if the paging token is expired - past its TTL
+    /// <p>This exception is thrown if the paging token is expired - past its TTL</p>
     ExpiredNextToken(String),
-    ///This exception is thrown on an unknown internal failure.
+    /// <p>This exception is thrown on an unknown internal failure.</p>
     InternalError(String),
-    ///This exception is thrown if paging token signature didn't match the token, or the paging token isn't for this request
+    /// <p>This exception is thrown if paging token signature didn&#39;t match the token, or the paging token isn&#39;t for this request</p>
     InvalidNextToken(String),
-    ///This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.
+    /// <p>This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.</p>
     InvalidParameter(String),
-    ///This exception is thrown if a requested entity is not found. E.g., if a budget id doesn't exist for an account ID.
+    /// <p>This exception is thrown if a requested entity is not found. E.g., if a budget id doesn&#39;t exist for an account ID.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1177,15 +1236,15 @@ impl Error for DescribeNotificationsForBudgetError {
 /// Errors returned by DescribeSubscribersForNotification
 #[derive(Debug, PartialEq)]
 pub enum DescribeSubscribersForNotificationError {
-    ///This exception is thrown if the paging token is expired - past its TTL
+    /// <p>This exception is thrown if the paging token is expired - past its TTL</p>
     ExpiredNextToken(String),
-    ///This exception is thrown on an unknown internal failure.
+    /// <p>This exception is thrown on an unknown internal failure.</p>
     InternalError(String),
-    ///This exception is thrown if paging token signature didn't match the token, or the paging token isn't for this request
+    /// <p>This exception is thrown if paging token signature didn&#39;t match the token, or the paging token isn&#39;t for this request</p>
     InvalidNextToken(String),
-    ///This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.
+    /// <p>This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.</p>
     InvalidParameter(String),
-    ///This exception is thrown if a requested entity is not found. E.g., if a budget id doesn't exist for an account ID.
+    /// <p>This exception is thrown if a requested entity is not found. E.g., if a budget id doesn&#39;t exist for an account ID.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1289,11 +1348,11 @@ impl Error for DescribeSubscribersForNotificationError {
 /// Errors returned by UpdateBudget
 #[derive(Debug, PartialEq)]
 pub enum UpdateBudgetError {
-    ///This exception is thrown on an unknown internal failure.
+    /// <p>This exception is thrown on an unknown internal failure.</p>
     InternalError(String),
-    ///This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.
+    /// <p>This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.</p>
     InvalidParameter(String),
-    ///This exception is thrown if a requested entity is not found. E.g., if a budget id doesn't exist for an account ID.
+    /// <p>This exception is thrown if a requested entity is not found. E.g., if a budget id doesn&#39;t exist for an account ID.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1377,11 +1436,11 @@ impl Error for UpdateBudgetError {
 /// Errors returned by UpdateNotification
 #[derive(Debug, PartialEq)]
 pub enum UpdateNotificationError {
-    ///This exception is thrown on an unknown internal failure.
+    /// <p>This exception is thrown on an unknown internal failure.</p>
     InternalError(String),
-    ///This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.
+    /// <p>This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.</p>
     InvalidParameter(String),
-    ///This exception is thrown if a requested entity is not found. E.g., if a budget id doesn't exist for an account ID.
+    /// <p>This exception is thrown if a requested entity is not found. E.g., if a budget id doesn&#39;t exist for an account ID.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1469,11 +1528,11 @@ impl Error for UpdateNotificationError {
 /// Errors returned by UpdateSubscriber
 #[derive(Debug, PartialEq)]
 pub enum UpdateSubscriberError {
-    ///This exception is thrown on an unknown internal failure.
+    /// <p>This exception is thrown on an unknown internal failure.</p>
     InternalError(String),
-    ///This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.
+    /// <p>This exception is thrown if any request is given an invalid parameter. E.g., if a required Date field is null.</p>
     InvalidParameter(String),
-    ///This exception is thrown if a requested entity is not found. E.g., if a budget id doesn't exist for an account ID.
+    /// <p>This exception is thrown if a requested entity is not found. E.g., if a budget id doesn&#39;t exist for an account ID.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1558,79 +1617,79 @@ impl Error for UpdateSubscriberError {
 }
 /// Trait representing the capabilities of the AWSBudgets API. AWSBudgets clients implement this trait.
 pub trait Budgets {
-    #[doc = "Create a new budget"]
+    /// <p>Create a new budget</p>
     fn create_budget(
         &self,
         input: &CreateBudgetRequest,
     ) -> Result<CreateBudgetResponse, CreateBudgetError>;
 
-    #[doc = "Create a new Notification with subscribers for a budget"]
+    /// <p>Create a new Notification with subscribers for a budget</p>
     fn create_notification(
         &self,
         input: &CreateNotificationRequest,
     ) -> Result<CreateNotificationResponse, CreateNotificationError>;
 
-    #[doc = "Create a new Subscriber for a notification"]
+    /// <p>Create a new Subscriber for a notification</p>
     fn create_subscriber(
         &self,
         input: &CreateSubscriberRequest,
     ) -> Result<CreateSubscriberResponse, CreateSubscriberError>;
 
-    #[doc = "Delete a budget and related notifications"]
+    /// <p>Delete a budget and related notifications</p>
     fn delete_budget(
         &self,
         input: &DeleteBudgetRequest,
     ) -> Result<DeleteBudgetResponse, DeleteBudgetError>;
 
-    #[doc = "Delete a notification and related subscribers"]
+    /// <p>Delete a notification and related subscribers</p>
     fn delete_notification(
         &self,
         input: &DeleteNotificationRequest,
     ) -> Result<DeleteNotificationResponse, DeleteNotificationError>;
 
-    #[doc = "Delete a Subscriber for a notification"]
+    /// <p>Delete a Subscriber for a notification</p>
     fn delete_subscriber(
         &self,
         input: &DeleteSubscriberRequest,
     ) -> Result<DeleteSubscriberResponse, DeleteSubscriberError>;
 
-    #[doc = "Get a single budget"]
+    /// <p>Get a single budget</p>
     fn describe_budget(
         &self,
         input: &DescribeBudgetRequest,
     ) -> Result<DescribeBudgetResponse, DescribeBudgetError>;
 
-    #[doc = "Get all budgets for an account"]
+    /// <p>Get all budgets for an account</p>
     fn describe_budgets(
         &self,
         input: &DescribeBudgetsRequest,
     ) -> Result<DescribeBudgetsResponse, DescribeBudgetsError>;
 
-    #[doc = "Get notifications of a budget"]
+    /// <p>Get notifications of a budget</p>
     fn describe_notifications_for_budget(
         &self,
         input: &DescribeNotificationsForBudgetRequest,
     ) -> Result<DescribeNotificationsForBudgetResponse, DescribeNotificationsForBudgetError>;
 
-    #[doc = "Get subscribers of a notification"]
+    /// <p>Get subscribers of a notification</p>
     fn describe_subscribers_for_notification(
         &self,
         input: &DescribeSubscribersForNotificationRequest,
     ) -> Result<DescribeSubscribersForNotificationResponse, DescribeSubscribersForNotificationError>;
 
-    #[doc = "Update the information of a budget already created"]
+    /// <p>Update the information of a budget already created</p>
     fn update_budget(
         &self,
         input: &UpdateBudgetRequest,
     ) -> Result<UpdateBudgetResponse, UpdateBudgetError>;
 
-    #[doc = "Update the information about a notification already created"]
+    /// <p>Update the information about a notification already created</p>
     fn update_notification(
         &self,
         input: &UpdateNotificationRequest,
     ) -> Result<UpdateNotificationResponse, UpdateNotificationError>;
 
-    #[doc = "Update a subscriber"]
+    /// <p>Update a subscriber</p>
     fn update_subscriber(
         &self,
         input: &UpdateSubscriberRequest,
@@ -1666,7 +1725,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc = "Create a new budget"]
+    /// <p>Create a new budget</p>
     fn create_budget(
         &self,
         input: &CreateBudgetRequest,
@@ -1700,7 +1759,7 @@ where
         }
     }
 
-    #[doc = "Create a new Notification with subscribers for a budget"]
+    /// <p>Create a new Notification with subscribers for a budget</p>
     fn create_notification(
         &self,
         input: &CreateNotificationRequest,
@@ -1734,7 +1793,7 @@ where
         }
     }
 
-    #[doc = "Create a new Subscriber for a notification"]
+    /// <p>Create a new Subscriber for a notification</p>
     fn create_subscriber(
         &self,
         input: &CreateSubscriberRequest,
@@ -1768,7 +1827,7 @@ where
         }
     }
 
-    #[doc = "Delete a budget and related notifications"]
+    /// <p>Delete a budget and related notifications</p>
     fn delete_budget(
         &self,
         input: &DeleteBudgetRequest,
@@ -1802,7 +1861,7 @@ where
         }
     }
 
-    #[doc = "Delete a notification and related subscribers"]
+    /// <p>Delete a notification and related subscribers</p>
     fn delete_notification(
         &self,
         input: &DeleteNotificationRequest,
@@ -1836,7 +1895,7 @@ where
         }
     }
 
-    #[doc = "Delete a Subscriber for a notification"]
+    /// <p>Delete a Subscriber for a notification</p>
     fn delete_subscriber(
         &self,
         input: &DeleteSubscriberRequest,
@@ -1870,7 +1929,7 @@ where
         }
     }
 
-    #[doc = "Get a single budget"]
+    /// <p>Get a single budget</p>
     fn describe_budget(
         &self,
         input: &DescribeBudgetRequest,
@@ -1904,7 +1963,7 @@ where
         }
     }
 
-    #[doc = "Get all budgets for an account"]
+    /// <p>Get all budgets for an account</p>
     fn describe_budgets(
         &self,
         input: &DescribeBudgetsRequest,
@@ -1938,7 +1997,7 @@ where
         }
     }
 
-    #[doc = "Get notifications of a budget"]
+    /// <p>Get notifications of a budget</p>
     fn describe_notifications_for_budget(
         &self,
         input: &DescribeNotificationsForBudgetRequest,
@@ -1977,7 +2036,7 @@ where
         }
     }
 
-    #[doc = "Get subscribers of a notification"]
+    /// <p>Get subscribers of a notification</p>
     fn describe_subscribers_for_notification(
         &self,
         input: &DescribeSubscribersForNotificationRequest,
@@ -2017,7 +2076,7 @@ where
         }
     }
 
-    #[doc = "Update the information of a budget already created"]
+    /// <p>Update the information of a budget already created</p>
     fn update_budget(
         &self,
         input: &UpdateBudgetRequest,
@@ -2051,7 +2110,7 @@ where
         }
     }
 
-    #[doc = "Update the information about a notification already created"]
+    /// <p>Update the information about a notification already created</p>
     fn update_notification(
         &self,
         input: &UpdateNotificationRequest,
@@ -2085,7 +2144,7 @@ where
         }
     }
 
-    #[doc = "Update a subscriber"]
+    /// <p>Update a subscriber</p>
     fn update_subscriber(
         &self,
         input: &UpdateSubscriberRequest,

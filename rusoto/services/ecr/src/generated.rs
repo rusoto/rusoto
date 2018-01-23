@@ -283,7 +283,7 @@ pub struct DescribeRepositoriesRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The <code>nextToken</code> value returned from a previous paginated <code>DescribeRepositories</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is <code>null</code> when there are no more results to return.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note>
+    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>DescribeRepositories</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is <code>null</code> when there are no more results to return.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -410,7 +410,7 @@ pub struct ImageDetail {
     #[serde(rename = "imagePushedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_pushed_at: Option<f64>,
-    /// <p>The size, in bytes, of the image in the repository.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note>
+    /// <p><p>The size, in bytes, of the image in the repository.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note></p>
     #[serde(rename = "imageSizeInBytes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_size_in_bytes: Option<i64>,
@@ -538,7 +538,7 @@ pub struct ListImagesRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The <code>nextToken</code> value returned from a previous paginated <code>ListImages</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is <code>null</code> when there are no more results to return.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note>
+    /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>ListImages</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is <code>null</code> when there are no more results to return.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -696,11 +696,11 @@ pub struct UploadLayerPartResponse {
 /// Errors returned by BatchCheckLayerAvailability
 #[derive(Debug, PartialEq)]
 pub enum BatchCheckLayerAvailabilityError {
-    ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
-    ///<p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
+    /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
     RepositoryNotFound(String),
-    ///<p>These errors are usually caused by a server-side issue.</p>
+    /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -792,11 +792,11 @@ impl Error for BatchCheckLayerAvailabilityError {
 /// Errors returned by BatchDeleteImage
 #[derive(Debug, PartialEq)]
 pub enum BatchDeleteImageError {
-    ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
-    ///<p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
+    /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
     RepositoryNotFound(String),
-    ///<p>These errors are usually caused by a server-side issue.</p>
+    /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -880,11 +880,11 @@ impl Error for BatchDeleteImageError {
 /// Errors returned by BatchGetImage
 #[derive(Debug, PartialEq)]
 pub enum BatchGetImageError {
-    ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
-    ///<p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
+    /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
     RepositoryNotFound(String),
-    ///<p>These errors are usually caused by a server-side issue.</p>
+    /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -968,21 +968,21 @@ impl Error for BatchGetImageError {
 /// Errors returned by CompleteLayerUpload
 #[derive(Debug, PartialEq)]
 pub enum CompleteLayerUploadError {
-    ///<p>The specified layer upload does not contain any layer parts.</p>
+    /// <p>The specified layer upload does not contain any layer parts.</p>
     EmptyUpload(String),
-    ///<p>The layer digest calculation performed by Amazon ECR upon receipt of the image layer does not match the digest specified.</p>
+    /// <p>The layer digest calculation performed by Amazon ECR upon receipt of the image layer does not match the digest specified.</p>
     InvalidLayer(String),
-    ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
-    ///<p>The image layer already exists in the associated repository.</p>
+    /// <p>The image layer already exists in the associated repository.</p>
     LayerAlreadyExists(String),
-    ///<p>Layer parts must be at least 5 MiB in size.</p>
+    /// <p>Layer parts must be at least 5 MiB in size.</p>
     LayerPartTooSmall(String),
-    ///<p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
+    /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
     RepositoryNotFound(String),
-    ///<p>These errors are usually caused by a server-side issue.</p>
+    /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
-    ///<p>The upload could not be found, or the specified upload id is not valid for this repository.</p>
+    /// <p>The upload could not be found, or the specified upload id is not valid for this repository.</p>
     UploadNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1090,13 +1090,13 @@ impl Error for CompleteLayerUploadError {
 /// Errors returned by CreateRepository
 #[derive(Debug, PartialEq)]
 pub enum CreateRepositoryError {
-    ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
-    ///<p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="http://docs.aws.amazon.com/AmazonECR/latest/userguide/service_limits.html">Amazon ECR Default Service Limits</a> in the Amazon EC2 Container Registry User Guide.</p>
+    /// <p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="http://docs.aws.amazon.com/AmazonECR/latest/userguide/service_limits.html">Amazon ECR Default Service Limits</a> in the Amazon EC2 Container Registry User Guide.</p>
     LimitExceeded(String),
-    ///<p>The specified repository already exists in the specified registry.</p>
+    /// <p>The specified repository already exists in the specified registry.</p>
     RepositoryAlreadyExists(String),
-    ///<p>These errors are usually caused by a server-side issue.</p>
+    /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1184,13 +1184,13 @@ impl Error for CreateRepositoryError {
 /// Errors returned by DeleteRepository
 #[derive(Debug, PartialEq)]
 pub enum DeleteRepositoryError {
-    ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
-    ///<p>The specified repository contains images. To delete a repository that contains images, you must force the deletion with the <code>force</code> parameter.</p>
+    /// <p>The specified repository contains images. To delete a repository that contains images, you must force the deletion with the <code>force</code> parameter.</p>
     RepositoryNotEmpty(String),
-    ///<p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
+    /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
     RepositoryNotFound(String),
-    ///<p>These errors are usually caused by a server-side issue.</p>
+    /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1278,13 +1278,13 @@ impl Error for DeleteRepositoryError {
 /// Errors returned by DeleteRepositoryPolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteRepositoryPolicyError {
-    ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
-    ///<p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
+    /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
     RepositoryNotFound(String),
-    ///<p>The specified repository and registry combination does not have an associated repository policy.</p>
+    /// <p>The specified repository and registry combination does not have an associated repository policy.</p>
     RepositoryPolicyNotFound(String),
-    ///<p>These errors are usually caused by a server-side issue.</p>
+    /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1378,13 +1378,13 @@ impl Error for DeleteRepositoryPolicyError {
 /// Errors returned by DescribeImages
 #[derive(Debug, PartialEq)]
 pub enum DescribeImagesError {
-    ///<p>The image requested does not exist in the specified repository.</p>
+    /// <p>The image requested does not exist in the specified repository.</p>
     ImageNotFound(String),
-    ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
-    ///<p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
+    /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
     RepositoryNotFound(String),
-    ///<p>These errors are usually caused by a server-side issue.</p>
+    /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1472,11 +1472,11 @@ impl Error for DescribeImagesError {
 /// Errors returned by DescribeRepositories
 #[derive(Debug, PartialEq)]
 pub enum DescribeRepositoriesError {
-    ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
-    ///<p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
+    /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
     RepositoryNotFound(String),
-    ///<p>These errors are usually caused by a server-side issue.</p>
+    /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1564,9 +1564,9 @@ impl Error for DescribeRepositoriesError {
 /// Errors returned by GetAuthorizationToken
 #[derive(Debug, PartialEq)]
 pub enum GetAuthorizationTokenError {
-    ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
-    ///<p>These errors are usually caused by a server-side issue.</p>
+    /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1650,15 +1650,15 @@ impl Error for GetAuthorizationTokenError {
 /// Errors returned by GetDownloadUrlForLayer
 #[derive(Debug, PartialEq)]
 pub enum GetDownloadUrlForLayerError {
-    ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
-    ///<p>The specified layer is not available because it is not associated with an image. Unassociated image layers may be cleaned up at any time.</p>
+    /// <p>The specified layer is not available because it is not associated with an image. Unassociated image layers may be cleaned up at any time.</p>
     LayerInaccessible(String),
-    ///<p>The specified layers could not be found, or the specified layer is not valid for this repository.</p>
+    /// <p>The specified layers could not be found, or the specified layer is not valid for this repository.</p>
     LayersNotFound(String),
-    ///<p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
+    /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
     RepositoryNotFound(String),
-    ///<p>These errors are usually caused by a server-side issue.</p>
+    /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1754,13 +1754,13 @@ impl Error for GetDownloadUrlForLayerError {
 /// Errors returned by GetRepositoryPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetRepositoryPolicyError {
-    ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
-    ///<p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
+    /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
     RepositoryNotFound(String),
-    ///<p>The specified repository and registry combination does not have an associated repository policy.</p>
+    /// <p>The specified repository and registry combination does not have an associated repository policy.</p>
     RepositoryPolicyNotFound(String),
-    ///<p>These errors are usually caused by a server-side issue.</p>
+    /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1854,11 +1854,11 @@ impl Error for GetRepositoryPolicyError {
 /// Errors returned by InitiateLayerUpload
 #[derive(Debug, PartialEq)]
 pub enum InitiateLayerUploadError {
-    ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
-    ///<p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
+    /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
     RepositoryNotFound(String),
-    ///<p>These errors are usually caused by a server-side issue.</p>
+    /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1946,11 +1946,11 @@ impl Error for InitiateLayerUploadError {
 /// Errors returned by ListImages
 #[derive(Debug, PartialEq)]
 pub enum ListImagesError {
-    ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
-    ///<p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
+    /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
     RepositoryNotFound(String),
-    ///<p>These errors are usually caused by a server-side issue.</p>
+    /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2032,17 +2032,17 @@ impl Error for ListImagesError {
 /// Errors returned by PutImage
 #[derive(Debug, PartialEq)]
 pub enum PutImageError {
-    ///<p>The specified image has already been pushed, and there are no changes to the manifest or image tag since the last push.</p>
+    /// <p>The specified image has already been pushed, and there are no changes to the manifest or image tag since the last push.</p>
     ImageAlreadyExists(String),
-    ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
-    ///<p>The specified layers could not be found, or the specified layer is not valid for this repository.</p>
+    /// <p>The specified layers could not be found, or the specified layer is not valid for this repository.</p>
     LayersNotFound(String),
-    ///<p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="http://docs.aws.amazon.com/AmazonECR/latest/userguide/service_limits.html">Amazon ECR Default Service Limits</a> in the Amazon EC2 Container Registry User Guide.</p>
+    /// <p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="http://docs.aws.amazon.com/AmazonECR/latest/userguide/service_limits.html">Amazon ECR Default Service Limits</a> in the Amazon EC2 Container Registry User Guide.</p>
     LimitExceeded(String),
-    ///<p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
+    /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
     RepositoryNotFound(String),
-    ///<p>These errors are usually caused by a server-side issue.</p>
+    /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2136,11 +2136,11 @@ impl Error for PutImageError {
 /// Errors returned by SetRepositoryPolicy
 #[derive(Debug, PartialEq)]
 pub enum SetRepositoryPolicyError {
-    ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
-    ///<p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
+    /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
     RepositoryNotFound(String),
-    ///<p>These errors are usually caused by a server-side issue.</p>
+    /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2228,17 +2228,17 @@ impl Error for SetRepositoryPolicyError {
 /// Errors returned by UploadLayerPart
 #[derive(Debug, PartialEq)]
 pub enum UploadLayerPartError {
-    ///<p>The layer part size is not valid, or the first byte specified is not consecutive to the last byte of a previous layer part upload.</p>
+    /// <p>The layer part size is not valid, or the first byte specified is not consecutive to the last byte of a previous layer part upload.</p>
     InvalidLayerPart(String),
-    ///<p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
-    ///<p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="http://docs.aws.amazon.com/AmazonECR/latest/userguide/service_limits.html">Amazon ECR Default Service Limits</a> in the Amazon EC2 Container Registry User Guide.</p>
+    /// <p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="http://docs.aws.amazon.com/AmazonECR/latest/userguide/service_limits.html">Amazon ECR Default Service Limits</a> in the Amazon EC2 Container Registry User Guide.</p>
     LimitExceeded(String),
-    ///<p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
+    /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
     RepositoryNotFound(String),
-    ///<p>These errors are usually caused by a server-side issue.</p>
+    /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
-    ///<p>The upload could not be found, or the specified upload id is not valid for this repository.</p>
+    /// <p>The upload could not be found, or the specified upload id is not valid for this repository.</p>
     UploadNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2333,98 +2333,98 @@ impl Error for UploadLayerPartError {
 }
 /// Trait representing the capabilities of the Amazon ECR API. Amazon ECR clients implement this trait.
 pub trait Ecr {
-    #[doc="<p>Check the availability of multiple image layers in a specified registry and repository.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
+    /// <p><p>Check the availability of multiple image layers in a specified registry and repository.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn batch_check_layer_availability(
         &self,
         input: &BatchCheckLayerAvailabilityRequest,
     ) -> Result<BatchCheckLayerAvailabilityResponse, BatchCheckLayerAvailabilityError>;
 
-    #[doc="<p>Deletes a list of specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p> <p>You can remove a tag from an image by specifying the image's tag in your request. When you remove the last tag from an image, the image is deleted from your repository.</p> <p>You can completely delete an image (and all of its tags) by specifying the image's digest in your request.</p>"]
+    /// <p>Deletes a list of specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p> <p>You can remove a tag from an image by specifying the image's tag in your request. When you remove the last tag from an image, the image is deleted from your repository.</p> <p>You can completely delete an image (and all of its tags) by specifying the image's digest in your request.</p>
     fn batch_delete_image(
         &self,
         input: &BatchDeleteImageRequest,
     ) -> Result<BatchDeleteImageResponse, BatchDeleteImageError>;
 
-    #[doc="<p>Gets detailed information for specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p>"]
+    /// <p>Gets detailed information for specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p>
     fn batch_get_image(
         &self,
         input: &BatchGetImageRequest,
     ) -> Result<BatchGetImageResponse, BatchGetImageError>;
 
-    #[doc="<p>Inform Amazon ECR that the image layer upload for a specified registry, repository name, and upload ID, has completed. You can optionally provide a <code>sha256</code> digest of the image layer for data validation purposes.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
+    /// <p><p>Inform Amazon ECR that the image layer upload for a specified registry, repository name, and upload ID, has completed. You can optionally provide a <code>sha256</code> digest of the image layer for data validation purposes.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn complete_layer_upload(
         &self,
         input: &CompleteLayerUploadRequest,
     ) -> Result<CompleteLayerUploadResponse, CompleteLayerUploadError>;
 
-    #[doc = "<p>Creates an image repository.</p>"]
+    /// <p>Creates an image repository.</p>
     fn create_repository(
         &self,
         input: &CreateRepositoryRequest,
     ) -> Result<CreateRepositoryResponse, CreateRepositoryError>;
 
-    #[doc="<p>Deletes an existing image repository. If a repository contains images, you must use the <code>force</code> option to delete it.</p>"]
+    /// <p>Deletes an existing image repository. If a repository contains images, you must use the <code>force</code> option to delete it.</p>
     fn delete_repository(
         &self,
         input: &DeleteRepositoryRequest,
     ) -> Result<DeleteRepositoryResponse, DeleteRepositoryError>;
 
-    #[doc = "<p>Deletes the repository policy from a specified repository.</p>"]
+    /// <p>Deletes the repository policy from a specified repository.</p>
     fn delete_repository_policy(
         &self,
         input: &DeleteRepositoryPolicyRequest,
     ) -> Result<DeleteRepositoryPolicyResponse, DeleteRepositoryPolicyError>;
 
-    #[doc="<p>Returns metadata about the images in a repository, including image size, image tags, and creation date.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note>"]
+    /// <p><p>Returns metadata about the images in a repository, including image size, image tags, and creation date.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note></p>
     fn describe_images(
         &self,
         input: &DescribeImagesRequest,
     ) -> Result<DescribeImagesResponse, DescribeImagesError>;
 
-    #[doc = "<p>Describes image repositories in a registry.</p>"]
+    /// <p>Describes image repositories in a registry.</p>
     fn describe_repositories(
         &self,
         input: &DescribeRepositoriesRequest,
     ) -> Result<DescribeRepositoriesResponse, DescribeRepositoriesError>;
 
-    #[doc="<p>Retrieves a token that is valid for a specified registry for 12 hours. This command allows you to use the <code>docker</code> CLI to push and pull images with Amazon ECR. If you do not specify a registry, the default registry is assumed.</p> <p>The <code>authorizationToken</code> returned for each registry specified is a base64 encoded string that can be decoded and used in a <code>docker login</code> command to authenticate to a registry. The AWS CLI offers an <code>aws ecr get-login</code> command that simplifies the login process.</p>"]
+    /// <p>Retrieves a token that is valid for a specified registry for 12 hours. This command allows you to use the <code>docker</code> CLI to push and pull images with Amazon ECR. If you do not specify a registry, the default registry is assumed.</p> <p>The <code>authorizationToken</code> returned for each registry specified is a base64 encoded string that can be decoded and used in a <code>docker login</code> command to authenticate to a registry. The AWS CLI offers an <code>aws ecr get-login</code> command that simplifies the login process.</p>
     fn get_authorization_token(
         &self,
         input: &GetAuthorizationTokenRequest,
     ) -> Result<GetAuthorizationTokenResponse, GetAuthorizationTokenError>;
 
-    #[doc="<p>Retrieves the pre-signed Amazon S3 download URL corresponding to an image layer. You can only get URLs for image layers that are referenced in an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
+    /// <p><p>Retrieves the pre-signed Amazon S3 download URL corresponding to an image layer. You can only get URLs for image layers that are referenced in an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn get_download_url_for_layer(
         &self,
         input: &GetDownloadUrlForLayerRequest,
     ) -> Result<GetDownloadUrlForLayerResponse, GetDownloadUrlForLayerError>;
 
-    #[doc = "<p>Retrieves the repository policy for a specified repository.</p>"]
+    /// <p>Retrieves the repository policy for a specified repository.</p>
     fn get_repository_policy(
         &self,
         input: &GetRepositoryPolicyRequest,
     ) -> Result<GetRepositoryPolicyResponse, GetRepositoryPolicyError>;
 
-    #[doc="<p>Notify Amazon ECR that you intend to upload an image layer.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
+    /// <p><p>Notify Amazon ECR that you intend to upload an image layer.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn initiate_layer_upload(
         &self,
         input: &InitiateLayerUploadRequest,
     ) -> Result<InitiateLayerUploadResponse, InitiateLayerUploadError>;
 
-    #[doc="<p>Lists all the image IDs for a given repository.</p> <p>You can filter images based on whether or not they are tagged by setting the <code>tagStatus</code> parameter to <code>TAGGED</code> or <code>UNTAGGED</code>. For example, you can filter your results to return only <code>UNTAGGED</code> images and then pipe that result to a <a>BatchDeleteImage</a> operation to delete them. Or, you can filter your results to return only <code>TAGGED</code> images to list all of the tags in your repository.</p>"]
+    /// <p>Lists all the image IDs for a given repository.</p> <p>You can filter images based on whether or not they are tagged by setting the <code>tagStatus</code> parameter to <code>TAGGED</code> or <code>UNTAGGED</code>. For example, you can filter your results to return only <code>UNTAGGED</code> images and then pipe that result to a <a>BatchDeleteImage</a> operation to delete them. Or, you can filter your results to return only <code>TAGGED</code> images to list all of the tags in your repository.</p>
     fn list_images(&self, input: &ListImagesRequest)
         -> Result<ListImagesResponse, ListImagesError>;
 
-    #[doc="<p>Creates or updates the image manifest and tags associated with an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
+    /// <p><p>Creates or updates the image manifest and tags associated with an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn put_image(&self, input: &PutImageRequest) -> Result<PutImageResponse, PutImageError>;
 
-    #[doc="<p>Applies a repository policy on a specified repository to control access permissions.</p>"]
+    /// <p>Applies a repository policy on a specified repository to control access permissions.</p>
     fn set_repository_policy(
         &self,
         input: &SetRepositoryPolicyRequest,
     ) -> Result<SetRepositoryPolicyResponse, SetRepositoryPolicyError>;
 
-    #[doc="<p>Uploads an image layer part to Amazon ECR.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
+    /// <p><p>Uploads an image layer part to Amazon ECR.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn upload_layer_part(
         &self,
         input: &UploadLayerPartRequest,
@@ -2460,7 +2460,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Check the availability of multiple image layers in a specified registry and repository.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
+    /// <p><p>Check the availability of multiple image layers in a specified registry and repository.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn batch_check_layer_availability(
         &self,
         input: &BatchCheckLayerAvailabilityRequest,
@@ -2497,7 +2497,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a list of specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p> <p>You can remove a tag from an image by specifying the image's tag in your request. When you remove the last tag from an image, the image is deleted from your repository.</p> <p>You can completely delete an image (and all of its tags) by specifying the image's digest in your request.</p>"]
+    /// <p>Deletes a list of specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p> <p>You can remove a tag from an image by specifying the image's tag in your request. When you remove the last tag from an image, the image is deleted from your repository.</p> <p>You can completely delete an image (and all of its tags) by specifying the image's digest in your request.</p>
     fn batch_delete_image(
         &self,
         input: &BatchDeleteImageRequest,
@@ -2534,7 +2534,7 @@ where
         }
     }
 
-    #[doc="<p>Gets detailed information for specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p>"]
+    /// <p>Gets detailed information for specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p>
     fn batch_get_image(
         &self,
         input: &BatchGetImageRequest,
@@ -2571,7 +2571,7 @@ where
         }
     }
 
-    #[doc="<p>Inform Amazon ECR that the image layer upload for a specified registry, repository name, and upload ID, has completed. You can optionally provide a <code>sha256</code> digest of the image layer for data validation purposes.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
+    /// <p><p>Inform Amazon ECR that the image layer upload for a specified registry, repository name, and upload ID, has completed. You can optionally provide a <code>sha256</code> digest of the image layer for data validation purposes.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn complete_layer_upload(
         &self,
         input: &CompleteLayerUploadRequest,
@@ -2608,7 +2608,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates an image repository.</p>"]
+    /// <p>Creates an image repository.</p>
     fn create_repository(
         &self,
         input: &CreateRepositoryRequest,
@@ -2645,7 +2645,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes an existing image repository. If a repository contains images, you must use the <code>force</code> option to delete it.</p>"]
+    /// <p>Deletes an existing image repository. If a repository contains images, you must use the <code>force</code> option to delete it.</p>
     fn delete_repository(
         &self,
         input: &DeleteRepositoryRequest,
@@ -2682,7 +2682,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the repository policy from a specified repository.</p>"]
+    /// <p>Deletes the repository policy from a specified repository.</p>
     fn delete_repository_policy(
         &self,
         input: &DeleteRepositoryPolicyRequest,
@@ -2719,7 +2719,7 @@ where
         }
     }
 
-    #[doc="<p>Returns metadata about the images in a repository, including image size, image tags, and creation date.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note>"]
+    /// <p><p>Returns metadata about the images in a repository, including image size, image tags, and creation date.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note></p>
     fn describe_images(
         &self,
         input: &DescribeImagesRequest,
@@ -2756,7 +2756,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes image repositories in a registry.</p>"]
+    /// <p>Describes image repositories in a registry.</p>
     fn describe_repositories(
         &self,
         input: &DescribeRepositoriesRequest,
@@ -2793,7 +2793,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves a token that is valid for a specified registry for 12 hours. This command allows you to use the <code>docker</code> CLI to push and pull images with Amazon ECR. If you do not specify a registry, the default registry is assumed.</p> <p>The <code>authorizationToken</code> returned for each registry specified is a base64 encoded string that can be decoded and used in a <code>docker login</code> command to authenticate to a registry. The AWS CLI offers an <code>aws ecr get-login</code> command that simplifies the login process.</p>"]
+    /// <p>Retrieves a token that is valid for a specified registry for 12 hours. This command allows you to use the <code>docker</code> CLI to push and pull images with Amazon ECR. If you do not specify a registry, the default registry is assumed.</p> <p>The <code>authorizationToken</code> returned for each registry specified is a base64 encoded string that can be decoded and used in a <code>docker login</code> command to authenticate to a registry. The AWS CLI offers an <code>aws ecr get-login</code> command that simplifies the login process.</p>
     fn get_authorization_token(
         &self,
         input: &GetAuthorizationTokenRequest,
@@ -2830,7 +2830,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves the pre-signed Amazon S3 download URL corresponding to an image layer. You can only get URLs for image layers that are referenced in an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
+    /// <p><p>Retrieves the pre-signed Amazon S3 download URL corresponding to an image layer. You can only get URLs for image layers that are referenced in an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn get_download_url_for_layer(
         &self,
         input: &GetDownloadUrlForLayerRequest,
@@ -2867,7 +2867,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves the repository policy for a specified repository.</p>"]
+    /// <p>Retrieves the repository policy for a specified repository.</p>
     fn get_repository_policy(
         &self,
         input: &GetRepositoryPolicyRequest,
@@ -2904,7 +2904,7 @@ where
         }
     }
 
-    #[doc="<p>Notify Amazon ECR that you intend to upload an image layer.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
+    /// <p><p>Notify Amazon ECR that you intend to upload an image layer.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn initiate_layer_upload(
         &self,
         input: &InitiateLayerUploadRequest,
@@ -2941,7 +2941,7 @@ where
         }
     }
 
-    #[doc="<p>Lists all the image IDs for a given repository.</p> <p>You can filter images based on whether or not they are tagged by setting the <code>tagStatus</code> parameter to <code>TAGGED</code> or <code>UNTAGGED</code>. For example, you can filter your results to return only <code>UNTAGGED</code> images and then pipe that result to a <a>BatchDeleteImage</a> operation to delete them. Or, you can filter your results to return only <code>TAGGED</code> images to list all of the tags in your repository.</p>"]
+    /// <p>Lists all the image IDs for a given repository.</p> <p>You can filter images based on whether or not they are tagged by setting the <code>tagStatus</code> parameter to <code>TAGGED</code> or <code>UNTAGGED</code>. For example, you can filter your results to return only <code>UNTAGGED</code> images and then pipe that result to a <a>BatchDeleteImage</a> operation to delete them. Or, you can filter your results to return only <code>TAGGED</code> images to list all of the tags in your repository.</p>
     fn list_images(
         &self,
         input: &ListImagesRequest,
@@ -2978,7 +2978,7 @@ where
         }
     }
 
-    #[doc="<p>Creates or updates the image manifest and tags associated with an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
+    /// <p><p>Creates or updates the image manifest and tags associated with an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn put_image(&self, input: &PutImageRequest) -> Result<PutImageResponse, PutImageError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
@@ -3012,7 +3012,7 @@ where
         }
     }
 
-    #[doc="<p>Applies a repository policy on a specified repository to control access permissions.</p>"]
+    /// <p>Applies a repository policy on a specified repository to control access permissions.</p>
     fn set_repository_policy(
         &self,
         input: &SetRepositoryPolicyRequest,
@@ -3049,7 +3049,7 @@ where
         }
     }
 
-    #[doc="<p>Uploads an image layer part to Amazon ECR.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note>"]
+    /// <p><p>Uploads an image layer part to Amazon ECR.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn upload_layer_part(
         &self,
         input: &UploadLayerPartRequest,

@@ -608,7 +608,8 @@ pub struct ListStateMachinesOutput {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[serde(rename = "stateMachines")] pub state_machines: Vec<StateMachineListItem>,
+    #[serde(rename = "stateMachines")]
+    pub state_machines: Vec<StateMachineListItem>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
@@ -737,9 +738,9 @@ pub struct StopExecutionOutput {
 /// Errors returned by CreateActivity
 #[derive(Debug, PartialEq)]
 pub enum CreateActivityError {
-    ///<p>The maximum number of activities has been reached. Existing activities must be deleted before a new activity can be created.</p>
+    /// <p>The maximum number of activities has been reached. Existing activities must be deleted before a new activity can be created.</p>
     ActivityLimitExceeded(String),
-    ///<p>The provided name is invalid.</p>
+    /// <p>The provided name is invalid.</p>
     InvalidName(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -819,17 +820,17 @@ impl Error for CreateActivityError {
 /// Errors returned by CreateStateMachine
 #[derive(Debug, PartialEq)]
 pub enum CreateStateMachineError {
-    ///<p>The provided Amazon Resource Name (ARN) is invalid.</p>
+    /// <p>The provided Amazon Resource Name (ARN) is invalid.</p>
     InvalidArn(String),
-    ///<p>The provided Amazon States Language definition is invalid.</p>
+    /// <p>The provided Amazon States Language definition is invalid.</p>
     InvalidDefinition(String),
-    ///<p>The provided name is invalid.</p>
+    /// <p>The provided name is invalid.</p>
     InvalidName(String),
-    ///<p>A state machine with the same name but a different definition or role ARN already exists.</p>
+    /// <p>A state machine with the same name but a different definition or role ARN already exists.</p>
     StateMachineAlreadyExists(String),
-    ///<p>The specified state machine is being deleted.</p>
+    /// <p>The specified state machine is being deleted.</p>
     StateMachineDeleting(String),
-    ///<p>The maximum number of state machines has been reached. Existing state machines must be deleted before a new state machine can be created.</p>
+    /// <p>The maximum number of state machines has been reached. Existing state machines must be deleted before a new state machine can be created.</p>
     StateMachineLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -933,7 +934,7 @@ impl Error for CreateStateMachineError {
 /// Errors returned by DeleteActivity
 #[derive(Debug, PartialEq)]
 pub enum DeleteActivityError {
-    ///<p>The provided Amazon Resource Name (ARN) is invalid.</p>
+    /// <p>The provided Amazon Resource Name (ARN) is invalid.</p>
     InvalidArn(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1009,7 +1010,7 @@ impl Error for DeleteActivityError {
 /// Errors returned by DeleteStateMachine
 #[derive(Debug, PartialEq)]
 pub enum DeleteStateMachineError {
-    ///<p>The provided Amazon Resource Name (ARN) is invalid.</p>
+    /// <p>The provided Amazon Resource Name (ARN) is invalid.</p>
     InvalidArn(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1089,9 +1090,9 @@ impl Error for DeleteStateMachineError {
 /// Errors returned by DescribeActivity
 #[derive(Debug, PartialEq)]
 pub enum DescribeActivityError {
-    ///<p>The specified activity does not exist.</p>
+    /// <p>The specified activity does not exist.</p>
     ActivityDoesNotExist(String),
-    ///<p>The provided Amazon Resource Name (ARN) is invalid.</p>
+    /// <p>The provided Amazon Resource Name (ARN) is invalid.</p>
     InvalidArn(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1171,9 +1172,9 @@ impl Error for DescribeActivityError {
 /// Errors returned by DescribeExecution
 #[derive(Debug, PartialEq)]
 pub enum DescribeExecutionError {
-    ///<p>The specified execution does not exist.</p>
+    /// <p>The specified execution does not exist.</p>
     ExecutionDoesNotExist(String),
-    ///<p>The provided Amazon Resource Name (ARN) is invalid.</p>
+    /// <p>The provided Amazon Resource Name (ARN) is invalid.</p>
     InvalidArn(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1255,9 +1256,9 @@ impl Error for DescribeExecutionError {
 /// Errors returned by DescribeStateMachine
 #[derive(Debug, PartialEq)]
 pub enum DescribeStateMachineError {
-    ///<p>The provided Amazon Resource Name (ARN) is invalid.</p>
+    /// <p>The provided Amazon Resource Name (ARN) is invalid.</p>
     InvalidArn(String),
-    ///<p>The specified state machine does not exist.</p>
+    /// <p>The specified state machine does not exist.</p>
     StateMachineDoesNotExist(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1343,11 +1344,11 @@ impl Error for DescribeStateMachineError {
 /// Errors returned by GetActivityTask
 #[derive(Debug, PartialEq)]
 pub enum GetActivityTaskError {
-    ///<p>The specified activity does not exist.</p>
+    /// <p>The specified activity does not exist.</p>
     ActivityDoesNotExist(String),
-    ///<p>The maximum number of workers concurrently polling for activity tasks has been reached.</p>
+    /// <p>The maximum number of workers concurrently polling for activity tasks has been reached.</p>
     ActivityWorkerLimitExceeded(String),
-    ///<p>The provided Amazon Resource Name (ARN) is invalid.</p>
+    /// <p>The provided Amazon Resource Name (ARN) is invalid.</p>
     InvalidArn(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1433,11 +1434,11 @@ impl Error for GetActivityTaskError {
 /// Errors returned by GetExecutionHistory
 #[derive(Debug, PartialEq)]
 pub enum GetExecutionHistoryError {
-    ///<p>The specified execution does not exist.</p>
+    /// <p>The specified execution does not exist.</p>
     ExecutionDoesNotExist(String),
-    ///<p>The provided Amazon Resource Name (ARN) is invalid.</p>
+    /// <p>The provided Amazon Resource Name (ARN) is invalid.</p>
     InvalidArn(String),
-    ///<p>The provided token is invalid.</p>
+    /// <p>The provided token is invalid.</p>
     InvalidToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1525,7 +1526,7 @@ impl Error for GetExecutionHistoryError {
 /// Errors returned by ListActivities
 #[derive(Debug, PartialEq)]
 pub enum ListActivitiesError {
-    ///<p>The provided token is invalid.</p>
+    /// <p>The provided token is invalid.</p>
     InvalidToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1603,11 +1604,11 @@ impl Error for ListActivitiesError {
 /// Errors returned by ListExecutions
 #[derive(Debug, PartialEq)]
 pub enum ListExecutionsError {
-    ///<p>The provided Amazon Resource Name (ARN) is invalid.</p>
+    /// <p>The provided Amazon Resource Name (ARN) is invalid.</p>
     InvalidArn(String),
-    ///<p>The provided token is invalid.</p>
+    /// <p>The provided token is invalid.</p>
     InvalidToken(String),
-    ///<p>The specified state machine does not exist.</p>
+    /// <p>The specified state machine does not exist.</p>
     StateMachineDoesNotExist(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1691,7 +1692,7 @@ impl Error for ListExecutionsError {
 /// Errors returned by ListStateMachines
 #[derive(Debug, PartialEq)]
 pub enum ListStateMachinesError {
-    ///<p>The provided token is invalid.</p>
+    /// <p>The provided token is invalid.</p>
     InvalidToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1771,11 +1772,11 @@ impl Error for ListStateMachinesError {
 /// Errors returned by SendTaskFailure
 #[derive(Debug, PartialEq)]
 pub enum SendTaskFailureError {
-    ///<p>The provided token is invalid.</p>
+    /// <p>The provided token is invalid.</p>
     InvalidToken(String),
-    ///
+
     TaskDoesNotExist(String),
-    ///
+
     TaskTimedOut(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1861,11 +1862,11 @@ impl Error for SendTaskFailureError {
 /// Errors returned by SendTaskHeartbeat
 #[derive(Debug, PartialEq)]
 pub enum SendTaskHeartbeatError {
-    ///<p>The provided token is invalid.</p>
+    /// <p>The provided token is invalid.</p>
     InvalidToken(String),
-    ///
+
     TaskDoesNotExist(String),
-    ///
+
     TaskTimedOut(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1953,13 +1954,13 @@ impl Error for SendTaskHeartbeatError {
 /// Errors returned by SendTaskSuccess
 #[derive(Debug, PartialEq)]
 pub enum SendTaskSuccessError {
-    ///<p>The provided JSON output data is invalid.</p>
+    /// <p>The provided JSON output data is invalid.</p>
     InvalidOutput(String),
-    ///<p>The provided token is invalid.</p>
+    /// <p>The provided token is invalid.</p>
     InvalidToken(String),
-    ///
+
     TaskDoesNotExist(String),
-    ///
+
     TaskTimedOut(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2049,19 +2050,19 @@ impl Error for SendTaskSuccessError {
 /// Errors returned by StartExecution
 #[derive(Debug, PartialEq)]
 pub enum StartExecutionError {
-    ///<p>An execution with the same name already exists.</p>
+    /// <p>An execution with the same name already exists.</p>
     ExecutionAlreadyExists(String),
-    ///<p>The maximum number of running executions has been reached. Running executions must end or be stopped before a new execution can be started.</p>
+    /// <p>The maximum number of running executions has been reached. Running executions must end or be stopped before a new execution can be started.</p>
     ExecutionLimitExceeded(String),
-    ///<p>The provided Amazon Resource Name (ARN) is invalid.</p>
+    /// <p>The provided Amazon Resource Name (ARN) is invalid.</p>
     InvalidArn(String),
-    ///<p>The provided JSON input data is invalid.</p>
+    /// <p>The provided JSON input data is invalid.</p>
     InvalidExecutionInput(String),
-    ///<p>The provided name is invalid.</p>
+    /// <p>The provided name is invalid.</p>
     InvalidName(String),
-    ///<p>The specified state machine is being deleted.</p>
+    /// <p>The specified state machine is being deleted.</p>
     StateMachineDeleting(String),
-    ///<p>The specified state machine does not exist.</p>
+    /// <p>The specified state machine does not exist.</p>
     StateMachineDoesNotExist(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2159,9 +2160,9 @@ impl Error for StartExecutionError {
 /// Errors returned by StopExecution
 #[derive(Debug, PartialEq)]
 pub enum StopExecutionError {
-    ///<p>The specified execution does not exist.</p>
+    /// <p>The specified execution does not exist.</p>
     ExecutionDoesNotExist(String),
-    ///<p>The provided Amazon Resource Name (ARN) is invalid.</p>
+    /// <p>The provided Amazon Resource Name (ARN) is invalid.</p>
     InvalidArn(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2240,103 +2241,103 @@ impl Error for StopExecutionError {
 }
 /// Trait representing the capabilities of the AWS SFN API. AWS SFN clients implement this trait.
 pub trait StepFunctions {
-    #[doc = "<p>Creates an activity.</p>"]
+    /// <p>Creates an activity.</p>
     fn create_activity(
         &self,
         input: &CreateActivityInput,
     ) -> Result<CreateActivityOutput, CreateActivityError>;
 
-    #[doc = "<p>Creates a state machine.</p>"]
+    /// <p>Creates a state machine.</p>
     fn create_state_machine(
         &self,
         input: &CreateStateMachineInput,
     ) -> Result<CreateStateMachineOutput, CreateStateMachineError>;
 
-    #[doc = "<p>Deletes an activity.</p>"]
+    /// <p>Deletes an activity.</p>
     fn delete_activity(
         &self,
         input: &DeleteActivityInput,
     ) -> Result<DeleteActivityOutput, DeleteActivityError>;
 
-    #[doc="<p>Deletes a state machine. This is an asynchronous operation-- it sets the state machine's status to \"DELETING\" and begins the delete process.</p>"]
+    /// <p>Deletes a state machine. This is an asynchronous operation-- it sets the state machine's status to "DELETING" and begins the delete process.</p>
     fn delete_state_machine(
         &self,
         input: &DeleteStateMachineInput,
     ) -> Result<DeleteStateMachineOutput, DeleteStateMachineError>;
 
-    #[doc = "<p>Describes an activity.</p>"]
+    /// <p>Describes an activity.</p>
     fn describe_activity(
         &self,
         input: &DescribeActivityInput,
     ) -> Result<DescribeActivityOutput, DescribeActivityError>;
 
-    #[doc = "<p>Describes an execution.</p>"]
+    /// <p>Describes an execution.</p>
     fn describe_execution(
         &self,
         input: &DescribeExecutionInput,
     ) -> Result<DescribeExecutionOutput, DescribeExecutionError>;
 
-    #[doc = "<p>Describes a state machine.</p>"]
+    /// <p>Describes a state machine.</p>
     fn describe_state_machine(
         &self,
         input: &DescribeStateMachineInput,
     ) -> Result<DescribeStateMachineOutput, DescribeStateMachineError>;
 
-    #[doc="<p>Used by workers to retrieve a task (with the specified activity ARN) scheduled for execution by a running state machine. This initiates a long poll, where the service holds the HTTP connection open and responds as soon as a task becomes available (i.e. an execution of a task of this type is needed.) The maximum time the service holds on to the request before responding is 60 seconds. If no task is available within 60 seconds, the poll will return an empty result, that is, the <code>taskToken</code> returned is an empty string.</p> <important> <p>Workers should set their client side socket timeout to at least 65 seconds (5 seconds higher than the maximum time the service may hold the poll request).</p> </important>"]
+    /// <p><p>Used by workers to retrieve a task (with the specified activity ARN) scheduled for execution by a running state machine. This initiates a long poll, where the service holds the HTTP connection open and responds as soon as a task becomes available (i.e. an execution of a task of this type is needed.) The maximum time the service holds on to the request before responding is 60 seconds. If no task is available within 60 seconds, the poll will return an empty result, that is, the <code>taskToken</code> returned is an empty string.</p> <important> <p>Workers should set their client side socket timeout to at least 65 seconds (5 seconds higher than the maximum time the service may hold the poll request).</p> </important></p>
     fn get_activity_task(
         &self,
         input: &GetActivityTaskInput,
     ) -> Result<GetActivityTaskOutput, GetActivityTaskError>;
 
-    #[doc="<p>Returns the history of the specified execution as a list of events. By default, the results are returned in ascending order of the <code>timeStamp</code> of the events. Use the <code>reverseOrder</code> parameter to get the latest events first. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the <code>nextToken</code> returned by the previous call.</p>"]
+    /// <p>Returns the history of the specified execution as a list of events. By default, the results are returned in ascending order of the <code>timeStamp</code> of the events. Use the <code>reverseOrder</code> parameter to get the latest events first. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the <code>nextToken</code> returned by the previous call.</p>
     fn get_execution_history(
         &self,
         input: &GetExecutionHistoryInput,
     ) -> Result<GetExecutionHistoryOutput, GetExecutionHistoryError>;
 
-    #[doc="<p>Lists the existing activities. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the <code>nextToken</code> returned by the previous call.</p>"]
+    /// <p>Lists the existing activities. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the <code>nextToken</code> returned by the previous call.</p>
     fn list_activities(
         &self,
         input: &ListActivitiesInput,
     ) -> Result<ListActivitiesOutput, ListActivitiesError>;
 
-    #[doc="<p>Lists the executions of a state machine that meet the filtering criteria. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the <code>nextToken</code> returned by the previous call.</p>"]
+    /// <p>Lists the executions of a state machine that meet the filtering criteria. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the <code>nextToken</code> returned by the previous call.</p>
     fn list_executions(
         &self,
         input: &ListExecutionsInput,
     ) -> Result<ListExecutionsOutput, ListExecutionsError>;
 
-    #[doc="<p>Lists the existing state machines. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the <code>nextToken</code> returned by the previous call.</p>"]
+    /// <p>Lists the existing state machines. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the <code>nextToken</code> returned by the previous call.</p>
     fn list_state_machines(
         &self,
         input: &ListStateMachinesInput,
     ) -> Result<ListStateMachinesOutput, ListStateMachinesError>;
 
-    #[doc="<p>Used by workers to report that the task identified by the <code>taskToken</code> failed.</p>"]
+    /// <p>Used by workers to report that the task identified by the <code>taskToken</code> failed.</p>
     fn send_task_failure(
         &self,
         input: &SendTaskFailureInput,
     ) -> Result<SendTaskFailureOutput, SendTaskFailureError>;
 
-    #[doc="<p>Used by workers to report to the service that the task represented by the specified <code>taskToken</code> is still making progress. This action resets the <code>Heartbeat</code> clock. The <code>Heartbeat</code> threshold is specified in the state machine's Amazon States Language definition. This action does not in itself create an event in the execution history. However, if the task times out, the execution history will contain an <code>ActivityTimedOut</code> event.</p> <note> <p>The <code>Timeout</code> of a task, defined in the state machine's Amazon States Language definition, is its maximum allowed duration, regardless of the number of <a>SendTaskHeartbeat</a> requests received.</p> </note> <note> <p>This operation is only useful for long-lived tasks to report the liveliness of the task.</p> </note>"]
+    /// <p><p>Used by workers to report to the service that the task represented by the specified <code>taskToken</code> is still making progress. This action resets the <code>Heartbeat</code> clock. The <code>Heartbeat</code> threshold is specified in the state machine&#39;s Amazon States Language definition. This action does not in itself create an event in the execution history. However, if the task times out, the execution history will contain an <code>ActivityTimedOut</code> event.</p> <note> <p>The <code>Timeout</code> of a task, defined in the state machine&#39;s Amazon States Language definition, is its maximum allowed duration, regardless of the number of <a>SendTaskHeartbeat</a> requests received.</p> </note> <note> <p>This operation is only useful for long-lived tasks to report the liveliness of the task.</p> </note></p>
     fn send_task_heartbeat(
         &self,
         input: &SendTaskHeartbeatInput,
     ) -> Result<SendTaskHeartbeatOutput, SendTaskHeartbeatError>;
 
-    #[doc="<p>Used by workers to report that the task identified by the <code>taskToken</code> completed successfully.</p>"]
+    /// <p>Used by workers to report that the task identified by the <code>taskToken</code> completed successfully.</p>
     fn send_task_success(
         &self,
         input: &SendTaskSuccessInput,
     ) -> Result<SendTaskSuccessOutput, SendTaskSuccessError>;
 
-    #[doc = "<p>Starts a state machine execution.</p>"]
+    /// <p>Starts a state machine execution.</p>
     fn start_execution(
         &self,
         input: &StartExecutionInput,
     ) -> Result<StartExecutionOutput, StartExecutionError>;
 
-    #[doc = "<p>Stops an execution.</p>"]
+    /// <p>Stops an execution.</p>
     fn stop_execution(
         &self,
         input: &StopExecutionInput,
@@ -2372,7 +2373,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc = "<p>Creates an activity.</p>"]
+    /// <p>Creates an activity.</p>
     fn create_activity(
         &self,
         input: &CreateActivityInput,
@@ -2406,7 +2407,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a state machine.</p>"]
+    /// <p>Creates a state machine.</p>
     fn create_state_machine(
         &self,
         input: &CreateStateMachineInput,
@@ -2440,7 +2441,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes an activity.</p>"]
+    /// <p>Deletes an activity.</p>
     fn delete_activity(
         &self,
         input: &DeleteActivityInput,
@@ -2474,7 +2475,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a state machine. This is an asynchronous operation-- it sets the state machine's status to \"DELETING\" and begins the delete process.</p>"]
+    /// <p>Deletes a state machine. This is an asynchronous operation-- it sets the state machine's status to "DELETING" and begins the delete process.</p>
     fn delete_state_machine(
         &self,
         input: &DeleteStateMachineInput,
@@ -2508,7 +2509,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes an activity.</p>"]
+    /// <p>Describes an activity.</p>
     fn describe_activity(
         &self,
         input: &DescribeActivityInput,
@@ -2542,7 +2543,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes an execution.</p>"]
+    /// <p>Describes an execution.</p>
     fn describe_execution(
         &self,
         input: &DescribeExecutionInput,
@@ -2576,7 +2577,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes a state machine.</p>"]
+    /// <p>Describes a state machine.</p>
     fn describe_state_machine(
         &self,
         input: &DescribeStateMachineInput,
@@ -2610,7 +2611,7 @@ where
         }
     }
 
-    #[doc="<p>Used by workers to retrieve a task (with the specified activity ARN) scheduled for execution by a running state machine. This initiates a long poll, where the service holds the HTTP connection open and responds as soon as a task becomes available (i.e. an execution of a task of this type is needed.) The maximum time the service holds on to the request before responding is 60 seconds. If no task is available within 60 seconds, the poll will return an empty result, that is, the <code>taskToken</code> returned is an empty string.</p> <important> <p>Workers should set their client side socket timeout to at least 65 seconds (5 seconds higher than the maximum time the service may hold the poll request).</p> </important>"]
+    /// <p><p>Used by workers to retrieve a task (with the specified activity ARN) scheduled for execution by a running state machine. This initiates a long poll, where the service holds the HTTP connection open and responds as soon as a task becomes available (i.e. an execution of a task of this type is needed.) The maximum time the service holds on to the request before responding is 60 seconds. If no task is available within 60 seconds, the poll will return an empty result, that is, the <code>taskToken</code> returned is an empty string.</p> <important> <p>Workers should set their client side socket timeout to at least 65 seconds (5 seconds higher than the maximum time the service may hold the poll request).</p> </important></p>
     fn get_activity_task(
         &self,
         input: &GetActivityTaskInput,
@@ -2644,7 +2645,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the history of the specified execution as a list of events. By default, the results are returned in ascending order of the <code>timeStamp</code> of the events. Use the <code>reverseOrder</code> parameter to get the latest events first. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the <code>nextToken</code> returned by the previous call.</p>"]
+    /// <p>Returns the history of the specified execution as a list of events. By default, the results are returned in ascending order of the <code>timeStamp</code> of the events. Use the <code>reverseOrder</code> parameter to get the latest events first. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the <code>nextToken</code> returned by the previous call.</p>
     fn get_execution_history(
         &self,
         input: &GetExecutionHistoryInput,
@@ -2678,7 +2679,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the existing activities. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the <code>nextToken</code> returned by the previous call.</p>"]
+    /// <p>Lists the existing activities. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the <code>nextToken</code> returned by the previous call.</p>
     fn list_activities(
         &self,
         input: &ListActivitiesInput,
@@ -2712,7 +2713,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the executions of a state machine that meet the filtering criteria. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the <code>nextToken</code> returned by the previous call.</p>"]
+    /// <p>Lists the executions of a state machine that meet the filtering criteria. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the <code>nextToken</code> returned by the previous call.</p>
     fn list_executions(
         &self,
         input: &ListExecutionsInput,
@@ -2746,7 +2747,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the existing state machines. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the <code>nextToken</code> returned by the previous call.</p>"]
+    /// <p>Lists the existing state machines. The results may be split into multiple pages. To retrieve subsequent pages, make the call again using the <code>nextToken</code> returned by the previous call.</p>
     fn list_state_machines(
         &self,
         input: &ListStateMachinesInput,
@@ -2780,7 +2781,7 @@ where
         }
     }
 
-    #[doc="<p>Used by workers to report that the task identified by the <code>taskToken</code> failed.</p>"]
+    /// <p>Used by workers to report that the task identified by the <code>taskToken</code> failed.</p>
     fn send_task_failure(
         &self,
         input: &SendTaskFailureInput,
@@ -2814,7 +2815,7 @@ where
         }
     }
 
-    #[doc="<p>Used by workers to report to the service that the task represented by the specified <code>taskToken</code> is still making progress. This action resets the <code>Heartbeat</code> clock. The <code>Heartbeat</code> threshold is specified in the state machine's Amazon States Language definition. This action does not in itself create an event in the execution history. However, if the task times out, the execution history will contain an <code>ActivityTimedOut</code> event.</p> <note> <p>The <code>Timeout</code> of a task, defined in the state machine's Amazon States Language definition, is its maximum allowed duration, regardless of the number of <a>SendTaskHeartbeat</a> requests received.</p> </note> <note> <p>This operation is only useful for long-lived tasks to report the liveliness of the task.</p> </note>"]
+    /// <p><p>Used by workers to report to the service that the task represented by the specified <code>taskToken</code> is still making progress. This action resets the <code>Heartbeat</code> clock. The <code>Heartbeat</code> threshold is specified in the state machine&#39;s Amazon States Language definition. This action does not in itself create an event in the execution history. However, if the task times out, the execution history will contain an <code>ActivityTimedOut</code> event.</p> <note> <p>The <code>Timeout</code> of a task, defined in the state machine&#39;s Amazon States Language definition, is its maximum allowed duration, regardless of the number of <a>SendTaskHeartbeat</a> requests received.</p> </note> <note> <p>This operation is only useful for long-lived tasks to report the liveliness of the task.</p> </note></p>
     fn send_task_heartbeat(
         &self,
         input: &SendTaskHeartbeatInput,
@@ -2848,7 +2849,7 @@ where
         }
     }
 
-    #[doc="<p>Used by workers to report that the task identified by the <code>taskToken</code> completed successfully.</p>"]
+    /// <p>Used by workers to report that the task identified by the <code>taskToken</code> completed successfully.</p>
     fn send_task_success(
         &self,
         input: &SendTaskSuccessInput,
@@ -2882,7 +2883,7 @@ where
         }
     }
 
-    #[doc = "<p>Starts a state machine execution.</p>"]
+    /// <p>Starts a state machine execution.</p>
     fn start_execution(
         &self,
         input: &StartExecutionInput,
@@ -2916,7 +2917,7 @@ where
         }
     }
 
-    #[doc = "<p>Stops an execution.</p>"]
+    /// <p>Stops an execution.</p>
     fn stop_execution(
         &self,
         input: &StopExecutionInput,

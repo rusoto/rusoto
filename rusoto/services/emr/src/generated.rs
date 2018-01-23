@@ -108,7 +108,7 @@ pub struct AddTagsInput {
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AddTagsOutput;
 
-/// <p>An application is any Amazon or third-party software that you can add to the cluster. This structure contains a list of strings that indicates the software to use with the cluster and accepts a user argument list. Amazon EMR accepts and forwards the argument list to the corresponding installation script as bootstrap action argument. For more information, see <a href="http://docs.aws.amazon.com/ElasticMapReduce/latest/ManagementGuide/emr-mapr.html">Using the MapR Distribution for Hadoop</a>. Currently supported values are:</p> <ul> <li> <p>"mapr-m3" - launch the cluster using MapR M3 Edition.</p> </li> <li> <p>"mapr-m5" - launch the cluster using MapR M5 Edition.</p> </li> <li> <p>"mapr" with the user arguments specifying "--edition,m3" or "--edition,m5" - launch the cluster using MapR M3 or M5 Edition, respectively.</p> </li> </ul> <note> <p>In Amazon EMR releases 4.x and later, the only accepted parameter is the application name. To pass arguments to applications, you supply a configuration for each application.</p> </note>
+/// <p><p>An application is any Amazon or third-party software that you can add to the cluster. This structure contains a list of strings that indicates the software to use with the cluster and accepts a user argument list. Amazon EMR accepts and forwards the argument list to the corresponding installation script as bootstrap action argument. For more information, see <a href="http://docs.aws.amazon.com/ElasticMapReduce/latest/ManagementGuide/emr-mapr.html">Using the MapR Distribution for Hadoop</a>. Currently supported values are:</p> <ul> <li> <p>&quot;mapr-m3&quot; - launch the cluster using MapR M3 Edition.</p> </li> <li> <p>&quot;mapr-m5&quot; - launch the cluster using MapR M5 Edition.</p> </li> <li> <p>&quot;mapr&quot; with the user arguments specifying &quot;--edition,m3&quot; or &quot;--edition,m5&quot; - launch the cluster using MapR M3 or M5 Edition, respectively.</p> </li> </ul> <note> <p>In Amazon EMR releases 4.x and later, the only accepted parameter is the application name. To pass arguments to applications, you supply a configuration for each application.</p> </note></p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Application {
     /// <p>This option is for advanced users only. This is meta information about third-party applications that third-party vendors use for testing purposes.</p>
@@ -314,7 +314,7 @@ pub struct Cluster {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note> <p>The instance group configuration of the cluster. A value of <code>INSTANCE_GROUP</code> indicates a uniform instance group configuration. A value of <code>INSTANCE_FLEET</code> indicates an instance fleets configuration.</p>
+    /// <p><note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note> <p>The instance group configuration of the cluster. A value of <code>INSTANCE<em>GROUP</code> indicates a uniform instance group configuration. A value of <code>INSTANCE</em>FLEET</code> indicates an instance fleets configuration.</p></p>
     #[serde(rename = "InstanceCollectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_collection_type: Option<String>,
@@ -465,7 +465,7 @@ pub struct Command {
     pub script_path: Option<String>,
 }
 
-/// <note> <p>Amazon EMR releases 4.x or later.</p> </note> <p>An optional configuration specification to be used when provisioning cluster instances, which can include configurations for applications and software bundled with Amazon EMR. A configuration consists of a classification, properties, and optional nested configurations. A classification refers to an application-specific configuration file. Properties are the settings you want to change in that file. For more information, see <a href="http://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-configure-apps.html">Configuring Applications</a>.</p>
+/// <p><note> <p>Amazon EMR releases 4.x or later.</p> </note> <p>An optional configuration specification to be used when provisioning cluster instances, which can include configurations for applications and software bundled with Amazon EMR. A configuration consists of a classification, properties, and optional nested configurations. A classification refers to an application-specific configuration file. Properties are the settings you want to change in that file. For more information, see <a href="http://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-configure-apps.html">Configuring Applications</a>.</p></p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Configuration {
     /// <p>The classification within a configuration.</p>
@@ -813,7 +813,7 @@ pub struct Instance {
     pub status: Option<InstanceStatus>,
 }
 
-/// <p>Describes an instance fleet, which is a group of EC2 instances that host a particular node type (master, core, or task) in an Amazon EMR cluster. Instance fleets can consist of a mix of instance types and On-Demand and Spot instances, which are provisioned to meet a defined target capacity. </p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note>
+/// <p><p>Describes an instance fleet, which is a group of EC2 instances that host a particular node type (master, core, or task) in an Amazon EMR cluster. Instance fleets can consist of a mix of instance types and On-Demand and Spot instances, which are provisioned to meet a defined target capacity. </p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct InstanceFleet {
     /// <p>The unique identifier of the instance fleet.</p>
@@ -848,17 +848,17 @@ pub struct InstanceFleet {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<InstanceFleetStatus>,
-    /// <p>The target capacity of On-Demand units for the instance fleet, which determines how many On-Demand instances to provision. When the instance fleet launches, Amazon EMR tries to provision On-Demand instances as specified by <a>InstanceTypeConfig</a>. Each instance configuration has a specified <code>WeightedCapacity</code>. When an On-Demand instance is provisioned, the <code>WeightedCapacity</code> units count toward the target capacity. Amazon EMR provisions instances until the target capacity is totally fulfilled, even if this results in an overage. For example, if there are 2 units remaining to fulfill capacity, and Amazon EMR can only provision an instance with a <code>WeightedCapacity</code> of 5 units, the instance is provisioned, and the target capacity is exceeded by 3 units. You can use <a>InstanceFleet$ProvisionedOnDemandCapacity</a> to determine the Spot capacity units that have been provisioned for the instance fleet.</p> <note> <p>If not specified or set to 0, only Spot instances are provisioned for the instance fleet using <code>TargetSpotCapacity</code>. At least one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> should be greater than 0. For a master instance fleet, only one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> can be specified, and its value must be 1.</p> </note>
+    /// <p><p>The target capacity of On-Demand units for the instance fleet, which determines how many On-Demand instances to provision. When the instance fleet launches, Amazon EMR tries to provision On-Demand instances as specified by <a>InstanceTypeConfig</a>. Each instance configuration has a specified <code>WeightedCapacity</code>. When an On-Demand instance is provisioned, the <code>WeightedCapacity</code> units count toward the target capacity. Amazon EMR provisions instances until the target capacity is totally fulfilled, even if this results in an overage. For example, if there are 2 units remaining to fulfill capacity, and Amazon EMR can only provision an instance with a <code>WeightedCapacity</code> of 5 units, the instance is provisioned, and the target capacity is exceeded by 3 units. You can use <a>InstanceFleet$ProvisionedOnDemandCapacity</a> to determine the Spot capacity units that have been provisioned for the instance fleet.</p> <note> <p>If not specified or set to 0, only Spot instances are provisioned for the instance fleet using <code>TargetSpotCapacity</code>. At least one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> should be greater than 0. For a master instance fleet, only one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> can be specified, and its value must be 1.</p> </note></p>
     #[serde(rename = "TargetOnDemandCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_on_demand_capacity: Option<i64>,
-    /// <p>The target capacity of Spot units for the instance fleet, which determines how many Spot instances to provision. When the instance fleet launches, Amazon EMR tries to provision Spot instances as specified by <a>InstanceTypeConfig</a>. Each instance configuration has a specified <code>WeightedCapacity</code>. When a Spot instance is provisioned, the <code>WeightedCapacity</code> units count toward the target capacity. Amazon EMR provisions instances until the target capacity is totally fulfilled, even if this results in an overage. For example, if there are 2 units remaining to fulfill capacity, and Amazon EMR can only provision an instance with a <code>WeightedCapacity</code> of 5 units, the instance is provisioned, and the target capacity is exceeded by 3 units. You can use <a>InstanceFleet$ProvisionedSpotCapacity</a> to determine the Spot capacity units that have been provisioned for the instance fleet.</p> <note> <p>If not specified or set to 0, only On-Demand instances are provisioned for the instance fleet. At least one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> should be greater than 0. For a master instance fleet, only one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> can be specified, and its value must be 1.</p> </note>
+    /// <p><p>The target capacity of Spot units for the instance fleet, which determines how many Spot instances to provision. When the instance fleet launches, Amazon EMR tries to provision Spot instances as specified by <a>InstanceTypeConfig</a>. Each instance configuration has a specified <code>WeightedCapacity</code>. When a Spot instance is provisioned, the <code>WeightedCapacity</code> units count toward the target capacity. Amazon EMR provisions instances until the target capacity is totally fulfilled, even if this results in an overage. For example, if there are 2 units remaining to fulfill capacity, and Amazon EMR can only provision an instance with a <code>WeightedCapacity</code> of 5 units, the instance is provisioned, and the target capacity is exceeded by 3 units. You can use <a>InstanceFleet$ProvisionedSpotCapacity</a> to determine the Spot capacity units that have been provisioned for the instance fleet.</p> <note> <p>If not specified or set to 0, only On-Demand instances are provisioned for the instance fleet. At least one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> should be greater than 0. For a master instance fleet, only one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> can be specified, and its value must be 1.</p> </note></p>
     #[serde(rename = "TargetSpotCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_spot_capacity: Option<i64>,
 }
 
-/// <p>The configuration that defines an instance fleet.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note>
+/// <p><p>The configuration that defines an instance fleet.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct InstanceFleetConfig {
     /// <p>The node type that the instance fleet hosts. Valid values are MASTER,CORE,and TASK.</p>
@@ -876,17 +876,17 @@ pub struct InstanceFleetConfig {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The target capacity of On-Demand units for the instance fleet, which determines how many On-Demand instances to provision. When the instance fleet launches, Amazon EMR tries to provision On-Demand instances as specified by <a>InstanceTypeConfig</a>. Each instance configuration has a specified <code>WeightedCapacity</code>. When an On-Demand instance is provisioned, the <code>WeightedCapacity</code> units count toward the target capacity. Amazon EMR provisions instances until the target capacity is totally fulfilled, even if this results in an overage. For example, if there are 2 units remaining to fulfill capacity, and Amazon EMR can only provision an instance with a <code>WeightedCapacity</code> of 5 units, the instance is provisioned, and the target capacity is exceeded by 3 units.</p> <note> <p>If not specified or set to 0, only Spot instances are provisioned for the instance fleet using <code>TargetSpotCapacity</code>. At least one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> should be greater than 0. For a master instance fleet, only one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> can be specified, and its value must be 1.</p> </note>
+    /// <p><p>The target capacity of On-Demand units for the instance fleet, which determines how many On-Demand instances to provision. When the instance fleet launches, Amazon EMR tries to provision On-Demand instances as specified by <a>InstanceTypeConfig</a>. Each instance configuration has a specified <code>WeightedCapacity</code>. When an On-Demand instance is provisioned, the <code>WeightedCapacity</code> units count toward the target capacity. Amazon EMR provisions instances until the target capacity is totally fulfilled, even if this results in an overage. For example, if there are 2 units remaining to fulfill capacity, and Amazon EMR can only provision an instance with a <code>WeightedCapacity</code> of 5 units, the instance is provisioned, and the target capacity is exceeded by 3 units.</p> <note> <p>If not specified or set to 0, only Spot instances are provisioned for the instance fleet using <code>TargetSpotCapacity</code>. At least one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> should be greater than 0. For a master instance fleet, only one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> can be specified, and its value must be 1.</p> </note></p>
     #[serde(rename = "TargetOnDemandCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_on_demand_capacity: Option<i64>,
-    /// <p>The target capacity of Spot units for the instance fleet, which determines how many Spot instances to provision. When the instance fleet launches, Amazon EMR tries to provision Spot instances as specified by <a>InstanceTypeConfig</a>. Each instance configuration has a specified <code>WeightedCapacity</code>. When a Spot instance is provisioned, the <code>WeightedCapacity</code> units count toward the target capacity. Amazon EMR provisions instances until the target capacity is totally fulfilled, even if this results in an overage. For example, if there are 2 units remaining to fulfill capacity, and Amazon EMR can only provision an instance with a <code>WeightedCapacity</code> of 5 units, the instance is provisioned, and the target capacity is exceeded by 3 units.</p> <note> <p>If not specified or set to 0, only On-Demand instances are provisioned for the instance fleet. At least one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> should be greater than 0. For a master instance fleet, only one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> can be specified, and its value must be 1.</p> </note>
+    /// <p><p>The target capacity of Spot units for the instance fleet, which determines how many Spot instances to provision. When the instance fleet launches, Amazon EMR tries to provision Spot instances as specified by <a>InstanceTypeConfig</a>. Each instance configuration has a specified <code>WeightedCapacity</code>. When a Spot instance is provisioned, the <code>WeightedCapacity</code> units count toward the target capacity. Amazon EMR provisions instances until the target capacity is totally fulfilled, even if this results in an overage. For example, if there are 2 units remaining to fulfill capacity, and Amazon EMR can only provision an instance with a <code>WeightedCapacity</code> of 5 units, the instance is provisioned, and the target capacity is exceeded by 3 units.</p> <note> <p>If not specified or set to 0, only On-Demand instances are provisioned for the instance fleet. At least one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> should be greater than 0. For a master instance fleet, only one of <code>TargetSpotCapacity</code> and <code>TargetOnDemandCapacity</code> can be specified, and its value must be 1.</p> </note></p>
     #[serde(rename = "TargetSpotCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_spot_capacity: Option<i64>,
 }
 
-/// <p>Configuration parameters for an instance fleet modification request.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note>
+/// <p><p>Configuration parameters for an instance fleet modification request.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct InstanceFleetModifyConfig {
     /// <p>A unique identifier for the instance fleet.</p>
@@ -902,7 +902,7 @@ pub struct InstanceFleetModifyConfig {
     pub target_spot_capacity: Option<i64>,
 }
 
-/// <p>The launch specification for Spot instances in the fleet, which determines the defined duration and provisioning timeout behavior.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note>
+/// <p><p>The launch specification for Spot instances in the fleet, which determines the defined duration and provisioning timeout behavior.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct InstanceFleetProvisioningSpecifications {
     /// <p>The launch specification for Spot instances in the fleet, which determines the defined duration and provisioning timeout behavior.</p>
@@ -910,7 +910,7 @@ pub struct InstanceFleetProvisioningSpecifications {
     pub spot_specification: SpotProvisioningSpecification,
 }
 
-/// <p>Provides status change reason details for the instance fleet.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note>
+/// <p><p>Provides status change reason details for the instance fleet.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct InstanceFleetStateChangeReason {
     /// <p>A code corresponding to the reason the state change occurred.</p>
@@ -923,7 +923,7 @@ pub struct InstanceFleetStateChangeReason {
     pub message: Option<String>,
 }
 
-/// <p>The status of the instance fleet.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note>
+/// <p><p>The status of the instance fleet.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct InstanceFleetStatus {
     /// <p>A code representing the instance fleet status.</p>
@@ -940,7 +940,7 @@ pub struct InstanceFleetStatus {
     pub timeline: Option<InstanceFleetTimeline>,
 }
 
-/// <p>Provides historical timestamps for the instance fleet, including the time of creation, the time it became ready to run jobs, and the time of termination.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note>
+/// <p><p>Provides historical timestamps for the instance fleet, including the time of creation, the time it became ready to run jobs, and the time of termination.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct InstanceFleetTimeline {
     /// <p>The time and date the instance fleet was created.</p>
@@ -968,7 +968,7 @@ pub struct InstanceGroup {
     #[serde(rename = "BidPrice")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bid_price: Option<String>,
-    /// <note> <p>Amazon EMR releases 4.x or later.</p> </note> <p>The list of configurations supplied for an EMR cluster instance group. You can specify a separate configuration for each instance group (master, core, and task).</p>
+    /// <p><note> <p>Amazon EMR releases 4.x or later.</p> </note> <p>The list of configurations supplied for an EMR cluster instance group. You can specify a separate configuration for each instance group (master, core, and task).</p></p>
     #[serde(rename = "Configurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configurations: Option<Vec<Configuration>>,
@@ -1029,7 +1029,7 @@ pub struct InstanceGroupConfig {
     #[serde(rename = "BidPrice")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bid_price: Option<String>,
-    /// <note> <p>Amazon EMR releases 4.x or later.</p> </note> <p>The list of configurations supplied for an EMR cluster instance group. You can specify a separate configuration for each instance group (master, core, and task).</p>
+    /// <p><note> <p>Amazon EMR releases 4.x or later.</p> </note> <p>The list of configurations supplied for an EMR cluster instance group. You can specify a separate configuration for each instance group (master, core, and task).</p></p>
     #[serde(rename = "Configurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configurations: Option<Vec<Configuration>>,
@@ -1241,7 +1241,7 @@ pub struct InstanceTimeline {
     pub ready_date_time: Option<f64>,
 }
 
-/// <p>An instance type configuration for each instance type in an instance fleet, which determines the EC2 instances Amazon EMR attempts to provision to fulfill On-Demand and Spot target capacities. There can be a maximum of 5 instance type configurations in a fleet.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note>
+/// <p><p>An instance type configuration for each instance type in an instance fleet, which determines the EC2 instances Amazon EMR attempts to provision to fulfill On-Demand and Spot target capacities. There can be a maximum of 5 instance type configurations in a fleet.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct InstanceTypeConfig {
     /// <p>The bid price for each EC2 Spot instance type as defined by <code>InstanceType</code>. Expressed in USD. If neither <code>BidPrice</code> nor <code>BidPriceAsPercentageOfOnDemandPrice</code> is provided, <code>BidPriceAsPercentageOfOnDemandPrice</code> defaults to 100%. </p>
@@ -1269,7 +1269,7 @@ pub struct InstanceTypeConfig {
     pub weighted_capacity: Option<i64>,
 }
 
-/// <p>The configuration specification for each instance type in an instance fleet.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note>
+/// <p><p>The configuration specification for each instance type in an instance fleet.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct InstanceTypeSpecification {
     /// <p>The bid price for each EC2 Spot instance type as defined by <code>InstanceType</code>. Expressed in USD.</p>
@@ -1405,7 +1405,7 @@ pub struct JobFlowInstancesConfig {
     #[serde(rename = "Ec2SubnetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_subnet_id: Option<String>,
-    /// <p>Applies to clusters that use the instance fleet configuration. When multiple EC2 subnet IDs are specified, Amazon EMR evaluates them and launches instances in the optimal subnet.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note>
+    /// <p><p>Applies to clusters that use the instance fleet configuration. When multiple EC2 subnet IDs are specified, Amazon EMR evaluates them and launches instances in the optimal subnet.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
     #[serde(rename = "Ec2SubnetIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_subnet_ids: Option<Vec<String>>,
@@ -1425,7 +1425,7 @@ pub struct JobFlowInstancesConfig {
     #[serde(rename = "InstanceCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_count: Option<i64>,
-    /// <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note> <p>Describes the EC2 instances and instance configurations for clusters that use the instance fleet configuration.</p>
+    /// <p><note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note> <p>Describes the EC2 instances and instance configurations for clusters that use the instance fleet configuration.</p></p>
     #[serde(rename = "InstanceFleets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_fleets: Option<Vec<InstanceFleetConfig>>,
@@ -1774,7 +1774,7 @@ pub struct PlacementType {
     #[serde(rename = "AvailabilityZone")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zone: Option<String>,
-    /// <p>When multiple Availability Zones are specified, Amazon EMR evaluates them and launches instances in the optimal Availability Zone. <code>AvailabilityZones</code> is used for instance fleets, while <code>AvailabilityZone</code> (singular) is used for uniform instance groups.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note>
+    /// <p><p>When multiple Availability Zones are specified, Amazon EMR evaluates them and launches instances in the optimal Availability Zone. <code>AvailabilityZones</code> is used for instance fleets, while <code>AvailabilityZone</code> (singular) is used for uniform instance groups.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
     #[serde(rename = "AvailabilityZones")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zones: Option<Vec<String>>,
@@ -1844,7 +1844,7 @@ pub struct RunJobFlowInput {
     #[serde(rename = "AdditionalInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_info: Option<String>,
-    /// <p>For Amazon EMR AMI versions 3.x and 2.x. For Amazon EMR releases 4.0 and later, the Linux AMI is determined by the <code>ReleaseLabel</code> specified or by <code>CustomAmiID</code>. The version of the Amazon Machine Image (AMI) to use when launching Amazon EC2 instances in the job flow. For details about the AMI versions currently supported in EMR version 3.x and 2.x, see <a href="ElasticMapReduce/latest/DeveloperGuide/emr-dg.pdf#nameddest=ami-versions-supported">AMI Versions Supported in EMR</a> in the <i>Amazon EMR Developer Guide</i>. </p> <p>If the AMI supports multiple versions of Hadoop (for example, AMI 1.0 supports both Hadoop 0.18 and 0.20), you can use the <a>JobFlowInstancesConfig</a> <code>HadoopVersion</code> parameter to modify the version of Hadoop from the defaults shown above.</p> <note> <p>Previously, the EMR AMI version API parameter options allowed you to use latest for the latest AMI version rather than specify a numerical value. Some regions no longer support this deprecated option as they only have a newer release label version of EMR, which requires you to specify an EMR release label release (EMR 4.x or later).</p> </note>
+    /// <p><p>For Amazon EMR AMI versions 3.x and 2.x. For Amazon EMR releases 4.0 and later, the Linux AMI is determined by the <code>ReleaseLabel</code> specified or by <code>CustomAmiID</code>. The version of the Amazon Machine Image (AMI) to use when launching Amazon EC2 instances in the job flow. For details about the AMI versions currently supported in EMR version 3.x and 2.x, see <a href="ElasticMapReduce/latest/DeveloperGuide/emr-dg.pdf#nameddest=ami-versions-supported">AMI Versions Supported in EMR</a> in the <i>Amazon EMR Developer Guide</i>. </p> <p>If the AMI supports multiple versions of Hadoop (for example, AMI 1.0 supports both Hadoop 0.18 and 0.20), you can use the <a>JobFlowInstancesConfig</a> <code>HadoopVersion</code> parameter to modify the version of Hadoop from the defaults shown above.</p> <note> <p>Previously, the EMR AMI version API parameter options allowed you to use latest for the latest AMI version rather than specify a numerical value. Some regions no longer support this deprecated option as they only have a newer release label version of EMR, which requires you to specify an EMR release label release (EMR 4.x or later).</p> </note></p>
     #[serde(rename = "AmiVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ami_version: Option<String>,
@@ -1886,7 +1886,7 @@ pub struct RunJobFlowInput {
     /// <p>The name of the job flow.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <note> <p>For Amazon EMR releases 3.x and 2.x. For Amazon EMR releases 4.x and later, use Applications.</p> </note> <p>A list of strings that indicates third-party software to use with the job flow that accepts a user argument list. EMR accepts and forwards the argument list to the corresponding installation script as bootstrap action arguments. For more information, see "Launch a Job Flow on the MapR Distribution for Hadoop" in the <a href="http://docs.aws.amazon.com/http:/docs.aws.amazon.com/emr/latest/DeveloperGuide/emr-dg.pdf">Amazon EMR Developer Guide</a>. Supported values are:</p> <ul> <li> <p>"mapr-m3" - launch the cluster using MapR M3 Edition.</p> </li> <li> <p>"mapr-m5" - launch the cluster using MapR M5 Edition.</p> </li> <li> <p>"mapr" with the user arguments specifying "--edition,m3" or "--edition,m5" - launch the job flow using MapR M3 or M5 Edition respectively.</p> </li> <li> <p>"mapr-m7" - launch the cluster using MapR M7 Edition.</p> </li> <li> <p>"hunk" - launch the cluster with the Hunk Big Data Analtics Platform.</p> </li> <li> <p>"hue"- launch the cluster with Hue installed.</p> </li> <li> <p>"spark" - launch the cluster with Apache Spark installed.</p> </li> <li> <p>"ganglia" - launch the cluster with the Ganglia Monitoring System installed.</p> </li> </ul>
+    /// <p><note> <p>For Amazon EMR releases 3.x and 2.x. For Amazon EMR releases 4.x and later, use Applications.</p> </note> <p>A list of strings that indicates third-party software to use with the job flow that accepts a user argument list. EMR accepts and forwards the argument list to the corresponding installation script as bootstrap action arguments. For more information, see &quot;Launch a Job Flow on the MapR Distribution for Hadoop&quot; in the <a href="http://docs.aws.amazon.com/http:/docs.aws.amazon.com/emr/latest/DeveloperGuide/emr-dg.pdf">Amazon EMR Developer Guide</a>. Supported values are:</p> <ul> <li> <p>&quot;mapr-m3&quot; - launch the cluster using MapR M3 Edition.</p> </li> <li> <p>&quot;mapr-m5&quot; - launch the cluster using MapR M5 Edition.</p> </li> <li> <p>&quot;mapr&quot; with the user arguments specifying &quot;--edition,m3&quot; or &quot;--edition,m5&quot; - launch the job flow using MapR M3 or M5 Edition respectively.</p> </li> <li> <p>&quot;mapr-m7&quot; - launch the cluster using MapR M7 Edition.</p> </li> <li> <p>&quot;hunk&quot; - launch the cluster with the Hunk Big Data Analtics Platform.</p> </li> <li> <p>&quot;hue&quot;- launch the cluster with Hue installed.</p> </li> <li> <p>&quot;spark&quot; - launch the cluster with Apache Spark installed.</p> </li> <li> <p>&quot;ganglia&quot; - launch the cluster with the Ganglia Monitoring System installed.</p> </li> </ul></p>
     #[serde(rename = "NewSupportedProducts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub new_supported_products: Option<Vec<SupportedProductConfig>>,
@@ -1914,7 +1914,7 @@ pub struct RunJobFlowInput {
     #[serde(rename = "Steps")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub steps: Option<Vec<StepConfig>>,
-    /// <note> <p>For Amazon EMR releases 3.x and 2.x. For Amazon EMR releases 4.x and later, use Applications.</p> </note> <p>A list of strings that indicates third-party software to use. For more information, see <a href="http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-supported-products.html">Use Third Party Applications with Amazon EMR</a>. Currently supported values are:</p> <ul> <li> <p>"mapr-m3" - launch the job flow using MapR M3 Edition.</p> </li> <li> <p>"mapr-m5" - launch the job flow using MapR M5 Edition.</p> </li> </ul>
+    /// <p><note> <p>For Amazon EMR releases 3.x and 2.x. For Amazon EMR releases 4.x and later, use Applications.</p> </note> <p>A list of strings that indicates third-party software to use. For more information, see <a href="http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-supported-products.html">Use Third Party Applications with Amazon EMR</a>. Currently supported values are:</p> <ul> <li> <p>&quot;mapr-m3&quot; - launch the job flow using MapR M3 Edition.</p> </li> <li> <p>&quot;mapr-m5&quot; - launch the job flow using MapR M5 Edition.</p> </li> </ul></p>
     #[serde(rename = "SupportedProducts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub supported_products: Option<Vec<String>>,
@@ -2062,7 +2062,7 @@ pub struct SimpleScalingPolicyConfiguration {
     pub scaling_adjustment: i64,
 }
 
-/// <p>The launch specification for Spot instances in the instance fleet, which determines the defined duration and provisioning timeout behavior.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note>
+/// <p><p>The launch specification for Spot instances in the instance fleet, which determines the defined duration and provisioning timeout behavior.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct SpotProvisioningSpecification {
     /// <p>The defined duration for Spot instances (also known as Spot blocks) in minutes. When specified, the Spot instance does not terminate before the defined duration expires, and defined duration pricing for Spot instances applies. Valid values are 60, 120, 180, 240, 300, or 360. The duration period starts as soon as a Spot instance receives its instance ID. At the end of the duration, Amazon EC2 marks the Spot instance for termination and provides a Spot instance termination notice, which gives the instance a two-minute warning before it terminates. </p>
@@ -2279,9 +2279,9 @@ pub struct VolumeSpecification {
 /// Errors returned by AddInstanceFleet
 #[derive(Debug, PartialEq)]
 pub enum AddInstanceFleetError {
-    ///<p>This exception occurs when there is an internal failure in the EMR service.</p>
+    /// <p>This exception occurs when there is an internal failure in the EMR service.</p>
     InternalServer(String),
-    ///<p>This exception occurs when there is something wrong with user input.</p>
+    /// <p>This exception occurs when there is something wrong with user input.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2363,7 +2363,7 @@ impl Error for AddInstanceFleetError {
 /// Errors returned by AddInstanceGroups
 #[derive(Debug, PartialEq)]
 pub enum AddInstanceGroupsError {
-    ///<p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
+    /// <p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2443,7 +2443,7 @@ impl Error for AddInstanceGroupsError {
 /// Errors returned by AddJobFlowSteps
 #[derive(Debug, PartialEq)]
 pub enum AddJobFlowStepsError {
-    ///<p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
+    /// <p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2521,9 +2521,9 @@ impl Error for AddJobFlowStepsError {
 /// Errors returned by AddTags
 #[derive(Debug, PartialEq)]
 pub enum AddTagsError {
-    ///<p>This exception occurs when there is an internal failure in the EMR service.</p>
+    /// <p>This exception occurs when there is an internal failure in the EMR service.</p>
     InternalServer(String),
-    ///<p>This exception occurs when there is something wrong with user input.</p>
+    /// <p>This exception occurs when there is something wrong with user input.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2603,9 +2603,9 @@ impl Error for AddTagsError {
 /// Errors returned by CancelSteps
 #[derive(Debug, PartialEq)]
 pub enum CancelStepsError {
-    ///<p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
+    /// <p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
     InternalServerError(String),
-    ///<p>This exception occurs when there is something wrong with user input.</p>
+    /// <p>This exception occurs when there is something wrong with user input.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2687,9 +2687,9 @@ impl Error for CancelStepsError {
 /// Errors returned by CreateSecurityConfiguration
 #[derive(Debug, PartialEq)]
 pub enum CreateSecurityConfigurationError {
-    ///<p>This exception occurs when there is an internal failure in the EMR service.</p>
+    /// <p>This exception occurs when there is an internal failure in the EMR service.</p>
     InternalServer(String),
-    ///<p>This exception occurs when there is something wrong with user input.</p>
+    /// <p>This exception occurs when there is something wrong with user input.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2773,9 +2773,9 @@ impl Error for CreateSecurityConfigurationError {
 /// Errors returned by DeleteSecurityConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DeleteSecurityConfigurationError {
-    ///<p>This exception occurs when there is an internal failure in the EMR service.</p>
+    /// <p>This exception occurs when there is an internal failure in the EMR service.</p>
     InternalServer(String),
-    ///<p>This exception occurs when there is something wrong with user input.</p>
+    /// <p>This exception occurs when there is something wrong with user input.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2859,9 +2859,9 @@ impl Error for DeleteSecurityConfigurationError {
 /// Errors returned by DescribeCluster
 #[derive(Debug, PartialEq)]
 pub enum DescribeClusterError {
-    ///<p>This exception occurs when there is an internal failure in the EMR service.</p>
+    /// <p>This exception occurs when there is an internal failure in the EMR service.</p>
     InternalServer(String),
-    ///<p>This exception occurs when there is something wrong with user input.</p>
+    /// <p>This exception occurs when there is something wrong with user input.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2943,7 +2943,7 @@ impl Error for DescribeClusterError {
 /// Errors returned by DescribeJobFlows
 #[derive(Debug, PartialEq)]
 pub enum DescribeJobFlowsError {
-    ///<p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
+    /// <p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3021,9 +3021,9 @@ impl Error for DescribeJobFlowsError {
 /// Errors returned by DescribeSecurityConfiguration
 #[derive(Debug, PartialEq)]
 pub enum DescribeSecurityConfigurationError {
-    ///<p>This exception occurs when there is an internal failure in the EMR service.</p>
+    /// <p>This exception occurs when there is an internal failure in the EMR service.</p>
     InternalServer(String),
-    ///<p>This exception occurs when there is something wrong with user input.</p>
+    /// <p>This exception occurs when there is something wrong with user input.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3111,9 +3111,9 @@ impl Error for DescribeSecurityConfigurationError {
 /// Errors returned by DescribeStep
 #[derive(Debug, PartialEq)]
 pub enum DescribeStepError {
-    ///<p>This exception occurs when there is an internal failure in the EMR service.</p>
+    /// <p>This exception occurs when there is an internal failure in the EMR service.</p>
     InternalServer(String),
-    ///<p>This exception occurs when there is something wrong with user input.</p>
+    /// <p>This exception occurs when there is something wrong with user input.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3195,9 +3195,9 @@ impl Error for DescribeStepError {
 /// Errors returned by ListBootstrapActions
 #[derive(Debug, PartialEq)]
 pub enum ListBootstrapActionsError {
-    ///<p>This exception occurs when there is an internal failure in the EMR service.</p>
+    /// <p>This exception occurs when there is an internal failure in the EMR service.</p>
     InternalServer(String),
-    ///<p>This exception occurs when there is something wrong with user input.</p>
+    /// <p>This exception occurs when there is something wrong with user input.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3281,9 +3281,9 @@ impl Error for ListBootstrapActionsError {
 /// Errors returned by ListClusters
 #[derive(Debug, PartialEq)]
 pub enum ListClustersError {
-    ///<p>This exception occurs when there is an internal failure in the EMR service.</p>
+    /// <p>This exception occurs when there is an internal failure in the EMR service.</p>
     InternalServer(String),
-    ///<p>This exception occurs when there is something wrong with user input.</p>
+    /// <p>This exception occurs when there is something wrong with user input.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3365,9 +3365,9 @@ impl Error for ListClustersError {
 /// Errors returned by ListInstanceFleets
 #[derive(Debug, PartialEq)]
 pub enum ListInstanceFleetsError {
-    ///<p>This exception occurs when there is an internal failure in the EMR service.</p>
+    /// <p>This exception occurs when there is an internal failure in the EMR service.</p>
     InternalServer(String),
-    ///<p>This exception occurs when there is something wrong with user input.</p>
+    /// <p>This exception occurs when there is something wrong with user input.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3451,9 +3451,9 @@ impl Error for ListInstanceFleetsError {
 /// Errors returned by ListInstanceGroups
 #[derive(Debug, PartialEq)]
 pub enum ListInstanceGroupsError {
-    ///<p>This exception occurs when there is an internal failure in the EMR service.</p>
+    /// <p>This exception occurs when there is an internal failure in the EMR service.</p>
     InternalServer(String),
-    ///<p>This exception occurs when there is something wrong with user input.</p>
+    /// <p>This exception occurs when there is something wrong with user input.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3537,9 +3537,9 @@ impl Error for ListInstanceGroupsError {
 /// Errors returned by ListInstances
 #[derive(Debug, PartialEq)]
 pub enum ListInstancesError {
-    ///<p>This exception occurs when there is an internal failure in the EMR service.</p>
+    /// <p>This exception occurs when there is an internal failure in the EMR service.</p>
     InternalServer(String),
-    ///<p>This exception occurs when there is something wrong with user input.</p>
+    /// <p>This exception occurs when there is something wrong with user input.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3621,9 +3621,9 @@ impl Error for ListInstancesError {
 /// Errors returned by ListSecurityConfigurations
 #[derive(Debug, PartialEq)]
 pub enum ListSecurityConfigurationsError {
-    ///<p>This exception occurs when there is an internal failure in the EMR service.</p>
+    /// <p>This exception occurs when there is an internal failure in the EMR service.</p>
     InternalServer(String),
-    ///<p>This exception occurs when there is something wrong with user input.</p>
+    /// <p>This exception occurs when there is something wrong with user input.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3707,9 +3707,9 @@ impl Error for ListSecurityConfigurationsError {
 /// Errors returned by ListSteps
 #[derive(Debug, PartialEq)]
 pub enum ListStepsError {
-    ///<p>This exception occurs when there is an internal failure in the EMR service.</p>
+    /// <p>This exception occurs when there is an internal failure in the EMR service.</p>
     InternalServer(String),
-    ///<p>This exception occurs when there is something wrong with user input.</p>
+    /// <p>This exception occurs when there is something wrong with user input.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3789,9 +3789,9 @@ impl Error for ListStepsError {
 /// Errors returned by ModifyInstanceFleet
 #[derive(Debug, PartialEq)]
 pub enum ModifyInstanceFleetError {
-    ///<p>This exception occurs when there is an internal failure in the EMR service.</p>
+    /// <p>This exception occurs when there is an internal failure in the EMR service.</p>
     InternalServer(String),
-    ///<p>This exception occurs when there is something wrong with user input.</p>
+    /// <p>This exception occurs when there is something wrong with user input.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3875,7 +3875,7 @@ impl Error for ModifyInstanceFleetError {
 /// Errors returned by ModifyInstanceGroups
 #[derive(Debug, PartialEq)]
 pub enum ModifyInstanceGroupsError {
-    ///<p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
+    /// <p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4103,9 +4103,9 @@ impl Error for RemoveAutoScalingPolicyError {
 /// Errors returned by RemoveTags
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsError {
-    ///<p>This exception occurs when there is an internal failure in the EMR service.</p>
+    /// <p>This exception occurs when there is an internal failure in the EMR service.</p>
     InternalServer(String),
-    ///<p>This exception occurs when there is something wrong with user input.</p>
+    /// <p>This exception occurs when there is something wrong with user input.</p>
     InvalidRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4185,7 +4185,7 @@ impl Error for RemoveTagsError {
 /// Errors returned by RunJobFlow
 #[derive(Debug, PartialEq)]
 pub enum RunJobFlowError {
-    ///<p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
+    /// <p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4261,7 +4261,7 @@ impl Error for RunJobFlowError {
 /// Errors returned by SetTerminationProtection
 #[derive(Debug, PartialEq)]
 pub enum SetTerminationProtectionError {
-    ///<p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
+    /// <p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4341,7 +4341,7 @@ impl Error for SetTerminationProtectionError {
 /// Errors returned by SetVisibleToAllUsers
 #[derive(Debug, PartialEq)]
 pub enum SetVisibleToAllUsersError {
-    ///<p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
+    /// <p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4421,7 +4421,7 @@ impl Error for SetVisibleToAllUsersError {
 /// Errors returned by TerminateJobFlows
 #[derive(Debug, PartialEq)]
 pub enum TerminateJobFlowsError {
-    ///<p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
+    /// <p>Indicates that an error occurred while processing the request and that the request was not completed.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4500,149 +4500,149 @@ impl Error for TerminateJobFlowsError {
 }
 /// Trait representing the capabilities of the Amazon EMR API. Amazon EMR clients implement this trait.
 pub trait Emr {
-    #[doc="<p>Adds an instance fleet to a running cluster.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x.</p> </note>"]
+    /// <p><p>Adds an instance fleet to a running cluster.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x.</p> </note></p>
     fn add_instance_fleet(
         &self,
         input: &AddInstanceFleetInput,
     ) -> Result<AddInstanceFleetOutput, AddInstanceFleetError>;
 
-    #[doc = "<p>Adds one or more instance groups to a running cluster.</p>"]
+    /// <p>Adds one or more instance groups to a running cluster.</p>
     fn add_instance_groups(
         &self,
         input: &AddInstanceGroupsInput,
     ) -> Result<AddInstanceGroupsOutput, AddInstanceGroupsError>;
 
-    #[doc="<p>AddJobFlowSteps adds new steps to a running cluster. A maximum of 256 steps are allowed in each job flow.</p> <p>If your cluster is long-running (such as a Hive data warehouse) or complex, you may require more than 256 steps to process your data. You can bypass the 256-step limitation in various ways, including using SSH to connect to the master node and submitting queries directly to the software running on the master node, such as Hive and Hadoop. For more information on how to do this, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/ManagementGuide/AddMoreThan256Steps.html\">Add More than 256 Steps to a Cluster</a> in the <i>Amazon EMR Management Guide</i>.</p> <p>A step specifies the location of a JAR file stored either on the master node of the cluster or in Amazon S3. Each step is performed by the main function of the main class of the JAR file. The main class can be specified either in the manifest of the JAR or by using the MainFunction parameter of the step.</p> <p>Amazon EMR executes each step in the order listed. For a step to be considered complete, the main function must exit with a zero exit code and all Hadoop jobs started while the step was running must have completed and run successfully.</p> <p>You can only add steps to a cluster that is in one of the following states: STARTING, BOOTSTRAPPING, RUNNING, or WAITING.</p>"]
+    /// <p>AddJobFlowSteps adds new steps to a running cluster. A maximum of 256 steps are allowed in each job flow.</p> <p>If your cluster is long-running (such as a Hive data warehouse) or complex, you may require more than 256 steps to process your data. You can bypass the 256-step limitation in various ways, including using SSH to connect to the master node and submitting queries directly to the software running on the master node, such as Hive and Hadoop. For more information on how to do this, see <a href="http://docs.aws.amazon.com/ElasticMapReduce/latest/ManagementGuide/AddMoreThan256Steps.html">Add More than 256 Steps to a Cluster</a> in the <i>Amazon EMR Management Guide</i>.</p> <p>A step specifies the location of a JAR file stored either on the master node of the cluster or in Amazon S3. Each step is performed by the main function of the main class of the JAR file. The main class can be specified either in the manifest of the JAR or by using the MainFunction parameter of the step.</p> <p>Amazon EMR executes each step in the order listed. For a step to be considered complete, the main function must exit with a zero exit code and all Hadoop jobs started while the step was running must have completed and run successfully.</p> <p>You can only add steps to a cluster that is in one of the following states: STARTING, BOOTSTRAPPING, RUNNING, or WAITING.</p>
     fn add_job_flow_steps(
         &self,
         input: &AddJobFlowStepsInput,
     ) -> Result<AddJobFlowStepsOutput, AddJobFlowStepsError>;
 
-    #[doc="<p>Adds tags to an Amazon EMR resource. Tags make it easier to associate clusters in various ways, such as grouping clusters to track your Amazon EMR resource allocation costs. For more information, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-plan-tags.html\">Tagging Amazon EMR Resources</a>. </p>"]
+    /// <p>Adds tags to an Amazon EMR resource. Tags make it easier to associate clusters in various ways, such as grouping clusters to track your Amazon EMR resource allocation costs. For more information, see <a href="http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-plan-tags.html">Tagging Amazon EMR Resources</a>. </p>
     fn add_tags(&self, input: &AddTagsInput) -> Result<AddTagsOutput, AddTagsError>;
 
-    #[doc="<p>Cancels a pending step or steps in a running cluster. Available only in Amazon EMR versions 4.8.0 and later, excluding version 5.0.0. A maximum of 256 steps are allowed in each CancelSteps request. CancelSteps is idempotent but asynchronous; it does not guarantee a step will be canceled, even if the request is successfully submitted. You can only cancel steps that are in a <code>PENDING</code> state.</p>"]
+    /// <p>Cancels a pending step or steps in a running cluster. Available only in Amazon EMR versions 4.8.0 and later, excluding version 5.0.0. A maximum of 256 steps are allowed in each CancelSteps request. CancelSteps is idempotent but asynchronous; it does not guarantee a step will be canceled, even if the request is successfully submitted. You can only cancel steps that are in a <code>PENDING</code> state.</p>
     fn cancel_steps(&self, input: &CancelStepsInput)
         -> Result<CancelStepsOutput, CancelStepsError>;
 
-    #[doc="<p>Creates a security configuration, which is stored in the service and can be specified when a cluster is created.</p>"]
+    /// <p>Creates a security configuration, which is stored in the service and can be specified when a cluster is created.</p>
     fn create_security_configuration(
         &self,
         input: &CreateSecurityConfigurationInput,
     ) -> Result<CreateSecurityConfigurationOutput, CreateSecurityConfigurationError>;
 
-    #[doc = "<p>Deletes a security configuration.</p>"]
+    /// <p>Deletes a security configuration.</p>
     fn delete_security_configuration(
         &self,
         input: &DeleteSecurityConfigurationInput,
     ) -> Result<DeleteSecurityConfigurationOutput, DeleteSecurityConfigurationError>;
 
-    #[doc="<p>Provides cluster-level details including status, hardware and software configuration, VPC settings, and so on. For information about the cluster steps, see <a>ListSteps</a>.</p>"]
+    /// <p>Provides cluster-level details including status, hardware and software configuration, VPC settings, and so on. For information about the cluster steps, see <a>ListSteps</a>.</p>
     fn describe_cluster(
         &self,
         input: &DescribeClusterInput,
     ) -> Result<DescribeClusterOutput, DescribeClusterError>;
 
-    #[doc="<p>This API is deprecated and will eventually be removed. We recommend you use <a>ListClusters</a>, <a>DescribeCluster</a>, <a>ListSteps</a>, <a>ListInstanceGroups</a> and <a>ListBootstrapActions</a> instead.</p> <p>DescribeJobFlows returns a list of job flows that match all of the supplied parameters. The parameters can include a list of job flow IDs, job flow states, and restrictions on job flow creation date and time.</p> <p>Regardless of supplied parameters, only job flows created within the last two months are returned.</p> <p>If no parameters are supplied, then job flows matching either of the following criteria are returned:</p> <ul> <li> <p>Job flows created and completed in the last two weeks</p> </li> <li> <p> Job flows created within the last two months that are in one of the following states: <code>RUNNING</code>, <code>WAITING</code>, <code>SHUTTING_DOWN</code>, <code>STARTING</code> </p> </li> </ul> <p>Amazon EMR can return a maximum of 512 job flow descriptions.</p>"]
+    /// <p>This API is deprecated and will eventually be removed. We recommend you use <a>ListClusters</a>, <a>DescribeCluster</a>, <a>ListSteps</a>, <a>ListInstanceGroups</a> and <a>ListBootstrapActions</a> instead.</p> <p>DescribeJobFlows returns a list of job flows that match all of the supplied parameters. The parameters can include a list of job flow IDs, job flow states, and restrictions on job flow creation date and time.</p> <p>Regardless of supplied parameters, only job flows created within the last two months are returned.</p> <p>If no parameters are supplied, then job flows matching either of the following criteria are returned:</p> <ul> <li> <p>Job flows created and completed in the last two weeks</p> </li> <li> <p> Job flows created within the last two months that are in one of the following states: <code>RUNNING</code>, <code>WAITING</code>, <code>SHUTTING_DOWN</code>, <code>STARTING</code> </p> </li> </ul> <p>Amazon EMR can return a maximum of 512 job flow descriptions.</p>
     fn describe_job_flows(
         &self,
         input: &DescribeJobFlowsInput,
     ) -> Result<DescribeJobFlowsOutput, DescribeJobFlowsError>;
 
-    #[doc="<p>Provides the details of a security configuration by returning the configuration JSON.</p>"]
+    /// <p>Provides the details of a security configuration by returning the configuration JSON.</p>
     fn describe_security_configuration(
         &self,
         input: &DescribeSecurityConfigurationInput,
     ) -> Result<DescribeSecurityConfigurationOutput, DescribeSecurityConfigurationError>;
 
-    #[doc = "<p>Provides more detail about the cluster step.</p>"]
+    /// <p>Provides more detail about the cluster step.</p>
     fn describe_step(
         &self,
         input: &DescribeStepInput,
     ) -> Result<DescribeStepOutput, DescribeStepError>;
 
-    #[doc = "<p>Provides information about the bootstrap actions associated with a cluster.</p>"]
+    /// <p>Provides information about the bootstrap actions associated with a cluster.</p>
     fn list_bootstrap_actions(
         &self,
         input: &ListBootstrapActionsInput,
     ) -> Result<ListBootstrapActionsOutput, ListBootstrapActionsError>;
 
-    #[doc="<p>Provides the status of all clusters visible to this AWS account. Allows you to filter the list of clusters based on certain criteria; for example, filtering by cluster creation date and time or by status. This call returns a maximum of 50 clusters per call, but returns a marker to track the paging of the cluster list across multiple ListClusters calls.</p>"]
+    /// <p>Provides the status of all clusters visible to this AWS account. Allows you to filter the list of clusters based on certain criteria; for example, filtering by cluster creation date and time or by status. This call returns a maximum of 50 clusters per call, but returns a marker to track the paging of the cluster list across multiple ListClusters calls.</p>
     fn list_clusters(
         &self,
         input: &ListClustersInput,
     ) -> Result<ListClustersOutput, ListClustersError>;
 
-    #[doc="<p>Lists all available details about the instance fleets in a cluster.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note>"]
+    /// <p><p>Lists all available details about the instance fleets in a cluster.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
     fn list_instance_fleets(
         &self,
         input: &ListInstanceFleetsInput,
     ) -> Result<ListInstanceFleetsOutput, ListInstanceFleetsError>;
 
-    #[doc = "<p>Provides all available details about the instance groups in a cluster.</p>"]
+    /// <p>Provides all available details about the instance groups in a cluster.</p>
     fn list_instance_groups(
         &self,
         input: &ListInstanceGroupsInput,
     ) -> Result<ListInstanceGroupsOutput, ListInstanceGroupsError>;
 
-    #[doc="<p>Provides information for all active EC2 instances and EC2 instances terminated in the last 30 days, up to a maximum of 2,000. EC2 instances in any of the following states are considered active: AWAITING_FULFILLMENT, PROVISIONING, BOOTSTRAPPING, RUNNING.</p>"]
+    /// <p>Provides information for all active EC2 instances and EC2 instances terminated in the last 30 days, up to a maximum of 2,000. EC2 instances in any of the following states are considered active: AWAITING_FULFILLMENT, PROVISIONING, BOOTSTRAPPING, RUNNING.</p>
     fn list_instances(
         &self,
         input: &ListInstancesInput,
     ) -> Result<ListInstancesOutput, ListInstancesError>;
 
-    #[doc="<p>Lists all the security configurations visible to this account, providing their creation dates and times, and their names. This call returns a maximum of 50 clusters per call, but returns a marker to track the paging of the cluster list across multiple ListSecurityConfigurations calls.</p>"]
+    /// <p>Lists all the security configurations visible to this account, providing their creation dates and times, and their names. This call returns a maximum of 50 clusters per call, but returns a marker to track the paging of the cluster list across multiple ListSecurityConfigurations calls.</p>
     fn list_security_configurations(
         &self,
         input: &ListSecurityConfigurationsInput,
     ) -> Result<ListSecurityConfigurationsOutput, ListSecurityConfigurationsError>;
 
-    #[doc="<p>Provides a list of steps for the cluster in reverse order unless you specify stepIds with the request.</p>"]
+    /// <p>Provides a list of steps for the cluster in reverse order unless you specify stepIds with the request.</p>
     fn list_steps(&self, input: &ListStepsInput) -> Result<ListStepsOutput, ListStepsError>;
 
-    #[doc="<p>Modifies the target On-Demand and target Spot capacities for the instance fleet with the specified InstanceFleetID within the cluster specified using ClusterID. The call either succeeds or fails atomically.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note>"]
+    /// <p><p>Modifies the target On-Demand and target Spot capacities for the instance fleet with the specified InstanceFleetID within the cluster specified using ClusterID. The call either succeeds or fails atomically.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
     fn modify_instance_fleet(
         &self,
         input: &ModifyInstanceFleetInput,
     ) -> Result<(), ModifyInstanceFleetError>;
 
-    #[doc="<p>ModifyInstanceGroups modifies the number of nodes and configuration settings of an instance group. The input parameters include the new target instance count for the group and the instance group ID. The call will either succeed or fail atomically.</p>"]
+    /// <p>ModifyInstanceGroups modifies the number of nodes and configuration settings of an instance group. The input parameters include the new target instance count for the group and the instance group ID. The call will either succeed or fail atomically.</p>
     fn modify_instance_groups(
         &self,
         input: &ModifyInstanceGroupsInput,
     ) -> Result<(), ModifyInstanceGroupsError>;
 
-    #[doc="<p>Creates or updates an automatic scaling policy for a core instance group or task instance group in an Amazon EMR cluster. The automatic scaling policy defines how an instance group dynamically adds and terminates EC2 instances in response to the value of a CloudWatch metric.</p>"]
+    /// <p>Creates or updates an automatic scaling policy for a core instance group or task instance group in an Amazon EMR cluster. The automatic scaling policy defines how an instance group dynamically adds and terminates EC2 instances in response to the value of a CloudWatch metric.</p>
     fn put_auto_scaling_policy(
         &self,
         input: &PutAutoScalingPolicyInput,
     ) -> Result<PutAutoScalingPolicyOutput, PutAutoScalingPolicyError>;
 
-    #[doc="<p>Removes an automatic scaling policy from a specified instance group within an EMR cluster.</p>"]
+    /// <p>Removes an automatic scaling policy from a specified instance group within an EMR cluster.</p>
     fn remove_auto_scaling_policy(
         &self,
         input: &RemoveAutoScalingPolicyInput,
     ) -> Result<RemoveAutoScalingPolicyOutput, RemoveAutoScalingPolicyError>;
 
-    #[doc="<p>Removes tags from an Amazon EMR resource. Tags make it easier to associate clusters in various ways, such as grouping clusters to track your Amazon EMR resource allocation costs. For more information, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-plan-tags.html\">Tagging Amazon EMR Resources</a>. </p> <p>The following example removes the stack tag with value Prod from a cluster:</p>"]
+    /// <p>Removes tags from an Amazon EMR resource. Tags make it easier to associate clusters in various ways, such as grouping clusters to track your Amazon EMR resource allocation costs. For more information, see <a href="http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-plan-tags.html">Tagging Amazon EMR Resources</a>. </p> <p>The following example removes the stack tag with value Prod from a cluster:</p>
     fn remove_tags(&self, input: &RemoveTagsInput) -> Result<RemoveTagsOutput, RemoveTagsError>;
 
-    #[doc="<p>RunJobFlow creates and starts running a new cluster (job flow). The cluster runs the steps specified. After the steps complete, the cluster stops and the HDFS partition is lost. To prevent loss of data, configure the last step of the job flow to store results in Amazon S3. If the <a>JobFlowInstancesConfig</a> <code>KeepJobFlowAliveWhenNoSteps</code> parameter is set to <code>TRUE</code>, the cluster transitions to the WAITING state rather than shutting down after the steps have completed. </p> <p>For additional protection, you can set the <a>JobFlowInstancesConfig</a> <code>TerminationProtected</code> parameter to <code>TRUE</code> to lock the cluster and prevent it from being terminated by API call, user intervention, or in the event of a job flow error.</p> <p>A maximum of 256 steps are allowed in each job flow.</p> <p>If your cluster is long-running (such as a Hive data warehouse) or complex, you may require more than 256 steps to process your data. You can bypass the 256-step limitation in various ways, including using the SSH shell to connect to the master node and submitting queries directly to the software running on the master node, such as Hive and Hadoop. For more information on how to do this, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/Management/Guide/AddMoreThan256Steps.html\">Add More than 256 Steps to a Cluster</a> in the <i>Amazon EMR Management Guide</i>.</p> <p>For long running clusters, we recommend that you periodically store your results.</p> <note> <p>The instance fleets configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions. The RunJobFlow request can contain InstanceFleets parameters or InstanceGroups parameters, but not both.</p> </note>"]
+    /// <p><p>RunJobFlow creates and starts running a new cluster (job flow). The cluster runs the steps specified. After the steps complete, the cluster stops and the HDFS partition is lost. To prevent loss of data, configure the last step of the job flow to store results in Amazon S3. If the <a>JobFlowInstancesConfig</a> <code>KeepJobFlowAliveWhenNoSteps</code> parameter is set to <code>TRUE</code>, the cluster transitions to the WAITING state rather than shutting down after the steps have completed. </p> <p>For additional protection, you can set the <a>JobFlowInstancesConfig</a> <code>TerminationProtected</code> parameter to <code>TRUE</code> to lock the cluster and prevent it from being terminated by API call, user intervention, or in the event of a job flow error.</p> <p>A maximum of 256 steps are allowed in each job flow.</p> <p>If your cluster is long-running (such as a Hive data warehouse) or complex, you may require more than 256 steps to process your data. You can bypass the 256-step limitation in various ways, including using the SSH shell to connect to the master node and submitting queries directly to the software running on the master node, such as Hive and Hadoop. For more information on how to do this, see <a href="http://docs.aws.amazon.com/ElasticMapReduce/latest/Management/Guide/AddMoreThan256Steps.html">Add More than 256 Steps to a Cluster</a> in the <i>Amazon EMR Management Guide</i>.</p> <p>For long running clusters, we recommend that you periodically store your results.</p> <note> <p>The instance fleets configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions. The RunJobFlow request can contain InstanceFleets parameters or InstanceGroups parameters, but not both.</p> </note></p>
     fn run_job_flow(&self, input: &RunJobFlowInput) -> Result<RunJobFlowOutput, RunJobFlowError>;
 
-    #[doc="<p>SetTerminationProtection locks a cluster (job flow) so the EC2 instances in the cluster cannot be terminated by user intervention, an API call, or in the event of a job-flow error. The cluster still terminates upon successful completion of the job flow. Calling <code>SetTerminationProtection</code> on a cluster is similar to calling the Amazon EC2 <code>DisableAPITermination</code> API on all EC2 instances in a cluster.</p> <p> <code>SetTerminationProtection</code> is used to prevent accidental termination of a cluster and to ensure that in the event of an error, the instances persist so that you can recover any data stored in their ephemeral instance storage.</p> <p> To terminate a cluster that has been locked by setting <code>SetTerminationProtection</code> to <code>true</code>, you must first unlock the job flow by a subsequent call to <code>SetTerminationProtection</code> in which you set the value to <code>false</code>. </p> <p> For more information, see<a href=\"http://docs.aws.amazon.com/emr/latest/ManagementGuide/UsingEMR_TerminationProtection.html\">Managing Cluster Termination</a> in the <i>Amazon EMR Management Guide</i>. </p>"]
+    /// <p>SetTerminationProtection locks a cluster (job flow) so the EC2 instances in the cluster cannot be terminated by user intervention, an API call, or in the event of a job-flow error. The cluster still terminates upon successful completion of the job flow. Calling <code>SetTerminationProtection</code> on a cluster is similar to calling the Amazon EC2 <code>DisableAPITermination</code> API on all EC2 instances in a cluster.</p> <p> <code>SetTerminationProtection</code> is used to prevent accidental termination of a cluster and to ensure that in the event of an error, the instances persist so that you can recover any data stored in their ephemeral instance storage.</p> <p> To terminate a cluster that has been locked by setting <code>SetTerminationProtection</code> to <code>true</code>, you must first unlock the job flow by a subsequent call to <code>SetTerminationProtection</code> in which you set the value to <code>false</code>. </p> <p> For more information, see<a href="http://docs.aws.amazon.com/emr/latest/ManagementGuide/UsingEMR_TerminationProtection.html">Managing Cluster Termination</a> in the <i>Amazon EMR Management Guide</i>. </p>
     fn set_termination_protection(
         &self,
         input: &SetTerminationProtectionInput,
     ) -> Result<(), SetTerminationProtectionError>;
 
-    #[doc="<p>Sets whether all AWS Identity and Access Management (IAM) users under your account can access the specified clusters (job flows). This action works on running clusters. You can also set the visibility of a cluster when you launch it using the <code>VisibleToAllUsers</code> parameter of <a>RunJobFlow</a>. The SetVisibleToAllUsers action can be called only by an IAM user who created the cluster or the AWS account that owns the cluster.</p>"]
+    /// <p>Sets whether all AWS Identity and Access Management (IAM) users under your account can access the specified clusters (job flows). This action works on running clusters. You can also set the visibility of a cluster when you launch it using the <code>VisibleToAllUsers</code> parameter of <a>RunJobFlow</a>. The SetVisibleToAllUsers action can be called only by an IAM user who created the cluster or the AWS account that owns the cluster.</p>
     fn set_visible_to_all_users(
         &self,
         input: &SetVisibleToAllUsersInput,
     ) -> Result<(), SetVisibleToAllUsersError>;
 
-    #[doc="<p>TerminateJobFlows shuts a list of clusters (job flows) down. When a job flow is shut down, any step not yet completed is canceled and the EC2 instances on which the cluster is running are stopped. Any log files not already saved are uploaded to Amazon S3 if a LogUri was specified when the cluster was created.</p> <p>The maximum number of clusters allowed is 10. The call to <code>TerminateJobFlows</code> is asynchronous. Depending on the configuration of the cluster, it may take up to 1-5 minutes for the cluster to completely terminate and release allocated resources, such as Amazon EC2 instances.</p>"]
+    /// <p>TerminateJobFlows shuts a list of clusters (job flows) down. When a job flow is shut down, any step not yet completed is canceled and the EC2 instances on which the cluster is running are stopped. Any log files not already saved are uploaded to Amazon S3 if a LogUri was specified when the cluster was created.</p> <p>The maximum number of clusters allowed is 10. The call to <code>TerminateJobFlows</code> is asynchronous. Depending on the configuration of the cluster, it may take up to 1-5 minutes for the cluster to completely terminate and release allocated resources, such as Amazon EC2 instances.</p>
     fn terminate_job_flows(
         &self,
         input: &TerminateJobFlowsInput,
@@ -4678,7 +4678,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Adds an instance fleet to a running cluster.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x.</p> </note>"]
+    /// <p><p>Adds an instance fleet to a running cluster.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x.</p> </note></p>
     fn add_instance_fleet(
         &self,
         input: &AddInstanceFleetInput,
@@ -4712,7 +4712,7 @@ where
         }
     }
 
-    #[doc = "<p>Adds one or more instance groups to a running cluster.</p>"]
+    /// <p>Adds one or more instance groups to a running cluster.</p>
     fn add_instance_groups(
         &self,
         input: &AddInstanceGroupsInput,
@@ -4746,7 +4746,7 @@ where
         }
     }
 
-    #[doc="<p>AddJobFlowSteps adds new steps to a running cluster. A maximum of 256 steps are allowed in each job flow.</p> <p>If your cluster is long-running (such as a Hive data warehouse) or complex, you may require more than 256 steps to process your data. You can bypass the 256-step limitation in various ways, including using SSH to connect to the master node and submitting queries directly to the software running on the master node, such as Hive and Hadoop. For more information on how to do this, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/ManagementGuide/AddMoreThan256Steps.html\">Add More than 256 Steps to a Cluster</a> in the <i>Amazon EMR Management Guide</i>.</p> <p>A step specifies the location of a JAR file stored either on the master node of the cluster or in Amazon S3. Each step is performed by the main function of the main class of the JAR file. The main class can be specified either in the manifest of the JAR or by using the MainFunction parameter of the step.</p> <p>Amazon EMR executes each step in the order listed. For a step to be considered complete, the main function must exit with a zero exit code and all Hadoop jobs started while the step was running must have completed and run successfully.</p> <p>You can only add steps to a cluster that is in one of the following states: STARTING, BOOTSTRAPPING, RUNNING, or WAITING.</p>"]
+    /// <p>AddJobFlowSteps adds new steps to a running cluster. A maximum of 256 steps are allowed in each job flow.</p> <p>If your cluster is long-running (such as a Hive data warehouse) or complex, you may require more than 256 steps to process your data. You can bypass the 256-step limitation in various ways, including using SSH to connect to the master node and submitting queries directly to the software running on the master node, such as Hive and Hadoop. For more information on how to do this, see <a href="http://docs.aws.amazon.com/ElasticMapReduce/latest/ManagementGuide/AddMoreThan256Steps.html">Add More than 256 Steps to a Cluster</a> in the <i>Amazon EMR Management Guide</i>.</p> <p>A step specifies the location of a JAR file stored either on the master node of the cluster or in Amazon S3. Each step is performed by the main function of the main class of the JAR file. The main class can be specified either in the manifest of the JAR or by using the MainFunction parameter of the step.</p> <p>Amazon EMR executes each step in the order listed. For a step to be considered complete, the main function must exit with a zero exit code and all Hadoop jobs started while the step was running must have completed and run successfully.</p> <p>You can only add steps to a cluster that is in one of the following states: STARTING, BOOTSTRAPPING, RUNNING, or WAITING.</p>
     fn add_job_flow_steps(
         &self,
         input: &AddJobFlowStepsInput,
@@ -4780,7 +4780,7 @@ where
         }
     }
 
-    #[doc="<p>Adds tags to an Amazon EMR resource. Tags make it easier to associate clusters in various ways, such as grouping clusters to track your Amazon EMR resource allocation costs. For more information, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-plan-tags.html\">Tagging Amazon EMR Resources</a>. </p>"]
+    /// <p>Adds tags to an Amazon EMR resource. Tags make it easier to associate clusters in various ways, such as grouping clusters to track your Amazon EMR resource allocation costs. For more information, see <a href="http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-plan-tags.html">Tagging Amazon EMR Resources</a>. </p>
     fn add_tags(&self, input: &AddTagsInput) -> Result<AddTagsOutput, AddTagsError> {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
@@ -4812,7 +4812,7 @@ where
         }
     }
 
-    #[doc="<p>Cancels a pending step or steps in a running cluster. Available only in Amazon EMR versions 4.8.0 and later, excluding version 5.0.0. A maximum of 256 steps are allowed in each CancelSteps request. CancelSteps is idempotent but asynchronous; it does not guarantee a step will be canceled, even if the request is successfully submitted. You can only cancel steps that are in a <code>PENDING</code> state.</p>"]
+    /// <p>Cancels a pending step or steps in a running cluster. Available only in Amazon EMR versions 4.8.0 and later, excluding version 5.0.0. A maximum of 256 steps are allowed in each CancelSteps request. CancelSteps is idempotent but asynchronous; it does not guarantee a step will be canceled, even if the request is successfully submitted. You can only cancel steps that are in a <code>PENDING</code> state.</p>
     fn cancel_steps(
         &self,
         input: &CancelStepsInput,
@@ -4846,7 +4846,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a security configuration, which is stored in the service and can be specified when a cluster is created.</p>"]
+    /// <p>Creates a security configuration, which is stored in the service and can be specified when a cluster is created.</p>
     fn create_security_configuration(
         &self,
         input: &CreateSecurityConfigurationInput,
@@ -4883,7 +4883,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a security configuration.</p>"]
+    /// <p>Deletes a security configuration.</p>
     fn delete_security_configuration(
         &self,
         input: &DeleteSecurityConfigurationInput,
@@ -4920,7 +4920,7 @@ where
         }
     }
 
-    #[doc="<p>Provides cluster-level details including status, hardware and software configuration, VPC settings, and so on. For information about the cluster steps, see <a>ListSteps</a>.</p>"]
+    /// <p>Provides cluster-level details including status, hardware and software configuration, VPC settings, and so on. For information about the cluster steps, see <a>ListSteps</a>.</p>
     fn describe_cluster(
         &self,
         input: &DescribeClusterInput,
@@ -4954,7 +4954,7 @@ where
         }
     }
 
-    #[doc="<p>This API is deprecated and will eventually be removed. We recommend you use <a>ListClusters</a>, <a>DescribeCluster</a>, <a>ListSteps</a>, <a>ListInstanceGroups</a> and <a>ListBootstrapActions</a> instead.</p> <p>DescribeJobFlows returns a list of job flows that match all of the supplied parameters. The parameters can include a list of job flow IDs, job flow states, and restrictions on job flow creation date and time.</p> <p>Regardless of supplied parameters, only job flows created within the last two months are returned.</p> <p>If no parameters are supplied, then job flows matching either of the following criteria are returned:</p> <ul> <li> <p>Job flows created and completed in the last two weeks</p> </li> <li> <p> Job flows created within the last two months that are in one of the following states: <code>RUNNING</code>, <code>WAITING</code>, <code>SHUTTING_DOWN</code>, <code>STARTING</code> </p> </li> </ul> <p>Amazon EMR can return a maximum of 512 job flow descriptions.</p>"]
+    /// <p>This API is deprecated and will eventually be removed. We recommend you use <a>ListClusters</a>, <a>DescribeCluster</a>, <a>ListSteps</a>, <a>ListInstanceGroups</a> and <a>ListBootstrapActions</a> instead.</p> <p>DescribeJobFlows returns a list of job flows that match all of the supplied parameters. The parameters can include a list of job flow IDs, job flow states, and restrictions on job flow creation date and time.</p> <p>Regardless of supplied parameters, only job flows created within the last two months are returned.</p> <p>If no parameters are supplied, then job flows matching either of the following criteria are returned:</p> <ul> <li> <p>Job flows created and completed in the last two weeks</p> </li> <li> <p> Job flows created within the last two months that are in one of the following states: <code>RUNNING</code>, <code>WAITING</code>, <code>SHUTTING_DOWN</code>, <code>STARTING</code> </p> </li> </ul> <p>Amazon EMR can return a maximum of 512 job flow descriptions.</p>
     fn describe_job_flows(
         &self,
         input: &DescribeJobFlowsInput,
@@ -4988,7 +4988,7 @@ where
         }
     }
 
-    #[doc="<p>Provides the details of a security configuration by returning the configuration JSON.</p>"]
+    /// <p>Provides the details of a security configuration by returning the configuration JSON.</p>
     fn describe_security_configuration(
         &self,
         input: &DescribeSecurityConfigurationInput,
@@ -5025,7 +5025,7 @@ where
         }
     }
 
-    #[doc = "<p>Provides more detail about the cluster step.</p>"]
+    /// <p>Provides more detail about the cluster step.</p>
     fn describe_step(
         &self,
         input: &DescribeStepInput,
@@ -5059,7 +5059,7 @@ where
         }
     }
 
-    #[doc = "<p>Provides information about the bootstrap actions associated with a cluster.</p>"]
+    /// <p>Provides information about the bootstrap actions associated with a cluster.</p>
     fn list_bootstrap_actions(
         &self,
         input: &ListBootstrapActionsInput,
@@ -5093,7 +5093,7 @@ where
         }
     }
 
-    #[doc="<p>Provides the status of all clusters visible to this AWS account. Allows you to filter the list of clusters based on certain criteria; for example, filtering by cluster creation date and time or by status. This call returns a maximum of 50 clusters per call, but returns a marker to track the paging of the cluster list across multiple ListClusters calls.</p>"]
+    /// <p>Provides the status of all clusters visible to this AWS account. Allows you to filter the list of clusters based on certain criteria; for example, filtering by cluster creation date and time or by status. This call returns a maximum of 50 clusters per call, but returns a marker to track the paging of the cluster list across multiple ListClusters calls.</p>
     fn list_clusters(
         &self,
         input: &ListClustersInput,
@@ -5127,7 +5127,7 @@ where
         }
     }
 
-    #[doc="<p>Lists all available details about the instance fleets in a cluster.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note>"]
+    /// <p><p>Lists all available details about the instance fleets in a cluster.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
     fn list_instance_fleets(
         &self,
         input: &ListInstanceFleetsInput,
@@ -5161,7 +5161,7 @@ where
         }
     }
 
-    #[doc = "<p>Provides all available details about the instance groups in a cluster.</p>"]
+    /// <p>Provides all available details about the instance groups in a cluster.</p>
     fn list_instance_groups(
         &self,
         input: &ListInstanceGroupsInput,
@@ -5195,7 +5195,7 @@ where
         }
     }
 
-    #[doc="<p>Provides information for all active EC2 instances and EC2 instances terminated in the last 30 days, up to a maximum of 2,000. EC2 instances in any of the following states are considered active: AWAITING_FULFILLMENT, PROVISIONING, BOOTSTRAPPING, RUNNING.</p>"]
+    /// <p>Provides information for all active EC2 instances and EC2 instances terminated in the last 30 days, up to a maximum of 2,000. EC2 instances in any of the following states are considered active: AWAITING_FULFILLMENT, PROVISIONING, BOOTSTRAPPING, RUNNING.</p>
     fn list_instances(
         &self,
         input: &ListInstancesInput,
@@ -5229,7 +5229,7 @@ where
         }
     }
 
-    #[doc="<p>Lists all the security configurations visible to this account, providing their creation dates and times, and their names. This call returns a maximum of 50 clusters per call, but returns a marker to track the paging of the cluster list across multiple ListSecurityConfigurations calls.</p>"]
+    /// <p>Lists all the security configurations visible to this account, providing their creation dates and times, and their names. This call returns a maximum of 50 clusters per call, but returns a marker to track the paging of the cluster list across multiple ListSecurityConfigurations calls.</p>
     fn list_security_configurations(
         &self,
         input: &ListSecurityConfigurationsInput,
@@ -5266,7 +5266,7 @@ where
         }
     }
 
-    #[doc="<p>Provides a list of steps for the cluster in reverse order unless you specify stepIds with the request.</p>"]
+    /// <p>Provides a list of steps for the cluster in reverse order unless you specify stepIds with the request.</p>
     fn list_steps(&self, input: &ListStepsInput) -> Result<ListStepsOutput, ListStepsError> {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
@@ -5299,7 +5299,7 @@ where
         }
     }
 
-    #[doc="<p>Modifies the target On-Demand and target Spot capacities for the instance fleet with the specified InstanceFleetID within the cluster specified using ClusterID. The call either succeeds or fails atomically.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note>"]
+    /// <p><p>Modifies the target On-Demand and target Spot capacities for the instance fleet with the specified InstanceFleetID within the cluster specified using ClusterID. The call either succeeds or fails atomically.</p> <note> <p>The instance fleet configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions.</p> </note></p>
     fn modify_instance_fleet(
         &self,
         input: &ModifyInstanceFleetInput,
@@ -5327,7 +5327,7 @@ where
         }
     }
 
-    #[doc="<p>ModifyInstanceGroups modifies the number of nodes and configuration settings of an instance group. The input parameters include the new target instance count for the group and the instance group ID. The call will either succeed or fail atomically.</p>"]
+    /// <p>ModifyInstanceGroups modifies the number of nodes and configuration settings of an instance group. The input parameters include the new target instance count for the group and the instance group ID. The call will either succeed or fail atomically.</p>
     fn modify_instance_groups(
         &self,
         input: &ModifyInstanceGroupsInput,
@@ -5355,7 +5355,7 @@ where
         }
     }
 
-    #[doc="<p>Creates or updates an automatic scaling policy for a core instance group or task instance group in an Amazon EMR cluster. The automatic scaling policy defines how an instance group dynamically adds and terminates EC2 instances in response to the value of a CloudWatch metric.</p>"]
+    /// <p>Creates or updates an automatic scaling policy for a core instance group or task instance group in an Amazon EMR cluster. The automatic scaling policy defines how an instance group dynamically adds and terminates EC2 instances in response to the value of a CloudWatch metric.</p>
     fn put_auto_scaling_policy(
         &self,
         input: &PutAutoScalingPolicyInput,
@@ -5389,7 +5389,7 @@ where
         }
     }
 
-    #[doc="<p>Removes an automatic scaling policy from a specified instance group within an EMR cluster.</p>"]
+    /// <p>Removes an automatic scaling policy from a specified instance group within an EMR cluster.</p>
     fn remove_auto_scaling_policy(
         &self,
         input: &RemoveAutoScalingPolicyInput,
@@ -5423,7 +5423,7 @@ where
         }
     }
 
-    #[doc="<p>Removes tags from an Amazon EMR resource. Tags make it easier to associate clusters in various ways, such as grouping clusters to track your Amazon EMR resource allocation costs. For more information, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-plan-tags.html\">Tagging Amazon EMR Resources</a>. </p> <p>The following example removes the stack tag with value Prod from a cluster:</p>"]
+    /// <p>Removes tags from an Amazon EMR resource. Tags make it easier to associate clusters in various ways, such as grouping clusters to track your Amazon EMR resource allocation costs. For more information, see <a href="http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-plan-tags.html">Tagging Amazon EMR Resources</a>. </p> <p>The following example removes the stack tag with value Prod from a cluster:</p>
     fn remove_tags(&self, input: &RemoveTagsInput) -> Result<RemoveTagsOutput, RemoveTagsError> {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
@@ -5454,7 +5454,7 @@ where
         }
     }
 
-    #[doc="<p>RunJobFlow creates and starts running a new cluster (job flow). The cluster runs the steps specified. After the steps complete, the cluster stops and the HDFS partition is lost. To prevent loss of data, configure the last step of the job flow to store results in Amazon S3. If the <a>JobFlowInstancesConfig</a> <code>KeepJobFlowAliveWhenNoSteps</code> parameter is set to <code>TRUE</code>, the cluster transitions to the WAITING state rather than shutting down after the steps have completed. </p> <p>For additional protection, you can set the <a>JobFlowInstancesConfig</a> <code>TerminationProtected</code> parameter to <code>TRUE</code> to lock the cluster and prevent it from being terminated by API call, user intervention, or in the event of a job flow error.</p> <p>A maximum of 256 steps are allowed in each job flow.</p> <p>If your cluster is long-running (such as a Hive data warehouse) or complex, you may require more than 256 steps to process your data. You can bypass the 256-step limitation in various ways, including using the SSH shell to connect to the master node and submitting queries directly to the software running on the master node, such as Hive and Hadoop. For more information on how to do this, see <a href=\"http://docs.aws.amazon.com/ElasticMapReduce/latest/Management/Guide/AddMoreThan256Steps.html\">Add More than 256 Steps to a Cluster</a> in the <i>Amazon EMR Management Guide</i>.</p> <p>For long running clusters, we recommend that you periodically store your results.</p> <note> <p>The instance fleets configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions. The RunJobFlow request can contain InstanceFleets parameters or InstanceGroups parameters, but not both.</p> </note>"]
+    /// <p><p>RunJobFlow creates and starts running a new cluster (job flow). The cluster runs the steps specified. After the steps complete, the cluster stops and the HDFS partition is lost. To prevent loss of data, configure the last step of the job flow to store results in Amazon S3. If the <a>JobFlowInstancesConfig</a> <code>KeepJobFlowAliveWhenNoSteps</code> parameter is set to <code>TRUE</code>, the cluster transitions to the WAITING state rather than shutting down after the steps have completed. </p> <p>For additional protection, you can set the <a>JobFlowInstancesConfig</a> <code>TerminationProtected</code> parameter to <code>TRUE</code> to lock the cluster and prevent it from being terminated by API call, user intervention, or in the event of a job flow error.</p> <p>A maximum of 256 steps are allowed in each job flow.</p> <p>If your cluster is long-running (such as a Hive data warehouse) or complex, you may require more than 256 steps to process your data. You can bypass the 256-step limitation in various ways, including using the SSH shell to connect to the master node and submitting queries directly to the software running on the master node, such as Hive and Hadoop. For more information on how to do this, see <a href="http://docs.aws.amazon.com/ElasticMapReduce/latest/Management/Guide/AddMoreThan256Steps.html">Add More than 256 Steps to a Cluster</a> in the <i>Amazon EMR Management Guide</i>.</p> <p>For long running clusters, we recommend that you periodically store your results.</p> <note> <p>The instance fleets configuration is available only in Amazon EMR versions 4.8.0 and later, excluding 5.0.x versions. The RunJobFlow request can contain InstanceFleets parameters or InstanceGroups parameters, but not both.</p> </note></p>
     fn run_job_flow(&self, input: &RunJobFlowInput) -> Result<RunJobFlowOutput, RunJobFlowError> {
         let mut request = SignedRequest::new("POST", "elasticmapreduce", &self.region, "/");
 
@@ -5485,7 +5485,7 @@ where
         }
     }
 
-    #[doc="<p>SetTerminationProtection locks a cluster (job flow) so the EC2 instances in the cluster cannot be terminated by user intervention, an API call, or in the event of a job-flow error. The cluster still terminates upon successful completion of the job flow. Calling <code>SetTerminationProtection</code> on a cluster is similar to calling the Amazon EC2 <code>DisableAPITermination</code> API on all EC2 instances in a cluster.</p> <p> <code>SetTerminationProtection</code> is used to prevent accidental termination of a cluster and to ensure that in the event of an error, the instances persist so that you can recover any data stored in their ephemeral instance storage.</p> <p> To terminate a cluster that has been locked by setting <code>SetTerminationProtection</code> to <code>true</code>, you must first unlock the job flow by a subsequent call to <code>SetTerminationProtection</code> in which you set the value to <code>false</code>. </p> <p> For more information, see<a href=\"http://docs.aws.amazon.com/emr/latest/ManagementGuide/UsingEMR_TerminationProtection.html\">Managing Cluster Termination</a> in the <i>Amazon EMR Management Guide</i>. </p>"]
+    /// <p>SetTerminationProtection locks a cluster (job flow) so the EC2 instances in the cluster cannot be terminated by user intervention, an API call, or in the event of a job-flow error. The cluster still terminates upon successful completion of the job flow. Calling <code>SetTerminationProtection</code> on a cluster is similar to calling the Amazon EC2 <code>DisableAPITermination</code> API on all EC2 instances in a cluster.</p> <p> <code>SetTerminationProtection</code> is used to prevent accidental termination of a cluster and to ensure that in the event of an error, the instances persist so that you can recover any data stored in their ephemeral instance storage.</p> <p> To terminate a cluster that has been locked by setting <code>SetTerminationProtection</code> to <code>true</code>, you must first unlock the job flow by a subsequent call to <code>SetTerminationProtection</code> in which you set the value to <code>false</code>. </p> <p> For more information, see<a href="http://docs.aws.amazon.com/emr/latest/ManagementGuide/UsingEMR_TerminationProtection.html">Managing Cluster Termination</a> in the <i>Amazon EMR Management Guide</i>. </p>
     fn set_termination_protection(
         &self,
         input: &SetTerminationProtectionInput,
@@ -5513,7 +5513,7 @@ where
         }
     }
 
-    #[doc="<p>Sets whether all AWS Identity and Access Management (IAM) users under your account can access the specified clusters (job flows). This action works on running clusters. You can also set the visibility of a cluster when you launch it using the <code>VisibleToAllUsers</code> parameter of <a>RunJobFlow</a>. The SetVisibleToAllUsers action can be called only by an IAM user who created the cluster or the AWS account that owns the cluster.</p>"]
+    /// <p>Sets whether all AWS Identity and Access Management (IAM) users under your account can access the specified clusters (job flows). This action works on running clusters. You can also set the visibility of a cluster when you launch it using the <code>VisibleToAllUsers</code> parameter of <a>RunJobFlow</a>. The SetVisibleToAllUsers action can be called only by an IAM user who created the cluster or the AWS account that owns the cluster.</p>
     fn set_visible_to_all_users(
         &self,
         input: &SetVisibleToAllUsersInput,
@@ -5541,7 +5541,7 @@ where
         }
     }
 
-    #[doc="<p>TerminateJobFlows shuts a list of clusters (job flows) down. When a job flow is shut down, any step not yet completed is canceled and the EC2 instances on which the cluster is running are stopped. Any log files not already saved are uploaded to Amazon S3 if a LogUri was specified when the cluster was created.</p> <p>The maximum number of clusters allowed is 10. The call to <code>TerminateJobFlows</code> is asynchronous. Depending on the configuration of the cluster, it may take up to 1-5 minutes for the cluster to completely terminate and release allocated resources, such as Amazon EC2 instances.</p>"]
+    /// <p>TerminateJobFlows shuts a list of clusters (job flows) down. When a job flow is shut down, any step not yet completed is canceled and the EC2 instances on which the cluster is running are stopped. Any log files not already saved are uploaded to Amazon S3 if a LogUri was specified when the cluster was created.</p> <p>The maximum number of clusters allowed is 10. The call to <code>TerminateJobFlows</code> is asynchronous. Depending on the configuration of the cluster, it may take up to 1-5 minutes for the cluster to completely terminate and release allocated resources, such as Amazon EC2 instances.</p>
     fn terminate_job_flows(
         &self,
         input: &TerminateJobFlowsInput,

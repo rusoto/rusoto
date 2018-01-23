@@ -166,8 +166,7 @@ impl GenerateProtocol for RestXmlGenerator {
 fn generate_documentation(operation: &Operation) -> String {
     match operation.documentation {
         Some(ref docs) => {
-            format!("#[doc=\"{}\"]",
-                    docs.replace("\\", "\\\\").replace("\"", "\\\""))
+            ::doco::Item(docs).to_string()
         }
         None => "".to_owned(),
     }

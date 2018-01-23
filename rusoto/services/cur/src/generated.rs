@@ -27,7 +27,7 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-/// Request of DeleteReportDefinition
+/// <p>Request of DeleteReportDefinition</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteReportDefinitionRequest {
     #[serde(rename = "ReportName")]
@@ -35,7 +35,7 @@ pub struct DeleteReportDefinitionRequest {
     pub report_name: Option<String>,
 }
 
-/// Response of DeleteReportDefinition
+/// <p>Response of DeleteReportDefinition</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteReportDefinitionResponse {
     #[serde(rename = "ResponseMessage")]
@@ -43,7 +43,7 @@ pub struct DeleteReportDefinitionResponse {
     pub response_message: Option<String>,
 }
 
-/// Request of DescribeReportDefinitions
+/// <p>Request of DescribeReportDefinitions</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeReportDefinitionsRequest {
     #[serde(rename = "MaxResults")]
@@ -54,7 +54,7 @@ pub struct DescribeReportDefinitionsRequest {
     pub next_token: Option<String>,
 }
 
-/// Response of DescribeReportDefinitions
+/// <p>Response of DescribeReportDefinitions</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeReportDefinitionsResponse {
     #[serde(rename = "NextToken")]
@@ -65,36 +65,45 @@ pub struct DescribeReportDefinitionsResponse {
     pub report_definitions: Option<Vec<ReportDefinition>>,
 }
 
-/// Request of PutReportDefinition
+/// <p>Request of PutReportDefinition</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct PutReportDefinitionRequest {
-    #[serde(rename = "ReportDefinition")] pub report_definition: ReportDefinition,
+    #[serde(rename = "ReportDefinition")]
+    pub report_definition: ReportDefinition,
 }
 
-/// Response of PutReportDefinition
+/// <p>Response of PutReportDefinition</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct PutReportDefinitionResponse;
 
-/// The definition of AWS Cost and Usage Report. Customer can specify the report name, time unit, report format, compression format, S3 bucket and additional artifacts and schema elements in the definition.
+/// <p>The definition of AWS Cost and Usage Report. Customer can specify the report name, time unit, report format, compression format, S3 bucket and additional artifacts and schema elements in the definition.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ReportDefinition {
     #[serde(rename = "AdditionalArtifacts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_artifacts: Option<Vec<String>>,
-    #[serde(rename = "AdditionalSchemaElements")] pub additional_schema_elements: Vec<String>,
-    #[serde(rename = "Compression")] pub compression: String,
-    #[serde(rename = "Format")] pub format: String,
-    #[serde(rename = "ReportName")] pub report_name: String,
-    #[serde(rename = "S3Bucket")] pub s3_bucket: String,
-    #[serde(rename = "S3Prefix")] pub s3_prefix: String,
-    #[serde(rename = "S3Region")] pub s3_region: String,
-    #[serde(rename = "TimeUnit")] pub time_unit: String,
+    #[serde(rename = "AdditionalSchemaElements")]
+    pub additional_schema_elements: Vec<String>,
+    #[serde(rename = "Compression")]
+    pub compression: String,
+    #[serde(rename = "Format")]
+    pub format: String,
+    #[serde(rename = "ReportName")]
+    pub report_name: String,
+    #[serde(rename = "S3Bucket")]
+    pub s3_bucket: String,
+    #[serde(rename = "S3Prefix")]
+    pub s3_prefix: String,
+    #[serde(rename = "S3Region")]
+    pub s3_region: String,
+    #[serde(rename = "TimeUnit")]
+    pub time_unit: String,
 }
 
 /// Errors returned by DeleteReportDefinition
 #[derive(Debug, PartialEq)]
 pub enum DeleteReportDefinitionError {
-    ///This exception is thrown on a known dependency failure.
+    /// <p>This exception is thrown on a known dependency failure.</p>
     InternalError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -174,7 +183,7 @@ impl Error for DeleteReportDefinitionError {
 /// Errors returned by DescribeReportDefinitions
 #[derive(Debug, PartialEq)]
 pub enum DescribeReportDefinitionsError {
-    ///This exception is thrown on a known dependency failure.
+    /// <p>This exception is thrown on a known dependency failure.</p>
     InternalError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -254,11 +263,11 @@ impl Error for DescribeReportDefinitionsError {
 /// Errors returned by PutReportDefinition
 #[derive(Debug, PartialEq)]
 pub enum PutReportDefinitionError {
-    ///This exception is thrown when putting a report preference with a name that already exists.
+    /// <p>This exception is thrown when putting a report preference with a name that already exists.</p>
     DuplicateReportName(String),
-    ///This exception is thrown on a known dependency failure.
+    /// <p>This exception is thrown on a known dependency failure.</p>
     InternalError(String),
-    ///This exception is thrown when the number of report preference reaches max limit. The max number is 5.
+    /// <p>This exception is thrown when the number of report preference reaches max limit. The max number is 5.</p>
     ReportLimitReached(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -345,19 +354,19 @@ impl Error for PutReportDefinitionError {
 }
 /// Trait representing the capabilities of the AWS Cost and Usage Report Service API. AWS Cost and Usage Report Service clients implement this trait.
 pub trait CostAndUsageReport {
-    #[doc = "Delete a specified report definition"]
+    /// <p>Delete a specified report definition</p>
     fn delete_report_definition(
         &self,
         input: &DeleteReportDefinitionRequest,
     ) -> Result<DeleteReportDefinitionResponse, DeleteReportDefinitionError>;
 
-    #[doc = "Describe a list of report definitions owned by the account"]
+    /// <p>Describe a list of report definitions owned by the account</p>
     fn describe_report_definitions(
         &self,
         input: &DescribeReportDefinitionsRequest,
     ) -> Result<DescribeReportDefinitionsResponse, DescribeReportDefinitionsError>;
 
-    #[doc = "Create a new report definition"]
+    /// <p>Create a new report definition</p>
     fn put_report_definition(
         &self,
         input: &PutReportDefinitionRequest,
@@ -393,7 +402,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc = "Delete a specified report definition"]
+    /// <p>Delete a specified report definition</p>
     fn delete_report_definition(
         &self,
         input: &DeleteReportDefinitionRequest,
@@ -430,7 +439,7 @@ where
         }
     }
 
-    #[doc = "Describe a list of report definitions owned by the account"]
+    /// <p>Describe a list of report definitions owned by the account</p>
     fn describe_report_definitions(
         &self,
         input: &DescribeReportDefinitionsRequest,
@@ -467,7 +476,7 @@ where
         }
     }
 
-    #[doc = "Create a new report definition"]
+    /// <p>Create a new report definition</p>
     fn put_report_definition(
         &self,
         input: &PutReportDefinitionRequest,

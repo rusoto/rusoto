@@ -108,7 +108,7 @@ pub struct BatchPrediction {
     #[serde(rename = "StartedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub started_at: Option<f64>,
-    /// <p>The status of the <code>BatchPrediction</code>. This element can have one of the following values:</p> <ul> <li> <code>PENDING</code> - Amazon Machine Learning (Amazon ML) submitted a request to generate predictions for a batch of observations.</li> <li> <code>INPROGRESS</code> - The process is underway.</li> <li> <code>FAILED</code> - The request to perform a batch prediction did not run to completion. It is not usable.</li> <li> <code>COMPLETED</code> - The batch prediction process completed successfully.</li> <li> <code>DELETED</code> - The <code>BatchPrediction</code> is marked as deleted. It is not usable.</li> </ul>
+    /// <p><p>The status of the <code>BatchPrediction</code>. This element can have one of the following values:</p> <ul> <li> <code>PENDING</code> - Amazon Machine Learning (Amazon ML) submitted a request to generate predictions for a batch of observations.</li> <li> <code>INPROGRESS</code> - The process is underway.</li> <li> <code>FAILED</code> - The request to perform a batch prediction did not run to completion. It is not usable.</li> <li> <code>COMPLETED</code> - The batch prediction process completed successfully.</li> <li> <code>DELETED</code> - The <code>BatchPrediction</code> is marked as deleted. It is not usable.</li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -159,7 +159,7 @@ pub struct CreateDataSourceFromRDSInput {
     #[serde(rename = "DataSourceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_source_name: Option<String>,
-    /// <p>The data specification of an Amazon RDS <code>DataSource</code>:</p> <ul> <li><p>DatabaseInformation - <ul> <li> <code>DatabaseName</code> - The name of the Amazon RDS database.</li> <li> <code>InstanceIdentifier </code> - A unique identifier for the Amazon RDS database instance.</li> </ul> </p></li> <li><p>DatabaseCredentials - AWS Identity and Access Management (IAM) credentials that are used to connect to the Amazon RDS database.</p></li> <li><p>ResourceRole - A role (DataPipelineDefaultResourceRole) assumed by an EC2 instance to carry out the copy task from Amazon RDS to Amazon Simple Storage Service (Amazon S3). For more information, see <a href="http://docs.aws.amazon.com/datapipeline/latest/DeveloperGuide/dp-iam-roles.html">Role templates</a> for data pipelines.</p></li> <li><p>ServiceRole - A role (DataPipelineDefaultRole) assumed by the AWS Data Pipeline service to monitor the progress of the copy task from Amazon RDS to Amazon S3. For more information, see <a href="http://docs.aws.amazon.com/datapipeline/latest/DeveloperGuide/dp-iam-roles.html">Role templates</a> for data pipelines.</p></li> <li><p>SecurityInfo - The security information to use to access an RDS DB instance. You need to set up appropriate ingress rules for the security entity IDs provided to allow access to the Amazon RDS instance. Specify a [<code>SubnetId</code>, <code>SecurityGroupIds</code>] pair for a VPC-based RDS DB instance.</p></li> <li><p>SelectSqlQuery - A query that is used to retrieve the observation data for the <code>Datasource</code>.</p></li> <li><p>S3StagingLocation - The Amazon S3 location for staging Amazon RDS data. The data retrieved from Amazon RDS using <code>SelectSqlQuery</code> is stored in this location.</p></li> <li><p>DataSchemaUri - The Amazon S3 location of the <code>DataSchema</code>.</p></li> <li><p>DataSchema - A JSON string representing the schema. This is not required if <code>DataSchemaUri</code> is specified. </p></li> <li> <p>DataRearrangement - A JSON string that represents the splitting and rearrangement requirements for the <code>Datasource</code>. </p> <br> <p> Sample - <code> "{\"splitting\":{\"percentBegin\":10,\"percentEnd\":60}}"</code> </p> </li> </ul>
+    /// <p><p>The data specification of an Amazon RDS <code>DataSource</code>:</p> <ul> <li><p>DatabaseInformation - <ul> <li> <code>DatabaseName</code> - The name of the Amazon RDS database.</li> <li> <code>InstanceIdentifier </code> - A unique identifier for the Amazon RDS database instance.</li> </ul> </p></li> <li><p>DatabaseCredentials - AWS Identity and Access Management (IAM) credentials that are used to connect to the Amazon RDS database.</p></li> <li><p>ResourceRole - A role (DataPipelineDefaultResourceRole) assumed by an EC2 instance to carry out the copy task from Amazon RDS to Amazon Simple Storage Service (Amazon S3). For more information, see <a href="http://docs.aws.amazon.com/datapipeline/latest/DeveloperGuide/dp-iam-roles.html">Role templates</a> for data pipelines.</p></li> <li><p>ServiceRole - A role (DataPipelineDefaultRole) assumed by the AWS Data Pipeline service to monitor the progress of the copy task from Amazon RDS to Amazon S3. For more information, see <a href="http://docs.aws.amazon.com/datapipeline/latest/DeveloperGuide/dp-iam-roles.html">Role templates</a> for data pipelines.</p></li> <li><p>SecurityInfo - The security information to use to access an RDS DB instance. You need to set up appropriate ingress rules for the security entity IDs provided to allow access to the Amazon RDS instance. Specify a [<code>SubnetId</code>, <code>SecurityGroupIds</code>] pair for a VPC-based RDS DB instance.</p></li> <li><p>SelectSqlQuery - A query that is used to retrieve the observation data for the <code>Datasource</code>.</p></li> <li><p>S3StagingLocation - The Amazon S3 location for staging Amazon RDS data. The data retrieved from Amazon RDS using <code>SelectSqlQuery</code> is stored in this location.</p></li> <li><p>DataSchemaUri - The Amazon S3 location of the <code>DataSchema</code>.</p></li> <li><p>DataSchema - A JSON string representing the schema. This is not required if <code>DataSchemaUri</code> is specified. </p></li> <li> <p>DataRearrangement - A JSON string that represents the splitting and rearrangement requirements for the <code>Datasource</code>. </p> <br> <p> Sample - <code> &quot;{&quot;splitting&quot;:{&quot;percentBegin&quot;:10,&quot;percentEnd&quot;:60}}&quot;</code> </p> </li> </ul></p>
     #[serde(rename = "RDSData")]
     pub rds_data: RDSDataSpec,
     /// <p>The role that Amazon ML assumes on behalf of the user to create and activate a data pipeline in the user's account and copy data using the <code>SelectSqlQuery</code> query from Amazon RDS to Amazon S3.</p> <p> </p>
@@ -189,7 +189,7 @@ pub struct CreateDataSourceFromRedshiftInput {
     #[serde(rename = "DataSourceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_source_name: Option<String>,
-    /// <p>The data specification of an Amazon Redshift <code>DataSource</code>:</p> <ul> <li><p>DatabaseInformation - <ul> <li> <code>DatabaseName</code> - The name of the Amazon Redshift database. </li> <li> <code> ClusterIdentifier</code> - The unique ID for the Amazon Redshift cluster.</li> </ul></p></li> <li><p>DatabaseCredentials - The AWS Identity and Access Management (IAM) credentials that are used to connect to the Amazon Redshift database.</p></li> <li><p>SelectSqlQuery - The query that is used to retrieve the observation data for the <code>Datasource</code>.</p></li> <li><p>S3StagingLocation - The Amazon Simple Storage Service (Amazon S3) location for staging Amazon Redshift data. The data retrieved from Amazon Redshift using the <code>SelectSqlQuery</code> query is stored in this location.</p></li> <li><p>DataSchemaUri - The Amazon S3 location of the <code>DataSchema</code>.</p></li> <li><p>DataSchema - A JSON string representing the schema. This is not required if <code>DataSchemaUri</code> is specified. </p></li> <li> <p>DataRearrangement - A JSON string that represents the splitting and rearrangement requirements for the <code>DataSource</code>.</p> <p> Sample - <code> "{\"splitting\":{\"percentBegin\":10,\"percentEnd\":60}}"</code> </p> </li> </ul>
+    /// <p><p>The data specification of an Amazon Redshift <code>DataSource</code>:</p> <ul> <li><p>DatabaseInformation - <ul> <li> <code>DatabaseName</code> - The name of the Amazon Redshift database. </li> <li> <code> ClusterIdentifier</code> - The unique ID for the Amazon Redshift cluster.</li> </ul></p></li> <li><p>DatabaseCredentials - The AWS Identity and Access Management (IAM) credentials that are used to connect to the Amazon Redshift database.</p></li> <li><p>SelectSqlQuery - The query that is used to retrieve the observation data for the <code>Datasource</code>.</p></li> <li><p>S3StagingLocation - The Amazon Simple Storage Service (Amazon S3) location for staging Amazon Redshift data. The data retrieved from Amazon Redshift using the <code>SelectSqlQuery</code> query is stored in this location.</p></li> <li><p>DataSchemaUri - The Amazon S3 location of the <code>DataSchema</code>.</p></li> <li><p>DataSchema - A JSON string representing the schema. This is not required if <code>DataSchemaUri</code> is specified. </p></li> <li> <p>DataRearrangement - A JSON string that represents the splitting and rearrangement requirements for the <code>DataSource</code>.</p> <p> Sample - <code> &quot;{&quot;splitting&quot;:{&quot;percentBegin&quot;:10,&quot;percentEnd&quot;:60}}&quot;</code> </p> </li> </ul></p>
     #[serde(rename = "DataSpec")]
     pub data_spec: RedshiftDataSpec,
     /// <p>A fully specified role Amazon Resource Name (ARN). Amazon ML assumes the role on behalf of the user to create the following: </p> <p> <ul> <li><p>A security group to allow Amazon ML to execute the <code>SelectSqlQuery</code> query on an Amazon Redshift cluster</p></li> <li><p>An Amazon S3 bucket policy to grant Amazon ML read/write permissions on the <code>S3StagingLocation</code></p></li> </ul> </p>
@@ -219,7 +219,7 @@ pub struct CreateDataSourceFromS3Input {
     #[serde(rename = "DataSourceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_source_name: Option<String>,
-    /// <p>The data specification of a <code>DataSource</code>:</p> <ul> <li><p>DataLocationS3 - The Amazon S3 location of the observation data.</p></li> <li><p>DataSchemaLocationS3 - The Amazon S3 location of the <code>DataSchema</code>.</p></li> <li><p>DataSchema - A JSON string representing the schema. This is not required if <code>DataSchemaUri</code> is specified. </p></li> <li> <p>DataRearrangement - A JSON string that represents the splitting and rearrangement requirements for the <code>Datasource</code>. </p> <p> Sample - <code> "{\"splitting\":{\"percentBegin\":10,\"percentEnd\":60}}"</code> </p> </li> </ul>
+    /// <p><p>The data specification of a <code>DataSource</code>:</p> <ul> <li><p>DataLocationS3 - The Amazon S3 location of the observation data.</p></li> <li><p>DataSchemaLocationS3 - The Amazon S3 location of the <code>DataSchema</code>.</p></li> <li><p>DataSchema - A JSON string representing the schema. This is not required if <code>DataSchemaUri</code> is specified. </p></li> <li> <p>DataRearrangement - A JSON string that represents the splitting and rearrangement requirements for the <code>Datasource</code>. </p> <p> Sample - <code> &quot;{&quot;splitting&quot;:{&quot;percentBegin&quot;:10,&quot;percentEnd&quot;:60}}&quot;</code> </p> </li> </ul></p>
     #[serde(rename = "DataSpec")]
     pub data_spec: S3DataSpec,
 }
@@ -271,7 +271,7 @@ pub struct CreateMLModelInput {
     /// <p>The category of supervised learning that this <code>MLModel</code> will address. Choose from the following types:</p> <ul> <li>Choose <code>REGRESSION</code> if the <code>MLModel</code> will be used to predict a numeric value.</li> <li>Choose <code>BINARY</code> if the <code>MLModel</code> result has two possible values.</li> <li>Choose <code>MULTICLASS</code> if the <code>MLModel</code> result has a limited number of values. </li> </ul> <p> For more information, see the <a href="http://docs.aws.amazon.com/machine-learning/latest/dg">Amazon Machine Learning Developer Guide</a>.</p>
     #[serde(rename = "MLModelType")]
     pub ml_model_type: String,
-    /// <p>A list of the training parameters in the <code>MLModel</code>. The list is implemented as a map of key-value pairs.</p> <p>The following is the current set of training parameters: </p> <ul> <li> <p><code>sgd.maxMLModelSizeInBytes</code> - The maximum allowed size of the model. Depending on the input data, the size of the model might affect its performance.</p> <p> The value is an integer that ranges from <code>100000</code> to <code>2147483648</code>. The default value is <code>33554432</code>.</p> </li> <li><p><code>sgd.maxPasses</code> - The number of times that the training process traverses the observations to build the <code>MLModel</code>. The value is an integer that ranges from <code>1</code> to <code>10000</code>. The default value is <code>10</code>.</p></li> <li> <p><code>sgd.shuffleType</code> - Whether Amazon ML shuffles the training data. Shuffling the data improves a model's ability to find the optimal solution for a variety of data types. The valid values are <code>auto</code> and <code>none</code>. The default value is <code>none</code>. We <?oxy_insert_start author="laurama" timestamp="20160329T131121-0700">strongly recommend that you shuffle your data.<?oxy_insert_end></p> </li> <li> <p><code>sgd.l1RegularizationAmount</code> - The coefficient regularization L1 norm. It controls overfitting the data by penalizing large coefficients. This tends to drive coefficients to zero, resulting in a sparse feature set. If you use this parameter, start by specifying a small value, such as <code>1.0E-08</code>.</p> <p>The value is a double that ranges from <code>0</code> to <code>MAX_DOUBLE</code>. The default is to not use L1 normalization. This parameter can't be used when <code>L2</code> is specified. Use this parameter sparingly.</p> </li> <li> <p><code>sgd.l2RegularizationAmount</code> - The coefficient regularization L2 norm. It controls overfitting the data by penalizing large coefficients. This tends to drive coefficients to small, nonzero values. If you use this parameter, start by specifying a small value, such as <code>1.0E-08</code>.</p> <p>The value is a double that ranges from <code>0</code> to <code>MAX_DOUBLE</code>. The default is to not use L2 normalization. This parameter can't be used when <code>L1</code> is specified. Use this parameter sparingly.</p> </li> </ul>
+    /// <p><p>A list of the training parameters in the <code>MLModel</code>. The list is implemented as a map of key-value pairs.</p> <p>The following is the current set of training parameters: </p> <ul> <li> <p><code>sgd.maxMLModelSizeInBytes</code> - The maximum allowed size of the model. Depending on the input data, the size of the model might affect its performance.</p> <p> The value is an integer that ranges from <code>100000</code> to <code>2147483648</code>. The default value is <code>33554432</code>.</p> </li> <li><p><code>sgd.maxPasses</code> - The number of times that the training process traverses the observations to build the <code>MLModel</code>. The value is an integer that ranges from <code>1</code> to <code>10000</code>. The default value is <code>10</code>.</p></li> <li> <p><code>sgd.shuffleType</code> - Whether Amazon ML shuffles the training data. Shuffling the data improves a model&#39;s ability to find the optimal solution for a variety of data types. The valid values are <code>auto</code> and <code>none</code>. The default value is <code>none</code>. We &lt;?oxy<em>insert</em>start author=&quot;laurama&quot; timestamp=&quot;20160329T131121-0700&quot;&gt;strongly recommend that you shuffle your data.&lt;?oxy<em>insert</em>end&gt;</p> </li> <li> <p><code>sgd.l1RegularizationAmount</code> - The coefficient regularization L1 norm. It controls overfitting the data by penalizing large coefficients. This tends to drive coefficients to zero, resulting in a sparse feature set. If you use this parameter, start by specifying a small value, such as <code>1.0E-08</code>.</p> <p>The value is a double that ranges from <code>0</code> to <code>MAX<em>DOUBLE</code>. The default is to not use L1 normalization. This parameter can&#39;t be used when <code>L2</code> is specified. Use this parameter sparingly.</p> </li> <li> <p><code>sgd.l2RegularizationAmount</code> - The coefficient regularization L2 norm. It controls overfitting the data by penalizing large coefficients. This tends to drive coefficients to small, nonzero values. If you use this parameter, start by specifying a small value, such as <code>1.0E-08</code>.</p> <p>The value is a double that ranges from <code>0</code> to <code>MAX</em>DOUBLE</code>. The default is to not use L2 normalization. This parameter can&#39;t be used when <code>L1</code> is specified. Use this parameter sparingly.</p> </li> </ul></p>
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
@@ -304,7 +304,7 @@ pub struct CreateRealtimeEndpointInput {
     pub ml_model_id: String,
 }
 
-/// <p>Represents the output of an <code>CreateRealtimeEndpoint</code> operation.</p> <p>The result contains the <code>MLModelId</code> and the endpoint information for the <code>MLModel</code>.</p> <note> <p>The endpoint information includes the URI of the <code>MLModel</code>; that is, the location to send online prediction requests for the specified <code>MLModel</code>.</p> </note>
+/// <p><p>Represents the output of an <code>CreateRealtimeEndpoint</code> operation.</p> <p>The result contains the <code>MLModelId</code> and the endpoint information for the <code>MLModel</code>.</p> <note> <p>The endpoint information includes the URI of the <code>MLModel</code>; that is, the location to send online prediction requests for the specified <code>MLModel</code>.</p> </note></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateRealtimeEndpointOutput {
     /// <p>A user-supplied ID that uniquely identifies the <code>MLModel</code>. This value should be identical to the value of the <code>MLModelId</code> in the request.</p>
@@ -382,7 +382,7 @@ pub struct DataSource {
     #[serde(rename = "StartedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub started_at: Option<f64>,
-    /// <p>The current status of the <code>DataSource</code>. This element can have one of the following values: </p> <ul> <li>PENDING - Amazon Machine Learning (Amazon ML) submitted a request to create a <code>DataSource</code>.</li> <li>INPROGRESS - The creation process is underway.</li> <li>FAILED - The request to create a <code>DataSource</code> did not run to completion. It is not usable.</li> <li>COMPLETED - The creation process completed successfully.</li> <li>DELETED - The <code>DataSource</code> is marked as deleted. It is not usable.</li> </ul>
+    /// <p><p>The current status of the <code>DataSource</code>. This element can have one of the following values: </p> <ul> <li>PENDING - Amazon Machine Learning (Amazon ML) submitted a request to create a <code>DataSource</code>.</li> <li>INPROGRESS - The creation process is underway.</li> <li>FAILED - The request to create a <code>DataSource</code> did not run to completion. It is not usable.</li> <li>COMPLETED - The creation process completed successfully.</li> <li>DELETED - The <code>DataSource</code> is marked as deleted. It is not usable.</li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -504,7 +504,7 @@ pub struct DescribeBatchPredictionsInput {
     #[serde(rename = "EQ")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub eq: Option<String>,
-    /// <p>Use one of the following variables to filter a list of <code>BatchPrediction</code>:</p> <ul> <li> <code>CreatedAt</code> - Sets the search criteria to the <code>BatchPrediction</code> creation date.</li> <li> <code>Status</code> - Sets the search criteria to the <code>BatchPrediction</code> status.</li> <li> <code>Name</code> - Sets the search criteria to the contents of the <code>BatchPrediction</code><b> </b> <code>Name</code>.</li> <li> <code>IAMUser</code> - Sets the search criteria to the user account that invoked the <code>BatchPrediction</code> creation.</li> <li> <code>MLModelId</code> - Sets the search criteria to the <code>MLModel</code> used in the <code>BatchPrediction</code>.</li> <li> <code>DataSourceId</code> - Sets the search criteria to the <code>DataSource</code> used in the <code>BatchPrediction</code>.</li> <li> <code>DataURI</code> - Sets the search criteria to the data file(s) used in the <code>BatchPrediction</code>. The URL can identify either a file or an Amazon Simple Storage Solution (Amazon S3) bucket or directory.</li> </ul>
+    /// <p><p>Use one of the following variables to filter a list of <code>BatchPrediction</code>:</p> <ul> <li> <code>CreatedAt</code> - Sets the search criteria to the <code>BatchPrediction</code> creation date.</li> <li> <code>Status</code> - Sets the search criteria to the <code>BatchPrediction</code> status.</li> <li> <code>Name</code> - Sets the search criteria to the contents of the <code>BatchPrediction</code><b> </b> <code>Name</code>.</li> <li> <code>IAMUser</code> - Sets the search criteria to the user account that invoked the <code>BatchPrediction</code> creation.</li> <li> <code>MLModelId</code> - Sets the search criteria to the <code>MLModel</code> used in the <code>BatchPrediction</code>.</li> <li> <code>DataSourceId</code> - Sets the search criteria to the <code>DataSource</code> used in the <code>BatchPrediction</code>.</li> <li> <code>DataURI</code> - Sets the search criteria to the data file(s) used in the <code>BatchPrediction</code>. The URL can identify either a file or an Amazon Simple Storage Solution (Amazon S3) bucket or directory.</li> </ul></p>
     #[serde(rename = "FilterVariable")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_variable: Option<String>,
@@ -536,7 +536,7 @@ pub struct DescribeBatchPredictionsInput {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>A string that is found at the beginning of a variable, such as <code>Name</code> or <code>Id</code>.</p> <p>For example, a <code>Batch Prediction</code> operation could have the <code>Name</code> <code>2014-09-09-HolidayGiftMailer</code>. To search for this <code>BatchPrediction</code>, select <code>Name</code> for the <code>FilterVariable</code> and any of the following strings for the <code>Prefix</code>: </p> <ul> <li><p>2014-09</p></li> <li><p>2014-09-09</p></li> <li><p>2014-09-09-Holiday</p></li> </ul>
+    /// <p><p>A string that is found at the beginning of a variable, such as <code>Name</code> or <code>Id</code>.</p> <p>For example, a <code>Batch Prediction</code> operation could have the <code>Name</code> <code>2014-09-09-HolidayGiftMailer</code>. To search for this <code>BatchPrediction</code>, select <code>Name</code> for the <code>FilterVariable</code> and any of the following strings for the <code>Prefix</code>: </p> <ul> <li><p>2014-09</p></li> <li><p>2014-09-09</p></li> <li><p>2014-09-09-Holiday</p></li> </ul></p>
     #[serde(rename = "Prefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub prefix: Option<String>,
@@ -565,7 +565,7 @@ pub struct DescribeDataSourcesInput {
     #[serde(rename = "EQ")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub eq: Option<String>,
-    /// <p>Use one of the following variables to filter a list of <code>DataSource</code>:</p> <ul> <li> <code>CreatedAt</code> - Sets the search criteria to <code>DataSource</code> creation dates.</li> <li> <code>Status</code> - Sets the search criteria to <code>DataSource</code> statuses.</li> <li> <code>Name</code> - Sets the search criteria to the contents of <code>DataSource</code> <b> </b> <code>Name</code>.</li> <li> <code>DataUri</code> - Sets the search criteria to the URI of data files used to create the <code>DataSource</code>. The URI can identify either a file or an Amazon Simple Storage Service (Amazon S3) bucket or directory.</li> <li> <code>IAMUser</code> - Sets the search criteria to the user account that invoked the <code>DataSource</code> creation.</li> </ul>
+    /// <p><p>Use one of the following variables to filter a list of <code>DataSource</code>:</p> <ul> <li> <code>CreatedAt</code> - Sets the search criteria to <code>DataSource</code> creation dates.</li> <li> <code>Status</code> - Sets the search criteria to <code>DataSource</code> statuses.</li> <li> <code>Name</code> - Sets the search criteria to the contents of <code>DataSource</code> <b> </b> <code>Name</code>.</li> <li> <code>DataUri</code> - Sets the search criteria to the URI of data files used to create the <code>DataSource</code>. The URI can identify either a file or an Amazon Simple Storage Service (Amazon S3) bucket or directory.</li> <li> <code>IAMUser</code> - Sets the search criteria to the user account that invoked the <code>DataSource</code> creation.</li> </ul></p>
     #[serde(rename = "FilterVariable")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_variable: Option<String>,
@@ -597,7 +597,7 @@ pub struct DescribeDataSourcesInput {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>A string that is found at the beginning of a variable, such as <code>Name</code> or <code>Id</code>.</p> <p>For example, a <code>DataSource</code> could have the <code>Name</code> <code>2014-09-09-HolidayGiftMailer</code>. To search for this <code>DataSource</code>, select <code>Name</code> for the <code>FilterVariable</code> and any of the following strings for the <code>Prefix</code>: </p> <ul> <li><p>2014-09</p></li> <li><p>2014-09-09</p></li> <li><p>2014-09-09-Holiday</p></li> </ul>
+    /// <p><p>A string that is found at the beginning of a variable, such as <code>Name</code> or <code>Id</code>.</p> <p>For example, a <code>DataSource</code> could have the <code>Name</code> <code>2014-09-09-HolidayGiftMailer</code>. To search for this <code>DataSource</code>, select <code>Name</code> for the <code>FilterVariable</code> and any of the following strings for the <code>Prefix</code>: </p> <ul> <li><p>2014-09</p></li> <li><p>2014-09-09</p></li> <li><p>2014-09-09-Holiday</p></li> </ul></p>
     #[serde(rename = "Prefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub prefix: Option<String>,
@@ -626,7 +626,7 @@ pub struct DescribeEvaluationsInput {
     #[serde(rename = "EQ")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub eq: Option<String>,
-    /// <p>Use one of the following variable to filter a list of <code>Evaluation</code> objects:</p> <ul> <li> <code>CreatedAt</code> - Sets the search criteria to the <code>Evaluation</code> creation date.</li> <li> <code>Status</code> - Sets the search criteria to the <code>Evaluation</code> status.</li> <li> <code>Name</code> - Sets the search criteria to the contents of <code>Evaluation</code> <b> </b> <code>Name</code>.</li> <li> <code>IAMUser</code> - Sets the search criteria to the user account that invoked an <code>Evaluation</code>.</li> <li> <code>MLModelId</code> - Sets the search criteria to the <code>MLModel</code> that was evaluated.</li> <li> <code>DataSourceId</code> - Sets the search criteria to the <code>DataSource</code> used in <code>Evaluation</code>.</li> <li> <code>DataUri</code> - Sets the search criteria to the data file(s) used in <code>Evaluation</code>. The URL can identify either a file or an Amazon Simple Storage Solution (Amazon S3) bucket or directory.</li> </ul>
+    /// <p><p>Use one of the following variable to filter a list of <code>Evaluation</code> objects:</p> <ul> <li> <code>CreatedAt</code> - Sets the search criteria to the <code>Evaluation</code> creation date.</li> <li> <code>Status</code> - Sets the search criteria to the <code>Evaluation</code> status.</li> <li> <code>Name</code> - Sets the search criteria to the contents of <code>Evaluation</code> <b> </b> <code>Name</code>.</li> <li> <code>IAMUser</code> - Sets the search criteria to the user account that invoked an <code>Evaluation</code>.</li> <li> <code>MLModelId</code> - Sets the search criteria to the <code>MLModel</code> that was evaluated.</li> <li> <code>DataSourceId</code> - Sets the search criteria to the <code>DataSource</code> used in <code>Evaluation</code>.</li> <li> <code>DataUri</code> - Sets the search criteria to the data file(s) used in <code>Evaluation</code>. The URL can identify either a file or an Amazon Simple Storage Solution (Amazon S3) bucket or directory.</li> </ul></p>
     #[serde(rename = "FilterVariable")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_variable: Option<String>,
@@ -658,7 +658,7 @@ pub struct DescribeEvaluationsInput {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>A string that is found at the beginning of a variable, such as <code>Name</code> or <code>Id</code>.</p> <p>For example, an <code>Evaluation</code> could have the <code>Name</code> <code>2014-09-09-HolidayGiftMailer</code>. To search for this <code>Evaluation</code>, select <code>Name</code> for the <code>FilterVariable</code> and any of the following strings for the <code>Prefix</code>: </p> <ul> <li><p>2014-09</p></li> <li><p>2014-09-09</p></li> <li><p>2014-09-09-Holiday</p></li> </ul>
+    /// <p><p>A string that is found at the beginning of a variable, such as <code>Name</code> or <code>Id</code>.</p> <p>For example, an <code>Evaluation</code> could have the <code>Name</code> <code>2014-09-09-HolidayGiftMailer</code>. To search for this <code>Evaluation</code>, select <code>Name</code> for the <code>FilterVariable</code> and any of the following strings for the <code>Prefix</code>: </p> <ul> <li><p>2014-09</p></li> <li><p>2014-09-09</p></li> <li><p>2014-09-09-Holiday</p></li> </ul></p>
     #[serde(rename = "Prefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub prefix: Option<String>,
@@ -687,7 +687,7 @@ pub struct DescribeMLModelsInput {
     #[serde(rename = "EQ")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub eq: Option<String>,
-    /// <p>Use one of the following variables to filter a list of <code>MLModel</code>:</p> <ul> <li> <code>CreatedAt</code> - Sets the search criteria to <code>MLModel</code> creation date.</li> <li> <code>Status</code> - Sets the search criteria to <code>MLModel</code> status.</li> <li> <code>Name</code> - Sets the search criteria to the contents of <code>MLModel</code><b> </b> <code>Name</code>.</li> <li> <code>IAMUser</code> - Sets the search criteria to the user account that invoked the <code>MLModel</code> creation.</li> <li> <code>TrainingDataSourceId</code> - Sets the search criteria to the <code>DataSource</code> used to train one or more <code>MLModel</code>.</li> <li> <code>RealtimeEndpointStatus</code> - Sets the search criteria to the <code>MLModel</code> real-time endpoint status.</li> <li> <code>MLModelType</code> - Sets the search criteria to <code>MLModel</code> type: binary, regression, or multi-class.</li> <li> <code>Algorithm</code> - Sets the search criteria to the algorithm that the <code>MLModel</code> uses.</li> <li> <code>TrainingDataURI</code> - Sets the search criteria to the data file(s) used in training a <code>MLModel</code>. The URL can identify either a file or an Amazon Simple Storage Service (Amazon S3) bucket or directory.</li> </ul>
+    /// <p><p>Use one of the following variables to filter a list of <code>MLModel</code>:</p> <ul> <li> <code>CreatedAt</code> - Sets the search criteria to <code>MLModel</code> creation date.</li> <li> <code>Status</code> - Sets the search criteria to <code>MLModel</code> status.</li> <li> <code>Name</code> - Sets the search criteria to the contents of <code>MLModel</code><b> </b> <code>Name</code>.</li> <li> <code>IAMUser</code> - Sets the search criteria to the user account that invoked the <code>MLModel</code> creation.</li> <li> <code>TrainingDataSourceId</code> - Sets the search criteria to the <code>DataSource</code> used to train one or more <code>MLModel</code>.</li> <li> <code>RealtimeEndpointStatus</code> - Sets the search criteria to the <code>MLModel</code> real-time endpoint status.</li> <li> <code>MLModelType</code> - Sets the search criteria to <code>MLModel</code> type: binary, regression, or multi-class.</li> <li> <code>Algorithm</code> - Sets the search criteria to the algorithm that the <code>MLModel</code> uses.</li> <li> <code>TrainingDataURI</code> - Sets the search criteria to the data file(s) used in training a <code>MLModel</code>. The URL can identify either a file or an Amazon Simple Storage Service (Amazon S3) bucket or directory.</li> </ul></p>
     #[serde(rename = "FilterVariable")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_variable: Option<String>,
@@ -719,7 +719,7 @@ pub struct DescribeMLModelsInput {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>A string that is found at the beginning of a variable, such as <code>Name</code> or <code>Id</code>.</p> <p>For example, an <code>MLModel</code> could have the <code>Name</code> <code>2014-09-09-HolidayGiftMailer</code>. To search for this <code>MLModel</code>, select <code>Name</code> for the <code>FilterVariable</code> and any of the following strings for the <code>Prefix</code>: </p> <ul> <li><p>2014-09</p></li> <li><p>2014-09-09</p></li> <li><p>2014-09-09-Holiday</p></li> </ul>
+    /// <p><p>A string that is found at the beginning of a variable, such as <code>Name</code> or <code>Id</code>.</p> <p>For example, an <code>MLModel</code> could have the <code>Name</code> <code>2014-09-09-HolidayGiftMailer</code>. To search for this <code>MLModel</code>, select <code>Name</code> for the <code>FilterVariable</code> and any of the following strings for the <code>Prefix</code>: </p> <ul> <li><p>2014-09</p></li> <li><p>2014-09-09</p></li> <li><p>2014-09-09-Holiday</p></li> </ul></p>
     #[serde(rename = "Prefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub prefix: Option<String>,
@@ -821,7 +821,7 @@ pub struct Evaluation {
     #[serde(rename = "StartedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub started_at: Option<f64>,
-    /// <p>The status of the evaluation. This element can have one of the following values:</p> <ul> <li> <code>PENDING</code> - Amazon Machine Learning (Amazon ML) submitted a request to evaluate an <code>MLModel</code>.</li> <li> <code>INPROGRESS</code> - The evaluation is underway.</li> <li> <code>FAILED</code> - The request to evaluate an <code>MLModel</code> did not run to completion. It is not usable.</li> <li> <code>COMPLETED</code> - The evaluation process completed successfully.</li> <li> <code>DELETED</code> - The <code>Evaluation</code> is marked as deleted. It is not usable.</li> </ul>
+    /// <p><p>The status of the evaluation. This element can have one of the following values:</p> <ul> <li> <code>PENDING</code> - Amazon Machine Learning (Amazon ML) submitted a request to evaluate an <code>MLModel</code>.</li> <li> <code>INPROGRESS</code> - The evaluation is underway.</li> <li> <code>FAILED</code> - The request to evaluate an <code>MLModel</code> did not run to completion. It is not usable.</li> <li> <code>COMPLETED</code> - The evaluation process completed successfully.</li> <li> <code>DELETED</code> - The <code>Evaluation</code> is marked as deleted. It is not usable.</li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -897,7 +897,7 @@ pub struct GetBatchPredictionOutput {
     #[serde(rename = "StartedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub started_at: Option<f64>,
-    /// <p>The status of the <code>BatchPrediction</code>, which can be one of the following values:</p> <ul> <li> <code>PENDING</code> - Amazon Machine Learning (Amazon ML) submitted a request to generate batch predictions.</li> <li> <code>INPROGRESS</code> - The batch predictions are in progress.</li> <li> <code>FAILED</code> - The request to perform a batch prediction did not run to completion. It is not usable.</li> <li> <code>COMPLETED</code> - The batch prediction process completed successfully.</li> <li> <code>DELETED</code> - The <code>BatchPrediction</code> is marked as deleted. It is not usable.</li> </ul>
+    /// <p><p>The status of the <code>BatchPrediction</code>, which can be one of the following values:</p> <ul> <li> <code>PENDING</code> - Amazon Machine Learning (Amazon ML) submitted a request to generate batch predictions.</li> <li> <code>INPROGRESS</code> - The batch predictions are in progress.</li> <li> <code>FAILED</code> - The request to perform a batch prediction did not run to completion. It is not usable.</li> <li> <code>COMPLETED</code> - The batch prediction process completed successfully.</li> <li> <code>DELETED</code> - The <code>BatchPrediction</code> is marked as deleted. It is not usable.</li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -953,7 +953,7 @@ pub struct GetDataSourceOutput {
     #[serde(rename = "DataSourceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_source_id: Option<String>,
-    /// <p>The schema used by all of the data files of this <code>DataSource</code>.</p> <note><title>Note</title> <p>This parameter is provided as part of the verbose format.</p></note>
+    /// <p><p>The schema used by all of the data files of this <code>DataSource</code>.</p> <note><title>Note</title> <p>This parameter is provided as part of the verbose format.</p></note></p>
     #[serde(rename = "DataSourceSchema")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_source_schema: Option<String>,
@@ -994,7 +994,7 @@ pub struct GetDataSourceOutput {
     #[serde(rename = "StartedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub started_at: Option<f64>,
-    /// <p>The current status of the <code>DataSource</code>. This element can have one of the following values:</p> <ul> <li> <code>PENDING</code> - Amazon ML submitted a request to create a <code>DataSource</code>.</li> <li> <code>INPROGRESS</code> - The creation process is underway.</li> <li> <code>FAILED</code> - The request to create a <code>DataSource</code> did not run to completion. It is not usable.</li> <li> <code>COMPLETED</code> - The creation process completed successfully.</li> <li> <code>DELETED</code> - The <code>DataSource</code> is marked as deleted. It is not usable.</li> </ul>
+    /// <p><p>The current status of the <code>DataSource</code>. This element can have one of the following values:</p> <ul> <li> <code>PENDING</code> - Amazon ML submitted a request to create a <code>DataSource</code>.</li> <li> <code>INPROGRESS</code> - The creation process is underway.</li> <li> <code>FAILED</code> - The request to create a <code>DataSource</code> did not run to completion. It is not usable.</li> <li> <code>COMPLETED</code> - The creation process completed successfully.</li> <li> <code>DELETED</code> - The <code>DataSource</code> is marked as deleted. It is not usable.</li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1066,7 +1066,7 @@ pub struct GetEvaluationOutput {
     #[serde(rename = "StartedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub started_at: Option<f64>,
-    /// <p>The status of the evaluation. This element can have one of the following values:</p> <ul> <li> <code>PENDING</code> - Amazon Machine Language (Amazon ML) submitted a request to evaluate an <code>MLModel</code>.</li> <li> <code>INPROGRESS</code> - The evaluation is underway.</li> <li> <code>FAILED</code> - The request to evaluate an <code>MLModel</code> did not run to completion. It is not usable.</li> <li> <code>COMPLETED</code> - The evaluation process completed successfully.</li> <li> <code>DELETED</code> - The <code>Evaluation</code> is marked as deleted. It is not usable.</li> </ul>
+    /// <p><p>The status of the evaluation. This element can have one of the following values:</p> <ul> <li> <code>PENDING</code> - Amazon Machine Language (Amazon ML) submitted a request to evaluate an <code>MLModel</code>.</li> <li> <code>INPROGRESS</code> - The evaluation is underway.</li> <li> <code>FAILED</code> - The request to evaluate an <code>MLModel</code> did not run to completion. It is not usable.</li> <li> <code>COMPLETED</code> - The evaluation process completed successfully.</li> <li> <code>DELETED</code> - The <code>Evaluation</code> is marked as deleted. It is not usable.</li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1122,7 +1122,7 @@ pub struct GetMLModelOutput {
     #[serde(rename = "MLModelId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ml_model_id: Option<String>,
-    /// <p>Identifies the <code>MLModel</code> category. The following are the available types: </p> <ul> <li>REGRESSION -- Produces a numeric result. For example, "What price should a house be listed at?"</li> <li>BINARY -- Produces one of two possible results. For example, "Is this an e-commerce website?"</li> <li>MULTICLASS -- Produces one of several possible results. For example, "Is this a HIGH, LOW or MEDIUM risk trade?"</li> </ul>
+    /// <p><p>Identifies the <code>MLModel</code> category. The following are the available types: </p> <ul> <li>REGRESSION -- Produces a numeric result. For example, &quot;What price should a house be listed at?&quot;</li> <li>BINARY -- Produces one of two possible results. For example, &quot;Is this an e-commerce website?&quot;</li> <li>MULTICLASS -- Produces one of several possible results. For example, &quot;Is this a HIGH, LOW or MEDIUM risk trade?&quot;</li> </ul></p>
     #[serde(rename = "MLModelType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ml_model_type: Option<String>,
@@ -1134,11 +1134,11 @@ pub struct GetMLModelOutput {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The recipe to use when training the <code>MLModel</code>. The <code>Recipe</code> provides detailed information about the observation data to use during training, and manipulations to perform on the observation data during training.</p> <note><title>Note</title> <p>This parameter is provided as part of the verbose format.</p></note>
+    /// <p><p>The recipe to use when training the <code>MLModel</code>. The <code>Recipe</code> provides detailed information about the observation data to use during training, and manipulations to perform on the observation data during training.</p> <note><title>Note</title> <p>This parameter is provided as part of the verbose format.</p></note></p>
     #[serde(rename = "Recipe")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub recipe: Option<String>,
-    /// <p>The schema used by all of the data files referenced by the <code>DataSource</code>.</p> <note><title>Note</title> <p>This parameter is provided as part of the verbose format.</p></note>
+    /// <p><p>The schema used by all of the data files referenced by the <code>DataSource</code>.</p> <note><title>Note</title> <p>This parameter is provided as part of the verbose format.</p></note></p>
     #[serde(rename = "Schema")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema: Option<String>,
@@ -1157,7 +1157,7 @@ pub struct GetMLModelOutput {
     #[serde(rename = "StartedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub started_at: Option<f64>,
-    /// <p>The current status of the <code>MLModel</code>. This element can have one of the following values:</p> <ul> <li> <code>PENDING</code> - Amazon Machine Learning (Amazon ML) submitted a request to describe a <code>MLModel</code>.</li> <li> <code>INPROGRESS</code> - The request is processing.</li> <li> <code>FAILED</code> - The request did not run to completion. The ML model isn't usable.</li> <li> <code>COMPLETED</code> - The request completed successfully.</li> <li> <code>DELETED</code> - The <code>MLModel</code> is marked as deleted. It isn't usable.</li> </ul>
+    /// <p><p>The current status of the <code>MLModel</code>. This element can have one of the following values:</p> <ul> <li> <code>PENDING</code> - Amazon Machine Learning (Amazon ML) submitted a request to describe a <code>MLModel</code>.</li> <li> <code>INPROGRESS</code> - The request is processing.</li> <li> <code>FAILED</code> - The request did not run to completion. The ML model isn&#39;t usable.</li> <li> <code>COMPLETED</code> - The request completed successfully.</li> <li> <code>DELETED</code> - The <code>MLModel</code> is marked as deleted. It isn&#39;t usable.</li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1165,7 +1165,7 @@ pub struct GetMLModelOutput {
     #[serde(rename = "TrainingDataSourceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub training_data_source_id: Option<String>,
-    /// <p>A list of the training parameters in the <code>MLModel</code>. The list is implemented as a map of key-value pairs.</p> <p>The following is the current set of training parameters: </p> <ul> <li> <p><code>sgd.maxMLModelSizeInBytes</code> - The maximum allowed size of the model. Depending on the input data, the size of the model might affect its performance.</p> <p> The value is an integer that ranges from <code>100000</code> to <code>2147483648</code>. The default value is <code>33554432</code>.</p> </li> <li><p><code>sgd.maxPasses</code> - The number of times that the training process traverses the observations to build the <code>MLModel</code>. The value is an integer that ranges from <code>1</code> to <code>10000</code>. The default value is <code>10</code>.</p></li> <li><p><code>sgd.shuffleType</code> - Whether Amazon ML shuffles the training data. Shuffling data improves a model's ability to find the optimal solution for a variety of data types. The valid values are <code>auto</code> and <code>none</code>. The default value is <code>none</code>. We strongly recommend that you shuffle your data.</p></li> <li> <p><code>sgd.l1RegularizationAmount</code> - The coefficient regularization L1 norm. It controls overfitting the data by penalizing large coefficients. This tends to drive coefficients to zero, resulting in a sparse feature set. If you use this parameter, start by specifying a small value, such as <code>1.0E-08</code>.</p> <p>The value is a double that ranges from <code>0</code> to <code>MAX_DOUBLE</code>. The default is to not use L1 normalization. This parameter can't be used when <code>L2</code> is specified. Use this parameter sparingly.</p> </li> <li> <p><code>sgd.l2RegularizationAmount</code> - The coefficient regularization L2 norm. It controls overfitting the data by penalizing large coefficients. This tends to drive coefficients to small, nonzero values. If you use this parameter, start by specifying a small value, such as <code>1.0E-08</code>.</p> <p>The value is a double that ranges from <code>0</code> to <code>MAX_DOUBLE</code>. The default is to not use L2 normalization. This parameter can't be used when <code>L1</code> is specified. Use this parameter sparingly.</p> </li> </ul>
+    /// <p><p>A list of the training parameters in the <code>MLModel</code>. The list is implemented as a map of key-value pairs.</p> <p>The following is the current set of training parameters: </p> <ul> <li> <p><code>sgd.maxMLModelSizeInBytes</code> - The maximum allowed size of the model. Depending on the input data, the size of the model might affect its performance.</p> <p> The value is an integer that ranges from <code>100000</code> to <code>2147483648</code>. The default value is <code>33554432</code>.</p> </li> <li><p><code>sgd.maxPasses</code> - The number of times that the training process traverses the observations to build the <code>MLModel</code>. The value is an integer that ranges from <code>1</code> to <code>10000</code>. The default value is <code>10</code>.</p></li> <li><p><code>sgd.shuffleType</code> - Whether Amazon ML shuffles the training data. Shuffling data improves a model&#39;s ability to find the optimal solution for a variety of data types. The valid values are <code>auto</code> and <code>none</code>. The default value is <code>none</code>. We strongly recommend that you shuffle your data.</p></li> <li> <p><code>sgd.l1RegularizationAmount</code> - The coefficient regularization L1 norm. It controls overfitting the data by penalizing large coefficients. This tends to drive coefficients to zero, resulting in a sparse feature set. If you use this parameter, start by specifying a small value, such as <code>1.0E-08</code>.</p> <p>The value is a double that ranges from <code>0</code> to <code>MAX<em>DOUBLE</code>. The default is to not use L1 normalization. This parameter can&#39;t be used when <code>L2</code> is specified. Use this parameter sparingly.</p> </li> <li> <p><code>sgd.l2RegularizationAmount</code> - The coefficient regularization L2 norm. It controls overfitting the data by penalizing large coefficients. This tends to drive coefficients to small, nonzero values. If you use this parameter, start by specifying a small value, such as <code>1.0E-08</code>.</p> <p>The value is a double that ranges from <code>0</code> to <code>MAX</em>DOUBLE</code>. The default is to not use L2 normalization. This parameter can&#39;t be used when <code>L1</code> is specified. Use this parameter sparingly.</p> </li> </ul></p>
     #[serde(rename = "TrainingParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub training_parameters: Option<::std::collections::HashMap<String, String>>,
@@ -1174,7 +1174,7 @@ pub struct GetMLModelOutput {
 /// <p> Represents the output of a <code>GetMLModel</code> operation. </p> <p>The content consists of the detailed metadata and the current status of the <code>MLModel</code>.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct MLModel {
-    /// <p>The algorithm used to train the <code>MLModel</code>. The following algorithm is supported:</p> <ul> <li> <code>SGD</code> -- Stochastic gradient descent. The goal of <code>SGD</code> is to minimize the gradient of the loss function. </li> </ul>
+    /// <p><p>The algorithm used to train the <code>MLModel</code>. The following algorithm is supported:</p> <ul> <li> <code>SGD</code> -- Stochastic gradient descent. The goal of <code>SGD</code> is to minimize the gradient of the loss function. </li> </ul></p>
     #[serde(rename = "Algorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub algorithm: Option<String>,
@@ -1208,7 +1208,7 @@ pub struct MLModel {
     #[serde(rename = "MLModelId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ml_model_id: Option<String>,
-    /// <p>Identifies the <code>MLModel</code> category. The following are the available types:</p> <ul> <li> <code>REGRESSION</code> - Produces a numeric result. For example, "What price should a house be listed at?"</li> <li> <code>BINARY</code> - Produces one of two possible results. For example, "Is this a child-friendly web site?".</li> <li> <code>MULTICLASS</code> - Produces one of several possible results. For example, "Is this a HIGH-, LOW-, or MEDIUM<?oxy_delete author="annbech" timestamp="20160328T175050-0700" content=" "><?oxy_insert_start author="annbech" timestamp="20160328T175050-0700">-<?oxy_insert_end>risk trade?".</li> </ul>
+    /// <p><p>Identifies the <code>MLModel</code> category. The following are the available types:</p> <ul> <li> <code>REGRESSION</code> - Produces a numeric result. For example, &quot;What price should a house be listed at?&quot;</li> <li> <code>BINARY</code> - Produces one of two possible results. For example, &quot;Is this a child-friendly web site?&quot;.</li> <li> <code>MULTICLASS</code> - Produces one of several possible results. For example, &quot;Is this a HIGH-, LOW-, or MEDIUM&lt;?oxy<em>delete author=&quot;annbech&quot; timestamp=&quot;20160328T175050-0700&quot; content=&quot; &quot;&gt;&lt;?oxy</em>insert<em>start author=&quot;annbech&quot; timestamp=&quot;20160328T175050-0700&quot;&gt;-&lt;?oxy</em>insert_end&gt;risk trade?&quot;.</li> </ul></p>
     #[serde(rename = "MLModelType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ml_model_type: Option<String>,
@@ -1233,7 +1233,7 @@ pub struct MLModel {
     #[serde(rename = "StartedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub started_at: Option<f64>,
-    /// <p>The current status of an <code>MLModel</code>. This element can have one of the following values: </p> <ul> <li> <code>PENDING</code> - Amazon Machine Learning (Amazon ML) submitted a request to create an <code>MLModel</code>.</li> <li> <code>INPROGRESS</code> - The creation process is underway.</li> <li> <code>FAILED</code> - The request to create an <code>MLModel</code> didn't run to completion. The model isn't usable.</li> <li> <code>COMPLETED</code> - The creation process completed successfully.</li> <li> <code>DELETED</code> - The <code>MLModel</code> is marked as deleted. It isn't usable.</li> </ul>
+    /// <p><p>The current status of an <code>MLModel</code>. This element can have one of the following values: </p> <ul> <li> <code>PENDING</code> - Amazon Machine Learning (Amazon ML) submitted a request to create an <code>MLModel</code>.</li> <li> <code>INPROGRESS</code> - The creation process is underway.</li> <li> <code>FAILED</code> - The request to create an <code>MLModel</code> didn&#39;t run to completion. The model isn&#39;t usable.</li> <li> <code>COMPLETED</code> - The creation process completed successfully.</li> <li> <code>DELETED</code> - The <code>MLModel</code> is marked as deleted. It isn&#39;t usable.</li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1241,7 +1241,7 @@ pub struct MLModel {
     #[serde(rename = "TrainingDataSourceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub training_data_source_id: Option<String>,
-    /// <p>A list of the training parameters in the <code>MLModel</code>. The list is implemented as a map of key-value pairs.</p> <p>The following is the current set of training parameters: </p> <ul> <li> <p><code>sgd.maxMLModelSizeInBytes</code> - The maximum allowed size of the model. Depending on the input data, the size of the model might affect its performance.</p> <p> The value is an integer that ranges from <code>100000</code> to <code>2147483648</code>. The default value is <code>33554432</code>.</p> </li> <li><p><code>sgd.maxPasses</code> - The number of times that the training process traverses the observations to build the <code>MLModel</code>. The value is an integer that ranges from <code>1</code> to <code>10000</code>. The default value is <code>10</code>.</p></li> <li><p><code>sgd.shuffleType</code> - Whether Amazon ML shuffles the training data. Shuffling the data improves a model's ability to find the optimal solution for a variety of data types. The valid values are <code>auto</code> and <code>none</code>. The default value is <code>none</code>.</p></li> <li> <p><code>sgd.l1RegularizationAmount</code> - The coefficient regularization L1 norm, which controls overfitting the data by penalizing large coefficients. This parameter tends to drive coefficients to zero, resulting in sparse feature set. If you use this parameter, start by specifying a small value, such as <code>1.0E-08</code>.</p> <p>The value is a double that ranges from <code>0</code> to <code>MAX_DOUBLE</code>. The default is to not use L1 normalization. This parameter can't be used when <code>L2</code> is specified. Use this parameter sparingly.</p> </li> <li> <p><code>sgd.l2RegularizationAmount</code> - The coefficient regularization L2 norm, which controls overfitting the data by penalizing large coefficients. This tends to drive coefficients to small, nonzero values. If you use this parameter, start by specifying a small value, such as <code>1.0E-08</code>.</p> <p>The value is a double that ranges from <code>0</code> to <code>MAX_DOUBLE</code>. The default is to not use L2 normalization. This parameter can't be used when <code>L1</code> is specified. Use this parameter sparingly.</p> </li> </ul>
+    /// <p><p>A list of the training parameters in the <code>MLModel</code>. The list is implemented as a map of key-value pairs.</p> <p>The following is the current set of training parameters: </p> <ul> <li> <p><code>sgd.maxMLModelSizeInBytes</code> - The maximum allowed size of the model. Depending on the input data, the size of the model might affect its performance.</p> <p> The value is an integer that ranges from <code>100000</code> to <code>2147483648</code>. The default value is <code>33554432</code>.</p> </li> <li><p><code>sgd.maxPasses</code> - The number of times that the training process traverses the observations to build the <code>MLModel</code>. The value is an integer that ranges from <code>1</code> to <code>10000</code>. The default value is <code>10</code>.</p></li> <li><p><code>sgd.shuffleType</code> - Whether Amazon ML shuffles the training data. Shuffling the data improves a model&#39;s ability to find the optimal solution for a variety of data types. The valid values are <code>auto</code> and <code>none</code>. The default value is <code>none</code>.</p></li> <li> <p><code>sgd.l1RegularizationAmount</code> - The coefficient regularization L1 norm, which controls overfitting the data by penalizing large coefficients. This parameter tends to drive coefficients to zero, resulting in sparse feature set. If you use this parameter, start by specifying a small value, such as <code>1.0E-08</code>.</p> <p>The value is a double that ranges from <code>0</code> to <code>MAX<em>DOUBLE</code>. The default is to not use L1 normalization. This parameter can&#39;t be used when <code>L2</code> is specified. Use this parameter sparingly.</p> </li> <li> <p><code>sgd.l2RegularizationAmount</code> - The coefficient regularization L2 norm, which controls overfitting the data by penalizing large coefficients. This tends to drive coefficients to small, nonzero values. If you use this parameter, start by specifying a small value, such as <code>1.0E-08</code>.</p> <p>The value is a double that ranges from <code>0</code> to <code>MAX</em>DOUBLE</code>. The default is to not use L2 normalization. This parameter can&#39;t be used when <code>L1</code> is specified. Use this parameter sparingly.</p> </li> </ul></p>
     #[serde(rename = "TrainingParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub training_parameters: Option<::std::collections::HashMap<String, String>>,
@@ -1260,8 +1260,10 @@ pub struct PredictInput {
     /// <p>A unique identifier of the <code>MLModel</code>.</p>
     #[serde(rename = "MLModelId")]
     pub ml_model_id: String,
-    #[serde(rename = "PredictEndpoint")] pub predict_endpoint: String,
-    #[serde(rename = "Record")] pub record: ::std::collections::HashMap<String, String>,
+    #[serde(rename = "PredictEndpoint")]
+    pub predict_endpoint: String,
+    #[serde(rename = "Record")]
+    pub record: ::std::collections::HashMap<String, String>,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -1271,7 +1273,7 @@ pub struct PredictOutput {
     pub prediction: Option<Prediction>,
 }
 
-/// <p>The output from a <code>Predict</code> operation: </p> <ul> <li> <p> <code>Details</code> - Contains the following attributes: <code>DetailsAttributes.PREDICTIVE_MODEL_TYPE - REGRESSION | BINARY | MULTICLASS</code> <code>DetailsAttributes.ALGORITHM - SGD</code> </p> </li> <li> <p> <code>PredictedLabel</code> - Present for either a <code>BINARY</code> or <code>MULTICLASS</code> <code>MLModel</code> request. </p> </li> <li> <p> <code>PredictedScores</code> - Contains the raw classification score corresponding to each label. </p> </li> <li> <p> <code>PredictedValue</code> - Present for a <code>REGRESSION</code> <code>MLModel</code> request. </p> </li> </ul>
+/// <p><p>The output from a <code>Predict</code> operation: </p> <ul> <li> <p> <code>Details</code> - Contains the following attributes: <code>DetailsAttributes.PREDICTIVE<em>MODEL</em>TYPE - REGRESSION | BINARY | MULTICLASS</code> <code>DetailsAttributes.ALGORITHM - SGD</code> </p> </li> <li> <p> <code>PredictedLabel</code> - Present for either a <code>BINARY</code> or <code>MULTICLASS</code> <code>MLModel</code> request. </p> </li> <li> <p> <code>PredictedScores</code> - Contains the raw classification score corresponding to each label. </p> </li> <li> <p> <code>PredictedValue</code> - Present for a <code>REGRESSION</code> <code>MLModel</code> request. </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Prediction {
     #[serde(rename = "details")]
@@ -1284,7 +1286,7 @@ pub struct Prediction {
     #[serde(rename = "predictedScores")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub predicted_scores: Option<::std::collections::HashMap<String, f32>>,
-    /// The prediction value for <code>REGRESSION</code> <code>MLModel</code>.
+    /// <p>The prediction value for <code>REGRESSION</code> <code>MLModel</code>.</p>
     #[serde(rename = "predictedValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub predicted_value: Option<f32>,
@@ -1293,11 +1295,11 @@ pub struct Prediction {
 /// <p>The data specification of an Amazon Relational Database Service (Amazon RDS) <code>DataSource</code>.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct RDSDataSpec {
-    /// <p>A JSON string that represents the splitting and rearrangement processing to be applied to a <code>DataSource</code>. If the <code>DataRearrangement</code> parameter is not provided, all of the input data is used to create the <code>Datasource</code>.</p> <p>There are multiple parameters that control what data is used to create a datasource:</p> <ul> <li><p><b><code>percentBegin</code></b></p> <p>Use <code>percentBegin</code> to indicate the beginning of the range of the data used to create the Datasource. If you do not include <code>percentBegin</code> and <code>percentEnd</code>, Amazon ML includes all of the data when creating the datasource.</p></li> <li><p><b><code>percentEnd</code></b></p> <p>Use <code>percentEnd</code> to indicate the end of the range of the data used to create the Datasource. If you do not include <code>percentBegin</code> and <code>percentEnd</code>, Amazon ML includes all of the data when creating the datasource.</p></li> <li><p><b><code>complement</code></b></p> <p>The <code>complement</code> parameter instructs Amazon ML to use the data that is not included in the range of <code>percentBegin</code> to <code>percentEnd</code> to create a datasource. The <code>complement</code> parameter is useful if you need to create complementary datasources for training and evaluation. To create a complementary datasource, use the same values for <code>percentBegin</code> and <code>percentEnd</code>, along with the <code>complement</code> parameter.</p> <p>For example, the following two datasources do not share any data, and can be used to train and evaluate a model. The first datasource has 25 percent of the data, and the second one has 75 percent of the data.</p> <p>Datasource for evaluation: <code>{"splitting":{"percentBegin":0, "percentEnd":25}}</code></p> <p>Datasource for training: <code>{"splitting":{"percentBegin":0, "percentEnd":25, "complement":"true"}}</code></p> </li> <li><p><b><code>strategy</code></b></p> <p>To change how Amazon ML splits the data for a datasource, use the <code>strategy</code> parameter.</p> <p>The default value for the <code>strategy</code> parameter is <code>sequential</code>, meaning that Amazon ML takes all of the data records between the <code>percentBegin</code> and <code>percentEnd</code> parameters for the datasource, in the order that the records appear in the input data.</p> <p>The following two <code>DataRearrangement</code> lines are examples of sequentially ordered training and evaluation datasources:</p> <p>Datasource for evaluation: <code>{"splitting":{"percentBegin":70, "percentEnd":100, "strategy":"sequential"}}</code></p> <p>Datasource for training: <code>{"splitting":{"percentBegin":70, "percentEnd":100, "strategy":"sequential", "complement":"true"}}</code></p> <p>To randomly split the input data into the proportions indicated by the percentBegin and percentEnd parameters, set the <code>strategy</code> parameter to <code>random</code> and provide a string that is used as the seed value for the random data splitting (for example, you can use the S3 path to your data as the random seed string). If you choose the random split strategy, Amazon ML assigns each row of data a pseudo-random number between 0 and 100, and then selects the rows that have an assigned number between <code>percentBegin</code> and <code>percentEnd</code>. Pseudo-random numbers are assigned using both the input seed string value and the byte offset as a seed, so changing the data results in a different split. Any existing ordering is preserved. The random splitting strategy ensures that variables in the training and evaluation data are distributed similarly. It is useful in the cases where the input data may have an implicit sort order, which would otherwise result in training and evaluation datasources containing non-similar data records.</p> <p>The following two <code>DataRearrangement</code> lines are examples of non-sequentially ordered training and evaluation datasources:</p> <p>Datasource for evaluation: <code>{"splitting":{"percentBegin":70, "percentEnd":100, "strategy":"random", "randomSeed"="s3://my_s3_path/bucket/file.csv"}}</code></p> <p>Datasource for training: <code>{"splitting":{"percentBegin":70, "percentEnd":100, "strategy":"random", "randomSeed"="s3://my_s3_path/bucket/file.csv", "complement":"true"}}</code></p> </li> </ul>
+    /// <p><p>A JSON string that represents the splitting and rearrangement processing to be applied to a <code>DataSource</code>. If the <code>DataRearrangement</code> parameter is not provided, all of the input data is used to create the <code>Datasource</code>.</p> <p>There are multiple parameters that control what data is used to create a datasource:</p> <ul> <li><p><b><code>percentBegin</code></b></p> <p>Use <code>percentBegin</code> to indicate the beginning of the range of the data used to create the Datasource. If you do not include <code>percentBegin</code> and <code>percentEnd</code>, Amazon ML includes all of the data when creating the datasource.</p></li> <li><p><b><code>percentEnd</code></b></p> <p>Use <code>percentEnd</code> to indicate the end of the range of the data used to create the Datasource. If you do not include <code>percentBegin</code> and <code>percentEnd</code>, Amazon ML includes all of the data when creating the datasource.</p></li> <li><p><b><code>complement</code></b></p> <p>The <code>complement</code> parameter instructs Amazon ML to use the data that is not included in the range of <code>percentBegin</code> to <code>percentEnd</code> to create a datasource. The <code>complement</code> parameter is useful if you need to create complementary datasources for training and evaluation. To create a complementary datasource, use the same values for <code>percentBegin</code> and <code>percentEnd</code>, along with the <code>complement</code> parameter.</p> <p>For example, the following two datasources do not share any data, and can be used to train and evaluate a model. The first datasource has 25 percent of the data, and the second one has 75 percent of the data.</p> <p>Datasource for evaluation: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:0, &quot;percentEnd&quot;:25}}</code></p> <p>Datasource for training: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:0, &quot;percentEnd&quot;:25, &quot;complement&quot;:&quot;true&quot;}}</code></p> </li> <li><p><b><code>strategy</code></b></p> <p>To change how Amazon ML splits the data for a datasource, use the <code>strategy</code> parameter.</p> <p>The default value for the <code>strategy</code> parameter is <code>sequential</code>, meaning that Amazon ML takes all of the data records between the <code>percentBegin</code> and <code>percentEnd</code> parameters for the datasource, in the order that the records appear in the input data.</p> <p>The following two <code>DataRearrangement</code> lines are examples of sequentially ordered training and evaluation datasources:</p> <p>Datasource for evaluation: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:70, &quot;percentEnd&quot;:100, &quot;strategy&quot;:&quot;sequential&quot;}}</code></p> <p>Datasource for training: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:70, &quot;percentEnd&quot;:100, &quot;strategy&quot;:&quot;sequential&quot;, &quot;complement&quot;:&quot;true&quot;}}</code></p> <p>To randomly split the input data into the proportions indicated by the percentBegin and percentEnd parameters, set the <code>strategy</code> parameter to <code>random</code> and provide a string that is used as the seed value for the random data splitting (for example, you can use the S3 path to your data as the random seed string). If you choose the random split strategy, Amazon ML assigns each row of data a pseudo-random number between 0 and 100, and then selects the rows that have an assigned number between <code>percentBegin</code> and <code>percentEnd</code>. Pseudo-random numbers are assigned using both the input seed string value and the byte offset as a seed, so changing the data results in a different split. Any existing ordering is preserved. The random splitting strategy ensures that variables in the training and evaluation data are distributed similarly. It is useful in the cases where the input data may have an implicit sort order, which would otherwise result in training and evaluation datasources containing non-similar data records.</p> <p>The following two <code>DataRearrangement</code> lines are examples of non-sequentially ordered training and evaluation datasources:</p> <p>Datasource for evaluation: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:70, &quot;percentEnd&quot;:100, &quot;strategy&quot;:&quot;random&quot;, &quot;randomSeed&quot;=&quot;s3://my<em>s3</em>path/bucket/file.csv&quot;}}</code></p> <p>Datasource for training: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:70, &quot;percentEnd&quot;:100, &quot;strategy&quot;:&quot;random&quot;, &quot;randomSeed&quot;=&quot;s3://my<em>s3</em>path/bucket/file.csv&quot;, &quot;complement&quot;:&quot;true&quot;}}</code></p> </li> </ul></p>
     #[serde(rename = "DataRearrangement")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_rearrangement: Option<String>,
-    /// <p>A JSON string that represents the schema for an Amazon RDS <code>DataSource</code>. The <code>DataSchema</code> defines the structure of the observation data in the data file(s) referenced in the <code>DataSource</code>.</p> <p>A <code>DataSchema</code> is not required if you specify a <code>DataSchemaUri</code></p> <p>Define your <code>DataSchema</code> as a series of key-value pairs. <code>attributes</code> and <code>excludedVariableNames</code> have an array of key-value pairs for their value. Use the following format to define your <code>DataSchema</code>.</p> <p>{ "version": "1.0",</p> <p> "recordAnnotationFieldName": "F1",</p> <p> "recordWeightFieldName": "F2",</p> <p> "targetFieldName": "F3",</p> <p> "dataFormat": "CSV",</p> <p> "dataFileContainsHeader": true,</p> <p> "attributes": [</p> <p> { "fieldName": "F1", "fieldType": "TEXT" }, { "fieldName": "F2", "fieldType": "NUMERIC" }, { "fieldName": "F3", "fieldType": "CATEGORICAL" }, { "fieldName": "F4", "fieldType": "NUMERIC" }, { "fieldName": "F5", "fieldType": "CATEGORICAL" }, { "fieldName": "F6", "fieldType": "TEXT" }, { "fieldName": "F7", "fieldType": "WEIGHTED_INT_SEQUENCE" }, { "fieldName": "F8", "fieldType": "WEIGHTED_STRING_SEQUENCE" } ],</p> <p> "excludedVariableNames": [ "F6" ] } </p> <?oxy_insert_end>
+    /// <p><p>A JSON string that represents the schema for an Amazon RDS <code>DataSource</code>. The <code>DataSchema</code> defines the structure of the observation data in the data file(s) referenced in the <code>DataSource</code>.</p> <p>A <code>DataSchema</code> is not required if you specify a <code>DataSchemaUri</code></p> <p>Define your <code>DataSchema</code> as a series of key-value pairs. <code>attributes</code> and <code>excludedVariableNames</code> have an array of key-value pairs for their value. Use the following format to define your <code>DataSchema</code>.</p> <p>{ &quot;version&quot;: &quot;1.0&quot;,</p> <p> &quot;recordAnnotationFieldName&quot;: &quot;F1&quot;,</p> <p> &quot;recordWeightFieldName&quot;: &quot;F2&quot;,</p> <p> &quot;targetFieldName&quot;: &quot;F3&quot;,</p> <p> &quot;dataFormat&quot;: &quot;CSV&quot;,</p> <p> &quot;dataFileContainsHeader&quot;: true,</p> <p> &quot;attributes&quot;: [</p> <p> { &quot;fieldName&quot;: &quot;F1&quot;, &quot;fieldType&quot;: &quot;TEXT&quot; }, { &quot;fieldName&quot;: &quot;F2&quot;, &quot;fieldType&quot;: &quot;NUMERIC&quot; }, { &quot;fieldName&quot;: &quot;F3&quot;, &quot;fieldType&quot;: &quot;CATEGORICAL&quot; }, { &quot;fieldName&quot;: &quot;F4&quot;, &quot;fieldType&quot;: &quot;NUMERIC&quot; }, { &quot;fieldName&quot;: &quot;F5&quot;, &quot;fieldType&quot;: &quot;CATEGORICAL&quot; }, { &quot;fieldName&quot;: &quot;F6&quot;, &quot;fieldType&quot;: &quot;TEXT&quot; }, { &quot;fieldName&quot;: &quot;F7&quot;, &quot;fieldType&quot;: &quot;WEIGHTED<em>INT</em>SEQUENCE&quot; }, { &quot;fieldName&quot;: &quot;F8&quot;, &quot;fieldType&quot;: &quot;WEIGHTED<em>STRING</em>SEQUENCE&quot; } ],</p> <p> &quot;excludedVariableNames&quot;: [ &quot;F6&quot; ] } </p> &lt;?oxy<em>insert</em>end&gt;</p>
     #[serde(rename = "DataSchema")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_schema: Option<String>,
@@ -1334,7 +1336,8 @@ pub struct RDSDataSpec {
 /// <p>The database details of an Amazon RDS database.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct RDSDatabase {
-    #[serde(rename = "DatabaseName")] pub database_name: String,
+    #[serde(rename = "DatabaseName")]
+    pub database_name: String,
     /// <p>The ID of an RDS DB instance.</p>
     #[serde(rename = "InstanceIdentifier")]
     pub instance_identifier: String,
@@ -1343,8 +1346,10 @@ pub struct RDSDatabase {
 /// <p>The database credentials to connect to a database on an RDS DB instance.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct RDSDatabaseCredentials {
-    #[serde(rename = "Password")] pub password: String,
-    #[serde(rename = "Username")] pub username: String,
+    #[serde(rename = "Password")]
+    pub password: String,
+    #[serde(rename = "Username")]
+    pub username: String,
 }
 
 /// <p>The datasource details that are specific to Amazon RDS.</p>
@@ -1382,11 +1387,11 @@ pub struct RealtimeEndpointInfo {
     #[serde(rename = "CreatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<f64>,
-    /// <p> The current status of the real-time endpoint for the <code>MLModel</code>. This element can have one of the following values: </p> <ul> <li> <code>NONE</code> - Endpoint does not exist or was previously deleted.</li> <li> <code>READY</code> - Endpoint is ready to be used for real-time predictions.</li> <li> <code>UPDATING</code> - Updating/creating the endpoint. </li> </ul>
+    /// <p><p> The current status of the real-time endpoint for the <code>MLModel</code>. This element can have one of the following values: </p> <ul> <li> <code>NONE</code> - Endpoint does not exist or was previously deleted.</li> <li> <code>READY</code> - Endpoint is ready to be used for real-time predictions.</li> <li> <code>UPDATING</code> - Updating/creating the endpoint. </li> </ul></p>
     #[serde(rename = "EndpointStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_status: Option<String>,
-    /// <p>The URI that specifies where to send real-time prediction requests for the <code>MLModel</code>.</p> <note><title>Note</title> <p>The application must wait until the real-time endpoint is ready before using this URI.</p> </note>
+    /// <p><p>The URI that specifies where to send real-time prediction requests for the <code>MLModel</code>.</p> <note><title>Note</title> <p>The application must wait until the real-time endpoint is ready before using this URI.</p> </note></p>
     #[serde(rename = "EndpointUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_url: Option<String>,
@@ -1399,7 +1404,7 @@ pub struct RealtimeEndpointInfo {
 /// <p>Describes the data specification of an Amazon Redshift <code>DataSource</code>.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct RedshiftDataSpec {
-    /// <p>A JSON string that represents the splitting and rearrangement processing to be applied to a <code>DataSource</code>. If the <code>DataRearrangement</code> parameter is not provided, all of the input data is used to create the <code>Datasource</code>.</p> <p>There are multiple parameters that control what data is used to create a datasource:</p> <ul> <li><p><b><code>percentBegin</code></b></p> <p>Use <code>percentBegin</code> to indicate the beginning of the range of the data used to create the Datasource. If you do not include <code>percentBegin</code> and <code>percentEnd</code>, Amazon ML includes all of the data when creating the datasource.</p></li> <li><p><b><code>percentEnd</code></b></p> <p>Use <code>percentEnd</code> to indicate the end of the range of the data used to create the Datasource. If you do not include <code>percentBegin</code> and <code>percentEnd</code>, Amazon ML includes all of the data when creating the datasource.</p></li> <li><p><b><code>complement</code></b></p> <p>The <code>complement</code> parameter instructs Amazon ML to use the data that is not included in the range of <code>percentBegin</code> to <code>percentEnd</code> to create a datasource. The <code>complement</code> parameter is useful if you need to create complementary datasources for training and evaluation. To create a complementary datasource, use the same values for <code>percentBegin</code> and <code>percentEnd</code>, along with the <code>complement</code> parameter.</p> <p>For example, the following two datasources do not share any data, and can be used to train and evaluate a model. The first datasource has 25 percent of the data, and the second one has 75 percent of the data.</p> <p>Datasource for evaluation: <code>{"splitting":{"percentBegin":0, "percentEnd":25}}</code></p> <p>Datasource for training: <code>{"splitting":{"percentBegin":0, "percentEnd":25, "complement":"true"}}</code></p> </li> <li><p><b><code>strategy</code></b></p> <p>To change how Amazon ML splits the data for a datasource, use the <code>strategy</code> parameter.</p> <p>The default value for the <code>strategy</code> parameter is <code>sequential</code>, meaning that Amazon ML takes all of the data records between the <code>percentBegin</code> and <code>percentEnd</code> parameters for the datasource, in the order that the records appear in the input data.</p> <p>The following two <code>DataRearrangement</code> lines are examples of sequentially ordered training and evaluation datasources:</p> <p>Datasource for evaluation: <code>{"splitting":{"percentBegin":70, "percentEnd":100, "strategy":"sequential"}}</code></p> <p>Datasource for training: <code>{"splitting":{"percentBegin":70, "percentEnd":100, "strategy":"sequential", "complement":"true"}}</code></p> <p>To randomly split the input data into the proportions indicated by the percentBegin and percentEnd parameters, set the <code>strategy</code> parameter to <code>random</code> and provide a string that is used as the seed value for the random data splitting (for example, you can use the S3 path to your data as the random seed string). If you choose the random split strategy, Amazon ML assigns each row of data a pseudo-random number between 0 and 100, and then selects the rows that have an assigned number between <code>percentBegin</code> and <code>percentEnd</code>. Pseudo-random numbers are assigned using both the input seed string value and the byte offset as a seed, so changing the data results in a different split. Any existing ordering is preserved. The random splitting strategy ensures that variables in the training and evaluation data are distributed similarly. It is useful in the cases where the input data may have an implicit sort order, which would otherwise result in training and evaluation datasources containing non-similar data records.</p> <p>The following two <code>DataRearrangement</code> lines are examples of non-sequentially ordered training and evaluation datasources:</p> <p>Datasource for evaluation: <code>{"splitting":{"percentBegin":70, "percentEnd":100, "strategy":"random", "randomSeed"="s3://my_s3_path/bucket/file.csv"}}</code></p> <p>Datasource for training: <code>{"splitting":{"percentBegin":70, "percentEnd":100, "strategy":"random", "randomSeed"="s3://my_s3_path/bucket/file.csv", "complement":"true"}}</code></p> </li> </ul>
+    /// <p><p>A JSON string that represents the splitting and rearrangement processing to be applied to a <code>DataSource</code>. If the <code>DataRearrangement</code> parameter is not provided, all of the input data is used to create the <code>Datasource</code>.</p> <p>There are multiple parameters that control what data is used to create a datasource:</p> <ul> <li><p><b><code>percentBegin</code></b></p> <p>Use <code>percentBegin</code> to indicate the beginning of the range of the data used to create the Datasource. If you do not include <code>percentBegin</code> and <code>percentEnd</code>, Amazon ML includes all of the data when creating the datasource.</p></li> <li><p><b><code>percentEnd</code></b></p> <p>Use <code>percentEnd</code> to indicate the end of the range of the data used to create the Datasource. If you do not include <code>percentBegin</code> and <code>percentEnd</code>, Amazon ML includes all of the data when creating the datasource.</p></li> <li><p><b><code>complement</code></b></p> <p>The <code>complement</code> parameter instructs Amazon ML to use the data that is not included in the range of <code>percentBegin</code> to <code>percentEnd</code> to create a datasource. The <code>complement</code> parameter is useful if you need to create complementary datasources for training and evaluation. To create a complementary datasource, use the same values for <code>percentBegin</code> and <code>percentEnd</code>, along with the <code>complement</code> parameter.</p> <p>For example, the following two datasources do not share any data, and can be used to train and evaluate a model. The first datasource has 25 percent of the data, and the second one has 75 percent of the data.</p> <p>Datasource for evaluation: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:0, &quot;percentEnd&quot;:25}}</code></p> <p>Datasource for training: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:0, &quot;percentEnd&quot;:25, &quot;complement&quot;:&quot;true&quot;}}</code></p> </li> <li><p><b><code>strategy</code></b></p> <p>To change how Amazon ML splits the data for a datasource, use the <code>strategy</code> parameter.</p> <p>The default value for the <code>strategy</code> parameter is <code>sequential</code>, meaning that Amazon ML takes all of the data records between the <code>percentBegin</code> and <code>percentEnd</code> parameters for the datasource, in the order that the records appear in the input data.</p> <p>The following two <code>DataRearrangement</code> lines are examples of sequentially ordered training and evaluation datasources:</p> <p>Datasource for evaluation: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:70, &quot;percentEnd&quot;:100, &quot;strategy&quot;:&quot;sequential&quot;}}</code></p> <p>Datasource for training: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:70, &quot;percentEnd&quot;:100, &quot;strategy&quot;:&quot;sequential&quot;, &quot;complement&quot;:&quot;true&quot;}}</code></p> <p>To randomly split the input data into the proportions indicated by the percentBegin and percentEnd parameters, set the <code>strategy</code> parameter to <code>random</code> and provide a string that is used as the seed value for the random data splitting (for example, you can use the S3 path to your data as the random seed string). If you choose the random split strategy, Amazon ML assigns each row of data a pseudo-random number between 0 and 100, and then selects the rows that have an assigned number between <code>percentBegin</code> and <code>percentEnd</code>. Pseudo-random numbers are assigned using both the input seed string value and the byte offset as a seed, so changing the data results in a different split. Any existing ordering is preserved. The random splitting strategy ensures that variables in the training and evaluation data are distributed similarly. It is useful in the cases where the input data may have an implicit sort order, which would otherwise result in training and evaluation datasources containing non-similar data records.</p> <p>The following two <code>DataRearrangement</code> lines are examples of non-sequentially ordered training and evaluation datasources:</p> <p>Datasource for evaluation: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:70, &quot;percentEnd&quot;:100, &quot;strategy&quot;:&quot;random&quot;, &quot;randomSeed&quot;=&quot;s3://my<em>s3</em>path/bucket/file.csv&quot;}}</code></p> <p>Datasource for training: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:70, &quot;percentEnd&quot;:100, &quot;strategy&quot;:&quot;random&quot;, &quot;randomSeed&quot;=&quot;s3://my<em>s3</em>path/bucket/file.csv&quot;, &quot;complement&quot;:&quot;true&quot;}}</code></p> </li> </ul></p>
     #[serde(rename = "DataRearrangement")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_rearrangement: Option<String>,
@@ -1428,15 +1433,19 @@ pub struct RedshiftDataSpec {
 /// <p>Describes the database details required to connect to an Amazon Redshift database.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct RedshiftDatabase {
-    #[serde(rename = "ClusterIdentifier")] pub cluster_identifier: String,
-    #[serde(rename = "DatabaseName")] pub database_name: String,
+    #[serde(rename = "ClusterIdentifier")]
+    pub cluster_identifier: String,
+    #[serde(rename = "DatabaseName")]
+    pub database_name: String,
 }
 
 /// <p> Describes the database credentials for connecting to a database on an Amazon Redshift cluster.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct RedshiftDatabaseCredentials {
-    #[serde(rename = "Password")] pub password: String,
-    #[serde(rename = "Username")] pub username: String,
+    #[serde(rename = "Password")]
+    pub password: String,
+    #[serde(rename = "Username")]
+    pub username: String,
 }
 
 /// <p>Describes the <code>DataSource</code> details specific to Amazon Redshift.</p>
@@ -1460,11 +1469,11 @@ pub struct S3DataSpec {
     /// <p>The location of the data file(s) used by a <code>DataSource</code>. The URI specifies a data file or an Amazon Simple Storage Service (Amazon S3) directory or bucket containing data files.</p>
     #[serde(rename = "DataLocationS3")]
     pub data_location_s3: String,
-    /// <p>A JSON string that represents the splitting and rearrangement processing to be applied to a <code>DataSource</code>. If the <code>DataRearrangement</code> parameter is not provided, all of the input data is used to create the <code>Datasource</code>.</p> <p>There are multiple parameters that control what data is used to create a datasource:</p> <ul> <li><p><b><code>percentBegin</code></b></p> <p>Use <code>percentBegin</code> to indicate the beginning of the range of the data used to create the Datasource. If you do not include <code>percentBegin</code> and <code>percentEnd</code>, Amazon ML includes all of the data when creating the datasource.</p></li> <li><p><b><code>percentEnd</code></b></p> <p>Use <code>percentEnd</code> to indicate the end of the range of the data used to create the Datasource. If you do not include <code>percentBegin</code> and <code>percentEnd</code>, Amazon ML includes all of the data when creating the datasource.</p></li> <li><p><b><code>complement</code></b></p> <p>The <code>complement</code> parameter instructs Amazon ML to use the data that is not included in the range of <code>percentBegin</code> to <code>percentEnd</code> to create a datasource. The <code>complement</code> parameter is useful if you need to create complementary datasources for training and evaluation. To create a complementary datasource, use the same values for <code>percentBegin</code> and <code>percentEnd</code>, along with the <code>complement</code> parameter.</p> <p>For example, the following two datasources do not share any data, and can be used to train and evaluate a model. The first datasource has 25 percent of the data, and the second one has 75 percent of the data.</p> <p>Datasource for evaluation: <code>{"splitting":{"percentBegin":0, "percentEnd":25}}</code></p> <p>Datasource for training: <code>{"splitting":{"percentBegin":0, "percentEnd":25, "complement":"true"}}</code></p> </li> <li><p><b><code>strategy</code></b></p> <p>To change how Amazon ML splits the data for a datasource, use the <code>strategy</code> parameter.</p> <p>The default value for the <code>strategy</code> parameter is <code>sequential</code>, meaning that Amazon ML takes all of the data records between the <code>percentBegin</code> and <code>percentEnd</code> parameters for the datasource, in the order that the records appear in the input data.</p> <p>The following two <code>DataRearrangement</code> lines are examples of sequentially ordered training and evaluation datasources:</p> <p>Datasource for evaluation: <code>{"splitting":{"percentBegin":70, "percentEnd":100, "strategy":"sequential"}}</code></p> <p>Datasource for training: <code>{"splitting":{"percentBegin":70, "percentEnd":100, "strategy":"sequential", "complement":"true"}}</code></p> <p>To randomly split the input data into the proportions indicated by the percentBegin and percentEnd parameters, set the <code>strategy</code> parameter to <code>random</code> and provide a string that is used as the seed value for the random data splitting (for example, you can use the S3 path to your data as the random seed string). If you choose the random split strategy, Amazon ML assigns each row of data a pseudo-random number between 0 and 100, and then selects the rows that have an assigned number between <code>percentBegin</code> and <code>percentEnd</code>. Pseudo-random numbers are assigned using both the input seed string value and the byte offset as a seed, so changing the data results in a different split. Any existing ordering is preserved. The random splitting strategy ensures that variables in the training and evaluation data are distributed similarly. It is useful in the cases where the input data may have an implicit sort order, which would otherwise result in training and evaluation datasources containing non-similar data records.</p> <p>The following two <code>DataRearrangement</code> lines are examples of non-sequentially ordered training and evaluation datasources:</p> <p>Datasource for evaluation: <code>{"splitting":{"percentBegin":70, "percentEnd":100, "strategy":"random", "randomSeed"="s3://my_s3_path/bucket/file.csv"}}</code></p> <p>Datasource for training: <code>{"splitting":{"percentBegin":70, "percentEnd":100, "strategy":"random", "randomSeed"="s3://my_s3_path/bucket/file.csv", "complement":"true"}}</code></p> </li> </ul>
+    /// <p><p>A JSON string that represents the splitting and rearrangement processing to be applied to a <code>DataSource</code>. If the <code>DataRearrangement</code> parameter is not provided, all of the input data is used to create the <code>Datasource</code>.</p> <p>There are multiple parameters that control what data is used to create a datasource:</p> <ul> <li><p><b><code>percentBegin</code></b></p> <p>Use <code>percentBegin</code> to indicate the beginning of the range of the data used to create the Datasource. If you do not include <code>percentBegin</code> and <code>percentEnd</code>, Amazon ML includes all of the data when creating the datasource.</p></li> <li><p><b><code>percentEnd</code></b></p> <p>Use <code>percentEnd</code> to indicate the end of the range of the data used to create the Datasource. If you do not include <code>percentBegin</code> and <code>percentEnd</code>, Amazon ML includes all of the data when creating the datasource.</p></li> <li><p><b><code>complement</code></b></p> <p>The <code>complement</code> parameter instructs Amazon ML to use the data that is not included in the range of <code>percentBegin</code> to <code>percentEnd</code> to create a datasource. The <code>complement</code> parameter is useful if you need to create complementary datasources for training and evaluation. To create a complementary datasource, use the same values for <code>percentBegin</code> and <code>percentEnd</code>, along with the <code>complement</code> parameter.</p> <p>For example, the following two datasources do not share any data, and can be used to train and evaluate a model. The first datasource has 25 percent of the data, and the second one has 75 percent of the data.</p> <p>Datasource for evaluation: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:0, &quot;percentEnd&quot;:25}}</code></p> <p>Datasource for training: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:0, &quot;percentEnd&quot;:25, &quot;complement&quot;:&quot;true&quot;}}</code></p> </li> <li><p><b><code>strategy</code></b></p> <p>To change how Amazon ML splits the data for a datasource, use the <code>strategy</code> parameter.</p> <p>The default value for the <code>strategy</code> parameter is <code>sequential</code>, meaning that Amazon ML takes all of the data records between the <code>percentBegin</code> and <code>percentEnd</code> parameters for the datasource, in the order that the records appear in the input data.</p> <p>The following two <code>DataRearrangement</code> lines are examples of sequentially ordered training and evaluation datasources:</p> <p>Datasource for evaluation: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:70, &quot;percentEnd&quot;:100, &quot;strategy&quot;:&quot;sequential&quot;}}</code></p> <p>Datasource for training: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:70, &quot;percentEnd&quot;:100, &quot;strategy&quot;:&quot;sequential&quot;, &quot;complement&quot;:&quot;true&quot;}}</code></p> <p>To randomly split the input data into the proportions indicated by the percentBegin and percentEnd parameters, set the <code>strategy</code> parameter to <code>random</code> and provide a string that is used as the seed value for the random data splitting (for example, you can use the S3 path to your data as the random seed string). If you choose the random split strategy, Amazon ML assigns each row of data a pseudo-random number between 0 and 100, and then selects the rows that have an assigned number between <code>percentBegin</code> and <code>percentEnd</code>. Pseudo-random numbers are assigned using both the input seed string value and the byte offset as a seed, so changing the data results in a different split. Any existing ordering is preserved. The random splitting strategy ensures that variables in the training and evaluation data are distributed similarly. It is useful in the cases where the input data may have an implicit sort order, which would otherwise result in training and evaluation datasources containing non-similar data records.</p> <p>The following two <code>DataRearrangement</code> lines are examples of non-sequentially ordered training and evaluation datasources:</p> <p>Datasource for evaluation: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:70, &quot;percentEnd&quot;:100, &quot;strategy&quot;:&quot;random&quot;, &quot;randomSeed&quot;=&quot;s3://my<em>s3</em>path/bucket/file.csv&quot;}}</code></p> <p>Datasource for training: <code>{&quot;splitting&quot;:{&quot;percentBegin&quot;:70, &quot;percentEnd&quot;:100, &quot;strategy&quot;:&quot;random&quot;, &quot;randomSeed&quot;=&quot;s3://my<em>s3</em>path/bucket/file.csv&quot;, &quot;complement&quot;:&quot;true&quot;}}</code></p> </li> </ul></p>
     #[serde(rename = "DataRearrangement")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_rearrangement: Option<String>,
-    /// <p> A JSON string that represents the schema for an Amazon S3 <code>DataSource</code>. The <code>DataSchema</code> defines the structure of the observation data in the data file(s) referenced in the <code>DataSource</code>.</p> <p>You must provide either the <code>DataSchema</code> or the <code>DataSchemaLocationS3</code>.</p> <p>Define your <code>DataSchema</code> as a series of key-value pairs. <code>attributes</code> and <code>excludedVariableNames</code> have an array of key-value pairs for their value. Use the following format to define your <code>DataSchema</code>.</p> <p>{ "version": "1.0",</p> <p> "recordAnnotationFieldName": "F1",</p> <p> "recordWeightFieldName": "F2",</p> <p> "targetFieldName": "F3",</p> <p> "dataFormat": "CSV",</p> <p> "dataFileContainsHeader": true,</p> <p> "attributes": [</p> <p> { "fieldName": "F1", "fieldType": "TEXT" }, { "fieldName": "F2", "fieldType": "NUMERIC" }, { "fieldName": "F3", "fieldType": "CATEGORICAL" }, { "fieldName": "F4", "fieldType": "NUMERIC" }, { "fieldName": "F5", "fieldType": "CATEGORICAL" }, { "fieldName": "F6", "fieldType": "TEXT" }, { "fieldName": "F7", "fieldType": "WEIGHTED_INT_SEQUENCE" }, { "fieldName": "F8", "fieldType": "WEIGHTED_STRING_SEQUENCE" } ],</p> <p> "excludedVariableNames": [ "F6" ] } </p> <?oxy_insert_end>
+    /// <p><p> A JSON string that represents the schema for an Amazon S3 <code>DataSource</code>. The <code>DataSchema</code> defines the structure of the observation data in the data file(s) referenced in the <code>DataSource</code>.</p> <p>You must provide either the <code>DataSchema</code> or the <code>DataSchemaLocationS3</code>.</p> <p>Define your <code>DataSchema</code> as a series of key-value pairs. <code>attributes</code> and <code>excludedVariableNames</code> have an array of key-value pairs for their value. Use the following format to define your <code>DataSchema</code>.</p> <p>{ &quot;version&quot;: &quot;1.0&quot;,</p> <p> &quot;recordAnnotationFieldName&quot;: &quot;F1&quot;,</p> <p> &quot;recordWeightFieldName&quot;: &quot;F2&quot;,</p> <p> &quot;targetFieldName&quot;: &quot;F3&quot;,</p> <p> &quot;dataFormat&quot;: &quot;CSV&quot;,</p> <p> &quot;dataFileContainsHeader&quot;: true,</p> <p> &quot;attributes&quot;: [</p> <p> { &quot;fieldName&quot;: &quot;F1&quot;, &quot;fieldType&quot;: &quot;TEXT&quot; }, { &quot;fieldName&quot;: &quot;F2&quot;, &quot;fieldType&quot;: &quot;NUMERIC&quot; }, { &quot;fieldName&quot;: &quot;F3&quot;, &quot;fieldType&quot;: &quot;CATEGORICAL&quot; }, { &quot;fieldName&quot;: &quot;F4&quot;, &quot;fieldType&quot;: &quot;NUMERIC&quot; }, { &quot;fieldName&quot;: &quot;F5&quot;, &quot;fieldType&quot;: &quot;CATEGORICAL&quot; }, { &quot;fieldName&quot;: &quot;F6&quot;, &quot;fieldType&quot;: &quot;TEXT&quot; }, { &quot;fieldName&quot;: &quot;F7&quot;, &quot;fieldType&quot;: &quot;WEIGHTED<em>INT</em>SEQUENCE&quot; }, { &quot;fieldName&quot;: &quot;F8&quot;, &quot;fieldType&quot;: &quot;WEIGHTED<em>STRING</em>SEQUENCE&quot; } ],</p> <p> &quot;excludedVariableNames&quot;: [ &quot;F6&quot; ] } </p> &lt;?oxy<em>insert</em>end&gt;</p>
     #[serde(rename = "DataSchema")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_schema: Option<String>,
@@ -1571,15 +1580,14 @@ pub struct UpdateMLModelOutput {
 /// Errors returned by AddTags
 #[derive(Debug, PartialEq)]
 pub enum AddTagsError {
-    ///
     InvalidTag(String),
-    ///
+
     TagLimitExceeded(String),
-    ///<p>A specified resource cannot be located.</p>
+    /// <p>A specified resource cannot be located.</p>
     ResourceNotFound(String),
-    ///<p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidInput(String),
-    ///<p>An error on the server occurred when trying to process a request.</p>
+    /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1669,11 +1677,11 @@ impl Error for AddTagsError {
 /// Errors returned by CreateBatchPrediction
 #[derive(Debug, PartialEq)]
 pub enum CreateBatchPredictionError {
-    ///<p>A second request to use or change an object was not allowed. This can result from retrying a request using a parameter that was not present in the original request.</p>
+    /// <p>A second request to use or change an object was not allowed. This can result from retrying a request using a parameter that was not present in the original request.</p>
     IdempotentParameterMismatch(String),
-    ///<p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidInput(String),
-    ///<p>An error on the server occurred when trying to process a request.</p>
+    /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1763,11 +1771,11 @@ impl Error for CreateBatchPredictionError {
 /// Errors returned by CreateDataSourceFromRDS
 #[derive(Debug, PartialEq)]
 pub enum CreateDataSourceFromRDSError {
-    ///<p>A second request to use or change an object was not allowed. This can result from retrying a request using a parameter that was not present in the original request.</p>
+    /// <p>A second request to use or change an object was not allowed. This can result from retrying a request using a parameter that was not present in the original request.</p>
     IdempotentParameterMismatch(String),
-    ///<p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidInput(String),
-    ///<p>An error on the server occurred when trying to process a request.</p>
+    /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1857,11 +1865,11 @@ impl Error for CreateDataSourceFromRDSError {
 /// Errors returned by CreateDataSourceFromRedshift
 #[derive(Debug, PartialEq)]
 pub enum CreateDataSourceFromRedshiftError {
-    ///<p>A second request to use or change an object was not allowed. This can result from retrying a request using a parameter that was not present in the original request.</p>
+    /// <p>A second request to use or change an object was not allowed. This can result from retrying a request using a parameter that was not present in the original request.</p>
     IdempotentParameterMismatch(String),
-    ///<p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidInput(String),
-    ///<p>An error on the server occurred when trying to process a request.</p>
+    /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1953,11 +1961,11 @@ impl Error for CreateDataSourceFromRedshiftError {
 /// Errors returned by CreateDataSourceFromS3
 #[derive(Debug, PartialEq)]
 pub enum CreateDataSourceFromS3Error {
-    ///<p>A second request to use or change an object was not allowed. This can result from retrying a request using a parameter that was not present in the original request.</p>
+    /// <p>A second request to use or change an object was not allowed. This can result from retrying a request using a parameter that was not present in the original request.</p>
     IdempotentParameterMismatch(String),
-    ///<p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidInput(String),
-    ///<p>An error on the server occurred when trying to process a request.</p>
+    /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2047,11 +2055,11 @@ impl Error for CreateDataSourceFromS3Error {
 /// Errors returned by CreateEvaluation
 #[derive(Debug, PartialEq)]
 pub enum CreateEvaluationError {
-    ///<p>A second request to use or change an object was not allowed. This can result from retrying a request using a parameter that was not present in the original request.</p>
+    /// <p>A second request to use or change an object was not allowed. This can result from retrying a request using a parameter that was not present in the original request.</p>
     IdempotentParameterMismatch(String),
-    ///<p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidInput(String),
-    ///<p>An error on the server occurred when trying to process a request.</p>
+    /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2139,11 +2147,11 @@ impl Error for CreateEvaluationError {
 /// Errors returned by CreateMLModel
 #[derive(Debug, PartialEq)]
 pub enum CreateMLModelError {
-    ///<p>A second request to use or change an object was not allowed. This can result from retrying a request using a parameter that was not present in the original request.</p>
+    /// <p>A second request to use or change an object was not allowed. This can result from retrying a request using a parameter that was not present in the original request.</p>
     IdempotentParameterMismatch(String),
-    ///<p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidInput(String),
-    ///<p>An error on the server occurred when trying to process a request.</p>
+    /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2229,11 +2237,11 @@ impl Error for CreateMLModelError {
 /// Errors returned by CreateRealtimeEndpoint
 #[derive(Debug, PartialEq)]
 pub enum CreateRealtimeEndpointError {
-    ///<p>A specified resource cannot be located.</p>
+    /// <p>A specified resource cannot be located.</p>
     ResourceNotFound(String),
-    ///<p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidInput(String),
-    ///<p>An error on the server occurred when trying to process a request.</p>
+    /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2321,11 +2329,11 @@ impl Error for CreateRealtimeEndpointError {
 /// Errors returned by DeleteBatchPrediction
 #[derive(Debug, PartialEq)]
 pub enum DeleteBatchPredictionError {
-    ///<p>A specified resource cannot be located.</p>
+    /// <p>A specified resource cannot be located.</p>
     ResourceNotFound(String),
-    ///<p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidInput(String),
-    ///<p>An error on the server occurred when trying to process a request.</p>
+    /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2413,11 +2421,11 @@ impl Error for DeleteBatchPredictionError {
 /// Errors returned by DeleteDataSource
 #[derive(Debug, PartialEq)]
 pub enum DeleteDataSourceError {
-    ///<p>A specified resource cannot be located.</p>
+    /// <p>A specified resource cannot be located.</p>
     ResourceNotFound(String),
-    ///<p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidInput(String),
-    ///<p>An error on the server occurred when trying to process a request.</p>
+    /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2503,11 +2511,11 @@ impl Error for DeleteDataSourceError {
 /// Errors returned by DeleteEvaluation
 #[derive(Debug, PartialEq)]
 pub enum DeleteEvaluationError {
-    ///<p>A specified resource cannot be located.</p>
+    /// <p>A specified resource cannot be located.</p>
     ResourceNotFound(String),
-    ///<p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidInput(String),
-    ///<p>An error on the server occurred when trying to process a request.</p>
+    /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2593,11 +2601,11 @@ impl Error for DeleteEvaluationError {
 /// Errors returned by DeleteMLModel
 #[derive(Debug, PartialEq)]
 pub enum DeleteMLModelError {
-    ///<p>A specified resource cannot be located.</p>
+    /// <p>A specified resource cannot be located.</p>
     ResourceNotFound(String),
-    ///<p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidInput(String),
-    ///<p>An error on the server occurred when trying to process a request.</p>
+    /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2683,11 +2691,11 @@ impl Error for DeleteMLModelError {
 /// Errors returned by DeleteRealtimeEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DeleteRealtimeEndpointError {
-    ///<p>A specified resource cannot be located.</p>
+    /// <p>A specified resource cannot be located.</p>
     ResourceNotFound(String),
-    ///<p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidInput(String),
-    ///<p>An error on the server occurred when trying to process a request.</p>
+    /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2775,13 +2783,12 @@ impl Error for DeleteRealtimeEndpointError {
 /// Errors returned by DeleteTags
 #[derive(Debug, PartialEq)]
 pub enum DeleteTagsError {
-    ///
     InvalidTag(String),
-    ///<p>A specified resource cannot be located.</p>
+    /// <p>A specified resource cannot be located.</p>
     ResourceNotFound(String),
-    ///<p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidInput(String),
-    ///<p>An error on the server occurred when trying to process a request.</p>
+    /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2869,9 +2876,9 @@ impl Error for DeleteTagsError {
 /// Errors returned by DescribeBatchPredictions
 #[derive(Debug, PartialEq)]
 pub enum DescribeBatchPredictionsError {
-    ///<p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidInput(String),
-    ///<p>An error on the server occurred when trying to process a request.</p>
+    /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2955,9 +2962,9 @@ impl Error for DescribeBatchPredictionsError {
 /// Errors returned by DescribeDataSources
 #[derive(Debug, PartialEq)]
 pub enum DescribeDataSourcesError {
-    ///<p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidInput(String),
-    ///<p>An error on the server occurred when trying to process a request.</p>
+    /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3041,9 +3048,9 @@ impl Error for DescribeDataSourcesError {
 /// Errors returned by DescribeEvaluations
 #[derive(Debug, PartialEq)]
 pub enum DescribeEvaluationsError {
-    ///<p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidInput(String),
-    ///<p>An error on the server occurred when trying to process a request.</p>
+    /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3127,9 +3134,9 @@ impl Error for DescribeEvaluationsError {
 /// Errors returned by DescribeMLModels
 #[derive(Debug, PartialEq)]
 pub enum DescribeMLModelsError {
-    ///<p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidInput(String),
-    ///<p>An error on the server occurred when trying to process a request.</p>
+    /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3211,11 +3218,11 @@ impl Error for DescribeMLModelsError {
 /// Errors returned by DescribeTags
 #[derive(Debug, PartialEq)]
 pub enum DescribeTagsError {
-    ///<p>A specified resource cannot be located.</p>
+    /// <p>A specified resource cannot be located.</p>
     ResourceNotFound(String),
-    ///<p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidInput(String),
-    ///<p>An error on the server occurred when trying to process a request.</p>
+    /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3301,11 +3308,11 @@ impl Error for DescribeTagsError {
 /// Errors returned by GetBatchPrediction
 #[derive(Debug, PartialEq)]
 pub enum GetBatchPredictionError {
-    ///<p>A specified resource cannot be located.</p>
+    /// <p>A specified resource cannot be located.</p>
     ResourceNotFound(String),
-    ///<p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidInput(String),
-    ///<p>An error on the server occurred when trying to process a request.</p>
+    /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3393,11 +3400,11 @@ impl Error for GetBatchPredictionError {
 /// Errors returned by GetDataSource
 #[derive(Debug, PartialEq)]
 pub enum GetDataSourceError {
-    ///<p>A specified resource cannot be located.</p>
+    /// <p>A specified resource cannot be located.</p>
     ResourceNotFound(String),
-    ///<p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidInput(String),
-    ///<p>An error on the server occurred when trying to process a request.</p>
+    /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3483,11 +3490,11 @@ impl Error for GetDataSourceError {
 /// Errors returned by GetEvaluation
 #[derive(Debug, PartialEq)]
 pub enum GetEvaluationError {
-    ///<p>A specified resource cannot be located.</p>
+    /// <p>A specified resource cannot be located.</p>
     ResourceNotFound(String),
-    ///<p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidInput(String),
-    ///<p>An error on the server occurred when trying to process a request.</p>
+    /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3573,11 +3580,11 @@ impl Error for GetEvaluationError {
 /// Errors returned by GetMLModel
 #[derive(Debug, PartialEq)]
 pub enum GetMLModelError {
-    ///<p>A specified resource cannot be located.</p>
+    /// <p>A specified resource cannot be located.</p>
     ResourceNotFound(String),
-    ///<p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidInput(String),
-    ///<p>An error on the server occurred when trying to process a request.</p>
+    /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3661,15 +3668,15 @@ impl Error for GetMLModelError {
 /// Errors returned by Predict
 #[derive(Debug, PartialEq)]
 pub enum PredictError {
-    ///<p>A specified resource cannot be located.</p>
+    /// <p>A specified resource cannot be located.</p>
     ResourceNotFound(String),
-    ///<p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidInput(String),
-    ///<p>An error on the server occurred when trying to process a request.</p>
+    /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
-    ///<p>The exception is thrown when a predict request is made to an unmounted <code>MLModel</code>.</p>
+    /// <p>The exception is thrown when a predict request is made to an unmounted <code>MLModel</code>.</p>
     PredictorNotMounted(String),
-    ///<p>The subscriber exceeded the maximum number of operations. This exception can occur when listing objects such as <code>DataSource</code>.</p>
+    /// <p>The subscriber exceeded the maximum number of operations. This exception can occur when listing objects such as <code>DataSource</code>.</p>
     LimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3761,11 +3768,11 @@ impl Error for PredictError {
 /// Errors returned by UpdateBatchPrediction
 #[derive(Debug, PartialEq)]
 pub enum UpdateBatchPredictionError {
-    ///<p>A specified resource cannot be located.</p>
+    /// <p>A specified resource cannot be located.</p>
     ResourceNotFound(String),
-    ///<p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidInput(String),
-    ///<p>An error on the server occurred when trying to process a request.</p>
+    /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3853,11 +3860,11 @@ impl Error for UpdateBatchPredictionError {
 /// Errors returned by UpdateDataSource
 #[derive(Debug, PartialEq)]
 pub enum UpdateDataSourceError {
-    ///<p>A specified resource cannot be located.</p>
+    /// <p>A specified resource cannot be located.</p>
     ResourceNotFound(String),
-    ///<p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidInput(String),
-    ///<p>An error on the server occurred when trying to process a request.</p>
+    /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3943,11 +3950,11 @@ impl Error for UpdateDataSourceError {
 /// Errors returned by UpdateEvaluation
 #[derive(Debug, PartialEq)]
 pub enum UpdateEvaluationError {
-    ///<p>A specified resource cannot be located.</p>
+    /// <p>A specified resource cannot be located.</p>
     ResourceNotFound(String),
-    ///<p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidInput(String),
-    ///<p>An error on the server occurred when trying to process a request.</p>
+    /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4033,11 +4040,11 @@ impl Error for UpdateEvaluationError {
 /// Errors returned by UpdateMLModel
 #[derive(Debug, PartialEq)]
 pub enum UpdateMLModelError {
-    ///<p>A specified resource cannot be located.</p>
+    /// <p>A specified resource cannot be located.</p>
     ResourceNotFound(String),
-    ///<p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
     InvalidInput(String),
-    ///<p>An error on the server occurred when trying to process a request.</p>
+    /// <p>An error on the server occurred when trying to process a request.</p>
     InternalServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4122,157 +4129,157 @@ impl Error for UpdateMLModelError {
 }
 /// Trait representing the capabilities of the Amazon Machine Learning API. Amazon Machine Learning clients implement this trait.
 pub trait MachineLearning {
-    #[doc="<p>Adds one or more tags to an object, up to a limit of 10. Each tag consists of a key and an optional value. If you add a tag using a key that is already associated with the ML object, <code>AddTags</code> updates the tag's value.</p>"]
+    /// <p>Adds one or more tags to an object, up to a limit of 10. Each tag consists of a key and an optional value. If you add a tag using a key that is already associated with the ML object, <code>AddTags</code> updates the tag's value.</p>
     fn add_tags(&self, input: &AddTagsInput) -> Result<AddTagsOutput, AddTagsError>;
 
-    #[doc="<p>Generates predictions for a group of observations. The observations to process exist in one or more data files referenced by a <code>DataSource</code>. This operation creates a new <code>BatchPrediction</code>, and uses an <code>MLModel</code> and the data files referenced by the <code>DataSource</code> as information sources. </p> <p><code>CreateBatchPrediction</code> is an asynchronous operation. In response to <code>CreateBatchPrediction</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>BatchPrediction</code> status to <code>PENDING</code>. After the <code>BatchPrediction</code> completes, Amazon ML sets the status to <code>COMPLETED</code>. </p> <p>You can poll for status updates by using the <a>GetBatchPrediction</a> operation and checking the <code>Status</code> parameter of the result. After the <code>COMPLETED</code> status appears, the results are available in the location specified by the <code>OutputUri</code> parameter.</p>"]
+    /// <p>Generates predictions for a group of observations. The observations to process exist in one or more data files referenced by a <code>DataSource</code>. This operation creates a new <code>BatchPrediction</code>, and uses an <code>MLModel</code> and the data files referenced by the <code>DataSource</code> as information sources. </p> <p><code>CreateBatchPrediction</code> is an asynchronous operation. In response to <code>CreateBatchPrediction</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>BatchPrediction</code> status to <code>PENDING</code>. After the <code>BatchPrediction</code> completes, Amazon ML sets the status to <code>COMPLETED</code>. </p> <p>You can poll for status updates by using the <a>GetBatchPrediction</a> operation and checking the <code>Status</code> parameter of the result. After the <code>COMPLETED</code> status appears, the results are available in the location specified by the <code>OutputUri</code> parameter.</p>
     fn create_batch_prediction(
         &self,
         input: &CreateBatchPredictionInput,
     ) -> Result<CreateBatchPredictionOutput, CreateBatchPredictionError>;
 
-    #[doc="<p>Creates a <code>DataSource</code> object from an <a href=\"http://aws.amazon.com/rds/\"> Amazon Relational Database Service</a> (Amazon RDS). A <code>DataSource</code> references data that can be used to perform <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p> <p><code>CreateDataSourceFromRDS</code> is an asynchronous operation. In response to <code>CreateDataSourceFromRDS</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After the <code>DataSource</code> is created and ready for use, Amazon ML sets the <code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in the <code>COMPLETED</code> or <code>PENDING</code> state can be used only to perform <code>&gt;CreateMLModel</code>&gt;, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations. </p> <p> If Amazon ML cannot accept the input source, it sets the <code>Status</code> parameter to <code>FAILED</code> and includes an error message in the <code>Message</code> attribute of the <code>GetDataSource</code> operation response. </p>"]
+    /// <p>Creates a <code>DataSource</code> object from an <a href="http://aws.amazon.com/rds/"> Amazon Relational Database Service</a> (Amazon RDS). A <code>DataSource</code> references data that can be used to perform <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p> <p><code>CreateDataSourceFromRDS</code> is an asynchronous operation. In response to <code>CreateDataSourceFromRDS</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After the <code>DataSource</code> is created and ready for use, Amazon ML sets the <code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in the <code>COMPLETED</code> or <code>PENDING</code> state can be used only to perform <code>&gt;CreateMLModel</code>&gt;, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations. </p> <p> If Amazon ML cannot accept the input source, it sets the <code>Status</code> parameter to <code>FAILED</code> and includes an error message in the <code>Message</code> attribute of the <code>GetDataSource</code> operation response. </p>
     fn create_data_source_from_rds(
         &self,
         input: &CreateDataSourceFromRDSInput,
     ) -> Result<CreateDataSourceFromRDSOutput, CreateDataSourceFromRDSError>;
 
-    #[doc="<p>Creates a <code>DataSource</code> from a database hosted on an Amazon Redshift cluster. A <code>DataSource</code> references data that can be used to perform either <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p> <p><code>CreateDataSourceFromRedshift</code> is an asynchronous operation. In response to <code>CreateDataSourceFromRedshift</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After the <code>DataSource</code> is created and ready for use, Amazon ML sets the <code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in <code>COMPLETED</code> or <code>PENDING</code> states can be used to perform only <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations. </p> <p> If Amazon ML can't accept the input source, it sets the <code>Status</code> parameter to <code>FAILED</code> and includes an error message in the <code>Message</code> attribute of the <code>GetDataSource</code> operation response. </p> <p>The observations should be contained in the database hosted on an Amazon Redshift cluster and should be specified by a <code>SelectSqlQuery</code> query. Amazon ML executes an <code>Unload</code> command in Amazon Redshift to transfer the result set of the <code>SelectSqlQuery</code> query to <code>S3StagingLocation</code>.</p> <p>After the <code>DataSource</code> has been created, it's ready for use in evaluations and batch predictions. If you plan to use the <code>DataSource</code> to train an <code>MLModel</code>, the <code>DataSource</code> also requires a recipe. A recipe describes how each input variable will be used in training an <code>MLModel</code>. Will the variable be included or excluded from training? Will the variable be manipulated; for example, will it be combined with another variable or will it be split apart into word combinations? The recipe provides answers to these questions.</p> <?oxy_insert_start author=\"laurama\" timestamp=\"20160406T153842-0700\"><p>You can't change an existing datasource, but you can copy and modify the settings from an existing Amazon Redshift datasource to create a new datasource. To do so, call <code>GetDataSource</code> for an existing datasource and copy the values to a <code>CreateDataSource</code> call. Change the settings that you want to change and make sure that all required fields have the appropriate values.</p> <?oxy_insert_end>"]
+    /// <p><p>Creates a <code>DataSource</code> from a database hosted on an Amazon Redshift cluster. A <code>DataSource</code> references data that can be used to perform either <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p> <p><code>CreateDataSourceFromRedshift</code> is an asynchronous operation. In response to <code>CreateDataSourceFromRedshift</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After the <code>DataSource</code> is created and ready for use, Amazon ML sets the <code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in <code>COMPLETED</code> or <code>PENDING</code> states can be used to perform only <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations. </p> <p> If Amazon ML can&#39;t accept the input source, it sets the <code>Status</code> parameter to <code>FAILED</code> and includes an error message in the <code>Message</code> attribute of the <code>GetDataSource</code> operation response. </p> <p>The observations should be contained in the database hosted on an Amazon Redshift cluster and should be specified by a <code>SelectSqlQuery</code> query. Amazon ML executes an <code>Unload</code> command in Amazon Redshift to transfer the result set of the <code>SelectSqlQuery</code> query to <code>S3StagingLocation</code>.</p> <p>After the <code>DataSource</code> has been created, it&#39;s ready for use in evaluations and batch predictions. If you plan to use the <code>DataSource</code> to train an <code>MLModel</code>, the <code>DataSource</code> also requires a recipe. A recipe describes how each input variable will be used in training an <code>MLModel</code>. Will the variable be included or excluded from training? Will the variable be manipulated; for example, will it be combined with another variable or will it be split apart into word combinations? The recipe provides answers to these questions.</p> &lt;?oxy<em>insert</em>start author=&quot;laurama&quot; timestamp=&quot;20160406T153842-0700&quot;&gt;<p>You can&#39;t change an existing datasource, but you can copy and modify the settings from an existing Amazon Redshift datasource to create a new datasource. To do so, call <code>GetDataSource</code> for an existing datasource and copy the values to a <code>CreateDataSource</code> call. Change the settings that you want to change and make sure that all required fields have the appropriate values.</p> &lt;?oxy<em>insert</em>end&gt;</p>
     fn create_data_source_from_redshift(
         &self,
         input: &CreateDataSourceFromRedshiftInput,
     ) -> Result<CreateDataSourceFromRedshiftOutput, CreateDataSourceFromRedshiftError>;
 
-    #[doc="<p>Creates a <code>DataSource</code> object. A <code>DataSource</code> references data that can be used to perform <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p> <p><code>CreateDataSourceFromS3</code> is an asynchronous operation. In response to <code>CreateDataSourceFromS3</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After the <code>DataSource</code> has been created and is ready for use, Amazon ML sets the <code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in the <code>COMPLETED</code> or <code>PENDING</code> state can be used to perform only <code>CreateMLModel</code>, <code>CreateEvaluation</code> or <code>CreateBatchPrediction</code> operations. </p> <p> If Amazon ML can't accept the input source, it sets the <code>Status</code> parameter to <code>FAILED</code> and includes an error message in the <code>Message</code> attribute of the <code>GetDataSource</code> operation response. </p> <p>The observation data used in a <code>DataSource</code> should be ready to use; that is, it should have a consistent structure, and missing data values should be kept to a minimum. The observation data must reside in one or more .csv files in an Amazon Simple Storage Service (Amazon S3) location, along with a schema that describes the data items by name and type. The same schema must be used for all of the data files referenced by the <code>DataSource</code>. </p> <p>After the <code>DataSource</code> has been created, it's ready to use in evaluations and batch predictions. If you plan to use the <code>DataSource</code> to train an <code>MLModel</code>, the <code>DataSource</code> also needs a recipe. A recipe describes how each input variable will be used in training an <code>MLModel</code>. Will the variable be included or excluded from training? Will the variable be manipulated; for example, will it be combined with another variable or will it be split apart into word combinations? The recipe provides answers to these questions.</p>"]
+    /// <p>Creates a <code>DataSource</code> object. A <code>DataSource</code> references data that can be used to perform <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p> <p><code>CreateDataSourceFromS3</code> is an asynchronous operation. In response to <code>CreateDataSourceFromS3</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After the <code>DataSource</code> has been created and is ready for use, Amazon ML sets the <code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in the <code>COMPLETED</code> or <code>PENDING</code> state can be used to perform only <code>CreateMLModel</code>, <code>CreateEvaluation</code> or <code>CreateBatchPrediction</code> operations. </p> <p> If Amazon ML can't accept the input source, it sets the <code>Status</code> parameter to <code>FAILED</code> and includes an error message in the <code>Message</code> attribute of the <code>GetDataSource</code> operation response. </p> <p>The observation data used in a <code>DataSource</code> should be ready to use; that is, it should have a consistent structure, and missing data values should be kept to a minimum. The observation data must reside in one or more .csv files in an Amazon Simple Storage Service (Amazon S3) location, along with a schema that describes the data items by name and type. The same schema must be used for all of the data files referenced by the <code>DataSource</code>. </p> <p>After the <code>DataSource</code> has been created, it's ready to use in evaluations and batch predictions. If you plan to use the <code>DataSource</code> to train an <code>MLModel</code>, the <code>DataSource</code> also needs a recipe. A recipe describes how each input variable will be used in training an <code>MLModel</code>. Will the variable be included or excluded from training? Will the variable be manipulated; for example, will it be combined with another variable or will it be split apart into word combinations? The recipe provides answers to these questions.</p>
     fn create_data_source_from_s3(
         &self,
         input: &CreateDataSourceFromS3Input,
     ) -> Result<CreateDataSourceFromS3Output, CreateDataSourceFromS3Error>;
 
-    #[doc="<p>Creates a new <code>Evaluation</code> of an <code>MLModel</code>. An <code>MLModel</code> is evaluated on a set of observations associated to a <code>DataSource</code>. Like a <code>DataSource</code> for an <code>MLModel</code>, the <code>DataSource</code> for an <code>Evaluation</code> contains values for the <code>Target Variable</code>. The <code>Evaluation</code> compares the predicted result for each observation to the actual outcome and provides a summary so that you know how effective the <code>MLModel</code> functions on the test data. Evaluation generates a relevant performance metric, such as BinaryAUC, RegressionRMSE or MulticlassAvgFScore based on the corresponding <code>MLModelType</code>: <code>BINARY</code>, <code>REGRESSION</code> or <code>MULTICLASS</code>. </p> <p><code>CreateEvaluation</code> is an asynchronous operation. In response to <code>CreateEvaluation</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the evaluation status to <code>PENDING</code>. After the <code>Evaluation</code> is created and ready for use, Amazon ML sets the status to <code>COMPLETED</code>. </p> <p>You can use the <code>GetEvaluation</code> operation to check progress of the evaluation during the creation operation.</p>"]
+    /// <p>Creates a new <code>Evaluation</code> of an <code>MLModel</code>. An <code>MLModel</code> is evaluated on a set of observations associated to a <code>DataSource</code>. Like a <code>DataSource</code> for an <code>MLModel</code>, the <code>DataSource</code> for an <code>Evaluation</code> contains values for the <code>Target Variable</code>. The <code>Evaluation</code> compares the predicted result for each observation to the actual outcome and provides a summary so that you know how effective the <code>MLModel</code> functions on the test data. Evaluation generates a relevant performance metric, such as BinaryAUC, RegressionRMSE or MulticlassAvgFScore based on the corresponding <code>MLModelType</code>: <code>BINARY</code>, <code>REGRESSION</code> or <code>MULTICLASS</code>. </p> <p><code>CreateEvaluation</code> is an asynchronous operation. In response to <code>CreateEvaluation</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the evaluation status to <code>PENDING</code>. After the <code>Evaluation</code> is created and ready for use, Amazon ML sets the status to <code>COMPLETED</code>. </p> <p>You can use the <code>GetEvaluation</code> operation to check progress of the evaluation during the creation operation.</p>
     fn create_evaluation(
         &self,
         input: &CreateEvaluationInput,
     ) -> Result<CreateEvaluationOutput, CreateEvaluationError>;
 
-    #[doc="<p>Creates a new <code>MLModel</code> using the <code>DataSource</code> and the recipe as information sources. </p> <p>An <code>MLModel</code> is nearly immutable. Users can update only the <code>MLModelName</code> and the <code>ScoreThreshold</code> in an <code>MLModel</code> without creating a new <code>MLModel</code>. </p> <p><code>CreateMLModel</code> is an asynchronous operation. In response to <code>CreateMLModel</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>MLModel</code> status to <code>PENDING</code>. After the <code>MLModel</code> has been created and ready is for use, Amazon ML sets the status to <code>COMPLETED</code>. </p> <p>You can use the <code>GetMLModel</code> operation to check the progress of the <code>MLModel</code> during the creation operation.</p> <p> <code>CreateMLModel</code> requires a <code>DataSource</code> with computed statistics, which can be created by setting <code>ComputeStatistics</code> to <code>true</code> in <code>CreateDataSourceFromRDS</code>, <code>CreateDataSourceFromS3</code>, or <code>CreateDataSourceFromRedshift</code> operations. </p>"]
+    /// <p>Creates a new <code>MLModel</code> using the <code>DataSource</code> and the recipe as information sources. </p> <p>An <code>MLModel</code> is nearly immutable. Users can update only the <code>MLModelName</code> and the <code>ScoreThreshold</code> in an <code>MLModel</code> without creating a new <code>MLModel</code>. </p> <p><code>CreateMLModel</code> is an asynchronous operation. In response to <code>CreateMLModel</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>MLModel</code> status to <code>PENDING</code>. After the <code>MLModel</code> has been created and ready is for use, Amazon ML sets the status to <code>COMPLETED</code>. </p> <p>You can use the <code>GetMLModel</code> operation to check the progress of the <code>MLModel</code> during the creation operation.</p> <p> <code>CreateMLModel</code> requires a <code>DataSource</code> with computed statistics, which can be created by setting <code>ComputeStatistics</code> to <code>true</code> in <code>CreateDataSourceFromRDS</code>, <code>CreateDataSourceFromS3</code>, or <code>CreateDataSourceFromRedshift</code> operations. </p>
     fn create_ml_model(
         &self,
         input: &CreateMLModelInput,
     ) -> Result<CreateMLModelOutput, CreateMLModelError>;
 
-    #[doc="<p>Creates a real-time endpoint for the <code>MLModel</code>. The endpoint contains the URI of the <code>MLModel</code>; that is, the location to send real-time prediction requests for the specified <code>MLModel</code>.</p>"]
+    /// <p>Creates a real-time endpoint for the <code>MLModel</code>. The endpoint contains the URI of the <code>MLModel</code>; that is, the location to send real-time prediction requests for the specified <code>MLModel</code>.</p>
     fn create_realtime_endpoint(
         &self,
         input: &CreateRealtimeEndpointInput,
     ) -> Result<CreateRealtimeEndpointOutput, CreateRealtimeEndpointError>;
 
-    #[doc="<p>Assigns the DELETED status to a <code>BatchPrediction</code>, rendering it unusable.</p> <p>After using the <code>DeleteBatchPrediction</code> operation, you can use the <a>GetBatchPrediction</a> operation to verify that the status of the <code>BatchPrediction</code> changed to DELETED.</p> <p><b>Caution:</b> The result of the <code>DeleteBatchPrediction</code> operation is irreversible.</p>"]
+    /// <p>Assigns the DELETED status to a <code>BatchPrediction</code>, rendering it unusable.</p> <p>After using the <code>DeleteBatchPrediction</code> operation, you can use the <a>GetBatchPrediction</a> operation to verify that the status of the <code>BatchPrediction</code> changed to DELETED.</p> <p><b>Caution:</b> The result of the <code>DeleteBatchPrediction</code> operation is irreversible.</p>
     fn delete_batch_prediction(
         &self,
         input: &DeleteBatchPredictionInput,
     ) -> Result<DeleteBatchPredictionOutput, DeleteBatchPredictionError>;
 
-    #[doc="<p>Assigns the DELETED status to a <code>DataSource</code>, rendering it unusable.</p> <p>After using the <code>DeleteDataSource</code> operation, you can use the <a>GetDataSource</a> operation to verify that the status of the <code>DataSource</code> changed to DELETED.</p> <p><b>Caution:</b> The results of the <code>DeleteDataSource</code> operation are irreversible.</p>"]
+    /// <p>Assigns the DELETED status to a <code>DataSource</code>, rendering it unusable.</p> <p>After using the <code>DeleteDataSource</code> operation, you can use the <a>GetDataSource</a> operation to verify that the status of the <code>DataSource</code> changed to DELETED.</p> <p><b>Caution:</b> The results of the <code>DeleteDataSource</code> operation are irreversible.</p>
     fn delete_data_source(
         &self,
         input: &DeleteDataSourceInput,
     ) -> Result<DeleteDataSourceOutput, DeleteDataSourceError>;
 
-    #[doc="<p>Assigns the <code>DELETED</code> status to an <code>Evaluation</code>, rendering it unusable.</p> <p>After invoking the <code>DeleteEvaluation</code> operation, you can use the <code>GetEvaluation</code> operation to verify that the status of the <code>Evaluation</code> changed to <code>DELETED</code>.</p> <caution><title>Caution</title> <p>The results of the <code>DeleteEvaluation</code> operation are irreversible.</p></caution>"]
+    /// <p><p>Assigns the <code>DELETED</code> status to an <code>Evaluation</code>, rendering it unusable.</p> <p>After invoking the <code>DeleteEvaluation</code> operation, you can use the <code>GetEvaluation</code> operation to verify that the status of the <code>Evaluation</code> changed to <code>DELETED</code>.</p> <caution><title>Caution</title> <p>The results of the <code>DeleteEvaluation</code> operation are irreversible.</p></caution></p>
     fn delete_evaluation(
         &self,
         input: &DeleteEvaluationInput,
     ) -> Result<DeleteEvaluationOutput, DeleteEvaluationError>;
 
-    #[doc="<p>Assigns the <code>DELETED</code> status to an <code>MLModel</code>, rendering it unusable.</p> <p>After using the <code>DeleteMLModel</code> operation, you can use the <code>GetMLModel</code> operation to verify that the status of the <code>MLModel</code> changed to DELETED.</p> <p><b>Caution:</b> The result of the <code>DeleteMLModel</code> operation is irreversible.</p>"]
+    /// <p>Assigns the <code>DELETED</code> status to an <code>MLModel</code>, rendering it unusable.</p> <p>After using the <code>DeleteMLModel</code> operation, you can use the <code>GetMLModel</code> operation to verify that the status of the <code>MLModel</code> changed to DELETED.</p> <p><b>Caution:</b> The result of the <code>DeleteMLModel</code> operation is irreversible.</p>
     fn delete_ml_model(
         &self,
         input: &DeleteMLModelInput,
     ) -> Result<DeleteMLModelOutput, DeleteMLModelError>;
 
-    #[doc = "<p>Deletes a real time endpoint of an <code>MLModel</code>.</p>"]
+    /// <p>Deletes a real time endpoint of an <code>MLModel</code>.</p>
     fn delete_realtime_endpoint(
         &self,
         input: &DeleteRealtimeEndpointInput,
     ) -> Result<DeleteRealtimeEndpointOutput, DeleteRealtimeEndpointError>;
 
-    #[doc="<p>Deletes the specified tags associated with an ML object. After this operation is complete, you can't recover deleted tags.</p> <p>If you specify a tag that doesn't exist, Amazon ML ignores it.</p>"]
+    /// <p>Deletes the specified tags associated with an ML object. After this operation is complete, you can't recover deleted tags.</p> <p>If you specify a tag that doesn't exist, Amazon ML ignores it.</p>
     fn delete_tags(&self, input: &DeleteTagsInput) -> Result<DeleteTagsOutput, DeleteTagsError>;
 
-    #[doc="<p>Returns a list of <code>BatchPrediction</code> operations that match the search criteria in the request.</p>"]
+    /// <p>Returns a list of <code>BatchPrediction</code> operations that match the search criteria in the request.</p>
     fn describe_batch_predictions(
         &self,
         input: &DescribeBatchPredictionsInput,
     ) -> Result<DescribeBatchPredictionsOutput, DescribeBatchPredictionsError>;
 
-    #[doc="<p>Returns a list of <code>DataSource</code> that match the search criteria in the request.</p>"]
+    /// <p>Returns a list of <code>DataSource</code> that match the search criteria in the request.</p>
     fn describe_data_sources(
         &self,
         input: &DescribeDataSourcesInput,
     ) -> Result<DescribeDataSourcesOutput, DescribeDataSourcesError>;
 
-    #[doc="<p>Returns a list of <code>DescribeEvaluations</code> that match the search criteria in the request.</p>"]
+    /// <p>Returns a list of <code>DescribeEvaluations</code> that match the search criteria in the request.</p>
     fn describe_evaluations(
         &self,
         input: &DescribeEvaluationsInput,
     ) -> Result<DescribeEvaluationsOutput, DescribeEvaluationsError>;
 
-    #[doc="<p>Returns a list of <code>MLModel</code> that match the search criteria in the request.</p>"]
+    /// <p>Returns a list of <code>MLModel</code> that match the search criteria in the request.</p>
     fn describe_ml_models(
         &self,
         input: &DescribeMLModelsInput,
     ) -> Result<DescribeMLModelsOutput, DescribeMLModelsError>;
 
-    #[doc = "<p>Describes one or more of the tags for your Amazon ML object.</p>"]
+    /// <p>Describes one or more of the tags for your Amazon ML object.</p>
     fn describe_tags(
         &self,
         input: &DescribeTagsInput,
     ) -> Result<DescribeTagsOutput, DescribeTagsError>;
 
-    #[doc="<p>Returns a <code>BatchPrediction</code> that includes detailed metadata, status, and data file information for a <code>Batch Prediction</code> request.</p>"]
+    /// <p>Returns a <code>BatchPrediction</code> that includes detailed metadata, status, and data file information for a <code>Batch Prediction</code> request.</p>
     fn get_batch_prediction(
         &self,
         input: &GetBatchPredictionInput,
     ) -> Result<GetBatchPredictionOutput, GetBatchPredictionError>;
 
-    #[doc="<p>Returns a <code>DataSource</code> that includes metadata and data file information, as well as the current status of the <code>DataSource</code>.</p> <p><code>GetDataSource</code> provides results in normal or verbose format. The verbose format adds the schema description and the list of files pointed to by the DataSource to the normal format.</p>"]
+    /// <p>Returns a <code>DataSource</code> that includes metadata and data file information, as well as the current status of the <code>DataSource</code>.</p> <p><code>GetDataSource</code> provides results in normal or verbose format. The verbose format adds the schema description and the list of files pointed to by the DataSource to the normal format.</p>
     fn get_data_source(
         &self,
         input: &GetDataSourceInput,
     ) -> Result<GetDataSourceOutput, GetDataSourceError>;
 
-    #[doc="<p>Returns an <code>Evaluation</code> that includes metadata as well as the current status of the <code>Evaluation</code>.</p>"]
+    /// <p>Returns an <code>Evaluation</code> that includes metadata as well as the current status of the <code>Evaluation</code>.</p>
     fn get_evaluation(
         &self,
         input: &GetEvaluationInput,
     ) -> Result<GetEvaluationOutput, GetEvaluationError>;
 
-    #[doc="<p>Returns an <code>MLModel</code> that includes detailed metadata, data source information, and the current status of the <code>MLModel</code>.</p> <p><code>GetMLModel</code> provides results in normal or verbose format. </p>"]
+    /// <p>Returns an <code>MLModel</code> that includes detailed metadata, data source information, and the current status of the <code>MLModel</code>.</p> <p><code>GetMLModel</code> provides results in normal or verbose format. </p>
     fn get_ml_model(&self, input: &GetMLModelInput) -> Result<GetMLModelOutput, GetMLModelError>;
 
-    #[doc="<p>Generates a prediction for the observation using the specified <code>ML Model</code>.</p> <note><title>Note</title> <p>Not all response parameters will be populated. Whether a response parameter is populated depends on the type of model requested.</p></note>"]
+    /// <p><p>Generates a prediction for the observation using the specified <code>ML Model</code>.</p> <note><title>Note</title> <p>Not all response parameters will be populated. Whether a response parameter is populated depends on the type of model requested.</p></note></p>
     fn predict(&self, input: &PredictInput) -> Result<PredictOutput, PredictError>;
 
-    #[doc="<p>Updates the <code>BatchPredictionName</code> of a <code>BatchPrediction</code>.</p> <p>You can use the <code>GetBatchPrediction</code> operation to view the contents of the updated data element.</p>"]
+    /// <p>Updates the <code>BatchPredictionName</code> of a <code>BatchPrediction</code>.</p> <p>You can use the <code>GetBatchPrediction</code> operation to view the contents of the updated data element.</p>
     fn update_batch_prediction(
         &self,
         input: &UpdateBatchPredictionInput,
     ) -> Result<UpdateBatchPredictionOutput, UpdateBatchPredictionError>;
 
-    #[doc="<p>Updates the <code>DataSourceName</code> of a <code>DataSource</code>.</p> <p>You can use the <code>GetDataSource</code> operation to view the contents of the updated data element.</p>"]
+    /// <p>Updates the <code>DataSourceName</code> of a <code>DataSource</code>.</p> <p>You can use the <code>GetDataSource</code> operation to view the contents of the updated data element.</p>
     fn update_data_source(
         &self,
         input: &UpdateDataSourceInput,
     ) -> Result<UpdateDataSourceOutput, UpdateDataSourceError>;
 
-    #[doc="<p>Updates the <code>EvaluationName</code> of an <code>Evaluation</code>.</p> <p>You can use the <code>GetEvaluation</code> operation to view the contents of the updated data element.</p>"]
+    /// <p>Updates the <code>EvaluationName</code> of an <code>Evaluation</code>.</p> <p>You can use the <code>GetEvaluation</code> operation to view the contents of the updated data element.</p>
     fn update_evaluation(
         &self,
         input: &UpdateEvaluationInput,
     ) -> Result<UpdateEvaluationOutput, UpdateEvaluationError>;
 
-    #[doc="<p>Updates the <code>MLModelName</code> and the <code>ScoreThreshold</code> of an <code>MLModel</code>.</p> <p>You can use the <code>GetMLModel</code> operation to view the contents of the updated data element.</p>"]
+    /// <p>Updates the <code>MLModelName</code> and the <code>ScoreThreshold</code> of an <code>MLModel</code>.</p> <p>You can use the <code>GetMLModel</code> operation to view the contents of the updated data element.</p>
     fn update_ml_model(
         &self,
         input: &UpdateMLModelInput,
@@ -4308,7 +4315,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Adds one or more tags to an object, up to a limit of 10. Each tag consists of a key and an optional value. If you add a tag using a key that is already associated with the ML object, <code>AddTags</code> updates the tag's value.</p>"]
+    /// <p>Adds one or more tags to an object, up to a limit of 10. Each tag consists of a key and an optional value. If you add a tag using a key that is already associated with the ML object, <code>AddTags</code> updates the tag's value.</p>
     fn add_tags(&self, input: &AddTagsInput) -> Result<AddTagsOutput, AddTagsError> {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
@@ -4340,7 +4347,7 @@ where
         }
     }
 
-    #[doc="<p>Generates predictions for a group of observations. The observations to process exist in one or more data files referenced by a <code>DataSource</code>. This operation creates a new <code>BatchPrediction</code>, and uses an <code>MLModel</code> and the data files referenced by the <code>DataSource</code> as information sources. </p> <p><code>CreateBatchPrediction</code> is an asynchronous operation. In response to <code>CreateBatchPrediction</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>BatchPrediction</code> status to <code>PENDING</code>. After the <code>BatchPrediction</code> completes, Amazon ML sets the status to <code>COMPLETED</code>. </p> <p>You can poll for status updates by using the <a>GetBatchPrediction</a> operation and checking the <code>Status</code> parameter of the result. After the <code>COMPLETED</code> status appears, the results are available in the location specified by the <code>OutputUri</code> parameter.</p>"]
+    /// <p>Generates predictions for a group of observations. The observations to process exist in one or more data files referenced by a <code>DataSource</code>. This operation creates a new <code>BatchPrediction</code>, and uses an <code>MLModel</code> and the data files referenced by the <code>DataSource</code> as information sources. </p> <p><code>CreateBatchPrediction</code> is an asynchronous operation. In response to <code>CreateBatchPrediction</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>BatchPrediction</code> status to <code>PENDING</code>. After the <code>BatchPrediction</code> completes, Amazon ML sets the status to <code>COMPLETED</code>. </p> <p>You can poll for status updates by using the <a>GetBatchPrediction</a> operation and checking the <code>Status</code> parameter of the result. After the <code>COMPLETED</code> status appears, the results are available in the location specified by the <code>OutputUri</code> parameter.</p>
     fn create_batch_prediction(
         &self,
         input: &CreateBatchPredictionInput,
@@ -4374,7 +4381,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a <code>DataSource</code> object from an <a href=\"http://aws.amazon.com/rds/\"> Amazon Relational Database Service</a> (Amazon RDS). A <code>DataSource</code> references data that can be used to perform <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p> <p><code>CreateDataSourceFromRDS</code> is an asynchronous operation. In response to <code>CreateDataSourceFromRDS</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After the <code>DataSource</code> is created and ready for use, Amazon ML sets the <code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in the <code>COMPLETED</code> or <code>PENDING</code> state can be used only to perform <code>&gt;CreateMLModel</code>&gt;, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations. </p> <p> If Amazon ML cannot accept the input source, it sets the <code>Status</code> parameter to <code>FAILED</code> and includes an error message in the <code>Message</code> attribute of the <code>GetDataSource</code> operation response. </p>"]
+    /// <p>Creates a <code>DataSource</code> object from an <a href="http://aws.amazon.com/rds/"> Amazon Relational Database Service</a> (Amazon RDS). A <code>DataSource</code> references data that can be used to perform <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p> <p><code>CreateDataSourceFromRDS</code> is an asynchronous operation. In response to <code>CreateDataSourceFromRDS</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After the <code>DataSource</code> is created and ready for use, Amazon ML sets the <code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in the <code>COMPLETED</code> or <code>PENDING</code> state can be used only to perform <code>&gt;CreateMLModel</code>&gt;, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations. </p> <p> If Amazon ML cannot accept the input source, it sets the <code>Status</code> parameter to <code>FAILED</code> and includes an error message in the <code>Message</code> attribute of the <code>GetDataSource</code> operation response. </p>
     fn create_data_source_from_rds(
         &self,
         input: &CreateDataSourceFromRDSInput,
@@ -4408,7 +4415,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a <code>DataSource</code> from a database hosted on an Amazon Redshift cluster. A <code>DataSource</code> references data that can be used to perform either <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p> <p><code>CreateDataSourceFromRedshift</code> is an asynchronous operation. In response to <code>CreateDataSourceFromRedshift</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After the <code>DataSource</code> is created and ready for use, Amazon ML sets the <code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in <code>COMPLETED</code> or <code>PENDING</code> states can be used to perform only <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations. </p> <p> If Amazon ML can't accept the input source, it sets the <code>Status</code> parameter to <code>FAILED</code> and includes an error message in the <code>Message</code> attribute of the <code>GetDataSource</code> operation response. </p> <p>The observations should be contained in the database hosted on an Amazon Redshift cluster and should be specified by a <code>SelectSqlQuery</code> query. Amazon ML executes an <code>Unload</code> command in Amazon Redshift to transfer the result set of the <code>SelectSqlQuery</code> query to <code>S3StagingLocation</code>.</p> <p>After the <code>DataSource</code> has been created, it's ready for use in evaluations and batch predictions. If you plan to use the <code>DataSource</code> to train an <code>MLModel</code>, the <code>DataSource</code> also requires a recipe. A recipe describes how each input variable will be used in training an <code>MLModel</code>. Will the variable be included or excluded from training? Will the variable be manipulated; for example, will it be combined with another variable or will it be split apart into word combinations? The recipe provides answers to these questions.</p> <?oxy_insert_start author=\"laurama\" timestamp=\"20160406T153842-0700\"><p>You can't change an existing datasource, but you can copy and modify the settings from an existing Amazon Redshift datasource to create a new datasource. To do so, call <code>GetDataSource</code> for an existing datasource and copy the values to a <code>CreateDataSource</code> call. Change the settings that you want to change and make sure that all required fields have the appropriate values.</p> <?oxy_insert_end>"]
+    /// <p><p>Creates a <code>DataSource</code> from a database hosted on an Amazon Redshift cluster. A <code>DataSource</code> references data that can be used to perform either <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p> <p><code>CreateDataSourceFromRedshift</code> is an asynchronous operation. In response to <code>CreateDataSourceFromRedshift</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After the <code>DataSource</code> is created and ready for use, Amazon ML sets the <code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in <code>COMPLETED</code> or <code>PENDING</code> states can be used to perform only <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations. </p> <p> If Amazon ML can&#39;t accept the input source, it sets the <code>Status</code> parameter to <code>FAILED</code> and includes an error message in the <code>Message</code> attribute of the <code>GetDataSource</code> operation response. </p> <p>The observations should be contained in the database hosted on an Amazon Redshift cluster and should be specified by a <code>SelectSqlQuery</code> query. Amazon ML executes an <code>Unload</code> command in Amazon Redshift to transfer the result set of the <code>SelectSqlQuery</code> query to <code>S3StagingLocation</code>.</p> <p>After the <code>DataSource</code> has been created, it&#39;s ready for use in evaluations and batch predictions. If you plan to use the <code>DataSource</code> to train an <code>MLModel</code>, the <code>DataSource</code> also requires a recipe. A recipe describes how each input variable will be used in training an <code>MLModel</code>. Will the variable be included or excluded from training? Will the variable be manipulated; for example, will it be combined with another variable or will it be split apart into word combinations? The recipe provides answers to these questions.</p> &lt;?oxy<em>insert</em>start author=&quot;laurama&quot; timestamp=&quot;20160406T153842-0700&quot;&gt;<p>You can&#39;t change an existing datasource, but you can copy and modify the settings from an existing Amazon Redshift datasource to create a new datasource. To do so, call <code>GetDataSource</code> for an existing datasource and copy the values to a <code>CreateDataSource</code> call. Change the settings that you want to change and make sure that all required fields have the appropriate values.</p> &lt;?oxy<em>insert</em>end&gt;</p>
     fn create_data_source_from_redshift(
         &self,
         input: &CreateDataSourceFromRedshiftInput,
@@ -4445,7 +4452,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a <code>DataSource</code> object. A <code>DataSource</code> references data that can be used to perform <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p> <p><code>CreateDataSourceFromS3</code> is an asynchronous operation. In response to <code>CreateDataSourceFromS3</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After the <code>DataSource</code> has been created and is ready for use, Amazon ML sets the <code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in the <code>COMPLETED</code> or <code>PENDING</code> state can be used to perform only <code>CreateMLModel</code>, <code>CreateEvaluation</code> or <code>CreateBatchPrediction</code> operations. </p> <p> If Amazon ML can't accept the input source, it sets the <code>Status</code> parameter to <code>FAILED</code> and includes an error message in the <code>Message</code> attribute of the <code>GetDataSource</code> operation response. </p> <p>The observation data used in a <code>DataSource</code> should be ready to use; that is, it should have a consistent structure, and missing data values should be kept to a minimum. The observation data must reside in one or more .csv files in an Amazon Simple Storage Service (Amazon S3) location, along with a schema that describes the data items by name and type. The same schema must be used for all of the data files referenced by the <code>DataSource</code>. </p> <p>After the <code>DataSource</code> has been created, it's ready to use in evaluations and batch predictions. If you plan to use the <code>DataSource</code> to train an <code>MLModel</code>, the <code>DataSource</code> also needs a recipe. A recipe describes how each input variable will be used in training an <code>MLModel</code>. Will the variable be included or excluded from training? Will the variable be manipulated; for example, will it be combined with another variable or will it be split apart into word combinations? The recipe provides answers to these questions.</p>"]
+    /// <p>Creates a <code>DataSource</code> object. A <code>DataSource</code> references data that can be used to perform <code>CreateMLModel</code>, <code>CreateEvaluation</code>, or <code>CreateBatchPrediction</code> operations.</p> <p><code>CreateDataSourceFromS3</code> is an asynchronous operation. In response to <code>CreateDataSourceFromS3</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>DataSource</code> status to <code>PENDING</code>. After the <code>DataSource</code> has been created and is ready for use, Amazon ML sets the <code>Status</code> parameter to <code>COMPLETED</code>. <code>DataSource</code> in the <code>COMPLETED</code> or <code>PENDING</code> state can be used to perform only <code>CreateMLModel</code>, <code>CreateEvaluation</code> or <code>CreateBatchPrediction</code> operations. </p> <p> If Amazon ML can't accept the input source, it sets the <code>Status</code> parameter to <code>FAILED</code> and includes an error message in the <code>Message</code> attribute of the <code>GetDataSource</code> operation response. </p> <p>The observation data used in a <code>DataSource</code> should be ready to use; that is, it should have a consistent structure, and missing data values should be kept to a minimum. The observation data must reside in one or more .csv files in an Amazon Simple Storage Service (Amazon S3) location, along with a schema that describes the data items by name and type. The same schema must be used for all of the data files referenced by the <code>DataSource</code>. </p> <p>After the <code>DataSource</code> has been created, it's ready to use in evaluations and batch predictions. If you plan to use the <code>DataSource</code> to train an <code>MLModel</code>, the <code>DataSource</code> also needs a recipe. A recipe describes how each input variable will be used in training an <code>MLModel</code>. Will the variable be included or excluded from training? Will the variable be manipulated; for example, will it be combined with another variable or will it be split apart into word combinations? The recipe provides answers to these questions.</p>
     fn create_data_source_from_s3(
         &self,
         input: &CreateDataSourceFromS3Input,
@@ -4479,7 +4486,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new <code>Evaluation</code> of an <code>MLModel</code>. An <code>MLModel</code> is evaluated on a set of observations associated to a <code>DataSource</code>. Like a <code>DataSource</code> for an <code>MLModel</code>, the <code>DataSource</code> for an <code>Evaluation</code> contains values for the <code>Target Variable</code>. The <code>Evaluation</code> compares the predicted result for each observation to the actual outcome and provides a summary so that you know how effective the <code>MLModel</code> functions on the test data. Evaluation generates a relevant performance metric, such as BinaryAUC, RegressionRMSE or MulticlassAvgFScore based on the corresponding <code>MLModelType</code>: <code>BINARY</code>, <code>REGRESSION</code> or <code>MULTICLASS</code>. </p> <p><code>CreateEvaluation</code> is an asynchronous operation. In response to <code>CreateEvaluation</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the evaluation status to <code>PENDING</code>. After the <code>Evaluation</code> is created and ready for use, Amazon ML sets the status to <code>COMPLETED</code>. </p> <p>You can use the <code>GetEvaluation</code> operation to check progress of the evaluation during the creation operation.</p>"]
+    /// <p>Creates a new <code>Evaluation</code> of an <code>MLModel</code>. An <code>MLModel</code> is evaluated on a set of observations associated to a <code>DataSource</code>. Like a <code>DataSource</code> for an <code>MLModel</code>, the <code>DataSource</code> for an <code>Evaluation</code> contains values for the <code>Target Variable</code>. The <code>Evaluation</code> compares the predicted result for each observation to the actual outcome and provides a summary so that you know how effective the <code>MLModel</code> functions on the test data. Evaluation generates a relevant performance metric, such as BinaryAUC, RegressionRMSE or MulticlassAvgFScore based on the corresponding <code>MLModelType</code>: <code>BINARY</code>, <code>REGRESSION</code> or <code>MULTICLASS</code>. </p> <p><code>CreateEvaluation</code> is an asynchronous operation. In response to <code>CreateEvaluation</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the evaluation status to <code>PENDING</code>. After the <code>Evaluation</code> is created and ready for use, Amazon ML sets the status to <code>COMPLETED</code>. </p> <p>You can use the <code>GetEvaluation</code> operation to check progress of the evaluation during the creation operation.</p>
     fn create_evaluation(
         &self,
         input: &CreateEvaluationInput,
@@ -4513,7 +4520,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new <code>MLModel</code> using the <code>DataSource</code> and the recipe as information sources. </p> <p>An <code>MLModel</code> is nearly immutable. Users can update only the <code>MLModelName</code> and the <code>ScoreThreshold</code> in an <code>MLModel</code> without creating a new <code>MLModel</code>. </p> <p><code>CreateMLModel</code> is an asynchronous operation. In response to <code>CreateMLModel</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>MLModel</code> status to <code>PENDING</code>. After the <code>MLModel</code> has been created and ready is for use, Amazon ML sets the status to <code>COMPLETED</code>. </p> <p>You can use the <code>GetMLModel</code> operation to check the progress of the <code>MLModel</code> during the creation operation.</p> <p> <code>CreateMLModel</code> requires a <code>DataSource</code> with computed statistics, which can be created by setting <code>ComputeStatistics</code> to <code>true</code> in <code>CreateDataSourceFromRDS</code>, <code>CreateDataSourceFromS3</code>, or <code>CreateDataSourceFromRedshift</code> operations. </p>"]
+    /// <p>Creates a new <code>MLModel</code> using the <code>DataSource</code> and the recipe as information sources. </p> <p>An <code>MLModel</code> is nearly immutable. Users can update only the <code>MLModelName</code> and the <code>ScoreThreshold</code> in an <code>MLModel</code> without creating a new <code>MLModel</code>. </p> <p><code>CreateMLModel</code> is an asynchronous operation. In response to <code>CreateMLModel</code>, Amazon Machine Learning (Amazon ML) immediately returns and sets the <code>MLModel</code> status to <code>PENDING</code>. After the <code>MLModel</code> has been created and ready is for use, Amazon ML sets the status to <code>COMPLETED</code>. </p> <p>You can use the <code>GetMLModel</code> operation to check the progress of the <code>MLModel</code> during the creation operation.</p> <p> <code>CreateMLModel</code> requires a <code>DataSource</code> with computed statistics, which can be created by setting <code>ComputeStatistics</code> to <code>true</code> in <code>CreateDataSourceFromRDS</code>, <code>CreateDataSourceFromS3</code>, or <code>CreateDataSourceFromRedshift</code> operations. </p>
     fn create_ml_model(
         &self,
         input: &CreateMLModelInput,
@@ -4547,7 +4554,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a real-time endpoint for the <code>MLModel</code>. The endpoint contains the URI of the <code>MLModel</code>; that is, the location to send real-time prediction requests for the specified <code>MLModel</code>.</p>"]
+    /// <p>Creates a real-time endpoint for the <code>MLModel</code>. The endpoint contains the URI of the <code>MLModel</code>; that is, the location to send real-time prediction requests for the specified <code>MLModel</code>.</p>
     fn create_realtime_endpoint(
         &self,
         input: &CreateRealtimeEndpointInput,
@@ -4581,7 +4588,7 @@ where
         }
     }
 
-    #[doc="<p>Assigns the DELETED status to a <code>BatchPrediction</code>, rendering it unusable.</p> <p>After using the <code>DeleteBatchPrediction</code> operation, you can use the <a>GetBatchPrediction</a> operation to verify that the status of the <code>BatchPrediction</code> changed to DELETED.</p> <p><b>Caution:</b> The result of the <code>DeleteBatchPrediction</code> operation is irreversible.</p>"]
+    /// <p>Assigns the DELETED status to a <code>BatchPrediction</code>, rendering it unusable.</p> <p>After using the <code>DeleteBatchPrediction</code> operation, you can use the <a>GetBatchPrediction</a> operation to verify that the status of the <code>BatchPrediction</code> changed to DELETED.</p> <p><b>Caution:</b> The result of the <code>DeleteBatchPrediction</code> operation is irreversible.</p>
     fn delete_batch_prediction(
         &self,
         input: &DeleteBatchPredictionInput,
@@ -4615,7 +4622,7 @@ where
         }
     }
 
-    #[doc="<p>Assigns the DELETED status to a <code>DataSource</code>, rendering it unusable.</p> <p>After using the <code>DeleteDataSource</code> operation, you can use the <a>GetDataSource</a> operation to verify that the status of the <code>DataSource</code> changed to DELETED.</p> <p><b>Caution:</b> The results of the <code>DeleteDataSource</code> operation are irreversible.</p>"]
+    /// <p>Assigns the DELETED status to a <code>DataSource</code>, rendering it unusable.</p> <p>After using the <code>DeleteDataSource</code> operation, you can use the <a>GetDataSource</a> operation to verify that the status of the <code>DataSource</code> changed to DELETED.</p> <p><b>Caution:</b> The results of the <code>DeleteDataSource</code> operation are irreversible.</p>
     fn delete_data_source(
         &self,
         input: &DeleteDataSourceInput,
@@ -4649,7 +4656,7 @@ where
         }
     }
 
-    #[doc="<p>Assigns the <code>DELETED</code> status to an <code>Evaluation</code>, rendering it unusable.</p> <p>After invoking the <code>DeleteEvaluation</code> operation, you can use the <code>GetEvaluation</code> operation to verify that the status of the <code>Evaluation</code> changed to <code>DELETED</code>.</p> <caution><title>Caution</title> <p>The results of the <code>DeleteEvaluation</code> operation are irreversible.</p></caution>"]
+    /// <p><p>Assigns the <code>DELETED</code> status to an <code>Evaluation</code>, rendering it unusable.</p> <p>After invoking the <code>DeleteEvaluation</code> operation, you can use the <code>GetEvaluation</code> operation to verify that the status of the <code>Evaluation</code> changed to <code>DELETED</code>.</p> <caution><title>Caution</title> <p>The results of the <code>DeleteEvaluation</code> operation are irreversible.</p></caution></p>
     fn delete_evaluation(
         &self,
         input: &DeleteEvaluationInput,
@@ -4683,7 +4690,7 @@ where
         }
     }
 
-    #[doc="<p>Assigns the <code>DELETED</code> status to an <code>MLModel</code>, rendering it unusable.</p> <p>After using the <code>DeleteMLModel</code> operation, you can use the <code>GetMLModel</code> operation to verify that the status of the <code>MLModel</code> changed to DELETED.</p> <p><b>Caution:</b> The result of the <code>DeleteMLModel</code> operation is irreversible.</p>"]
+    /// <p>Assigns the <code>DELETED</code> status to an <code>MLModel</code>, rendering it unusable.</p> <p>After using the <code>DeleteMLModel</code> operation, you can use the <code>GetMLModel</code> operation to verify that the status of the <code>MLModel</code> changed to DELETED.</p> <p><b>Caution:</b> The result of the <code>DeleteMLModel</code> operation is irreversible.</p>
     fn delete_ml_model(
         &self,
         input: &DeleteMLModelInput,
@@ -4717,7 +4724,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a real time endpoint of an <code>MLModel</code>.</p>"]
+    /// <p>Deletes a real time endpoint of an <code>MLModel</code>.</p>
     fn delete_realtime_endpoint(
         &self,
         input: &DeleteRealtimeEndpointInput,
@@ -4751,7 +4758,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified tags associated with an ML object. After this operation is complete, you can't recover deleted tags.</p> <p>If you specify a tag that doesn't exist, Amazon ML ignores it.</p>"]
+    /// <p>Deletes the specified tags associated with an ML object. After this operation is complete, you can't recover deleted tags.</p> <p>If you specify a tag that doesn't exist, Amazon ML ignores it.</p>
     fn delete_tags(&self, input: &DeleteTagsInput) -> Result<DeleteTagsOutput, DeleteTagsError> {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
@@ -4782,7 +4789,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of <code>BatchPrediction</code> operations that match the search criteria in the request.</p>"]
+    /// <p>Returns a list of <code>BatchPrediction</code> operations that match the search criteria in the request.</p>
     fn describe_batch_predictions(
         &self,
         input: &DescribeBatchPredictionsInput,
@@ -4816,7 +4823,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of <code>DataSource</code> that match the search criteria in the request.</p>"]
+    /// <p>Returns a list of <code>DataSource</code> that match the search criteria in the request.</p>
     fn describe_data_sources(
         &self,
         input: &DescribeDataSourcesInput,
@@ -4850,7 +4857,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of <code>DescribeEvaluations</code> that match the search criteria in the request.</p>"]
+    /// <p>Returns a list of <code>DescribeEvaluations</code> that match the search criteria in the request.</p>
     fn describe_evaluations(
         &self,
         input: &DescribeEvaluationsInput,
@@ -4884,7 +4891,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of <code>MLModel</code> that match the search criteria in the request.</p>"]
+    /// <p>Returns a list of <code>MLModel</code> that match the search criteria in the request.</p>
     fn describe_ml_models(
         &self,
         input: &DescribeMLModelsInput,
@@ -4918,7 +4925,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes one or more of the tags for your Amazon ML object.</p>"]
+    /// <p>Describes one or more of the tags for your Amazon ML object.</p>
     fn describe_tags(
         &self,
         input: &DescribeTagsInput,
@@ -4952,7 +4959,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a <code>BatchPrediction</code> that includes detailed metadata, status, and data file information for a <code>Batch Prediction</code> request.</p>"]
+    /// <p>Returns a <code>BatchPrediction</code> that includes detailed metadata, status, and data file information for a <code>Batch Prediction</code> request.</p>
     fn get_batch_prediction(
         &self,
         input: &GetBatchPredictionInput,
@@ -4986,7 +4993,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a <code>DataSource</code> that includes metadata and data file information, as well as the current status of the <code>DataSource</code>.</p> <p><code>GetDataSource</code> provides results in normal or verbose format. The verbose format adds the schema description and the list of files pointed to by the DataSource to the normal format.</p>"]
+    /// <p>Returns a <code>DataSource</code> that includes metadata and data file information, as well as the current status of the <code>DataSource</code>.</p> <p><code>GetDataSource</code> provides results in normal or verbose format. The verbose format adds the schema description and the list of files pointed to by the DataSource to the normal format.</p>
     fn get_data_source(
         &self,
         input: &GetDataSourceInput,
@@ -5020,7 +5027,7 @@ where
         }
     }
 
-    #[doc="<p>Returns an <code>Evaluation</code> that includes metadata as well as the current status of the <code>Evaluation</code>.</p>"]
+    /// <p>Returns an <code>Evaluation</code> that includes metadata as well as the current status of the <code>Evaluation</code>.</p>
     fn get_evaluation(
         &self,
         input: &GetEvaluationInput,
@@ -5054,7 +5061,7 @@ where
         }
     }
 
-    #[doc="<p>Returns an <code>MLModel</code> that includes detailed metadata, data source information, and the current status of the <code>MLModel</code>.</p> <p><code>GetMLModel</code> provides results in normal or verbose format. </p>"]
+    /// <p>Returns an <code>MLModel</code> that includes detailed metadata, data source information, and the current status of the <code>MLModel</code>.</p> <p><code>GetMLModel</code> provides results in normal or verbose format. </p>
     fn get_ml_model(&self, input: &GetMLModelInput) -> Result<GetMLModelOutput, GetMLModelError> {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
@@ -5085,7 +5092,7 @@ where
         }
     }
 
-    #[doc="<p>Generates a prediction for the observation using the specified <code>ML Model</code>.</p> <note><title>Note</title> <p>Not all response parameters will be populated. Whether a response parameter is populated depends on the type of model requested.</p></note>"]
+    /// <p><p>Generates a prediction for the observation using the specified <code>ML Model</code>.</p> <note><title>Note</title> <p>Not all response parameters will be populated. Whether a response parameter is populated depends on the type of model requested.</p></note></p>
     fn predict(&self, input: &PredictInput) -> Result<PredictOutput, PredictError> {
         let mut request = SignedRequest::new("POST", "machinelearning", &self.region, "/");
 
@@ -5117,7 +5124,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the <code>BatchPredictionName</code> of a <code>BatchPrediction</code>.</p> <p>You can use the <code>GetBatchPrediction</code> operation to view the contents of the updated data element.</p>"]
+    /// <p>Updates the <code>BatchPredictionName</code> of a <code>BatchPrediction</code>.</p> <p>You can use the <code>GetBatchPrediction</code> operation to view the contents of the updated data element.</p>
     fn update_batch_prediction(
         &self,
         input: &UpdateBatchPredictionInput,
@@ -5151,7 +5158,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the <code>DataSourceName</code> of a <code>DataSource</code>.</p> <p>You can use the <code>GetDataSource</code> operation to view the contents of the updated data element.</p>"]
+    /// <p>Updates the <code>DataSourceName</code> of a <code>DataSource</code>.</p> <p>You can use the <code>GetDataSource</code> operation to view the contents of the updated data element.</p>
     fn update_data_source(
         &self,
         input: &UpdateDataSourceInput,
@@ -5185,7 +5192,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the <code>EvaluationName</code> of an <code>Evaluation</code>.</p> <p>You can use the <code>GetEvaluation</code> operation to view the contents of the updated data element.</p>"]
+    /// <p>Updates the <code>EvaluationName</code> of an <code>Evaluation</code>.</p> <p>You can use the <code>GetEvaluation</code> operation to view the contents of the updated data element.</p>
     fn update_evaluation(
         &self,
         input: &UpdateEvaluationInput,
@@ -5219,7 +5226,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the <code>MLModelName</code> and the <code>ScoreThreshold</code> of an <code>MLModel</code>.</p> <p>You can use the <code>GetMLModel</code> operation to view the contents of the updated data element.</p>"]
+    /// <p>Updates the <code>MLModelName</code> and the <code>ScoreThreshold</code> of an <code>MLModel</code>.</p> <p>You can use the <code>GetMLModel</code> operation to view the contents of the updated data element.</p>
     fn update_ml_model(
         &self,
         input: &UpdateMLModelInput,

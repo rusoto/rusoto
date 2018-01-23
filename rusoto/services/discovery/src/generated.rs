@@ -329,7 +329,7 @@ pub struct DescribeExportTasksRequest {
     #[serde(rename = "exportIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub export_ids: Option<Vec<String>>,
-    /// <p>One or more filters.</p> <ul> <li> <p> <code>AgentId</code> - ID of the agent whose collected data will be exported</p> </li> </ul>
+    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>AgentId</code> - ID of the agent whose collected data will be exported</p> </li> </ul></p>
     #[serde(rename = "filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<ExportFilter>>,
@@ -704,13 +704,13 @@ pub struct UpdateApplicationResponse;
 /// Errors returned by AssociateConfigurationItemsToApplication
 #[derive(Debug, PartialEq)]
 pub enum AssociateConfigurationItemsToApplicationError {
-    ///<p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    ///<p>One or more parameters are not valid. Verify the parameters and try again.</p>
+    /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
-    ///<p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
+    /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
     InvalidParameterValue(String),
-    ///<p>The server experienced an internal error. Try again.</p>
+    /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -816,13 +816,13 @@ impl Error for AssociateConfigurationItemsToApplicationError {
 /// Errors returned by CreateApplication
 #[derive(Debug, PartialEq)]
 pub enum CreateApplicationError {
-    ///<p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    ///<p>One or more parameters are not valid. Verify the parameters and try again.</p>
+    /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
-    ///<p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
+    /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
     InvalidParameterValue(String),
-    ///<p>The server experienced an internal error. Try again.</p>
+    /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -914,15 +914,15 @@ impl Error for CreateApplicationError {
 /// Errors returned by CreateTags
 #[derive(Debug, PartialEq)]
 pub enum CreateTagsError {
-    ///<p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    ///<p>One or more parameters are not valid. Verify the parameters and try again.</p>
+    /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
-    ///<p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
+    /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
     InvalidParameterValue(String),
-    ///<p>The specified configuration ID was not located. Verify the configuration ID and try again.</p>
+    /// <p>The specified configuration ID was not located. Verify the configuration ID and try again.</p>
     ResourceNotFound(String),
-    ///<p>The server experienced an internal error. Try again.</p>
+    /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1014,13 +1014,13 @@ impl Error for CreateTagsError {
 /// Errors returned by DeleteApplications
 #[derive(Debug, PartialEq)]
 pub enum DeleteApplicationsError {
-    ///<p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    ///<p>One or more parameters are not valid. Verify the parameters and try again.</p>
+    /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
-    ///<p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
+    /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
     InvalidParameterValue(String),
-    ///<p>The server experienced an internal error. Try again.</p>
+    /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1112,15 +1112,15 @@ impl Error for DeleteApplicationsError {
 /// Errors returned by DeleteTags
 #[derive(Debug, PartialEq)]
 pub enum DeleteTagsError {
-    ///<p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    ///<p>One or more parameters are not valid. Verify the parameters and try again.</p>
+    /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
-    ///<p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
+    /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
     InvalidParameterValue(String),
-    ///<p>The specified configuration ID was not located. Verify the configuration ID and try again.</p>
+    /// <p>The specified configuration ID was not located. Verify the configuration ID and try again.</p>
     ResourceNotFound(String),
-    ///<p>The server experienced an internal error. Try again.</p>
+    /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1212,13 +1212,13 @@ impl Error for DeleteTagsError {
 /// Errors returned by DescribeAgents
 #[derive(Debug, PartialEq)]
 pub enum DescribeAgentsError {
-    ///<p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    ///<p>One or more parameters are not valid. Verify the parameters and try again.</p>
+    /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
-    ///<p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
+    /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
     InvalidParameterValue(String),
-    ///<p>The server experienced an internal error. Try again.</p>
+    /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1308,13 +1308,13 @@ impl Error for DescribeAgentsError {
 /// Errors returned by DescribeConfigurations
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigurationsError {
-    ///<p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    ///<p>One or more parameters are not valid. Verify the parameters and try again.</p>
+    /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
-    ///<p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
+    /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
     InvalidParameterValue(String),
-    ///<p>The server experienced an internal error. Try again.</p>
+    /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1410,15 +1410,15 @@ impl Error for DescribeConfigurationsError {
 /// Errors returned by DescribeExportConfigurations
 #[derive(Debug, PartialEq)]
 pub enum DescribeExportConfigurationsError {
-    ///<p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    ///<p>One or more parameters are not valid. Verify the parameters and try again.</p>
+    /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
-    ///<p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
+    /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
     InvalidParameterValue(String),
-    ///<p>The specified configuration ID was not located. Verify the configuration ID and try again.</p>
+    /// <p>The specified configuration ID was not located. Verify the configuration ID and try again.</p>
     ResourceNotFound(String),
-    ///<p>The server experienced an internal error. Try again.</p>
+    /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1524,13 +1524,13 @@ impl Error for DescribeExportConfigurationsError {
 /// Errors returned by DescribeExportTasks
 #[derive(Debug, PartialEq)]
 pub enum DescribeExportTasksError {
-    ///<p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    ///<p>One or more parameters are not valid. Verify the parameters and try again.</p>
+    /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
-    ///<p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
+    /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
     InvalidParameterValue(String),
-    ///<p>The server experienced an internal error. Try again.</p>
+    /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1622,15 +1622,15 @@ impl Error for DescribeExportTasksError {
 /// Errors returned by DescribeTags
 #[derive(Debug, PartialEq)]
 pub enum DescribeTagsError {
-    ///<p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    ///<p>One or more parameters are not valid. Verify the parameters and try again.</p>
+    /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
-    ///<p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
+    /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
     InvalidParameterValue(String),
-    ///<p>The specified configuration ID was not located. Verify the configuration ID and try again.</p>
+    /// <p>The specified configuration ID was not located. Verify the configuration ID and try again.</p>
     ResourceNotFound(String),
-    ///<p>The server experienced an internal error. Try again.</p>
+    /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1724,13 +1724,13 @@ impl Error for DescribeTagsError {
 /// Errors returned by DisassociateConfigurationItemsFromApplication
 #[derive(Debug, PartialEq)]
 pub enum DisassociateConfigurationItemsFromApplicationError {
-    ///<p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    ///<p>One or more parameters are not valid. Verify the parameters and try again.</p>
+    /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
-    ///<p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
+    /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
     InvalidParameterValue(String),
-    ///<p>The server experienced an internal error. Try again.</p>
+    /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1848,15 +1848,15 @@ impl Error for DisassociateConfigurationItemsFromApplicationError {
 /// Errors returned by ExportConfigurations
 #[derive(Debug, PartialEq)]
 pub enum ExportConfigurationsError {
-    ///<p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    ///<p>One or more parameters are not valid. Verify the parameters and try again.</p>
+    /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
-    ///<p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
+    /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
     InvalidParameterValue(String),
-    ///<p>This operation is not permitted.</p>
+    /// <p>This operation is not permitted.</p>
     OperationNotPermitted(String),
-    ///<p>The server experienced an internal error. Try again.</p>
+    /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1956,13 +1956,13 @@ impl Error for ExportConfigurationsError {
 /// Errors returned by GetDiscoverySummary
 #[derive(Debug, PartialEq)]
 pub enum GetDiscoverySummaryError {
-    ///<p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    ///<p>One or more parameters are not valid. Verify the parameters and try again.</p>
+    /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
-    ///<p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
+    /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
     InvalidParameterValue(String),
-    ///<p>The server experienced an internal error. Try again.</p>
+    /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2054,15 +2054,15 @@ impl Error for GetDiscoverySummaryError {
 /// Errors returned by ListConfigurations
 #[derive(Debug, PartialEq)]
 pub enum ListConfigurationsError {
-    ///<p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    ///<p>One or more parameters are not valid. Verify the parameters and try again.</p>
+    /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
-    ///<p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
+    /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
     InvalidParameterValue(String),
-    ///<p>The specified configuration ID was not located. Verify the configuration ID and try again.</p>
+    /// <p>The specified configuration ID was not located. Verify the configuration ID and try again.</p>
     ResourceNotFound(String),
-    ///<p>The server experienced an internal error. Try again.</p>
+    /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2158,13 +2158,13 @@ impl Error for ListConfigurationsError {
 /// Errors returned by ListServerNeighbors
 #[derive(Debug, PartialEq)]
 pub enum ListServerNeighborsError {
-    ///<p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    ///<p>One or more parameters are not valid. Verify the parameters and try again.</p>
+    /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
-    ///<p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
+    /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
     InvalidParameterValue(String),
-    ///<p>The server experienced an internal error. Try again.</p>
+    /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2256,13 +2256,13 @@ impl Error for ListServerNeighborsError {
 /// Errors returned by StartDataCollectionByAgentIds
 #[derive(Debug, PartialEq)]
 pub enum StartDataCollectionByAgentIdsError {
-    ///<p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    ///<p>One or more parameters are not valid. Verify the parameters and try again.</p>
+    /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
-    ///<p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
+    /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
     InvalidParameterValue(String),
-    ///<p>The server experienced an internal error. Try again.</p>
+    /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2362,15 +2362,15 @@ impl Error for StartDataCollectionByAgentIdsError {
 /// Errors returned by StartExportTask
 #[derive(Debug, PartialEq)]
 pub enum StartExportTaskError {
-    ///<p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    ///<p>One or more parameters are not valid. Verify the parameters and try again.</p>
+    /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
-    ///<p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
+    /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
     InvalidParameterValue(String),
-    ///<p>This operation is not permitted.</p>
+    /// <p>This operation is not permitted.</p>
     OperationNotPermitted(String),
-    ///<p>The server experienced an internal error. Try again.</p>
+    /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2464,13 +2464,13 @@ impl Error for StartExportTaskError {
 /// Errors returned by StopDataCollectionByAgentIds
 #[derive(Debug, PartialEq)]
 pub enum StopDataCollectionByAgentIdsError {
-    ///<p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    ///<p>One or more parameters are not valid. Verify the parameters and try again.</p>
+    /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
-    ///<p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
+    /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
     InvalidParameterValue(String),
-    ///<p>The server experienced an internal error. Try again.</p>
+    /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2570,13 +2570,13 @@ impl Error for StopDataCollectionByAgentIdsError {
 /// Errors returned by UpdateApplication
 #[derive(Debug, PartialEq)]
 pub enum UpdateApplicationError {
-    ///<p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     AuthorizationError(String),
-    ///<p>One or more parameters are not valid. Verify the parameters and try again.</p>
+    /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
     InvalidParameter(String),
-    ///<p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
+    /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
     InvalidParameterValue(String),
-    ///<p>The server experienced an internal error. Try again.</p>
+    /// <p>The server experienced an internal error. Try again.</p>
     ServerInternalError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2667,7 +2667,7 @@ impl Error for UpdateApplicationError {
 }
 /// Trait representing the capabilities of the AWS Application Discovery Service API. AWS Application Discovery Service clients implement this trait.
 pub trait Discovery {
-    #[doc = "<p>Associates one or more configuration items with an application.</p>"]
+    /// <p>Associates one or more configuration items with an application.</p>
     fn associate_configuration_items_to_application(
         &self,
         input: &AssociateConfigurationItemsToApplicationRequest,
@@ -2676,57 +2676,57 @@ pub trait Discovery {
         AssociateConfigurationItemsToApplicationError,
     >;
 
-    #[doc = "<p>Creates an application with the given name and description.</p>"]
+    /// <p>Creates an application with the given name and description.</p>
     fn create_application(
         &self,
         input: &CreateApplicationRequest,
     ) -> Result<CreateApplicationResponse, CreateApplicationError>;
 
-    #[doc="<p>Creates one or more tags for configuration items. Tags are metadata that help you categorize IT assets. This API accepts a list of multiple configuration items.</p>"]
+    /// <p>Creates one or more tags for configuration items. Tags are metadata that help you categorize IT assets. This API accepts a list of multiple configuration items.</p>
     fn create_tags(&self, input: &CreateTagsRequest)
         -> Result<CreateTagsResponse, CreateTagsError>;
 
-    #[doc = "<p>Deletes a list of applications and their associations with configuration items.</p>"]
+    /// <p>Deletes a list of applications and their associations with configuration items.</p>
     fn delete_applications(
         &self,
         input: &DeleteApplicationsRequest,
     ) -> Result<DeleteApplicationsResponse, DeleteApplicationsError>;
 
-    #[doc="<p>Deletes the association between configuration items and one or more tags. This API accepts a list of multiple configuration items.</p>"]
+    /// <p>Deletes the association between configuration items and one or more tags. This API accepts a list of multiple configuration items.</p>
     fn delete_tags(&self, input: &DeleteTagsRequest)
         -> Result<DeleteTagsResponse, DeleteTagsError>;
 
-    #[doc="<p>Lists agents or the Connector by ID or lists all agents/Connectors associated with your user account if you did not specify an ID.</p>"]
+    /// <p>Lists agents or the Connector by ID or lists all agents/Connectors associated with your user account if you did not specify an ID.</p>
     fn describe_agents(
         &self,
         input: &DescribeAgentsRequest,
     ) -> Result<DescribeAgentsResponse, DescribeAgentsError>;
 
-    #[doc="<p>Retrieves attributes for a list of configuration item IDs. All of the supplied IDs must be for the same asset type (server, application, process, or connection). Output fields are specific to the asset type selected. For example, the output for a <i>server</i> configuration item includes a list of attributes about the server, such as host name, operating system, and number of network cards.</p> <p>For a complete list of outputs for each asset type, see <a href=\"http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html#DescribeConfigurations\">Using the DescribeConfigurations Action</a>.</p>"]
+    /// <p>Retrieves attributes for a list of configuration item IDs. All of the supplied IDs must be for the same asset type (server, application, process, or connection). Output fields are specific to the asset type selected. For example, the output for a <i>server</i> configuration item includes a list of attributes about the server, such as host name, operating system, and number of network cards.</p> <p>For a complete list of outputs for each asset type, see <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html#DescribeConfigurations">Using the DescribeConfigurations Action</a>.</p>
     fn describe_configurations(
         &self,
         input: &DescribeConfigurationsRequest,
     ) -> Result<DescribeConfigurationsResponse, DescribeConfigurationsError>;
 
-    #[doc="<p>Deprecated. Use <code>DescribeExportTasks</code> instead.</p> <p>Retrieves the status of a given export process. You can retrieve status from a maximum of 100 processes.</p>"]
+    /// <p>Deprecated. Use <code>DescribeExportTasks</code> instead.</p> <p>Retrieves the status of a given export process. You can retrieve status from a maximum of 100 processes.</p>
     fn describe_export_configurations(
         &self,
         input: &DescribeExportConfigurationsRequest,
     ) -> Result<DescribeExportConfigurationsResponse, DescribeExportConfigurationsError>;
 
-    #[doc="<p>Retrieve status of one or more export tasks. You can retrieve the status of up to 100 export tasks.</p>"]
+    /// <p>Retrieve status of one or more export tasks. You can retrieve the status of up to 100 export tasks.</p>
     fn describe_export_tasks(
         &self,
         input: &DescribeExportTasksRequest,
     ) -> Result<DescribeExportTasksResponse, DescribeExportTasksError>;
 
-    #[doc="<p>Retrieves a list of configuration items that are tagged with a specific tag. Or retrieves a list of all tags assigned to a specific configuration item.</p>"]
+    /// <p>Retrieves a list of configuration items that are tagged with a specific tag. Or retrieves a list of all tags assigned to a specific configuration item.</p>
     fn describe_tags(
         &self,
         input: &DescribeTagsRequest,
     ) -> Result<DescribeTagsResponse, DescribeTagsError>;
 
-    #[doc = "<p>Disassociates one or more configuration items from an application.</p>"]
+    /// <p>Disassociates one or more configuration items from an application.</p>
     fn disassociate_configuration_items_from_application(
         &self,
         input: &DisassociateConfigurationItemsFromApplicationRequest,
@@ -2735,47 +2735,47 @@ pub trait Discovery {
         DisassociateConfigurationItemsFromApplicationError,
     >;
 
-    #[doc="<p>Deprecated. Use <code>StartExportTask</code> instead.</p> <p>Exports all discovered configuration data to an Amazon S3 bucket or an application that enables you to view and evaluate the data. Data includes tags and tag associations, processes, connections, servers, and system performance. This API returns an export ID that you can query using the <i>DescribeExportConfigurations</i> API. The system imposes a limit of two configuration exports in six hours.</p>"]
+    /// <p>Deprecated. Use <code>StartExportTask</code> instead.</p> <p>Exports all discovered configuration data to an Amazon S3 bucket or an application that enables you to view and evaluate the data. Data includes tags and tag associations, processes, connections, servers, and system performance. This API returns an export ID that you can query using the <i>DescribeExportConfigurations</i> API. The system imposes a limit of two configuration exports in six hours.</p>
     fn export_configurations(
         &self,
     ) -> Result<ExportConfigurationsResponse, ExportConfigurationsError>;
 
-    #[doc = "<p>Retrieves a short summary of discovered assets.</p>"]
+    /// <p>Retrieves a short summary of discovered assets.</p>
     fn get_discovery_summary(
         &self,
     ) -> Result<GetDiscoverySummaryResponse, GetDiscoverySummaryError>;
 
-    #[doc="<p>Retrieves a list of configuration items according to criteria that you specify in a filter. The filter criteria identifies the relationship requirements.</p>"]
+    /// <p>Retrieves a list of configuration items according to criteria that you specify in a filter. The filter criteria identifies the relationship requirements.</p>
     fn list_configurations(
         &self,
         input: &ListConfigurationsRequest,
     ) -> Result<ListConfigurationsResponse, ListConfigurationsError>;
 
-    #[doc="<p>Retrieves a list of servers that are one network hop away from a specified server.</p>"]
+    /// <p>Retrieves a list of servers that are one network hop away from a specified server.</p>
     fn list_server_neighbors(
         &self,
         input: &ListServerNeighborsRequest,
     ) -> Result<ListServerNeighborsResponse, ListServerNeighborsError>;
 
-    #[doc = "<p>Instructs the specified agents or connectors to start collecting data.</p>"]
+    /// <p>Instructs the specified agents or connectors to start collecting data.</p>
     fn start_data_collection_by_agent_ids(
         &self,
         input: &StartDataCollectionByAgentIdsRequest,
     ) -> Result<StartDataCollectionByAgentIdsResponse, StartDataCollectionByAgentIdsError>;
 
-    #[doc="<p> Begins the export of discovered data to an S3 bucket.</p> <p> If you specify <code>agentId</code> in a filter, the task exports up to 72 hours of detailed data collected by the identified Application Discovery Agent, including network, process, and performance details. A time range for exported agent data may be set by using <code>startTime</code> and <code>endTime</code>. Export of detailed agent data is limited to five concurrently running exports. </p> <p> If you do not include an <code>agentId</code> filter, summary data is exported that includes both AWS Agentless Discovery Connector data and summary data from AWS Discovery Agents. Export of summary data is limited to two exports per day. </p>"]
+    /// <p> Begins the export of discovered data to an S3 bucket.</p> <p> If you specify <code>agentId</code> in a filter, the task exports up to 72 hours of detailed data collected by the identified Application Discovery Agent, including network, process, and performance details. A time range for exported agent data may be set by using <code>startTime</code> and <code>endTime</code>. Export of detailed agent data is limited to five concurrently running exports. </p> <p> If you do not include an <code>agentId</code> filter, summary data is exported that includes both AWS Agentless Discovery Connector data and summary data from AWS Discovery Agents. Export of summary data is limited to two exports per day. </p>
     fn start_export_task(
         &self,
         input: &StartExportTaskRequest,
     ) -> Result<StartExportTaskResponse, StartExportTaskError>;
 
-    #[doc = "<p>Instructs the specified agents or connectors to stop collecting data.</p>"]
+    /// <p>Instructs the specified agents or connectors to stop collecting data.</p>
     fn stop_data_collection_by_agent_ids(
         &self,
         input: &StopDataCollectionByAgentIdsRequest,
     ) -> Result<StopDataCollectionByAgentIdsResponse, StopDataCollectionByAgentIdsError>;
 
-    #[doc = "<p>Updates metadata about an application.</p>"]
+    /// <p>Updates metadata about an application.</p>
     fn update_application(
         &self,
         input: &UpdateApplicationRequest,
@@ -2811,7 +2811,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc = "<p>Associates one or more configuration items with an application.</p>"]
+    /// <p>Associates one or more configuration items with an application.</p>
     fn associate_configuration_items_to_application(
         &self,
         input: &AssociateConfigurationItemsToApplicationRequest,
@@ -2853,7 +2853,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates an application with the given name and description.</p>"]
+    /// <p>Creates an application with the given name and description.</p>
     fn create_application(
         &self,
         input: &CreateApplicationRequest,
@@ -2890,7 +2890,7 @@ where
         }
     }
 
-    #[doc="<p>Creates one or more tags for configuration items. Tags are metadata that help you categorize IT assets. This API accepts a list of multiple configuration items.</p>"]
+    /// <p>Creates one or more tags for configuration items. Tags are metadata that help you categorize IT assets. This API accepts a list of multiple configuration items.</p>
     fn create_tags(
         &self,
         input: &CreateTagsRequest,
@@ -2924,7 +2924,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a list of applications and their associations with configuration items.</p>"]
+    /// <p>Deletes a list of applications and their associations with configuration items.</p>
     fn delete_applications(
         &self,
         input: &DeleteApplicationsRequest,
@@ -2961,7 +2961,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the association between configuration items and one or more tags. This API accepts a list of multiple configuration items.</p>"]
+    /// <p>Deletes the association between configuration items and one or more tags. This API accepts a list of multiple configuration items.</p>
     fn delete_tags(
         &self,
         input: &DeleteTagsRequest,
@@ -2995,7 +2995,7 @@ where
         }
     }
 
-    #[doc="<p>Lists agents or the Connector by ID or lists all agents/Connectors associated with your user account if you did not specify an ID.</p>"]
+    /// <p>Lists agents or the Connector by ID or lists all agents/Connectors associated with your user account if you did not specify an ID.</p>
     fn describe_agents(
         &self,
         input: &DescribeAgentsRequest,
@@ -3032,7 +3032,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves attributes for a list of configuration item IDs. All of the supplied IDs must be for the same asset type (server, application, process, or connection). Output fields are specific to the asset type selected. For example, the output for a <i>server</i> configuration item includes a list of attributes about the server, such as host name, operating system, and number of network cards.</p> <p>For a complete list of outputs for each asset type, see <a href=\"http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html#DescribeConfigurations\">Using the DescribeConfigurations Action</a>.</p>"]
+    /// <p>Retrieves attributes for a list of configuration item IDs. All of the supplied IDs must be for the same asset type (server, application, process, or connection). Output fields are specific to the asset type selected. For example, the output for a <i>server</i> configuration item includes a list of attributes about the server, such as host name, operating system, and number of network cards.</p> <p>For a complete list of outputs for each asset type, see <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html#DescribeConfigurations">Using the DescribeConfigurations Action</a>.</p>
     fn describe_configurations(
         &self,
         input: &DescribeConfigurationsRequest,
@@ -3069,7 +3069,7 @@ where
         }
     }
 
-    #[doc="<p>Deprecated. Use <code>DescribeExportTasks</code> instead.</p> <p>Retrieves the status of a given export process. You can retrieve status from a maximum of 100 processes.</p>"]
+    /// <p>Deprecated. Use <code>DescribeExportTasks</code> instead.</p> <p>Retrieves the status of a given export process. You can retrieve status from a maximum of 100 processes.</p>
     fn describe_export_configurations(
         &self,
         input: &DescribeExportConfigurationsRequest,
@@ -3108,7 +3108,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieve status of one or more export tasks. You can retrieve the status of up to 100 export tasks.</p>"]
+    /// <p>Retrieve status of one or more export tasks. You can retrieve the status of up to 100 export tasks.</p>
     fn describe_export_tasks(
         &self,
         input: &DescribeExportTasksRequest,
@@ -3145,7 +3145,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves a list of configuration items that are tagged with a specific tag. Or retrieves a list of all tags assigned to a specific configuration item.</p>"]
+    /// <p>Retrieves a list of configuration items that are tagged with a specific tag. Or retrieves a list of all tags assigned to a specific configuration item.</p>
     fn describe_tags(
         &self,
         input: &DescribeTagsRequest,
@@ -3182,7 +3182,7 @@ where
         }
     }
 
-    #[doc = "<p>Disassociates one or more configuration items from an application.</p>"]
+    /// <p>Disassociates one or more configuration items from an application.</p>
     fn disassociate_configuration_items_from_application(
         &self,
         input: &DisassociateConfigurationItemsFromApplicationRequest,
@@ -3226,7 +3226,7 @@ where
         }
     }
 
-    #[doc="<p>Deprecated. Use <code>StartExportTask</code> instead.</p> <p>Exports all discovered configuration data to an Amazon S3 bucket or an application that enables you to view and evaluate the data. Data includes tags and tag associations, processes, connections, servers, and system performance. This API returns an export ID that you can query using the <i>DescribeExportConfigurations</i> API. The system imposes a limit of two configuration exports in six hours.</p>"]
+    /// <p>Deprecated. Use <code>StartExportTask</code> instead.</p> <p>Exports all discovered configuration data to an Amazon S3 bucket or an application that enables you to view and evaluate the data. Data includes tags and tag associations, processes, connections, servers, and system performance. This API returns an export ID that you can query using the <i>DescribeExportConfigurations</i> API. The system imposes a limit of two configuration exports in six hours.</p>
     fn export_configurations(
         &self,
     ) -> Result<ExportConfigurationsResponse, ExportConfigurationsError> {
@@ -3261,7 +3261,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves a short summary of discovered assets.</p>"]
+    /// <p>Retrieves a short summary of discovered assets.</p>
     fn get_discovery_summary(
         &self,
     ) -> Result<GetDiscoverySummaryResponse, GetDiscoverySummaryError> {
@@ -3296,7 +3296,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves a list of configuration items according to criteria that you specify in a filter. The filter criteria identifies the relationship requirements.</p>"]
+    /// <p>Retrieves a list of configuration items according to criteria that you specify in a filter. The filter criteria identifies the relationship requirements.</p>
     fn list_configurations(
         &self,
         input: &ListConfigurationsRequest,
@@ -3333,7 +3333,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves a list of servers that are one network hop away from a specified server.</p>"]
+    /// <p>Retrieves a list of servers that are one network hop away from a specified server.</p>
     fn list_server_neighbors(
         &self,
         input: &ListServerNeighborsRequest,
@@ -3370,7 +3370,7 @@ where
         }
     }
 
-    #[doc = "<p>Instructs the specified agents or connectors to start collecting data.</p>"]
+    /// <p>Instructs the specified agents or connectors to start collecting data.</p>
     fn start_data_collection_by_agent_ids(
         &self,
         input: &StartDataCollectionByAgentIdsRequest,
@@ -3409,7 +3409,7 @@ where
         }
     }
 
-    #[doc="<p> Begins the export of discovered data to an S3 bucket.</p> <p> If you specify <code>agentId</code> in a filter, the task exports up to 72 hours of detailed data collected by the identified Application Discovery Agent, including network, process, and performance details. A time range for exported agent data may be set by using <code>startTime</code> and <code>endTime</code>. Export of detailed agent data is limited to five concurrently running exports. </p> <p> If you do not include an <code>agentId</code> filter, summary data is exported that includes both AWS Agentless Discovery Connector data and summary data from AWS Discovery Agents. Export of summary data is limited to two exports per day. </p>"]
+    /// <p> Begins the export of discovered data to an S3 bucket.</p> <p> If you specify <code>agentId</code> in a filter, the task exports up to 72 hours of detailed data collected by the identified Application Discovery Agent, including network, process, and performance details. A time range for exported agent data may be set by using <code>startTime</code> and <code>endTime</code>. Export of detailed agent data is limited to five concurrently running exports. </p> <p> If you do not include an <code>agentId</code> filter, summary data is exported that includes both AWS Agentless Discovery Connector data and summary data from AWS Discovery Agents. Export of summary data is limited to two exports per day. </p>
     fn start_export_task(
         &self,
         input: &StartExportTaskRequest,
@@ -3446,7 +3446,7 @@ where
         }
     }
 
-    #[doc = "<p>Instructs the specified agents or connectors to stop collecting data.</p>"]
+    /// <p>Instructs the specified agents or connectors to stop collecting data.</p>
     fn stop_data_collection_by_agent_ids(
         &self,
         input: &StopDataCollectionByAgentIdsRequest,
@@ -3485,7 +3485,7 @@ where
         }
     }
 
-    #[doc = "<p>Updates metadata about an application.</p>"]
+    /// <p>Updates metadata about an application.</p>
     fn update_application(
         &self,
         input: &UpdateApplicationRequest,

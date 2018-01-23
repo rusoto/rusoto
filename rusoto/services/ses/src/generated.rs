@@ -467,7 +467,7 @@ impl CidrDeserializer {
 pub struct CloneReceiptRuleSetRequest {
     /// <p>The name of the rule set to clone.</p>
     pub original_rule_set_name: String,
-    /// <p>The name of the rule set to create. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-).</p> </li> <li> <p>Start and end with a letter or number.</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul>
+    /// <p><p>The name of the rule set to create. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-).</p> </li> <li> <p>Start and end with a letter or number.</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul></p>
     pub rule_set_name: String,
 }
 
@@ -582,9 +582,9 @@ impl CloudWatchDestinationSerializer {
 /// <p>Contains the dimension configuration to use when you publish email sending events to Amazon CloudWatch.</p> <p>For information about publishing email sending events to Amazon CloudWatch, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone)]
 pub struct CloudWatchDimensionConfiguration {
-    /// <p>The default value of the dimension that is published to Amazon CloudWatch if you do not provide the value of the dimension when you send an email. The default value must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 256 characters.</p> </li> </ul>
+    /// <p><p>The default value of the dimension that is published to Amazon CloudWatch if you do not provide the value of the dimension when you send an email. The default value must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 256 characters.</p> </li> </ul></p>
     pub default_dimension_value: String,
-    /// <p>The name of an Amazon CloudWatch dimension associated with an email sending metric. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 256 characters.</p> </li> </ul>
+    /// <p><p>The name of an Amazon CloudWatch dimension associated with an email sending metric. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 256 characters.</p> </li> </ul></p>
     pub dimension_name: String,
     /// <p>The place where Amazon SES finds the value of a dimension to publish to Amazon CloudWatch. If you want Amazon SES to use the message tags that you specify using an <code>X-SES-MESSAGE-TAGS</code> header or a parameter to the <code>SendEmail</code>/<code>SendRawEmail</code> API, choose <code>messageTag</code>. If you want Amazon SES to use your own email headers, choose <code>emailHeader</code>.</p>
     pub dimension_value_source: String,
@@ -731,7 +731,7 @@ impl CloudWatchDimensionConfigurationsSerializer {
 /// <p>The name of the configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone)]
 pub struct ConfigurationSet {
-    /// <p>The name of the configuration set. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul>
+    /// <p><p>The name of the configuration set. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul></p>
     pub name: String,
 }
 
@@ -1100,7 +1100,7 @@ impl CreateReceiptRuleResponseDeserializer {
 /// <p>Represents a request to create an empty receipt rule set. You use receipt rule sets to receive email with Amazon SES. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone)]
 pub struct CreateReceiptRuleSetRequest {
-    /// <p>The name of the rule set to create. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-).</p> </li> <li> <p>Start and end with a letter or number.</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul>
+    /// <p><p>The name of the rule set to create. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-).</p> </li> <li> <p>Start and end with a letter or number.</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul></p>
     pub rule_set_name: String,
 }
 
@@ -1949,7 +1949,7 @@ pub struct EventDestination {
     pub kinesis_firehose_destination: Option<KinesisFirehoseDestination>,
     /// <p>The type of email sending events to publish to the event destination.</p>
     pub matching_event_types: Vec<String>,
-    /// <p>The name of the event destination. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul>
+    /// <p><p>The name of the event destination. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul></p>
     pub name: String,
     /// <p>An object that contains the topic ARN associated with an Amazon Simple Notification Service (Amazon SNS) event destination.</p>
     pub sns_destination: Option<SNSDestination>,
@@ -2620,7 +2620,7 @@ impl GetIdentityVerificationAttributesResponseDeserializer {
 pub struct GetSendQuotaResponse {
     /// <p>The maximum number of emails the user is allowed to send in a 24-hour interval. A value of -1 signifies an unlimited quota.</p>
     pub max_24_hour_send: Option<f64>,
-    /// <p>The maximum number of emails that Amazon SES can accept from the user's account per second.</p> <note> <p>The rate at which Amazon SES accepts the user's messages might be less than the maximum send rate.</p> </note>
+    /// <p><p>The maximum number of emails that Amazon SES can accept from the user&#39;s account per second.</p> <note> <p>The rate at which Amazon SES accepts the user&#39;s messages might be less than the maximum send rate.</p> </note></p>
     pub max_send_rate: Option<f64>,
     /// <p>The number of emails sent during the previous 24 hours.</p>
     pub sent_last_24_hours: Option<f64>,
@@ -3202,7 +3202,7 @@ impl KinesisFirehoseDestinationSerializer {
 pub struct LambdaAction {
     /// <p>The Amazon Resource Name (ARN) of the AWS Lambda function. An example of an AWS Lambda function ARN is <code>arn:aws:lambda:us-west-2:account-id:function:MyFunction</code>. For more information about AWS Lambda, see the <a href="http://docs.aws.amazon.com/lambda/latest/dg/welcome.html">AWS Lambda Developer Guide</a>.</p>
     pub function_arn: String,
-    /// <p>The invocation type of the AWS Lambda function. An invocation type of <code>RequestResponse</code> means that the execution of the function will immediately result in a response, and a value of <code>Event</code> means that the function will be invoked asynchronously. The default value is <code>Event</code>. For information about AWS Lambda invocation types, see the <a href="http://docs.aws.amazon.com/lambda/latest/dg/API_Invoke.html">AWS Lambda Developer Guide</a>.</p> <important> <p>There is a 30-second timeout on <code>RequestResponse</code> invocations. You should use <code>Event</code> invocation in most cases. Use <code>RequestResponse</code> only when you want to make a mail flow decision, such as whether to stop the receipt rule or the receipt rule set.</p> </important>
+    /// <p><p>The invocation type of the AWS Lambda function. An invocation type of <code>RequestResponse</code> means that the execution of the function will immediately result in a response, and a value of <code>Event</code> means that the function will be invoked asynchronously. The default value is <code>Event</code>. For information about AWS Lambda invocation types, see the <a href="http://docs.aws.amazon.com/lambda/latest/dg/API_Invoke.html">AWS Lambda Developer Guide</a>.</p> <important> <p>There is a 30-second timeout on <code>RequestResponse</code> invocations. You should use <code>Event</code> invocation in most cases. Use <code>RequestResponse</code> only when you want to make a mail flow decision, such as whether to stop the receipt rule or the receipt rule set.</p> </important></p>
     pub invocation_type: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the Amazon SNS topic to notify when the Lambda action is taken. An example of an Amazon SNS topic ARN is <code>arn:aws:sns:us-west-2:123456789012:MyTopic</code>. For more information about Amazon SNS topics, see the <a href="http://docs.aws.amazon.com/sns/latest/dg/CreateTopic.html">Amazon SNS Developer Guide</a>.</p>
     pub topic_arn: Option<String>,
@@ -3885,9 +3885,9 @@ impl MessageIdDeserializer {
 /// <p>Contains the name and value of a tag that you can provide to <code>SendEmail</code> or <code>SendRawEmail</code> to apply to an email.</p> <p>Message tags, which you use with configuration sets, enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone)]
 pub struct MessageTag {
-    /// <p>The name of the tag. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 256 characters.</p> </li> </ul>
+    /// <p><p>The name of the tag. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 256 characters.</p> </li> </ul></p>
     pub name: String,
-    /// <p>The value of the tag. The value must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 256 characters.</p> </li> </ul>
+    /// <p><p>The value of the tag. The value must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 256 characters.</p> </li> </ul></p>
     pub value: String,
 }
 
@@ -4374,7 +4374,7 @@ impl ReceiptActionsListSerializer {
 pub struct ReceiptFilter {
     /// <p>A structure that provides the IP addresses to block or allow, and whether to block or allow incoming mail from them.</p>
     pub ip_filter: ReceiptIpFilter,
-    /// <p>The name of the IP address filter. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-).</p> </li> <li> <p>Start and end with a letter or number.</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul>
+    /// <p><p>The name of the IP address filter. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-).</p> </li> <li> <p>Start and end with a letter or number.</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul></p>
     pub name: String,
 }
 
@@ -4596,7 +4596,7 @@ pub struct ReceiptRule {
     pub actions: Option<Vec<ReceiptAction>>,
     /// <p>If <code>true</code>, the receipt rule is active. The default value is <code>false</code>.</p>
     pub enabled: Option<bool>,
-    /// <p>The name of the receipt rule. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-).</p> </li> <li> <p>Start and end with a letter or number.</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul>
+    /// <p><p>The name of the receipt rule. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-).</p> </li> <li> <p>Start and end with a letter or number.</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul></p>
     pub name: String,
     /// <p>The recipient domains and email addresses to which the receipt rule applies. If this field is not specified, this rule will match all recipients under all verified domains.</p>
     pub recipients: Option<Vec<String>>,
@@ -4749,7 +4749,7 @@ impl ReceiptRuleNamesListSerializer {
 pub struct ReceiptRuleSetMetadata {
     /// <p>The date and time the receipt rule set was created.</p>
     pub created_timestamp: Option<String>,
-    /// <p>The name of the receipt rule set. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-).</p> </li> <li> <p>Start and end with a letter or number.</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul>
+    /// <p><p>The name of the receipt rule set. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-).</p> </li> <li> <p>Start and end with a letter or number.</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul></p>
     pub name: Option<String>,
 }
 
@@ -4921,7 +4921,7 @@ pub struct RecipientDsnFields {
     pub diagnostic_code: Option<String>,
     /// <p>Additional X-headers to include in the DSN.</p>
     pub extension_fields: Option<Vec<ExtensionField>>,
-    /// <p>The email address to which the message was ultimately delivered. This corresponds to the <code>Final-Recipient</code> in the DSN. If not specified, <code>FinalRecipient</code> will be set to the <code>Recipient</code> specified in the <code>BouncedRecipientInfo</code> structure. Either <code>FinalRecipient</code> or the recipient in <code>BouncedRecipientInfo</code> must be a recipient of the original bounced message.</p> <note> <p>Do not prepend the <code>FinalRecipient</code> email address with <code>rfc 822;</code>, as described in <a href="https://tools.ietf.org/html/rfc3798">RFC 3798</a>.</p> </note>
+    /// <p><p>The email address to which the message was ultimately delivered. This corresponds to the <code>Final-Recipient</code> in the DSN. If not specified, <code>FinalRecipient</code> will be set to the <code>Recipient</code> specified in the <code>BouncedRecipientInfo</code> structure. Either <code>FinalRecipient</code> or the recipient in <code>BouncedRecipientInfo</code> must be a recipient of the original bounced message.</p> <note> <p>Do not prepend the <code>FinalRecipient</code> email address with <code>rfc 822;</code>, as described in <a href="https://tools.ietf.org/html/rfc3798">RFC 3798</a>.</p> </note></p>
     pub final_recipient: Option<String>,
     /// <p>The time the final delivery attempt was made, in <a href="https://www.ietf.org/rfc/rfc0822.txt">RFC 822</a> date-time format.</p>
     pub last_attempt_date: Option<String>,
@@ -5089,7 +5089,7 @@ impl ReorderReceiptRuleSetResponseDeserializer {
 pub struct S3Action {
     /// <p>The name of the Amazon S3 bucket to which to save the received email.</p>
     pub bucket_name: String,
-    /// <p>The customer master key that Amazon SES should use to encrypt your emails before saving them to the Amazon S3 bucket. You can use the default master key or a custom master key you created in AWS KMS as follows:</p> <ul> <li> <p>To use the default master key, provide an ARN in the form of <code>arn:aws:kms:REGION:ACCOUNT-ID-WITHOUT-HYPHENS:alias/aws/ses</code>. For example, if your AWS account ID is 123456789012 and you want to use the default master key in the US West (Oregon) region, the ARN of the default master key would be <code>arn:aws:kms:us-west-2:123456789012:alias/aws/ses</code>. If you use the default master key, you don't need to perform any extra steps to give Amazon SES permission to use the key.</p> </li> <li> <p>To use a custom master key you created in AWS KMS, provide the ARN of the master key and ensure that you add a statement to your key's policy to give Amazon SES permission to use it. For more information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p> </li> </ul> <p>For more information about key policies, see the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html">AWS KMS Developer Guide</a>. If you do not specify a master key, Amazon SES will not encrypt your emails.</p> <important> <p>Your mail is encrypted by Amazon SES using the Amazon S3 encryption client before the mail is submitted to Amazon S3 for storage. It is not encrypted using Amazon S3 server-side encryption. This means that you must use the Amazon S3 encryption client to decrypt the email after retrieving it from Amazon S3, as the service has no access to use your AWS KMS keys for decryption. This encryption client is currently available with the <a href="http://aws.amazon.com/sdk-for-java/">AWS Java SDK</a> and <a href="http://aws.amazon.com/sdk-for-ruby/">AWS Ruby SDK</a> only. For more information about client-side encryption using AWS KMS master keys, see the <a href="http://alpha-docs-aws.amazon.com/AmazonS3/latest/dev/UsingClientSideEncryption.html">Amazon S3 Developer Guide</a>.</p> </important>
+    /// <p><p>The customer master key that Amazon SES should use to encrypt your emails before saving them to the Amazon S3 bucket. You can use the default master key or a custom master key you created in AWS KMS as follows:</p> <ul> <li> <p>To use the default master key, provide an ARN in the form of <code>arn:aws:kms:REGION:ACCOUNT-ID-WITHOUT-HYPHENS:alias/aws/ses</code>. For example, if your AWS account ID is 123456789012 and you want to use the default master key in the US West (Oregon) region, the ARN of the default master key would be <code>arn:aws:kms:us-west-2:123456789012:alias/aws/ses</code>. If you use the default master key, you don&#39;t need to perform any extra steps to give Amazon SES permission to use the key.</p> </li> <li> <p>To use a custom master key you created in AWS KMS, provide the ARN of the master key and ensure that you add a statement to your key&#39;s policy to give Amazon SES permission to use it. For more information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p> </li> </ul> <p>For more information about key policies, see the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html">AWS KMS Developer Guide</a>. If you do not specify a master key, Amazon SES will not encrypt your emails.</p> <important> <p>Your mail is encrypted by Amazon SES using the Amazon S3 encryption client before the mail is submitted to Amazon S3 for storage. It is not encrypted using Amazon S3 server-side encryption. This means that you must use the Amazon S3 encryption client to decrypt the email after retrieving it from Amazon S3, as the service has no access to use your AWS KMS keys for decryption. This encryption client is currently available with the <a href="http://aws.amazon.com/sdk-for-java/">AWS Java SDK</a> and <a href="http://aws.amazon.com/sdk-for-ruby/">AWS Ruby SDK</a> only. For more information about client-side encryption using AWS KMS master keys, see the <a href="http://alpha-docs-aws.amazon.com/AmazonS3/latest/dev/UsingClientSideEncryption.html">Amazon S3 Developer Guide</a>.</p> </important></p>
     pub kms_key_arn: Option<String>,
     /// <p>The key prefix of the Amazon S3 bucket. The key prefix is similar to a directory name that enables you to store similar data under the same directory in a bucket.</p>
     pub object_key_prefix: Option<String>,
@@ -5738,15 +5738,15 @@ pub struct SendRawEmailRequest {
     pub configuration_set_name: Option<String>,
     /// <p>A list of destinations for the message, consisting of To:, CC:, and BCC: addresses.</p>
     pub destinations: Option<Vec<String>>,
-    /// <p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to specify a particular "From" address in the header of the raw email.</p> <p>Instead of using this parameter, you can use the X-header <code>X-SES-FROM-ARN</code> in the raw message of the email. If you use both the <code>FromArn</code> parameter and the corresponding X-header, Amazon SES uses the value of the <code>FromArn</code> parameter.</p> <note> <p>For information about when to use this parameter, see the description of <code>SendRawEmail</code> in this guide, or see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-delegate-sender-tasks-email.html">Amazon SES Developer Guide</a>.</p> </note>
+    /// <p><p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to specify a particular &quot;From&quot; address in the header of the raw email.</p> <p>Instead of using this parameter, you can use the X-header <code>X-SES-FROM-ARN</code> in the raw message of the email. If you use both the <code>FromArn</code> parameter and the corresponding X-header, Amazon SES uses the value of the <code>FromArn</code> parameter.</p> <note> <p>For information about when to use this parameter, see the description of <code>SendRawEmail</code> in this guide, or see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-delegate-sender-tasks-email.html">Amazon SES Developer Guide</a>.</p> </note></p>
     pub from_arn: Option<String>,
-    /// <p>The raw text of the message. The client is responsible for ensuring the following:</p> <ul> <li> <p>Message must contain a header and a body, separated by a blank line.</p> </li> <li> <p>All required header fields must be present.</p> </li> <li> <p>Each part of a multipart MIME message must be formatted properly.</p> </li> <li> <p>MIME content types must be among those supported by Amazon SES. For more information, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mime-types.html">Amazon SES Developer Guide</a>.</p> </li> <li> <p>Must be base64-encoded.</p> </li> <li> <p>Per <a href="https://tools.ietf.org/html/rfc5321#section-4.5.3.1.6">RFC 5321</a>, the maximum length of each line of text, including the &lt;CRLF&gt;, must not exceed 1,000 characters.</p> </li> </ul>
+    /// <p><p>The raw text of the message. The client is responsible for ensuring the following:</p> <ul> <li> <p>Message must contain a header and a body, separated by a blank line.</p> </li> <li> <p>All required header fields must be present.</p> </li> <li> <p>Each part of a multipart MIME message must be formatted properly.</p> </li> <li> <p>MIME content types must be among those supported by Amazon SES. For more information, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mime-types.html">Amazon SES Developer Guide</a>.</p> </li> <li> <p>Must be base64-encoded.</p> </li> <li> <p>Per <a href="https://tools.ietf.org/html/rfc5321#section-4.5.3.1.6">RFC 5321</a>, the maximum length of each line of text, including the &lt;CRLF&gt;, must not exceed 1,000 characters.</p> </li> </ul></p>
     pub raw_message: RawMessage,
-    /// <p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to use the email address specified in the <code>ReturnPath</code> parameter.</p> <p>For example, if the owner of <code>example.com</code> (which has ARN <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>) attaches a policy to it that authorizes you to use <code>feedback@example.com</code>, then you would specify the <code>ReturnPathArn</code> to be <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>, and the <code>ReturnPath</code> to be <code>feedback@example.com</code>.</p> <p>Instead of using this parameter, you can use the X-header <code>X-SES-RETURN-PATH-ARN</code> in the raw message of the email. If you use both the <code>ReturnPathArn</code> parameter and the corresponding X-header, Amazon SES uses the value of the <code>ReturnPathArn</code> parameter.</p> <note> <p>For information about when to use this parameter, see the description of <code>SendRawEmail</code> in this guide, or see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-delegate-sender-tasks-email.html">Amazon SES Developer Guide</a>.</p> </note>
+    /// <p><p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to use the email address specified in the <code>ReturnPath</code> parameter.</p> <p>For example, if the owner of <code>example.com</code> (which has ARN <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>) attaches a policy to it that authorizes you to use <code>feedback@example.com</code>, then you would specify the <code>ReturnPathArn</code> to be <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>, and the <code>ReturnPath</code> to be <code>feedback@example.com</code>.</p> <p>Instead of using this parameter, you can use the X-header <code>X-SES-RETURN-PATH-ARN</code> in the raw message of the email. If you use both the <code>ReturnPathArn</code> parameter and the corresponding X-header, Amazon SES uses the value of the <code>ReturnPathArn</code> parameter.</p> <note> <p>For information about when to use this parameter, see the description of <code>SendRawEmail</code> in this guide, or see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-delegate-sender-tasks-email.html">Amazon SES Developer Guide</a>.</p> </note></p>
     pub return_path_arn: Option<String>,
-    /// <p>The identity's email address. If you do not provide a value for this parameter, you must specify a "From" address in the raw text of the message. (You can also specify both.)</p> <p> By default, the string must be 7-bit ASCII. If the text must contain any other characters, then you must use MIME encoded-word syntax (RFC 2047) instead of a literal string. MIME encoded-word syntax uses the following form: <code>=?charset?encoding?encoded-text?=</code>. For more information, see <a href="http://tools.ietf.org/html/rfc2047">RFC 2047</a>. </p> <note> <p>If you specify the <code>Source</code> parameter and have feedback forwarding enabled, then bounces and complaints will be sent to this email address. This takes precedence over any <i>Return-Path</i> header that you might include in the raw text of the message.</p> </note>
+    /// <p><p>The identity&#39;s email address. If you do not provide a value for this parameter, you must specify a &quot;From&quot; address in the raw text of the message. (You can also specify both.)</p> <p> By default, the string must be 7-bit ASCII. If the text must contain any other characters, then you must use MIME encoded-word syntax (RFC 2047) instead of a literal string. MIME encoded-word syntax uses the following form: <code>=?charset?encoding?encoded-text?=</code>. For more information, see <a href="http://tools.ietf.org/html/rfc2047">RFC 2047</a>. </p> <note> <p>If you specify the <code>Source</code> parameter and have feedback forwarding enabled, then bounces and complaints will be sent to this email address. This takes precedence over any <i>Return-Path</i> header that you might include in the raw text of the message.</p> </note></p>
     pub source: Option<String>,
-    /// <p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to send for the email address specified in the <code>Source</code> parameter.</p> <p>For example, if the owner of <code>example.com</code> (which has ARN <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>) attaches a policy to it that authorizes you to send from <code>user@example.com</code>, then you would specify the <code>SourceArn</code> to be <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>, and the <code>Source</code> to be <code>user@example.com</code>.</p> <p>Instead of using this parameter, you can use the X-header <code>X-SES-SOURCE-ARN</code> in the raw message of the email. If you use both the <code>SourceArn</code> parameter and the corresponding X-header, Amazon SES uses the value of the <code>SourceArn</code> parameter.</p> <note> <p>For information about when to use this parameter, see the description of <code>SendRawEmail</code> in this guide, or see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-delegate-sender-tasks-email.html">Amazon SES Developer Guide</a>.</p> </note>
+    /// <p><p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to send for the email address specified in the <code>Source</code> parameter.</p> <p>For example, if the owner of <code>example.com</code> (which has ARN <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>) attaches a policy to it that authorizes you to send from <code>user@example.com</code>, then you would specify the <code>SourceArn</code> to be <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>, and the <code>Source</code> to be <code>user@example.com</code>.</p> <p>Instead of using this parameter, you can use the X-header <code>X-SES-SOURCE-ARN</code> in the raw message of the email. If you use both the <code>SourceArn</code> parameter and the corresponding X-header, Amazon SES uses the value of the <code>SourceArn</code> parameter.</p> <note> <p>For information about when to use this parameter, see the description of <code>SendRawEmail</code> in this guide, or see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-delegate-sender-tasks-email.html">Amazon SES Developer Guide</a>.</p> </note></p>
     pub source_arn: Option<String>,
     /// <p>A list of tags, in the form of name/value pairs, to apply to an email that you send using <code>SendRawEmail</code>. Tags correspond to characteristics of the email that you define, so that you can publish email sending events.</p>
     pub tags: Option<Vec<MessageTag>>,
@@ -6863,11 +6863,11 @@ impl WorkmailActionSerializer {
 /// Errors returned by CloneReceiptRuleSet
 #[derive(Debug, PartialEq)]
 pub enum CloneReceiptRuleSetError {
-    ///<p>Indicates that a resource could not be created because of a naming conflict.</p>
+    /// <p>Indicates that a resource could not be created because of a naming conflict.</p>
     AlreadyExists(String),
-    ///<p>Indicates that a resource could not be created because of service limits. For a list of Amazon SES limits, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Indicates that a resource could not be created because of service limits. For a list of Amazon SES limits, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html">Amazon SES Developer Guide</a>.</p>
     LimitExceeded(String),
-    ///<p>Indicates that the provided receipt rule set does not exist.</p>
+    /// <p>Indicates that the provided receipt rule set does not exist.</p>
     RuleSetDoesNotExist(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6946,11 +6946,11 @@ impl Error for CloneReceiptRuleSetError {
 /// Errors returned by CreateConfigurationSet
 #[derive(Debug, PartialEq)]
 pub enum CreateConfigurationSetError {
-    ///<p>Indicates that the configuration set could not be created because of a naming conflict.</p>
+    /// <p>Indicates that the configuration set could not be created because of a naming conflict.</p>
     ConfigurationSetAlreadyExists(String),
-    ///<p>Indicates that the configuration set is invalid. See the error message for details.</p>
+    /// <p>Indicates that the configuration set is invalid. See the error message for details.</p>
     InvalidConfigurationSet(String),
-    ///<p>Indicates that a resource could not be created because of service limits. For a list of Amazon SES limits, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Indicates that a resource could not be created because of service limits. For a list of Amazon SES limits, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html">Amazon SES Developer Guide</a>.</p>
     LimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7033,17 +7033,17 @@ impl Error for CreateConfigurationSetError {
 /// Errors returned by CreateConfigurationSetEventDestination
 #[derive(Debug, PartialEq)]
 pub enum CreateConfigurationSetEventDestinationError {
-    ///<p>Indicates that the configuration set does not exist.</p>
+    /// <p>Indicates that the configuration set does not exist.</p>
     ConfigurationSetDoesNotExist(String),
-    ///<p>Indicates that the event destination could not be created because of a naming conflict.</p>
+    /// <p>Indicates that the event destination could not be created because of a naming conflict.</p>
     EventDestinationAlreadyExists(String),
-    ///<p>Indicates that the Amazon CloudWatch destination is invalid. See the error message for details.</p>
+    /// <p>Indicates that the Amazon CloudWatch destination is invalid. See the error message for details.</p>
     InvalidCloudWatchDestination(String),
-    ///<p>Indicates that the Amazon Kinesis Firehose destination is invalid. See the error message for details.</p>
+    /// <p>Indicates that the Amazon Kinesis Firehose destination is invalid. See the error message for details.</p>
     InvalidFirehoseDestination(String),
-    ///<p>Indicates that the Amazon Simple Notification Service (Amazon SNS) destination is invalid. See the error message for details.</p>
+    /// <p>Indicates that the Amazon Simple Notification Service (Amazon SNS) destination is invalid. See the error message for details.</p>
     InvalidSNSDestination(String),
-    ///<p>Indicates that a resource could not be created because of service limits. For a list of Amazon SES limits, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Indicates that a resource could not be created because of service limits. For a list of Amazon SES limits, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html">Amazon SES Developer Guide</a>.</p>
     LimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7154,9 +7154,9 @@ impl Error for CreateConfigurationSetEventDestinationError {
 /// Errors returned by CreateReceiptFilter
 #[derive(Debug, PartialEq)]
 pub enum CreateReceiptFilterError {
-    ///<p>Indicates that a resource could not be created because of a naming conflict.</p>
+    /// <p>Indicates that a resource could not be created because of a naming conflict.</p>
     AlreadyExists(String),
-    ///<p>Indicates that a resource could not be created because of service limits. For a list of Amazon SES limits, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Indicates that a resource could not be created because of service limits. For a list of Amazon SES limits, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html">Amazon SES Developer Guide</a>.</p>
     LimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7231,19 +7231,19 @@ impl Error for CreateReceiptFilterError {
 /// Errors returned by CreateReceiptRule
 #[derive(Debug, PartialEq)]
 pub enum CreateReceiptRuleError {
-    ///<p>Indicates that a resource could not be created because of a naming conflict.</p>
+    /// <p>Indicates that a resource could not be created because of a naming conflict.</p>
     AlreadyExists(String),
-    ///<p>Indicates that the provided AWS Lambda function is invalid, or that Amazon SES could not execute the provided function, possibly due to permissions issues. For information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Indicates that the provided AWS Lambda function is invalid, or that Amazon SES could not execute the provided function, possibly due to permissions issues. For information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p>
     InvalidLambdaFunction(String),
-    ///<p>Indicates that the provided Amazon S3 bucket or AWS KMS encryption key is invalid, or that Amazon SES could not publish to the bucket, possibly due to permissions issues. For information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Indicates that the provided Amazon S3 bucket or AWS KMS encryption key is invalid, or that Amazon SES could not publish to the bucket, possibly due to permissions issues. For information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p>
     InvalidS3Configuration(String),
-    ///<p>Indicates that the provided Amazon SNS topic is invalid, or that Amazon SES could not publish to the topic, possibly due to permissions issues. For information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Indicates that the provided Amazon SNS topic is invalid, or that Amazon SES could not publish to the topic, possibly due to permissions issues. For information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p>
     InvalidSnsTopic(String),
-    ///<p>Indicates that a resource could not be created because of service limits. For a list of Amazon SES limits, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Indicates that a resource could not be created because of service limits. For a list of Amazon SES limits, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html">Amazon SES Developer Guide</a>.</p>
     LimitExceeded(String),
-    ///<p>Indicates that the provided receipt rule does not exist.</p>
+    /// <p>Indicates that the provided receipt rule does not exist.</p>
     RuleDoesNotExist(String),
-    ///<p>Indicates that the provided receipt rule set does not exist.</p>
+    /// <p>Indicates that the provided receipt rule set does not exist.</p>
     RuleSetDoesNotExist(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7340,9 +7340,9 @@ impl Error for CreateReceiptRuleError {
 /// Errors returned by CreateReceiptRuleSet
 #[derive(Debug, PartialEq)]
 pub enum CreateReceiptRuleSetError {
-    ///<p>Indicates that a resource could not be created because of a naming conflict.</p>
+    /// <p>Indicates that a resource could not be created because of a naming conflict.</p>
     AlreadyExists(String),
-    ///<p>Indicates that a resource could not be created because of service limits. For a list of Amazon SES limits, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Indicates that a resource could not be created because of service limits. For a list of Amazon SES limits, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html">Amazon SES Developer Guide</a>.</p>
     LimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7417,7 +7417,7 @@ impl Error for CreateReceiptRuleSetError {
 /// Errors returned by DeleteConfigurationSet
 #[derive(Debug, PartialEq)]
 pub enum DeleteConfigurationSetError {
-    ///<p>Indicates that the configuration set does not exist.</p>
+    /// <p>Indicates that the configuration set does not exist.</p>
     ConfigurationSetDoesNotExist(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7490,9 +7490,9 @@ impl Error for DeleteConfigurationSetError {
 /// Errors returned by DeleteConfigurationSetEventDestination
 #[derive(Debug, PartialEq)]
 pub enum DeleteConfigurationSetEventDestinationError {
-    ///<p>Indicates that the configuration set does not exist.</p>
+    /// <p>Indicates that the configuration set does not exist.</p>
     ConfigurationSetDoesNotExist(String),
-    ///<p>Indicates that the event destination does not exist.</p>
+    /// <p>Indicates that the event destination does not exist.</p>
     EventDestinationDoesNotExist(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7768,7 +7768,7 @@ impl Error for DeleteReceiptFilterError {
 /// Errors returned by DeleteReceiptRule
 #[derive(Debug, PartialEq)]
 pub enum DeleteReceiptRuleError {
-    ///<p>Indicates that the provided receipt rule set does not exist.</p>
+    /// <p>Indicates that the provided receipt rule set does not exist.</p>
     RuleSetDoesNotExist(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7839,7 +7839,7 @@ impl Error for DeleteReceiptRuleError {
 /// Errors returned by DeleteReceiptRuleSet
 #[derive(Debug, PartialEq)]
 pub enum DeleteReceiptRuleSetError {
-    ///<p>Indicates that the delete operation could not be completed.</p>
+    /// <p>Indicates that the delete operation could not be completed.</p>
     CannotDelete(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8040,7 +8040,7 @@ impl Error for DescribeActiveReceiptRuleSetError {
 /// Errors returned by DescribeConfigurationSet
 #[derive(Debug, PartialEq)]
 pub enum DescribeConfigurationSetError {
-    ///<p>Indicates that the configuration set does not exist.</p>
+    /// <p>Indicates that the configuration set does not exist.</p>
     ConfigurationSetDoesNotExist(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8113,9 +8113,9 @@ impl Error for DescribeConfigurationSetError {
 /// Errors returned by DescribeReceiptRule
 #[derive(Debug, PartialEq)]
 pub enum DescribeReceiptRuleError {
-    ///<p>Indicates that the provided receipt rule does not exist.</p>
+    /// <p>Indicates that the provided receipt rule does not exist.</p>
     RuleDoesNotExist(String),
-    ///<p>Indicates that the provided receipt rule set does not exist.</p>
+    /// <p>Indicates that the provided receipt rule set does not exist.</p>
     RuleSetDoesNotExist(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8190,7 +8190,7 @@ impl Error for DescribeReceiptRuleError {
 /// Errors returned by DescribeReceiptRuleSet
 #[derive(Debug, PartialEq)]
 pub enum DescribeReceiptRuleSetError {
-    ///<p>Indicates that the provided receipt rule set does not exist.</p>
+    /// <p>Indicates that the provided receipt rule set does not exist.</p>
     RuleSetDoesNotExist(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9104,7 +9104,7 @@ impl Error for ListVerifiedEmailAddressesError {
 /// Errors returned by PutIdentityPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutIdentityPolicyError {
-    ///<p>Indicates that the provided policy is invalid. Check the error stack for more information about what caused the error.</p>
+    /// <p>Indicates that the provided policy is invalid. Check the error stack for more information about what caused the error.</p>
     InvalidPolicy(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9175,9 +9175,9 @@ impl Error for PutIdentityPolicyError {
 /// Errors returned by ReorderReceiptRuleSet
 #[derive(Debug, PartialEq)]
 pub enum ReorderReceiptRuleSetError {
-    ///<p>Indicates that the provided receipt rule does not exist.</p>
+    /// <p>Indicates that the provided receipt rule does not exist.</p>
     RuleDoesNotExist(String),
-    ///<p>Indicates that the provided receipt rule set does not exist.</p>
+    /// <p>Indicates that the provided receipt rule set does not exist.</p>
     RuleSetDoesNotExist(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9252,7 +9252,7 @@ impl Error for ReorderReceiptRuleSetError {
 /// Errors returned by SendBounce
 #[derive(Debug, PartialEq)]
 pub enum SendBounceError {
-    ///<p>Indicates that the action failed, and the message could not be sent. Check the error stack for more information about what caused the error.</p>
+    /// <p>Indicates that the action failed, and the message could not be sent. Check the error stack for more information about what caused the error.</p>
     MessageRejected(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9321,11 +9321,11 @@ impl Error for SendBounceError {
 /// Errors returned by SendEmail
 #[derive(Debug, PartialEq)]
 pub enum SendEmailError {
-    ///<p>Indicates that the configuration set does not exist.</p>
+    /// <p>Indicates that the configuration set does not exist.</p>
     ConfigurationSetDoesNotExist(String),
-    ///<p> Indicates that the message could not be sent because Amazon SES could not read the MX record required to use the specified MAIL FROM domain. For information about editing the custom MAIL FROM domain settings for an identity, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from-edit.html">Amazon SES Developer Guide</a>.</p>
+    /// <p> Indicates that the message could not be sent because Amazon SES could not read the MX record required to use the specified MAIL FROM domain. For information about editing the custom MAIL FROM domain settings for an identity, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from-edit.html">Amazon SES Developer Guide</a>.</p>
     MailFromDomainNotVerified(String),
-    ///<p>Indicates that the action failed, and the message could not be sent. Check the error stack for more information about what caused the error.</p>
+    /// <p>Indicates that the action failed, and the message could not be sent. Check the error stack for more information about what caused the error.</p>
     MessageRejected(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9402,11 +9402,11 @@ impl Error for SendEmailError {
 /// Errors returned by SendRawEmail
 #[derive(Debug, PartialEq)]
 pub enum SendRawEmailError {
-    ///<p>Indicates that the configuration set does not exist.</p>
+    /// <p>Indicates that the configuration set does not exist.</p>
     ConfigurationSetDoesNotExist(String),
-    ///<p> Indicates that the message could not be sent because Amazon SES could not read the MX record required to use the specified MAIL FROM domain. For information about editing the custom MAIL FROM domain settings for an identity, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from-edit.html">Amazon SES Developer Guide</a>.</p>
+    /// <p> Indicates that the message could not be sent because Amazon SES could not read the MX record required to use the specified MAIL FROM domain. For information about editing the custom MAIL FROM domain settings for an identity, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from-edit.html">Amazon SES Developer Guide</a>.</p>
     MailFromDomainNotVerified(String),
-    ///<p>Indicates that the action failed, and the message could not be sent. Check the error stack for more information about what caused the error.</p>
+    /// <p>Indicates that the action failed, and the message could not be sent. Check the error stack for more information about what caused the error.</p>
     MessageRejected(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9485,7 +9485,7 @@ impl Error for SendRawEmailError {
 /// Errors returned by SetActiveReceiptRuleSet
 #[derive(Debug, PartialEq)]
 pub enum SetActiveReceiptRuleSetError {
-    ///<p>Indicates that the provided receipt rule set does not exist.</p>
+    /// <p>Indicates that the provided receipt rule set does not exist.</p>
     RuleSetDoesNotExist(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9885,9 +9885,9 @@ impl Error for SetIdentityNotificationTopicError {
 /// Errors returned by SetReceiptRulePosition
 #[derive(Debug, PartialEq)]
 pub enum SetReceiptRulePositionError {
-    ///<p>Indicates that the provided receipt rule does not exist.</p>
+    /// <p>Indicates that the provided receipt rule does not exist.</p>
     RuleDoesNotExist(String),
-    ///<p>Indicates that the provided receipt rule set does not exist.</p>
+    /// <p>Indicates that the provided receipt rule set does not exist.</p>
     RuleSetDoesNotExist(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9964,15 +9964,15 @@ impl Error for SetReceiptRulePositionError {
 /// Errors returned by UpdateConfigurationSetEventDestination
 #[derive(Debug, PartialEq)]
 pub enum UpdateConfigurationSetEventDestinationError {
-    ///<p>Indicates that the configuration set does not exist.</p>
+    /// <p>Indicates that the configuration set does not exist.</p>
     ConfigurationSetDoesNotExist(String),
-    ///<p>Indicates that the event destination does not exist.</p>
+    /// <p>Indicates that the event destination does not exist.</p>
     EventDestinationDoesNotExist(String),
-    ///<p>Indicates that the Amazon CloudWatch destination is invalid. See the error message for details.</p>
+    /// <p>Indicates that the Amazon CloudWatch destination is invalid. See the error message for details.</p>
     InvalidCloudWatchDestination(String),
-    ///<p>Indicates that the Amazon Kinesis Firehose destination is invalid. See the error message for details.</p>
+    /// <p>Indicates that the Amazon Kinesis Firehose destination is invalid. See the error message for details.</p>
     InvalidFirehoseDestination(String),
-    ///<p>Indicates that the Amazon Simple Notification Service (Amazon SNS) destination is invalid. See the error message for details.</p>
+    /// <p>Indicates that the Amazon Simple Notification Service (Amazon SNS) destination is invalid. See the error message for details.</p>
     InvalidSNSDestination(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10077,17 +10077,17 @@ impl Error for UpdateConfigurationSetEventDestinationError {
 /// Errors returned by UpdateReceiptRule
 #[derive(Debug, PartialEq)]
 pub enum UpdateReceiptRuleError {
-    ///<p>Indicates that the provided AWS Lambda function is invalid, or that Amazon SES could not execute the provided function, possibly due to permissions issues. For information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Indicates that the provided AWS Lambda function is invalid, or that Amazon SES could not execute the provided function, possibly due to permissions issues. For information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p>
     InvalidLambdaFunction(String),
-    ///<p>Indicates that the provided Amazon S3 bucket or AWS KMS encryption key is invalid, or that Amazon SES could not publish to the bucket, possibly due to permissions issues. For information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Indicates that the provided Amazon S3 bucket or AWS KMS encryption key is invalid, or that Amazon SES could not publish to the bucket, possibly due to permissions issues. For information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p>
     InvalidS3Configuration(String),
-    ///<p>Indicates that the provided Amazon SNS topic is invalid, or that Amazon SES could not publish to the topic, possibly due to permissions issues. For information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Indicates that the provided Amazon SNS topic is invalid, or that Amazon SES could not publish to the topic, possibly due to permissions issues. For information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p>
     InvalidSnsTopic(String),
-    ///<p>Indicates that a resource could not be created because of service limits. For a list of Amazon SES limits, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Indicates that a resource could not be created because of service limits. For a list of Amazon SES limits, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html">Amazon SES Developer Guide</a>.</p>
     LimitExceeded(String),
-    ///<p>Indicates that the provided receipt rule does not exist.</p>
+    /// <p>Indicates that the provided receipt rule does not exist.</p>
     RuleDoesNotExist(String),
-    ///<p>Indicates that the provided receipt rule set does not exist.</p>
+    /// <p>Indicates that the provided receipt rule set does not exist.</p>
     RuleSetDoesNotExist(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10437,19 +10437,19 @@ impl Error for VerifyEmailIdentityError {
 }
 /// Trait representing the capabilities of the Amazon SES API. Amazon SES clients implement this trait.
 pub trait Ses {
-    #[doc="<p>Creates a receipt rule set by cloning an existing one. All receipt rules and configurations are copied to the new receipt rule set and are completely independent of the source rule set.</p> <p>For information about setting up rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Creates a receipt rule set by cloning an existing one. All receipt rules and configurations are copied to the new receipt rule set and are completely independent of the source rule set.</p> <p>For information about setting up rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn clone_receipt_rule_set(
         &self,
         input: &CloneReceiptRuleSetRequest,
     ) -> Result<CloneReceiptRuleSetResponse, CloneReceiptRuleSetError>;
 
-    #[doc="<p>Creates a configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Creates a configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn create_configuration_set(
         &self,
         input: &CreateConfigurationSetRequest,
     ) -> Result<CreateConfigurationSetResponse, CreateConfigurationSetError>;
 
-    #[doc="<p>Creates a configuration set event destination.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>An event destination is the AWS service to which Amazon SES publishes the email sending events associated with a configuration set. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Creates a configuration set event destination.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>An event destination is the AWS service to which Amazon SES publishes the email sending events associated with a configuration set. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn create_configuration_set_event_destination(
         &self,
         input: &CreateConfigurationSetEventDestinationRequest,
@@ -10458,31 +10458,31 @@ pub trait Ses {
         CreateConfigurationSetEventDestinationError,
     >;
 
-    #[doc="<p>Creates a new IP address filter.</p> <p>For information about setting up IP address filters, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-ip-filters.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Creates a new IP address filter.</p> <p>For information about setting up IP address filters, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn create_receipt_filter(
         &self,
         input: &CreateReceiptFilterRequest,
     ) -> Result<CreateReceiptFilterResponse, CreateReceiptFilterError>;
 
-    #[doc="<p>Creates a receipt rule.</p> <p>For information about setting up receipt rules, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Creates a receipt rule.</p> <p>For information about setting up receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn create_receipt_rule(
         &self,
         input: &CreateReceiptRuleRequest,
     ) -> Result<CreateReceiptRuleResponse, CreateReceiptRuleError>;
 
-    #[doc="<p>Creates an empty receipt rule set.</p> <p>For information about setting up receipt rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Creates an empty receipt rule set.</p> <p>For information about setting up receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn create_receipt_rule_set(
         &self,
         input: &CreateReceiptRuleSetRequest,
     ) -> Result<CreateReceiptRuleSetResponse, CreateReceiptRuleSetError>;
 
-    #[doc="<p>Deletes a configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Deletes a configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn delete_configuration_set(
         &self,
         input: &DeleteConfigurationSetRequest,
     ) -> Result<DeleteConfigurationSetResponse, DeleteConfigurationSetError>;
 
-    #[doc="<p>Deletes a configuration set event destination.</p> <p>Configuration set event destinations are associated with configuration sets, which enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Deletes a configuration set event destination.</p> <p>Configuration set event destinations are associated with configuration sets, which enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn delete_configuration_set_event_destination(
         &self,
         input: &DeleteConfigurationSetEventDestinationRequest,
@@ -10491,175 +10491,175 @@ pub trait Ses {
         DeleteConfigurationSetEventDestinationError,
     >;
 
-    #[doc="<p>Deletes the specified identity (an email address or a domain) from the list of verified identities.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Deletes the specified identity (an email address or a domain) from the list of verified identities.</p> <p>This action is throttled at one request per second.</p>
     fn delete_identity(
         &self,
         input: &DeleteIdentityRequest,
     ) -> Result<DeleteIdentityResponse, DeleteIdentityError>;
 
-    #[doc="<p>Deletes the specified sending authorization policy for the given identity (an email address or a domain). This API returns successfully even if a policy with the specified name does not exist.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Deletes the specified sending authorization policy for the given identity (an email address or a domain). This API returns successfully even if a policy with the specified name does not exist.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn delete_identity_policy(
         &self,
         input: &DeleteIdentityPolicyRequest,
     ) -> Result<DeleteIdentityPolicyResponse, DeleteIdentityPolicyError>;
 
-    #[doc="<p>Deletes the specified IP address filter.</p> <p>For information about managing IP address filters, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Deletes the specified IP address filter.</p> <p>For information about managing IP address filters, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn delete_receipt_filter(
         &self,
         input: &DeleteReceiptFilterRequest,
     ) -> Result<DeleteReceiptFilterResponse, DeleteReceiptFilterError>;
 
-    #[doc="<p>Deletes the specified receipt rule.</p> <p>For information about managing receipt rules, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Deletes the specified receipt rule.</p> <p>For information about managing receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn delete_receipt_rule(
         &self,
         input: &DeleteReceiptRuleRequest,
     ) -> Result<DeleteReceiptRuleResponse, DeleteReceiptRuleError>;
 
-    #[doc="<p>Deletes the specified receipt rule set and all of the receipt rules it contains.</p> <note> <p>The currently active rule set cannot be deleted.</p> </note> <p>For information about managing receipt rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Deletes the specified receipt rule set and all of the receipt rules it contains.</p> <note> <p>The currently active rule set cannot be deleted.</p> </note> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn delete_receipt_rule_set(
         &self,
         input: &DeleteReceiptRuleSetRequest,
     ) -> Result<DeleteReceiptRuleSetResponse, DeleteReceiptRuleSetError>;
 
-    #[doc="<p>Deletes the specified email address from the list of verified addresses.</p> <important> <p>The DeleteVerifiedEmailAddress action is deprecated as of the May 15, 2012 release of Domain Verification. The DeleteIdentity action is now preferred.</p> </important> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Deletes the specified email address from the list of verified addresses.</p> <important> <p>The DeleteVerifiedEmailAddress action is deprecated as of the May 15, 2012 release of Domain Verification. The DeleteIdentity action is now preferred.</p> </important> <p>This action is throttled at one request per second.</p>
     fn delete_verified_email_address(
         &self,
         input: &DeleteVerifiedEmailAddressRequest,
     ) -> Result<(), DeleteVerifiedEmailAddressError>;
 
-    #[doc="<p>Returns the metadata and receipt rules for the receipt rule set that is currently active.</p> <p>For information about setting up receipt rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Returns the metadata and receipt rules for the receipt rule set that is currently active.</p> <p>For information about setting up receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn describe_active_receipt_rule_set(
         &self,
         input: &DescribeActiveReceiptRuleSetRequest,
     ) -> Result<DescribeActiveReceiptRuleSetResponse, DescribeActiveReceiptRuleSetError>;
 
-    #[doc="<p>Returns the details of the specified configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Returns the details of the specified configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn describe_configuration_set(
         &self,
         input: &DescribeConfigurationSetRequest,
     ) -> Result<DescribeConfigurationSetResponse, DescribeConfigurationSetError>;
 
-    #[doc="<p>Returns the details of the specified receipt rule.</p> <p>For information about setting up receipt rules, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Returns the details of the specified receipt rule.</p> <p>For information about setting up receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn describe_receipt_rule(
         &self,
         input: &DescribeReceiptRuleRequest,
     ) -> Result<DescribeReceiptRuleResponse, DescribeReceiptRuleError>;
 
-    #[doc="<p>Returns the details of the specified receipt rule set.</p> <p>For information about managing receipt rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Returns the details of the specified receipt rule set.</p> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn describe_receipt_rule_set(
         &self,
         input: &DescribeReceiptRuleSetRequest,
     ) -> Result<DescribeReceiptRuleSetResponse, DescribeReceiptRuleSetError>;
 
-    #[doc="<p>Returns the current status of Easy DKIM signing for an entity. For domain name identities, this action also returns the DKIM tokens that are required for Easy DKIM signing, and whether Amazon SES has successfully verified that these tokens have been published.</p> <p>This action takes a list of identities as input and returns the following information for each:</p> <ul> <li> <p>Whether Easy DKIM signing is enabled or disabled.</p> </li> <li> <p>A set of DKIM tokens that represent the identity. If the identity is an email address, the tokens represent the domain of that address.</p> </li> <li> <p>Whether Amazon SES has successfully verified the DKIM tokens published in the domain's DNS. This information is only returned for domain name identities, not for email addresses.</p> </li> </ul> <p>This action is throttled at one request per second and can only get DKIM attributes for up to 100 identities at a time.</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html\">Amazon SES Developer Guide</a>.</p>"]
+    /// <p>Returns the current status of Easy DKIM signing for an entity. For domain name identities, this action also returns the DKIM tokens that are required for Easy DKIM signing, and whether Amazon SES has successfully verified that these tokens have been published.</p> <p>This action takes a list of identities as input and returns the following information for each:</p> <ul> <li> <p>Whether Easy DKIM signing is enabled or disabled.</p> </li> <li> <p>A set of DKIM tokens that represent the identity. If the identity is an email address, the tokens represent the domain of that address.</p> </li> <li> <p>Whether Amazon SES has successfully verified the DKIM tokens published in the domain's DNS. This information is only returned for domain name identities, not for email addresses.</p> </li> </ul> <p>This action is throttled at one request per second and can only get DKIM attributes for up to 100 identities at a time.</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html">Amazon SES Developer Guide</a>.</p>
     fn get_identity_dkim_attributes(
         &self,
         input: &GetIdentityDkimAttributesRequest,
     ) -> Result<GetIdentityDkimAttributesResponse, GetIdentityDkimAttributesError>;
 
-    #[doc="<p>Returns the custom MAIL FROM attributes for a list of identities (email addresses and/or domains).</p> <p>This action is throttled at one request per second and can only get custom MAIL FROM attributes for up to 100 identities at a time.</p>"]
+    /// <p>Returns the custom MAIL FROM attributes for a list of identities (email addresses and/or domains).</p> <p>This action is throttled at one request per second and can only get custom MAIL FROM attributes for up to 100 identities at a time.</p>
     fn get_identity_mail_from_domain_attributes(
         &self,
         input: &GetIdentityMailFromDomainAttributesRequest,
     ) -> Result<GetIdentityMailFromDomainAttributesResponse, GetIdentityMailFromDomainAttributesError>;
 
-    #[doc="<p>Given a list of verified identities (email addresses and/or domains), returns a structure describing identity notification attributes.</p> <p>This action is throttled at one request per second and can only get notification attributes for up to 100 identities at a time.</p> <p>For more information about using notifications with Amazon SES, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html\">Amazon SES Developer Guide</a>.</p>"]
+    /// <p>Given a list of verified identities (email addresses and/or domains), returns a structure describing identity notification attributes.</p> <p>This action is throttled at one request per second and can only get notification attributes for up to 100 identities at a time.</p> <p>For more information about using notifications with Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
     fn get_identity_notification_attributes(
         &self,
         input: &GetIdentityNotificationAttributesRequest,
     ) -> Result<GetIdentityNotificationAttributesResponse, GetIdentityNotificationAttributesError>;
 
-    #[doc="<p>Returns the requested sending authorization policies for the given identity (an email address or a domain). The policies are returned as a map of policy names to policy contents. You can retrieve a maximum of 20 policies at a time.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Returns the requested sending authorization policies for the given identity (an email address or a domain). The policies are returned as a map of policy names to policy contents. You can retrieve a maximum of 20 policies at a time.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn get_identity_policies(
         &self,
         input: &GetIdentityPoliciesRequest,
     ) -> Result<GetIdentityPoliciesResponse, GetIdentityPoliciesError>;
 
-    #[doc="<p>Given a list of identities (email addresses and/or domains), returns the verification status and (for domain identities) the verification token for each identity.</p> <p>The verification status of an email address is \"Pending\" until the email address owner clicks the link within the verification email that Amazon SES sent to that address. If the email address owner clicks the link within 24 hours, the verification status of the email address changes to \"Success\". If the link is not clicked within 24 hours, the verification status changes to \"Failed.\" In that case, if you still want to verify the email address, you must restart the verification process from the beginning.</p> <p>For domain identities, the domain's verification status is \"Pending\" as Amazon SES searches for the required TXT record in the DNS settings of the domain. When Amazon SES detects the record, the domain's verification status changes to \"Success\". If Amazon SES is unable to detect the record within 72 hours, the domain's verification status changes to \"Failed.\" In that case, if you still want to verify the domain, you must restart the verification process from the beginning.</p> <p>This action is throttled at one request per second and can only get verification attributes for up to 100 identities at a time.</p>"]
+    /// <p>Given a list of identities (email addresses and/or domains), returns the verification status and (for domain identities) the verification token for each identity.</p> <p>The verification status of an email address is "Pending" until the email address owner clicks the link within the verification email that Amazon SES sent to that address. If the email address owner clicks the link within 24 hours, the verification status of the email address changes to "Success". If the link is not clicked within 24 hours, the verification status changes to "Failed." In that case, if you still want to verify the email address, you must restart the verification process from the beginning.</p> <p>For domain identities, the domain's verification status is "Pending" as Amazon SES searches for the required TXT record in the DNS settings of the domain. When Amazon SES detects the record, the domain's verification status changes to "Success". If Amazon SES is unable to detect the record within 72 hours, the domain's verification status changes to "Failed." In that case, if you still want to verify the domain, you must restart the verification process from the beginning.</p> <p>This action is throttled at one request per second and can only get verification attributes for up to 100 identities at a time.</p>
     fn get_identity_verification_attributes(
         &self,
         input: &GetIdentityVerificationAttributesRequest,
     ) -> Result<GetIdentityVerificationAttributesResponse, GetIdentityVerificationAttributesError>;
 
-    #[doc="<p>Returns the user's current sending limits.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Returns the user's current sending limits.</p> <p>This action is throttled at one request per second.</p>
     fn get_send_quota(&self) -> Result<GetSendQuotaResponse, GetSendQuotaError>;
 
-    #[doc="<p>Returns the user's sending statistics. The result is a list of data points, representing the last two weeks of sending activity.</p> <p>Each data point in the list contains statistics for a 15-minute interval.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Returns the user's sending statistics. The result is a list of data points, representing the last two weeks of sending activity.</p> <p>Each data point in the list contains statistics for a 15-minute interval.</p> <p>This action is throttled at one request per second.</p>
     fn get_send_statistics(&self) -> Result<GetSendStatisticsResponse, GetSendStatisticsError>;
 
-    #[doc="<p>Lists the configuration sets associated with your AWS account.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second and can return up to 50 configuration sets at a time.</p>"]
+    /// <p>Lists the configuration sets associated with your AWS account.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second and can return up to 50 configuration sets at a time.</p>
     fn list_configuration_sets(
         &self,
         input: &ListConfigurationSetsRequest,
     ) -> Result<ListConfigurationSetsResponse, ListConfigurationSetsError>;
 
-    #[doc="<p>Returns a list containing all of the identities (email addresses and domains) for your AWS account, regardless of verification status.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Returns a list containing all of the identities (email addresses and domains) for your AWS account, regardless of verification status.</p> <p>This action is throttled at one request per second.</p>
     fn list_identities(
         &self,
         input: &ListIdentitiesRequest,
     ) -> Result<ListIdentitiesResponse, ListIdentitiesError>;
 
-    #[doc="<p>Returns a list of sending authorization policies that are attached to the given identity (an email address or a domain). This API returns only a list. If you want the actual policy content, you can use <code>GetIdentityPolicies</code>.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Returns a list of sending authorization policies that are attached to the given identity (an email address or a domain). This API returns only a list. If you want the actual policy content, you can use <code>GetIdentityPolicies</code>.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn list_identity_policies(
         &self,
         input: &ListIdentityPoliciesRequest,
     ) -> Result<ListIdentityPoliciesResponse, ListIdentityPoliciesError>;
 
-    #[doc="<p>Lists the IP address filters associated with your AWS account.</p> <p>For information about managing IP address filters, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Lists the IP address filters associated with your AWS account.</p> <p>For information about managing IP address filters, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn list_receipt_filters(
         &self,
         input: &ListReceiptFiltersRequest,
     ) -> Result<ListReceiptFiltersResponse, ListReceiptFiltersError>;
 
-    #[doc="<p>Lists the receipt rule sets that exist under your AWS account. If there are additional receipt rule sets to be retrieved, you will receive a <code>NextToken</code> that you can provide to the next call to <code>ListReceiptRuleSets</code> to retrieve the additional entries.</p> <p>For information about managing receipt rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Lists the receipt rule sets that exist under your AWS account. If there are additional receipt rule sets to be retrieved, you will receive a <code>NextToken</code> that you can provide to the next call to <code>ListReceiptRuleSets</code> to retrieve the additional entries.</p> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn list_receipt_rule_sets(
         &self,
         input: &ListReceiptRuleSetsRequest,
     ) -> Result<ListReceiptRuleSetsResponse, ListReceiptRuleSetsError>;
 
-    #[doc="<p>Returns a list containing all of the email addresses that have been verified.</p> <important> <p>The ListVerifiedEmailAddresses action is deprecated as of the May 15, 2012 release of Domain Verification. The ListIdentities action is now preferred.</p> </important> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Returns a list containing all of the email addresses that have been verified.</p> <important> <p>The ListVerifiedEmailAddresses action is deprecated as of the May 15, 2012 release of Domain Verification. The ListIdentities action is now preferred.</p> </important> <p>This action is throttled at one request per second.</p>
     fn list_verified_email_addresses(
         &self,
     ) -> Result<ListVerifiedEmailAddressesResponse, ListVerifiedEmailAddressesError>;
 
-    #[doc="<p>Adds or updates a sending authorization policy for the specified identity (an email address or a domain).</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Adds or updates a sending authorization policy for the specified identity (an email address or a domain).</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn put_identity_policy(
         &self,
         input: &PutIdentityPolicyRequest,
     ) -> Result<PutIdentityPolicyResponse, PutIdentityPolicyError>;
 
-    #[doc="<p>Reorders the receipt rules within a receipt rule set.</p> <note> <p>All of the rules in the rule set must be represented in this request. That is, this API will return an error if the reorder request doesn't explicitly position all of the rules.</p> </note> <p>For information about managing receipt rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Reorders the receipt rules within a receipt rule set.</p> <note> <p>All of the rules in the rule set must be represented in this request. That is, this API will return an error if the reorder request doesn't explicitly position all of the rules.</p> </note> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn reorder_receipt_rule_set(
         &self,
         input: &ReorderReceiptRuleSetRequest,
     ) -> Result<ReorderReceiptRuleSetResponse, ReorderReceiptRuleSetError>;
 
-    #[doc="<p>Generates and sends a bounce message to the sender of an email you received through Amazon SES. You can only use this API on an email up to 24 hours after you receive it.</p> <note> <p>You cannot use this API to send generic bounces for mail that was not received by Amazon SES.</p> </note> <p>For information about receiving email through Amazon SES, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Generates and sends a bounce message to the sender of an email you received through Amazon SES. You can only use this API on an email up to 24 hours after you receive it.</p> <note> <p>You cannot use this API to send generic bounces for mail that was not received by Amazon SES.</p> </note> <p>For information about receiving email through Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn send_bounce(&self, input: &SendBounceRequest)
         -> Result<SendBounceResponse, SendBounceError>;
 
-    #[doc="<p>Composes an email message based on input data, and then immediately queues the message for sending.</p> <p>There are several important points to know about <code>SendEmail</code>:</p> <ul> <li> <p>You can only send email from verified email addresses and domains; otherwise, you will get an \"Email address not verified\" error. If your account is still in the Amazon SES sandbox, you must also verify every recipient email address except for the recipients provided by the Amazon SES mailbox simulator. For more information, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html\">Amazon SES Developer Guide</a>.</p> </li> <li> <p>The total size of the message cannot exceed 10 MB. This includes any attachments that are part of the message.</p> </li> <li> <p>You must provide at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If any email address you provide is invalid, Amazon SES rejects the entire email.</p> </li> <li> <p>Amazon SES has a limit on the total number of recipients per message. The combined number of To:, CC: and BCC: email addresses cannot exceed 50. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call Amazon SES repeatedly to send the message to each group.</p> </li> <li> <p>For every message that you send, the total number of recipients (To:, CC: and BCC:) is counted against your sending quota - the maximum number of emails you can send in a 24-hour period. For information about your sending quota, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html\">Amazon SES Developer Guide</a>.</p> </li> </ul>"]
+    /// <p><p>Composes an email message based on input data, and then immediately queues the message for sending.</p> <p>There are several important points to know about <code>SendEmail</code>:</p> <ul> <li> <p>You can only send email from verified email addresses and domains; otherwise, you will get an &quot;Email address not verified&quot; error. If your account is still in the Amazon SES sandbox, you must also verify every recipient email address except for the recipients provided by the Amazon SES mailbox simulator. For more information, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Amazon SES Developer Guide</a>.</p> </li> <li> <p>The total size of the message cannot exceed 10 MB. This includes any attachments that are part of the message.</p> </li> <li> <p>You must provide at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If any email address you provide is invalid, Amazon SES rejects the entire email.</p> </li> <li> <p>Amazon SES has a limit on the total number of recipients per message. The combined number of To:, CC: and BCC: email addresses cannot exceed 50. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call Amazon SES repeatedly to send the message to each group.</p> </li> <li> <p>For every message that you send, the total number of recipients (To:, CC: and BCC:) is counted against your sending quota - the maximum number of emails you can send in a 24-hour period. For information about your sending quota, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html">Amazon SES Developer Guide</a>.</p> </li> </ul></p>
     fn send_email(&self, input: &SendEmailRequest) -> Result<SendEmailResponse, SendEmailError>;
 
-    #[doc="<p>Sends an email message, with header and content specified by the client. The <code>SendRawEmail</code> action is useful for sending multipart MIME emails. The raw text of the message must comply with Internet email standards; otherwise, the message cannot be sent. </p> <p>There are several important points to know about <code>SendRawEmail</code>:</p> <ul> <li> <p>You can only send email from verified email addresses and domains; otherwise, you will get an \"Email address not verified\" error. If your account is still in the Amazon SES sandbox, you must also verify every recipient email address except for the recipients provided by the Amazon SES mailbox simulator. For more information, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html\">Amazon SES Developer Guide</a>.</p> </li> <li> <p>The total size of the message cannot exceed 10 MB. This includes any attachments that are part of the message.</p> </li> <li> <p>You must provide at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If any email address you provide is invalid, Amazon SES rejects the entire email.</p> </li> <li> <p>Amazon SES has a limit on the total number of recipients per message. The combined number of To:, CC: and BCC: email addresses cannot exceed 50. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call Amazon SES repeatedly to send the message to each group.</p> </li> <li> <p>The To:, CC:, and BCC: headers in the raw message can contain a group list. Note that each recipient in a group list counts towards the 50-recipient limit.</p> </li> <li> <p>Amazon SES overrides any Message-ID and Date headers you provide.</p> </li> <li> <p>For every message that you send, the total number of recipients (To:, CC: and BCC:) is counted against your sending quota - the maximum number of emails you can send in a 24-hour period. For information about your sending quota, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html\">Amazon SES Developer Guide</a>.</p> </li> <li> <p>If you are using sending authorization to send on behalf of another user, <code>SendRawEmail</code> enables you to specify the cross-account identity for the email's \"Source,\" \"From,\" and \"Return-Path\" parameters in one of two ways: you can pass optional parameters <code>SourceArn</code>, <code>FromArn</code>, and/or <code>ReturnPathArn</code> to the API, or you can include the following X-headers in the header of your raw email:</p> <ul> <li> <p> <code>X-SES-SOURCE-ARN</code> </p> </li> <li> <p> <code>X-SES-FROM-ARN</code> </p> </li> <li> <p> <code>X-SES-RETURN-PATH-ARN</code> </p> </li> </ul> <important> <p>Do not include these X-headers in the DKIM signature, because they are removed by Amazon SES before sending the email.</p> </important> <p>For the most common sending authorization use case, we recommend that you specify the <code>SourceIdentityArn</code> and do not specify either the <code>FromIdentityArn</code> or <code>ReturnPathIdentityArn</code>. (The same note applies to the corresponding X-headers.) If you only specify the <code>SourceIdentityArn</code>, Amazon SES will simply set the \"From\" address and the \"Return Path\" address to the identity specified in <code>SourceIdentityArn</code>. For more information about sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p> </li> </ul>"]
+    /// <p><p>Sends an email message, with header and content specified by the client. The <code>SendRawEmail</code> action is useful for sending multipart MIME emails. The raw text of the message must comply with Internet email standards; otherwise, the message cannot be sent. </p> <p>There are several important points to know about <code>SendRawEmail</code>:</p> <ul> <li> <p>You can only send email from verified email addresses and domains; otherwise, you will get an &quot;Email address not verified&quot; error. If your account is still in the Amazon SES sandbox, you must also verify every recipient email address except for the recipients provided by the Amazon SES mailbox simulator. For more information, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Amazon SES Developer Guide</a>.</p> </li> <li> <p>The total size of the message cannot exceed 10 MB. This includes any attachments that are part of the message.</p> </li> <li> <p>You must provide at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If any email address you provide is invalid, Amazon SES rejects the entire email.</p> </li> <li> <p>Amazon SES has a limit on the total number of recipients per message. The combined number of To:, CC: and BCC: email addresses cannot exceed 50. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call Amazon SES repeatedly to send the message to each group.</p> </li> <li> <p>The To:, CC:, and BCC: headers in the raw message can contain a group list. Note that each recipient in a group list counts towards the 50-recipient limit.</p> </li> <li> <p>Amazon SES overrides any Message-ID and Date headers you provide.</p> </li> <li> <p>For every message that you send, the total number of recipients (To:, CC: and BCC:) is counted against your sending quota - the maximum number of emails you can send in a 24-hour period. For information about your sending quota, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html">Amazon SES Developer Guide</a>.</p> </li> <li> <p>If you are using sending authorization to send on behalf of another user, <code>SendRawEmail</code> enables you to specify the cross-account identity for the email&#39;s &quot;Source,&quot; &quot;From,&quot; and &quot;Return-Path&quot; parameters in one of two ways: you can pass optional parameters <code>SourceArn</code>, <code>FromArn</code>, and/or <code>ReturnPathArn</code> to the API, or you can include the following X-headers in the header of your raw email:</p> <ul> <li> <p> <code>X-SES-SOURCE-ARN</code> </p> </li> <li> <p> <code>X-SES-FROM-ARN</code> </p> </li> <li> <p> <code>X-SES-RETURN-PATH-ARN</code> </p> </li> </ul> <important> <p>Do not include these X-headers in the DKIM signature, because they are removed by Amazon SES before sending the email.</p> </important> <p>For the most common sending authorization use case, we recommend that you specify the <code>SourceIdentityArn</code> and do not specify either the <code>FromIdentityArn</code> or <code>ReturnPathIdentityArn</code>. (The same note applies to the corresponding X-headers.) If you only specify the <code>SourceIdentityArn</code>, Amazon SES will simply set the &quot;From&quot; address and the &quot;Return Path&quot; address to the identity specified in <code>SourceIdentityArn</code>. For more information about sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> </li> </ul></p>
     fn send_raw_email(
         &self,
         input: &SendRawEmailRequest,
     ) -> Result<SendRawEmailResponse, SendRawEmailError>;
 
-    #[doc="<p>Sets the specified receipt rule set as the active receipt rule set.</p> <note> <p>To disable your email-receiving through Amazon SES completely, you can call this API with RuleSetName set to null.</p> </note> <p>For information about managing receipt rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Sets the specified receipt rule set as the active receipt rule set.</p> <note> <p>To disable your email-receiving through Amazon SES completely, you can call this API with RuleSetName set to null.</p> </note> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn set_active_receipt_rule_set(
         &self,
         input: &SetActiveReceiptRuleSetRequest,
     ) -> Result<SetActiveReceiptRuleSetResponse, SetActiveReceiptRuleSetError>;
 
-    #[doc="<p>Enables or disables Easy DKIM signing of email sent from an identity:</p> <ul> <li> <p>If Easy DKIM signing is enabled for a domain name identity (e.g., <code>example.com</code>), then Amazon SES will DKIM-sign all email sent by addresses under that domain name (e.g., <code>user@example.com</code>).</p> </li> <li> <p>If Easy DKIM signing is enabled for an email address, then Amazon SES will DKIM-sign all email sent by that email address.</p> </li> </ul> <p>For email addresses (e.g., <code>user@example.com</code>), you can only enable Easy DKIM signing if the corresponding domain (e.g., <code>example.com</code>) has been set up for Easy DKIM using the AWS Console or the <code>VerifyDomainDkim</code> action.</p> <p>This action is throttled at one request per second.</p> <p>For more information about Easy DKIM signing, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html\">Amazon SES Developer Guide</a>.</p>"]
+    /// <p>Enables or disables Easy DKIM signing of email sent from an identity:</p> <ul> <li> <p>If Easy DKIM signing is enabled for a domain name identity (e.g., <code>example.com</code>), then Amazon SES will DKIM-sign all email sent by addresses under that domain name (e.g., <code>user@example.com</code>).</p> </li> <li> <p>If Easy DKIM signing is enabled for an email address, then Amazon SES will DKIM-sign all email sent by that email address.</p> </li> </ul> <p>For email addresses (e.g., <code>user@example.com</code>), you can only enable Easy DKIM signing if the corresponding domain (e.g., <code>example.com</code>) has been set up for Easy DKIM using the AWS Console or the <code>VerifyDomainDkim</code> action.</p> <p>This action is throttled at one request per second.</p> <p>For more information about Easy DKIM signing, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">Amazon SES Developer Guide</a>.</p>
     fn set_identity_dkim_enabled(
         &self,
         input: &SetIdentityDkimEnabledRequest,
     ) -> Result<SetIdentityDkimEnabledResponse, SetIdentityDkimEnabledError>;
 
-    #[doc="<p>Given an identity (an email address or a domain), enables or disables whether Amazon SES forwards bounce and complaint notifications as email. Feedback forwarding can only be disabled when Amazon Simple Notification Service (Amazon SNS) topics are specified for both bounces and complaints.</p> <note> <p>Feedback forwarding does not apply to delivery notifications. Delivery notifications are only available through Amazon SNS.</p> </note> <p>This action is throttled at one request per second.</p> <p>For more information about using notifications with Amazon SES, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html\">Amazon SES Developer Guide</a>.</p>"]
+    /// <p>Given an identity (an email address or a domain), enables or disables whether Amazon SES forwards bounce and complaint notifications as email. Feedback forwarding can only be disabled when Amazon Simple Notification Service (Amazon SNS) topics are specified for both bounces and complaints.</p> <note> <p>Feedback forwarding does not apply to delivery notifications. Delivery notifications are only available through Amazon SNS.</p> </note> <p>This action is throttled at one request per second.</p> <p>For more information about using notifications with Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
     fn set_identity_feedback_forwarding_enabled(
         &self,
         input: &SetIdentityFeedbackForwardingEnabledRequest,
@@ -10668,7 +10668,7 @@ pub trait Ses {
         SetIdentityFeedbackForwardingEnabledError,
     >;
 
-    #[doc="<p>Given an identity (an email address or a domain), sets whether Amazon SES includes the original email headers in the Amazon Simple Notification Service (Amazon SNS) notifications of a specified type.</p> <p>This action is throttled at one request per second.</p> <p>For more information about using notifications with Amazon SES, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html\">Amazon SES Developer Guide</a>.</p>"]
+    /// <p>Given an identity (an email address or a domain), sets whether Amazon SES includes the original email headers in the Amazon Simple Notification Service (Amazon SNS) notifications of a specified type.</p> <p>This action is throttled at one request per second.</p> <p>For more information about using notifications with Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
     fn set_identity_headers_in_notifications_enabled(
         &self,
         input: &SetIdentityHeadersInNotificationsEnabledRequest,
@@ -10677,25 +10677,25 @@ pub trait Ses {
         SetIdentityHeadersInNotificationsEnabledError,
     >;
 
-    #[doc="<p>Enables or disables the custom MAIL FROM domain setup for a verified identity (an email address or a domain).</p> <important> <p>To send emails using the specified MAIL FROM domain, you must add an MX record to your MAIL FROM domain's DNS settings. If you want your emails to pass Sender Policy Framework (SPF) checks, you must also add or update an SPF record. For more information, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from-set.html\">Amazon SES Developer Guide</a>.</p> </important> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Enables or disables the custom MAIL FROM domain setup for a verified identity (an email address or a domain).</p> <important> <p>To send emails using the specified MAIL FROM domain, you must add an MX record to your MAIL FROM domain's DNS settings. If you want your emails to pass Sender Policy Framework (SPF) checks, you must also add or update an SPF record. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from-set.html">Amazon SES Developer Guide</a>.</p> </important> <p>This action is throttled at one request per second.</p>
     fn set_identity_mail_from_domain(
         &self,
         input: &SetIdentityMailFromDomainRequest,
     ) -> Result<SetIdentityMailFromDomainResponse, SetIdentityMailFromDomainError>;
 
-    #[doc="<p>Given an identity (an email address or a domain), sets the Amazon Simple Notification Service (Amazon SNS) topic to which Amazon SES will publish bounce, complaint, and/or delivery notifications for emails sent with that identity as the <code>Source</code>.</p> <note> <p>Unless feedback forwarding is enabled, you must specify Amazon SNS topics for bounce and complaint notifications. For more information, see <code>SetIdentityFeedbackForwardingEnabled</code>.</p> </note> <p>This action is throttled at one request per second.</p> <p>For more information about feedback notification, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html\">Amazon SES Developer Guide</a>.</p>"]
+    /// <p>Given an identity (an email address or a domain), sets the Amazon Simple Notification Service (Amazon SNS) topic to which Amazon SES will publish bounce, complaint, and/or delivery notifications for emails sent with that identity as the <code>Source</code>.</p> <note> <p>Unless feedback forwarding is enabled, you must specify Amazon SNS topics for bounce and complaint notifications. For more information, see <code>SetIdentityFeedbackForwardingEnabled</code>.</p> </note> <p>This action is throttled at one request per second.</p> <p>For more information about feedback notification, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
     fn set_identity_notification_topic(
         &self,
         input: &SetIdentityNotificationTopicRequest,
     ) -> Result<SetIdentityNotificationTopicResponse, SetIdentityNotificationTopicError>;
 
-    #[doc="<p>Sets the position of the specified receipt rule in the receipt rule set.</p> <p>For information about managing receipt rules, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Sets the position of the specified receipt rule in the receipt rule set.</p> <p>For information about managing receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn set_receipt_rule_position(
         &self,
         input: &SetReceiptRulePositionRequest,
     ) -> Result<SetReceiptRulePositionResponse, SetReceiptRulePositionError>;
 
-    #[doc="<p>Updates the event destination of a configuration set.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>Event destinations are associated with configuration sets, which enable you to publish email sending events to Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS). For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Updates the event destination of a configuration set.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>Event destinations are associated with configuration sets, which enable you to publish email sending events to Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS). For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn update_configuration_set_event_destination(
         &self,
         input: &UpdateConfigurationSetEventDestinationRequest,
@@ -10704,31 +10704,31 @@ pub trait Ses {
         UpdateConfigurationSetEventDestinationError,
     >;
 
-    #[doc="<p>Updates a receipt rule.</p> <p>For information about managing receipt rules, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Updates a receipt rule.</p> <p>For information about managing receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn update_receipt_rule(
         &self,
         input: &UpdateReceiptRuleRequest,
     ) -> Result<UpdateReceiptRuleResponse, UpdateReceiptRuleError>;
 
-    #[doc="<p>Returns a set of DKIM tokens for a domain. DKIM <i>tokens</i> are character strings that represent your domain's identity. Using these tokens, you will need to create DNS CNAME records that point to DKIM public keys hosted by Amazon SES. Amazon Web Services will eventually detect that you have updated your DNS records; this detection process may take up to 72 hours. Upon successful detection, Amazon SES will be able to DKIM-sign email originating from that domain.</p> <p>This action is throttled at one request per second.</p> <p>To enable or disable Easy DKIM signing for a domain, use the <code>SetIdentityDkimEnabled</code> action.</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html\">Amazon SES Developer Guide</a>.</p>"]
+    /// <p>Returns a set of DKIM tokens for a domain. DKIM <i>tokens</i> are character strings that represent your domain's identity. Using these tokens, you will need to create DNS CNAME records that point to DKIM public keys hosted by Amazon SES. Amazon Web Services will eventually detect that you have updated your DNS records; this detection process may take up to 72 hours. Upon successful detection, Amazon SES will be able to DKIM-sign email originating from that domain.</p> <p>This action is throttled at one request per second.</p> <p>To enable or disable Easy DKIM signing for a domain, use the <code>SetIdentityDkimEnabled</code> action.</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html">Amazon SES Developer Guide</a>.</p>
     fn verify_domain_dkim(
         &self,
         input: &VerifyDomainDkimRequest,
     ) -> Result<VerifyDomainDkimResponse, VerifyDomainDkimError>;
 
-    #[doc = "<p>Verifies a domain.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Verifies a domain.</p> <p>This action is throttled at one request per second.</p>
     fn verify_domain_identity(
         &self,
         input: &VerifyDomainIdentityRequest,
     ) -> Result<VerifyDomainIdentityResponse, VerifyDomainIdentityError>;
 
-    #[doc="<p>Verifies an email address. This action causes a confirmation email message to be sent to the specified address.</p> <important> <p>The VerifyEmailAddress action is deprecated as of the May 15, 2012 release of Domain Verification. The VerifyEmailIdentity action is now preferred.</p> </important> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Verifies an email address. This action causes a confirmation email message to be sent to the specified address.</p> <important> <p>The VerifyEmailAddress action is deprecated as of the May 15, 2012 release of Domain Verification. The VerifyEmailIdentity action is now preferred.</p> </important> <p>This action is throttled at one request per second.</p>
     fn verify_email_address(
         &self,
         input: &VerifyEmailAddressRequest,
     ) -> Result<(), VerifyEmailAddressError>;
 
-    #[doc="<p>Verifies an email address. This action causes a confirmation email message to be sent to the specified address.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Verifies an email address. This action causes a confirmation email message to be sent to the specified address.</p> <p>This action is throttled at one request per second.</p>
     fn verify_email_identity(
         &self,
         input: &VerifyEmailIdentityRequest,
@@ -10764,7 +10764,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Creates a receipt rule set by cloning an existing one. All receipt rules and configurations are copied to the new receipt rule set and are completely independent of the source rule set.</p> <p>For information about setting up rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Creates a receipt rule set by cloning an existing one. All receipt rules and configurations are copied to the new receipt rule set and are completely independent of the source rule set.</p> <p>For information about setting up rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn clone_receipt_rule_set(
         &self,
         input: &CloneReceiptRuleSetRequest,
@@ -10815,7 +10815,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Creates a configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn create_configuration_set(
         &self,
         input: &CreateConfigurationSetRequest,
@@ -10866,7 +10866,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a configuration set event destination.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>An event destination is the AWS service to which Amazon SES publishes the email sending events associated with a configuration set. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Creates a configuration set event destination.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>An event destination is the AWS service to which Amazon SES publishes the email sending events associated with a configuration set. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn create_configuration_set_event_destination(
         &self,
         input: &CreateConfigurationSetEventDestinationRequest,
@@ -10922,7 +10922,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new IP address filter.</p> <p>For information about setting up IP address filters, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-ip-filters.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Creates a new IP address filter.</p> <p>For information about setting up IP address filters, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn create_receipt_filter(
         &self,
         input: &CreateReceiptFilterRequest,
@@ -10973,7 +10973,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a receipt rule.</p> <p>For information about setting up receipt rules, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Creates a receipt rule.</p> <p>For information about setting up receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn create_receipt_rule(
         &self,
         input: &CreateReceiptRuleRequest,
@@ -11024,7 +11024,7 @@ where
         }
     }
 
-    #[doc="<p>Creates an empty receipt rule set.</p> <p>For information about setting up receipt rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Creates an empty receipt rule set.</p> <p>For information about setting up receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn create_receipt_rule_set(
         &self,
         input: &CreateReceiptRuleSetRequest,
@@ -11075,7 +11075,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Deletes a configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn delete_configuration_set(
         &self,
         input: &DeleteConfigurationSetRequest,
@@ -11126,7 +11126,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a configuration set event destination.</p> <p>Configuration set event destinations are associated with configuration sets, which enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Deletes a configuration set event destination.</p> <p>Configuration set event destinations are associated with configuration sets, which enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn delete_configuration_set_event_destination(
         &self,
         input: &DeleteConfigurationSetEventDestinationRequest,
@@ -11182,7 +11182,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified identity (an email address or a domain) from the list of verified identities.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Deletes the specified identity (an email address or a domain) from the list of verified identities.</p> <p>This action is throttled at one request per second.</p>
     fn delete_identity(
         &self,
         input: &DeleteIdentityRequest,
@@ -11233,7 +11233,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified sending authorization policy for the given identity (an email address or a domain). This API returns successfully even if a policy with the specified name does not exist.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Deletes the specified sending authorization policy for the given identity (an email address or a domain). This API returns successfully even if a policy with the specified name does not exist.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn delete_identity_policy(
         &self,
         input: &DeleteIdentityPolicyRequest,
@@ -11284,7 +11284,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified IP address filter.</p> <p>For information about managing IP address filters, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Deletes the specified IP address filter.</p> <p>For information about managing IP address filters, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn delete_receipt_filter(
         &self,
         input: &DeleteReceiptFilterRequest,
@@ -11335,7 +11335,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified receipt rule.</p> <p>For information about managing receipt rules, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Deletes the specified receipt rule.</p> <p>For information about managing receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn delete_receipt_rule(
         &self,
         input: &DeleteReceiptRuleRequest,
@@ -11386,7 +11386,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified receipt rule set and all of the receipt rules it contains.</p> <note> <p>The currently active rule set cannot be deleted.</p> </note> <p>For information about managing receipt rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Deletes the specified receipt rule set and all of the receipt rules it contains.</p> <note> <p>The currently active rule set cannot be deleted.</p> </note> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn delete_receipt_rule_set(
         &self,
         input: &DeleteReceiptRuleSetRequest,
@@ -11437,7 +11437,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified email address from the list of verified addresses.</p> <important> <p>The DeleteVerifiedEmailAddress action is deprecated as of the May 15, 2012 release of Domain Verification. The DeleteIdentity action is now preferred.</p> </important> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Deletes the specified email address from the list of verified addresses.</p> <important> <p>The DeleteVerifiedEmailAddress action is deprecated as of the May 15, 2012 release of Domain Verification. The DeleteIdentity action is now preferred.</p> </important> <p>This action is throttled at one request per second.</p>
     fn delete_verified_email_address(
         &self,
         input: &DeleteVerifiedEmailAddressRequest,
@@ -11467,7 +11467,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the metadata and receipt rules for the receipt rule set that is currently active.</p> <p>For information about setting up receipt rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Returns the metadata and receipt rules for the receipt rule set that is currently active.</p> <p>For information about setting up receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn describe_active_receipt_rule_set(
         &self,
         input: &DescribeActiveReceiptRuleSetRequest,
@@ -11520,7 +11520,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the details of the specified configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Returns the details of the specified configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn describe_configuration_set(
         &self,
         input: &DescribeConfigurationSetRequest,
@@ -11571,7 +11571,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the details of the specified receipt rule.</p> <p>For information about setting up receipt rules, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Returns the details of the specified receipt rule.</p> <p>For information about setting up receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn describe_receipt_rule(
         &self,
         input: &DescribeReceiptRuleRequest,
@@ -11622,7 +11622,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the details of the specified receipt rule set.</p> <p>For information about managing receipt rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Returns the details of the specified receipt rule set.</p> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn describe_receipt_rule_set(
         &self,
         input: &DescribeReceiptRuleSetRequest,
@@ -11673,7 +11673,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the current status of Easy DKIM signing for an entity. For domain name identities, this action also returns the DKIM tokens that are required for Easy DKIM signing, and whether Amazon SES has successfully verified that these tokens have been published.</p> <p>This action takes a list of identities as input and returns the following information for each:</p> <ul> <li> <p>Whether Easy DKIM signing is enabled or disabled.</p> </li> <li> <p>A set of DKIM tokens that represent the identity. If the identity is an email address, the tokens represent the domain of that address.</p> </li> <li> <p>Whether Amazon SES has successfully verified the DKIM tokens published in the domain's DNS. This information is only returned for domain name identities, not for email addresses.</p> </li> </ul> <p>This action is throttled at one request per second and can only get DKIM attributes for up to 100 identities at a time.</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html\">Amazon SES Developer Guide</a>.</p>"]
+    /// <p>Returns the current status of Easy DKIM signing for an entity. For domain name identities, this action also returns the DKIM tokens that are required for Easy DKIM signing, and whether Amazon SES has successfully verified that these tokens have been published.</p> <p>This action takes a list of identities as input and returns the following information for each:</p> <ul> <li> <p>Whether Easy DKIM signing is enabled or disabled.</p> </li> <li> <p>A set of DKIM tokens that represent the identity. If the identity is an email address, the tokens represent the domain of that address.</p> </li> <li> <p>Whether Amazon SES has successfully verified the DKIM tokens published in the domain's DNS. This information is only returned for domain name identities, not for email addresses.</p> </li> </ul> <p>This action is throttled at one request per second and can only get DKIM attributes for up to 100 identities at a time.</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html">Amazon SES Developer Guide</a>.</p>
     fn get_identity_dkim_attributes(
         &self,
         input: &GetIdentityDkimAttributesRequest,
@@ -11724,7 +11724,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the custom MAIL FROM attributes for a list of identities (email addresses and/or domains).</p> <p>This action is throttled at one request per second and can only get custom MAIL FROM attributes for up to 100 identities at a time.</p>"]
+    /// <p>Returns the custom MAIL FROM attributes for a list of identities (email addresses and/or domains).</p> <p>This action is throttled at one request per second and can only get custom MAIL FROM attributes for up to 100 identities at a time.</p>
     fn get_identity_mail_from_domain_attributes(
         &self,
         input: &GetIdentityMailFromDomainAttributesRequest,
@@ -11778,7 +11778,7 @@ where
         }
     }
 
-    #[doc="<p>Given a list of verified identities (email addresses and/or domains), returns a structure describing identity notification attributes.</p> <p>This action is throttled at one request per second and can only get notification attributes for up to 100 identities at a time.</p> <p>For more information about using notifications with Amazon SES, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html\">Amazon SES Developer Guide</a>.</p>"]
+    /// <p>Given a list of verified identities (email addresses and/or domains), returns a structure describing identity notification attributes.</p> <p>This action is throttled at one request per second and can only get notification attributes for up to 100 identities at a time.</p> <p>For more information about using notifications with Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
     fn get_identity_notification_attributes(
         &self,
         input: &GetIdentityNotificationAttributesRequest,
@@ -11832,7 +11832,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the requested sending authorization policies for the given identity (an email address or a domain). The policies are returned as a map of policy names to policy contents. You can retrieve a maximum of 20 policies at a time.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Returns the requested sending authorization policies for the given identity (an email address or a domain). The policies are returned as a map of policy names to policy contents. You can retrieve a maximum of 20 policies at a time.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn get_identity_policies(
         &self,
         input: &GetIdentityPoliciesRequest,
@@ -11883,7 +11883,7 @@ where
         }
     }
 
-    #[doc="<p>Given a list of identities (email addresses and/or domains), returns the verification status and (for domain identities) the verification token for each identity.</p> <p>The verification status of an email address is \"Pending\" until the email address owner clicks the link within the verification email that Amazon SES sent to that address. If the email address owner clicks the link within 24 hours, the verification status of the email address changes to \"Success\". If the link is not clicked within 24 hours, the verification status changes to \"Failed.\" In that case, if you still want to verify the email address, you must restart the verification process from the beginning.</p> <p>For domain identities, the domain's verification status is \"Pending\" as Amazon SES searches for the required TXT record in the DNS settings of the domain. When Amazon SES detects the record, the domain's verification status changes to \"Success\". If Amazon SES is unable to detect the record within 72 hours, the domain's verification status changes to \"Failed.\" In that case, if you still want to verify the domain, you must restart the verification process from the beginning.</p> <p>This action is throttled at one request per second and can only get verification attributes for up to 100 identities at a time.</p>"]
+    /// <p>Given a list of identities (email addresses and/or domains), returns the verification status and (for domain identities) the verification token for each identity.</p> <p>The verification status of an email address is "Pending" until the email address owner clicks the link within the verification email that Amazon SES sent to that address. If the email address owner clicks the link within 24 hours, the verification status of the email address changes to "Success". If the link is not clicked within 24 hours, the verification status changes to "Failed." In that case, if you still want to verify the email address, you must restart the verification process from the beginning.</p> <p>For domain identities, the domain's verification status is "Pending" as Amazon SES searches for the required TXT record in the DNS settings of the domain. When Amazon SES detects the record, the domain's verification status changes to "Success". If Amazon SES is unable to detect the record within 72 hours, the domain's verification status changes to "Failed." In that case, if you still want to verify the domain, you must restart the verification process from the beginning.</p> <p>This action is throttled at one request per second and can only get verification attributes for up to 100 identities at a time.</p>
     fn get_identity_verification_attributes(
         &self,
         input: &GetIdentityVerificationAttributesRequest,
@@ -11937,7 +11937,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the user's current sending limits.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Returns the user's current sending limits.</p> <p>This action is throttled at one request per second.</p>
     fn get_send_quota(&self) -> Result<GetSendQuotaResponse, GetSendQuotaError> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
@@ -11985,7 +11985,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the user's sending statistics. The result is a list of data points, representing the last two weeks of sending activity.</p> <p>Each data point in the list contains statistics for a 15-minute interval.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Returns the user's sending statistics. The result is a list of data points, representing the last two weeks of sending activity.</p> <p>Each data point in the list contains statistics for a 15-minute interval.</p> <p>This action is throttled at one request per second.</p>
     fn get_send_statistics(&self) -> Result<GetSendStatisticsResponse, GetSendStatisticsError> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
@@ -12033,7 +12033,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the configuration sets associated with your AWS account.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second and can return up to 50 configuration sets at a time.</p>"]
+    /// <p>Lists the configuration sets associated with your AWS account.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second and can return up to 50 configuration sets at a time.</p>
     fn list_configuration_sets(
         &self,
         input: &ListConfigurationSetsRequest,
@@ -12084,7 +12084,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list containing all of the identities (email addresses and domains) for your AWS account, regardless of verification status.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Returns a list containing all of the identities (email addresses and domains) for your AWS account, regardless of verification status.</p> <p>This action is throttled at one request per second.</p>
     fn list_identities(
         &self,
         input: &ListIdentitiesRequest,
@@ -12135,7 +12135,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of sending authorization policies that are attached to the given identity (an email address or a domain). This API returns only a list. If you want the actual policy content, you can use <code>GetIdentityPolicies</code>.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Returns a list of sending authorization policies that are attached to the given identity (an email address or a domain). This API returns only a list. If you want the actual policy content, you can use <code>GetIdentityPolicies</code>.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn list_identity_policies(
         &self,
         input: &ListIdentityPoliciesRequest,
@@ -12186,7 +12186,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the IP address filters associated with your AWS account.</p> <p>For information about managing IP address filters, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Lists the IP address filters associated with your AWS account.</p> <p>For information about managing IP address filters, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn list_receipt_filters(
         &self,
         input: &ListReceiptFiltersRequest,
@@ -12237,7 +12237,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the receipt rule sets that exist under your AWS account. If there are additional receipt rule sets to be retrieved, you will receive a <code>NextToken</code> that you can provide to the next call to <code>ListReceiptRuleSets</code> to retrieve the additional entries.</p> <p>For information about managing receipt rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Lists the receipt rule sets that exist under your AWS account. If there are additional receipt rule sets to be retrieved, you will receive a <code>NextToken</code> that you can provide to the next call to <code>ListReceiptRuleSets</code> to retrieve the additional entries.</p> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn list_receipt_rule_sets(
         &self,
         input: &ListReceiptRuleSetsRequest,
@@ -12288,7 +12288,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list containing all of the email addresses that have been verified.</p> <important> <p>The ListVerifiedEmailAddresses action is deprecated as of the May 15, 2012 release of Domain Verification. The ListIdentities action is now preferred.</p> </important> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Returns a list containing all of the email addresses that have been verified.</p> <important> <p>The ListVerifiedEmailAddresses action is deprecated as of the May 15, 2012 release of Domain Verification. The ListIdentities action is now preferred.</p> </important> <p>This action is throttled at one request per second.</p>
     fn list_verified_email_addresses(
         &self,
     ) -> Result<ListVerifiedEmailAddressesResponse, ListVerifiedEmailAddressesError> {
@@ -12340,7 +12340,7 @@ where
         }
     }
 
-    #[doc="<p>Adds or updates a sending authorization policy for the specified identity (an email address or a domain).</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Adds or updates a sending authorization policy for the specified identity (an email address or a domain).</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn put_identity_policy(
         &self,
         input: &PutIdentityPolicyRequest,
@@ -12391,7 +12391,7 @@ where
         }
     }
 
-    #[doc="<p>Reorders the receipt rules within a receipt rule set.</p> <note> <p>All of the rules in the rule set must be represented in this request. That is, this API will return an error if the reorder request doesn't explicitly position all of the rules.</p> </note> <p>For information about managing receipt rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Reorders the receipt rules within a receipt rule set.</p> <note> <p>All of the rules in the rule set must be represented in this request. That is, this API will return an error if the reorder request doesn't explicitly position all of the rules.</p> </note> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn reorder_receipt_rule_set(
         &self,
         input: &ReorderReceiptRuleSetRequest,
@@ -12442,7 +12442,7 @@ where
         }
     }
 
-    #[doc="<p>Generates and sends a bounce message to the sender of an email you received through Amazon SES. You can only use this API on an email up to 24 hours after you receive it.</p> <note> <p>You cannot use this API to send generic bounces for mail that was not received by Amazon SES.</p> </note> <p>For information about receiving email through Amazon SES, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Generates and sends a bounce message to the sender of an email you received through Amazon SES. You can only use this API on an email up to 24 hours after you receive it.</p> <note> <p>You cannot use this API to send generic bounces for mail that was not received by Amazon SES.</p> </note> <p>For information about receiving email through Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn send_bounce(
         &self,
         input: &SendBounceRequest,
@@ -12493,7 +12493,7 @@ where
         }
     }
 
-    #[doc="<p>Composes an email message based on input data, and then immediately queues the message for sending.</p> <p>There are several important points to know about <code>SendEmail</code>:</p> <ul> <li> <p>You can only send email from verified email addresses and domains; otherwise, you will get an \"Email address not verified\" error. If your account is still in the Amazon SES sandbox, you must also verify every recipient email address except for the recipients provided by the Amazon SES mailbox simulator. For more information, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html\">Amazon SES Developer Guide</a>.</p> </li> <li> <p>The total size of the message cannot exceed 10 MB. This includes any attachments that are part of the message.</p> </li> <li> <p>You must provide at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If any email address you provide is invalid, Amazon SES rejects the entire email.</p> </li> <li> <p>Amazon SES has a limit on the total number of recipients per message. The combined number of To:, CC: and BCC: email addresses cannot exceed 50. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call Amazon SES repeatedly to send the message to each group.</p> </li> <li> <p>For every message that you send, the total number of recipients (To:, CC: and BCC:) is counted against your sending quota - the maximum number of emails you can send in a 24-hour period. For information about your sending quota, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html\">Amazon SES Developer Guide</a>.</p> </li> </ul>"]
+    /// <p><p>Composes an email message based on input data, and then immediately queues the message for sending.</p> <p>There are several important points to know about <code>SendEmail</code>:</p> <ul> <li> <p>You can only send email from verified email addresses and domains; otherwise, you will get an &quot;Email address not verified&quot; error. If your account is still in the Amazon SES sandbox, you must also verify every recipient email address except for the recipients provided by the Amazon SES mailbox simulator. For more information, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Amazon SES Developer Guide</a>.</p> </li> <li> <p>The total size of the message cannot exceed 10 MB. This includes any attachments that are part of the message.</p> </li> <li> <p>You must provide at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If any email address you provide is invalid, Amazon SES rejects the entire email.</p> </li> <li> <p>Amazon SES has a limit on the total number of recipients per message. The combined number of To:, CC: and BCC: email addresses cannot exceed 50. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call Amazon SES repeatedly to send the message to each group.</p> </li> <li> <p>For every message that you send, the total number of recipients (To:, CC: and BCC:) is counted against your sending quota - the maximum number of emails you can send in a 24-hour period. For information about your sending quota, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html">Amazon SES Developer Guide</a>.</p> </li> </ul></p>
     fn send_email(&self, input: &SendEmailRequest) -> Result<SendEmailResponse, SendEmailError> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
@@ -12541,7 +12541,7 @@ where
         }
     }
 
-    #[doc="<p>Sends an email message, with header and content specified by the client. The <code>SendRawEmail</code> action is useful for sending multipart MIME emails. The raw text of the message must comply with Internet email standards; otherwise, the message cannot be sent. </p> <p>There are several important points to know about <code>SendRawEmail</code>:</p> <ul> <li> <p>You can only send email from verified email addresses and domains; otherwise, you will get an \"Email address not verified\" error. If your account is still in the Amazon SES sandbox, you must also verify every recipient email address except for the recipients provided by the Amazon SES mailbox simulator. For more information, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html\">Amazon SES Developer Guide</a>.</p> </li> <li> <p>The total size of the message cannot exceed 10 MB. This includes any attachments that are part of the message.</p> </li> <li> <p>You must provide at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If any email address you provide is invalid, Amazon SES rejects the entire email.</p> </li> <li> <p>Amazon SES has a limit on the total number of recipients per message. The combined number of To:, CC: and BCC: email addresses cannot exceed 50. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call Amazon SES repeatedly to send the message to each group.</p> </li> <li> <p>The To:, CC:, and BCC: headers in the raw message can contain a group list. Note that each recipient in a group list counts towards the 50-recipient limit.</p> </li> <li> <p>Amazon SES overrides any Message-ID and Date headers you provide.</p> </li> <li> <p>For every message that you send, the total number of recipients (To:, CC: and BCC:) is counted against your sending quota - the maximum number of emails you can send in a 24-hour period. For information about your sending quota, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html\">Amazon SES Developer Guide</a>.</p> </li> <li> <p>If you are using sending authorization to send on behalf of another user, <code>SendRawEmail</code> enables you to specify the cross-account identity for the email's \"Source,\" \"From,\" and \"Return-Path\" parameters in one of two ways: you can pass optional parameters <code>SourceArn</code>, <code>FromArn</code>, and/or <code>ReturnPathArn</code> to the API, or you can include the following X-headers in the header of your raw email:</p> <ul> <li> <p> <code>X-SES-SOURCE-ARN</code> </p> </li> <li> <p> <code>X-SES-FROM-ARN</code> </p> </li> <li> <p> <code>X-SES-RETURN-PATH-ARN</code> </p> </li> </ul> <important> <p>Do not include these X-headers in the DKIM signature, because they are removed by Amazon SES before sending the email.</p> </important> <p>For the most common sending authorization use case, we recommend that you specify the <code>SourceIdentityArn</code> and do not specify either the <code>FromIdentityArn</code> or <code>ReturnPathIdentityArn</code>. (The same note applies to the corresponding X-headers.) If you only specify the <code>SourceIdentityArn</code>, Amazon SES will simply set the \"From\" address and the \"Return Path\" address to the identity specified in <code>SourceIdentityArn</code>. For more information about sending authorization, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html\">Amazon SES Developer Guide</a>.</p> </li> </ul>"]
+    /// <p><p>Sends an email message, with header and content specified by the client. The <code>SendRawEmail</code> action is useful for sending multipart MIME emails. The raw text of the message must comply with Internet email standards; otherwise, the message cannot be sent. </p> <p>There are several important points to know about <code>SendRawEmail</code>:</p> <ul> <li> <p>You can only send email from verified email addresses and domains; otherwise, you will get an &quot;Email address not verified&quot; error. If your account is still in the Amazon SES sandbox, you must also verify every recipient email address except for the recipients provided by the Amazon SES mailbox simulator. For more information, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Amazon SES Developer Guide</a>.</p> </li> <li> <p>The total size of the message cannot exceed 10 MB. This includes any attachments that are part of the message.</p> </li> <li> <p>You must provide at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If any email address you provide is invalid, Amazon SES rejects the entire email.</p> </li> <li> <p>Amazon SES has a limit on the total number of recipients per message. The combined number of To:, CC: and BCC: email addresses cannot exceed 50. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call Amazon SES repeatedly to send the message to each group.</p> </li> <li> <p>The To:, CC:, and BCC: headers in the raw message can contain a group list. Note that each recipient in a group list counts towards the 50-recipient limit.</p> </li> <li> <p>Amazon SES overrides any Message-ID and Date headers you provide.</p> </li> <li> <p>For every message that you send, the total number of recipients (To:, CC: and BCC:) is counted against your sending quota - the maximum number of emails you can send in a 24-hour period. For information about your sending quota, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html">Amazon SES Developer Guide</a>.</p> </li> <li> <p>If you are using sending authorization to send on behalf of another user, <code>SendRawEmail</code> enables you to specify the cross-account identity for the email&#39;s &quot;Source,&quot; &quot;From,&quot; and &quot;Return-Path&quot; parameters in one of two ways: you can pass optional parameters <code>SourceArn</code>, <code>FromArn</code>, and/or <code>ReturnPathArn</code> to the API, or you can include the following X-headers in the header of your raw email:</p> <ul> <li> <p> <code>X-SES-SOURCE-ARN</code> </p> </li> <li> <p> <code>X-SES-FROM-ARN</code> </p> </li> <li> <p> <code>X-SES-RETURN-PATH-ARN</code> </p> </li> </ul> <important> <p>Do not include these X-headers in the DKIM signature, because they are removed by Amazon SES before sending the email.</p> </important> <p>For the most common sending authorization use case, we recommend that you specify the <code>SourceIdentityArn</code> and do not specify either the <code>FromIdentityArn</code> or <code>ReturnPathIdentityArn</code>. (The same note applies to the corresponding X-headers.) If you only specify the <code>SourceIdentityArn</code>, Amazon SES will simply set the &quot;From&quot; address and the &quot;Return Path&quot; address to the identity specified in <code>SourceIdentityArn</code>. For more information about sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> </li> </ul></p>
     fn send_raw_email(
         &self,
         input: &SendRawEmailRequest,
@@ -12592,7 +12592,7 @@ where
         }
     }
 
-    #[doc="<p>Sets the specified receipt rule set as the active receipt rule set.</p> <note> <p>To disable your email-receiving through Amazon SES completely, you can call this API with RuleSetName set to null.</p> </note> <p>For information about managing receipt rule sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Sets the specified receipt rule set as the active receipt rule set.</p> <note> <p>To disable your email-receiving through Amazon SES completely, you can call this API with RuleSetName set to null.</p> </note> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn set_active_receipt_rule_set(
         &self,
         input: &SetActiveReceiptRuleSetRequest,
@@ -12643,7 +12643,7 @@ where
         }
     }
 
-    #[doc="<p>Enables or disables Easy DKIM signing of email sent from an identity:</p> <ul> <li> <p>If Easy DKIM signing is enabled for a domain name identity (e.g., <code>example.com</code>), then Amazon SES will DKIM-sign all email sent by addresses under that domain name (e.g., <code>user@example.com</code>).</p> </li> <li> <p>If Easy DKIM signing is enabled for an email address, then Amazon SES will DKIM-sign all email sent by that email address.</p> </li> </ul> <p>For email addresses (e.g., <code>user@example.com</code>), you can only enable Easy DKIM signing if the corresponding domain (e.g., <code>example.com</code>) has been set up for Easy DKIM using the AWS Console or the <code>VerifyDomainDkim</code> action.</p> <p>This action is throttled at one request per second.</p> <p>For more information about Easy DKIM signing, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html\">Amazon SES Developer Guide</a>.</p>"]
+    /// <p>Enables or disables Easy DKIM signing of email sent from an identity:</p> <ul> <li> <p>If Easy DKIM signing is enabled for a domain name identity (e.g., <code>example.com</code>), then Amazon SES will DKIM-sign all email sent by addresses under that domain name (e.g., <code>user@example.com</code>).</p> </li> <li> <p>If Easy DKIM signing is enabled for an email address, then Amazon SES will DKIM-sign all email sent by that email address.</p> </li> </ul> <p>For email addresses (e.g., <code>user@example.com</code>), you can only enable Easy DKIM signing if the corresponding domain (e.g., <code>example.com</code>) has been set up for Easy DKIM using the AWS Console or the <code>VerifyDomainDkim</code> action.</p> <p>This action is throttled at one request per second.</p> <p>For more information about Easy DKIM signing, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">Amazon SES Developer Guide</a>.</p>
     fn set_identity_dkim_enabled(
         &self,
         input: &SetIdentityDkimEnabledRequest,
@@ -12694,7 +12694,7 @@ where
         }
     }
 
-    #[doc="<p>Given an identity (an email address or a domain), enables or disables whether Amazon SES forwards bounce and complaint notifications as email. Feedback forwarding can only be disabled when Amazon Simple Notification Service (Amazon SNS) topics are specified for both bounces and complaints.</p> <note> <p>Feedback forwarding does not apply to delivery notifications. Delivery notifications are only available through Amazon SNS.</p> </note> <p>This action is throttled at one request per second.</p> <p>For more information about using notifications with Amazon SES, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html\">Amazon SES Developer Guide</a>.</p>"]
+    /// <p>Given an identity (an email address or a domain), enables or disables whether Amazon SES forwards bounce and complaint notifications as email. Feedback forwarding can only be disabled when Amazon Simple Notification Service (Amazon SNS) topics are specified for both bounces and complaints.</p> <note> <p>Feedback forwarding does not apply to delivery notifications. Delivery notifications are only available through Amazon SNS.</p> </note> <p>This action is throttled at one request per second.</p> <p>For more information about using notifications with Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
     fn set_identity_feedback_forwarding_enabled(
         &self,
         input: &SetIdentityFeedbackForwardingEnabledRequest,
@@ -12750,7 +12750,7 @@ where
         }
     }
 
-    #[doc="<p>Given an identity (an email address or a domain), sets whether Amazon SES includes the original email headers in the Amazon Simple Notification Service (Amazon SNS) notifications of a specified type.</p> <p>This action is throttled at one request per second.</p> <p>For more information about using notifications with Amazon SES, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html\">Amazon SES Developer Guide</a>.</p>"]
+    /// <p>Given an identity (an email address or a domain), sets whether Amazon SES includes the original email headers in the Amazon Simple Notification Service (Amazon SNS) notifications of a specified type.</p> <p>This action is throttled at one request per second.</p> <p>For more information about using notifications with Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
     fn set_identity_headers_in_notifications_enabled(
         &self,
         input: &SetIdentityHeadersInNotificationsEnabledRequest,
@@ -12810,7 +12810,7 @@ where
         }
     }
 
-    #[doc="<p>Enables or disables the custom MAIL FROM domain setup for a verified identity (an email address or a domain).</p> <important> <p>To send emails using the specified MAIL FROM domain, you must add an MX record to your MAIL FROM domain's DNS settings. If you want your emails to pass Sender Policy Framework (SPF) checks, you must also add or update an SPF record. For more information, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from-set.html\">Amazon SES Developer Guide</a>.</p> </important> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Enables or disables the custom MAIL FROM domain setup for a verified identity (an email address or a domain).</p> <important> <p>To send emails using the specified MAIL FROM domain, you must add an MX record to your MAIL FROM domain's DNS settings. If you want your emails to pass Sender Policy Framework (SPF) checks, you must also add or update an SPF record. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from-set.html">Amazon SES Developer Guide</a>.</p> </important> <p>This action is throttled at one request per second.</p>
     fn set_identity_mail_from_domain(
         &self,
         input: &SetIdentityMailFromDomainRequest,
@@ -12861,7 +12861,7 @@ where
         }
     }
 
-    #[doc="<p>Given an identity (an email address or a domain), sets the Amazon Simple Notification Service (Amazon SNS) topic to which Amazon SES will publish bounce, complaint, and/or delivery notifications for emails sent with that identity as the <code>Source</code>.</p> <note> <p>Unless feedback forwarding is enabled, you must specify Amazon SNS topics for bounce and complaint notifications. For more information, see <code>SetIdentityFeedbackForwardingEnabled</code>.</p> </note> <p>This action is throttled at one request per second.</p> <p>For more information about feedback notification, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html\">Amazon SES Developer Guide</a>.</p>"]
+    /// <p>Given an identity (an email address or a domain), sets the Amazon Simple Notification Service (Amazon SNS) topic to which Amazon SES will publish bounce, complaint, and/or delivery notifications for emails sent with that identity as the <code>Source</code>.</p> <note> <p>Unless feedback forwarding is enabled, you must specify Amazon SNS topics for bounce and complaint notifications. For more information, see <code>SetIdentityFeedbackForwardingEnabled</code>.</p> </note> <p>This action is throttled at one request per second.</p> <p>For more information about feedback notification, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
     fn set_identity_notification_topic(
         &self,
         input: &SetIdentityNotificationTopicRequest,
@@ -12914,7 +12914,7 @@ where
         }
     }
 
-    #[doc="<p>Sets the position of the specified receipt rule in the receipt rule set.</p> <p>For information about managing receipt rules, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Sets the position of the specified receipt rule in the receipt rule set.</p> <p>For information about managing receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn set_receipt_rule_position(
         &self,
         input: &SetReceiptRulePositionRequest,
@@ -12965,7 +12965,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the event destination of a configuration set.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>Event destinations are associated with configuration sets, which enable you to publish email sending events to Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS). For information about using configuration sets, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Updates the event destination of a configuration set.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>Event destinations are associated with configuration sets, which enable you to publish email sending events to Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS). For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn update_configuration_set_event_destination(
         &self,
         input: &UpdateConfigurationSetEventDestinationRequest,
@@ -13021,7 +13021,7 @@ where
         }
     }
 
-    #[doc="<p>Updates a receipt rule.</p> <p>For information about managing receipt rules, see the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html\">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Updates a receipt rule.</p> <p>For information about managing receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
     fn update_receipt_rule(
         &self,
         input: &UpdateReceiptRuleRequest,
@@ -13072,7 +13072,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a set of DKIM tokens for a domain. DKIM <i>tokens</i> are character strings that represent your domain's identity. Using these tokens, you will need to create DNS CNAME records that point to DKIM public keys hosted by Amazon SES. Amazon Web Services will eventually detect that you have updated your DNS records; this detection process may take up to 72 hours. Upon successful detection, Amazon SES will be able to DKIM-sign email originating from that domain.</p> <p>This action is throttled at one request per second.</p> <p>To enable or disable Easy DKIM signing for a domain, use the <code>SetIdentityDkimEnabled</code> action.</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href=\"http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html\">Amazon SES Developer Guide</a>.</p>"]
+    /// <p>Returns a set of DKIM tokens for a domain. DKIM <i>tokens</i> are character strings that represent your domain's identity. Using these tokens, you will need to create DNS CNAME records that point to DKIM public keys hosted by Amazon SES. Amazon Web Services will eventually detect that you have updated your DNS records; this detection process may take up to 72 hours. Upon successful detection, Amazon SES will be able to DKIM-sign email originating from that domain.</p> <p>This action is throttled at one request per second.</p> <p>To enable or disable Easy DKIM signing for a domain, use the <code>SetIdentityDkimEnabled</code> action.</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html">Amazon SES Developer Guide</a>.</p>
     fn verify_domain_dkim(
         &self,
         input: &VerifyDomainDkimRequest,
@@ -13123,7 +13123,7 @@ where
         }
     }
 
-    #[doc = "<p>Verifies a domain.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Verifies a domain.</p> <p>This action is throttled at one request per second.</p>
     fn verify_domain_identity(
         &self,
         input: &VerifyDomainIdentityRequest,
@@ -13174,7 +13174,7 @@ where
         }
     }
 
-    #[doc="<p>Verifies an email address. This action causes a confirmation email message to be sent to the specified address.</p> <important> <p>The VerifyEmailAddress action is deprecated as of the May 15, 2012 release of Domain Verification. The VerifyEmailIdentity action is now preferred.</p> </important> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Verifies an email address. This action causes a confirmation email message to be sent to the specified address.</p> <important> <p>The VerifyEmailAddress action is deprecated as of the May 15, 2012 release of Domain Verification. The VerifyEmailIdentity action is now preferred.</p> </important> <p>This action is throttled at one request per second.</p>
     fn verify_email_address(
         &self,
         input: &VerifyEmailAddressRequest,
@@ -13204,7 +13204,7 @@ where
         }
     }
 
-    #[doc="<p>Verifies an email address. This action causes a confirmation email message to be sent to the specified address.</p> <p>This action is throttled at one request per second.</p>"]
+    /// <p>Verifies an email address. This action causes a confirmation email message to be sent to the specified address.</p> <p>This action is throttled at one request per second.</p>
     fn verify_email_identity(
         &self,
         input: &VerifyEmailIdentityRequest,

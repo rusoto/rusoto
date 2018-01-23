@@ -236,9 +236,9 @@ pub struct Voice {
 /// Errors returned by DeleteLexicon
 #[derive(Debug, PartialEq)]
 pub enum DeleteLexiconError {
-    ///<p>Amazon Polly can't find the specified lexicon. This could be caused by a lexicon that is missing, its name is misspelled or specifying a lexicon that is in a different region.</p> <p>Verify that the lexicon exists, is in the region (see <a>ListLexicons</a>) and that you spelled its name is spelled correctly. Then try again.</p>
+    /// <p>Amazon Polly can't find the specified lexicon. This could be caused by a lexicon that is missing, its name is misspelled or specifying a lexicon that is in a different region.</p> <p>Verify that the lexicon exists, is in the region (see <a>ListLexicons</a>) and that you spelled its name is spelled correctly. Then try again.</p>
     LexiconNotFound(String),
-    ///<p>An unknown condition has caused a service failure.</p>
+    /// <p>An unknown condition has caused a service failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -320,9 +320,9 @@ impl Error for DeleteLexiconError {
 /// Errors returned by DescribeVoices
 #[derive(Debug, PartialEq)]
 pub enum DescribeVoicesError {
-    ///<p>The NextToken is invalid. Verify that it's spelled correctly, and then try again.</p>
+    /// <p>The NextToken is invalid. Verify that it's spelled correctly, and then try again.</p>
     InvalidNextToken(String),
-    ///<p>An unknown condition has caused a service failure.</p>
+    /// <p>An unknown condition has caused a service failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -404,9 +404,9 @@ impl Error for DescribeVoicesError {
 /// Errors returned by GetLexicon
 #[derive(Debug, PartialEq)]
 pub enum GetLexiconError {
-    ///<p>Amazon Polly can't find the specified lexicon. This could be caused by a lexicon that is missing, its name is misspelled or specifying a lexicon that is in a different region.</p> <p>Verify that the lexicon exists, is in the region (see <a>ListLexicons</a>) and that you spelled its name is spelled correctly. Then try again.</p>
+    /// <p>Amazon Polly can't find the specified lexicon. This could be caused by a lexicon that is missing, its name is misspelled or specifying a lexicon that is in a different region.</p> <p>Verify that the lexicon exists, is in the region (see <a>ListLexicons</a>) and that you spelled its name is spelled correctly. Then try again.</p>
     LexiconNotFound(String),
-    ///<p>An unknown condition has caused a service failure.</p>
+    /// <p>An unknown condition has caused a service failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -486,9 +486,9 @@ impl Error for GetLexiconError {
 /// Errors returned by ListLexicons
 #[derive(Debug, PartialEq)]
 pub enum ListLexiconsError {
-    ///<p>The NextToken is invalid. Verify that it's spelled correctly, and then try again.</p>
+    /// <p>The NextToken is invalid. Verify that it's spelled correctly, and then try again.</p>
     InvalidNextToken(String),
-    ///<p>An unknown condition has caused a service failure.</p>
+    /// <p>An unknown condition has caused a service failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -570,19 +570,19 @@ impl Error for ListLexiconsError {
 /// Errors returned by PutLexicon
 #[derive(Debug, PartialEq)]
 pub enum PutLexiconError {
-    ///<p>Amazon Polly can't find the specified lexicon. Verify that the lexicon's name is spelled correctly, and then try again.</p>
+    /// <p>Amazon Polly can't find the specified lexicon. Verify that the lexicon's name is spelled correctly, and then try again.</p>
     InvalidLexicon(String),
-    ///<p>The maximum size of the specified lexicon would be exceeded by this operation.</p>
+    /// <p>The maximum size of the specified lexicon would be exceeded by this operation.</p>
     LexiconSizeExceeded(String),
-    ///<p>The maximum size of the lexeme would be exceeded by this operation.</p>
+    /// <p>The maximum size of the lexeme would be exceeded by this operation.</p>
     MaxLexemeLengthExceeded(String),
-    ///<p>The maximum number of lexicons would be exceeded by this operation.</p>
+    /// <p>The maximum number of lexicons would be exceeded by this operation.</p>
     MaxLexiconsNumberExceeded(String),
-    ///<p>An unknown condition has caused a service failure.</p>
+    /// <p>An unknown condition has caused a service failure.</p>
     ServiceFailure(String),
-    ///<p>The alphabet specified by the lexicon is not a supported alphabet. Valid values are <code>x-sampa</code> and <code>ipa</code>.</p>
+    /// <p>The alphabet specified by the lexicon is not a supported alphabet. Valid values are <code>x-sampa</code> and <code>ipa</code>.</p>
     UnsupportedPlsAlphabet(String),
-    ///<p>The language specified in the lexicon is unsupported. For a list of supported languages, see <a href="http://docs.aws.amazon.com/polly/latest/dg/API_LexiconAttributes.html">Lexicon Attributes</a>.</p>
+    /// <p>The language specified in the lexicon is unsupported. For a list of supported languages, see <a href="http://docs.aws.amazon.com/polly/latest/dg/API_LexiconAttributes.html">Lexicon Attributes</a>.</p>
     UnsupportedPlsLanguage(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -682,19 +682,19 @@ impl Error for PutLexiconError {
 /// Errors returned by SynthesizeSpeech
 #[derive(Debug, PartialEq)]
 pub enum SynthesizeSpeechError {
-    ///<p>The specified sample rate is not valid.</p>
+    /// <p>The specified sample rate is not valid.</p>
     InvalidSampleRate(String),
-    ///<p>The SSML you provided is invalid. Verify the SSML syntax, spelling of tags and values, and then try again.</p>
+    /// <p>The SSML you provided is invalid. Verify the SSML syntax, spelling of tags and values, and then try again.</p>
     InvalidSsml(String),
-    ///<p>Amazon Polly can't find the specified lexicon. This could be caused by a lexicon that is missing, its name is misspelled or specifying a lexicon that is in a different region.</p> <p>Verify that the lexicon exists, is in the region (see <a>ListLexicons</a>) and that you spelled its name is spelled correctly. Then try again.</p>
+    /// <p>Amazon Polly can't find the specified lexicon. This could be caused by a lexicon that is missing, its name is misspelled or specifying a lexicon that is in a different region.</p> <p>Verify that the lexicon exists, is in the region (see <a>ListLexicons</a>) and that you spelled its name is spelled correctly. Then try again.</p>
     LexiconNotFound(String),
-    ///<p>Speech marks are not supported for the <code>OutputFormat</code> selected. Speech marks are only available for content in <code>json</code> format.</p>
+    /// <p>Speech marks are not supported for the <code>OutputFormat</code> selected. Speech marks are only available for content in <code>json</code> format.</p>
     MarksNotSupportedForFormat(String),
-    ///<p>An unknown condition has caused a service failure.</p>
+    /// <p>An unknown condition has caused a service failure.</p>
     ServiceFailure(String),
-    ///<p>SSML speech marks are not supported for plain text-type input.</p>
+    /// <p>SSML speech marks are not supported for plain text-type input.</p>
     SsmlMarksNotSupportedForTextType(String),
-    ///<p>The value of the "Text" parameter is longer than the accepted limits. The limit for input text is a maximum of 3000 characters total, of which no more than 1500 can be billed characters. SSML tags are not counted as billed characters.</p>
+    /// <p>The value of the "Text" parameter is longer than the accepted limits. The limit for input text is a maximum of 3000 characters total, of which no more than 1500 can be billed characters. SSML tags are not counted as billed characters.</p>
     TextLengthExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -799,31 +799,31 @@ impl Error for SynthesizeSpeechError {
 }
 /// Trait representing the capabilities of the Amazon Polly API. Amazon Polly clients implement this trait.
 pub trait Polly {
-    #[doc="<p>Deletes the specified pronunciation lexicon stored in an AWS Region. A lexicon which has been deleted is not available for speech synthesis, nor is it possible to retrieve it using either the <code>GetLexicon</code> or <code>ListLexicon</code> APIs.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html\">Managing Lexicons</a>.</p>"]
+    /// <p>Deletes the specified pronunciation lexicon stored in an AWS Region. A lexicon which has been deleted is not available for speech synthesis, nor is it possible to retrieve it using either the <code>GetLexicon</code> or <code>ListLexicon</code> APIs.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
     fn delete_lexicon(
         &self,
         input: &DeleteLexiconInput,
     ) -> Result<DeleteLexiconOutput, DeleteLexiconError>;
 
-    #[doc="<p>Returns the list of voices that are available for use when requesting speech synthesis. Each voice speaks a specified language, is either male or female, and is identified by an ID, which is the ASCII version of the voice name. </p> <p>When synthesizing speech ( <code>SynthesizeSpeech</code> ), you provide the voice ID for the voice you want from the list of voices returned by <code>DescribeVoices</code>.</p> <p>For example, you want your news reader application to read news in a specific language, but giving a user the option to choose the voice. Using the <code>DescribeVoices</code> operation you can provide the user with a list of available voices to select from.</p> <p> You can optionally specify a language code to filter the available voices. For example, if you specify <code>en-US</code>, the operation returns a list of all available US English voices. </p> <p>This operation requires permissions to perform the <code>polly:DescribeVoices</code> action.</p>"]
+    /// <p>Returns the list of voices that are available for use when requesting speech synthesis. Each voice speaks a specified language, is either male or female, and is identified by an ID, which is the ASCII version of the voice name. </p> <p>When synthesizing speech ( <code>SynthesizeSpeech</code> ), you provide the voice ID for the voice you want from the list of voices returned by <code>DescribeVoices</code>.</p> <p>For example, you want your news reader application to read news in a specific language, but giving a user the option to choose the voice. Using the <code>DescribeVoices</code> operation you can provide the user with a list of available voices to select from.</p> <p> You can optionally specify a language code to filter the available voices. For example, if you specify <code>en-US</code>, the operation returns a list of all available US English voices. </p> <p>This operation requires permissions to perform the <code>polly:DescribeVoices</code> action.</p>
     fn describe_voices(
         &self,
         input: &DescribeVoicesInput,
     ) -> Result<DescribeVoicesOutput, DescribeVoicesError>;
 
-    #[doc="<p>Returns the content of the specified pronunciation lexicon stored in an AWS Region. For more information, see <a href=\"http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html\">Managing Lexicons</a>.</p>"]
+    /// <p>Returns the content of the specified pronunciation lexicon stored in an AWS Region. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
     fn get_lexicon(&self, input: &GetLexiconInput) -> Result<GetLexiconOutput, GetLexiconError>;
 
-    #[doc="<p>Returns a list of pronunciation lexicons stored in an AWS Region. For more information, see <a href=\"http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html\">Managing Lexicons</a>.</p>"]
+    /// <p>Returns a list of pronunciation lexicons stored in an AWS Region. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
     fn list_lexicons(
         &self,
         input: &ListLexiconsInput,
     ) -> Result<ListLexiconsOutput, ListLexiconsError>;
 
-    #[doc="<p>Stores a pronunciation lexicon in an AWS Region. If a lexicon with the same name already exists in the region, it is overwritten by the new lexicon. Lexicon operations have eventual consistency, therefore, it might take some time before the lexicon is available to the SynthesizeSpeech operation.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html\">Managing Lexicons</a>.</p>"]
+    /// <p>Stores a pronunciation lexicon in an AWS Region. If a lexicon with the same name already exists in the region, it is overwritten by the new lexicon. Lexicon operations have eventual consistency, therefore, it might take some time before the lexicon is available to the SynthesizeSpeech operation.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
     fn put_lexicon(&self, input: &PutLexiconInput) -> Result<PutLexiconOutput, PutLexiconError>;
 
-    #[doc="<p>Synthesizes UTF-8 input, plain text or SSML, to a stream of bytes. SSML input must be valid, well-formed SSML. Some alphabets might not be available with all the voices (for example, Cyrillic might not be read at all by English voices) unless phoneme mapping is used. For more information, see <a href=\"http://docs.aws.amazon.com/polly/latest/dg/how-text-to-speech-works.html\">How it Works</a>.</p>"]
+    /// <p>Synthesizes UTF-8 input, plain text or SSML, to a stream of bytes. SSML input must be valid, well-formed SSML. Some alphabets might not be available with all the voices (for example, Cyrillic might not be read at all by English voices) unless phoneme mapping is used. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/how-text-to-speech-works.html">How it Works</a>.</p>
     fn synthesize_speech(
         &self,
         input: &SynthesizeSpeechInput,
@@ -859,7 +859,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Deletes the specified pronunciation lexicon stored in an AWS Region. A lexicon which has been deleted is not available for speech synthesis, nor is it possible to retrieve it using either the <code>GetLexicon</code> or <code>ListLexicon</code> APIs.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html\">Managing Lexicons</a>.</p>"]
+    /// <p>Deletes the specified pronunciation lexicon stored in an AWS Region. A lexicon which has been deleted is not available for speech synthesis, nor is it possible to retrieve it using either the <code>GetLexicon</code> or <code>ListLexicon</code> APIs.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
     fn delete_lexicon(
         &self,
         input: &DeleteLexiconInput,
@@ -897,7 +897,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the list of voices that are available for use when requesting speech synthesis. Each voice speaks a specified language, is either male or female, and is identified by an ID, which is the ASCII version of the voice name. </p> <p>When synthesizing speech ( <code>SynthesizeSpeech</code> ), you provide the voice ID for the voice you want from the list of voices returned by <code>DescribeVoices</code>.</p> <p>For example, you want your news reader application to read news in a specific language, but giving a user the option to choose the voice. Using the <code>DescribeVoices</code> operation you can provide the user with a list of available voices to select from.</p> <p> You can optionally specify a language code to filter the available voices. For example, if you specify <code>en-US</code>, the operation returns a list of all available US English voices. </p> <p>This operation requires permissions to perform the <code>polly:DescribeVoices</code> action.</p>"]
+    /// <p>Returns the list of voices that are available for use when requesting speech synthesis. Each voice speaks a specified language, is either male or female, and is identified by an ID, which is the ASCII version of the voice name. </p> <p>When synthesizing speech ( <code>SynthesizeSpeech</code> ), you provide the voice ID for the voice you want from the list of voices returned by <code>DescribeVoices</code>.</p> <p>For example, you want your news reader application to read news in a specific language, but giving a user the option to choose the voice. Using the <code>DescribeVoices</code> operation you can provide the user with a list of available voices to select from.</p> <p> You can optionally specify a language code to filter the available voices. For example, if you specify <code>en-US</code>, the operation returns a list of all available US English voices. </p> <p>This operation requires permissions to perform the <code>polly:DescribeVoices</code> action.</p>
     fn describe_voices(
         &self,
         input: &DescribeVoicesInput,
@@ -944,7 +944,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the content of the specified pronunciation lexicon stored in an AWS Region. For more information, see <a href=\"http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html\">Managing Lexicons</a>.</p>"]
+    /// <p>Returns the content of the specified pronunciation lexicon stored in an AWS Region. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
     fn get_lexicon(&self, input: &GetLexiconInput) -> Result<GetLexiconOutput, GetLexiconError> {
         let request_uri = format!("/v1/lexicons/{lexicon_name}", lexicon_name = input.name);
 
@@ -979,7 +979,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a list of pronunciation lexicons stored in an AWS Region. For more information, see <a href=\"http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html\">Managing Lexicons</a>.</p>"]
+    /// <p>Returns a list of pronunciation lexicons stored in an AWS Region. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
     fn list_lexicons(
         &self,
         input: &ListLexiconsInput,
@@ -1023,7 +1023,7 @@ where
         }
     }
 
-    #[doc="<p>Stores a pronunciation lexicon in an AWS Region. If a lexicon with the same name already exists in the region, it is overwritten by the new lexicon. Lexicon operations have eventual consistency, therefore, it might take some time before the lexicon is available to the SynthesizeSpeech operation.</p> <p>For more information, see <a href=\"http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html\">Managing Lexicons</a>.</p>"]
+    /// <p>Stores a pronunciation lexicon in an AWS Region. If a lexicon with the same name already exists in the region, it is overwritten by the new lexicon. Lexicon operations have eventual consistency, therefore, it might take some time before the lexicon is available to the SynthesizeSpeech operation.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
     fn put_lexicon(&self, input: &PutLexiconInput) -> Result<PutLexiconOutput, PutLexiconError> {
         let request_uri = format!("/v1/lexicons/{lexicon_name}", lexicon_name = input.name);
 
@@ -1061,7 +1061,7 @@ where
         }
     }
 
-    #[doc="<p>Synthesizes UTF-8 input, plain text or SSML, to a stream of bytes. SSML input must be valid, well-formed SSML. Some alphabets might not be available with all the voices (for example, Cyrillic might not be read at all by English voices) unless phoneme mapping is used. For more information, see <a href=\"http://docs.aws.amazon.com/polly/latest/dg/how-text-to-speech-works.html\">How it Works</a>.</p>"]
+    /// <p>Synthesizes UTF-8 input, plain text or SSML, to a stream of bytes. SSML input must be valid, well-formed SSML. Some alphabets might not be available with all the voices (for example, Cyrillic might not be read at all by English voices) unless phoneme mapping is used. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/how-text-to-speech-works.html">How it Works</a>.</p>
     fn synthesize_speech(
         &self,
         input: &SynthesizeSpeechInput,

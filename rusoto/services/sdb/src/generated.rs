@@ -46,9 +46,9 @@ pub struct Attribute {
     pub alternate_name_encoding: Option<String>,
     /// <p></p>
     pub alternate_value_encoding: Option<String>,
-    /// The name of the attribute.
+    /// <p>The name of the attribute.</p>
     pub name: String,
-    /// The value of the attribute.
+    /// <p>The value of the attribute.</p>
     pub value: String,
 }
 
@@ -188,9 +188,9 @@ impl AttributeNameListSerializer {
 
 #[derive(Default, Debug, Clone)]
 pub struct BatchDeleteAttributesRequest {
-    /// The name of the domain in which the attributes are being deleted.
+    /// <p>The name of the domain in which the attributes are being deleted.</p>
     pub domain_name: String,
-    /// A list of items on which to perform the operation.
+    /// <p>A list of items on which to perform the operation.</p>
     pub items: Vec<DeletableItem>,
 }
 
@@ -217,9 +217,9 @@ impl BatchDeleteAttributesRequestSerializer {
 
 #[derive(Default, Debug, Clone)]
 pub struct BatchPutAttributesRequest {
-    /// The name of the domain in which the attributes are being stored.
+    /// <p>The name of the domain in which the attributes are being stored.</p>
     pub domain_name: String,
-    /// A list of items on which to perform the operation.
+    /// <p>A list of items on which to perform the operation.</p>
     pub items: Vec<ReplaceableItem>,
 }
 
@@ -246,7 +246,7 @@ impl BatchPutAttributesRequestSerializer {
 
 #[derive(Default, Debug, Clone)]
 pub struct CreateDomainRequest {
-    /// The name of the domain to create. The name can range between 3 and 255 characters and can contain the following characters: a-z, A-Z, 0-9, '_', '-', and '.'.
+    /// <p>The name of the domain to create. The name can range between 3 and 255 characters and can contain the following characters: a-z, A-Z, 0-9, &#39;_&#39;, &#39;-&#39;, and &#39;.&#39;.</p>
     pub domain_name: String,
 }
 
@@ -308,13 +308,13 @@ impl DeletableItemListSerializer {
 
 #[derive(Default, Debug, Clone)]
 pub struct DeleteAttributesRequest {
-    /// A list of Attributes. Similar to columns on a spreadsheet, attributes represent categories of data that can be assigned to items.
+    /// <p>A list of Attributes. Similar to columns on a spreadsheet, attributes represent categories of data that can be assigned to items.</p>
     pub attributes: Option<Vec<Attribute>>,
-    /// The name of the domain in which to perform the operation.
+    /// <p>The name of the domain in which to perform the operation.</p>
     pub domain_name: String,
-    /// The update condition which, if specified, determines whether the specified attributes will be deleted or not. The update condition must be satisfied in order for this request to be processed and the attributes to be deleted.
+    /// <p>The update condition which, if specified, determines whether the specified attributes will be deleted or not. The update condition must be satisfied in order for this request to be processed and the attributes to be deleted.</p>
     pub expected: Option<UpdateCondition>,
-    /// The name of the item. Similar to rows on a spreadsheet, items represent individual objects that contain one or more value-attribute pairs.
+    /// <p>The name of the item. Similar to rows on a spreadsheet, items represent individual objects that contain one or more value-attribute pairs.</p>
     pub item_name: String,
 }
 
@@ -354,7 +354,7 @@ impl DeleteAttributesRequestSerializer {
 
 #[derive(Default, Debug, Clone)]
 pub struct DeleteDomainRequest {
-    /// The name of the domain to delete.
+    /// <p>The name of the domain to delete.</p>
     pub domain_name: String,
 }
 
@@ -376,7 +376,7 @@ impl DeleteDomainRequestSerializer {
 
 #[derive(Default, Debug, Clone)]
 pub struct DomainMetadataRequest {
-    /// The name of the domain for which to display the metadata of.
+    /// <p>The name of the domain for which to display the metadata of.</p>
     pub domain_name: String,
 }
 
@@ -398,19 +398,19 @@ impl DomainMetadataRequestSerializer {
 
 #[derive(Default, Debug, Clone)]
 pub struct DomainMetadataResult {
-    /// The number of unique attribute names in the domain.
+    /// <p>The number of unique attribute names in the domain.</p>
     pub attribute_name_count: Option<i64>,
-    /// The total size of all unique attribute names in the domain, in bytes.
+    /// <p>The total size of all unique attribute names in the domain, in bytes.</p>
     pub attribute_names_size_bytes: Option<i64>,
-    /// The number of all attribute name/value pairs in the domain.
+    /// <p>The number of all attribute name/value pairs in the domain.</p>
     pub attribute_value_count: Option<i64>,
-    /// The total size of all attribute values in the domain, in bytes.
+    /// <p>The total size of all attribute values in the domain, in bytes.</p>
     pub attribute_values_size_bytes: Option<i64>,
-    /// The number of all items in the domain.
+    /// <p>The number of all items in the domain.</p>
     pub item_count: Option<i64>,
-    /// The total size of all item names in the domain, in bytes.
+    /// <p>The total size of all item names in the domain, in bytes.</p>
     pub item_names_size_bytes: Option<i64>,
-    /// The data and time when metadata was calculated, in Epoch (UNIX) seconds.
+    /// <p>The data and time when metadata was calculated, in Epoch (UNIX) seconds.</p>
     pub timestamp: Option<i64>,
 }
 
@@ -513,13 +513,13 @@ impl DomainNameListDeserializer {
 }
 #[derive(Default, Debug, Clone)]
 pub struct GetAttributesRequest {
-    /// The names of the attributes.
+    /// <p>The names of the attributes.</p>
     pub attribute_names: Option<Vec<String>>,
-    /// Determines whether or not strong consistency should be enforced when data is read from SimpleDB. If <code>true</code>, any data previously written to SimpleDB will be returned. Otherwise, results will be consistent eventually, and the client may not see data that was written immediately before your read.
+    /// <p>Determines whether or not strong consistency should be enforced when data is read from SimpleDB. If <code>true</code>, any data previously written to SimpleDB will be returned. Otherwise, results will be consistent eventually, and the client may not see data that was written immediately before your read.</p>
     pub consistent_read: Option<bool>,
-    /// The name of the domain in which to perform the operation.
+    /// <p>The name of the domain in which to perform the operation.</p>
     pub domain_name: String,
-    /// The name of the item.
+    /// <p>The name of the item.</p>
     pub item_name: String,
 }
 
@@ -558,7 +558,7 @@ impl GetAttributesRequestSerializer {
 
 #[derive(Default, Debug, Clone)]
 pub struct GetAttributesResult {
-    /// The list of attributes returned by the operation.
+    /// <p>The list of attributes returned by the operation.</p>
     pub attributes: Option<Vec<Attribute>>,
 }
 
@@ -623,9 +623,9 @@ impl IntegerDeserializer {
 pub struct Item {
     /// <p></p>
     pub alternate_name_encoding: Option<String>,
-    /// A list of attributes.
+    /// <p>A list of attributes.</p>
     pub attributes: Vec<Attribute>,
-    /// The name of the item.
+    /// <p>The name of the item.</p>
     pub name: String,
 }
 
@@ -705,9 +705,9 @@ impl ItemListDeserializer {
 }
 #[derive(Default, Debug, Clone)]
 pub struct ListDomainsRequest {
-    /// The maximum number of domain names you want returned. The range is 1 to 100. The default setting is 100.
+    /// <p>The maximum number of domain names you want returned. The range is 1 to 100. The default setting is 100.</p>
     pub max_number_of_domains: Option<i64>,
-    /// A string informing Amazon SimpleDB where to start the next list of domain names.
+    /// <p>A string informing Amazon SimpleDB where to start the next list of domain names.</p>
     pub next_token: Option<String>,
 }
 
@@ -737,9 +737,9 @@ impl ListDomainsRequestSerializer {
 
 #[derive(Default, Debug, Clone)]
 pub struct ListDomainsResult {
-    /// A list of domain names that match the expression.
+    /// <p>A list of domain names that match the expression.</p>
     pub domain_names: Option<Vec<String>>,
-    /// An opaque token indicating that there are more domains than the specified <code>MaxNumberOfDomains</code> still available.
+    /// <p>An opaque token indicating that there are more domains than the specified <code>MaxNumberOfDomains</code> still available.</p>
     pub next_token: Option<String>,
 }
 
@@ -805,13 +805,13 @@ impl LongDeserializer {
 }
 #[derive(Default, Debug, Clone)]
 pub struct PutAttributesRequest {
-    /// The list of attributes.
+    /// <p>The list of attributes.</p>
     pub attributes: Vec<ReplaceableAttribute>,
-    /// The name of the domain in which to perform the operation.
+    /// <p>The name of the domain in which to perform the operation.</p>
     pub domain_name: String,
-    /// The update condition which, if specified, determines whether the specified attributes will be updated or not. The update condition must be satisfied in order for this request to be processed and the attributes to be updated.
+    /// <p>The update condition which, if specified, determines whether the specified attributes will be updated or not. The update condition must be satisfied in order for this request to be processed and the attributes to be updated.</p>
     pub expected: Option<UpdateCondition>,
-    /// The name of the item.
+    /// <p>The name of the item.</p>
     pub item_name: String,
 }
 
@@ -850,11 +850,11 @@ impl PutAttributesRequestSerializer {
 /// <p></p>
 #[derive(Default, Debug, Clone)]
 pub struct ReplaceableAttribute {
-    /// The name of the replaceable attribute.
+    /// <p>The name of the replaceable attribute.</p>
     pub name: String,
-    /// A flag specifying whether or not to replace the attribute/value pair or to add a new attribute/value pair. The default setting is <code>false</code>.
+    /// <p>A flag specifying whether or not to replace the attribute/value pair or to add a new attribute/value pair. The default setting is <code>false</code>.</p>
     pub replace: Option<bool>,
-    /// The value of the replaceable attribute.
+    /// <p>The value of the replaceable attribute.</p>
     pub value: String,
 }
 
@@ -898,9 +898,9 @@ impl ReplaceableAttributeListSerializer {
 /// <p></p>
 #[derive(Default, Debug, Clone)]
 pub struct ReplaceableItem {
-    /// The list of attributes for a replaceable item.
+    /// <p>The list of attributes for a replaceable item.</p>
     pub attributes: Vec<ReplaceableAttribute>,
-    /// The name of the replaceable item.
+    /// <p>The name of the replaceable item.</p>
     pub name: String,
 }
 
@@ -938,11 +938,11 @@ impl ReplaceableItemListSerializer {
 
 #[derive(Default, Debug, Clone)]
 pub struct SelectRequest {
-    /// Determines whether or not strong consistency should be enforced when data is read from SimpleDB. If <code>true</code>, any data previously written to SimpleDB will be returned. Otherwise, results will be consistent eventually, and the client may not see data that was written immediately before your read.
+    /// <p>Determines whether or not strong consistency should be enforced when data is read from SimpleDB. If <code>true</code>, any data previously written to SimpleDB will be returned. Otherwise, results will be consistent eventually, and the client may not see data that was written immediately before your read.</p>
     pub consistent_read: Option<bool>,
-    /// A string informing Amazon SimpleDB where to start the next list of <code>ItemNames</code>.
+    /// <p>A string informing Amazon SimpleDB where to start the next list of <code>ItemNames</code>.</p>
     pub next_token: Option<String>,
-    /// The expression used to query the domain.
+    /// <p>The expression used to query the domain.</p>
     pub select_expression: String,
 }
 
@@ -976,9 +976,9 @@ impl SelectRequestSerializer {
 
 #[derive(Default, Debug, Clone)]
 pub struct SelectResult {
-    /// A list of items that match the select expression.
+    /// <p>A list of items that match the select expression.</p>
     pub items: Option<Vec<Item>>,
-    /// An opaque token indicating that more items than <code>MaxNumberOfItems</code> were matched, the response size exceeded 1 megabyte, or the execution time exceeded 5 seconds.
+    /// <p>An opaque token indicating that more items than <code>MaxNumberOfItems</code> were matched, the response size exceeded 1 megabyte, or the execution time exceeded 5 seconds.</p>
     pub next_token: Option<String>,
 }
 
@@ -1148,23 +1148,23 @@ impl Error for BatchDeleteAttributesError {
 /// Errors returned by BatchPutAttributes
 #[derive(Debug, PartialEq)]
 pub enum BatchPutAttributesError {
-    ///<p>The item name was specified more than once. </p>
+    /// <p>The item name was specified more than once. </p>
     DuplicateItemName(String),
-    ///<p>The request must contain the specified missing parameter.</p>
+    /// <p>The request must contain the specified missing parameter.</p>
     MissingParameter(String),
-    ///<p>The specified domain does not exist.</p>
+    /// <p>The specified domain does not exist.</p>
     NoSuchDomain(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>Too many attributes exist in a single call.</p>
+    /// <p>Too many attributes exist in a single call.</p>
     NumberSubmittedAttributesExceeded(String),
-    ///<p>Too many attributes in this domain.</p>
+    /// <p>Too many attributes in this domain.</p>
     NumberDomainAttributesExceeded(String),
-    ///<p>Too many attributes in this item.</p>
+    /// <p>Too many attributes in this item.</p>
     NumberItemAttributesExceeded(String),
-    ///<p>Too many bytes in this domain.</p>
+    /// <p>Too many bytes in this domain.</p>
     NumberDomainBytesExceeded(String),
-    ///<p>Too many items exist in a single call.</p>
+    /// <p>Too many items exist in a single call.</p>
     NumberSubmittedItemsExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1275,11 +1275,11 @@ impl Error for BatchPutAttributesError {
 /// Errors returned by CreateDomain
 #[derive(Debug, PartialEq)]
 pub enum CreateDomainError {
-    ///<p>The request must contain the specified missing parameter.</p>
+    /// <p>The request must contain the specified missing parameter.</p>
     MissingParameter(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>Too many domains exist per this account.</p>
+    /// <p>Too many domains exist per this account.</p>
     NumberDomainsExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1356,13 +1356,13 @@ impl Error for CreateDomainError {
 /// Errors returned by DeleteAttributes
 #[derive(Debug, PartialEq)]
 pub enum DeleteAttributesError {
-    ///<p>The request must contain the specified missing parameter.</p>
+    /// <p>The request must contain the specified missing parameter.</p>
     MissingParameter(String),
-    ///<p>The specified attribute does not exist.</p>
+    /// <p>The specified attribute does not exist.</p>
     AttributeDoesNotExist(String),
-    ///<p>The specified domain does not exist.</p>
+    /// <p>The specified domain does not exist.</p>
     NoSuchDomain(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1443,7 +1443,7 @@ impl Error for DeleteAttributesError {
 /// Errors returned by DeleteDomain
 #[derive(Debug, PartialEq)]
 pub enum DeleteDomainError {
-    ///<p>The request must contain the specified missing parameter.</p>
+    /// <p>The request must contain the specified missing parameter.</p>
     MissingParameter(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1512,9 +1512,9 @@ impl Error for DeleteDomainError {
 /// Errors returned by DomainMetadata
 #[derive(Debug, PartialEq)]
 pub enum DomainMetadataError {
-    ///<p>The request must contain the specified missing parameter.</p>
+    /// <p>The request must contain the specified missing parameter.</p>
     MissingParameter(String),
-    ///<p>The specified domain does not exist.</p>
+    /// <p>The specified domain does not exist.</p>
     NoSuchDomain(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1587,11 +1587,11 @@ impl Error for DomainMetadataError {
 /// Errors returned by GetAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetAttributesError {
-    ///<p>The request must contain the specified missing parameter.</p>
+    /// <p>The request must contain the specified missing parameter.</p>
     MissingParameter(String),
-    ///<p>The specified domain does not exist.</p>
+    /// <p>The specified domain does not exist.</p>
     NoSuchDomain(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1668,9 +1668,9 @@ impl Error for GetAttributesError {
 /// Errors returned by ListDomains
 #[derive(Debug, PartialEq)]
 pub enum ListDomainsError {
-    ///<p>The specified NextToken is not valid. </p>
+    /// <p>The specified NextToken is not valid. </p>
     InvalidNextToken(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1743,19 +1743,19 @@ impl Error for ListDomainsError {
 /// Errors returned by PutAttributes
 #[derive(Debug, PartialEq)]
 pub enum PutAttributesError {
-    ///<p>The request must contain the specified missing parameter.</p>
+    /// <p>The request must contain the specified missing parameter.</p>
     MissingParameter(String),
-    ///<p>The specified attribute does not exist.</p>
+    /// <p>The specified attribute does not exist.</p>
     AttributeDoesNotExist(String),
-    ///<p>The specified domain does not exist.</p>
+    /// <p>The specified domain does not exist.</p>
     NoSuchDomain(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>Too many attributes in this domain.</p>
+    /// <p>Too many attributes in this domain.</p>
     NumberDomainAttributesExceeded(String),
-    ///<p>Too many attributes in this item.</p>
+    /// <p>Too many attributes in this item.</p>
     NumberItemAttributesExceeded(String),
-    ///<p>Too many bytes in this domain.</p>
+    /// <p>Too many bytes in this domain.</p>
     NumberDomainBytesExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1852,23 +1852,23 @@ impl Error for PutAttributesError {
 /// Errors returned by Select
 #[derive(Debug, PartialEq)]
 pub enum SelectError {
-    ///<p>A timeout occurred when attempting to query the specified domain with specified query expression.</p>
+    /// <p>A timeout occurred when attempting to query the specified domain with specified query expression.</p>
     RequestTimeout(String),
-    ///<p>The request must contain the specified missing parameter.</p>
+    /// <p>The request must contain the specified missing parameter.</p>
     MissingParameter(String),
-    ///<p>The specified NextToken is not valid. </p>
+    /// <p>The specified NextToken is not valid. </p>
     InvalidNextToken(String),
-    ///<p>The specified domain does not exist.</p>
+    /// <p>The specified domain does not exist.</p>
     NoSuchDomain(String),
-    ///<p>The specified query expression syntax is not valid.</p>
+    /// <p>The specified query expression syntax is not valid.</p>
     InvalidQueryExpression(String),
-    ///<p>The value for a parameter is invalid.</p>
+    /// <p>The value for a parameter is invalid.</p>
     InvalidParameterValue(String),
-    ///<p>Too many attributes requested.</p>
+    /// <p>Too many attributes requested.</p>
     TooManyRequestedAttributes(String),
-    ///<p>Too many predicates exist in the query expression.</p>
+    /// <p>Too many predicates exist in the query expression.</p>
     InvalidNumberPredicates(String),
-    ///<p>Too many predicates exist in the query expression.</p>
+    /// <p>Too many predicates exist in the query expression.</p>
     InvalidNumberValueTests(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1964,52 +1964,52 @@ impl Error for SelectError {
 }
 /// Trait representing the capabilities of the Amazon SimpleDB API. Amazon SimpleDB clients implement this trait.
 pub trait SimpleDb {
-    #[doc="<p> Performs multiple DeleteAttributes operations in a single call, which reduces round trips and latencies. This enables Amazon SimpleDB to optimize requests, which generally yields better throughput. </p> <p> The following limitations are enforced for this operation: <ul> <li>1 MB request size</li> <li>25 item limit per BatchDeleteAttributes operation</li> </ul> </p>"]
+    /// <p> Performs multiple DeleteAttributes operations in a single call, which reduces round trips and latencies. This enables Amazon SimpleDB to optimize requests, which generally yields better throughput. </p> <p> The following limitations are enforced for this operation: <ul> <li>1 MB request size</li> <li>25 item limit per BatchDeleteAttributes operation</li> </ul> </p>
     fn batch_delete_attributes(
         &self,
         input: &BatchDeleteAttributesRequest,
     ) -> Result<(), BatchDeleteAttributesError>;
 
-    #[doc="<p> The <code>BatchPutAttributes</code> operation creates or replaces attributes within one or more items. By using this operation, the client can perform multiple <a>PutAttribute</a> operation with a single call. This helps yield savings in round trips and latencies, enabling Amazon SimpleDB to optimize requests and generally produce better throughput. </p> <p> The client may specify the item name with the <code>Item.X.ItemName</code> parameter. The client may specify new attributes using a combination of the <code>Item.X.Attribute.Y.Name</code> and <code>Item.X.Attribute.Y.Value</code> parameters. The client may specify the first attribute for the first item using the parameters <code>Item.0.Attribute.0.Name</code> and <code>Item.0.Attribute.0.Value</code>, and for the second attribute for the first item by the parameters <code>Item.0.Attribute.1.Name</code> and <code>Item.0.Attribute.1.Value</code>, and so on. </p> <p> Attributes are uniquely identified within an item by their name/value combination. For example, a single item can have the attributes <code>{ \"first_name\", \"first_value\" }</code> and <code>{ \"first_name\", \"second_value\" }</code>. However, it cannot have two attribute instances where both the <code>Item.X.Attribute.Y.Name</code> and <code>Item.X.Attribute.Y.Value</code> are the same. </p> <p> Optionally, the requester can supply the <code>Replace</code> parameter for each individual value. Setting this value to <code>true</code> will cause the new attribute values to replace the existing attribute values. For example, if an item <code>I</code> has the attributes <code>{ 'a', '1' }, { 'b', '2'}</code> and <code>{ 'b', '3' }</code> and the requester does a BatchPutAttributes of <code>{'I', 'b', '4' }</code> with the Replace parameter set to true, the final attributes of the item will be <code>{ 'a', '1' }</code> and <code>{ 'b', '4' }</code>, replacing the previous values of the 'b' attribute with the new value. </p> <important> This operation is vulnerable to exceeding the maximum URL size when making a REST request using the HTTP GET method. This operation does not support conditions using <code>Expected.X.Name</code>, <code>Expected.X.Value</code>, or <code>Expected.X.Exists</code>. </important> <p> You can execute multiple <code>BatchPutAttributes</code> operations and other operations in parallel. However, large numbers of concurrent <code>BatchPutAttributes</code> calls can result in Service Unavailable (503) responses. </p> <p> The following limitations are enforced for this operation: <ul> <li>256 attribute name-value pairs per item</li> <li>1 MB request size</li> <li>1 billion attributes per domain</li> <li>10 GB of total user data storage per domain</li> <li>25 item limit per <code>BatchPutAttributes</code> operation</li> </ul> </p>"]
+    /// <p> The <code>BatchPutAttributes</code> operation creates or replaces attributes within one or more items. By using this operation, the client can perform multiple <a>PutAttribute</a> operation with a single call. This helps yield savings in round trips and latencies, enabling Amazon SimpleDB to optimize requests and generally produce better throughput. </p> <p> The client may specify the item name with the <code>Item.X.ItemName</code> parameter. The client may specify new attributes using a combination of the <code>Item.X.Attribute.Y.Name</code> and <code>Item.X.Attribute.Y.Value</code> parameters. The client may specify the first attribute for the first item using the parameters <code>Item.0.Attribute.0.Name</code> and <code>Item.0.Attribute.0.Value</code>, and for the second attribute for the first item by the parameters <code>Item.0.Attribute.1.Name</code> and <code>Item.0.Attribute.1.Value</code>, and so on. </p> <p> Attributes are uniquely identified within an item by their name/value combination. For example, a single item can have the attributes <code>{ "first_name", "first_value" }</code> and <code>{ "first_name", "second_value" }</code>. However, it cannot have two attribute instances where both the <code>Item.X.Attribute.Y.Name</code> and <code>Item.X.Attribute.Y.Value</code> are the same. </p> <p> Optionally, the requester can supply the <code>Replace</code> parameter for each individual value. Setting this value to <code>true</code> will cause the new attribute values to replace the existing attribute values. For example, if an item <code>I</code> has the attributes <code>{ 'a', '1' }, { 'b', '2'}</code> and <code>{ 'b', '3' }</code> and the requester does a BatchPutAttributes of <code>{'I', 'b', '4' }</code> with the Replace parameter set to true, the final attributes of the item will be <code>{ 'a', '1' }</code> and <code>{ 'b', '4' }</code>, replacing the previous values of the 'b' attribute with the new value. </p> <important> This operation is vulnerable to exceeding the maximum URL size when making a REST request using the HTTP GET method. This operation does not support conditions using <code>Expected.X.Name</code>, <code>Expected.X.Value</code>, or <code>Expected.X.Exists</code>. </important> <p> You can execute multiple <code>BatchPutAttributes</code> operations and other operations in parallel. However, large numbers of concurrent <code>BatchPutAttributes</code> calls can result in Service Unavailable (503) responses. </p> <p> The following limitations are enforced for this operation: <ul> <li>256 attribute name-value pairs per item</li> <li>1 MB request size</li> <li>1 billion attributes per domain</li> <li>10 GB of total user data storage per domain</li> <li>25 item limit per <code>BatchPutAttributes</code> operation</li> </ul> </p>
     fn batch_put_attributes(
         &self,
         input: &BatchPutAttributesRequest,
     ) -> Result<(), BatchPutAttributesError>;
 
-    #[doc="<p> The <code>CreateDomain</code> operation creates a new domain. The domain name should be unique among the domains associated with the Access Key ID provided in the request. The <code>CreateDomain</code> operation may take 10 or more seconds to complete. </p> <p> The client can create up to 100 domains per account. </p> <p> If the client requires additional domains, go to <a href=\"http://aws.amazon.com/contact-us/simpledb-limit-request/\"> http://aws.amazon.com/contact-us/simpledb-limit-request/</a>. </p>"]
+    /// <p> The <code>CreateDomain</code> operation creates a new domain. The domain name should be unique among the domains associated with the Access Key ID provided in the request. The <code>CreateDomain</code> operation may take 10 or more seconds to complete. </p> <p> The client can create up to 100 domains per account. </p> <p> If the client requires additional domains, go to <a href="http://aws.amazon.com/contact-us/simpledb-limit-request/"> http://aws.amazon.com/contact-us/simpledb-limit-request/</a>. </p>
     fn create_domain(&self, input: &CreateDomainRequest) -> Result<(), CreateDomainError>;
 
-    #[doc="<p> Deletes one or more attributes associated with an item. If all attributes of the item are deleted, the item is deleted. </p> <p> <code>DeleteAttributes</code> is an idempotent operation; running it multiple times on the same item or attribute does not result in an error response. </p> <p> Because Amazon SimpleDB makes multiple copies of item data and uses an eventual consistency update model, performing a <a>GetAttributes</a> or <a>Select</a> operation (read) immediately after a <code>DeleteAttributes</code> or <a>PutAttributes</a> operation (write) might not return updated item data. </p>"]
+    /// <p> Deletes one or more attributes associated with an item. If all attributes of the item are deleted, the item is deleted. </p> <p> <code>DeleteAttributes</code> is an idempotent operation; running it multiple times on the same item or attribute does not result in an error response. </p> <p> Because Amazon SimpleDB makes multiple copies of item data and uses an eventual consistency update model, performing a <a>GetAttributes</a> or <a>Select</a> operation (read) immediately after a <code>DeleteAttributes</code> or <a>PutAttributes</a> operation (write) might not return updated item data. </p>
     fn delete_attributes(
         &self,
         input: &DeleteAttributesRequest,
     ) -> Result<(), DeleteAttributesError>;
 
-    #[doc="<p> The <code>DeleteDomain</code> operation deletes a domain. Any items (and their attributes) in the domain are deleted as well. The <code>DeleteDomain</code> operation might take 10 or more seconds to complete. </p>"]
+    /// <p> The <code>DeleteDomain</code> operation deletes a domain. Any items (and their attributes) in the domain are deleted as well. The <code>DeleteDomain</code> operation might take 10 or more seconds to complete. </p>
     fn delete_domain(&self, input: &DeleteDomainRequest) -> Result<(), DeleteDomainError>;
 
-    #[doc="<p> Returns information about the domain, including when the domain was created, the number of items and attributes in the domain, and the size of the attribute names and values. </p>"]
+    /// <p> Returns information about the domain, including when the domain was created, the number of items and attributes in the domain, and the size of the attribute names and values. </p>
     fn domain_metadata(
         &self,
         input: &DomainMetadataRequest,
     ) -> Result<DomainMetadataResult, DomainMetadataError>;
 
-    #[doc="<p> Returns all of the attributes associated with the specified item. Optionally, the attributes returned can be limited to one or more attributes by specifying an attribute name parameter. </p> <p> If the item does not exist on the replica that was accessed for this operation, an empty set is returned. The system does not return an error as it cannot guarantee the item does not exist on other replicas. </p>"]
+    /// <p> Returns all of the attributes associated with the specified item. Optionally, the attributes returned can be limited to one or more attributes by specifying an attribute name parameter. </p> <p> If the item does not exist on the replica that was accessed for this operation, an empty set is returned. The system does not return an error as it cannot guarantee the item does not exist on other replicas. </p>
     fn get_attributes(
         &self,
         input: &GetAttributesRequest,
     ) -> Result<GetAttributesResult, GetAttributesError>;
 
-    #[doc="<p> The <code>ListDomains</code> operation lists all domains associated with the Access Key ID. It returns domain names up to the limit set by <a href=\"#MaxNumberOfDomains\">MaxNumberOfDomains</a>. A <a href=\"#NextToken\">NextToken</a> is returned if there are more than <code>MaxNumberOfDomains</code> domains. Calling <code>ListDomains</code> successive times with the <code>NextToken</code> provided by the operation returns up to <code>MaxNumberOfDomains</code> more domain names with each successive operation call. </p>"]
+    /// <p> The <code>ListDomains</code> operation lists all domains associated with the Access Key ID. It returns domain names up to the limit set by <a href="#MaxNumberOfDomains">MaxNumberOfDomains</a>. A <a href="#NextToken">NextToken</a> is returned if there are more than <code>MaxNumberOfDomains</code> domains. Calling <code>ListDomains</code> successive times with the <code>NextToken</code> provided by the operation returns up to <code>MaxNumberOfDomains</code> more domain names with each successive operation call. </p>
     fn list_domains(
         &self,
         input: &ListDomainsRequest,
     ) -> Result<ListDomainsResult, ListDomainsError>;
 
-    #[doc="<p> The PutAttributes operation creates or replaces attributes in an item. The client may specify new attributes using a combination of the <code>Attribute.X.Name</code> and <code>Attribute.X.Value</code> parameters. The client specifies the first attribute by the parameters <code>Attribute.0.Name</code> and <code>Attribute.0.Value</code>, the second attribute by the parameters <code>Attribute.1.Name</code> and <code>Attribute.1.Value</code>, and so on. </p> <p> Attributes are uniquely identified in an item by their name/value combination. For example, a single item can have the attributes <code>{ \"first_name\", \"first_value\" }</code> and <code>{ \"first_name\", second_value\" }</code>. However, it cannot have two attribute instances where both the <code>Attribute.X.Name</code> and <code>Attribute.X.Value</code> are the same. </p> <p> Optionally, the requestor can supply the <code>Replace</code> parameter for each individual attribute. Setting this value to <code>true</code> causes the new attribute value to replace the existing attribute value(s). For example, if an item has the attributes <code>{ 'a', '1' }</code>, <code>{ 'b', '2'}</code> and <code>{ 'b', '3' }</code> and the requestor calls <code>PutAttributes</code> using the attributes <code>{ 'b', '4' }</code> with the <code>Replace</code> parameter set to true, the final attributes of the item are changed to <code>{ 'a', '1' }</code> and <code>{ 'b', '4' }</code>, which replaces the previous values of the 'b' attribute with the new value. </p> <p> You cannot specify an empty string as an attribute name. </p> <p> Because Amazon SimpleDB makes multiple copies of client data and uses an eventual consistency update model, an immediate <a>GetAttributes</a> or <a>Select</a> operation (read) immediately after a <a>PutAttributes</a> or <a>DeleteAttributes</a> operation (write) might not return the updated data. </p> <p> The following limitations are enforced for this operation: <ul> <li>256 total attribute name-value pairs per item</li> <li>One billion attributes per domain</li> <li>10 GB of total user data storage per domain</li> </ul> </p>"]
+    /// <p> The PutAttributes operation creates or replaces attributes in an item. The client may specify new attributes using a combination of the <code>Attribute.X.Name</code> and <code>Attribute.X.Value</code> parameters. The client specifies the first attribute by the parameters <code>Attribute.0.Name</code> and <code>Attribute.0.Value</code>, the second attribute by the parameters <code>Attribute.1.Name</code> and <code>Attribute.1.Value</code>, and so on. </p> <p> Attributes are uniquely identified in an item by their name/value combination. For example, a single item can have the attributes <code>{ "first_name", "first_value" }</code> and <code>{ "first_name", second_value" }</code>. However, it cannot have two attribute instances where both the <code>Attribute.X.Name</code> and <code>Attribute.X.Value</code> are the same. </p> <p> Optionally, the requestor can supply the <code>Replace</code> parameter for each individual attribute. Setting this value to <code>true</code> causes the new attribute value to replace the existing attribute value(s). For example, if an item has the attributes <code>{ 'a', '1' }</code>, <code>{ 'b', '2'}</code> and <code>{ 'b', '3' }</code> and the requestor calls <code>PutAttributes</code> using the attributes <code>{ 'b', '4' }</code> with the <code>Replace</code> parameter set to true, the final attributes of the item are changed to <code>{ 'a', '1' }</code> and <code>{ 'b', '4' }</code>, which replaces the previous values of the 'b' attribute with the new value. </p> <p> You cannot specify an empty string as an attribute name. </p> <p> Because Amazon SimpleDB makes multiple copies of client data and uses an eventual consistency update model, an immediate <a>GetAttributes</a> or <a>Select</a> operation (read) immediately after a <a>PutAttributes</a> or <a>DeleteAttributes</a> operation (write) might not return the updated data. </p> <p> The following limitations are enforced for this operation: <ul> <li>256 total attribute name-value pairs per item</li> <li>One billion attributes per domain</li> <li>10 GB of total user data storage per domain</li> </ul> </p>
     fn put_attributes(&self, input: &PutAttributesRequest) -> Result<(), PutAttributesError>;
 
-    #[doc="<p> The <code>Select</code> operation returns a set of attributes for <code>ItemNames</code> that match the select expression. <code>Select</code> is similar to the standard SQL SELECT statement. </p> <p> The total size of the response cannot exceed 1 MB in total size. Amazon SimpleDB automatically adjusts the number of items returned per page to enforce this limit. For example, if the client asks to retrieve 2500 items, but each individual item is 10 kB in size, the system returns 100 items and an appropriate <code>NextToken</code> so the client can access the next page of results. </p> <p> For information on how to construct select expressions, see Using Select to Create Amazon SimpleDB Queries in the Developer Guide. </p>"]
+    /// <p> The <code>Select</code> operation returns a set of attributes for <code>ItemNames</code> that match the select expression. <code>Select</code> is similar to the standard SQL SELECT statement. </p> <p> The total size of the response cannot exceed 1 MB in total size. Amazon SimpleDB automatically adjusts the number of items returned per page to enforce this limit. For example, if the client asks to retrieve 2500 items, but each individual item is 10 kB in size, the system returns 100 items and an appropriate <code>NextToken</code> so the client can access the next page of results. </p> <p> For information on how to construct select expressions, see Using Select to Create Amazon SimpleDB Queries in the Developer Guide. </p>
     fn select(&self, input: &SelectRequest) -> Result<SelectResult, SelectError>;
 }
 /// A client for the Amazon SimpleDB API.
@@ -2042,7 +2042,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p> Performs multiple DeleteAttributes operations in a single call, which reduces round trips and latencies. This enables Amazon SimpleDB to optimize requests, which generally yields better throughput. </p> <p> The following limitations are enforced for this operation: <ul> <li>1 MB request size</li> <li>25 item limit per BatchDeleteAttributes operation</li> </ul> </p>"]
+    /// <p> Performs multiple DeleteAttributes operations in a single call, which reduces round trips and latencies. This enables Amazon SimpleDB to optimize requests, which generally yields better throughput. </p> <p> The following limitations are enforced for this operation: <ul> <li>1 MB request size</li> <li>25 item limit per BatchDeleteAttributes operation</li> </ul> </p>
     fn batch_delete_attributes(
         &self,
         input: &BatchDeleteAttributesRequest,
@@ -2072,7 +2072,7 @@ where
         }
     }
 
-    #[doc="<p> The <code>BatchPutAttributes</code> operation creates or replaces attributes within one or more items. By using this operation, the client can perform multiple <a>PutAttribute</a> operation with a single call. This helps yield savings in round trips and latencies, enabling Amazon SimpleDB to optimize requests and generally produce better throughput. </p> <p> The client may specify the item name with the <code>Item.X.ItemName</code> parameter. The client may specify new attributes using a combination of the <code>Item.X.Attribute.Y.Name</code> and <code>Item.X.Attribute.Y.Value</code> parameters. The client may specify the first attribute for the first item using the parameters <code>Item.0.Attribute.0.Name</code> and <code>Item.0.Attribute.0.Value</code>, and for the second attribute for the first item by the parameters <code>Item.0.Attribute.1.Name</code> and <code>Item.0.Attribute.1.Value</code>, and so on. </p> <p> Attributes are uniquely identified within an item by their name/value combination. For example, a single item can have the attributes <code>{ \"first_name\", \"first_value\" }</code> and <code>{ \"first_name\", \"second_value\" }</code>. However, it cannot have two attribute instances where both the <code>Item.X.Attribute.Y.Name</code> and <code>Item.X.Attribute.Y.Value</code> are the same. </p> <p> Optionally, the requester can supply the <code>Replace</code> parameter for each individual value. Setting this value to <code>true</code> will cause the new attribute values to replace the existing attribute values. For example, if an item <code>I</code> has the attributes <code>{ 'a', '1' }, { 'b', '2'}</code> and <code>{ 'b', '3' }</code> and the requester does a BatchPutAttributes of <code>{'I', 'b', '4' }</code> with the Replace parameter set to true, the final attributes of the item will be <code>{ 'a', '1' }</code> and <code>{ 'b', '4' }</code>, replacing the previous values of the 'b' attribute with the new value. </p> <important> This operation is vulnerable to exceeding the maximum URL size when making a REST request using the HTTP GET method. This operation does not support conditions using <code>Expected.X.Name</code>, <code>Expected.X.Value</code>, or <code>Expected.X.Exists</code>. </important> <p> You can execute multiple <code>BatchPutAttributes</code> operations and other operations in parallel. However, large numbers of concurrent <code>BatchPutAttributes</code> calls can result in Service Unavailable (503) responses. </p> <p> The following limitations are enforced for this operation: <ul> <li>256 attribute name-value pairs per item</li> <li>1 MB request size</li> <li>1 billion attributes per domain</li> <li>10 GB of total user data storage per domain</li> <li>25 item limit per <code>BatchPutAttributes</code> operation</li> </ul> </p>"]
+    /// <p> The <code>BatchPutAttributes</code> operation creates or replaces attributes within one or more items. By using this operation, the client can perform multiple <a>PutAttribute</a> operation with a single call. This helps yield savings in round trips and latencies, enabling Amazon SimpleDB to optimize requests and generally produce better throughput. </p> <p> The client may specify the item name with the <code>Item.X.ItemName</code> parameter. The client may specify new attributes using a combination of the <code>Item.X.Attribute.Y.Name</code> and <code>Item.X.Attribute.Y.Value</code> parameters. The client may specify the first attribute for the first item using the parameters <code>Item.0.Attribute.0.Name</code> and <code>Item.0.Attribute.0.Value</code>, and for the second attribute for the first item by the parameters <code>Item.0.Attribute.1.Name</code> and <code>Item.0.Attribute.1.Value</code>, and so on. </p> <p> Attributes are uniquely identified within an item by their name/value combination. For example, a single item can have the attributes <code>{ "first_name", "first_value" }</code> and <code>{ "first_name", "second_value" }</code>. However, it cannot have two attribute instances where both the <code>Item.X.Attribute.Y.Name</code> and <code>Item.X.Attribute.Y.Value</code> are the same. </p> <p> Optionally, the requester can supply the <code>Replace</code> parameter for each individual value. Setting this value to <code>true</code> will cause the new attribute values to replace the existing attribute values. For example, if an item <code>I</code> has the attributes <code>{ 'a', '1' }, { 'b', '2'}</code> and <code>{ 'b', '3' }</code> and the requester does a BatchPutAttributes of <code>{'I', 'b', '4' }</code> with the Replace parameter set to true, the final attributes of the item will be <code>{ 'a', '1' }</code> and <code>{ 'b', '4' }</code>, replacing the previous values of the 'b' attribute with the new value. </p> <important> This operation is vulnerable to exceeding the maximum URL size when making a REST request using the HTTP GET method. This operation does not support conditions using <code>Expected.X.Name</code>, <code>Expected.X.Value</code>, or <code>Expected.X.Exists</code>. </important> <p> You can execute multiple <code>BatchPutAttributes</code> operations and other operations in parallel. However, large numbers of concurrent <code>BatchPutAttributes</code> calls can result in Service Unavailable (503) responses. </p> <p> The following limitations are enforced for this operation: <ul> <li>256 attribute name-value pairs per item</li> <li>1 MB request size</li> <li>1 billion attributes per domain</li> <li>10 GB of total user data storage per domain</li> <li>25 item limit per <code>BatchPutAttributes</code> operation</li> </ul> </p>
     fn batch_put_attributes(
         &self,
         input: &BatchPutAttributesRequest,
@@ -2102,7 +2102,7 @@ where
         }
     }
 
-    #[doc="<p> The <code>CreateDomain</code> operation creates a new domain. The domain name should be unique among the domains associated with the Access Key ID provided in the request. The <code>CreateDomain</code> operation may take 10 or more seconds to complete. </p> <p> The client can create up to 100 domains per account. </p> <p> If the client requires additional domains, go to <a href=\"http://aws.amazon.com/contact-us/simpledb-limit-request/\"> http://aws.amazon.com/contact-us/simpledb-limit-request/</a>. </p>"]
+    /// <p> The <code>CreateDomain</code> operation creates a new domain. The domain name should be unique among the domains associated with the Access Key ID provided in the request. The <code>CreateDomain</code> operation may take 10 or more seconds to complete. </p> <p> The client can create up to 100 domains per account. </p> <p> If the client requires additional domains, go to <a href="http://aws.amazon.com/contact-us/simpledb-limit-request/"> http://aws.amazon.com/contact-us/simpledb-limit-request/</a>. </p>
     fn create_domain(&self, input: &CreateDomainRequest) -> Result<(), CreateDomainError> {
         let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
         let mut params = Params::new();
@@ -2129,7 +2129,7 @@ where
         }
     }
 
-    #[doc="<p> Deletes one or more attributes associated with an item. If all attributes of the item are deleted, the item is deleted. </p> <p> <code>DeleteAttributes</code> is an idempotent operation; running it multiple times on the same item or attribute does not result in an error response. </p> <p> Because Amazon SimpleDB makes multiple copies of item data and uses an eventual consistency update model, performing a <a>GetAttributes</a> or <a>Select</a> operation (read) immediately after a <code>DeleteAttributes</code> or <a>PutAttributes</a> operation (write) might not return updated item data. </p>"]
+    /// <p> Deletes one or more attributes associated with an item. If all attributes of the item are deleted, the item is deleted. </p> <p> <code>DeleteAttributes</code> is an idempotent operation; running it multiple times on the same item or attribute does not result in an error response. </p> <p> Because Amazon SimpleDB makes multiple copies of item data and uses an eventual consistency update model, performing a <a>GetAttributes</a> or <a>Select</a> operation (read) immediately after a <code>DeleteAttributes</code> or <a>PutAttributes</a> operation (write) might not return updated item data. </p>
     fn delete_attributes(
         &self,
         input: &DeleteAttributesRequest,
@@ -2159,7 +2159,7 @@ where
         }
     }
 
-    #[doc="<p> The <code>DeleteDomain</code> operation deletes a domain. Any items (and their attributes) in the domain are deleted as well. The <code>DeleteDomain</code> operation might take 10 or more seconds to complete. </p>"]
+    /// <p> The <code>DeleteDomain</code> operation deletes a domain. Any items (and their attributes) in the domain are deleted as well. The <code>DeleteDomain</code> operation might take 10 or more seconds to complete. </p>
     fn delete_domain(&self, input: &DeleteDomainRequest) -> Result<(), DeleteDomainError> {
         let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
         let mut params = Params::new();
@@ -2186,7 +2186,7 @@ where
         }
     }
 
-    #[doc="<p> Returns information about the domain, including when the domain was created, the number of items and attributes in the domain, and the size of the attribute names and values. </p>"]
+    /// <p> Returns information about the domain, including when the domain was created, the number of items and attributes in the domain, and the size of the attribute names and values. </p>
     fn domain_metadata(
         &self,
         input: &DomainMetadataRequest,
@@ -2237,7 +2237,7 @@ where
         }
     }
 
-    #[doc="<p> Returns all of the attributes associated with the specified item. Optionally, the attributes returned can be limited to one or more attributes by specifying an attribute name parameter. </p> <p> If the item does not exist on the replica that was accessed for this operation, an empty set is returned. The system does not return an error as it cannot guarantee the item does not exist on other replicas. </p>"]
+    /// <p> Returns all of the attributes associated with the specified item. Optionally, the attributes returned can be limited to one or more attributes by specifying an attribute name parameter. </p> <p> If the item does not exist on the replica that was accessed for this operation, an empty set is returned. The system does not return an error as it cannot guarantee the item does not exist on other replicas. </p>
     fn get_attributes(
         &self,
         input: &GetAttributesRequest,
@@ -2288,7 +2288,7 @@ where
         }
     }
 
-    #[doc="<p> The <code>ListDomains</code> operation lists all domains associated with the Access Key ID. It returns domain names up to the limit set by <a href=\"#MaxNumberOfDomains\">MaxNumberOfDomains</a>. A <a href=\"#NextToken\">NextToken</a> is returned if there are more than <code>MaxNumberOfDomains</code> domains. Calling <code>ListDomains</code> successive times with the <code>NextToken</code> provided by the operation returns up to <code>MaxNumberOfDomains</code> more domain names with each successive operation call. </p>"]
+    /// <p> The <code>ListDomains</code> operation lists all domains associated with the Access Key ID. It returns domain names up to the limit set by <a href="#MaxNumberOfDomains">MaxNumberOfDomains</a>. A <a href="#NextToken">NextToken</a> is returned if there are more than <code>MaxNumberOfDomains</code> domains. Calling <code>ListDomains</code> successive times with the <code>NextToken</code> provided by the operation returns up to <code>MaxNumberOfDomains</code> more domain names with each successive operation call. </p>
     fn list_domains(
         &self,
         input: &ListDomainsRequest,
@@ -2339,7 +2339,7 @@ where
         }
     }
 
-    #[doc="<p> The PutAttributes operation creates or replaces attributes in an item. The client may specify new attributes using a combination of the <code>Attribute.X.Name</code> and <code>Attribute.X.Value</code> parameters. The client specifies the first attribute by the parameters <code>Attribute.0.Name</code> and <code>Attribute.0.Value</code>, the second attribute by the parameters <code>Attribute.1.Name</code> and <code>Attribute.1.Value</code>, and so on. </p> <p> Attributes are uniquely identified in an item by their name/value combination. For example, a single item can have the attributes <code>{ \"first_name\", \"first_value\" }</code> and <code>{ \"first_name\", second_value\" }</code>. However, it cannot have two attribute instances where both the <code>Attribute.X.Name</code> and <code>Attribute.X.Value</code> are the same. </p> <p> Optionally, the requestor can supply the <code>Replace</code> parameter for each individual attribute. Setting this value to <code>true</code> causes the new attribute value to replace the existing attribute value(s). For example, if an item has the attributes <code>{ 'a', '1' }</code>, <code>{ 'b', '2'}</code> and <code>{ 'b', '3' }</code> and the requestor calls <code>PutAttributes</code> using the attributes <code>{ 'b', '4' }</code> with the <code>Replace</code> parameter set to true, the final attributes of the item are changed to <code>{ 'a', '1' }</code> and <code>{ 'b', '4' }</code>, which replaces the previous values of the 'b' attribute with the new value. </p> <p> You cannot specify an empty string as an attribute name. </p> <p> Because Amazon SimpleDB makes multiple copies of client data and uses an eventual consistency update model, an immediate <a>GetAttributes</a> or <a>Select</a> operation (read) immediately after a <a>PutAttributes</a> or <a>DeleteAttributes</a> operation (write) might not return the updated data. </p> <p> The following limitations are enforced for this operation: <ul> <li>256 total attribute name-value pairs per item</li> <li>One billion attributes per domain</li> <li>10 GB of total user data storage per domain</li> </ul> </p>"]
+    /// <p> The PutAttributes operation creates or replaces attributes in an item. The client may specify new attributes using a combination of the <code>Attribute.X.Name</code> and <code>Attribute.X.Value</code> parameters. The client specifies the first attribute by the parameters <code>Attribute.0.Name</code> and <code>Attribute.0.Value</code>, the second attribute by the parameters <code>Attribute.1.Name</code> and <code>Attribute.1.Value</code>, and so on. </p> <p> Attributes are uniquely identified in an item by their name/value combination. For example, a single item can have the attributes <code>{ "first_name", "first_value" }</code> and <code>{ "first_name", second_value" }</code>. However, it cannot have two attribute instances where both the <code>Attribute.X.Name</code> and <code>Attribute.X.Value</code> are the same. </p> <p> Optionally, the requestor can supply the <code>Replace</code> parameter for each individual attribute. Setting this value to <code>true</code> causes the new attribute value to replace the existing attribute value(s). For example, if an item has the attributes <code>{ 'a', '1' }</code>, <code>{ 'b', '2'}</code> and <code>{ 'b', '3' }</code> and the requestor calls <code>PutAttributes</code> using the attributes <code>{ 'b', '4' }</code> with the <code>Replace</code> parameter set to true, the final attributes of the item are changed to <code>{ 'a', '1' }</code> and <code>{ 'b', '4' }</code>, which replaces the previous values of the 'b' attribute with the new value. </p> <p> You cannot specify an empty string as an attribute name. </p> <p> Because Amazon SimpleDB makes multiple copies of client data and uses an eventual consistency update model, an immediate <a>GetAttributes</a> or <a>Select</a> operation (read) immediately after a <a>PutAttributes</a> or <a>DeleteAttributes</a> operation (write) might not return the updated data. </p> <p> The following limitations are enforced for this operation: <ul> <li>256 total attribute name-value pairs per item</li> <li>One billion attributes per domain</li> <li>10 GB of total user data storage per domain</li> </ul> </p>
     fn put_attributes(&self, input: &PutAttributesRequest) -> Result<(), PutAttributesError> {
         let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
         let mut params = Params::new();
@@ -2366,7 +2366,7 @@ where
         }
     }
 
-    #[doc="<p> The <code>Select</code> operation returns a set of attributes for <code>ItemNames</code> that match the select expression. <code>Select</code> is similar to the standard SQL SELECT statement. </p> <p> The total size of the response cannot exceed 1 MB in total size. Amazon SimpleDB automatically adjusts the number of items returned per page to enforce this limit. For example, if the client asks to retrieve 2500 items, but each individual item is 10 kB in size, the system returns 100 items and an appropriate <code>NextToken</code> so the client can access the next page of results. </p> <p> For information on how to construct select expressions, see Using Select to Create Amazon SimpleDB Queries in the Developer Guide. </p>"]
+    /// <p> The <code>Select</code> operation returns a set of attributes for <code>ItemNames</code> that match the select expression. <code>Select</code> is similar to the standard SQL SELECT statement. </p> <p> The total size of the response cannot exceed 1 MB in total size. Amazon SimpleDB automatically adjusts the number of items returned per page to enforce this limit. For example, if the client asks to retrieve 2500 items, but each individual item is 10 kB in size, the system returns 100 items and an appropriate <code>NextToken</code> so the client can access the next page of results. </p> <p> For information on how to construct select expressions, see Using Select to Create Amazon SimpleDB Queries in the Developer Guide. </p>
     fn select(&self, input: &SelectRequest) -> Result<SelectResult, SelectError> {
         let mut request = SignedRequest::new("POST", "sdb", &self.region, "/");
         let mut params = Params::new();

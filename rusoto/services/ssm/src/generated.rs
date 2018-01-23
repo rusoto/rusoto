@@ -386,7 +386,7 @@ pub struct AutomationExecutionMetadata {
     pub outputs: Option<::std::collections::HashMap<String, Vec<String>>>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CancelCommandRequest {
     /// <p>The ID of the command you want to cancel.</p>
@@ -473,7 +473,7 @@ pub struct Command {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>A detailed status of the command execution. StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-about-status.html">Run Command Status</a>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to any instances.</p> </li> <li> <p>In Progress: The command has been sent to at least one instance but has not reached a final state on all instances.</p> </li> <li> <p>Success: The command successfully executed on all invocations. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The value of MaxErrors or more command invocations shows a status of Delivery Timed Out. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: The value of MaxErrors or more command invocations shows a status of Execution Timed Out. This is a terminal state.</p> </li> <li> <p>Failed: The value of MaxErrors or more command invocations shows a status of Failed. This is a terminal state.</p> </li> <li> <p>Incomplete: The command was attempted on all instances and one or more invocations does not have a value of Success but not enough invocations failed for the status to be Failed. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Rate Exceeded: The number of instances targeted by the command exceeded the account limit for pending invocations. The system has canceled the command before executing it on any instance. This is a terminal state.</p> </li> </ul>
+    /// <p><p>A detailed status of the command execution. StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-about-status.html">Run Command Status</a>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to any instances.</p> </li> <li> <p>In Progress: The command has been sent to at least one instance but has not reached a final state on all instances.</p> </li> <li> <p>Success: The command successfully executed on all invocations. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The value of MaxErrors or more command invocations shows a status of Delivery Timed Out. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: The value of MaxErrors or more command invocations shows a status of Execution Timed Out. This is a terminal state.</p> </li> <li> <p>Failed: The value of MaxErrors or more command invocations shows a status of Failed. This is a terminal state.</p> </li> <li> <p>Incomplete: The command was attempted on all instances and one or more invocations does not have a value of Success but not enough invocations failed for the status to be Failed. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Rate Exceeded: The number of instances targeted by the command exceeded the account limit for pending invocations. The system has canceled the command before executing it on any instance. This is a terminal state.</p> </li> </ul></p>
     #[serde(rename = "StatusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_details: Option<String>,
@@ -548,7 +548,7 @@ pub struct CommandInvocation {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>A detailed status of the command execution for each invocation (each instance targeted by the command). StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-about-status.html">Run Command Status</a>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to the instance.</p> </li> <li> <p>In Progress: The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Success: The execution of the command or plugin was successfully completed. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command's MaxErrors limit, but they do contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: Command execution started on the instance, but the execution was not complete before the execution timeout expired. Execution timeouts count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed: The command was not successful on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable: The command can't be delivered to the instance. The instance might not exist or might not be responding. Undeliverable invocations don't count against the parent command's MaxErrors limit and don't contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Terminated: The parent command exceeded its MaxErrors limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul>
+    /// <p><p>A detailed status of the command execution for each invocation (each instance targeted by the command). StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-about-status.html">Run Command Status</a>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to the instance.</p> </li> <li> <p>In Progress: The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Success: The execution of the command or plugin was successfully completed. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command&#39;s MaxErrors limit, but they do contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: Command execution started on the instance, but the execution was not complete before the execution timeout expired. Execution timeouts count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed: The command was not successful on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable: The command can&#39;t be delivered to the instance. The instance might not exist or might not be responding. Undeliverable invocations don&#39;t count against the parent command&#39;s MaxErrors limit and don&#39;t contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Terminated: The parent command exceeded its MaxErrors limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul></p>
     #[serde(rename = "StatusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_details: Option<String>,
@@ -605,7 +605,7 @@ pub struct CommandPlugin {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>A detailed status of the plugin execution. StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-about-status.html">Run Command Status</a>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to the instance.</p> </li> <li> <p>In Progress: The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Success: The execution of the command or plugin was successfully completed. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command's MaxErrors limit, but they do contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: Command execution started on the instance, but the execution was not complete before the execution timeout expired. Execution timeouts count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed: The command was not successful on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable: The command can't be delivered to the instance. The instance might not exist, or it might not be responding. Undeliverable invocations don't count against the parent command's MaxErrors limit, and they don't contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Terminated: The parent command exceeded its MaxErrors limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul>
+    /// <p><p>A detailed status of the plugin execution. StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-about-status.html">Run Command Status</a>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to the instance.</p> </li> <li> <p>In Progress: The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Success: The execution of the command or plugin was successfully completed. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command&#39;s MaxErrors limit, but they do contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: Command execution started on the instance, but the execution was not complete before the execution timeout expired. Execution timeouts count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed: The command was not successful on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable: The command can&#39;t be delivered to the instance. The instance might not exist, or it might not be responding. Undeliverable invocations don&#39;t count against the parent command&#39;s MaxErrors limit, and they don&#39;t contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Terminated: The parent command exceeded its MaxErrors limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul></p>
     #[serde(rename = "StatusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_details: Option<String>,
@@ -1886,11 +1886,11 @@ pub struct DocumentDescription {
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
-    /// <p>The Sha256 or Sha1 hash created by the system when the document was created. </p> <note> <p>Sha1 hashes have been deprecated.</p> </note>
+    /// <p><p>The Sha256 or Sha1 hash created by the system when the document was created. </p> <note> <p>Sha1 hashes have been deprecated.</p> </note></p>
     #[serde(rename = "Hash")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hash: Option<String>,
-    /// <p>Sha256 or Sha1.</p> <note> <p>Sha1 hashes have been deprecated.</p> </note>
+    /// <p><p>Sha256 or Sha1.</p> <note> <p>Sha1 hashes have been deprecated.</p> </note></p>
     #[serde(rename = "HashType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hash_type: Option<String>,
@@ -2144,7 +2144,7 @@ pub struct GetCommandInvocationResult {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>A detailed status of the command execution for an invocation. StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-about-status.html">Run Command Status</a>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to the instance.</p> </li> <li> <p>In Progress: The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Delayed: The system attempted to send the command to the target, but the target was not available. The instance might not be available because of network issues, the instance was stopped, etc. The system will try to deliver the command again.</p> </li> <li> <p>Success: The command or plugin was executed successfully. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command's MaxErrors limit, but they do contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: The command started to execute on the instance, but the execution was not complete before the timeout expired. Execution timeouts count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed: The command wasn't executed successfully on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable: The command can't be delivered to the instance. The instance might not exist or might not be responding. Undeliverable invocations don't count against the parent command's MaxErrors limit and don't contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Terminated: The parent command exceeded its MaxErrors limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul>
+    /// <p><p>A detailed status of the command execution for an invocation. StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-about-status.html">Run Command Status</a>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to the instance.</p> </li> <li> <p>In Progress: The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Delayed: The system attempted to send the command to the target, but the target was not available. The instance might not be available because of network issues, the instance was stopped, etc. The system will try to deliver the command again.</p> </li> <li> <p>Success: The command or plugin was executed successfully. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command&#39;s MaxErrors limit, but they do contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: The command started to execute on the instance, but the execution was not complete before the timeout expired. Execution timeouts count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed: The command wasn&#39;t executed successfully on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable: The command can&#39;t be delivered to the instance. The instance might not exist or might not be responding. Undeliverable invocations don&#39;t count against the parent command&#39;s MaxErrors limit and don&#39;t contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Terminated: The parent command exceeded its MaxErrors limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul></p>
     #[serde(rename = "StatusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_details: Option<String>,
@@ -4630,11 +4630,11 @@ pub struct SendCommandRequest {
     #[serde(rename = "Comment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub comment: Option<String>,
-    /// <p>The Sha256 or Sha1 hash created by the system when the document was created. </p> <note> <p>Sha1 hashes have been deprecated.</p> </note>
+    /// <p><p>The Sha256 or Sha1 hash created by the system when the document was created. </p> <note> <p>Sha1 hashes have been deprecated.</p> </note></p>
     #[serde(rename = "DocumentHash")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_hash: Option<String>,
-    /// <p>Sha256 or Sha1.</p> <note> <p>Sha1 hashes have been deprecated.</p> </note>
+    /// <p><p>Sha256 or Sha1.</p> <note> <p>Sha1 hashes have been deprecated.</p> </note></p>
     #[serde(rename = "DocumentHashType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_hash_type: Option<String>,
@@ -4817,7 +4817,7 @@ pub struct Tag {
     pub value: String,
 }
 
-/// <p>An array of search criteria that targets instances using a Key,Value combination that you specify. <code>Targets</code> is required if you don't provide one or more instance IDs in the call.</p> <p/>
+/// <p><p>An array of search criteria that targets instances using a Key,Value combination that you specify. <code>Targets</code> is required if you don&#39;t provide one or more instance IDs in the call.</p> <p/></p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Target {
     /// <p>User-defined criteria for sending commands that target instances that meet the criteria. Key can be tag:&lt;Amazon EC2 tag&gt; or InstanceIds. For more information about how to send commands that target instances using Key,Value parameters, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html">Executing a Command Using Systems Manager Run Command</a>.</p>
@@ -5286,13 +5286,13 @@ pub struct UpdatePatchBaselineResult {
 /// Errors returned by AddTagsToResource
 #[derive(Debug, PartialEq)]
 pub enum AddTagsToResourceError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The resource ID is not valid. Verify that you entered the correct ID and try again.</p>
+    /// <p>The resource ID is not valid. Verify that you entered the correct ID and try again.</p>
     InvalidResourceId(String),
-    ///<p>The resource type is not valid. If you are attempting to tag an instance, the instance must be a registered, managed instance.</p>
+    /// <p>The resource type is not valid. If you are attempting to tag an instance, the instance must be a registered, managed instance.</p>
     InvalidResourceType(String),
-    ///<p>The Targets parameter includes too many tags. Remove one or more tags and try the command again.</p>
+    /// <p>The Targets parameter includes too many tags. Remove one or more tags and try the command again.</p>
     TooManyTagsError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5384,13 +5384,13 @@ impl Error for AddTagsToResourceError {
 /// Errors returned by CancelCommand
 #[derive(Debug, PartialEq)]
 pub enum CancelCommandError {
-    ///<p>You cannot specify an instance ID in more than one association.</p>
+    /// <p>You cannot specify an instance ID in more than one association.</p>
     DuplicateInstanceId(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///
+
     InvalidCommandId(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5480,7 +5480,7 @@ impl Error for CancelCommandError {
 /// Errors returned by CreateActivation
 #[derive(Debug, PartialEq)]
 pub enum CreateActivationError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5558,27 +5558,27 @@ impl Error for CreateActivationError {
 /// Errors returned by CreateAssociation
 #[derive(Debug, PartialEq)]
 pub enum CreateAssociationError {
-    ///<p>The specified association already exists.</p>
+    /// <p>The specified association already exists.</p>
     AssociationAlreadyExists(String),
-    ///<p>You can have at most 2,000 active associations.</p>
+    /// <p>You can have at most 2,000 active associations.</p>
     AssociationLimitExceeded(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The specified document does not exist.</p>
+    /// <p>The specified document does not exist.</p>
     InvalidDocument(String),
-    ///<p>The document version is not valid or does not exist.</p>
+    /// <p>The document version is not valid or does not exist.</p>
     InvalidDocumentVersion(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
-    ///<p>The output location is not valid or does not exist.</p>
+    /// <p>The output location is not valid or does not exist.</p>
     InvalidOutputLocation(String),
-    ///<p>You must specify values for all required parameters in the SSM document. You can only supply values to parameters defined in the SSM document.</p>
+    /// <p>You must specify values for all required parameters in the SSM document. You can only supply values to parameters defined in the SSM document.</p>
     InvalidParameters(String),
-    ///<p>The schedule is invalid. Verify your cron or rate expression and try again.</p>
+    /// <p>The schedule is invalid. Verify your cron or rate expression and try again.</p>
     InvalidSchedule(String),
-    ///<p>The target is not valid or does not exist. It might not be configured for EC2 Systems Manager or you might not have permission to perform the operation.</p>
+    /// <p>The target is not valid or does not exist. It might not be configured for EC2 Systems Manager or you might not have permission to perform the operation.</p>
     InvalidTarget(String),
-    ///<p>The document does not support the platform type of the given instance ID(s). For example, you sent an document for a Windows instance to a Linux instance.</p>
+    /// <p>The document does not support the platform type of the given instance ID(s). For example, you sent an document for a Windows instance to a Linux instance.</p>
     UnsupportedPlatformType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5702,27 +5702,27 @@ impl Error for CreateAssociationError {
 /// Errors returned by CreateAssociationBatch
 #[derive(Debug, PartialEq)]
 pub enum CreateAssociationBatchError {
-    ///<p>You can have at most 2,000 active associations.</p>
+    /// <p>You can have at most 2,000 active associations.</p>
     AssociationLimitExceeded(String),
-    ///<p>You cannot specify an instance ID in more than one association.</p>
+    /// <p>You cannot specify an instance ID in more than one association.</p>
     DuplicateInstanceId(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The specified document does not exist.</p>
+    /// <p>The specified document does not exist.</p>
     InvalidDocument(String),
-    ///<p>The document version is not valid or does not exist.</p>
+    /// <p>The document version is not valid or does not exist.</p>
     InvalidDocumentVersion(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
-    ///<p>The output location is not valid or does not exist.</p>
+    /// <p>The output location is not valid or does not exist.</p>
     InvalidOutputLocation(String),
-    ///<p>You must specify values for all required parameters in the SSM document. You can only supply values to parameters defined in the SSM document.</p>
+    /// <p>You must specify values for all required parameters in the SSM document. You can only supply values to parameters defined in the SSM document.</p>
     InvalidParameters(String),
-    ///<p>The schedule is invalid. Verify your cron or rate expression and try again.</p>
+    /// <p>The schedule is invalid. Verify your cron or rate expression and try again.</p>
     InvalidSchedule(String),
-    ///<p>The target is not valid or does not exist. It might not be configured for EC2 Systems Manager or you might not have permission to perform the operation.</p>
+    /// <p>The target is not valid or does not exist. It might not be configured for EC2 Systems Manager or you might not have permission to perform the operation.</p>
     InvalidTarget(String),
-    ///<p>The document does not support the platform type of the given instance ID(s). For example, you sent an document for a Windows instance to a Linux instance.</p>
+    /// <p>The document does not support the platform type of the given instance ID(s). For example, you sent an document for a Windows instance to a Linux instance.</p>
     UnsupportedPlatformType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5848,17 +5848,17 @@ impl Error for CreateAssociationBatchError {
 /// Errors returned by CreateDocument
 #[derive(Debug, PartialEq)]
 pub enum CreateDocumentError {
-    ///<p>The specified document already exists.</p>
+    /// <p>The specified document already exists.</p>
     DocumentAlreadyExists(String),
-    ///<p>You can have at most 200 active SSM documents.</p>
+    /// <p>You can have at most 200 active SSM documents.</p>
     DocumentLimitExceeded(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The content for the document is not valid.</p>
+    /// <p>The content for the document is not valid.</p>
     InvalidDocumentContent(String),
-    ///<p>The version of the document schema is not supported.</p>
+    /// <p>The version of the document schema is not supported.</p>
     InvalidDocumentSchemaVersion(String),
-    ///<p>The size limit of a document is 64 KB.</p>
+    /// <p>The size limit of a document is 64 KB.</p>
     MaxDocumentSizeExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5958,11 +5958,11 @@ impl Error for CreateDocumentError {
 /// Errors returned by CreateMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum CreateMaintenanceWindowError {
-    ///<p>Error returned when an idempotent operation is retried and the parameters don't match the original call to the API with the same idempotency token. </p>
+    /// <p>Error returned when an idempotent operation is retried and the parameters don't match the original call to the API with the same idempotency token. </p>
     IdempotentParameterMismatch(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>Error returned when the caller has exceeded the default resource limits (e.g. too many Maintenance Windows have been created).</p>
+    /// <p>Error returned when the caller has exceeded the default resource limits (e.g. too many Maintenance Windows have been created).</p>
     ResourceLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6054,11 +6054,11 @@ impl Error for CreateMaintenanceWindowError {
 /// Errors returned by CreatePatchBaseline
 #[derive(Debug, PartialEq)]
 pub enum CreatePatchBaselineError {
-    ///<p>Error returned when an idempotent operation is retried and the parameters don't match the original call to the API with the same idempotency token. </p>
+    /// <p>Error returned when an idempotent operation is retried and the parameters don't match the original call to the API with the same idempotency token. </p>
     IdempotentParameterMismatch(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>Error returned when the caller has exceeded the default resource limits (e.g. too many Maintenance Windows have been created).</p>
+    /// <p>Error returned when the caller has exceeded the default resource limits (e.g. too many Maintenance Windows have been created).</p>
     ResourceLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6148,13 +6148,13 @@ impl Error for CreatePatchBaselineError {
 /// Errors returned by CreateResourceDataSync
 #[derive(Debug, PartialEq)]
 pub enum CreateResourceDataSyncError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>A sync configuration with the same name already exists.</p>
+    /// <p>A sync configuration with the same name already exists.</p>
     ResourceDataSyncAlreadyExists(String),
-    ///<p>You have exceeded the allowed maximum sync configurations.</p>
+    /// <p>You have exceeded the allowed maximum sync configurations.</p>
     ResourceDataSyncCountExceeded(String),
-    ///<p>The specified sync configuration is invalid.</p>
+    /// <p>The specified sync configuration is invalid.</p>
     ResourceDataSyncInvalidConfiguration(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6252,11 +6252,11 @@ impl Error for CreateResourceDataSyncError {
 /// Errors returned by DeleteActivation
 #[derive(Debug, PartialEq)]
 pub enum DeleteActivationError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The activation is not valid. The activation might have been deleted, or the ActivationId and the ActivationCode do not match.</p>
+    /// <p>The activation is not valid. The activation might have been deleted, or the ActivationId and the ActivationCode do not match.</p>
     InvalidActivation(String),
-    ///<p>The activation ID is not valid. Verify the you entered the correct ActivationId or ActivationCode and try again.</p>
+    /// <p>The activation ID is not valid. Verify the you entered the correct ActivationId or ActivationCode and try again.</p>
     InvalidActivationId(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6342,15 +6342,15 @@ impl Error for DeleteActivationError {
 /// Errors returned by DeleteAssociation
 #[derive(Debug, PartialEq)]
 pub enum DeleteAssociationError {
-    ///<p>The specified association does not exist.</p>
+    /// <p>The specified association does not exist.</p>
     AssociationDoesNotExist(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The specified document does not exist.</p>
+    /// <p>The specified document does not exist.</p>
     InvalidDocument(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
-    ///<p>There are concurrent updates for a resource that supports one update at a time.</p>
+    /// <p>There are concurrent updates for a resource that supports one update at a time.</p>
     TooManyUpdates(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6446,13 +6446,13 @@ impl Error for DeleteAssociationError {
 /// Errors returned by DeleteDocument
 #[derive(Debug, PartialEq)]
 pub enum DeleteDocumentError {
-    ///<p>You must disassociate a document from all instances before you can delete it.</p>
+    /// <p>You must disassociate a document from all instances before you can delete it.</p>
     AssociatedInstances(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The specified document does not exist.</p>
+    /// <p>The specified document does not exist.</p>
     InvalidDocument(String),
-    ///<p>You attempted to delete a document while it is still shared. You must stop sharing the document before you can delete it.</p>
+    /// <p>You attempted to delete a document while it is still shared. You must stop sharing the document before you can delete it.</p>
     InvalidDocumentOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6542,7 +6542,7 @@ impl Error for DeleteDocumentError {
 /// Errors returned by DeleteMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum DeleteMaintenanceWindowError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6622,9 +6622,9 @@ impl Error for DeleteMaintenanceWindowError {
 /// Errors returned by DeleteParameter
 #[derive(Debug, PartialEq)]
 pub enum DeleteParameterError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The parameter could not be found. Verify the name and try again.</p>
+    /// <p>The parameter could not be found. Verify the name and try again.</p>
     ParameterNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6706,7 +6706,7 @@ impl Error for DeleteParameterError {
 /// Errors returned by DeleteParameters
 #[derive(Debug, PartialEq)]
 pub enum DeleteParametersError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6784,9 +6784,9 @@ impl Error for DeleteParametersError {
 /// Errors returned by DeletePatchBaseline
 #[derive(Debug, PartialEq)]
 pub enum DeletePatchBaselineError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>Error returned if an attempt is made to delete a patch baseline that is registered for a patch group.</p>
+    /// <p>Error returned if an attempt is made to delete a patch baseline that is registered for a patch group.</p>
     ResourceInUse(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6870,9 +6870,9 @@ impl Error for DeletePatchBaselineError {
 /// Errors returned by DeleteResourceDataSync
 #[derive(Debug, PartialEq)]
 pub enum DeleteResourceDataSyncError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The specified sync name was not found.</p>
+    /// <p>The specified sync name was not found.</p>
     ResourceDataSyncNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6958,9 +6958,9 @@ impl Error for DeleteResourceDataSyncError {
 /// Errors returned by DeregisterManagedInstance
 #[derive(Debug, PartialEq)]
 pub enum DeregisterManagedInstanceError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7044,9 +7044,9 @@ impl Error for DeregisterManagedInstanceError {
 /// Errors returned by DeregisterPatchBaselineForPatchGroup
 #[derive(Debug, PartialEq)]
 pub enum DeregisterPatchBaselineForPatchGroupError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The resource ID is not valid. Verify that you entered the correct ID and try again.</p>
+    /// <p>The resource ID is not valid. Verify that you entered the correct ID and try again.</p>
     InvalidResourceId(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7136,11 +7136,11 @@ impl Error for DeregisterPatchBaselineForPatchGroupError {
 /// Errors returned by DeregisterTargetFromMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum DeregisterTargetFromMaintenanceWindowError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>You specified the <code>Safe</code> option for the DeregisterTargetFromMaintenanceWindow operation, but the target is still referenced in a task.</p>
+    /// <p>You specified the <code>Safe</code> option for the DeregisterTargetFromMaintenanceWindow operation, but the target is still referenced in a task.</p>
     TargetInUse(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7236,9 +7236,9 @@ impl Error for DeregisterTargetFromMaintenanceWindowError {
 /// Errors returned by DeregisterTaskFromMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum DeregisterTaskFromMaintenanceWindowError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7326,11 +7326,11 @@ impl Error for DeregisterTaskFromMaintenanceWindowError {
 /// Errors returned by DescribeActivations
 #[derive(Debug, PartialEq)]
 pub enum DescribeActivationsError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The filter name is not valid. Verify the you entered the correct name and try again.</p>
+    /// <p>The filter name is not valid. Verify the you entered the correct name and try again.</p>
     InvalidFilter(String),
-    ///<p>The specified token is not valid.</p>
+    /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7418,15 +7418,15 @@ impl Error for DescribeActivationsError {
 /// Errors returned by DescribeAssociation
 #[derive(Debug, PartialEq)]
 pub enum DescribeAssociationError {
-    ///<p>The specified association does not exist.</p>
+    /// <p>The specified association does not exist.</p>
     AssociationDoesNotExist(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The version you specified is not valid. Use ListAssociationVersions to view all versions of an association according to the association ID. Or, use the <code>$LATEST</code> parameter to view the latest version of the association.</p>
+    /// <p>The version you specified is not valid. Use ListAssociationVersions to view all versions of an association according to the association ID. Or, use the <code>$LATEST</code> parameter to view the latest version of the association.</p>
     InvalidAssociationVersion(String),
-    ///<p>The specified document does not exist.</p>
+    /// <p>The specified document does not exist.</p>
     InvalidDocument(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7526,9 +7526,9 @@ impl Error for DescribeAssociationError {
 /// Errors returned by DescribeAutomationExecutions
 #[derive(Debug, PartialEq)]
 pub enum DescribeAutomationExecutionsError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The specified token is not valid.</p>
+    /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7614,7 +7614,7 @@ impl Error for DescribeAutomationExecutionsError {
 /// Errors returned by DescribeAvailablePatches
 #[derive(Debug, PartialEq)]
 pub enum DescribeAvailablePatchesError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7694,11 +7694,11 @@ impl Error for DescribeAvailablePatchesError {
 /// Errors returned by DescribeDocument
 #[derive(Debug, PartialEq)]
 pub enum DescribeDocumentError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The specified document does not exist.</p>
+    /// <p>The specified document does not exist.</p>
     InvalidDocument(String),
-    ///<p>The document version is not valid or does not exist.</p>
+    /// <p>The document version is not valid or does not exist.</p>
     InvalidDocumentVersion(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7784,11 +7784,11 @@ impl Error for DescribeDocumentError {
 /// Errors returned by DescribeDocumentPermission
 #[derive(Debug, PartialEq)]
 pub enum DescribeDocumentPermissionError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The specified document does not exist.</p>
+    /// <p>The specified document does not exist.</p>
     InvalidDocument(String),
-    ///<p>The permission type is not supported. <i>Share</i> is the only supported permission type.</p>
+    /// <p>The permission type is not supported. <i>Share</i> is the only supported permission type.</p>
     InvalidPermissionType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7878,11 +7878,11 @@ impl Error for DescribeDocumentPermissionError {
 /// Errors returned by DescribeEffectiveInstanceAssociations
 #[derive(Debug, PartialEq)]
 pub enum DescribeEffectiveInstanceAssociationsError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
-    ///<p>The specified token is not valid.</p>
+    /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7978,13 +7978,13 @@ impl Error for DescribeEffectiveInstanceAssociationsError {
 /// Errors returned by DescribeEffectivePatchesForPatchBaseline
 #[derive(Debug, PartialEq)]
 pub enum DescribeEffectivePatchesForPatchBaselineError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The resource ID is not valid. Verify that you entered the correct ID and try again.</p>
+    /// <p>The resource ID is not valid. Verify that you entered the correct ID and try again.</p>
     InvalidResourceId(String),
-    ///<p>The operating systems you specified is not supported, or the operation is not supported for the operating system. Valid operating systems include: Windows, AmazonLinux, RedhatEnterpriseLinux, and Ubuntu.</p>
+    /// <p>The operating systems you specified is not supported, or the operation is not supported for the operating system. Valid operating systems include: Windows, AmazonLinux, RedhatEnterpriseLinux, and Ubuntu.</p>
     UnsupportedOperatingSystem(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8090,11 +8090,11 @@ impl Error for DescribeEffectivePatchesForPatchBaselineError {
 /// Errors returned by DescribeInstanceAssociationsStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeInstanceAssociationsStatusError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
-    ///<p>The specified token is not valid.</p>
+    /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8188,15 +8188,15 @@ impl Error for DescribeInstanceAssociationsStatusError {
 /// Errors returned by DescribeInstanceInformation
 #[derive(Debug, PartialEq)]
 pub enum DescribeInstanceInformationError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The specified key is not valid.</p>
+    /// <p>The specified key is not valid.</p>
     InvalidFilterKey(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
-    ///<p>The specified filter value is not valid.</p>
+    /// <p>The specified filter value is not valid.</p>
     InvalidInstanceInformationFilterValue(String),
-    ///<p>The specified token is not valid.</p>
+    /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8298,9 +8298,9 @@ impl Error for DescribeInstanceInformationError {
 /// Errors returned by DescribeInstancePatchStates
 #[derive(Debug, PartialEq)]
 pub enum DescribeInstancePatchStatesError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The specified token is not valid.</p>
+    /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8386,11 +8386,11 @@ impl Error for DescribeInstancePatchStatesError {
 /// Errors returned by DescribeInstancePatchStatesForPatchGroup
 #[derive(Debug, PartialEq)]
 pub enum DescribeInstancePatchStatesForPatchGroupError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The filter name is not valid. Verify the you entered the correct name and try again.</p>
+    /// <p>The filter name is not valid. Verify the you entered the correct name and try again.</p>
     InvalidFilter(String),
-    ///<p>The specified token is not valid.</p>
+    /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8488,13 +8488,13 @@ impl Error for DescribeInstancePatchStatesForPatchGroupError {
 /// Errors returned by DescribeInstancePatches
 #[derive(Debug, PartialEq)]
 pub enum DescribeInstancePatchesError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The filter name is not valid. Verify the you entered the correct name and try again.</p>
+    /// <p>The filter name is not valid. Verify the you entered the correct name and try again.</p>
     InvalidFilter(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
-    ///<p>The specified token is not valid.</p>
+    /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8586,9 +8586,9 @@ impl Error for DescribeInstancePatchesError {
 /// Errors returned by DescribeMaintenanceWindowExecutionTaskInvocations
 #[derive(Debug, PartialEq)]
 pub enum DescribeMaintenanceWindowExecutionTaskInvocationsError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8680,9 +8680,9 @@ impl Error for DescribeMaintenanceWindowExecutionTaskInvocationsError {
 /// Errors returned by DescribeMaintenanceWindowExecutionTasks
 #[derive(Debug, PartialEq)]
 pub enum DescribeMaintenanceWindowExecutionTasksError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8772,7 +8772,7 @@ impl Error for DescribeMaintenanceWindowExecutionTasksError {
 /// Errors returned by DescribeMaintenanceWindowExecutions
 #[derive(Debug, PartialEq)]
 pub enum DescribeMaintenanceWindowExecutionsError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8854,9 +8854,9 @@ impl Error for DescribeMaintenanceWindowExecutionsError {
 /// Errors returned by DescribeMaintenanceWindowTargets
 #[derive(Debug, PartialEq)]
 pub enum DescribeMaintenanceWindowTargetsError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8944,9 +8944,9 @@ impl Error for DescribeMaintenanceWindowTargetsError {
 /// Errors returned by DescribeMaintenanceWindowTasks
 #[derive(Debug, PartialEq)]
 pub enum DescribeMaintenanceWindowTasksError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9032,7 +9032,7 @@ impl Error for DescribeMaintenanceWindowTasksError {
 /// Errors returned by DescribeMaintenanceWindows
 #[derive(Debug, PartialEq)]
 pub enum DescribeMaintenanceWindowsError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9112,15 +9112,15 @@ impl Error for DescribeMaintenanceWindowsError {
 /// Errors returned by DescribeParameters
 #[derive(Debug, PartialEq)]
 pub enum DescribeParametersError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The specified key is not valid.</p>
+    /// <p>The specified key is not valid.</p>
     InvalidFilterKey(String),
-    ///<p>The specified filter option is not valid. Valid options are Equals and BeginsWith. For Path filter, valid options are Recursive and OneLevel.</p>
+    /// <p>The specified filter option is not valid. Valid options are Equals and BeginsWith. For Path filter, valid options are Recursive and OneLevel.</p>
     InvalidFilterOption(String),
-    ///<p>The filter value is not valid. Verify the value and try again.</p>
+    /// <p>The filter value is not valid. Verify the value and try again.</p>
     InvalidFilterValue(String),
-    ///<p>The specified token is not valid.</p>
+    /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9216,7 +9216,7 @@ impl Error for DescribeParametersError {
 /// Errors returned by DescribePatchBaselines
 #[derive(Debug, PartialEq)]
 pub enum DescribePatchBaselinesError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9296,9 +9296,9 @@ impl Error for DescribePatchBaselinesError {
 /// Errors returned by DescribePatchGroupState
 #[derive(Debug, PartialEq)]
 pub enum DescribePatchGroupStateError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The specified token is not valid.</p>
+    /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9382,7 +9382,7 @@ impl Error for DescribePatchGroupStateError {
 /// Errors returned by DescribePatchGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribePatchGroupsError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9462,9 +9462,9 @@ impl Error for DescribePatchGroupsError {
 /// Errors returned by GetAutomationExecution
 #[derive(Debug, PartialEq)]
 pub enum GetAutomationExecutionError {
-    ///<p>There is no automation execution information for the requested automation execution ID.</p>
+    /// <p>There is no automation execution information for the requested automation execution ID.</p>
     AutomationExecutionNotFound(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9550,15 +9550,15 @@ impl Error for GetAutomationExecutionError {
 /// Errors returned by GetCommandInvocation
 #[derive(Debug, PartialEq)]
 pub enum GetCommandInvocationError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///
+
     InvalidCommandId(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
-    ///<p>The plugin name is not valid.</p>
+    /// <p>The plugin name is not valid.</p>
     InvalidPluginName(String),
-    ///<p>The command ID and instance ID you specified did not match any invocations. Verify the command ID adn the instance ID and try again. </p>
+    /// <p>The command ID and instance ID you specified did not match any invocations. Verify the command ID adn the instance ID and try again. </p>
     InvocationDoesNotExist(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9654,7 +9654,7 @@ impl Error for GetCommandInvocationError {
 /// Errors returned by GetDefaultPatchBaseline
 #[derive(Debug, PartialEq)]
 pub enum GetDefaultPatchBaselineError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9734,9 +9734,9 @@ impl Error for GetDefaultPatchBaselineError {
 /// Errors returned by GetDeployablePatchSnapshotForInstance
 #[derive(Debug, PartialEq)]
 pub enum GetDeployablePatchSnapshotForInstanceError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The operating systems you specified is not supported, or the operation is not supported for the operating system. Valid operating systems include: Windows, AmazonLinux, RedhatEnterpriseLinux, and Ubuntu.</p>
+    /// <p>The operating systems you specified is not supported, or the operation is not supported for the operating system. Valid operating systems include: Windows, AmazonLinux, RedhatEnterpriseLinux, and Ubuntu.</p>
     UnsupportedOperatingSystem(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9828,11 +9828,11 @@ impl Error for GetDeployablePatchSnapshotForInstanceError {
 /// Errors returned by GetDocument
 #[derive(Debug, PartialEq)]
 pub enum GetDocumentError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The specified document does not exist.</p>
+    /// <p>The specified document does not exist.</p>
     InvalidDocument(String),
-    ///<p>The document version is not valid or does not exist.</p>
+    /// <p>The document version is not valid or does not exist.</p>
     InvalidDocumentVersion(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9918,15 +9918,15 @@ impl Error for GetDocumentError {
 /// Errors returned by GetInventory
 #[derive(Debug, PartialEq)]
 pub enum GetInventoryError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The filter name is not valid. Verify the you entered the correct name and try again.</p>
+    /// <p>The filter name is not valid. Verify the you entered the correct name and try again.</p>
     InvalidFilter(String),
-    ///<p>The specified token is not valid.</p>
+    /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
-    ///<p>The specified inventory item result attribute is not valid.</p>
+    /// <p>The specified inventory item result attribute is not valid.</p>
     InvalidResultAttribute(String),
-    ///<p>The parameter type name is not valid.</p>
+    /// <p>The parameter type name is not valid.</p>
     InvalidTypeName(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10020,11 +10020,11 @@ impl Error for GetInventoryError {
 /// Errors returned by GetInventorySchema
 #[derive(Debug, PartialEq)]
 pub enum GetInventorySchemaError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The specified token is not valid.</p>
+    /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
-    ///<p>The parameter type name is not valid.</p>
+    /// <p>The parameter type name is not valid.</p>
     InvalidTypeName(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10112,9 +10112,9 @@ impl Error for GetInventorySchemaError {
 /// Errors returned by GetMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum GetMaintenanceWindowError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10198,9 +10198,9 @@ impl Error for GetMaintenanceWindowError {
 /// Errors returned by GetMaintenanceWindowExecution
 #[derive(Debug, PartialEq)]
 pub enum GetMaintenanceWindowExecutionError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10286,9 +10286,9 @@ impl Error for GetMaintenanceWindowExecutionError {
 /// Errors returned by GetMaintenanceWindowExecutionTask
 #[derive(Debug, PartialEq)]
 pub enum GetMaintenanceWindowExecutionTaskError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10376,9 +10376,9 @@ impl Error for GetMaintenanceWindowExecutionTaskError {
 /// Errors returned by GetMaintenanceWindowExecutionTaskInvocation
 #[derive(Debug, PartialEq)]
 pub enum GetMaintenanceWindowExecutionTaskInvocationError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10474,9 +10474,9 @@ impl Error for GetMaintenanceWindowExecutionTaskInvocationError {
 /// Errors returned by GetMaintenanceWindowTask
 #[derive(Debug, PartialEq)]
 pub enum GetMaintenanceWindowTaskError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10560,11 +10560,11 @@ impl Error for GetMaintenanceWindowTaskError {
 /// Errors returned by GetParameter
 #[derive(Debug, PartialEq)]
 pub enum GetParameterError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The query key ID is not valid.</p>
+    /// <p>The query key ID is not valid.</p>
     InvalidKeyId(String),
-    ///<p>The parameter could not be found. Verify the name and try again.</p>
+    /// <p>The parameter could not be found. Verify the name and try again.</p>
     ParameterNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10648,13 +10648,13 @@ impl Error for GetParameterError {
 /// Errors returned by GetParameterHistory
 #[derive(Debug, PartialEq)]
 pub enum GetParameterHistoryError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The query key ID is not valid.</p>
+    /// <p>The query key ID is not valid.</p>
     InvalidKeyId(String),
-    ///<p>The specified token is not valid.</p>
+    /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
-    ///<p>The parameter could not be found. Verify the name and try again.</p>
+    /// <p>The parameter could not be found. Verify the name and try again.</p>
     ParameterNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10746,9 +10746,9 @@ impl Error for GetParameterHistoryError {
 /// Errors returned by GetParameters
 #[derive(Debug, PartialEq)]
 pub enum GetParametersError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The query key ID is not valid.</p>
+    /// <p>The query key ID is not valid.</p>
     InvalidKeyId(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10828,17 +10828,17 @@ impl Error for GetParametersError {
 /// Errors returned by GetParametersByPath
 #[derive(Debug, PartialEq)]
 pub enum GetParametersByPathError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The specified key is not valid.</p>
+    /// <p>The specified key is not valid.</p>
     InvalidFilterKey(String),
-    ///<p>The specified filter option is not valid. Valid options are Equals and BeginsWith. For Path filter, valid options are Recursive and OneLevel.</p>
+    /// <p>The specified filter option is not valid. Valid options are Equals and BeginsWith. For Path filter, valid options are Recursive and OneLevel.</p>
     InvalidFilterOption(String),
-    ///<p>The filter value is not valid. Verify the value and try again.</p>
+    /// <p>The filter value is not valid. Verify the value and try again.</p>
     InvalidFilterValue(String),
-    ///<p>The query key ID is not valid.</p>
+    /// <p>The query key ID is not valid.</p>
     InvalidKeyId(String),
-    ///<p>The specified token is not valid.</p>
+    /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10938,11 +10938,11 @@ impl Error for GetParametersByPathError {
 /// Errors returned by GetPatchBaseline
 #[derive(Debug, PartialEq)]
 pub enum GetPatchBaselineError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The resource ID is not valid. Verify that you entered the correct ID and try again.</p>
+    /// <p>The resource ID is not valid. Verify that you entered the correct ID and try again.</p>
     InvalidResourceId(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11028,7 +11028,7 @@ impl Error for GetPatchBaselineError {
 /// Errors returned by GetPatchBaselineForPatchGroup
 #[derive(Debug, PartialEq)]
 pub enum GetPatchBaselineForPatchGroupError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11110,11 +11110,11 @@ impl Error for GetPatchBaselineForPatchGroupError {
 /// Errors returned by ListAssociationVersions
 #[derive(Debug, PartialEq)]
 pub enum ListAssociationVersionsError {
-    ///<p>The specified association does not exist.</p>
+    /// <p>The specified association does not exist.</p>
     AssociationDoesNotExist(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The specified token is not valid.</p>
+    /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11204,9 +11204,9 @@ impl Error for ListAssociationVersionsError {
 /// Errors returned by ListAssociations
 #[derive(Debug, PartialEq)]
 pub enum ListAssociationsError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The specified token is not valid.</p>
+    /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11288,15 +11288,15 @@ impl Error for ListAssociationsError {
 /// Errors returned by ListCommandInvocations
 #[derive(Debug, PartialEq)]
 pub enum ListCommandInvocationsError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///
+
     InvalidCommandId(String),
-    ///<p>The specified key is not valid.</p>
+    /// <p>The specified key is not valid.</p>
     InvalidFilterKey(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
-    ///<p>The specified token is not valid.</p>
+    /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11392,15 +11392,15 @@ impl Error for ListCommandInvocationsError {
 /// Errors returned by ListCommands
 #[derive(Debug, PartialEq)]
 pub enum ListCommandsError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///
+
     InvalidCommandId(String),
-    ///<p>The specified key is not valid.</p>
+    /// <p>The specified key is not valid.</p>
     InvalidFilterKey(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
-    ///<p>The specified token is not valid.</p>
+    /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11494,15 +11494,15 @@ impl Error for ListCommandsError {
 /// Errors returned by ListComplianceItems
 #[derive(Debug, PartialEq)]
 pub enum ListComplianceItemsError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The filter name is not valid. Verify the you entered the correct name and try again.</p>
+    /// <p>The filter name is not valid. Verify the you entered the correct name and try again.</p>
     InvalidFilter(String),
-    ///<p>The specified token is not valid.</p>
+    /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
-    ///<p>The resource ID is not valid. Verify that you entered the correct ID and try again.</p>
+    /// <p>The resource ID is not valid. Verify that you entered the correct ID and try again.</p>
     InvalidResourceId(String),
-    ///<p>The resource type is not valid. If you are attempting to tag an instance, the instance must be a registered, managed instance.</p>
+    /// <p>The resource type is not valid. If you are attempting to tag an instance, the instance must be a registered, managed instance.</p>
     InvalidResourceType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11598,11 +11598,11 @@ impl Error for ListComplianceItemsError {
 /// Errors returned by ListComplianceSummaries
 #[derive(Debug, PartialEq)]
 pub enum ListComplianceSummariesError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The filter name is not valid. Verify the you entered the correct name and try again.</p>
+    /// <p>The filter name is not valid. Verify the you entered the correct name and try again.</p>
     InvalidFilter(String),
-    ///<p>The specified token is not valid.</p>
+    /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11690,11 +11690,11 @@ impl Error for ListComplianceSummariesError {
 /// Errors returned by ListDocumentVersions
 #[derive(Debug, PartialEq)]
 pub enum ListDocumentVersionsError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The specified document does not exist.</p>
+    /// <p>The specified document does not exist.</p>
     InvalidDocument(String),
-    ///<p>The specified token is not valid.</p>
+    /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11782,11 +11782,11 @@ impl Error for ListDocumentVersionsError {
 /// Errors returned by ListDocuments
 #[derive(Debug, PartialEq)]
 pub enum ListDocumentsError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The specified key is not valid.</p>
+    /// <p>The specified key is not valid.</p>
     InvalidFilterKey(String),
-    ///<p>The specified token is not valid.</p>
+    /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11872,15 +11872,15 @@ impl Error for ListDocumentsError {
 /// Errors returned by ListInventoryEntries
 #[derive(Debug, PartialEq)]
 pub enum ListInventoryEntriesError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The filter name is not valid. Verify the you entered the correct name and try again.</p>
+    /// <p>The filter name is not valid. Verify the you entered the correct name and try again.</p>
     InvalidFilter(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
-    ///<p>The specified token is not valid.</p>
+    /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
-    ///<p>The parameter type name is not valid.</p>
+    /// <p>The parameter type name is not valid.</p>
     InvalidTypeName(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11976,11 +11976,11 @@ impl Error for ListInventoryEntriesError {
 /// Errors returned by ListResourceComplianceSummaries
 #[derive(Debug, PartialEq)]
 pub enum ListResourceComplianceSummariesError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The filter name is not valid. Verify the you entered the correct name and try again.</p>
+    /// <p>The filter name is not valid. Verify the you entered the correct name and try again.</p>
     InvalidFilter(String),
-    ///<p>The specified token is not valid.</p>
+    /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12070,9 +12070,9 @@ impl Error for ListResourceComplianceSummariesError {
 /// Errors returned by ListResourceDataSync
 #[derive(Debug, PartialEq)]
 pub enum ListResourceDataSyncError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The specified token is not valid.</p>
+    /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12156,11 +12156,11 @@ impl Error for ListResourceDataSyncError {
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The resource ID is not valid. Verify that you entered the correct ID and try again.</p>
+    /// <p>The resource ID is not valid. Verify that you entered the correct ID and try again.</p>
     InvalidResourceId(String),
-    ///<p>The resource type is not valid. If you are attempting to tag an instance, the instance must be a registered, managed instance.</p>
+    /// <p>The resource type is not valid. If you are attempting to tag an instance, the instance must be a registered, managed instance.</p>
     InvalidResourceType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12248,15 +12248,15 @@ impl Error for ListTagsForResourceError {
 /// Errors returned by ModifyDocumentPermission
 #[derive(Debug, PartialEq)]
 pub enum ModifyDocumentPermissionError {
-    ///<p>You can have at most 200 active SSM documents.</p>
+    /// <p>You can have at most 200 active SSM documents.</p>
     DocumentLimitExceeded(String),
-    ///<p>The document cannot be shared with more AWS user accounts. You can share a document with a maximum of 20 accounts. You can publicly share up to five documents. If you need to increase this limit, contact AWS Support.</p>
+    /// <p>The document cannot be shared with more AWS user accounts. You can share a document with a maximum of 20 accounts. You can publicly share up to five documents. If you need to increase this limit, contact AWS Support.</p>
     DocumentPermissionLimit(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The specified document does not exist.</p>
+    /// <p>The specified document does not exist.</p>
     InvalidDocument(String),
-    ///<p>The permission type is not supported. <i>Share</i> is the only supported permission type.</p>
+    /// <p>The permission type is not supported. <i>Share</i> is the only supported permission type.</p>
     InvalidPermissionType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12358,19 +12358,19 @@ impl Error for ModifyDocumentPermissionError {
 /// Errors returned by PutComplianceItems
 #[derive(Debug, PartialEq)]
 pub enum PutComplianceItemsError {
-    ///<p>You specified too many custom compliance types. You can specify a maximum of 10 different types. </p>
+    /// <p>You specified too many custom compliance types. You can specify a maximum of 10 different types. </p>
     ComplianceTypeCountLimitExceeded(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>One or more content items is not valid.</p>
+    /// <p>One or more content items is not valid.</p>
     InvalidItemContent(String),
-    ///<p>The resource ID is not valid. Verify that you entered the correct ID and try again.</p>
+    /// <p>The resource ID is not valid. Verify that you entered the correct ID and try again.</p>
     InvalidResourceId(String),
-    ///<p>The resource type is not valid. If you are attempting to tag an instance, the instance must be a registered, managed instance.</p>
+    /// <p>The resource type is not valid. If you are attempting to tag an instance, the instance must be a registered, managed instance.</p>
     InvalidResourceType(String),
-    ///<p>The inventory item size has exceeded the size limit.</p>
+    /// <p>The inventory item size has exceeded the size limit.</p>
     ItemSizeLimitExceeded(String),
-    ///<p>The size of inventory data has exceeded the total size limit for the resource.</p>
+    /// <p>The size of inventory data has exceeded the total size limit for the resource.</p>
     TotalSizeLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12476,29 +12476,29 @@ impl Error for PutComplianceItemsError {
 /// Errors returned by PutInventory
 #[derive(Debug, PartialEq)]
 pub enum PutInventoryError {
-    ///<p>You have exceeded the limit for custom schemas. Delete one or more custom schemas and try again.</p>
+    /// <p>You have exceeded the limit for custom schemas. Delete one or more custom schemas and try again.</p>
     CustomSchemaCountLimitExceeded(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
-    ///<p>You specified invalid keys or values in the <code>Context</code> attribute for <code>InventoryItem</code>. Verify the keys and values, and try again.</p>
+    /// <p>You specified invalid keys or values in the <code>Context</code> attribute for <code>InventoryItem</code>. Verify the keys and values, and try again.</p>
     InvalidInventoryItemContext(String),
-    ///<p>One or more content items is not valid.</p>
+    /// <p>One or more content items is not valid.</p>
     InvalidItemContent(String),
-    ///<p>The parameter type name is not valid.</p>
+    /// <p>The parameter type name is not valid.</p>
     InvalidTypeName(String),
-    ///<p>The inventory item has invalid content. </p>
+    /// <p>The inventory item has invalid content. </p>
     ItemContentMismatch(String),
-    ///<p>The inventory item size has exceeded the size limit.</p>
+    /// <p>The inventory item size has exceeded the size limit.</p>
     ItemSizeLimitExceeded(String),
-    ///<p>The sub-type count exceeded the limit for the inventory type.</p>
+    /// <p>The sub-type count exceeded the limit for the inventory type.</p>
     SubTypeCountLimitExceeded(String),
-    ///<p>The size of inventory data has exceeded the total size limit for the resource.</p>
+    /// <p>The size of inventory data has exceeded the total size limit for the resource.</p>
     TotalSizeLimitExceeded(String),
-    ///<p>The <code>Context</code> attribute that you specified for the <code>InventoryItem</code> is not allowed for this inventory type. You can only use the <code>Context</code> attribute with inventory types like <code>AWS:ComplianceItem</code>.</p>
+    /// <p>The <code>Context</code> attribute that you specified for the <code>InventoryItem</code> is not allowed for this inventory type. You can only use the <code>Context</code> attribute with inventory types like <code>AWS:ComplianceItem</code>.</p>
     UnsupportedInventoryItemContext(String),
-    ///<p>Inventory item type schema version has to match supported versions in the service. Check output of GetInventorySchema to see the available schema version for each type.</p>
+    /// <p>Inventory item type schema version has to match supported versions in the service. Check output of GetInventorySchema to see the available schema version for each type.</p>
     UnsupportedInventorySchemaVersion(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12626,25 +12626,25 @@ impl Error for PutInventoryError {
 /// Errors returned by PutParameter
 #[derive(Debug, PartialEq)]
 pub enum PutParameterError {
-    ///<p>A hierarchy can have a maximum of five levels. For example:</p> <p>/Finance/Prod/IAD/OS/WinServ2016/license15</p> <p>For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html">Working with Systems Manager Parameters</a>. </p>
+    /// <p>A hierarchy can have a maximum of five levels. For example:</p> <p>/Finance/Prod/IAD/OS/WinServ2016/license15</p> <p>For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html">Working with Systems Manager Parameters</a>. </p>
     HierarchyLevelLimitExceeded(String),
-    ///<p>Parameter Store does not support changing a parameter type in a hierarchy. For example, you can't change a parameter from a String type to a SecureString type. You must create a new, unique parameter.</p>
+    /// <p>Parameter Store does not support changing a parameter type in a hierarchy. For example, you can't change a parameter from a String type to a SecureString type. You must create a new, unique parameter.</p>
     HierarchyTypeMismatch(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The request does not meet the regular expression requirement.</p>
+    /// <p>The request does not meet the regular expression requirement.</p>
     InvalidAllowedPattern(String),
-    ///<p>The query key ID is not valid.</p>
+    /// <p>The query key ID is not valid.</p>
     InvalidKeyId(String),
-    ///<p>The parameter already exists. You can't create duplicate parameters.</p>
+    /// <p>The parameter already exists. You can't create duplicate parameters.</p>
     ParameterAlreadyExists(String),
-    ///<p>You have exceeded the number of parameters for this AWS account. Delete one or more parameters and try again.</p>
+    /// <p>You have exceeded the number of parameters for this AWS account. Delete one or more parameters and try again.</p>
     ParameterLimitExceeded(String),
-    ///<p>The parameter name is not valid.</p>
+    /// <p>The parameter name is not valid.</p>
     ParameterPatternMismatch(String),
-    ///<p>There are concurrent updates for a resource that supports one update at a time.</p>
+    /// <p>There are concurrent updates for a resource that supports one update at a time.</p>
     TooManyUpdates(String),
-    ///<p>The parameter type is not supported.</p>
+    /// <p>The parameter type is not supported.</p>
     UnsupportedParameterType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12756,11 +12756,11 @@ impl Error for PutParameterError {
 /// Errors returned by RegisterDefaultPatchBaseline
 #[derive(Debug, PartialEq)]
 pub enum RegisterDefaultPatchBaselineError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The resource ID is not valid. Verify that you entered the correct ID and try again.</p>
+    /// <p>The resource ID is not valid. Verify that you entered the correct ID and try again.</p>
     InvalidResourceId(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12850,15 +12850,15 @@ impl Error for RegisterDefaultPatchBaselineError {
 /// Errors returned by RegisterPatchBaselineForPatchGroup
 #[derive(Debug, PartialEq)]
 pub enum RegisterPatchBaselineForPatchGroupError {
-    ///<p>Error returned if an attempt is made to register a patch group with a patch baseline that is already registered with a different patch baseline.</p>
+    /// <p>Error returned if an attempt is made to register a patch group with a patch baseline that is already registered with a different patch baseline.</p>
     AlreadyExists(String),
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The resource ID is not valid. Verify that you entered the correct ID and try again.</p>
+    /// <p>The resource ID is not valid. Verify that you entered the correct ID and try again.</p>
     InvalidResourceId(String),
-    ///<p>Error returned when the caller has exceeded the default resource limits (e.g. too many Maintenance Windows have been created).</p>
+    /// <p>Error returned when the caller has exceeded the default resource limits (e.g. too many Maintenance Windows have been created).</p>
     ResourceLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12964,13 +12964,13 @@ impl Error for RegisterPatchBaselineForPatchGroupError {
 /// Errors returned by RegisterTargetWithMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum RegisterTargetWithMaintenanceWindowError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
-    ///<p>Error returned when an idempotent operation is retried and the parameters don't match the original call to the API with the same idempotency token. </p>
+    /// <p>Error returned when an idempotent operation is retried and the parameters don't match the original call to the API with the same idempotency token. </p>
     IdempotentParameterMismatch(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>Error returned when the caller has exceeded the default resource limits (e.g. too many Maintenance Windows have been created).</p>
+    /// <p>Error returned when the caller has exceeded the default resource limits (e.g. too many Maintenance Windows have been created).</p>
     ResourceLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13072,15 +13072,15 @@ impl Error for RegisterTargetWithMaintenanceWindowError {
 /// Errors returned by RegisterTaskWithMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum RegisterTaskWithMaintenanceWindowError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
-    ///<p>You attempted to register a LAMBDA or STEP_FUNCTION task in a region where the corresponding service is not available. </p>
+    /// <p>You attempted to register a LAMBDA or STEP_FUNCTION task in a region where the corresponding service is not available. </p>
     FeatureNotAvailable(String),
-    ///<p>Error returned when an idempotent operation is retried and the parameters don't match the original call to the API with the same idempotency token. </p>
+    /// <p>Error returned when an idempotent operation is retried and the parameters don't match the original call to the API with the same idempotency token. </p>
     IdempotentParameterMismatch(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>Error returned when the caller has exceeded the default resource limits (e.g. too many Maintenance Windows have been created).</p>
+    /// <p>Error returned when the caller has exceeded the default resource limits (e.g. too many Maintenance Windows have been created).</p>
     ResourceLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13186,11 +13186,11 @@ impl Error for RegisterTaskWithMaintenanceWindowError {
 /// Errors returned by RemoveTagsFromResource
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsFromResourceError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The resource ID is not valid. Verify that you entered the correct ID and try again.</p>
+    /// <p>The resource ID is not valid. Verify that you entered the correct ID and try again.</p>
     InvalidResourceId(String),
-    ///<p>The resource type is not valid. If you are attempting to tag an instance, the instance must be a registered, managed instance.</p>
+    /// <p>The resource type is not valid. If you are attempting to tag an instance, the instance must be a registered, managed instance.</p>
     InvalidResourceType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13278,11 +13278,11 @@ impl Error for RemoveTagsFromResourceError {
 /// Errors returned by SendAutomationSignal
 #[derive(Debug, PartialEq)]
 pub enum SendAutomationSignalError {
-    ///<p>There is no automation execution information for the requested automation execution ID.</p>
+    /// <p>There is no automation execution information for the requested automation execution ID.</p>
     AutomationExecutionNotFound(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The signal is not valid for the current Automation execution.</p>
+    /// <p>The signal is not valid for the current Automation execution.</p>
     InvalidAutomationSignal(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13374,25 +13374,25 @@ impl Error for SendAutomationSignalError {
 /// Errors returned by SendCommand
 #[derive(Debug, PartialEq)]
 pub enum SendCommandError {
-    ///<p>You cannot specify an instance ID in more than one association.</p>
+    /// <p>You cannot specify an instance ID in more than one association.</p>
     DuplicateInstanceId(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The specified document does not exist.</p>
+    /// <p>The specified document does not exist.</p>
     InvalidDocument(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
-    ///<p>One or more configuration items is not valid. Verify that a valid Amazon Resource Name (ARN) was provided for an Amazon SNS topic.</p>
+    /// <p>One or more configuration items is not valid. Verify that a valid Amazon Resource Name (ARN) was provided for an Amazon SNS topic.</p>
     InvalidNotificationConfig(String),
-    ///<p>The S3 bucket does not exist.</p>
+    /// <p>The S3 bucket does not exist.</p>
     InvalidOutputFolder(String),
-    ///<p>You must specify values for all required parameters in the SSM document. You can only supply values to parameters defined in the SSM document.</p>
+    /// <p>You must specify values for all required parameters in the SSM document. You can only supply values to parameters defined in the SSM document.</p>
     InvalidParameters(String),
-    ///<p>The role name can't contain invalid characters. Also verify that you specified an IAM role for notifications that includes the required trust policy. For information about configuring the IAM role for Run Command notifications, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/rc-sns-notifications.html">Configuring Amazon SNS Notifications for Run Command</a> in the <i>Amazon EC2 Systems Manager User Guide</i>.</p>
+    /// <p>The role name can't contain invalid characters. Also verify that you specified an IAM role for notifications that includes the required trust policy. For information about configuring the IAM role for Run Command notifications, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/rc-sns-notifications.html">Configuring Amazon SNS Notifications for Run Command</a> in the <i>Amazon EC2 Systems Manager User Guide</i>.</p>
     InvalidRole(String),
-    ///<p>The size limit of a document is 64 KB.</p>
+    /// <p>The size limit of a document is 64 KB.</p>
     MaxDocumentSizeExceeded(String),
-    ///<p>The document does not support the platform type of the given instance ID(s). For example, you sent an document for a Windows instance to a Linux instance.</p>
+    /// <p>The document does not support the platform type of the given instance ID(s). For example, you sent an document for a Windows instance to a Linux instance.</p>
     UnsupportedPlatformType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13504,15 +13504,15 @@ impl Error for SendCommandError {
 /// Errors returned by StartAutomationExecution
 #[derive(Debug, PartialEq)]
 pub enum StartAutomationExecutionError {
-    ///<p>An Automation document with the specified name could not be found.</p>
+    /// <p>An Automation document with the specified name could not be found.</p>
     AutomationDefinitionNotFound(String),
-    ///<p>An Automation document with the specified name and version could not be found.</p>
+    /// <p>An Automation document with the specified name and version could not be found.</p>
     AutomationDefinitionVersionNotFound(String),
-    ///<p>The number of simultaneously running Automation executions exceeded the allowable limit.</p>
+    /// <p>The number of simultaneously running Automation executions exceeded the allowable limit.</p>
     AutomationExecutionLimitExceeded(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The supplied parameters for invoking the specified Automation document are incorrect. For example, they may not match the set of parameters permitted for the specified Automation document.</p>
+    /// <p>The supplied parameters for invoking the specified Automation document are incorrect. For example, they may not match the set of parameters permitted for the specified Automation document.</p>
     InvalidAutomationExecutionParameters(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13616,9 +13616,9 @@ impl Error for StartAutomationExecutionError {
 /// Errors returned by StopAutomationExecution
 #[derive(Debug, PartialEq)]
 pub enum StopAutomationExecutionError {
-    ///<p>There is no automation execution information for the requested automation execution ID.</p>
+    /// <p>There is no automation execution information for the requested automation execution ID.</p>
     AutomationExecutionNotFound(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13704,29 +13704,29 @@ impl Error for StopAutomationExecutionError {
 /// Errors returned by UpdateAssociation
 #[derive(Debug, PartialEq)]
 pub enum UpdateAssociationError {
-    ///<p>The specified association does not exist.</p>
+    /// <p>The specified association does not exist.</p>
     AssociationDoesNotExist(String),
-    ///<p>You have reached the maximum number versions allowed for an association. Each association has a limit of 1,000 versions. </p>
+    /// <p>You have reached the maximum number versions allowed for an association. Each association has a limit of 1,000 versions. </p>
     AssociationVersionLimitExceeded(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The version you specified is not valid. Use ListAssociationVersions to view all versions of an association according to the association ID. Or, use the <code>$LATEST</code> parameter to view the latest version of the association.</p>
+    /// <p>The version you specified is not valid. Use ListAssociationVersions to view all versions of an association according to the association ID. Or, use the <code>$LATEST</code> parameter to view the latest version of the association.</p>
     InvalidAssociationVersion(String),
-    ///<p>The specified document does not exist.</p>
+    /// <p>The specified document does not exist.</p>
     InvalidDocument(String),
-    ///<p>The document version is not valid or does not exist.</p>
+    /// <p>The document version is not valid or does not exist.</p>
     InvalidDocumentVersion(String),
-    ///<p>The output location is not valid or does not exist.</p>
+    /// <p>The output location is not valid or does not exist.</p>
     InvalidOutputLocation(String),
-    ///<p>You must specify values for all required parameters in the SSM document. You can only supply values to parameters defined in the SSM document.</p>
+    /// <p>You must specify values for all required parameters in the SSM document. You can only supply values to parameters defined in the SSM document.</p>
     InvalidParameters(String),
-    ///<p>The schedule is invalid. Verify your cron or rate expression and try again.</p>
+    /// <p>The schedule is invalid. Verify your cron or rate expression and try again.</p>
     InvalidSchedule(String),
-    ///<p>The target is not valid or does not exist. It might not be configured for EC2 Systems Manager or you might not have permission to perform the operation.</p>
+    /// <p>The target is not valid or does not exist. It might not be configured for EC2 Systems Manager or you might not have permission to perform the operation.</p>
     InvalidTarget(String),
-    ///<p>The update is not valid.</p>
+    /// <p>The update is not valid.</p>
     InvalidUpdate(String),
-    ///<p>There are concurrent updates for a resource that supports one update at a time.</p>
+    /// <p>There are concurrent updates for a resource that supports one update at a time.</p>
     TooManyUpdates(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13854,17 +13854,17 @@ impl Error for UpdateAssociationError {
 /// Errors returned by UpdateAssociationStatus
 #[derive(Debug, PartialEq)]
 pub enum UpdateAssociationStatusError {
-    ///<p>The specified association does not exist.</p>
+    /// <p>The specified association does not exist.</p>
     AssociationDoesNotExist(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The specified document does not exist.</p>
+    /// <p>The specified document does not exist.</p>
     InvalidDocument(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
-    ///<p>The updated status is the same as the current status.</p>
+    /// <p>The updated status is the same as the current status.</p>
     StatusUnchanged(String),
-    ///<p>There are concurrent updates for a resource that supports one update at a time.</p>
+    /// <p>There are concurrent updates for a resource that supports one update at a time.</p>
     TooManyUpdates(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13966,21 +13966,21 @@ impl Error for UpdateAssociationStatusError {
 /// Errors returned by UpdateDocument
 #[derive(Debug, PartialEq)]
 pub enum UpdateDocumentError {
-    ///<p>The document has too many versions. Delete one or more document versions and try again.</p>
+    /// <p>The document has too many versions. Delete one or more document versions and try again.</p>
     DocumentVersionLimitExceeded(String),
-    ///<p>The content of the association document matches another document. Change the content of the document and try again.</p>
+    /// <p>The content of the association document matches another document. Change the content of the document and try again.</p>
     DuplicateDocumentContent(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The specified document does not exist.</p>
+    /// <p>The specified document does not exist.</p>
     InvalidDocument(String),
-    ///<p>The content for the document is not valid.</p>
+    /// <p>The content for the document is not valid.</p>
     InvalidDocumentContent(String),
-    ///<p>The version of the document schema is not supported.</p>
+    /// <p>The version of the document schema is not supported.</p>
     InvalidDocumentSchemaVersion(String),
-    ///<p>The document version is not valid or does not exist.</p>
+    /// <p>The document version is not valid or does not exist.</p>
     InvalidDocumentVersion(String),
-    ///<p>The size limit of a document is 64 KB.</p>
+    /// <p>The size limit of a document is 64 KB.</p>
     MaxDocumentSizeExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -14090,13 +14090,13 @@ impl Error for UpdateDocumentError {
 /// Errors returned by UpdateDocumentDefaultVersion
 #[derive(Debug, PartialEq)]
 pub enum UpdateDocumentDefaultVersionError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The specified document does not exist.</p>
+    /// <p>The specified document does not exist.</p>
     InvalidDocument(String),
-    ///<p>The version of the document schema is not supported.</p>
+    /// <p>The version of the document schema is not supported.</p>
     InvalidDocumentSchemaVersion(String),
-    ///<p>The document version is not valid or does not exist.</p>
+    /// <p>The document version is not valid or does not exist.</p>
     InvalidDocumentVersion(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -14194,9 +14194,9 @@ impl Error for UpdateDocumentDefaultVersionError {
 /// Errors returned by UpdateMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum UpdateMaintenanceWindowError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -14280,9 +14280,9 @@ impl Error for UpdateMaintenanceWindowError {
 /// Errors returned by UpdateMaintenanceWindowTarget
 #[derive(Debug, PartialEq)]
 pub enum UpdateMaintenanceWindowTargetError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -14368,9 +14368,9 @@ impl Error for UpdateMaintenanceWindowTargetError {
 /// Errors returned by UpdateMaintenanceWindowTask
 #[derive(Debug, PartialEq)]
 pub enum UpdateMaintenanceWindowTaskError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -14456,9 +14456,9 @@ impl Error for UpdateMaintenanceWindowTaskError {
 /// Errors returned by UpdateManagedInstanceRole
 #[derive(Debug, PartialEq)]
 pub enum UpdateManagedInstanceRoleError {
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    ///<p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
+    /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>The SSM Agent is not running. On managed instances and Linux instances, verify that the SSM Agent is running. On EC2 Windows instances, verify that the EC2Config service is running.</p> <p>The SSM Agent or EC2Config service is not registered to the SSM endpoint. Try reinstalling the SSM Agent or EC2Config service.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -14542,9 +14542,9 @@ impl Error for UpdateManagedInstanceRoleError {
 /// Errors returned by UpdatePatchBaseline
 #[derive(Debug, PartialEq)]
 pub enum UpdatePatchBaselineError {
-    ///<p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
     DoesNotExist(String),
-    ///<p>An error occurred on the server side.</p>
+    /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -14627,121 +14627,121 @@ impl Error for UpdatePatchBaselineError {
 }
 /// Trait representing the capabilities of the Amazon SSM API. Amazon SSM clients implement this trait.
 pub trait Ssm {
-    #[doc="<p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you assign to your managed instances, Maintenance Windows, or Parameter Store parameters. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test.</p> <p>Each resource can have a maximum of 10 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html\">Tagging Your Amazon EC2 Resources</a> in the <i>Amazon EC2 User Guide</i>.</p>"]
+    /// <p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you assign to your managed instances, Maintenance Windows, or Parameter Store parameters. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test.</p> <p>Each resource can have a maximum of 10 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Amazon EC2 Resources</a> in the <i>Amazon EC2 User Guide</i>.</p>
     fn add_tags_to_resource(
         &self,
         input: &AddTagsToResourceRequest,
     ) -> Result<AddTagsToResourceResult, AddTagsToResourceError>;
 
-    #[doc="<p>Attempts to cancel the command specified by the Command ID. There is no guarantee that the command will be terminated and the underlying process stopped.</p>"]
+    /// <p>Attempts to cancel the command specified by the Command ID. There is no guarantee that the command will be terminated and the underlying process stopped.</p>
     fn cancel_command(
         &self,
         input: &CancelCommandRequest,
     ) -> Result<CancelCommandResult, CancelCommandError>;
 
-    #[doc="<p>Registers your on-premises server or virtual machine with Amazon EC2 so that you can manage these resources using Run Command. An on-premises server or virtual machine that has been registered with EC2 is called a managed instance. For more information about activations, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html\">Setting Up Systems Manager in Hybrid Environments</a>.</p>"]
+    /// <p>Registers your on-premises server or virtual machine with Amazon EC2 so that you can manage these resources using Run Command. An on-premises server or virtual machine that has been registered with EC2 is called a managed instance. For more information about activations, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html">Setting Up Systems Manager in Hybrid Environments</a>.</p>
     fn create_activation(
         &self,
         input: &CreateActivationRequest,
     ) -> Result<CreateActivationResult, CreateActivationError>;
 
-    #[doc="<p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, the SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>"]
+    /// <p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, the SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>
     fn create_association(
         &self,
         input: &CreateAssociationRequest,
     ) -> Result<CreateAssociationResult, CreateAssociationError>;
 
-    #[doc="<p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, the SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>"]
+    /// <p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, the SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>
     fn create_association_batch(
         &self,
         input: &CreateAssociationBatchRequest,
     ) -> Result<CreateAssociationBatchResult, CreateAssociationBatchError>;
 
-    #[doc="<p>Creates a Systems Manager document.</p> <p>After you create a document, you can use CreateAssociation to associate it with one or more running instances.</p>"]
+    /// <p>Creates a Systems Manager document.</p> <p>After you create a document, you can use CreateAssociation to associate it with one or more running instances.</p>
     fn create_document(
         &self,
         input: &CreateDocumentRequest,
     ) -> Result<CreateDocumentResult, CreateDocumentError>;
 
-    #[doc = "<p>Creates a new Maintenance Window.</p>"]
+    /// <p>Creates a new Maintenance Window.</p>
     fn create_maintenance_window(
         &self,
         input: &CreateMaintenanceWindowRequest,
     ) -> Result<CreateMaintenanceWindowResult, CreateMaintenanceWindowError>;
 
-    #[doc = "<p>Creates a patch baseline.</p>"]
+    /// <p>Creates a patch baseline.</p>
     fn create_patch_baseline(
         &self,
         input: &CreatePatchBaselineRequest,
     ) -> Result<CreatePatchBaselineResult, CreatePatchBaselineError>;
 
-    #[doc="<p>Creates a resource data sync configuration to a single bucket in Amazon S3. This is an asynchronous operation that returns immediately. After a successful initial sync is completed, the system continuously syncs data to the Amazon S3 bucket. To check the status of the sync, use the <a href=\"API_ListResourceDataSync.html\">ListResourceDataSync</a> operation.</p> <p>By default, data is not encrypted in Amazon S3. We strongly recommend that you enable encryption in Amazon S3 to ensure secure data storage. We also recommend that you secure access to the Amazon S3 bucket by creating a restrictive bucket policy. To view an example of a restrictive Amazon S3 bucket policy for Resource Data Sync, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-configuring.html#sysman-inventory-datasync\">Configuring Resource Data Sync for Inventory</a>.</p>"]
+    /// <p>Creates a resource data sync configuration to a single bucket in Amazon S3. This is an asynchronous operation that returns immediately. After a successful initial sync is completed, the system continuously syncs data to the Amazon S3 bucket. To check the status of the sync, use the <a href="API_ListResourceDataSync.html">ListResourceDataSync</a> operation.</p> <p>By default, data is not encrypted in Amazon S3. We strongly recommend that you enable encryption in Amazon S3 to ensure secure data storage. We also recommend that you secure access to the Amazon S3 bucket by creating a restrictive bucket policy. To view an example of a restrictive Amazon S3 bucket policy for Resource Data Sync, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-configuring.html#sysman-inventory-datasync">Configuring Resource Data Sync for Inventory</a>.</p>
     fn create_resource_data_sync(
         &self,
         input: &CreateResourceDataSyncRequest,
     ) -> Result<CreateResourceDataSyncResult, CreateResourceDataSyncError>;
 
-    #[doc="<p>Deletes an activation. You are not required to delete an activation. If you delete an activation, you can no longer use it to register additional managed instances. Deleting an activation does not de-register managed instances. You must manually de-register managed instances.</p>"]
+    /// <p>Deletes an activation. You are not required to delete an activation. If you delete an activation, you can no longer use it to register additional managed instances. Deleting an activation does not de-register managed instances. You must manually de-register managed instances.</p>
     fn delete_activation(
         &self,
         input: &DeleteActivationRequest,
     ) -> Result<DeleteActivationResult, DeleteActivationError>;
 
-    #[doc="<p>Disassociates the specified Systems Manager document from the specified instance.</p> <p>When you disassociate a document from an instance, it does not change the configuration of the instance. To change the configuration state of an instance after you disassociate a document, you must create a new document with the desired configuration and associate it with the instance.</p>"]
+    /// <p>Disassociates the specified Systems Manager document from the specified instance.</p> <p>When you disassociate a document from an instance, it does not change the configuration of the instance. To change the configuration state of an instance after you disassociate a document, you must create a new document with the desired configuration and associate it with the instance.</p>
     fn delete_association(
         &self,
         input: &DeleteAssociationRequest,
     ) -> Result<DeleteAssociationResult, DeleteAssociationError>;
 
-    #[doc="<p>Deletes the Systems Manager document and all instance associations to the document.</p> <p>Before you delete the document, we recommend that you use <a>DeleteAssociation</a> to disassociate all instances that are associated with the document.</p>"]
+    /// <p>Deletes the Systems Manager document and all instance associations to the document.</p> <p>Before you delete the document, we recommend that you use <a>DeleteAssociation</a> to disassociate all instances that are associated with the document.</p>
     fn delete_document(
         &self,
         input: &DeleteDocumentRequest,
     ) -> Result<DeleteDocumentResult, DeleteDocumentError>;
 
-    #[doc = "<p>Deletes a Maintenance Window.</p>"]
+    /// <p>Deletes a Maintenance Window.</p>
     fn delete_maintenance_window(
         &self,
         input: &DeleteMaintenanceWindowRequest,
     ) -> Result<DeleteMaintenanceWindowResult, DeleteMaintenanceWindowError>;
 
-    #[doc = "<p>Delete a parameter from the system.</p>"]
+    /// <p>Delete a parameter from the system.</p>
     fn delete_parameter(
         &self,
         input: &DeleteParameterRequest,
     ) -> Result<DeleteParameterResult, DeleteParameterError>;
 
-    #[doc="<p>Delete a list of parameters. This API is used to delete parameters by using the Amazon EC2 console.</p>"]
+    /// <p>Delete a list of parameters. This API is used to delete parameters by using the Amazon EC2 console.</p>
     fn delete_parameters(
         &self,
         input: &DeleteParametersRequest,
     ) -> Result<DeleteParametersResult, DeleteParametersError>;
 
-    #[doc = "<p>Deletes a patch baseline.</p>"]
+    /// <p>Deletes a patch baseline.</p>
     fn delete_patch_baseline(
         &self,
         input: &DeletePatchBaselineRequest,
     ) -> Result<DeletePatchBaselineResult, DeletePatchBaselineError>;
 
-    #[doc="<p>Deletes a Resource Data Sync configuration. After the configuration is deleted, changes to inventory data on managed instances are no longer synced with the target Amazon S3 bucket. Deleting a sync configuration does not delete data in the target Amazon S3 bucket.</p>"]
+    /// <p>Deletes a Resource Data Sync configuration. After the configuration is deleted, changes to inventory data on managed instances are no longer synced with the target Amazon S3 bucket. Deleting a sync configuration does not delete data in the target Amazon S3 bucket.</p>
     fn delete_resource_data_sync(
         &self,
         input: &DeleteResourceDataSyncRequest,
     ) -> Result<DeleteResourceDataSyncResult, DeleteResourceDataSyncError>;
 
-    #[doc="<p>Removes the server or virtual machine from the list of registered servers. You can reregister the instance again at any time. If you don't plan to use Run Command on the server, we suggest uninstalling the SSM Agent first.</p>"]
+    /// <p>Removes the server or virtual machine from the list of registered servers. You can reregister the instance again at any time. If you don't plan to use Run Command on the server, we suggest uninstalling the SSM Agent first.</p>
     fn deregister_managed_instance(
         &self,
         input: &DeregisterManagedInstanceRequest,
     ) -> Result<DeregisterManagedInstanceResult, DeregisterManagedInstanceError>;
 
-    #[doc = "<p>Removes a patch group from a patch baseline.</p>"]
+    /// <p>Removes a patch group from a patch baseline.</p>
     fn deregister_patch_baseline_for_patch_group(
         &self,
         input: &DeregisterPatchBaselineForPatchGroupRequest,
     ) -> Result<DeregisterPatchBaselineForPatchGroupResult, DeregisterPatchBaselineForPatchGroupError>;
 
-    #[doc = "<p>Removes a target from a Maintenance Window.</p>"]
+    /// <p>Removes a target from a Maintenance Window.</p>
     fn deregister_target_from_maintenance_window(
         &self,
         input: &DeregisterTargetFromMaintenanceWindowRequest,
@@ -14750,49 +14750,49 @@ pub trait Ssm {
         DeregisterTargetFromMaintenanceWindowError,
     >;
 
-    #[doc = "<p>Removes a task from a Maintenance Window.</p>"]
+    /// <p>Removes a task from a Maintenance Window.</p>
     fn deregister_task_from_maintenance_window(
         &self,
         input: &DeregisterTaskFromMaintenanceWindowRequest,
     ) -> Result<DeregisterTaskFromMaintenanceWindowResult, DeregisterTaskFromMaintenanceWindowError>;
 
-    #[doc="<p>Details about the activation, including: the date and time the activation was created, the expiration date, the IAM role assigned to the instances in the activation, and the number of instances activated by this registration.</p>"]
+    /// <p>Details about the activation, including: the date and time the activation was created, the expiration date, the IAM role assigned to the instances in the activation, and the number of instances activated by this registration.</p>
     fn describe_activations(
         &self,
         input: &DescribeActivationsRequest,
     ) -> Result<DescribeActivationsResult, DescribeActivationsError>;
 
-    #[doc="<p>Describes the associations for the specified Systems Manager document or instance.</p>"]
+    /// <p>Describes the associations for the specified Systems Manager document or instance.</p>
     fn describe_association(
         &self,
         input: &DescribeAssociationRequest,
     ) -> Result<DescribeAssociationResult, DescribeAssociationError>;
 
-    #[doc = "<p>Provides details about all active and terminated Automation executions.</p>"]
+    /// <p>Provides details about all active and terminated Automation executions.</p>
     fn describe_automation_executions(
         &self,
         input: &DescribeAutomationExecutionsRequest,
     ) -> Result<DescribeAutomationExecutionsResult, DescribeAutomationExecutionsError>;
 
-    #[doc = "<p>Lists all patches that could possibly be included in a patch baseline.</p>"]
+    /// <p>Lists all patches that could possibly be included in a patch baseline.</p>
     fn describe_available_patches(
         &self,
         input: &DescribeAvailablePatchesRequest,
     ) -> Result<DescribeAvailablePatchesResult, DescribeAvailablePatchesError>;
 
-    #[doc = "<p>Describes the specified SSM document.</p>"]
+    /// <p>Describes the specified SSM document.</p>
     fn describe_document(
         &self,
         input: &DescribeDocumentRequest,
     ) -> Result<DescribeDocumentResult, DescribeDocumentError>;
 
-    #[doc="<p>Describes the permissions for a Systems Manager document. If you created the document, you are the owner. If a document is shared, it can either be shared privately (by specifying a user's AWS account ID) or publicly (<i>All</i>). </p>"]
+    /// <p>Describes the permissions for a Systems Manager document. If you created the document, you are the owner. If a document is shared, it can either be shared privately (by specifying a user's AWS account ID) or publicly (<i>All</i>). </p>
     fn describe_document_permission(
         &self,
         input: &DescribeDocumentPermissionRequest,
     ) -> Result<DescribeDocumentPermissionResponse, DescribeDocumentPermissionError>;
 
-    #[doc = "<p>All associations for the instance(s).</p>"]
+    /// <p>All associations for the instance(s).</p>
     fn describe_effective_instance_associations(
         &self,
         input: &DescribeEffectiveInstanceAssociationsRequest,
@@ -14801,7 +14801,7 @@ pub trait Ssm {
         DescribeEffectiveInstanceAssociationsError,
     >;
 
-    #[doc="<p>Retrieves the current effective patches (the patch and the approval state) for the specified patch baseline. Note that this API applies only to Windows patch baselines.</p>"]
+    /// <p>Retrieves the current effective patches (the patch and the approval state) for the specified patch baseline. Note that this API applies only to Windows patch baselines.</p>
     fn describe_effective_patches_for_patch_baseline(
         &self,
         input: &DescribeEffectivePatchesForPatchBaselineRequest,
@@ -14810,25 +14810,25 @@ pub trait Ssm {
         DescribeEffectivePatchesForPatchBaselineError,
     >;
 
-    #[doc = "<p>The status of the associations for the instance(s).</p>"]
+    /// <p>The status of the associations for the instance(s).</p>
     fn describe_instance_associations_status(
         &self,
         input: &DescribeInstanceAssociationsStatusRequest,
     ) -> Result<DescribeInstanceAssociationsStatusResult, DescribeInstanceAssociationsStatusError>;
 
-    #[doc="<p>Describes one or more of your instances. You can use this to get information about instances like the operating system platform, the SSM Agent version (Linux), status etc. If you specify one or more instance IDs, it returns information for those instances. If you do not specify instance IDs, it returns information for all your instances. If you specify an instance ID that is not valid or an instance that you do not own, you receive an error. </p>"]
+    /// <p>Describes one or more of your instances. You can use this to get information about instances like the operating system platform, the SSM Agent version (Linux), status etc. If you specify one or more instance IDs, it returns information for those instances. If you do not specify instance IDs, it returns information for all your instances. If you specify an instance ID that is not valid or an instance that you do not own, you receive an error. </p>
     fn describe_instance_information(
         &self,
         input: &DescribeInstanceInformationRequest,
     ) -> Result<DescribeInstanceInformationResult, DescribeInstanceInformationError>;
 
-    #[doc = "<p>Retrieves the high-level patch state of one or more instances.</p>"]
+    /// <p>Retrieves the high-level patch state of one or more instances.</p>
     fn describe_instance_patch_states(
         &self,
         input: &DescribeInstancePatchStatesRequest,
     ) -> Result<DescribeInstancePatchStatesResult, DescribeInstancePatchStatesError>;
 
-    #[doc="<p>Retrieves the high-level patch state for the instances in the specified patch group.</p>"]
+    /// <p>Retrieves the high-level patch state for the instances in the specified patch group.</p>
     fn describe_instance_patch_states_for_patch_group(
         &self,
         input: &DescribeInstancePatchStatesForPatchGroupRequest,
@@ -14837,13 +14837,13 @@ pub trait Ssm {
         DescribeInstancePatchStatesForPatchGroupError,
     >;
 
-    #[doc="<p>Retrieves information about the patches on the specified instance and their state relative to the patch baseline being used for the instance.</p>"]
+    /// <p>Retrieves information about the patches on the specified instance and their state relative to the patch baseline being used for the instance.</p>
     fn describe_instance_patches(
         &self,
         input: &DescribeInstancePatchesRequest,
     ) -> Result<DescribeInstancePatchesResult, DescribeInstancePatchesError>;
 
-    #[doc="<p>Retrieves the individual task executions (one per target) for a particular task executed as part of a Maintenance Window execution.</p>"]
+    /// <p>Retrieves the individual task executions (one per target) for a particular task executed as part of a Maintenance Window execution.</p>
     fn describe_maintenance_window_execution_task_invocations(
         &self,
         input: &DescribeMaintenanceWindowExecutionTaskInvocationsRequest,
@@ -14852,7 +14852,7 @@ pub trait Ssm {
         DescribeMaintenanceWindowExecutionTaskInvocationsError,
     >;
 
-    #[doc = "<p>For a given Maintenance Window execution, lists the tasks that were executed.</p>"]
+    /// <p>For a given Maintenance Window execution, lists the tasks that were executed.</p>
     fn describe_maintenance_window_execution_tasks(
         &self,
         input: &DescribeMaintenanceWindowExecutionTasksRequest,
@@ -14861,73 +14861,73 @@ pub trait Ssm {
         DescribeMaintenanceWindowExecutionTasksError,
     >;
 
-    #[doc="<p>Lists the executions of a Maintenance Window. This includes information about when the Maintenance Window was scheduled to be active, and information about tasks registered and run with the Maintenance Window.</p>"]
+    /// <p>Lists the executions of a Maintenance Window. This includes information about when the Maintenance Window was scheduled to be active, and information about tasks registered and run with the Maintenance Window.</p>
     fn describe_maintenance_window_executions(
         &self,
         input: &DescribeMaintenanceWindowExecutionsRequest,
     ) -> Result<DescribeMaintenanceWindowExecutionsResult, DescribeMaintenanceWindowExecutionsError>;
 
-    #[doc = "<p>Lists the targets registered with the Maintenance Window.</p>"]
+    /// <p>Lists the targets registered with the Maintenance Window.</p>
     fn describe_maintenance_window_targets(
         &self,
         input: &DescribeMaintenanceWindowTargetsRequest,
     ) -> Result<DescribeMaintenanceWindowTargetsResult, DescribeMaintenanceWindowTargetsError>;
 
-    #[doc = "<p>Lists the tasks in a Maintenance Window.</p>"]
+    /// <p>Lists the tasks in a Maintenance Window.</p>
     fn describe_maintenance_window_tasks(
         &self,
         input: &DescribeMaintenanceWindowTasksRequest,
     ) -> Result<DescribeMaintenanceWindowTasksResult, DescribeMaintenanceWindowTasksError>;
 
-    #[doc = "<p>Retrieves the Maintenance Windows in an AWS account.</p>"]
+    /// <p>Retrieves the Maintenance Windows in an AWS account.</p>
     fn describe_maintenance_windows(
         &self,
         input: &DescribeMaintenanceWindowsRequest,
     ) -> Result<DescribeMaintenanceWindowsResult, DescribeMaintenanceWindowsError>;
 
-    #[doc="<p>Get information about a parameter.</p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p>"]
+    /// <p>Get information about a parameter.</p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p>
     fn describe_parameters(
         &self,
         input: &DescribeParametersRequest,
     ) -> Result<DescribeParametersResult, DescribeParametersError>;
 
-    #[doc = "<p>Lists the patch baselines in your AWS account.</p>"]
+    /// <p>Lists the patch baselines in your AWS account.</p>
     fn describe_patch_baselines(
         &self,
         input: &DescribePatchBaselinesRequest,
     ) -> Result<DescribePatchBaselinesResult, DescribePatchBaselinesError>;
 
-    #[doc = "<p>Returns high-level aggregated patch compliance state for a patch group.</p>"]
+    /// <p>Returns high-level aggregated patch compliance state for a patch group.</p>
     fn describe_patch_group_state(
         &self,
         input: &DescribePatchGroupStateRequest,
     ) -> Result<DescribePatchGroupStateResult, DescribePatchGroupStateError>;
 
-    #[doc = "<p>Lists all patch groups that have been registered with patch baselines.</p>"]
+    /// <p>Lists all patch groups that have been registered with patch baselines.</p>
     fn describe_patch_groups(
         &self,
         input: &DescribePatchGroupsRequest,
     ) -> Result<DescribePatchGroupsResult, DescribePatchGroupsError>;
 
-    #[doc = "<p>Get detailed information about a particular Automation execution.</p>"]
+    /// <p>Get detailed information about a particular Automation execution.</p>
     fn get_automation_execution(
         &self,
         input: &GetAutomationExecutionRequest,
     ) -> Result<GetAutomationExecutionResult, GetAutomationExecutionError>;
 
-    #[doc="<p>Returns detailed information about command execution for an invocation or plugin. </p>"]
+    /// <p>Returns detailed information about command execution for an invocation or plugin. </p>
     fn get_command_invocation(
         &self,
         input: &GetCommandInvocationRequest,
     ) -> Result<GetCommandInvocationResult, GetCommandInvocationError>;
 
-    #[doc="<p>Retrieves the default patch baseline. Note that Systems Manager supports creating multiple default patch baselines. For example, you can create a default patch baseline for each operating system.</p>"]
+    /// <p>Retrieves the default patch baseline. Note that Systems Manager supports creating multiple default patch baselines. For example, you can create a default patch baseline for each operating system.</p>
     fn get_default_patch_baseline(
         &self,
         input: &GetDefaultPatchBaselineRequest,
     ) -> Result<GetDefaultPatchBaselineResult, GetDefaultPatchBaselineError>;
 
-    #[doc="<p>Retrieves the current snapshot for the patch baseline the instance uses. This API is primarily used by the AWS-RunPatchBaseline Systems Manager document. </p>"]
+    /// <p>Retrieves the current snapshot for the patch baseline the instance uses. This API is primarily used by the AWS-RunPatchBaseline Systems Manager document. </p>
     fn get_deployable_patch_snapshot_for_instance(
         &self,
         input: &GetDeployablePatchSnapshotForInstanceRequest,
@@ -14936,43 +14936,43 @@ pub trait Ssm {
         GetDeployablePatchSnapshotForInstanceError,
     >;
 
-    #[doc = "<p>Gets the contents of the specified SSM document.</p>"]
+    /// <p>Gets the contents of the specified SSM document.</p>
     fn get_document(
         &self,
         input: &GetDocumentRequest,
     ) -> Result<GetDocumentResult, GetDocumentError>;
 
-    #[doc = "<p>Query inventory information.</p>"]
+    /// <p>Query inventory information.</p>
     fn get_inventory(
         &self,
         input: &GetInventoryRequest,
     ) -> Result<GetInventoryResult, GetInventoryError>;
 
-    #[doc="<p>Return a list of inventory type names for the account, or return a list of attribute names for a specific Inventory item type. </p>"]
+    /// <p>Return a list of inventory type names for the account, or return a list of attribute names for a specific Inventory item type. </p>
     fn get_inventory_schema(
         &self,
         input: &GetInventorySchemaRequest,
     ) -> Result<GetInventorySchemaResult, GetInventorySchemaError>;
 
-    #[doc = "<p>Retrieves a Maintenance Window.</p>"]
+    /// <p>Retrieves a Maintenance Window.</p>
     fn get_maintenance_window(
         &self,
         input: &GetMaintenanceWindowRequest,
     ) -> Result<GetMaintenanceWindowResult, GetMaintenanceWindowError>;
 
-    #[doc="<p>Retrieves details about a specific task executed as part of a Maintenance Window execution.</p>"]
+    /// <p>Retrieves details about a specific task executed as part of a Maintenance Window execution.</p>
     fn get_maintenance_window_execution(
         &self,
         input: &GetMaintenanceWindowExecutionRequest,
     ) -> Result<GetMaintenanceWindowExecutionResult, GetMaintenanceWindowExecutionError>;
 
-    #[doc="<p>Retrieves the details about a specific task executed as part of a Maintenance Window execution.</p>"]
+    /// <p>Retrieves the details about a specific task executed as part of a Maintenance Window execution.</p>
     fn get_maintenance_window_execution_task(
         &self,
         input: &GetMaintenanceWindowExecutionTaskRequest,
     ) -> Result<GetMaintenanceWindowExecutionTaskResult, GetMaintenanceWindowExecutionTaskError>;
 
-    #[doc="<p>Retrieves a task invocation. A task invocation is a specific task executing on a specific target. Maintenance Windows report status for all invocations. </p>"]
+    /// <p>Retrieves a task invocation. A task invocation is a specific task executing on a specific target. Maintenance Windows report status for all invocations. </p>
     fn get_maintenance_window_execution_task_invocation(
         &self,
         input: &GetMaintenanceWindowExecutionTaskInvocationRequest,
@@ -14981,247 +14981,247 @@ pub trait Ssm {
         GetMaintenanceWindowExecutionTaskInvocationError,
     >;
 
-    #[doc = "<p>Lists the tasks in a Maintenance Window.</p>"]
+    /// <p>Lists the tasks in a Maintenance Window.</p>
     fn get_maintenance_window_task(
         &self,
         input: &GetMaintenanceWindowTaskRequest,
     ) -> Result<GetMaintenanceWindowTaskResult, GetMaintenanceWindowTaskError>;
 
-    #[doc = "<p>Get information about a parameter by using the parameter name. </p>"]
+    /// <p>Get information about a parameter by using the parameter name. </p>
     fn get_parameter(
         &self,
         input: &GetParameterRequest,
     ) -> Result<GetParameterResult, GetParameterError>;
 
-    #[doc = "<p>Query a list of all parameters used by the AWS account.</p>"]
+    /// <p>Query a list of all parameters used by the AWS account.</p>
     fn get_parameter_history(
         &self,
         input: &GetParameterHistoryRequest,
     ) -> Result<GetParameterHistoryResult, GetParameterHistoryError>;
 
-    #[doc = "<p>Get details of a parameter.</p>"]
+    /// <p>Get details of a parameter.</p>
     fn get_parameters(
         &self,
         input: &GetParametersRequest,
     ) -> Result<GetParametersResult, GetParametersError>;
 
-    #[doc="<p>Retrieve parameters in a specific hierarchy. For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html\">Working with Systems Manager Parameters</a>. </p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p>"]
+    /// <p>Retrieve parameters in a specific hierarchy. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html">Working with Systems Manager Parameters</a>. </p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p>
     fn get_parameters_by_path(
         &self,
         input: &GetParametersByPathRequest,
     ) -> Result<GetParametersByPathResult, GetParametersByPathError>;
 
-    #[doc = "<p>Retrieves information about a patch baseline.</p>"]
+    /// <p>Retrieves information about a patch baseline.</p>
     fn get_patch_baseline(
         &self,
         input: &GetPatchBaselineRequest,
     ) -> Result<GetPatchBaselineResult, GetPatchBaselineError>;
 
-    #[doc = "<p>Retrieves the patch baseline that should be used for the specified patch group.</p>"]
+    /// <p>Retrieves the patch baseline that should be used for the specified patch group.</p>
     fn get_patch_baseline_for_patch_group(
         &self,
         input: &GetPatchBaselineForPatchGroupRequest,
     ) -> Result<GetPatchBaselineForPatchGroupResult, GetPatchBaselineForPatchGroupError>;
 
-    #[doc = "<p>Retrieves all versions of an association for a specific association ID.</p>"]
+    /// <p>Retrieves all versions of an association for a specific association ID.</p>
     fn list_association_versions(
         &self,
         input: &ListAssociationVersionsRequest,
     ) -> Result<ListAssociationVersionsResult, ListAssociationVersionsError>;
 
-    #[doc = "<p>Lists the associations for the specified Systems Manager document or instance.</p>"]
+    /// <p>Lists the associations for the specified Systems Manager document or instance.</p>
     fn list_associations(
         &self,
         input: &ListAssociationsRequest,
     ) -> Result<ListAssociationsResult, ListAssociationsError>;
 
-    #[doc="<p>An invocation is copy of a command sent to a specific instance. A command can apply to one or more instances. A command invocation applies to one instance. For example, if a user executes SendCommand against three instances, then a command invocation is created for each requested instance ID. ListCommandInvocations provide status about command execution.</p>"]
+    /// <p>An invocation is copy of a command sent to a specific instance. A command can apply to one or more instances. A command invocation applies to one instance. For example, if a user executes SendCommand against three instances, then a command invocation is created for each requested instance ID. ListCommandInvocations provide status about command execution.</p>
     fn list_command_invocations(
         &self,
         input: &ListCommandInvocationsRequest,
     ) -> Result<ListCommandInvocationsResult, ListCommandInvocationsError>;
 
-    #[doc = "<p>Lists the commands requested by users of the AWS account.</p>"]
+    /// <p>Lists the commands requested by users of the AWS account.</p>
     fn list_commands(
         &self,
         input: &ListCommandsRequest,
     ) -> Result<ListCommandsResult, ListCommandsError>;
 
-    #[doc="<p>For a specified resource ID, this API action returns a list of compliance statuses for different resource types. Currently, you can only specify one resource ID per call. List results depend on the criteria specified in the filter. </p>"]
+    /// <p>For a specified resource ID, this API action returns a list of compliance statuses for different resource types. Currently, you can only specify one resource ID per call. List results depend on the criteria specified in the filter. </p>
     fn list_compliance_items(
         &self,
         input: &ListComplianceItemsRequest,
     ) -> Result<ListComplianceItemsResult, ListComplianceItemsError>;
 
-    #[doc="<p>Returns a summary count of compliant and non-compliant resources for a compliance type. For example, this call can return State Manager associations, patches, or custom compliance types according to the filter criteria that you specify. </p>"]
+    /// <p>Returns a summary count of compliant and non-compliant resources for a compliance type. For example, this call can return State Manager associations, patches, or custom compliance types according to the filter criteria that you specify. </p>
     fn list_compliance_summaries(
         &self,
         input: &ListComplianceSummariesRequest,
     ) -> Result<ListComplianceSummariesResult, ListComplianceSummariesError>;
 
-    #[doc = "<p>List all versions for a document.</p>"]
+    /// <p>List all versions for a document.</p>
     fn list_document_versions(
         &self,
         input: &ListDocumentVersionsRequest,
     ) -> Result<ListDocumentVersionsResult, ListDocumentVersionsError>;
 
-    #[doc = "<p>Describes one or more of your SSM documents.</p>"]
+    /// <p>Describes one or more of your SSM documents.</p>
     fn list_documents(
         &self,
         input: &ListDocumentsRequest,
     ) -> Result<ListDocumentsResult, ListDocumentsError>;
 
-    #[doc = "<p>A list of inventory items returned by the request.</p>"]
+    /// <p>A list of inventory items returned by the request.</p>
     fn list_inventory_entries(
         &self,
         input: &ListInventoryEntriesRequest,
     ) -> Result<ListInventoryEntriesResult, ListInventoryEntriesError>;
 
-    #[doc="<p>Returns a resource-level summary count. The summary includes information about compliant and non-compliant statuses and detailed compliance-item severity counts, according to the filter criteria you specify.</p>"]
+    /// <p>Returns a resource-level summary count. The summary includes information about compliant and non-compliant statuses and detailed compliance-item severity counts, according to the filter criteria you specify.</p>
     fn list_resource_compliance_summaries(
         &self,
         input: &ListResourceComplianceSummariesRequest,
     ) -> Result<ListResourceComplianceSummariesResult, ListResourceComplianceSummariesError>;
 
-    #[doc="<p>Lists your resource data sync configurations. Includes information about the last time a sync attempted to start, the last sync status, and the last time a sync successfully completed.</p> <p>The number of sync configurations might be too large to return using a single call to <code>ListResourceDataSync</code>. You can limit the number of sync configurations returned by using the <code>MaxResults</code> parameter. To determine whether there are more sync configurations to list, check the value of <code>NextToken</code> in the output. If there are more sync configurations to list, you can request them by specifying the <code>NextToken</code> returned in the call to the parameter of a subsequent call. </p>"]
+    /// <p>Lists your resource data sync configurations. Includes information about the last time a sync attempted to start, the last sync status, and the last time a sync successfully completed.</p> <p>The number of sync configurations might be too large to return using a single call to <code>ListResourceDataSync</code>. You can limit the number of sync configurations returned by using the <code>MaxResults</code> parameter. To determine whether there are more sync configurations to list, check the value of <code>NextToken</code> in the output. If there are more sync configurations to list, you can request them by specifying the <code>NextToken</code> returned in the call to the parameter of a subsequent call. </p>
     fn list_resource_data_sync(
         &self,
         input: &ListResourceDataSyncRequest,
     ) -> Result<ListResourceDataSyncResult, ListResourceDataSyncError>;
 
-    #[doc = "<p>Returns a list of the tags assigned to the specified resource.</p>"]
+    /// <p>Returns a list of the tags assigned to the specified resource.</p>
     fn list_tags_for_resource(
         &self,
         input: &ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResult, ListTagsForResourceError>;
 
-    #[doc="<p>Shares a Systems Manager document publicly or privately. If you share a document privately, you must specify the AWS user account IDs for those people who can use the document. If you share a document publicly, you must specify <i>All</i> as the account ID.</p>"]
+    /// <p>Shares a Systems Manager document publicly or privately. If you share a document privately, you must specify the AWS user account IDs for those people who can use the document. If you share a document publicly, you must specify <i>All</i> as the account ID.</p>
     fn modify_document_permission(
         &self,
         input: &ModifyDocumentPermissionRequest,
     ) -> Result<ModifyDocumentPermissionResponse, ModifyDocumentPermissionError>;
 
-    #[doc="<p>Registers a compliance type and other compliance details on a designated resource. This action lets you register custom compliance details with a resource. This call overwrites existing compliance information on the resource, so you must provide a full list of compliance items each time that you send the request.</p>"]
+    /// <p>Registers a compliance type and other compliance details on a designated resource. This action lets you register custom compliance details with a resource. This call overwrites existing compliance information on the resource, so you must provide a full list of compliance items each time that you send the request.</p>
     fn put_compliance_items(
         &self,
         input: &PutComplianceItemsRequest,
     ) -> Result<PutComplianceItemsResult, PutComplianceItemsError>;
 
-    #[doc="<p>Bulk update custom inventory items on one more instance. The request adds an inventory item, if it doesn't already exist, or updates an inventory item, if it does exist.</p>"]
+    /// <p>Bulk update custom inventory items on one more instance. The request adds an inventory item, if it doesn't already exist, or updates an inventory item, if it does exist.</p>
     fn put_inventory(
         &self,
         input: &PutInventoryRequest,
     ) -> Result<PutInventoryResult, PutInventoryError>;
 
-    #[doc = "<p>Add one or more parameters to the system.</p>"]
+    /// <p>Add one or more parameters to the system.</p>
     fn put_parameter(
         &self,
         input: &PutParameterRequest,
     ) -> Result<PutParameterResult, PutParameterError>;
 
-    #[doc = "<p>Defines the default patch baseline.</p>"]
+    /// <p>Defines the default patch baseline.</p>
     fn register_default_patch_baseline(
         &self,
         input: &RegisterDefaultPatchBaselineRequest,
     ) -> Result<RegisterDefaultPatchBaselineResult, RegisterDefaultPatchBaselineError>;
 
-    #[doc = "<p>Registers a patch baseline for a patch group.</p>"]
+    /// <p>Registers a patch baseline for a patch group.</p>
     fn register_patch_baseline_for_patch_group(
         &self,
         input: &RegisterPatchBaselineForPatchGroupRequest,
     ) -> Result<RegisterPatchBaselineForPatchGroupResult, RegisterPatchBaselineForPatchGroupError>;
 
-    #[doc = "<p>Registers a target with a Maintenance Window.</p>"]
+    /// <p>Registers a target with a Maintenance Window.</p>
     fn register_target_with_maintenance_window(
         &self,
         input: &RegisterTargetWithMaintenanceWindowRequest,
     ) -> Result<RegisterTargetWithMaintenanceWindowResult, RegisterTargetWithMaintenanceWindowError>;
 
-    #[doc = "<p>Adds a new task to a Maintenance Window.</p>"]
+    /// <p>Adds a new task to a Maintenance Window.</p>
     fn register_task_with_maintenance_window(
         &self,
         input: &RegisterTaskWithMaintenanceWindowRequest,
     ) -> Result<RegisterTaskWithMaintenanceWindowResult, RegisterTaskWithMaintenanceWindowError>;
 
-    #[doc = "<p>Removes all tags from the specified resource.</p>"]
+    /// <p>Removes all tags from the specified resource.</p>
     fn remove_tags_from_resource(
         &self,
         input: &RemoveTagsFromResourceRequest,
     ) -> Result<RemoveTagsFromResourceResult, RemoveTagsFromResourceError>;
 
-    #[doc="<p>Sends a signal to an Automation execution to change the current behavior or status of the execution. </p>"]
+    /// <p>Sends a signal to an Automation execution to change the current behavior or status of the execution. </p>
     fn send_automation_signal(
         &self,
         input: &SendAutomationSignalRequest,
     ) -> Result<SendAutomationSignalResult, SendAutomationSignalError>;
 
-    #[doc = "<p>Executes commands on one or more managed instances.</p>"]
+    /// <p>Executes commands on one or more managed instances.</p>
     fn send_command(
         &self,
         input: &SendCommandRequest,
     ) -> Result<SendCommandResult, SendCommandError>;
 
-    #[doc = "<p>Initiates execution of an Automation document.</p>"]
+    /// <p>Initiates execution of an Automation document.</p>
     fn start_automation_execution(
         &self,
         input: &StartAutomationExecutionRequest,
     ) -> Result<StartAutomationExecutionResult, StartAutomationExecutionError>;
 
-    #[doc = "<p>Stop an Automation that is currently executing.</p>"]
+    /// <p>Stop an Automation that is currently executing.</p>
     fn stop_automation_execution(
         &self,
         input: &StopAutomationExecutionRequest,
     ) -> Result<StopAutomationExecutionResult, StopAutomationExecutionError>;
 
-    #[doc="<p>Updates an association. You can update the association name and version, the document version, schedule, parameters, and Amazon S3 output.</p>"]
+    /// <p>Updates an association. You can update the association name and version, the document version, schedule, parameters, and Amazon S3 output.</p>
     fn update_association(
         &self,
         input: &UpdateAssociationRequest,
     ) -> Result<UpdateAssociationResult, UpdateAssociationError>;
 
-    #[doc="<p>Updates the status of the Systems Manager document associated with the specified instance.</p>"]
+    /// <p>Updates the status of the Systems Manager document associated with the specified instance.</p>
     fn update_association_status(
         &self,
         input: &UpdateAssociationStatusRequest,
     ) -> Result<UpdateAssociationStatusResult, UpdateAssociationStatusError>;
 
-    #[doc = "<p>The document you want to update.</p>"]
+    /// <p>The document you want to update.</p>
     fn update_document(
         &self,
         input: &UpdateDocumentRequest,
     ) -> Result<UpdateDocumentResult, UpdateDocumentError>;
 
-    #[doc = "<p>Set the default version of a document. </p>"]
+    /// <p>Set the default version of a document. </p>
     fn update_document_default_version(
         &self,
         input: &UpdateDocumentDefaultVersionRequest,
     ) -> Result<UpdateDocumentDefaultVersionResult, UpdateDocumentDefaultVersionError>;
 
-    #[doc = "<p>Updates an existing Maintenance Window. Only specified parameters are modified.</p>"]
+    /// <p>Updates an existing Maintenance Window. Only specified parameters are modified.</p>
     fn update_maintenance_window(
         &self,
         input: &UpdateMaintenanceWindowRequest,
     ) -> Result<UpdateMaintenanceWindowResult, UpdateMaintenanceWindowError>;
 
-    #[doc="<p>Modifies the target of an existing Maintenance Window. You can't change the target type, but you can change the following:</p> <p>The target from being an ID target to a Tag target, or a Tag target to an ID target.</p> <p>IDs for an ID target.</p> <p>Tags for a Tag target.</p> <p>Owner.</p> <p>Name.</p> <p>Description.</p> <p>If a parameter is null, then the corresponding field is not modified.</p>"]
+    /// <p>Modifies the target of an existing Maintenance Window. You can't change the target type, but you can change the following:</p> <p>The target from being an ID target to a Tag target, or a Tag target to an ID target.</p> <p>IDs for an ID target.</p> <p>Tags for a Tag target.</p> <p>Owner.</p> <p>Name.</p> <p>Description.</p> <p>If a parameter is null, then the corresponding field is not modified.</p>
     fn update_maintenance_window_target(
         &self,
         input: &UpdateMaintenanceWindowTargetRequest,
     ) -> Result<UpdateMaintenanceWindowTargetResult, UpdateMaintenanceWindowTargetError>;
 
-    #[doc="<p>Modifies a task assigned to a Maintenance Window. You can't change the task type, but you can change the following values:</p> <p>Task ARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> <p>Service role ARN.</p> <p>Task parameters.</p> <p>Task priority.</p> <p>Task MaxConcurrency and MaxErrors.</p> <p>Log location.</p> <p>If a parameter is null, then the corresponding field is not modified. Also, if you set Replace to true, then all fields required by the RegisterTaskWithMaintenanceWindow action are required for this request. Optional fields that aren't specified are set to null.</p>"]
+    /// <p>Modifies a task assigned to a Maintenance Window. You can't change the task type, but you can change the following values:</p> <p>Task ARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> <p>Service role ARN.</p> <p>Task parameters.</p> <p>Task priority.</p> <p>Task MaxConcurrency and MaxErrors.</p> <p>Log location.</p> <p>If a parameter is null, then the corresponding field is not modified. Also, if you set Replace to true, then all fields required by the RegisterTaskWithMaintenanceWindow action are required for this request. Optional fields that aren't specified are set to null.</p>
     fn update_maintenance_window_task(
         &self,
         input: &UpdateMaintenanceWindowTaskRequest,
     ) -> Result<UpdateMaintenanceWindowTaskResult, UpdateMaintenanceWindowTaskError>;
 
-    #[doc="<p>Assigns or changes an Amazon Identity and Access Management (IAM) role to the managed instance.</p>"]
+    /// <p>Assigns or changes an Amazon Identity and Access Management (IAM) role to the managed instance.</p>
     fn update_managed_instance_role(
         &self,
         input: &UpdateManagedInstanceRoleRequest,
     ) -> Result<UpdateManagedInstanceRoleResult, UpdateManagedInstanceRoleError>;
 
-    #[doc="<p>Modifies an existing patch baseline. Fields not specified in the request are left unchanged.</p>"]
+    /// <p>Modifies an existing patch baseline. Fields not specified in the request are left unchanged.</p>
     fn update_patch_baseline(
         &self,
         input: &UpdatePatchBaselineRequest,
@@ -15257,7 +15257,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you assign to your managed instances, Maintenance Windows, or Parameter Store parameters. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test.</p> <p>Each resource can have a maximum of 10 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html\">Tagging Your Amazon EC2 Resources</a> in the <i>Amazon EC2 User Guide</i>.</p>"]
+    /// <p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you assign to your managed instances, Maintenance Windows, or Parameter Store parameters. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test.</p> <p>Each resource can have a maximum of 10 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Amazon EC2 Resources</a> in the <i>Amazon EC2 User Guide</i>.</p>
     fn add_tags_to_resource(
         &self,
         input: &AddTagsToResourceRequest,
@@ -15291,7 +15291,7 @@ where
         }
     }
 
-    #[doc="<p>Attempts to cancel the command specified by the Command ID. There is no guarantee that the command will be terminated and the underlying process stopped.</p>"]
+    /// <p>Attempts to cancel the command specified by the Command ID. There is no guarantee that the command will be terminated and the underlying process stopped.</p>
     fn cancel_command(
         &self,
         input: &CancelCommandRequest,
@@ -15325,7 +15325,7 @@ where
         }
     }
 
-    #[doc="<p>Registers your on-premises server or virtual machine with Amazon EC2 so that you can manage these resources using Run Command. An on-premises server or virtual machine that has been registered with EC2 is called a managed instance. For more information about activations, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html\">Setting Up Systems Manager in Hybrid Environments</a>.</p>"]
+    /// <p>Registers your on-premises server or virtual machine with Amazon EC2 so that you can manage these resources using Run Command. An on-premises server or virtual machine that has been registered with EC2 is called a managed instance. For more information about activations, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html">Setting Up Systems Manager in Hybrid Environments</a>.</p>
     fn create_activation(
         &self,
         input: &CreateActivationRequest,
@@ -15359,7 +15359,7 @@ where
         }
     }
 
-    #[doc="<p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, the SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>"]
+    /// <p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, the SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>
     fn create_association(
         &self,
         input: &CreateAssociationRequest,
@@ -15393,7 +15393,7 @@ where
         }
     }
 
-    #[doc="<p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, the SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>"]
+    /// <p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, the SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>
     fn create_association_batch(
         &self,
         input: &CreateAssociationBatchRequest,
@@ -15427,7 +15427,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a Systems Manager document.</p> <p>After you create a document, you can use CreateAssociation to associate it with one or more running instances.</p>"]
+    /// <p>Creates a Systems Manager document.</p> <p>After you create a document, you can use CreateAssociation to associate it with one or more running instances.</p>
     fn create_document(
         &self,
         input: &CreateDocumentRequest,
@@ -15461,7 +15461,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a new Maintenance Window.</p>"]
+    /// <p>Creates a new Maintenance Window.</p>
     fn create_maintenance_window(
         &self,
         input: &CreateMaintenanceWindowRequest,
@@ -15495,7 +15495,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a patch baseline.</p>"]
+    /// <p>Creates a patch baseline.</p>
     fn create_patch_baseline(
         &self,
         input: &CreatePatchBaselineRequest,
@@ -15529,7 +15529,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a resource data sync configuration to a single bucket in Amazon S3. This is an asynchronous operation that returns immediately. After a successful initial sync is completed, the system continuously syncs data to the Amazon S3 bucket. To check the status of the sync, use the <a href=\"API_ListResourceDataSync.html\">ListResourceDataSync</a> operation.</p> <p>By default, data is not encrypted in Amazon S3. We strongly recommend that you enable encryption in Amazon S3 to ensure secure data storage. We also recommend that you secure access to the Amazon S3 bucket by creating a restrictive bucket policy. To view an example of a restrictive Amazon S3 bucket policy for Resource Data Sync, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-configuring.html#sysman-inventory-datasync\">Configuring Resource Data Sync for Inventory</a>.</p>"]
+    /// <p>Creates a resource data sync configuration to a single bucket in Amazon S3. This is an asynchronous operation that returns immediately. After a successful initial sync is completed, the system continuously syncs data to the Amazon S3 bucket. To check the status of the sync, use the <a href="API_ListResourceDataSync.html">ListResourceDataSync</a> operation.</p> <p>By default, data is not encrypted in Amazon S3. We strongly recommend that you enable encryption in Amazon S3 to ensure secure data storage. We also recommend that you secure access to the Amazon S3 bucket by creating a restrictive bucket policy. To view an example of a restrictive Amazon S3 bucket policy for Resource Data Sync, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-configuring.html#sysman-inventory-datasync">Configuring Resource Data Sync for Inventory</a>.</p>
     fn create_resource_data_sync(
         &self,
         input: &CreateResourceDataSyncRequest,
@@ -15563,7 +15563,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes an activation. You are not required to delete an activation. If you delete an activation, you can no longer use it to register additional managed instances. Deleting an activation does not de-register managed instances. You must manually de-register managed instances.</p>"]
+    /// <p>Deletes an activation. You are not required to delete an activation. If you delete an activation, you can no longer use it to register additional managed instances. Deleting an activation does not de-register managed instances. You must manually de-register managed instances.</p>
     fn delete_activation(
         &self,
         input: &DeleteActivationRequest,
@@ -15597,7 +15597,7 @@ where
         }
     }
 
-    #[doc="<p>Disassociates the specified Systems Manager document from the specified instance.</p> <p>When you disassociate a document from an instance, it does not change the configuration of the instance. To change the configuration state of an instance after you disassociate a document, you must create a new document with the desired configuration and associate it with the instance.</p>"]
+    /// <p>Disassociates the specified Systems Manager document from the specified instance.</p> <p>When you disassociate a document from an instance, it does not change the configuration of the instance. To change the configuration state of an instance after you disassociate a document, you must create a new document with the desired configuration and associate it with the instance.</p>
     fn delete_association(
         &self,
         input: &DeleteAssociationRequest,
@@ -15631,7 +15631,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the Systems Manager document and all instance associations to the document.</p> <p>Before you delete the document, we recommend that you use <a>DeleteAssociation</a> to disassociate all instances that are associated with the document.</p>"]
+    /// <p>Deletes the Systems Manager document and all instance associations to the document.</p> <p>Before you delete the document, we recommend that you use <a>DeleteAssociation</a> to disassociate all instances that are associated with the document.</p>
     fn delete_document(
         &self,
         input: &DeleteDocumentRequest,
@@ -15665,7 +15665,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a Maintenance Window.</p>"]
+    /// <p>Deletes a Maintenance Window.</p>
     fn delete_maintenance_window(
         &self,
         input: &DeleteMaintenanceWindowRequest,
@@ -15699,7 +15699,7 @@ where
         }
     }
 
-    #[doc = "<p>Delete a parameter from the system.</p>"]
+    /// <p>Delete a parameter from the system.</p>
     fn delete_parameter(
         &self,
         input: &DeleteParameterRequest,
@@ -15733,7 +15733,7 @@ where
         }
     }
 
-    #[doc="<p>Delete a list of parameters. This API is used to delete parameters by using the Amazon EC2 console.</p>"]
+    /// <p>Delete a list of parameters. This API is used to delete parameters by using the Amazon EC2 console.</p>
     fn delete_parameters(
         &self,
         input: &DeleteParametersRequest,
@@ -15767,7 +15767,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a patch baseline.</p>"]
+    /// <p>Deletes a patch baseline.</p>
     fn delete_patch_baseline(
         &self,
         input: &DeletePatchBaselineRequest,
@@ -15801,7 +15801,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a Resource Data Sync configuration. After the configuration is deleted, changes to inventory data on managed instances are no longer synced with the target Amazon S3 bucket. Deleting a sync configuration does not delete data in the target Amazon S3 bucket.</p>"]
+    /// <p>Deletes a Resource Data Sync configuration. After the configuration is deleted, changes to inventory data on managed instances are no longer synced with the target Amazon S3 bucket. Deleting a sync configuration does not delete data in the target Amazon S3 bucket.</p>
     fn delete_resource_data_sync(
         &self,
         input: &DeleteResourceDataSyncRequest,
@@ -15835,7 +15835,7 @@ where
         }
     }
 
-    #[doc="<p>Removes the server or virtual machine from the list of registered servers. You can reregister the instance again at any time. If you don't plan to use Run Command on the server, we suggest uninstalling the SSM Agent first.</p>"]
+    /// <p>Removes the server or virtual machine from the list of registered servers. You can reregister the instance again at any time. If you don't plan to use Run Command on the server, we suggest uninstalling the SSM Agent first.</p>
     fn deregister_managed_instance(
         &self,
         input: &DeregisterManagedInstanceRequest,
@@ -15869,7 +15869,7 @@ where
         }
     }
 
-    #[doc = "<p>Removes a patch group from a patch baseline.</p>"]
+    /// <p>Removes a patch group from a patch baseline.</p>
     fn deregister_patch_baseline_for_patch_group(
         &self,
         input: &DeregisterPatchBaselineForPatchGroupRequest,
@@ -15909,7 +15909,7 @@ where
         }
     }
 
-    #[doc = "<p>Removes a target from a Maintenance Window.</p>"]
+    /// <p>Removes a target from a Maintenance Window.</p>
     fn deregister_target_from_maintenance_window(
         &self,
         input: &DeregisterTargetFromMaintenanceWindowRequest,
@@ -15951,7 +15951,7 @@ where
         }
     }
 
-    #[doc = "<p>Removes a task from a Maintenance Window.</p>"]
+    /// <p>Removes a task from a Maintenance Window.</p>
     fn deregister_task_from_maintenance_window(
         &self,
         input: &DeregisterTaskFromMaintenanceWindowRequest,
@@ -15991,7 +15991,7 @@ where
         }
     }
 
-    #[doc="<p>Details about the activation, including: the date and time the activation was created, the expiration date, the IAM role assigned to the instances in the activation, and the number of instances activated by this registration.</p>"]
+    /// <p>Details about the activation, including: the date and time the activation was created, the expiration date, the IAM role assigned to the instances in the activation, and the number of instances activated by this registration.</p>
     fn describe_activations(
         &self,
         input: &DescribeActivationsRequest,
@@ -16025,7 +16025,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the associations for the specified Systems Manager document or instance.</p>"]
+    /// <p>Describes the associations for the specified Systems Manager document or instance.</p>
     fn describe_association(
         &self,
         input: &DescribeAssociationRequest,
@@ -16059,7 +16059,7 @@ where
         }
     }
 
-    #[doc = "<p>Provides details about all active and terminated Automation executions.</p>"]
+    /// <p>Provides details about all active and terminated Automation executions.</p>
     fn describe_automation_executions(
         &self,
         input: &DescribeAutomationExecutionsRequest,
@@ -16093,7 +16093,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists all patches that could possibly be included in a patch baseline.</p>"]
+    /// <p>Lists all patches that could possibly be included in a patch baseline.</p>
     fn describe_available_patches(
         &self,
         input: &DescribeAvailablePatchesRequest,
@@ -16127,7 +16127,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes the specified SSM document.</p>"]
+    /// <p>Describes the specified SSM document.</p>
     fn describe_document(
         &self,
         input: &DescribeDocumentRequest,
@@ -16161,7 +16161,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the permissions for a Systems Manager document. If you created the document, you are the owner. If a document is shared, it can either be shared privately (by specifying a user's AWS account ID) or publicly (<i>All</i>). </p>"]
+    /// <p>Describes the permissions for a Systems Manager document. If you created the document, you are the owner. If a document is shared, it can either be shared privately (by specifying a user's AWS account ID) or publicly (<i>All</i>). </p>
     fn describe_document_permission(
         &self,
         input: &DescribeDocumentPermissionRequest,
@@ -16195,7 +16195,7 @@ where
         }
     }
 
-    #[doc = "<p>All associations for the instance(s).</p>"]
+    /// <p>All associations for the instance(s).</p>
     fn describe_effective_instance_associations(
         &self,
         input: &DescribeEffectiveInstanceAssociationsRequest,
@@ -16237,7 +16237,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves the current effective patches (the patch and the approval state) for the specified patch baseline. Note that this API applies only to Windows patch baselines.</p>"]
+    /// <p>Retrieves the current effective patches (the patch and the approval state) for the specified patch baseline. Note that this API applies only to Windows patch baselines.</p>
     fn describe_effective_patches_for_patch_baseline(
         &self,
         input: &DescribeEffectivePatchesForPatchBaselineRequest,
@@ -16279,7 +16279,7 @@ where
         }
     }
 
-    #[doc = "<p>The status of the associations for the instance(s).</p>"]
+    /// <p>The status of the associations for the instance(s).</p>
     fn describe_instance_associations_status(
         &self,
         input: &DescribeInstanceAssociationsStatusRequest,
@@ -16319,7 +16319,7 @@ where
         }
     }
 
-    #[doc="<p>Describes one or more of your instances. You can use this to get information about instances like the operating system platform, the SSM Agent version (Linux), status etc. If you specify one or more instance IDs, it returns information for those instances. If you do not specify instance IDs, it returns information for all your instances. If you specify an instance ID that is not valid or an instance that you do not own, you receive an error. </p>"]
+    /// <p>Describes one or more of your instances. You can use this to get information about instances like the operating system platform, the SSM Agent version (Linux), status etc. If you specify one or more instance IDs, it returns information for those instances. If you do not specify instance IDs, it returns information for all your instances. If you specify an instance ID that is not valid or an instance that you do not own, you receive an error. </p>
     fn describe_instance_information(
         &self,
         input: &DescribeInstanceInformationRequest,
@@ -16353,7 +16353,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves the high-level patch state of one or more instances.</p>"]
+    /// <p>Retrieves the high-level patch state of one or more instances.</p>
     fn describe_instance_patch_states(
         &self,
         input: &DescribeInstancePatchStatesRequest,
@@ -16387,7 +16387,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves the high-level patch state for the instances in the specified patch group.</p>"]
+    /// <p>Retrieves the high-level patch state for the instances in the specified patch group.</p>
     fn describe_instance_patch_states_for_patch_group(
         &self,
         input: &DescribeInstancePatchStatesForPatchGroupRequest,
@@ -16429,7 +16429,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves information about the patches on the specified instance and their state relative to the patch baseline being used for the instance.</p>"]
+    /// <p>Retrieves information about the patches on the specified instance and their state relative to the patch baseline being used for the instance.</p>
     fn describe_instance_patches(
         &self,
         input: &DescribeInstancePatchesRequest,
@@ -16463,7 +16463,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves the individual task executions (one per target) for a particular task executed as part of a Maintenance Window execution.</p>"]
+    /// <p>Retrieves the individual task executions (one per target) for a particular task executed as part of a Maintenance Window execution.</p>
     fn describe_maintenance_window_execution_task_invocations(
         &self,
         input: &DescribeMaintenanceWindowExecutionTaskInvocationsRequest,
@@ -16503,7 +16503,7 @@ where
         }
     }
 
-    #[doc = "<p>For a given Maintenance Window execution, lists the tasks that were executed.</p>"]
+    /// <p>For a given Maintenance Window execution, lists the tasks that were executed.</p>
     fn describe_maintenance_window_execution_tasks(
         &self,
         input: &DescribeMaintenanceWindowExecutionTasksRequest,
@@ -16545,7 +16545,7 @@ where
         }
     }
 
-    #[doc="<p>Lists the executions of a Maintenance Window. This includes information about when the Maintenance Window was scheduled to be active, and information about tasks registered and run with the Maintenance Window.</p>"]
+    /// <p>Lists the executions of a Maintenance Window. This includes information about when the Maintenance Window was scheduled to be active, and information about tasks registered and run with the Maintenance Window.</p>
     fn describe_maintenance_window_executions(
         &self,
         input: &DescribeMaintenanceWindowExecutionsRequest,
@@ -16585,7 +16585,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists the targets registered with the Maintenance Window.</p>"]
+    /// <p>Lists the targets registered with the Maintenance Window.</p>
     fn describe_maintenance_window_targets(
         &self,
         input: &DescribeMaintenanceWindowTargetsRequest,
@@ -16621,7 +16621,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists the tasks in a Maintenance Window.</p>"]
+    /// <p>Lists the tasks in a Maintenance Window.</p>
     fn describe_maintenance_window_tasks(
         &self,
         input: &DescribeMaintenanceWindowTasksRequest,
@@ -16657,7 +16657,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves the Maintenance Windows in an AWS account.</p>"]
+    /// <p>Retrieves the Maintenance Windows in an AWS account.</p>
     fn describe_maintenance_windows(
         &self,
         input: &DescribeMaintenanceWindowsRequest,
@@ -16691,7 +16691,7 @@ where
         }
     }
 
-    #[doc="<p>Get information about a parameter.</p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p>"]
+    /// <p>Get information about a parameter.</p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p>
     fn describe_parameters(
         &self,
         input: &DescribeParametersRequest,
@@ -16725,7 +16725,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists the patch baselines in your AWS account.</p>"]
+    /// <p>Lists the patch baselines in your AWS account.</p>
     fn describe_patch_baselines(
         &self,
         input: &DescribePatchBaselinesRequest,
@@ -16759,7 +16759,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns high-level aggregated patch compliance state for a patch group.</p>"]
+    /// <p>Returns high-level aggregated patch compliance state for a patch group.</p>
     fn describe_patch_group_state(
         &self,
         input: &DescribePatchGroupStateRequest,
@@ -16793,7 +16793,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists all patch groups that have been registered with patch baselines.</p>"]
+    /// <p>Lists all patch groups that have been registered with patch baselines.</p>
     fn describe_patch_groups(
         &self,
         input: &DescribePatchGroupsRequest,
@@ -16827,7 +16827,7 @@ where
         }
     }
 
-    #[doc = "<p>Get detailed information about a particular Automation execution.</p>"]
+    /// <p>Get detailed information about a particular Automation execution.</p>
     fn get_automation_execution(
         &self,
         input: &GetAutomationExecutionRequest,
@@ -16861,7 +16861,7 @@ where
         }
     }
 
-    #[doc="<p>Returns detailed information about command execution for an invocation or plugin. </p>"]
+    /// <p>Returns detailed information about command execution for an invocation or plugin. </p>
     fn get_command_invocation(
         &self,
         input: &GetCommandInvocationRequest,
@@ -16895,7 +16895,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves the default patch baseline. Note that Systems Manager supports creating multiple default patch baselines. For example, you can create a default patch baseline for each operating system.</p>"]
+    /// <p>Retrieves the default patch baseline. Note that Systems Manager supports creating multiple default patch baselines. For example, you can create a default patch baseline for each operating system.</p>
     fn get_default_patch_baseline(
         &self,
         input: &GetDefaultPatchBaselineRequest,
@@ -16929,7 +16929,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves the current snapshot for the patch baseline the instance uses. This API is primarily used by the AWS-RunPatchBaseline Systems Manager document. </p>"]
+    /// <p>Retrieves the current snapshot for the patch baseline the instance uses. This API is primarily used by the AWS-RunPatchBaseline Systems Manager document. </p>
     fn get_deployable_patch_snapshot_for_instance(
         &self,
         input: &GetDeployablePatchSnapshotForInstanceRequest,
@@ -16971,7 +16971,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets the contents of the specified SSM document.</p>"]
+    /// <p>Gets the contents of the specified SSM document.</p>
     fn get_document(
         &self,
         input: &GetDocumentRequest,
@@ -17005,7 +17005,7 @@ where
         }
     }
 
-    #[doc = "<p>Query inventory information.</p>"]
+    /// <p>Query inventory information.</p>
     fn get_inventory(
         &self,
         input: &GetInventoryRequest,
@@ -17039,7 +17039,7 @@ where
         }
     }
 
-    #[doc="<p>Return a list of inventory type names for the account, or return a list of attribute names for a specific Inventory item type. </p>"]
+    /// <p>Return a list of inventory type names for the account, or return a list of attribute names for a specific Inventory item type. </p>
     fn get_inventory_schema(
         &self,
         input: &GetInventorySchemaRequest,
@@ -17073,7 +17073,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves a Maintenance Window.</p>"]
+    /// <p>Retrieves a Maintenance Window.</p>
     fn get_maintenance_window(
         &self,
         input: &GetMaintenanceWindowRequest,
@@ -17107,7 +17107,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves details about a specific task executed as part of a Maintenance Window execution.</p>"]
+    /// <p>Retrieves details about a specific task executed as part of a Maintenance Window execution.</p>
     fn get_maintenance_window_execution(
         &self,
         input: &GetMaintenanceWindowExecutionRequest,
@@ -17141,7 +17141,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves the details about a specific task executed as part of a Maintenance Window execution.</p>"]
+    /// <p>Retrieves the details about a specific task executed as part of a Maintenance Window execution.</p>
     fn get_maintenance_window_execution_task(
         &self,
         input: &GetMaintenanceWindowExecutionTaskRequest,
@@ -17181,7 +17181,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves a task invocation. A task invocation is a specific task executing on a specific target. Maintenance Windows report status for all invocations. </p>"]
+    /// <p>Retrieves a task invocation. A task invocation is a specific task executing on a specific target. Maintenance Windows report status for all invocations. </p>
     fn get_maintenance_window_execution_task_invocation(
         &self,
         input: &GetMaintenanceWindowExecutionTaskInvocationRequest,
@@ -17225,7 +17225,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists the tasks in a Maintenance Window.</p>"]
+    /// <p>Lists the tasks in a Maintenance Window.</p>
     fn get_maintenance_window_task(
         &self,
         input: &GetMaintenanceWindowTaskRequest,
@@ -17259,7 +17259,7 @@ where
         }
     }
 
-    #[doc = "<p>Get information about a parameter by using the parameter name. </p>"]
+    /// <p>Get information about a parameter by using the parameter name. </p>
     fn get_parameter(
         &self,
         input: &GetParameterRequest,
@@ -17293,7 +17293,7 @@ where
         }
     }
 
-    #[doc = "<p>Query a list of all parameters used by the AWS account.</p>"]
+    /// <p>Query a list of all parameters used by the AWS account.</p>
     fn get_parameter_history(
         &self,
         input: &GetParameterHistoryRequest,
@@ -17327,7 +17327,7 @@ where
         }
     }
 
-    #[doc = "<p>Get details of a parameter.</p>"]
+    /// <p>Get details of a parameter.</p>
     fn get_parameters(
         &self,
         input: &GetParametersRequest,
@@ -17361,7 +17361,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieve parameters in a specific hierarchy. For more information, see <a href=\"http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html\">Working with Systems Manager Parameters</a>. </p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p>"]
+    /// <p>Retrieve parameters in a specific hierarchy. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html">Working with Systems Manager Parameters</a>. </p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p>
     fn get_parameters_by_path(
         &self,
         input: &GetParametersByPathRequest,
@@ -17395,7 +17395,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves information about a patch baseline.</p>"]
+    /// <p>Retrieves information about a patch baseline.</p>
     fn get_patch_baseline(
         &self,
         input: &GetPatchBaselineRequest,
@@ -17429,7 +17429,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves the patch baseline that should be used for the specified patch group.</p>"]
+    /// <p>Retrieves the patch baseline that should be used for the specified patch group.</p>
     fn get_patch_baseline_for_patch_group(
         &self,
         input: &GetPatchBaselineForPatchGroupRequest,
@@ -17463,7 +17463,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves all versions of an association for a specific association ID.</p>"]
+    /// <p>Retrieves all versions of an association for a specific association ID.</p>
     fn list_association_versions(
         &self,
         input: &ListAssociationVersionsRequest,
@@ -17497,7 +17497,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists the associations for the specified Systems Manager document or instance.</p>"]
+    /// <p>Lists the associations for the specified Systems Manager document or instance.</p>
     fn list_associations(
         &self,
         input: &ListAssociationsRequest,
@@ -17531,7 +17531,7 @@ where
         }
     }
 
-    #[doc="<p>An invocation is copy of a command sent to a specific instance. A command can apply to one or more instances. A command invocation applies to one instance. For example, if a user executes SendCommand against three instances, then a command invocation is created for each requested instance ID. ListCommandInvocations provide status about command execution.</p>"]
+    /// <p>An invocation is copy of a command sent to a specific instance. A command can apply to one or more instances. A command invocation applies to one instance. For example, if a user executes SendCommand against three instances, then a command invocation is created for each requested instance ID. ListCommandInvocations provide status about command execution.</p>
     fn list_command_invocations(
         &self,
         input: &ListCommandInvocationsRequest,
@@ -17565,7 +17565,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists the commands requested by users of the AWS account.</p>"]
+    /// <p>Lists the commands requested by users of the AWS account.</p>
     fn list_commands(
         &self,
         input: &ListCommandsRequest,
@@ -17599,7 +17599,7 @@ where
         }
     }
 
-    #[doc="<p>For a specified resource ID, this API action returns a list of compliance statuses for different resource types. Currently, you can only specify one resource ID per call. List results depend on the criteria specified in the filter. </p>"]
+    /// <p>For a specified resource ID, this API action returns a list of compliance statuses for different resource types. Currently, you can only specify one resource ID per call. List results depend on the criteria specified in the filter. </p>
     fn list_compliance_items(
         &self,
         input: &ListComplianceItemsRequest,
@@ -17633,7 +17633,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a summary count of compliant and non-compliant resources for a compliance type. For example, this call can return State Manager associations, patches, or custom compliance types according to the filter criteria that you specify. </p>"]
+    /// <p>Returns a summary count of compliant and non-compliant resources for a compliance type. For example, this call can return State Manager associations, patches, or custom compliance types according to the filter criteria that you specify. </p>
     fn list_compliance_summaries(
         &self,
         input: &ListComplianceSummariesRequest,
@@ -17667,7 +17667,7 @@ where
         }
     }
 
-    #[doc = "<p>List all versions for a document.</p>"]
+    /// <p>List all versions for a document.</p>
     fn list_document_versions(
         &self,
         input: &ListDocumentVersionsRequest,
@@ -17701,7 +17701,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes one or more of your SSM documents.</p>"]
+    /// <p>Describes one or more of your SSM documents.</p>
     fn list_documents(
         &self,
         input: &ListDocumentsRequest,
@@ -17735,7 +17735,7 @@ where
         }
     }
 
-    #[doc = "<p>A list of inventory items returned by the request.</p>"]
+    /// <p>A list of inventory items returned by the request.</p>
     fn list_inventory_entries(
         &self,
         input: &ListInventoryEntriesRequest,
@@ -17769,7 +17769,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a resource-level summary count. The summary includes information about compliant and non-compliant statuses and detailed compliance-item severity counts, according to the filter criteria you specify.</p>"]
+    /// <p>Returns a resource-level summary count. The summary includes information about compliant and non-compliant statuses and detailed compliance-item severity counts, according to the filter criteria you specify.</p>
     fn list_resource_compliance_summaries(
         &self,
         input: &ListResourceComplianceSummariesRequest,
@@ -17805,7 +17805,7 @@ where
         }
     }
 
-    #[doc="<p>Lists your resource data sync configurations. Includes information about the last time a sync attempted to start, the last sync status, and the last time a sync successfully completed.</p> <p>The number of sync configurations might be too large to return using a single call to <code>ListResourceDataSync</code>. You can limit the number of sync configurations returned by using the <code>MaxResults</code> parameter. To determine whether there are more sync configurations to list, check the value of <code>NextToken</code> in the output. If there are more sync configurations to list, you can request them by specifying the <code>NextToken</code> returned in the call to the parameter of a subsequent call. </p>"]
+    /// <p>Lists your resource data sync configurations. Includes information about the last time a sync attempted to start, the last sync status, and the last time a sync successfully completed.</p> <p>The number of sync configurations might be too large to return using a single call to <code>ListResourceDataSync</code>. You can limit the number of sync configurations returned by using the <code>MaxResults</code> parameter. To determine whether there are more sync configurations to list, check the value of <code>NextToken</code> in the output. If there are more sync configurations to list, you can request them by specifying the <code>NextToken</code> returned in the call to the parameter of a subsequent call. </p>
     fn list_resource_data_sync(
         &self,
         input: &ListResourceDataSyncRequest,
@@ -17839,7 +17839,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns a list of the tags assigned to the specified resource.</p>"]
+    /// <p>Returns a list of the tags assigned to the specified resource.</p>
     fn list_tags_for_resource(
         &self,
         input: &ListTagsForResourceRequest,
@@ -17873,7 +17873,7 @@ where
         }
     }
 
-    #[doc="<p>Shares a Systems Manager document publicly or privately. If you share a document privately, you must specify the AWS user account IDs for those people who can use the document. If you share a document publicly, you must specify <i>All</i> as the account ID.</p>"]
+    /// <p>Shares a Systems Manager document publicly or privately. If you share a document privately, you must specify the AWS user account IDs for those people who can use the document. If you share a document publicly, you must specify <i>All</i> as the account ID.</p>
     fn modify_document_permission(
         &self,
         input: &ModifyDocumentPermissionRequest,
@@ -17907,7 +17907,7 @@ where
         }
     }
 
-    #[doc="<p>Registers a compliance type and other compliance details on a designated resource. This action lets you register custom compliance details with a resource. This call overwrites existing compliance information on the resource, so you must provide a full list of compliance items each time that you send the request.</p>"]
+    /// <p>Registers a compliance type and other compliance details on a designated resource. This action lets you register custom compliance details with a resource. This call overwrites existing compliance information on the resource, so you must provide a full list of compliance items each time that you send the request.</p>
     fn put_compliance_items(
         &self,
         input: &PutComplianceItemsRequest,
@@ -17941,7 +17941,7 @@ where
         }
     }
 
-    #[doc="<p>Bulk update custom inventory items on one more instance. The request adds an inventory item, if it doesn't already exist, or updates an inventory item, if it does exist.</p>"]
+    /// <p>Bulk update custom inventory items on one more instance. The request adds an inventory item, if it doesn't already exist, or updates an inventory item, if it does exist.</p>
     fn put_inventory(
         &self,
         input: &PutInventoryRequest,
@@ -17975,7 +17975,7 @@ where
         }
     }
 
-    #[doc = "<p>Add one or more parameters to the system.</p>"]
+    /// <p>Add one or more parameters to the system.</p>
     fn put_parameter(
         &self,
         input: &PutParameterRequest,
@@ -18009,7 +18009,7 @@ where
         }
     }
 
-    #[doc = "<p>Defines the default patch baseline.</p>"]
+    /// <p>Defines the default patch baseline.</p>
     fn register_default_patch_baseline(
         &self,
         input: &RegisterDefaultPatchBaselineRequest,
@@ -18043,7 +18043,7 @@ where
         }
     }
 
-    #[doc = "<p>Registers a patch baseline for a patch group.</p>"]
+    /// <p>Registers a patch baseline for a patch group.</p>
     fn register_patch_baseline_for_patch_group(
         &self,
         input: &RegisterPatchBaselineForPatchGroupRequest,
@@ -18083,7 +18083,7 @@ where
         }
     }
 
-    #[doc = "<p>Registers a target with a Maintenance Window.</p>"]
+    /// <p>Registers a target with a Maintenance Window.</p>
     fn register_target_with_maintenance_window(
         &self,
         input: &RegisterTargetWithMaintenanceWindowRequest,
@@ -18123,7 +18123,7 @@ where
         }
     }
 
-    #[doc = "<p>Adds a new task to a Maintenance Window.</p>"]
+    /// <p>Adds a new task to a Maintenance Window.</p>
     fn register_task_with_maintenance_window(
         &self,
         input: &RegisterTaskWithMaintenanceWindowRequest,
@@ -18163,7 +18163,7 @@ where
         }
     }
 
-    #[doc = "<p>Removes all tags from the specified resource.</p>"]
+    /// <p>Removes all tags from the specified resource.</p>
     fn remove_tags_from_resource(
         &self,
         input: &RemoveTagsFromResourceRequest,
@@ -18197,7 +18197,7 @@ where
         }
     }
 
-    #[doc="<p>Sends a signal to an Automation execution to change the current behavior or status of the execution. </p>"]
+    /// <p>Sends a signal to an Automation execution to change the current behavior or status of the execution. </p>
     fn send_automation_signal(
         &self,
         input: &SendAutomationSignalRequest,
@@ -18231,7 +18231,7 @@ where
         }
     }
 
-    #[doc = "<p>Executes commands on one or more managed instances.</p>"]
+    /// <p>Executes commands on one or more managed instances.</p>
     fn send_command(
         &self,
         input: &SendCommandRequest,
@@ -18265,7 +18265,7 @@ where
         }
     }
 
-    #[doc = "<p>Initiates execution of an Automation document.</p>"]
+    /// <p>Initiates execution of an Automation document.</p>
     fn start_automation_execution(
         &self,
         input: &StartAutomationExecutionRequest,
@@ -18299,7 +18299,7 @@ where
         }
     }
 
-    #[doc = "<p>Stop an Automation that is currently executing.</p>"]
+    /// <p>Stop an Automation that is currently executing.</p>
     fn stop_automation_execution(
         &self,
         input: &StopAutomationExecutionRequest,
@@ -18333,7 +18333,7 @@ where
         }
     }
 
-    #[doc="<p>Updates an association. You can update the association name and version, the document version, schedule, parameters, and Amazon S3 output.</p>"]
+    /// <p>Updates an association. You can update the association name and version, the document version, schedule, parameters, and Amazon S3 output.</p>
     fn update_association(
         &self,
         input: &UpdateAssociationRequest,
@@ -18367,7 +18367,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the status of the Systems Manager document associated with the specified instance.</p>"]
+    /// <p>Updates the status of the Systems Manager document associated with the specified instance.</p>
     fn update_association_status(
         &self,
         input: &UpdateAssociationStatusRequest,
@@ -18401,7 +18401,7 @@ where
         }
     }
 
-    #[doc = "<p>The document you want to update.</p>"]
+    /// <p>The document you want to update.</p>
     fn update_document(
         &self,
         input: &UpdateDocumentRequest,
@@ -18435,7 +18435,7 @@ where
         }
     }
 
-    #[doc = "<p>Set the default version of a document. </p>"]
+    /// <p>Set the default version of a document. </p>
     fn update_document_default_version(
         &self,
         input: &UpdateDocumentDefaultVersionRequest,
@@ -18469,7 +18469,7 @@ where
         }
     }
 
-    #[doc = "<p>Updates an existing Maintenance Window. Only specified parameters are modified.</p>"]
+    /// <p>Updates an existing Maintenance Window. Only specified parameters are modified.</p>
     fn update_maintenance_window(
         &self,
         input: &UpdateMaintenanceWindowRequest,
@@ -18503,7 +18503,7 @@ where
         }
     }
 
-    #[doc="<p>Modifies the target of an existing Maintenance Window. You can't change the target type, but you can change the following:</p> <p>The target from being an ID target to a Tag target, or a Tag target to an ID target.</p> <p>IDs for an ID target.</p> <p>Tags for a Tag target.</p> <p>Owner.</p> <p>Name.</p> <p>Description.</p> <p>If a parameter is null, then the corresponding field is not modified.</p>"]
+    /// <p>Modifies the target of an existing Maintenance Window. You can't change the target type, but you can change the following:</p> <p>The target from being an ID target to a Tag target, or a Tag target to an ID target.</p> <p>IDs for an ID target.</p> <p>Tags for a Tag target.</p> <p>Owner.</p> <p>Name.</p> <p>Description.</p> <p>If a parameter is null, then the corresponding field is not modified.</p>
     fn update_maintenance_window_target(
         &self,
         input: &UpdateMaintenanceWindowTargetRequest,
@@ -18537,7 +18537,7 @@ where
         }
     }
 
-    #[doc="<p>Modifies a task assigned to a Maintenance Window. You can't change the task type, but you can change the following values:</p> <p>Task ARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> <p>Service role ARN.</p> <p>Task parameters.</p> <p>Task priority.</p> <p>Task MaxConcurrency and MaxErrors.</p> <p>Log location.</p> <p>If a parameter is null, then the corresponding field is not modified. Also, if you set Replace to true, then all fields required by the RegisterTaskWithMaintenanceWindow action are required for this request. Optional fields that aren't specified are set to null.</p>"]
+    /// <p>Modifies a task assigned to a Maintenance Window. You can't change the task type, but you can change the following values:</p> <p>Task ARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> <p>Service role ARN.</p> <p>Task parameters.</p> <p>Task priority.</p> <p>Task MaxConcurrency and MaxErrors.</p> <p>Log location.</p> <p>If a parameter is null, then the corresponding field is not modified. Also, if you set Replace to true, then all fields required by the RegisterTaskWithMaintenanceWindow action are required for this request. Optional fields that aren't specified are set to null.</p>
     fn update_maintenance_window_task(
         &self,
         input: &UpdateMaintenanceWindowTaskRequest,
@@ -18571,7 +18571,7 @@ where
         }
     }
 
-    #[doc="<p>Assigns or changes an Amazon Identity and Access Management (IAM) role to the managed instance.</p>"]
+    /// <p>Assigns or changes an Amazon Identity and Access Management (IAM) role to the managed instance.</p>
     fn update_managed_instance_role(
         &self,
         input: &UpdateManagedInstanceRoleRequest,
@@ -18605,7 +18605,7 @@ where
         }
     }
 
-    #[doc="<p>Modifies an existing patch baseline. Fields not specified in the request are left unchanged.</p>"]
+    /// <p>Modifies an existing patch baseline. Fields not specified in the request are left unchanged.</p>
     fn update_patch_baseline(
         &self,
         input: &UpdatePatchBaselineRequest,

@@ -43,10 +43,10 @@ enum DeserializerNext {
 }
 use md5;
 use base64;
-/// Specifies the days since the initiation of an Incomplete Multipart Upload that Lifecycle will wait before permanently removing all parts of the upload.
+/// <p>Specifies the days since the initiation of an Incomplete Multipart Upload that Lifecycle will wait before permanently removing all parts of the upload.</p>
 #[derive(Default, Debug)]
 pub struct AbortIncompleteMultipartUpload {
-    /// Indicates the number of days that must pass since initiation for Lifecycle to abort an Incomplete Multipart Upload.
+    /// <p>Indicates the number of days that must pass since initiation for Lifecycle to abort an Incomplete Multipart Upload.</p>
     pub days_after_initiation: Option<i64>,
 }
 
@@ -149,7 +149,7 @@ pub struct AbortMultipartUploadRequest {
 
 #[derive(Default, Debug)]
 pub struct AccelerateConfiguration {
-    /// The accelerate configuration of the bucket.
+    /// <p>The accelerate configuration of the bucket.</p>
     pub status: Option<String>,
 }
 
@@ -179,7 +179,7 @@ impl AccelerateConfigurationSerializer {
 
 #[derive(Default, Debug)]
 pub struct AccessControlPolicy {
-    /// A list of grants.
+    /// <p>A list of grants.</p>
     pub grants: Option<Vec<Grant>>,
     pub owner: Option<Owner>,
 }
@@ -489,9 +489,9 @@ impl AllowedOriginsSerializer {
 
 #[derive(Default, Debug)]
 pub struct AnalyticsAndOperator {
-    /// The prefix to use when evaluating an AND predicate.
+    /// <p>The prefix to use when evaluating an AND predicate.</p>
     pub prefix: Option<String>,
-    /// The list of tags to use when evaluating an AND predicate.
+    /// <p>The list of tags to use when evaluating an AND predicate.</p>
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -567,11 +567,11 @@ impl AnalyticsAndOperatorSerializer {
 
 #[derive(Default, Debug)]
 pub struct AnalyticsConfiguration {
-    /// The filter used to describe a set of objects for analyses. A filter must have exactly one prefix, one tag, or one conjunction (AnalyticsAndOperator). If no filter is provided, all objects will be considered in any analysis.
+    /// <p>The filter used to describe a set of objects for analyses. A filter must have exactly one prefix, one tag, or one conjunction (AnalyticsAndOperator). If no filter is provided, all objects will be considered in any analysis.</p>
     pub filter: Option<AnalyticsFilter>,
-    /// The identifier used to represent an analytics configuration.
+    /// <p>The identifier used to represent an analytics configuration.</p>
     pub id: String,
-    /// If present, it indicates that data related to access patterns will be collected and made available to analyze the tradeoffs between different storage classes.
+    /// <p>If present, it indicates that data related to access patterns will be collected and made available to analyze the tradeoffs between different storage classes.</p>
     pub storage_class_analysis: StorageClassAnalysis,
 }
 
@@ -688,7 +688,7 @@ impl AnalyticsConfigurationListDeserializer {
 }
 #[derive(Default, Debug)]
 pub struct AnalyticsExportDestination {
-    /// A destination signifying output to an S3 bucket.
+    /// <p>A destination signifying output to an S3 bucket.</p>
     pub s3_bucket_destination: AnalyticsS3BucketDestination,
 }
 
@@ -759,11 +759,11 @@ impl AnalyticsExportDestinationSerializer {
 
 #[derive(Default, Debug)]
 pub struct AnalyticsFilter {
-    /// A conjunction (logical AND) of predicates, which is used in evaluating an analytics filter. The operator must have at least two predicates.
+    /// <p>A conjunction (logical AND) of predicates, which is used in evaluating an analytics filter. The operator must have at least two predicates.</p>
     pub and: Option<AnalyticsAndOperator>,
-    /// The prefix to use when evaluating an analytics filter.
+    /// <p>The prefix to use when evaluating an analytics filter.</p>
     pub prefix: Option<String>,
-    /// The tag to use when evaluating an analytics filter.
+    /// <p>The tag to use when evaluating an analytics filter.</p>
     pub tag: Option<Tag>,
 }
 
@@ -883,13 +883,13 @@ impl AnalyticsIdSerializer {
 
 #[derive(Default, Debug)]
 pub struct AnalyticsS3BucketDestination {
-    /// The Amazon resource name (ARN) of the bucket to which data is exported.
+    /// <p>The Amazon resource name (ARN) of the bucket to which data is exported.</p>
     pub bucket: String,
-    /// The account ID that owns the destination bucket. If no account ID is provided, the owner will not be validated prior to exporting data.
+    /// <p>The account ID that owns the destination bucket. If no account ID is provided, the owner will not be validated prior to exporting data.</p>
     pub bucket_account_id: Option<String>,
-    /// The file format used when exporting data to Amazon S3.
+    /// <p>The file format used when exporting data to Amazon S3.</p>
     pub format: String,
-    /// The prefix to use when exporting data. The exported data begins with this prefix.
+    /// <p>The prefix to use when exporting data. The exported data begins with this prefix.</p>
     pub prefix: Option<String>,
 }
 
@@ -1083,9 +1083,9 @@ impl BodySerializer {
 
 #[derive(Default, Debug)]
 pub struct Bucket {
-    /// Date the bucket was created.
+    /// <p>Date the bucket was created.</p>
     pub creation_date: Option<String>,
-    /// The name of the bucket.
+    /// <p>The name of the bucket.</p>
     pub name: Option<String>,
 }
 
@@ -1419,15 +1419,15 @@ impl CORSConfigurationSerializer {
 
 #[derive(Default, Debug)]
 pub struct CORSRule {
-    /// Specifies which headers are allowed in a pre-flight OPTIONS request.
+    /// <p>Specifies which headers are allowed in a pre-flight OPTIONS request.</p>
     pub allowed_headers: Option<Vec<String>>,
-    /// Identifies HTTP methods that the domain/origin specified in the rule is allowed to execute.
+    /// <p>Identifies HTTP methods that the domain/origin specified in the rule is allowed to execute.</p>
     pub allowed_methods: Vec<String>,
-    /// One or more origins you want customers to be able to access the bucket from.
+    /// <p>One or more origins you want customers to be able to access the bucket from.</p>
     pub allowed_origins: Vec<String>,
-    /// One or more headers in the response that you want customers to be able to access from their applications (for example, from a JavaScript XMLHttpRequest object).
+    /// <p>One or more headers in the response that you want customers to be able to access from their applications (for example, from a JavaScript XMLHttpRequest object).</p>
     pub expose_headers: Option<Vec<String>>,
-    /// The time in seconds that your browser is to cache the preflight response for the specified resource.
+    /// <p>The time in seconds that your browser is to cache the preflight response for the specified resource.</p>
     pub max_age_seconds: Option<i64>,
 }
 
@@ -1836,18 +1836,18 @@ impl CommonPrefixListDeserializer {
 #[derive(Default, Debug)]
 pub struct CompleteMultipartUploadOutput {
     pub bucket: Option<String>,
-    /// Entity tag of the object.
+    /// <p>Entity tag of the object.</p>
     pub e_tag: Option<String>,
-    /// If the object expiration is configured, this will contain the expiration date (expiry-date) and rule ID (rule-id). The value of rule-id is URL encoded.
+    /// <p>If the object expiration is configured, this will contain the expiration date (expiry-date) and rule ID (rule-id). The value of rule-id is URL encoded.</p>
     pub expiration: Option<String>,
     pub key: Option<String>,
     pub location: Option<String>,
     pub request_charged: Option<String>,
-    /// If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object.
+    /// <p>If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object.</p>
     pub ssekms_key_id: Option<String>,
-    /// The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).
+    /// <p>The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).</p>
     pub server_side_encryption: Option<String>,
-    /// Version of the object.
+    /// <p>Version of the object.</p>
     pub version_id: Option<String>,
 }
 
@@ -1936,9 +1936,9 @@ impl CompletedMultipartUploadSerializer {
 
 #[derive(Default, Debug)]
 pub struct CompletedPart {
-    /// Entity tag returned when the part was uploaded.
+    /// <p>Entity tag returned when the part was uploaded.</p>
     pub e_tag: Option<String>,
-    /// Part number that identifies the part. This is a positive integer between 1 and 10,000.
+    /// <p>Part number that identifies the part. This is a positive integer between 1 and 10,000.</p>
     pub part_number: Option<i64>,
 }
 
@@ -1994,9 +1994,9 @@ impl CompletedPartListSerializer {
 
 #[derive(Default, Debug)]
 pub struct Condition {
-    /// The HTTP error code when the redirect is applied. In the event of an error, if the error code equals this value, then the specified redirect is applied. Required when parent element Condition is specified and sibling KeyPrefixEquals is not specified. If both are specified, then both must be true for the redirect to be applied.
+    /// <p>The HTTP error code when the redirect is applied. In the event of an error, if the error code equals this value, then the specified redirect is applied. Required when parent element Condition is specified and sibling KeyPrefixEquals is not specified. If both are specified, then both must be true for the redirect to be applied.</p>
     pub http_error_code_returned_equals: Option<String>,
-    /// The object key name prefix when the redirect is applied. For example, to redirect requests for ExamplePage.html, the key prefix will be ExamplePage.html. To redirect request for all pages with the prefix docs/, the key prefix will be /docs, which identifies all objects in the docs/ folder. Required when the parent element Condition is specified and sibling HttpErrorCodeReturnedEquals is not specified. If both conditions are specified, both must be true for the redirect to be applied.
+    /// <p>The object key name prefix when the redirect is applied. For example, to redirect requests for ExamplePage.html, the key prefix will be ExamplePage.html. To redirect request for all pages with the prefix docs/, the key prefix will be /docs, which identifies all objects in the docs/ folder. Required when the parent element Condition is specified and sibling HttpErrorCodeReturnedEquals is not specified. If both conditions are specified, both must be true for the redirect to be applied.</p>
     pub key_prefix_equals: Option<String>,
 }
 
@@ -2087,18 +2087,18 @@ impl ConditionSerializer {
 pub struct CopyObjectOutput {
     pub copy_object_result: Option<CopyObjectResult>,
     pub copy_source_version_id: Option<String>,
-    /// If the object expiration is configured, the response includes this header.
+    /// <p>If the object expiration is configured, the response includes this header.</p>
     pub expiration: Option<String>,
     pub request_charged: Option<String>,
-    /// If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.
+    /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.</p>
     pub sse_customer_algorithm: Option<String>,
-    /// If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key.
+    /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key.</p>
     pub sse_customer_key_md5: Option<String>,
-    /// If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object.
+    /// <p>If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object.</p>
     pub ssekms_key_id: Option<String>,
-    /// The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).
+    /// <p>The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).</p>
     pub server_side_encryption: Option<String>,
-    /// Version ID of the newly created copy.
+    /// <p>Version ID of the newly created copy.</p>
     pub version_id: Option<String>,
 }
 
@@ -2145,68 +2145,68 @@ impl CopyObjectOutputDeserializer {
 }
 #[derive(Default, Debug)]
 pub struct CopyObjectRequest {
-    /// The canned ACL to apply to the object.
+    /// <p>The canned ACL to apply to the object.</p>
     pub acl: Option<String>,
     pub bucket: String,
-    /// Specifies caching behavior along the request/reply chain.
+    /// <p>Specifies caching behavior along the request/reply chain.</p>
     pub cache_control: Option<String>,
-    /// Specifies presentational information for the object.
+    /// <p>Specifies presentational information for the object.</p>
     pub content_disposition: Option<String>,
-    /// Specifies what content encodings have been applied to the object and thus what decoding mechanisms must be applied to obtain the media-type referenced by the Content-Type header field.
+    /// <p>Specifies what content encodings have been applied to the object and thus what decoding mechanisms must be applied to obtain the media-type referenced by the Content-Type header field.</p>
     pub content_encoding: Option<String>,
-    /// The language the content is in.
+    /// <p>The language the content is in.</p>
     pub content_language: Option<String>,
-    /// A standard MIME type describing the format of the object data.
+    /// <p>A standard MIME type describing the format of the object data.</p>
     pub content_type: Option<String>,
-    /// The name of the source bucket and key name of the source object, separated by a slash (/). Must be URL-encoded.
+    /// <p>The name of the source bucket and key name of the source object, separated by a slash (/). Must be URL-encoded.</p>
     pub copy_source: String,
-    /// Copies the object if its entity tag (ETag) matches the specified tag.
+    /// <p>Copies the object if its entity tag (ETag) matches the specified tag.</p>
     pub copy_source_if_match: Option<String>,
-    /// Copies the object if it has been modified since the specified time.
+    /// <p>Copies the object if it has been modified since the specified time.</p>
     pub copy_source_if_modified_since: Option<String>,
-    /// Copies the object if its entity tag (ETag) is different than the specified ETag.
+    /// <p>Copies the object if its entity tag (ETag) is different than the specified ETag.</p>
     pub copy_source_if_none_match: Option<String>,
-    /// Copies the object if it hasn't been modified since the specified time.
+    /// <p>Copies the object if it hasn&#39;t been modified since the specified time.</p>
     pub copy_source_if_unmodified_since: Option<String>,
-    /// Specifies the algorithm to use when decrypting the source object (e.g., AES256).
+    /// <p>Specifies the algorithm to use when decrypting the source object (e.g., AES256).</p>
     pub copy_source_sse_customer_algorithm: Option<String>,
-    /// Specifies the customer-provided encryption key for Amazon S3 to use to decrypt the source object. The encryption key provided in this header must be one that was used when the source object was created.
+    /// <p>Specifies the customer-provided encryption key for Amazon S3 to use to decrypt the source object. The encryption key provided in this header must be one that was used when the source object was created.</p>
     pub copy_source_sse_customer_key: Option<String>,
-    /// Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error.
+    /// <p>Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error.</p>
     pub copy_source_sse_customer_key_md5: Option<String>,
-    /// The date and time at which the object is no longer cacheable.
+    /// <p>The date and time at which the object is no longer cacheable.</p>
     pub expires: Option<String>,
-    /// Gives the grantee READ, READ_ACP, and WRITE_ACP permissions on the object.
+    /// <p>Gives the grantee READ, READ<em>ACP, and WRITE</em>ACP permissions on the object.</p>
     pub grant_full_control: Option<String>,
-    /// Allows grantee to read the object data and its metadata.
+    /// <p>Allows grantee to read the object data and its metadata.</p>
     pub grant_read: Option<String>,
-    /// Allows grantee to read the object ACL.
+    /// <p>Allows grantee to read the object ACL.</p>
     pub grant_read_acp: Option<String>,
-    /// Allows grantee to write the ACL for the applicable object.
+    /// <p>Allows grantee to write the ACL for the applicable object.</p>
     pub grant_write_acp: Option<String>,
     pub key: String,
-    /// A map of metadata to store with the object in S3.
+    /// <p>A map of metadata to store with the object in S3.</p>
     pub metadata: Option<::std::collections::HashMap<String, String>>,
-    /// Specifies whether the metadata is copied from the source object or replaced with metadata provided in the request.
+    /// <p>Specifies whether the metadata is copied from the source object or replaced with metadata provided in the request.</p>
     pub metadata_directive: Option<String>,
     pub request_payer: Option<String>,
-    /// Specifies the algorithm to use to when encrypting the object (e.g., AES256).
+    /// <p>Specifies the algorithm to use to when encrypting the object (e.g., AES256).</p>
     pub sse_customer_algorithm: Option<String>,
-    /// Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header.
+    /// <p>Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header.</p>
     pub sse_customer_key: Option<String>,
-    /// Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error.
+    /// <p>Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error.</p>
     pub sse_customer_key_md5: Option<String>,
-    /// Specifies the AWS KMS key ID to use for object encryption. All GET and PUT requests for an object protected by AWS KMS will fail if not made via SSL or using SigV4. Documentation on configuring any of the officially supported AWS SDKs and CLI can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingAWSSDK.html#specify-signature-version
+    /// <p>Specifies the AWS KMS key ID to use for object encryption. All GET and PUT requests for an object protected by AWS KMS will fail if not made via SSL or using SigV4. Documentation on configuring any of the officially supported AWS SDKs and CLI can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingAWSSDK.html#specify-signature-version</p>
     pub ssekms_key_id: Option<String>,
-    /// The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).
+    /// <p>The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).</p>
     pub server_side_encryption: Option<String>,
-    /// The type of storage to use for the object. Defaults to 'STANDARD'.
+    /// <p>The type of storage to use for the object. Defaults to &#39;STANDARD&#39;.</p>
     pub storage_class: Option<String>,
-    /// The tag-set for the object destination object this value must be used in conjunction with the TaggingDirective. The tag-set must be encoded as URL Query parameters
+    /// <p>The tag-set for the object destination object this value must be used in conjunction with the TaggingDirective. The tag-set must be encoded as URL Query parameters</p>
     pub tagging: Option<String>,
-    /// Specifies whether the object tag-set are copied from the source object or replaced with tag-set provided in the request.
+    /// <p>Specifies whether the object tag-set are copied from the source object or replaced with tag-set provided in the request.</p>
     pub tagging_directive: Option<String>,
-    /// If the bucket is configured as a website, redirects requests for this object to another object in the same bucket or to an external URL. Amazon S3 stores the value of this header in the object metadata.
+    /// <p>If the bucket is configured as a website, redirects requests for this object to another object in the same bucket or to an external URL. Amazon S3 stores the value of this header in the object metadata.</p>
     pub website_redirect_location: Option<String>,
 }
 
@@ -2263,9 +2263,9 @@ impl CopyObjectResultDeserializer {
 }
 #[derive(Default, Debug)]
 pub struct CopyPartResult {
-    /// Entity tag of the object.
+    /// <p>Entity tag of the object.</p>
     pub e_tag: Option<String>,
-    /// Date and time at which the object was uploaded.
+    /// <p>Date and time at which the object was uploaded.</p>
     pub last_modified: Option<String>,
 }
 
@@ -2316,7 +2316,7 @@ impl CopyPartResultDeserializer {
 }
 #[derive(Default, Debug)]
 pub struct CreateBucketConfiguration {
-    /// Specifies the region where the bucket will be created. If you don't specify a region, the bucket will be created in US Standard.
+    /// <p>Specifies the region where the bucket will be created. If you don&#39;t specify a region, the bucket will be created in US Standard.</p>
     pub location_constraint: Option<String>,
 }
 
@@ -2367,42 +2367,42 @@ impl CreateBucketOutputDeserializer {
 }
 #[derive(Default, Debug)]
 pub struct CreateBucketRequest {
-    /// The canned ACL to apply to the bucket.
+    /// <p>The canned ACL to apply to the bucket.</p>
     pub acl: Option<String>,
     pub bucket: String,
     pub create_bucket_configuration: Option<CreateBucketConfiguration>,
-    /// Allows grantee the read, write, read ACP, and write ACP permissions on the bucket.
+    /// <p>Allows grantee the read, write, read ACP, and write ACP permissions on the bucket.</p>
     pub grant_full_control: Option<String>,
-    /// Allows grantee to list the objects in the bucket.
+    /// <p>Allows grantee to list the objects in the bucket.</p>
     pub grant_read: Option<String>,
-    /// Allows grantee to read the bucket ACL.
+    /// <p>Allows grantee to read the bucket ACL.</p>
     pub grant_read_acp: Option<String>,
-    /// Allows grantee to create, overwrite, and delete any object in the bucket.
+    /// <p>Allows grantee to create, overwrite, and delete any object in the bucket.</p>
     pub grant_write: Option<String>,
-    /// Allows grantee to write the ACL for the applicable bucket.
+    /// <p>Allows grantee to write the ACL for the applicable bucket.</p>
     pub grant_write_acp: Option<String>,
 }
 
 #[derive(Default, Debug)]
 pub struct CreateMultipartUploadOutput {
-    /// Date when multipart upload will become eligible for abort operation by lifecycle.
+    /// <p>Date when multipart upload will become eligible for abort operation by lifecycle.</p>
     pub abort_date: Option<String>,
-    /// Id of the lifecycle rule that makes a multipart upload eligible for abort operation.
+    /// <p>Id of the lifecycle rule that makes a multipart upload eligible for abort operation.</p>
     pub abort_rule_id: Option<String>,
-    /// Name of the bucket to which the multipart upload was initiated.
+    /// <p>Name of the bucket to which the multipart upload was initiated.</p>
     pub bucket: Option<String>,
-    /// Object key for which the multipart upload was initiated.
+    /// <p>Object key for which the multipart upload was initiated.</p>
     pub key: Option<String>,
     pub request_charged: Option<String>,
-    /// If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.
+    /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.</p>
     pub sse_customer_algorithm: Option<String>,
-    /// If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key.
+    /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key.</p>
     pub sse_customer_key_md5: Option<String>,
-    /// If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object.
+    /// <p>If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object.</p>
     pub ssekms_key_id: Option<String>,
-    /// The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).
+    /// <p>The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).</p>
     pub server_side_encryption: Option<String>,
-    /// ID for the initiated multipart upload.
+    /// <p>ID for the initiated multipart upload.</p>
     pub upload_id: Option<String>,
 }
 
@@ -2457,48 +2457,48 @@ impl CreateMultipartUploadOutputDeserializer {
 }
 #[derive(Default, Debug)]
 pub struct CreateMultipartUploadRequest {
-    /// The canned ACL to apply to the object.
+    /// <p>The canned ACL to apply to the object.</p>
     pub acl: Option<String>,
     pub bucket: String,
-    /// Specifies caching behavior along the request/reply chain.
+    /// <p>Specifies caching behavior along the request/reply chain.</p>
     pub cache_control: Option<String>,
-    /// Specifies presentational information for the object.
+    /// <p>Specifies presentational information for the object.</p>
     pub content_disposition: Option<String>,
-    /// Specifies what content encodings have been applied to the object and thus what decoding mechanisms must be applied to obtain the media-type referenced by the Content-Type header field.
+    /// <p>Specifies what content encodings have been applied to the object and thus what decoding mechanisms must be applied to obtain the media-type referenced by the Content-Type header field.</p>
     pub content_encoding: Option<String>,
-    /// The language the content is in.
+    /// <p>The language the content is in.</p>
     pub content_language: Option<String>,
-    /// A standard MIME type describing the format of the object data.
+    /// <p>A standard MIME type describing the format of the object data.</p>
     pub content_type: Option<String>,
-    /// The date and time at which the object is no longer cacheable.
+    /// <p>The date and time at which the object is no longer cacheable.</p>
     pub expires: Option<String>,
-    /// Gives the grantee READ, READ_ACP, and WRITE_ACP permissions on the object.
+    /// <p>Gives the grantee READ, READ<em>ACP, and WRITE</em>ACP permissions on the object.</p>
     pub grant_full_control: Option<String>,
-    /// Allows grantee to read the object data and its metadata.
+    /// <p>Allows grantee to read the object data and its metadata.</p>
     pub grant_read: Option<String>,
-    /// Allows grantee to read the object ACL.
+    /// <p>Allows grantee to read the object ACL.</p>
     pub grant_read_acp: Option<String>,
-    /// Allows grantee to write the ACL for the applicable object.
+    /// <p>Allows grantee to write the ACL for the applicable object.</p>
     pub grant_write_acp: Option<String>,
     pub key: String,
-    /// A map of metadata to store with the object in S3.
+    /// <p>A map of metadata to store with the object in S3.</p>
     pub metadata: Option<::std::collections::HashMap<String, String>>,
     pub request_payer: Option<String>,
-    /// Specifies the algorithm to use to when encrypting the object (e.g., AES256).
+    /// <p>Specifies the algorithm to use to when encrypting the object (e.g., AES256).</p>
     pub sse_customer_algorithm: Option<String>,
-    /// Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header.
+    /// <p>Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header.</p>
     pub sse_customer_key: Option<String>,
-    /// Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error.
+    /// <p>Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error.</p>
     pub sse_customer_key_md5: Option<String>,
-    /// Specifies the AWS KMS key ID to use for object encryption. All GET and PUT requests for an object protected by AWS KMS will fail if not made via SSL or using SigV4. Documentation on configuring any of the officially supported AWS SDKs and CLI can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingAWSSDK.html#specify-signature-version
+    /// <p>Specifies the AWS KMS key ID to use for object encryption. All GET and PUT requests for an object protected by AWS KMS will fail if not made via SSL or using SigV4. Documentation on configuring any of the officially supported AWS SDKs and CLI can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingAWSSDK.html#specify-signature-version</p>
     pub ssekms_key_id: Option<String>,
-    /// The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).
+    /// <p>The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).</p>
     pub server_side_encryption: Option<String>,
-    /// The type of storage to use for the object. Defaults to 'STANDARD'.
+    /// <p>The type of storage to use for the object. Defaults to &#39;STANDARD&#39;.</p>
     pub storage_class: Option<String>,
-    /// The tag-set for the object. The tag-set must be encoded as URL Query parameters
+    /// <p>The tag-set for the object. The tag-set must be encoded as URL Query parameters</p>
     pub tagging: Option<String>,
-    /// If the bucket is configured as a website, redirects requests for this object to another object in the same bucket or to an external URL. Amazon S3 stores the value of this header in the object metadata.
+    /// <p>If the bucket is configured as a website, redirects requests for this object to another object in the same bucket or to an external URL. Amazon S3 stores the value of this header in the object metadata.</p>
     pub website_redirect_location: Option<String>,
 }
 
@@ -2624,7 +2624,7 @@ impl DaysAfterInitiationSerializer {
 #[derive(Default, Debug)]
 pub struct Delete {
     pub objects: Vec<ObjectIdentifier>,
-    /// Element to enable quiet mode for the request. When you add this element, you must set its value to true.
+    /// <p>Element to enable quiet mode for the request. When you add this element, you must set its value to true.</p>
     pub quiet: Option<bool>,
 }
 
@@ -2655,9 +2655,9 @@ impl DeleteSerializer {
 
 #[derive(Default, Debug)]
 pub struct DeleteBucketAnalyticsConfigurationRequest {
-    /// The name of the bucket from which an analytics configuration is deleted.
+    /// <p>The name of the bucket from which an analytics configuration is deleted.</p>
     pub bucket: String,
-    /// The identifier used to represent an analytics configuration.
+    /// <p>The identifier used to represent an analytics configuration.</p>
     pub id: String,
 }
 
@@ -2668,9 +2668,9 @@ pub struct DeleteBucketCorsRequest {
 
 #[derive(Default, Debug)]
 pub struct DeleteBucketInventoryConfigurationRequest {
-    /// The name of the bucket containing the inventory configuration to delete.
+    /// <p>The name of the bucket containing the inventory configuration to delete.</p>
     pub bucket: String,
-    /// The ID used to identify the inventory configuration.
+    /// <p>The ID used to identify the inventory configuration.</p>
     pub id: String,
 }
 
@@ -2681,9 +2681,9 @@ pub struct DeleteBucketLifecycleRequest {
 
 #[derive(Default, Debug)]
 pub struct DeleteBucketMetricsConfigurationRequest {
-    /// The name of the bucket containing the metrics configuration to delete.
+    /// <p>The name of the bucket containing the metrics configuration to delete.</p>
     pub bucket: String,
-    /// The ID used to identify the metrics configuration.
+    /// <p>The ID used to identify the metrics configuration.</p>
     pub id: String,
 }
 
@@ -2728,14 +2728,14 @@ impl DeleteMarkerDeserializer {
 }
 #[derive(Default, Debug)]
 pub struct DeleteMarkerEntry {
-    /// Specifies whether the object is (true) or is not (false) the latest version of an object.
+    /// <p>Specifies whether the object is (true) or is not (false) the latest version of an object.</p>
     pub is_latest: Option<bool>,
-    /// The object key.
+    /// <p>The object key.</p>
     pub key: Option<String>,
-    /// Date and time the object was last modified.
+    /// <p>Date and time the object was last modified.</p>
     pub last_modified: Option<String>,
     pub owner: Option<Owner>,
-    /// Version ID of an object.
+    /// <p>Version ID of an object.</p>
     pub version_id: Option<String>,
 }
 
@@ -2841,10 +2841,10 @@ impl DeleteMarkersDeserializer {
 }
 #[derive(Default, Debug)]
 pub struct DeleteObjectOutput {
-    /// Specifies whether the versioned object that was permanently deleted was (true) or was not (false) a delete marker.
+    /// <p>Specifies whether the versioned object that was permanently deleted was (true) or was not (false) a delete marker.</p>
     pub delete_marker: Option<bool>,
     pub request_charged: Option<String>,
-    /// Returns the version ID of the delete marker created as a result of the DELETE operation.
+    /// <p>Returns the version ID of the delete marker created as a result of the DELETE operation.</p>
     pub version_id: Option<String>,
 }
 
@@ -2868,16 +2868,16 @@ impl DeleteObjectOutputDeserializer {
 pub struct DeleteObjectRequest {
     pub bucket: String,
     pub key: String,
-    /// The concatenation of the authentication device's serial number, a space, and the value that is displayed on your authentication device.
+    /// <p>The concatenation of the authentication device&#39;s serial number, a space, and the value that is displayed on your authentication device.</p>
     pub mfa: Option<String>,
     pub request_payer: Option<String>,
-    /// VersionId used to reference a specific version of the object.
+    /// <p>VersionId used to reference a specific version of the object.</p>
     pub version_id: Option<String>,
 }
 
 #[derive(Default, Debug)]
 pub struct DeleteObjectTaggingOutput {
-    /// The versionId of the object the tag-set was removed from.
+    /// <p>The versionId of the object the tag-set was removed from.</p>
     pub version_id: Option<String>,
 }
 
@@ -2901,7 +2901,7 @@ impl DeleteObjectTaggingOutputDeserializer {
 pub struct DeleteObjectTaggingRequest {
     pub bucket: String,
     pub key: String,
-    /// The versionId of the object that the tag-set will be removed from.
+    /// <p>The versionId of the object that the tag-set will be removed from.</p>
     pub version_id: Option<String>,
 }
 
@@ -2961,7 +2961,7 @@ impl DeleteObjectsOutputDeserializer {
 pub struct DeleteObjectsRequest {
     pub bucket: String,
     pub delete: Delete,
-    /// The concatenation of the authentication device's serial number, a space, and the value that is displayed on your authentication device.
+    /// <p>The concatenation of the authentication device&#39;s serial number, a space, and the value that is displayed on your authentication device.</p>
     pub mfa: Option<String>,
     pub request_payer: Option<String>,
 }
@@ -3097,9 +3097,9 @@ impl DelimiterSerializer {
 
 #[derive(Default, Debug)]
 pub struct Destination {
-    /// Amazon resource name (ARN) of the bucket where you want Amazon S3 to store replicas of the object identified by the rule.
+    /// <p>Amazon resource name (ARN) of the bucket where you want Amazon S3 to store replicas of the object identified by the rule.</p>
     pub bucket: String,
-    /// The class of storage used to store the object.
+    /// <p>The class of storage used to store the object.</p>
     pub storage_class: Option<String>,
 }
 
@@ -3381,7 +3381,7 @@ impl S3ErrorDeserializer {
 }
 #[derive(Default, Debug)]
 pub struct ErrorDocument {
-    /// The object key name to use when a 4XX class error occurs.
+    /// <p>The object key name to use when a 4XX class error occurs.</p>
     pub key: String,
 }
 
@@ -3720,10 +3720,10 @@ impl FetchOwnerSerializer {
     }
 }
 
-/// Container for key value pair that defines the criteria for the filter rule.
+/// <p>Container for key value pair that defines the criteria for the filter rule.</p>
 #[derive(Default, Debug)]
 pub struct FilterRule {
-    /// Object key name prefix or suffix identifying one or more objects to which the filtering rule applies. Maximum prefix length can be up to 1,024 characters. Overlapping prefixes and suffixes are not supported. For more information, go to <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Configuring Event Notifications</a> in the Amazon Simple Storage Service Developer Guide.
+    /// <p>Object key name prefix or suffix identifying one or more objects to which the filtering rule applies. Maximum prefix length can be up to 1,024 characters. Overlapping prefixes and suffixes are not supported. For more information, go to <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Configuring Event Notifications</a> in the Amazon Simple Storage Service Developer Guide.</p>
     pub name: Option<String>,
     pub value: Option<String>,
 }
@@ -3923,7 +3923,7 @@ impl FilterRuleValueSerializer {
 
 #[derive(Default, Debug)]
 pub struct GetBucketAccelerateConfigurationOutput {
-    /// The accelerate configuration of the bucket.
+    /// <p>The accelerate configuration of the bucket.</p>
     pub status: Option<String>,
 }
 
@@ -3971,13 +3971,13 @@ impl GetBucketAccelerateConfigurationOutputDeserializer {
 }
 #[derive(Default, Debug)]
 pub struct GetBucketAccelerateConfigurationRequest {
-    /// Name of the bucket for which the accelerate configuration is retrieved.
+    /// <p>Name of the bucket for which the accelerate configuration is retrieved.</p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug)]
 pub struct GetBucketAclOutput {
-    /// A list of grants.
+    /// <p>A list of grants.</p>
     pub grants: Option<Vec<Grant>>,
     pub owner: Option<Owner>,
 }
@@ -4034,7 +4034,7 @@ pub struct GetBucketAclRequest {
 
 #[derive(Default, Debug)]
 pub struct GetBucketAnalyticsConfigurationOutput {
-    /// The configuration and any analyses for the analytics filter.
+    /// <p>The configuration and any analyses for the analytics filter.</p>
     pub analytics_configuration: Option<AnalyticsConfiguration>,
 }
 
@@ -4083,9 +4083,9 @@ impl GetBucketAnalyticsConfigurationOutputDeserializer {
 }
 #[derive(Default, Debug)]
 pub struct GetBucketAnalyticsConfigurationRequest {
-    /// The name of the bucket from which an analytics configuration is retrieved.
+    /// <p>The name of the bucket from which an analytics configuration is retrieved.</p>
     pub bucket: String,
-    /// The identifier used to represent an analytics configuration.
+    /// <p>The identifier used to represent an analytics configuration.</p>
     pub id: String,
 }
 
@@ -4141,7 +4141,7 @@ pub struct GetBucketCorsRequest {
 
 #[derive(Default, Debug)]
 pub struct GetBucketInventoryConfigurationOutput {
-    /// Specifies the inventory configuration.
+    /// <p>Specifies the inventory configuration.</p>
     pub inventory_configuration: Option<InventoryConfiguration>,
 }
 
@@ -4190,9 +4190,9 @@ impl GetBucketInventoryConfigurationOutputDeserializer {
 }
 #[derive(Default, Debug)]
 pub struct GetBucketInventoryConfigurationRequest {
-    /// The name of the bucket containing the inventory configuration to retrieve.
+    /// <p>The name of the bucket containing the inventory configuration to retrieve.</p>
     pub bucket: String,
-    /// The ID used to identify the inventory configuration.
+    /// <p>The ID used to identify the inventory configuration.</p>
     pub id: String,
 }
 
@@ -4374,7 +4374,7 @@ pub struct GetBucketLoggingRequest {
 
 #[derive(Default, Debug)]
 pub struct GetBucketMetricsConfigurationOutput {
-    /// Specifies the metrics configuration.
+    /// <p>Specifies the metrics configuration.</p>
     pub metrics_configuration: Option<MetricsConfiguration>,
 }
 
@@ -4423,21 +4423,21 @@ impl GetBucketMetricsConfigurationOutputDeserializer {
 }
 #[derive(Default, Debug)]
 pub struct GetBucketMetricsConfigurationRequest {
-    /// The name of the bucket containing the metrics configuration to retrieve.
+    /// <p>The name of the bucket containing the metrics configuration to retrieve.</p>
     pub bucket: String,
-    /// The ID used to identify the metrics configuration.
+    /// <p>The ID used to identify the metrics configuration.</p>
     pub id: String,
 }
 
 #[derive(Default, Debug)]
 pub struct GetBucketNotificationConfigurationRequest {
-    /// Name of the bucket to get the notification configuration for.
+    /// <p>Name of the bucket to get the notification configuration for.</p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug)]
 pub struct GetBucketPolicyOutput {
-    /// The bucket policy as a JSON document.
+    /// <p>The bucket policy as a JSON document.</p>
     pub policy: Option<String>,
 }
 
@@ -4501,7 +4501,7 @@ pub struct GetBucketReplicationRequest {
 
 #[derive(Default, Debug)]
 pub struct GetBucketRequestPaymentOutput {
-    /// Specifies who pays for the download and request fees.
+    /// <p>Specifies who pays for the download and request fees.</p>
     pub payer: Option<String>,
 }
 
@@ -4600,9 +4600,9 @@ pub struct GetBucketTaggingRequest {
 
 #[derive(Default, Debug)]
 pub struct GetBucketVersioningOutput {
-    /// Specifies whether MFA delete is enabled in the bucket versioning configuration. This element is only returned if the bucket has been configured with MFA delete. If the bucket has never been so configured, this element is not returned.
+    /// <p>Specifies whether MFA delete is enabled in the bucket versioning configuration. This element is only returned if the bucket has been configured with MFA delete. If the bucket has never been so configured, this element is not returned.</p>
     pub mfa_delete: Option<String>,
-    /// The versioning state of the bucket.
+    /// <p>The versioning state of the bucket.</p>
     pub status: Option<String>,
 }
 
@@ -4735,7 +4735,7 @@ pub struct GetBucketWebsiteRequest {
 
 #[derive(Default, Debug)]
 pub struct GetObjectAclOutput {
-    /// A list of grants.
+    /// <p>A list of grants.</p>
     pub grants: Option<Vec<Grant>>,
     pub owner: Option<Owner>,
     pub request_charged: Option<String>,
@@ -4791,102 +4791,102 @@ pub struct GetObjectAclRequest {
     pub bucket: String,
     pub key: String,
     pub request_payer: Option<String>,
-    /// VersionId used to reference a specific version of the object.
+    /// <p>VersionId used to reference a specific version of the object.</p>
     pub version_id: Option<String>,
 }
 
 #[derive(Default, Debug)]
 pub struct GetObjectOutput {
     pub accept_ranges: Option<String>,
-    /// Object data.
+    /// <p>Object data.</p>
     pub body: Option<StreamingBody>,
-    /// Specifies caching behavior along the request/reply chain.
+    /// <p>Specifies caching behavior along the request/reply chain.</p>
     pub cache_control: Option<String>,
-    /// Specifies presentational information for the object.
+    /// <p>Specifies presentational information for the object.</p>
     pub content_disposition: Option<String>,
-    /// Specifies what content encodings have been applied to the object and thus what decoding mechanisms must be applied to obtain the media-type referenced by the Content-Type header field.
+    /// <p>Specifies what content encodings have been applied to the object and thus what decoding mechanisms must be applied to obtain the media-type referenced by the Content-Type header field.</p>
     pub content_encoding: Option<String>,
-    /// The language the content is in.
+    /// <p>The language the content is in.</p>
     pub content_language: Option<String>,
-    /// Size of the body in bytes.
+    /// <p>Size of the body in bytes.</p>
     pub content_length: Option<i64>,
-    /// The portion of the object returned in the response.
+    /// <p>The portion of the object returned in the response.</p>
     pub content_range: Option<String>,
-    /// A standard MIME type describing the format of the object data.
+    /// <p>A standard MIME type describing the format of the object data.</p>
     pub content_type: Option<String>,
-    /// Specifies whether the object retrieved was (true) or was not (false) a Delete Marker. If false, this response header does not appear in the response.
+    /// <p>Specifies whether the object retrieved was (true) or was not (false) a Delete Marker. If false, this response header does not appear in the response.</p>
     pub delete_marker: Option<bool>,
-    /// An ETag is an opaque identifier assigned by a web server to a specific version of a resource found at a URL
+    /// <p>An ETag is an opaque identifier assigned by a web server to a specific version of a resource found at a URL</p>
     pub e_tag: Option<String>,
-    /// If the object expiration is configured (see PUT Bucket lifecycle), the response includes this header. It includes the expiry-date and rule-id key value pairs providing object expiration information. The value of the rule-id is URL encoded.
+    /// <p>If the object expiration is configured (see PUT Bucket lifecycle), the response includes this header. It includes the expiry-date and rule-id key value pairs providing object expiration information. The value of the rule-id is URL encoded.</p>
     pub expiration: Option<String>,
-    /// The date and time at which the object is no longer cacheable.
+    /// <p>The date and time at which the object is no longer cacheable.</p>
     pub expires: Option<String>,
-    /// Last modified date of the object
+    /// <p>Last modified date of the object</p>
     pub last_modified: Option<String>,
-    /// A map of metadata to store with the object in S3.
+    /// <p>A map of metadata to store with the object in S3.</p>
     pub metadata: Option<::std::collections::HashMap<String, String>>,
-    /// This is set to the number of metadata entries not returned in x-amz-meta headers. This can happen if you create metadata using an API like SOAP that supports more flexible metadata than the REST API. For example, using SOAP, you can create metadata whose values are not legal HTTP headers.
+    /// <p>This is set to the number of metadata entries not returned in x-amz-meta headers. This can happen if you create metadata using an API like SOAP that supports more flexible metadata than the REST API. For example, using SOAP, you can create metadata whose values are not legal HTTP headers.</p>
     pub missing_meta: Option<i64>,
-    /// The count of parts this object has.
+    /// <p>The count of parts this object has.</p>
     pub parts_count: Option<i64>,
     pub replication_status: Option<String>,
     pub request_charged: Option<String>,
-    /// Provides information about object restoration operation and expiration time of the restored object copy.
+    /// <p>Provides information about object restoration operation and expiration time of the restored object copy.</p>
     pub restore: Option<String>,
-    /// If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.
+    /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.</p>
     pub sse_customer_algorithm: Option<String>,
-    /// If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key.
+    /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key.</p>
     pub sse_customer_key_md5: Option<String>,
-    /// If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object.
+    /// <p>If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object.</p>
     pub ssekms_key_id: Option<String>,
-    /// The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).
+    /// <p>The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).</p>
     pub server_side_encryption: Option<String>,
     pub storage_class: Option<String>,
-    /// The number of tags, if any, on the object.
+    /// <p>The number of tags, if any, on the object.</p>
     pub tag_count: Option<i64>,
-    /// Version of the object.
+    /// <p>Version of the object.</p>
     pub version_id: Option<String>,
-    /// If the bucket is configured as a website, redirects requests for this object to another object in the same bucket or to an external URL. Amazon S3 stores the value of this header in the object metadata.
+    /// <p>If the bucket is configured as a website, redirects requests for this object to another object in the same bucket or to an external URL. Amazon S3 stores the value of this header in the object metadata.</p>
     pub website_redirect_location: Option<String>,
 }
 
 #[derive(Default, Debug)]
 pub struct GetObjectRequest {
     pub bucket: String,
-    /// Return the object only if its entity tag (ETag) is the same as the one specified, otherwise return a 412 (precondition failed).
+    /// <p>Return the object only if its entity tag (ETag) is the same as the one specified, otherwise return a 412 (precondition failed).</p>
     pub if_match: Option<String>,
-    /// Return the object only if it has been modified since the specified time, otherwise return a 304 (not modified).
+    /// <p>Return the object only if it has been modified since the specified time, otherwise return a 304 (not modified).</p>
     pub if_modified_since: Option<String>,
-    /// Return the object only if its entity tag (ETag) is different from the one specified, otherwise return a 304 (not modified).
+    /// <p>Return the object only if its entity tag (ETag) is different from the one specified, otherwise return a 304 (not modified).</p>
     pub if_none_match: Option<String>,
-    /// Return the object only if it has not been modified since the specified time, otherwise return a 412 (precondition failed).
+    /// <p>Return the object only if it has not been modified since the specified time, otherwise return a 412 (precondition failed).</p>
     pub if_unmodified_since: Option<String>,
     pub key: String,
-    /// Part number of the object being read. This is a positive integer between 1 and 10,000. Effectively performs a 'ranged' GET request for the part specified. Useful for downloading just a part of an object.
+    /// <p>Part number of the object being read. This is a positive integer between 1 and 10,000. Effectively performs a &#39;ranged&#39; GET request for the part specified. Useful for downloading just a part of an object.</p>
     pub part_number: Option<i64>,
-    /// Downloads the specified range bytes of an object. For more information about the HTTP Range header, go to http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35.
+    /// <p>Downloads the specified range bytes of an object. For more information about the HTTP Range header, go to http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35.</p>
     pub range: Option<String>,
     pub request_payer: Option<String>,
-    /// Sets the Cache-Control header of the response.
+    /// <p>Sets the Cache-Control header of the response.</p>
     pub response_cache_control: Option<String>,
-    /// Sets the Content-Disposition header of the response
+    /// <p>Sets the Content-Disposition header of the response</p>
     pub response_content_disposition: Option<String>,
-    /// Sets the Content-Encoding header of the response.
+    /// <p>Sets the Content-Encoding header of the response.</p>
     pub response_content_encoding: Option<String>,
-    /// Sets the Content-Language header of the response.
+    /// <p>Sets the Content-Language header of the response.</p>
     pub response_content_language: Option<String>,
-    /// Sets the Content-Type header of the response.
+    /// <p>Sets the Content-Type header of the response.</p>
     pub response_content_type: Option<String>,
-    /// Sets the Expires header of the response.
+    /// <p>Sets the Expires header of the response.</p>
     pub response_expires: Option<String>,
-    /// Specifies the algorithm to use to when encrypting the object (e.g., AES256).
+    /// <p>Specifies the algorithm to use to when encrypting the object (e.g., AES256).</p>
     pub sse_customer_algorithm: Option<String>,
-    /// Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header.
+    /// <p>Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header.</p>
     pub sse_customer_key: Option<String>,
-    /// Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error.
+    /// <p>Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error.</p>
     pub sse_customer_key_md5: Option<String>,
-    /// VersionId used to reference a specific version of the object.
+    /// <p>VersionId used to reference a specific version of the object.</p>
     pub version_id: Option<String>,
 }
 
@@ -4957,7 +4957,7 @@ pub struct GetObjectTorrentRequest {
 
 #[derive(Default, Debug)]
 pub struct GlacierJobParameters {
-    /// Glacier retrieval tier at which the restore will be processed.
+    /// <p>Glacier retrieval tier at which the restore will be processed.</p>
     pub tier: String,
 }
 
@@ -4986,7 +4986,7 @@ impl GlacierJobParametersSerializer {
 #[derive(Default, Debug)]
 pub struct Grant {
     pub grantee: Option<Grantee>,
-    /// Specifies the permission given to the grantee.
+    /// <p>Specifies the permission given to the grantee.</p>
     pub permission: Option<String>,
 }
 
@@ -5066,15 +5066,15 @@ impl GrantSerializer {
 
 #[derive(Default, Debug)]
 pub struct Grantee {
-    /// Screen name of the grantee.
+    /// <p>Screen name of the grantee.</p>
     pub display_name: Option<String>,
-    /// Email address of the grantee.
+    /// <p>Email address of the grantee.</p>
     pub email_address: Option<String>,
-    /// The canonical user ID of the grantee.
+    /// <p>The canonical user ID of the grantee.</p>
     pub id: Option<String>,
-    /// Type of grantee
+    /// <p>Type of grantee</p>
     pub type_: String,
-    /// URI of the grantee group.
+    /// <p>URI of the grantee group.</p>
     pub uri: Option<String>,
 }
 
@@ -5259,50 +5259,50 @@ pub struct HeadBucketRequest {
 #[derive(Default, Debug)]
 pub struct HeadObjectOutput {
     pub accept_ranges: Option<String>,
-    /// Specifies caching behavior along the request/reply chain.
+    /// <p>Specifies caching behavior along the request/reply chain.</p>
     pub cache_control: Option<String>,
-    /// Specifies presentational information for the object.
+    /// <p>Specifies presentational information for the object.</p>
     pub content_disposition: Option<String>,
-    /// Specifies what content encodings have been applied to the object and thus what decoding mechanisms must be applied to obtain the media-type referenced by the Content-Type header field.
+    /// <p>Specifies what content encodings have been applied to the object and thus what decoding mechanisms must be applied to obtain the media-type referenced by the Content-Type header field.</p>
     pub content_encoding: Option<String>,
-    /// The language the content is in.
+    /// <p>The language the content is in.</p>
     pub content_language: Option<String>,
-    /// Size of the body in bytes.
+    /// <p>Size of the body in bytes.</p>
     pub content_length: Option<i64>,
-    /// A standard MIME type describing the format of the object data.
+    /// <p>A standard MIME type describing the format of the object data.</p>
     pub content_type: Option<String>,
-    /// Specifies whether the object retrieved was (true) or was not (false) a Delete Marker. If false, this response header does not appear in the response.
+    /// <p>Specifies whether the object retrieved was (true) or was not (false) a Delete Marker. If false, this response header does not appear in the response.</p>
     pub delete_marker: Option<bool>,
-    /// An ETag is an opaque identifier assigned by a web server to a specific version of a resource found at a URL
+    /// <p>An ETag is an opaque identifier assigned by a web server to a specific version of a resource found at a URL</p>
     pub e_tag: Option<String>,
-    /// If the object expiration is configured (see PUT Bucket lifecycle), the response includes this header. It includes the expiry-date and rule-id key value pairs providing object expiration information. The value of the rule-id is URL encoded.
+    /// <p>If the object expiration is configured (see PUT Bucket lifecycle), the response includes this header. It includes the expiry-date and rule-id key value pairs providing object expiration information. The value of the rule-id is URL encoded.</p>
     pub expiration: Option<String>,
-    /// The date and time at which the object is no longer cacheable.
+    /// <p>The date and time at which the object is no longer cacheable.</p>
     pub expires: Option<String>,
-    /// Last modified date of the object
+    /// <p>Last modified date of the object</p>
     pub last_modified: Option<String>,
-    /// A map of metadata to store with the object in S3.
+    /// <p>A map of metadata to store with the object in S3.</p>
     pub metadata: Option<::std::collections::HashMap<String, String>>,
-    /// This is set to the number of metadata entries not returned in x-amz-meta headers. This can happen if you create metadata using an API like SOAP that supports more flexible metadata than the REST API. For example, using SOAP, you can create metadata whose values are not legal HTTP headers.
+    /// <p>This is set to the number of metadata entries not returned in x-amz-meta headers. This can happen if you create metadata using an API like SOAP that supports more flexible metadata than the REST API. For example, using SOAP, you can create metadata whose values are not legal HTTP headers.</p>
     pub missing_meta: Option<i64>,
-    /// The count of parts this object has.
+    /// <p>The count of parts this object has.</p>
     pub parts_count: Option<i64>,
     pub replication_status: Option<String>,
     pub request_charged: Option<String>,
-    /// Provides information about object restoration operation and expiration time of the restored object copy.
+    /// <p>Provides information about object restoration operation and expiration time of the restored object copy.</p>
     pub restore: Option<String>,
-    /// If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.
+    /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.</p>
     pub sse_customer_algorithm: Option<String>,
-    /// If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key.
+    /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key.</p>
     pub sse_customer_key_md5: Option<String>,
-    /// If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object.
+    /// <p>If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object.</p>
     pub ssekms_key_id: Option<String>,
-    /// The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).
+    /// <p>The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).</p>
     pub server_side_encryption: Option<String>,
     pub storage_class: Option<String>,
-    /// Version of the object.
+    /// <p>Version of the object.</p>
     pub version_id: Option<String>,
-    /// If the bucket is configured as a website, redirects requests for this object to another object in the same bucket or to an external URL. Amazon S3 stores the value of this header in the object metadata.
+    /// <p>If the bucket is configured as a website, redirects requests for this object to another object in the same bucket or to an external URL. Amazon S3 stores the value of this header in the object metadata.</p>
     pub website_redirect_location: Option<String>,
 }
 
@@ -5325,27 +5325,27 @@ impl HeadObjectOutputDeserializer {
 #[derive(Default, Debug)]
 pub struct HeadObjectRequest {
     pub bucket: String,
-    /// Return the object only if its entity tag (ETag) is the same as the one specified, otherwise return a 412 (precondition failed).
+    /// <p>Return the object only if its entity tag (ETag) is the same as the one specified, otherwise return a 412 (precondition failed).</p>
     pub if_match: Option<String>,
-    /// Return the object only if it has been modified since the specified time, otherwise return a 304 (not modified).
+    /// <p>Return the object only if it has been modified since the specified time, otherwise return a 304 (not modified).</p>
     pub if_modified_since: Option<String>,
-    /// Return the object only if its entity tag (ETag) is different from the one specified, otherwise return a 304 (not modified).
+    /// <p>Return the object only if its entity tag (ETag) is different from the one specified, otherwise return a 304 (not modified).</p>
     pub if_none_match: Option<String>,
-    /// Return the object only if it has not been modified since the specified time, otherwise return a 412 (precondition failed).
+    /// <p>Return the object only if it has not been modified since the specified time, otherwise return a 412 (precondition failed).</p>
     pub if_unmodified_since: Option<String>,
     pub key: String,
-    /// Part number of the object being read. This is a positive integer between 1 and 10,000. Effectively performs a 'ranged' HEAD request for the part specified. Useful querying about the size of the part and the number of parts in this object.
+    /// <p>Part number of the object being read. This is a positive integer between 1 and 10,000. Effectively performs a &#39;ranged&#39; HEAD request for the part specified. Useful querying about the size of the part and the number of parts in this object.</p>
     pub part_number: Option<i64>,
-    /// Downloads the specified range bytes of an object. For more information about the HTTP Range header, go to http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35.
+    /// <p>Downloads the specified range bytes of an object. For more information about the HTTP Range header, go to http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35.</p>
     pub range: Option<String>,
     pub request_payer: Option<String>,
-    /// Specifies the algorithm to use to when encrypting the object (e.g., AES256).
+    /// <p>Specifies the algorithm to use to when encrypting the object (e.g., AES256).</p>
     pub sse_customer_algorithm: Option<String>,
-    /// Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header.
+    /// <p>Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header.</p>
     pub sse_customer_key: Option<String>,
-    /// Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error.
+    /// <p>Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error.</p>
     pub sse_customer_key_md5: Option<String>,
-    /// VersionId used to reference a specific version of the object.
+    /// <p>VersionId used to reference a specific version of the object.</p>
     pub version_id: Option<String>,
 }
 
@@ -5491,7 +5491,7 @@ impl IDSerializer {
 
 #[derive(Default, Debug)]
 pub struct IndexDocument {
-    /// A suffix that is appended to a request that is for a directory on the website endpoint (e.g. if the suffix is index.html and you make a request to samplebucket/images/ the data that is returned will be for the object with the key name images/index.html) The suffix must not be empty and must not include a slash character.
+    /// <p>A suffix that is appended to a request that is for a directory on the website endpoint (e.g. if the suffix is index.html and you make a request to samplebucket/images/ the data that is returned will be for the object with the key name images/index.html) The suffix must not be empty and must not include a slash character.</p>
     pub suffix: String,
 }
 
@@ -5573,9 +5573,9 @@ impl InitiatedDeserializer {
 }
 #[derive(Default, Debug)]
 pub struct Initiator {
-    /// Name of the Principal.
+    /// <p>Name of the Principal.</p>
     pub display_name: Option<String>,
-    /// If the principal is an AWS account, it provides the Canonical User ID. If the principal is an IAM User, it provides a user ARN value.
+    /// <p>If the principal is an AWS account, it provides the Canonical User ID. If the principal is an IAM User, it provides a user ARN value.</p>
     pub id: Option<String>,
 }
 
@@ -5626,19 +5626,19 @@ impl InitiatorDeserializer {
 }
 #[derive(Default, Debug)]
 pub struct InventoryConfiguration {
-    /// Contains information about where to publish the inventory results.
+    /// <p>Contains information about where to publish the inventory results.</p>
     pub destination: InventoryDestination,
-    /// Specifies an inventory filter. The inventory only includes objects that meet the filter's criteria.
+    /// <p>Specifies an inventory filter. The inventory only includes objects that meet the filter&#39;s criteria.</p>
     pub filter: Option<InventoryFilter>,
-    /// The ID used to identify the inventory configuration.
+    /// <p>The ID used to identify the inventory configuration.</p>
     pub id: String,
-    /// Specifies which object version(s) to included in the inventory results.
+    /// <p>Specifies which object version(s) to included in the inventory results.</p>
     pub included_object_versions: String,
-    /// Specifies whether the inventory is enabled or disabled.
+    /// <p>Specifies whether the inventory is enabled or disabled.</p>
     pub is_enabled: bool,
-    /// Contains the optional fields that are included in the inventory results.
+    /// <p>Contains the optional fields that are included in the inventory results.</p>
     pub optional_fields: Option<Vec<String>>,
-    /// Specifies the schedule for generating inventory results.
+    /// <p>Specifies the schedule for generating inventory results.</p>
     pub schedule: InventorySchedule,
 }
 
@@ -5792,7 +5792,7 @@ impl InventoryConfigurationListDeserializer {
 }
 #[derive(Default, Debug)]
 pub struct InventoryDestination {
-    /// Contains the bucket name, file format, bucket owner (optional), and prefix (optional) where inventory results are published.
+    /// <p>Contains the bucket name, file format, bucket owner (optional), and prefix (optional) where inventory results are published.</p>
     pub s3_bucket_destination: InventoryS3BucketDestination,
 }
 
@@ -5863,7 +5863,7 @@ impl InventoryDestinationSerializer {
 
 #[derive(Default, Debug)]
 pub struct InventoryFilter {
-    /// The prefix that an object must have to be included in the inventory results.
+    /// <p>The prefix that an object must have to be included in the inventory results.</p>
     pub prefix: String,
 }
 
@@ -6170,13 +6170,13 @@ impl InventoryOptionalFieldsSerializer {
 
 #[derive(Default, Debug)]
 pub struct InventoryS3BucketDestination {
-    /// The ID of the account that owns the destination bucket.
+    /// <p>The ID of the account that owns the destination bucket.</p>
     pub account_id: Option<String>,
-    /// The Amazon resource name (ARN) of the bucket where inventory results will be published.
+    /// <p>The Amazon resource name (ARN) of the bucket where inventory results will be published.</p>
     pub bucket: String,
-    /// Specifies the output format of the inventory results.
+    /// <p>Specifies the output format of the inventory results.</p>
     pub format: String,
-    /// The prefix that is prepended to all inventory results.
+    /// <p>The prefix that is prepended to all inventory results.</p>
     pub prefix: Option<String>,
 }
 
@@ -6277,7 +6277,7 @@ impl InventoryS3BucketDestinationSerializer {
 
 #[derive(Default, Debug)]
 pub struct InventorySchedule {
-    /// Specifies how frequently inventory results are produced.
+    /// <p>Specifies how frequently inventory results are produced.</p>
     pub frequency: String,
 }
 
@@ -6528,13 +6528,13 @@ impl LambdaFunctionArnSerializer {
     }
 }
 
-/// Container for specifying the AWS Lambda notification configuration.
+/// <p>Container for specifying the AWS Lambda notification configuration.</p>
 #[derive(Default, Debug)]
 pub struct LambdaFunctionConfiguration {
     pub events: Vec<String>,
     pub filter: Option<NotificationConfigurationFilter>,
     pub id: Option<String>,
-    /// Lambda cloud function ARN that Amazon S3 can invoke when it detects events of the specified type.
+    /// <p>Lambda cloud function ARN that Amazon S3 can invoke when it detects events of the specified type.</p>
     pub lambda_function_arn: String,
 }
 
@@ -6713,11 +6713,11 @@ impl LifecycleConfigurationSerializer {
 
 #[derive(Default, Debug)]
 pub struct LifecycleExpiration {
-    /// Indicates at what date the object is to be moved or deleted. Should be in GMT ISO 8601 Format.
+    /// <p>Indicates at what date the object is to be moved or deleted. Should be in GMT ISO 8601 Format.</p>
     pub date: Option<String>,
-    /// Indicates the lifetime, in days, of the objects that are subject to the rule. The value must be a non-zero positive integer.
+    /// <p>Indicates the lifetime, in days, of the objects that are subject to the rule. The value must be a non-zero positive integer.</p>
     pub days: Option<i64>,
-    /// Indicates whether Amazon S3 will remove a delete marker with no noncurrent versions. If set to true, the delete marker will be expired; if set to false the policy takes no action. This cannot be specified with Days or Date in a Lifecycle Expiration Policy.
+    /// <p>Indicates whether Amazon S3 will remove a delete marker with no noncurrent versions. If set to true, the delete marker will be expired; if set to false the policy takes no action. This cannot be specified with Days or Date in a Lifecycle Expiration Policy.</p>
     pub expired_object_delete_marker: Option<bool>,
 }
 
@@ -6818,11 +6818,11 @@ pub struct LifecycleRule {
     pub abort_incomplete_multipart_upload: Option<AbortIncompleteMultipartUpload>,
     pub expiration: Option<LifecycleExpiration>,
     pub filter: Option<LifecycleRuleFilter>,
-    /// Unique identifier for the rule. The value cannot be longer than 255 characters.
+    /// <p>Unique identifier for the rule. The value cannot be longer than 255 characters.</p>
     pub id: Option<String>,
     pub noncurrent_version_expiration: Option<NoncurrentVersionExpiration>,
     pub noncurrent_version_transitions: Option<Vec<NoncurrentVersionTransition>>,
-    /// If 'Enabled', the rule is currently being applied. If 'Disabled', the rule is not currently being applied.
+    /// <p>If &#39;Enabled&#39;, the rule is currently being applied. If &#39;Disabled&#39;, the rule is not currently being applied.</p>
     pub status: String,
     pub transitions: Option<Vec<Transition>>,
 }
@@ -6972,11 +6972,11 @@ impl LifecycleRuleSerializer {
     }
 }
 
-/// This is used in a Lifecycle Rule Filter to apply a logical AND to two or more predicates. The Lifecycle Rule will apply to any object matching all of the predicates configured inside the And operator.
+/// <p>This is used in a Lifecycle Rule Filter to apply a logical AND to two or more predicates. The Lifecycle Rule will apply to any object matching all of the predicates configured inside the And operator.</p>
 #[derive(Default, Debug)]
 pub struct LifecycleRuleAndOperator {
     pub prefix: Option<String>,
-    /// All of these tags must exist in the object's tag set in order for the rule to apply.
+    /// <p>All of these tags must exist in the object&#39;s tag set in order for the rule to apply.</p>
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -7050,13 +7050,13 @@ impl LifecycleRuleAndOperatorSerializer {
     }
 }
 
-/// The Filter is used to identify objects that a Lifecycle Rule applies to. A Filter must have exactly one of Prefix, Tag, or And specified.
+/// <p>The Filter is used to identify objects that a Lifecycle Rule applies to. A Filter must have exactly one of Prefix, Tag, or And specified.</p>
 #[derive(Default, Debug)]
 pub struct LifecycleRuleFilter {
     pub and: Option<LifecycleRuleAndOperator>,
-    /// Prefix identifying one or more objects to which the rule applies.
+    /// <p>Prefix identifying one or more objects to which the rule applies.</p>
     pub prefix: Option<String>,
-    /// This tag must exist in the object's tag set in order for the rule to apply.
+    /// <p>This tag must exist in the object&#39;s tag set in order for the rule to apply.</p>
     pub tag: Option<Tag>,
 }
 
@@ -7188,13 +7188,13 @@ impl LifecycleRulesSerializer {
 
 #[derive(Default, Debug)]
 pub struct ListBucketAnalyticsConfigurationsOutput {
-    /// The list of analytics configurations for a bucket.
+    /// <p>The list of analytics configurations for a bucket.</p>
     pub analytics_configuration_list: Option<Vec<AnalyticsConfiguration>>,
-    /// The ContinuationToken that represents where this request began.
+    /// <p>The ContinuationToken that represents where this request began.</p>
     pub continuation_token: Option<String>,
-    /// Indicates whether the returned list of analytics configurations is complete. A value of true indicates that the list is not complete and the NextContinuationToken will be provided for a subsequent request.
+    /// <p>Indicates whether the returned list of analytics configurations is complete. A value of true indicates that the list is not complete and the NextContinuationToken will be provided for a subsequent request.</p>
     pub is_truncated: Option<bool>,
-    /// NextContinuationToken is sent when isTruncated is true, which indicates that there are more analytics configurations to list. The next request must include this NextContinuationToken. The token is obfuscated and is not a usable value.
+    /// <p>NextContinuationToken is sent when isTruncated is true, which indicates that there are more analytics configurations to list. The next request must include this NextContinuationToken. The token is obfuscated and is not a usable value.</p>
     pub next_continuation_token: Option<String>,
 }
 
@@ -7260,21 +7260,21 @@ impl ListBucketAnalyticsConfigurationsOutputDeserializer {
 }
 #[derive(Default, Debug)]
 pub struct ListBucketAnalyticsConfigurationsRequest {
-    /// The name of the bucket from which analytics configurations are retrieved.
+    /// <p>The name of the bucket from which analytics configurations are retrieved.</p>
     pub bucket: String,
-    /// The ContinuationToken that represents a placeholder from where this request should begin.
+    /// <p>The ContinuationToken that represents a placeholder from where this request should begin.</p>
     pub continuation_token: Option<String>,
 }
 
 #[derive(Default, Debug)]
 pub struct ListBucketInventoryConfigurationsOutput {
-    /// If sent in the request, the marker that is used as a starting point for this inventory configuration list response.
+    /// <p>If sent in the request, the marker that is used as a starting point for this inventory configuration list response.</p>
     pub continuation_token: Option<String>,
-    /// The list of inventory configurations for a bucket.
+    /// <p>The list of inventory configurations for a bucket.</p>
     pub inventory_configuration_list: Option<Vec<InventoryConfiguration>>,
-    /// Indicates whether the returned list of inventory configurations is truncated in this response. A value of true indicates that the list is truncated.
+    /// <p>Indicates whether the returned list of inventory configurations is truncated in this response. A value of true indicates that the list is truncated.</p>
     pub is_truncated: Option<bool>,
-    /// The marker used to continue this inventory configuration listing. Use the NextContinuationToken from this response to continue the listing in a subsequent request. The continuation token is an opaque value that Amazon S3 understands.
+    /// <p>The marker used to continue this inventory configuration listing. Use the NextContinuationToken from this response to continue the listing in a subsequent request. The continuation token is an opaque value that Amazon S3 understands.</p>
     pub next_continuation_token: Option<String>,
 }
 
@@ -7340,21 +7340,21 @@ impl ListBucketInventoryConfigurationsOutputDeserializer {
 }
 #[derive(Default, Debug)]
 pub struct ListBucketInventoryConfigurationsRequest {
-    /// The name of the bucket containing the inventory configurations to retrieve.
+    /// <p>The name of the bucket containing the inventory configurations to retrieve.</p>
     pub bucket: String,
-    /// The marker used to continue an inventory configuration listing that has been truncated. Use the NextContinuationToken from a previously truncated list response to continue the listing. The continuation token is an opaque value that Amazon S3 understands.
+    /// <p>The marker used to continue an inventory configuration listing that has been truncated. Use the NextContinuationToken from a previously truncated list response to continue the listing. The continuation token is an opaque value that Amazon S3 understands.</p>
     pub continuation_token: Option<String>,
 }
 
 #[derive(Default, Debug)]
 pub struct ListBucketMetricsConfigurationsOutput {
-    /// The marker that is used as a starting point for this metrics configuration list response. This value is present if it was sent in the request.
+    /// <p>The marker that is used as a starting point for this metrics configuration list response. This value is present if it was sent in the request.</p>
     pub continuation_token: Option<String>,
-    /// Indicates whether the returned list of metrics configurations is complete. A value of true indicates that the list is not complete and the NextContinuationToken will be provided for a subsequent request.
+    /// <p>Indicates whether the returned list of metrics configurations is complete. A value of true indicates that the list is not complete and the NextContinuationToken will be provided for a subsequent request.</p>
     pub is_truncated: Option<bool>,
-    /// The list of metrics configurations for a bucket.
+    /// <p>The list of metrics configurations for a bucket.</p>
     pub metrics_configuration_list: Option<Vec<MetricsConfiguration>>,
-    /// The marker used to continue a metrics configuration listing that has been truncated. Use the NextContinuationToken from a previously truncated list response to continue the listing. The continuation token is an opaque value that Amazon S3 understands.
+    /// <p>The marker used to continue a metrics configuration listing that has been truncated. Use the NextContinuationToken from a previously truncated list response to continue the listing. The continuation token is an opaque value that Amazon S3 understands.</p>
     pub next_continuation_token: Option<String>,
 }
 
@@ -7420,9 +7420,9 @@ impl ListBucketMetricsConfigurationsOutputDeserializer {
 }
 #[derive(Default, Debug)]
 pub struct ListBucketMetricsConfigurationsRequest {
-    /// The name of the bucket containing the metrics configurations to retrieve.
+    /// <p>The name of the bucket containing the metrics configurations to retrieve.</p>
     pub bucket: String,
-    /// The marker that is used to continue a metrics configuration listing that has been truncated. Use the NextContinuationToken from a previously truncated list response to continue the listing. The continuation token is an opaque value that Amazon S3 understands.
+    /// <p>The marker that is used to continue a metrics configuration listing that has been truncated. Use the NextContinuationToken from a previously truncated list response to continue the listing. The continuation token is an opaque value that Amazon S3 understands.</p>
     pub continuation_token: Option<String>,
 }
 
@@ -7477,25 +7477,25 @@ impl ListBucketsOutputDeserializer {
 }
 #[derive(Default, Debug)]
 pub struct ListMultipartUploadsOutput {
-    /// Name of the bucket to which the multipart upload was initiated.
+    /// <p>Name of the bucket to which the multipart upload was initiated.</p>
     pub bucket: Option<String>,
     pub common_prefixes: Option<Vec<CommonPrefix>>,
     pub delimiter: Option<String>,
-    /// Encoding type used by Amazon S3 to encode object keys in the response.
+    /// <p>Encoding type used by Amazon S3 to encode object keys in the response.</p>
     pub encoding_type: Option<String>,
-    /// Indicates whether the returned list of multipart uploads is truncated. A value of true indicates that the list was truncated. The list can be truncated if the number of multipart uploads exceeds the limit allowed or specified by max uploads.
+    /// <p>Indicates whether the returned list of multipart uploads is truncated. A value of true indicates that the list was truncated. The list can be truncated if the number of multipart uploads exceeds the limit allowed or specified by max uploads.</p>
     pub is_truncated: Option<bool>,
-    /// The key at or after which the listing began.
+    /// <p>The key at or after which the listing began.</p>
     pub key_marker: Option<String>,
-    /// Maximum number of multipart uploads that could have been included in the response.
+    /// <p>Maximum number of multipart uploads that could have been included in the response.</p>
     pub max_uploads: Option<i64>,
-    /// When a list is truncated, this element specifies the value that should be used for the key-marker request parameter in a subsequent request.
+    /// <p>When a list is truncated, this element specifies the value that should be used for the key-marker request parameter in a subsequent request.</p>
     pub next_key_marker: Option<String>,
-    /// When a list is truncated, this element specifies the value that should be used for the upload-id-marker request parameter in a subsequent request.
+    /// <p>When a list is truncated, this element specifies the value that should be used for the upload-id-marker request parameter in a subsequent request.</p>
     pub next_upload_id_marker: Option<String>,
-    /// When a prefix is provided in the request, this field contains the specified prefix. The result contains only keys starting with the specified prefix.
+    /// <p>When a prefix is provided in the request, this field contains the specified prefix. The result contains only keys starting with the specified prefix.</p>
     pub prefix: Option<String>,
-    /// Upload ID after which listing began.
+    /// <p>Upload ID after which listing began.</p>
     pub upload_id_marker: Option<String>,
     pub uploads: Option<Vec<MultipartUpload>>,
 }
@@ -7601,16 +7601,16 @@ impl ListMultipartUploadsOutputDeserializer {
 #[derive(Default, Debug)]
 pub struct ListMultipartUploadsRequest {
     pub bucket: String,
-    /// Character you use to group keys.
+    /// <p>Character you use to group keys.</p>
     pub delimiter: Option<String>,
     pub encoding_type: Option<String>,
-    /// Together with upload-id-marker, this parameter specifies the multipart upload after which listing should begin.
+    /// <p>Together with upload-id-marker, this parameter specifies the multipart upload after which listing should begin.</p>
     pub key_marker: Option<String>,
-    /// Sets the maximum number of multipart uploads, from 1 to 1,000, to return in the response body. 1,000 is the maximum number of uploads that can be returned in a response.
+    /// <p>Sets the maximum number of multipart uploads, from 1 to 1,000, to return in the response body. 1,000 is the maximum number of uploads that can be returned in a response.</p>
     pub max_uploads: Option<i64>,
-    /// Lists in-progress uploads only for those keys that begin with the specified prefix.
+    /// <p>Lists in-progress uploads only for those keys that begin with the specified prefix.</p>
     pub prefix: Option<String>,
-    /// Together with key-marker, specifies the multipart upload after which listing should begin. If key-marker is not specified, the upload-id-marker parameter is ignored.
+    /// <p>Together with key-marker, specifies the multipart upload after which listing should begin. If key-marker is not specified, the upload-id-marker parameter is ignored.</p>
     pub upload_id_marker: Option<String>,
 }
 
@@ -7619,17 +7619,17 @@ pub struct ListObjectVersionsOutput {
     pub common_prefixes: Option<Vec<CommonPrefix>>,
     pub delete_markers: Option<Vec<DeleteMarkerEntry>>,
     pub delimiter: Option<String>,
-    /// Encoding type used by Amazon S3 to encode object keys in the response.
+    /// <p>Encoding type used by Amazon S3 to encode object keys in the response.</p>
     pub encoding_type: Option<String>,
-    /// A flag that indicates whether or not Amazon S3 returned all of the results that satisfied the search criteria. If your results were truncated, you can make a follow-up paginated request using the NextKeyMarker and NextVersionIdMarker response parameters as a starting place in another request to return the rest of the results.
+    /// <p>A flag that indicates whether or not Amazon S3 returned all of the results that satisfied the search criteria. If your results were truncated, you can make a follow-up paginated request using the NextKeyMarker and NextVersionIdMarker response parameters as a starting place in another request to return the rest of the results.</p>
     pub is_truncated: Option<bool>,
-    /// Marks the last Key returned in a truncated response.
+    /// <p>Marks the last Key returned in a truncated response.</p>
     pub key_marker: Option<String>,
     pub max_keys: Option<i64>,
     pub name: Option<String>,
-    /// Use this value for the key marker request parameter in a subsequent request.
+    /// <p>Use this value for the key marker request parameter in a subsequent request.</p>
     pub next_key_marker: Option<String>,
-    /// Use this value for the next version id marker parameter in a subsequent request.
+    /// <p>Use this value for the next version id marker parameter in a subsequent request.</p>
     pub next_version_id_marker: Option<String>,
     pub prefix: Option<String>,
     pub version_id_marker: Option<String>,
@@ -7740,16 +7740,16 @@ impl ListObjectVersionsOutputDeserializer {
 #[derive(Default, Debug)]
 pub struct ListObjectVersionsRequest {
     pub bucket: String,
-    /// A delimiter is a character you use to group keys.
+    /// <p>A delimiter is a character you use to group keys.</p>
     pub delimiter: Option<String>,
     pub encoding_type: Option<String>,
-    /// Specifies the key to start with when listing objects in a bucket.
+    /// <p>Specifies the key to start with when listing objects in a bucket.</p>
     pub key_marker: Option<String>,
-    /// Sets the maximum number of keys returned in the response. The response might contain fewer keys but will never contain more.
+    /// <p>Sets the maximum number of keys returned in the response. The response might contain fewer keys but will never contain more.</p>
     pub max_keys: Option<i64>,
-    /// Limits the response to keys that begin with the specified prefix.
+    /// <p>Limits the response to keys that begin with the specified prefix.</p>
     pub prefix: Option<String>,
-    /// Specifies the object version you want to start listing from.
+    /// <p>Specifies the object version you want to start listing from.</p>
     pub version_id_marker: Option<String>,
 }
 
@@ -7758,14 +7758,14 @@ pub struct ListObjectsOutput {
     pub common_prefixes: Option<Vec<CommonPrefix>>,
     pub contents: Option<Vec<Object>>,
     pub delimiter: Option<String>,
-    /// Encoding type used by Amazon S3 to encode object keys in the response.
+    /// <p>Encoding type used by Amazon S3 to encode object keys in the response.</p>
     pub encoding_type: Option<String>,
-    /// A flag that indicates whether or not Amazon S3 returned all of the results that satisfied the search criteria.
+    /// <p>A flag that indicates whether or not Amazon S3 returned all of the results that satisfied the search criteria.</p>
     pub is_truncated: Option<bool>,
     pub marker: Option<String>,
     pub max_keys: Option<i64>,
     pub name: Option<String>,
-    /// When response is truncated (the IsTruncated element value in the response is true), you can use the key name in this field as marker in the subsequent request to get next set of objects. Amazon S3 lists objects in alphabetical order Note: This element is returned only if you have delimiter request parameter specified. If response does not include the NextMaker and it is truncated, you can use the value of the last Key in the response as the marker in the subsequent request to get the next set of object keys.
+    /// <p>When response is truncated (the IsTruncated element value in the response is true), you can use the key name in this field as marker in the subsequent request to get next set of objects. Amazon S3 lists objects in alphabetical order Note: This element is returned only if you have delimiter request parameter specified. If response does not include the NextMaker and it is truncated, you can use the value of the last Key in the response as the marker in the subsequent request to get the next set of object keys.</p>
     pub next_marker: Option<String>,
     pub prefix: Option<String>,
 }
@@ -7853,44 +7853,44 @@ impl ListObjectsOutputDeserializer {
 #[derive(Default, Debug)]
 pub struct ListObjectsRequest {
     pub bucket: String,
-    /// A delimiter is a character you use to group keys.
+    /// <p>A delimiter is a character you use to group keys.</p>
     pub delimiter: Option<String>,
     pub encoding_type: Option<String>,
-    /// Specifies the key to start with when listing objects in a bucket.
+    /// <p>Specifies the key to start with when listing objects in a bucket.</p>
     pub marker: Option<String>,
-    /// Sets the maximum number of keys returned in the response. The response might contain fewer keys but will never contain more.
+    /// <p>Sets the maximum number of keys returned in the response. The response might contain fewer keys but will never contain more.</p>
     pub max_keys: Option<i64>,
-    /// Limits the response to keys that begin with the specified prefix.
+    /// <p>Limits the response to keys that begin with the specified prefix.</p>
     pub prefix: Option<String>,
-    /// Confirms that the requester knows that she or he will be charged for the list objects request. Bucket owners need not specify this parameter in their requests.
+    /// <p>Confirms that the requester knows that she or he will be charged for the list objects request. Bucket owners need not specify this parameter in their requests.</p>
     pub request_payer: Option<String>,
 }
 
 #[derive(Default, Debug)]
 pub struct ListObjectsV2Output {
-    /// CommonPrefixes contains all (if there are any) keys between Prefix and the next occurrence of the string specified by delimiter
+    /// <p>CommonPrefixes contains all (if there are any) keys between Prefix and the next occurrence of the string specified by delimiter</p>
     pub common_prefixes: Option<Vec<CommonPrefix>>,
-    /// Metadata about each object returned.
+    /// <p>Metadata about each object returned.</p>
     pub contents: Option<Vec<Object>>,
-    /// ContinuationToken indicates Amazon S3 that the list is being continued on this bucket with a token. ContinuationToken is obfuscated and is not a real key
+    /// <p>ContinuationToken indicates Amazon S3 that the list is being continued on this bucket with a token. ContinuationToken is obfuscated and is not a real key</p>
     pub continuation_token: Option<String>,
-    /// A delimiter is a character you use to group keys.
+    /// <p>A delimiter is a character you use to group keys.</p>
     pub delimiter: Option<String>,
-    /// Encoding type used by Amazon S3 to encode object keys in the response.
+    /// <p>Encoding type used by Amazon S3 to encode object keys in the response.</p>
     pub encoding_type: Option<String>,
-    /// A flag that indicates whether or not Amazon S3 returned all of the results that satisfied the search criteria.
+    /// <p>A flag that indicates whether or not Amazon S3 returned all of the results that satisfied the search criteria.</p>
     pub is_truncated: Option<bool>,
-    /// KeyCount is the number of keys returned with this request. KeyCount will always be less than equals to MaxKeys field. Say you ask for 50 keys, your result will include less than equals 50 keys
+    /// <p>KeyCount is the number of keys returned with this request. KeyCount will always be less than equals to MaxKeys field. Say you ask for 50 keys, your result will include less than equals 50 keys</p>
     pub key_count: Option<i64>,
-    /// Sets the maximum number of keys returned in the response. The response might contain fewer keys but will never contain more.
+    /// <p>Sets the maximum number of keys returned in the response. The response might contain fewer keys but will never contain more.</p>
     pub max_keys: Option<i64>,
-    /// Name of the bucket to list.
+    /// <p>Name of the bucket to list.</p>
     pub name: Option<String>,
-    /// NextContinuationToken is sent when isTruncated is true which means there are more keys in the bucket that can be listed. The next list requests to Amazon S3 can be continued with this NextContinuationToken. NextContinuationToken is obfuscated and is not a real key
+    /// <p>NextContinuationToken is sent when isTruncated is true which means there are more keys in the bucket that can be listed. The next list requests to Amazon S3 can be continued with this NextContinuationToken. NextContinuationToken is obfuscated and is not a real key</p>
     pub next_continuation_token: Option<String>,
-    /// Limits the response to keys that begin with the specified prefix.
+    /// <p>Limits the response to keys that begin with the specified prefix.</p>
     pub prefix: Option<String>,
-    /// StartAfter is where you want Amazon S3 to start listing from. Amazon S3 starts listing after this specified key. StartAfter can be any key in the bucket
+    /// <p>StartAfter is where you want Amazon S3 to start listing from. Amazon S3 starts listing after this specified key. StartAfter can be any key in the bucket</p>
     pub start_after: Option<String>,
 }
 
@@ -7988,52 +7988,52 @@ impl ListObjectsV2OutputDeserializer {
 }
 #[derive(Default, Debug)]
 pub struct ListObjectsV2Request {
-    /// Name of the bucket to list.
+    /// <p>Name of the bucket to list.</p>
     pub bucket: String,
-    /// ContinuationToken indicates Amazon S3 that the list is being continued on this bucket with a token. ContinuationToken is obfuscated and is not a real key
+    /// <p>ContinuationToken indicates Amazon S3 that the list is being continued on this bucket with a token. ContinuationToken is obfuscated and is not a real key</p>
     pub continuation_token: Option<String>,
-    /// A delimiter is a character you use to group keys.
+    /// <p>A delimiter is a character you use to group keys.</p>
     pub delimiter: Option<String>,
-    /// Encoding type used by Amazon S3 to encode object keys in the response.
+    /// <p>Encoding type used by Amazon S3 to encode object keys in the response.</p>
     pub encoding_type: Option<String>,
-    /// The owner field is not present in listV2 by default, if you want to return owner field with each key in the result then set the fetch owner field to true
+    /// <p>The owner field is not present in listV2 by default, if you want to return owner field with each key in the result then set the fetch owner field to true</p>
     pub fetch_owner: Option<bool>,
-    /// Sets the maximum number of keys returned in the response. The response might contain fewer keys but will never contain more.
+    /// <p>Sets the maximum number of keys returned in the response. The response might contain fewer keys but will never contain more.</p>
     pub max_keys: Option<i64>,
-    /// Limits the response to keys that begin with the specified prefix.
+    /// <p>Limits the response to keys that begin with the specified prefix.</p>
     pub prefix: Option<String>,
-    /// Confirms that the requester knows that she or he will be charged for the list objects request in V2 style. Bucket owners need not specify this parameter in their requests.
+    /// <p>Confirms that the requester knows that she or he will be charged for the list objects request in V2 style. Bucket owners need not specify this parameter in their requests.</p>
     pub request_payer: Option<String>,
-    /// StartAfter is where you want Amazon S3 to start listing from. Amazon S3 starts listing after this specified key. StartAfter can be any key in the bucket
+    /// <p>StartAfter is where you want Amazon S3 to start listing from. Amazon S3 starts listing after this specified key. StartAfter can be any key in the bucket</p>
     pub start_after: Option<String>,
 }
 
 #[derive(Default, Debug)]
 pub struct ListPartsOutput {
-    /// Date when multipart upload will become eligible for abort operation by lifecycle.
+    /// <p>Date when multipart upload will become eligible for abort operation by lifecycle.</p>
     pub abort_date: Option<String>,
-    /// Id of the lifecycle rule that makes a multipart upload eligible for abort operation.
+    /// <p>Id of the lifecycle rule that makes a multipart upload eligible for abort operation.</p>
     pub abort_rule_id: Option<String>,
-    /// Name of the bucket to which the multipart upload was initiated.
+    /// <p>Name of the bucket to which the multipart upload was initiated.</p>
     pub bucket: Option<String>,
-    /// Identifies who initiated the multipart upload.
+    /// <p>Identifies who initiated the multipart upload.</p>
     pub initiator: Option<Initiator>,
-    /// Indicates whether the returned list of parts is truncated.
+    /// <p>Indicates whether the returned list of parts is truncated.</p>
     pub is_truncated: Option<bool>,
-    /// Object key for which the multipart upload was initiated.
+    /// <p>Object key for which the multipart upload was initiated.</p>
     pub key: Option<String>,
-    /// Maximum number of parts that were allowed in the response.
+    /// <p>Maximum number of parts that were allowed in the response.</p>
     pub max_parts: Option<i64>,
-    /// When a list is truncated, this element specifies the last part in the list, as well as the value to use for the part-number-marker request parameter in a subsequent request.
+    /// <p>When a list is truncated, this element specifies the last part in the list, as well as the value to use for the part-number-marker request parameter in a subsequent request.</p>
     pub next_part_number_marker: Option<i64>,
     pub owner: Option<Owner>,
-    /// Part number after which listing begins.
+    /// <p>Part number after which listing begins.</p>
     pub part_number_marker: Option<i64>,
     pub parts: Option<Vec<Part>>,
     pub request_charged: Option<String>,
-    /// The class of storage used to store the object.
+    /// <p>The class of storage used to store the object.</p>
     pub storage_class: Option<String>,
-    /// Upload ID identifying the multipart upload whose parts are being listed.
+    /// <p>Upload ID identifying the multipart upload whose parts are being listed.</p>
     pub upload_id: Option<String>,
 }
 
@@ -8128,12 +8128,12 @@ impl ListPartsOutputDeserializer {
 pub struct ListPartsRequest {
     pub bucket: String,
     pub key: String,
-    /// Sets the maximum number of parts to return.
+    /// <p>Sets the maximum number of parts to return.</p>
     pub max_parts: Option<i64>,
-    /// Specifies the part after which listing should begin. Only parts with higher part numbers will be listed.
+    /// <p>Specifies the part after which listing should begin. Only parts with higher part numbers will be listed.</p>
     pub part_number_marker: Option<i64>,
     pub request_payer: Option<String>,
-    /// Upload ID identifying the multipart upload whose parts are being listed.
+    /// <p>Upload ID identifying the multipart upload whose parts are being listed.</p>
     pub upload_id: String,
 }
 
@@ -8153,10 +8153,10 @@ impl LocationDeserializer {
 }
 #[derive(Default, Debug)]
 pub struct LoggingEnabled {
-    /// Specifies the bucket where you want Amazon S3 to store server access logs. You can have your logs delivered to any bucket that you own, including the same bucket that is being logged. You can also configure multiple buckets to deliver their logs to the same target bucket. In this case you should choose a different TargetPrefix for each source bucket so that the delivered log files can be distinguished by key.
+    /// <p>Specifies the bucket where you want Amazon S3 to store server access logs. You can have your logs delivered to any bucket that you own, including the same bucket that is being logged. You can also configure multiple buckets to deliver their logs to the same target bucket. In this case you should choose a different TargetPrefix for each source bucket so that the delivered log files can be distinguished by key.</p>
     pub target_bucket: Option<String>,
     pub target_grants: Option<Vec<TargetGrant>>,
-    /// This element lets you specify a prefix for the keys that the log files will be stored under.
+    /// <p>This element lets you specify a prefix for the keys that the log files will be stored under.</p>
     pub target_prefix: Option<String>,
 }
 
@@ -8475,9 +8475,9 @@ impl MessageDeserializer {
 }
 #[derive(Default, Debug)]
 pub struct MetricsAndOperator {
-    /// The prefix used when evaluating an AND predicate.
+    /// <p>The prefix used when evaluating an AND predicate.</p>
     pub prefix: Option<String>,
-    /// The list of tags used when evaluating an AND predicate.
+    /// <p>The list of tags used when evaluating an AND predicate.</p>
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -8553,9 +8553,9 @@ impl MetricsAndOperatorSerializer {
 
 #[derive(Default, Debug)]
 pub struct MetricsConfiguration {
-    /// Specifies a metrics configuration filter. The metrics configuration will only include objects that meet the filter's criteria. A filter must be a prefix, a tag, or a conjunction (MetricsAndOperator).
+    /// <p>Specifies a metrics configuration filter. The metrics configuration will only include objects that meet the filter&#39;s criteria. A filter must be a prefix, a tag, or a conjunction (MetricsAndOperator).</p>
     pub filter: Option<MetricsFilter>,
-    /// The ID used to identify the metrics configuration.
+    /// <p>The ID used to identify the metrics configuration.</p>
     pub id: String,
 }
 
@@ -8660,11 +8660,11 @@ impl MetricsConfigurationListDeserializer {
 }
 #[derive(Default, Debug)]
 pub struct MetricsFilter {
-    /// A conjunction (logical AND) of predicates, which is used in evaluating a metrics filter. The operator must have at least two predicates, and an object must match all of the predicates in order for the filter to apply.
+    /// <p>A conjunction (logical AND) of predicates, which is used in evaluating a metrics filter. The operator must have at least two predicates, and an object must match all of the predicates in order for the filter to apply.</p>
     pub and: Option<MetricsAndOperator>,
-    /// The prefix used when evaluating a metrics filter.
+    /// <p>The prefix used when evaluating a metrics filter.</p>
     pub prefix: Option<String>,
-    /// The tag used when evaluating a metrics filter.
+    /// <p>The tag used when evaluating a metrics filter.</p>
     pub tag: Option<Tag>,
 }
 
@@ -8784,16 +8784,16 @@ impl MetricsIdSerializer {
 
 #[derive(Default, Debug)]
 pub struct MultipartUpload {
-    /// Date and time at which the multipart upload was initiated.
+    /// <p>Date and time at which the multipart upload was initiated.</p>
     pub initiated: Option<String>,
-    /// Identifies who initiated the multipart upload.
+    /// <p>Identifies who initiated the multipart upload.</p>
     pub initiator: Option<Initiator>,
-    /// Key of the object for which the multipart upload was initiated.
+    /// <p>Key of the object for which the multipart upload was initiated.</p>
     pub key: Option<String>,
     pub owner: Option<Owner>,
-    /// The class of storage used to store the object.
+    /// <p>The class of storage used to store the object.</p>
     pub storage_class: Option<String>,
-    /// Upload ID that identifies the multipart upload.
+    /// <p>Upload ID that identifies the multipart upload.</p>
     pub upload_id: Option<String>,
 }
 
@@ -9006,10 +9006,10 @@ impl NextVersionIdMarkerDeserializer {
         Ok(obj)
     }
 }
-/// Specifies when noncurrent object versions expire. Upon expiration, Amazon S3 permanently deletes the noncurrent object versions. You set this lifecycle configuration action on a bucket that has versioning enabled (or suspended) to request that Amazon S3 delete noncurrent object versions at a specific period in the object's lifetime.
+/// <p>Specifies when noncurrent object versions expire. Upon expiration, Amazon S3 permanently deletes the noncurrent object versions. You set this lifecycle configuration action on a bucket that has versioning enabled (or suspended) to request that Amazon S3 delete noncurrent object versions at a specific period in the object&#39;s lifetime.</p>
 #[derive(Default, Debug)]
 pub struct NoncurrentVersionExpiration {
-    /// Specifies the number of days an object is noncurrent before Amazon S3 can perform the associated action. For information about the noncurrent days calculations, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">How Amazon S3 Calculates When an Object Became Noncurrent</a> in the Amazon Simple Storage Service Developer Guide.
+    /// <p>Specifies the number of days an object is noncurrent before Amazon S3 can perform the associated action. For information about the noncurrent days calculations, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">How Amazon S3 Calculates When an Object Became Noncurrent</a> in the Amazon Simple Storage Service Developer Guide.</p>
     pub noncurrent_days: Option<i64>,
 }
 
@@ -9078,12 +9078,12 @@ impl NoncurrentVersionExpirationSerializer {
     }
 }
 
-/// Container for the transition rule that describes when noncurrent objects transition to the STANDARD_IA or GLACIER storage class. If your bucket is versioning-enabled (or versioning is suspended), you can set this action to request that Amazon S3 transition noncurrent object versions to the STANDARD_IA or GLACIER storage class at a specific period in the object's lifetime.
+/// <p>Container for the transition rule that describes when noncurrent objects transition to the STANDARD<em>IA or GLACIER storage class. If your bucket is versioning-enabled (or versioning is suspended), you can set this action to request that Amazon S3 transition noncurrent object versions to the STANDARD</em>IA or GLACIER storage class at a specific period in the object&#39;s lifetime.</p>
 #[derive(Default, Debug)]
 pub struct NoncurrentVersionTransition {
-    /// Specifies the number of days an object is noncurrent before Amazon S3 can perform the associated action. For information about the noncurrent days calculations, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">How Amazon S3 Calculates When an Object Became Noncurrent</a> in the Amazon Simple Storage Service Developer Guide.
+    /// <p>Specifies the number of days an object is noncurrent before Amazon S3 can perform the associated action. For information about the noncurrent days calculations, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">How Amazon S3 Calculates When an Object Became Noncurrent</a> in the Amazon Simple Storage Service Developer Guide.</p>
     pub noncurrent_days: Option<i64>,
-    /// The class of storage used to store the object.
+    /// <p>The class of storage used to store the object.</p>
     pub storage_class: Option<String>,
 }
 
@@ -9212,7 +9212,7 @@ impl NoncurrentVersionTransitionListSerializer {
     }
 }
 
-/// Container for specifying the notification configuration of the bucket. If this element is empty, notifications are turned off on the bucket.
+/// <p>Container for specifying the notification configuration of the bucket. If this element is empty, notifications are turned off on the bucket.</p>
 #[derive(Default, Debug)]
 pub struct NotificationConfiguration {
     pub lambda_function_configurations: Option<Vec<LambdaFunctionConfiguration>>,
@@ -9412,7 +9412,7 @@ impl NotificationConfigurationDeprecatedSerializer {
     }
 }
 
-/// Container for object key name filtering rules. For information about key name filtering, go to <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Configuring Event Notifications</a> in the Amazon Simple Storage Service Developer Guide.
+/// <p>Container for object key name filtering rules. For information about key name filtering, go to <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Configuring Event Notifications</a> in the Amazon Simple Storage Service Developer Guide.</p>
 #[derive(Default, Debug)]
 pub struct NotificationConfigurationFilter {
     pub key: Option<S3KeyFilter>,
@@ -9519,7 +9519,7 @@ pub struct Object {
     pub last_modified: Option<String>,
     pub owner: Option<Owner>,
     pub size: Option<i64>,
-    /// The class of storage used to store the object.
+    /// <p>The class of storage used to store the object.</p>
     pub storage_class: Option<String>,
 }
 
@@ -9584,9 +9584,9 @@ impl ObjectDeserializer {
 }
 #[derive(Default, Debug)]
 pub struct ObjectIdentifier {
-    /// Key name of the object to delete.
+    /// <p>Key name of the object to delete.</p>
     pub key: String,
-    /// VersionId for the specific version of the object to delete.
+    /// <p>VersionId for the specific version of the object to delete.</p>
     pub version_id: Option<String>,
 }
 
@@ -9715,18 +9715,18 @@ impl ObjectStorageClassDeserializer {
 #[derive(Default, Debug)]
 pub struct ObjectVersion {
     pub e_tag: Option<String>,
-    /// Specifies whether the object is (true) or is not (false) the latest version of an object.
+    /// <p>Specifies whether the object is (true) or is not (false) the latest version of an object.</p>
     pub is_latest: Option<bool>,
-    /// The object key.
+    /// <p>The object key.</p>
     pub key: Option<String>,
-    /// Date and time the object was last modified.
+    /// <p>Date and time the object was last modified.</p>
     pub last_modified: Option<String>,
     pub owner: Option<Owner>,
-    /// Size in bytes of the object.
+    /// <p>Size in bytes of the object.</p>
     pub size: Option<i64>,
-    /// The class of storage used to store the object.
+    /// <p>The class of storage used to store the object.</p>
     pub storage_class: Option<String>,
-    /// Version ID of an object.
+    /// <p>Version ID of an object.</p>
     pub version_id: Option<String>,
 }
 
@@ -9964,13 +9964,13 @@ impl OwnerSerializer {
 
 #[derive(Default, Debug)]
 pub struct Part {
-    /// Entity tag returned when the part was uploaded.
+    /// <p>Entity tag returned when the part was uploaded.</p>
     pub e_tag: Option<String>,
-    /// Date and time at which the part was uploaded.
+    /// <p>Date and time at which the part was uploaded.</p>
     pub last_modified: Option<String>,
-    /// Part number identifying the part. This is a positive integer between 1 and 10,000.
+    /// <p>Part number identifying the part. This is a positive integer between 1 and 10,000.</p>
     pub part_number: Option<i64>,
-    /// Size of the uploaded part data.
+    /// <p>Size of the uploaded part data.</p>
     pub size: Option<i64>,
 }
 
@@ -10285,38 +10285,38 @@ impl ProtocolSerializer {
 
 #[derive(Default, Debug)]
 pub struct PutBucketAccelerateConfigurationRequest {
-    /// Specifies the Accelerate Configuration you want to set for the bucket.
+    /// <p>Specifies the Accelerate Configuration you want to set for the bucket.</p>
     pub accelerate_configuration: AccelerateConfiguration,
-    /// Name of the bucket for which the accelerate configuration is set.
+    /// <p>Name of the bucket for which the accelerate configuration is set.</p>
     pub bucket: String,
 }
 
 #[derive(Default, Debug)]
 pub struct PutBucketAclRequest {
-    /// The canned ACL to apply to the bucket.
+    /// <p>The canned ACL to apply to the bucket.</p>
     pub acl: Option<String>,
     pub access_control_policy: Option<AccessControlPolicy>,
     pub bucket: String,
     pub content_md5: Option<String>,
-    /// Allows grantee the read, write, read ACP, and write ACP permissions on the bucket.
+    /// <p>Allows grantee the read, write, read ACP, and write ACP permissions on the bucket.</p>
     pub grant_full_control: Option<String>,
-    /// Allows grantee to list the objects in the bucket.
+    /// <p>Allows grantee to list the objects in the bucket.</p>
     pub grant_read: Option<String>,
-    /// Allows grantee to read the bucket ACL.
+    /// <p>Allows grantee to read the bucket ACL.</p>
     pub grant_read_acp: Option<String>,
-    /// Allows grantee to create, overwrite, and delete any object in the bucket.
+    /// <p>Allows grantee to create, overwrite, and delete any object in the bucket.</p>
     pub grant_write: Option<String>,
-    /// Allows grantee to write the ACL for the applicable bucket.
+    /// <p>Allows grantee to write the ACL for the applicable bucket.</p>
     pub grant_write_acp: Option<String>,
 }
 
 #[derive(Default, Debug)]
 pub struct PutBucketAnalyticsConfigurationRequest {
-    /// The configuration and any analyses for the analytics filter.
+    /// <p>The configuration and any analyses for the analytics filter.</p>
     pub analytics_configuration: AnalyticsConfiguration,
-    /// The name of the bucket to which an analytics configuration is stored.
+    /// <p>The name of the bucket to which an analytics configuration is stored.</p>
     pub bucket: String,
-    /// The identifier used to represent an analytics configuration.
+    /// <p>The identifier used to represent an analytics configuration.</p>
     pub id: String,
 }
 
@@ -10329,11 +10329,11 @@ pub struct PutBucketCorsRequest {
 
 #[derive(Default, Debug)]
 pub struct PutBucketInventoryConfigurationRequest {
-    /// The name of the bucket where the inventory configuration will be stored.
+    /// <p>The name of the bucket where the inventory configuration will be stored.</p>
     pub bucket: String,
-    /// The ID used to identify the inventory configuration.
+    /// <p>The ID used to identify the inventory configuration.</p>
     pub id: String,
-    /// Specifies the inventory configuration.
+    /// <p>Specifies the inventory configuration.</p>
     pub inventory_configuration: InventoryConfiguration,
 }
 
@@ -10359,11 +10359,11 @@ pub struct PutBucketLoggingRequest {
 
 #[derive(Default, Debug)]
 pub struct PutBucketMetricsConfigurationRequest {
-    /// The name of the bucket for which the metrics configuration is set.
+    /// <p>The name of the bucket for which the metrics configuration is set.</p>
     pub bucket: String,
-    /// The ID used to identify the metrics configuration.
+    /// <p>The ID used to identify the metrics configuration.</p>
     pub id: String,
-    /// Specifies the metrics configuration.
+    /// <p>Specifies the metrics configuration.</p>
     pub metrics_configuration: MetricsConfiguration,
 }
 
@@ -10384,7 +10384,7 @@ pub struct PutBucketNotificationRequest {
 pub struct PutBucketPolicyRequest {
     pub bucket: String,
     pub content_md5: Option<String>,
-    /// The bucket policy as a JSON document.
+    /// <p>The bucket policy as a JSON document.</p>
     pub policy: String,
 }
 
@@ -10413,7 +10413,7 @@ pub struct PutBucketTaggingRequest {
 pub struct PutBucketVersioningRequest {
     pub bucket: String,
     pub content_md5: Option<String>,
-    /// The concatenation of the authentication device's serial number, a space, and the value that is displayed on your authentication device.
+    /// <p>The concatenation of the authentication device&#39;s serial number, a space, and the value that is displayed on your authentication device.</p>
     pub mfa: Option<String>,
     pub versioning_configuration: VersioningConfiguration,
 }
@@ -10448,43 +10448,43 @@ impl PutObjectAclOutputDeserializer {
 }
 #[derive(Default, Debug)]
 pub struct PutObjectAclRequest {
-    /// The canned ACL to apply to the object.
+    /// <p>The canned ACL to apply to the object.</p>
     pub acl: Option<String>,
     pub access_control_policy: Option<AccessControlPolicy>,
     pub bucket: String,
     pub content_md5: Option<String>,
-    /// Allows grantee the read, write, read ACP, and write ACP permissions on the bucket.
+    /// <p>Allows grantee the read, write, read ACP, and write ACP permissions on the bucket.</p>
     pub grant_full_control: Option<String>,
-    /// Allows grantee to list the objects in the bucket.
+    /// <p>Allows grantee to list the objects in the bucket.</p>
     pub grant_read: Option<String>,
-    /// Allows grantee to read the bucket ACL.
+    /// <p>Allows grantee to read the bucket ACL.</p>
     pub grant_read_acp: Option<String>,
-    /// Allows grantee to create, overwrite, and delete any object in the bucket.
+    /// <p>Allows grantee to create, overwrite, and delete any object in the bucket.</p>
     pub grant_write: Option<String>,
-    /// Allows grantee to write the ACL for the applicable bucket.
+    /// <p>Allows grantee to write the ACL for the applicable bucket.</p>
     pub grant_write_acp: Option<String>,
     pub key: String,
     pub request_payer: Option<String>,
-    /// VersionId used to reference a specific version of the object.
+    /// <p>VersionId used to reference a specific version of the object.</p>
     pub version_id: Option<String>,
 }
 
 #[derive(Default, Debug)]
 pub struct PutObjectOutput {
-    /// Entity tag for the uploaded object.
+    /// <p>Entity tag for the uploaded object.</p>
     pub e_tag: Option<String>,
-    /// If the object expiration is configured, this will contain the expiration date (expiry-date) and rule ID (rule-id). The value of rule-id is URL encoded.
+    /// <p>If the object expiration is configured, this will contain the expiration date (expiry-date) and rule ID (rule-id). The value of rule-id is URL encoded.</p>
     pub expiration: Option<String>,
     pub request_charged: Option<String>,
-    /// If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.
+    /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.</p>
     pub sse_customer_algorithm: Option<String>,
-    /// If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key.
+    /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key.</p>
     pub sse_customer_key_md5: Option<String>,
-    /// If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object.
+    /// <p>If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object.</p>
     pub ssekms_key_id: Option<String>,
-    /// The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).
+    /// <p>The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).</p>
     pub server_side_encryption: Option<String>,
-    /// Version of the object.
+    /// <p>Version of the object.</p>
     pub version_id: Option<String>,
 }
 
@@ -10506,56 +10506,56 @@ impl PutObjectOutputDeserializer {
 }
 #[derive(Default, Debug)]
 pub struct PutObjectRequest {
-    /// The canned ACL to apply to the object.
+    /// <p>The canned ACL to apply to the object.</p>
     pub acl: Option<String>,
-    /// Object data.
+    /// <p>Object data.</p>
     pub body: Option<Vec<u8>>,
-    /// Name of the bucket to which the PUT operation was initiated.
+    /// <p>Name of the bucket to which the PUT operation was initiated.</p>
     pub bucket: String,
-    /// Specifies caching behavior along the request/reply chain.
+    /// <p>Specifies caching behavior along the request/reply chain.</p>
     pub cache_control: Option<String>,
-    /// Specifies presentational information for the object.
+    /// <p>Specifies presentational information for the object.</p>
     pub content_disposition: Option<String>,
-    /// Specifies what content encodings have been applied to the object and thus what decoding mechanisms must be applied to obtain the media-type referenced by the Content-Type header field.
+    /// <p>Specifies what content encodings have been applied to the object and thus what decoding mechanisms must be applied to obtain the media-type referenced by the Content-Type header field.</p>
     pub content_encoding: Option<String>,
-    /// The language the content is in.
+    /// <p>The language the content is in.</p>
     pub content_language: Option<String>,
-    /// Size of the body in bytes. This parameter is useful when the size of the body cannot be determined automatically.
+    /// <p>Size of the body in bytes. This parameter is useful when the size of the body cannot be determined automatically.</p>
     pub content_length: Option<i64>,
-    /// The base64-encoded 128-bit MD5 digest of the part data.
+    /// <p>The base64-encoded 128-bit MD5 digest of the part data.</p>
     pub content_md5: Option<String>,
-    /// A standard MIME type describing the format of the object data.
+    /// <p>A standard MIME type describing the format of the object data.</p>
     pub content_type: Option<String>,
-    /// The date and time at which the object is no longer cacheable.
+    /// <p>The date and time at which the object is no longer cacheable.</p>
     pub expires: Option<String>,
-    /// Gives the grantee READ, READ_ACP, and WRITE_ACP permissions on the object.
+    /// <p>Gives the grantee READ, READ<em>ACP, and WRITE</em>ACP permissions on the object.</p>
     pub grant_full_control: Option<String>,
-    /// Allows grantee to read the object data and its metadata.
+    /// <p>Allows grantee to read the object data and its metadata.</p>
     pub grant_read: Option<String>,
-    /// Allows grantee to read the object ACL.
+    /// <p>Allows grantee to read the object ACL.</p>
     pub grant_read_acp: Option<String>,
-    /// Allows grantee to write the ACL for the applicable object.
+    /// <p>Allows grantee to write the ACL for the applicable object.</p>
     pub grant_write_acp: Option<String>,
-    /// Object key for which the PUT operation was initiated.
+    /// <p>Object key for which the PUT operation was initiated.</p>
     pub key: String,
-    /// A map of metadata to store with the object in S3.
+    /// <p>A map of metadata to store with the object in S3.</p>
     pub metadata: Option<::std::collections::HashMap<String, String>>,
     pub request_payer: Option<String>,
-    /// Specifies the algorithm to use to when encrypting the object (e.g., AES256).
+    /// <p>Specifies the algorithm to use to when encrypting the object (e.g., AES256).</p>
     pub sse_customer_algorithm: Option<String>,
-    /// Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header.
+    /// <p>Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header.</p>
     pub sse_customer_key: Option<String>,
-    /// Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error.
+    /// <p>Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error.</p>
     pub sse_customer_key_md5: Option<String>,
-    /// Specifies the AWS KMS key ID to use for object encryption. All GET and PUT requests for an object protected by AWS KMS will fail if not made via SSL or using SigV4. Documentation on configuring any of the officially supported AWS SDKs and CLI can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingAWSSDK.html#specify-signature-version
+    /// <p>Specifies the AWS KMS key ID to use for object encryption. All GET and PUT requests for an object protected by AWS KMS will fail if not made via SSL or using SigV4. Documentation on configuring any of the officially supported AWS SDKs and CLI can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingAWSSDK.html#specify-signature-version</p>
     pub ssekms_key_id: Option<String>,
-    /// The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).
+    /// <p>The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).</p>
     pub server_side_encryption: Option<String>,
-    /// The type of storage to use for the object. Defaults to 'STANDARD'.
+    /// <p>The type of storage to use for the object. Defaults to &#39;STANDARD&#39;.</p>
     pub storage_class: Option<String>,
-    /// The tag-set for the object. The tag-set must be encoded as URL Query parameters
+    /// <p>The tag-set for the object. The tag-set must be encoded as URL Query parameters</p>
     pub tagging: Option<String>,
-    /// If the bucket is configured as a website, redirects requests for this object to another object in the same bucket or to an external URL. Amazon S3 stores the value of this header in the object metadata.
+    /// <p>If the bucket is configured as a website, redirects requests for this object to another object in the same bucket or to an external URL. Amazon S3 stores the value of this header in the object metadata.</p>
     pub website_redirect_location: Option<String>,
 }
 
@@ -10624,13 +10624,13 @@ impl QueueArnSerializer {
     }
 }
 
-/// Container for specifying an configuration when you want Amazon S3 to publish events to an Amazon Simple Queue Service (Amazon SQS) queue.
+/// <p>Container for specifying an configuration when you want Amazon S3 to publish events to an Amazon Simple Queue Service (Amazon SQS) queue.</p>
 #[derive(Default, Debug)]
 pub struct QueueConfiguration {
     pub events: Vec<String>,
     pub filter: Option<NotificationConfigurationFilter>,
     pub id: Option<String>,
-    /// Amazon SQS queue ARN to which Amazon S3 will publish a message when it detects events of specified type.
+    /// <p>Amazon SQS queue ARN to which Amazon S3 will publish a message when it detects events of specified type.</p>
     pub queue_arn: String,
 }
 
@@ -10879,15 +10879,15 @@ impl QuietSerializer {
 
 #[derive(Default, Debug)]
 pub struct Redirect {
-    /// The host name to use in the redirect request.
+    /// <p>The host name to use in the redirect request.</p>
     pub host_name: Option<String>,
-    /// The HTTP redirect code to use on the response. Not required if one of the siblings is present.
+    /// <p>The HTTP redirect code to use on the response. Not required if one of the siblings is present.</p>
     pub http_redirect_code: Option<String>,
-    /// Protocol to use (http, https) when redirecting requests. The default is the protocol that is used in the original request.
+    /// <p>Protocol to use (http, https) when redirecting requests. The default is the protocol that is used in the original request.</p>
     pub protocol: Option<String>,
-    /// The object key prefix to use in the redirect request. For example, to redirect requests for all pages with prefix docs/ (objects in the docs/ folder) to documents/, you can set a condition block with KeyPrefixEquals set to docs/ and in the Redirect set ReplaceKeyPrefixWith to /documents. Not required if one of the siblings is present. Can be present only if ReplaceKeyWith is not provided.
+    /// <p>The object key prefix to use in the redirect request. For example, to redirect requests for all pages with prefix docs/ (objects in the docs/ folder) to documents/, you can set a condition block with KeyPrefixEquals set to docs/ and in the Redirect set ReplaceKeyPrefixWith to /documents. Not required if one of the siblings is present. Can be present only if ReplaceKeyWith is not provided.</p>
     pub replace_key_prefix_with: Option<String>,
-    /// The specific object key to use in the redirect request. For example, redirect request to error.html. Not required if one of the sibling is present. Can be present only if ReplaceKeyPrefixWith is not provided.
+    /// <p>The specific object key to use in the redirect request. For example, redirect request to error.html. Not required if one of the sibling is present. Can be present only if ReplaceKeyPrefixWith is not provided.</p>
     pub replace_key_with: Option<String>,
 }
 
@@ -11011,9 +11011,9 @@ impl RedirectSerializer {
 
 #[derive(Default, Debug)]
 pub struct RedirectAllRequestsTo {
-    /// Name of the host where requests will be redirected.
+    /// <p>Name of the host where requests will be redirected.</p>
     pub host_name: String,
-    /// Protocol to use (http, https) when redirecting requests. The default is the protocol that is used in the original request.
+    /// <p>Protocol to use (http, https) when redirecting requests. The default is the protocol that is used in the original request.</p>
     pub protocol: Option<String>,
 }
 
@@ -11161,12 +11161,12 @@ impl ReplaceKeyWithSerializer {
     }
 }
 
-/// Container for replication rules. You can add as many as 1,000 rules. Total replication configuration size can be up to 2 MB.
+/// <p>Container for replication rules. You can add as many as 1,000 rules. Total replication configuration size can be up to 2 MB.</p>
 #[derive(Default, Debug)]
 pub struct ReplicationConfiguration {
-    /// Amazon Resource Name (ARN) of an IAM role for Amazon S3 to assume when replicating the objects.
+    /// <p>Amazon Resource Name (ARN) of an IAM role for Amazon S3 to assume when replicating the objects.</p>
     pub role: String,
-    /// Container for information about a particular replication rule. Replication configuration must have at least one rule and can contain up to 1,000 rules.
+    /// <p>Container for information about a particular replication rule. Replication configuration must have at least one rule and can contain up to 1,000 rules.</p>
     pub rules: Vec<ReplicationRule>,
 }
 
@@ -11239,11 +11239,11 @@ impl ReplicationConfigurationSerializer {
 #[derive(Default, Debug)]
 pub struct ReplicationRule {
     pub destination: Destination,
-    /// Unique identifier for the rule. The value cannot be longer than 255 characters.
+    /// <p>Unique identifier for the rule. The value cannot be longer than 255 characters.</p>
     pub id: Option<String>,
-    /// Object keyname prefix identifying one or more objects to which the rule applies. Maximum prefix length can be up to 1,024 characters. Overlapping prefixes are not supported.
+    /// <p>Object keyname prefix identifying one or more objects to which the rule applies. Maximum prefix length can be up to 1,024 characters. Overlapping prefixes are not supported.</p>
     pub prefix: String,
-    /// The rule is ignored if status is not Enabled.
+    /// <p>The rule is ignored if status is not Enabled.</p>
     pub status: String,
 }
 
@@ -11421,7 +11421,7 @@ impl ReplicationRulesSerializer {
 
 #[derive(Default, Debug)]
 pub struct RequestPaymentConfiguration {
-    /// Specifies who pays for the download and request fees.
+    /// <p>Specifies who pays for the download and request fees.</p>
     pub payer: String,
 }
 
@@ -11599,9 +11599,9 @@ pub struct RestoreObjectRequest {
 
 #[derive(Default, Debug)]
 pub struct RestoreRequest {
-    /// Lifetime of the active copy in days
+    /// <p>Lifetime of the active copy in days</p>
     pub days: i64,
-    /// Glacier related prameters pertaining to this job.
+    /// <p>Glacier related prameters pertaining to this job.</p>
     pub glacier_job_parameters: Option<GlacierJobParameters>,
 }
 
@@ -11667,9 +11667,9 @@ impl RoleSerializer {
 
 #[derive(Default, Debug)]
 pub struct RoutingRule {
-    /// A container for describing a condition that must be met for the specified redirect to apply. For example, 1. If request is for pages in the /docs folder, redirect to the /documents folder. 2. If request results in HTTP error 4xx, redirect request to another host where you might process the error.
+    /// <p>A container for describing a condition that must be met for the specified redirect to apply. For example, 1. If request is for pages in the /docs folder, redirect to the /documents folder. 2. If request results in HTTP error 4xx, redirect request to another host where you might process the error.</p>
     pub condition: Option<Condition>,
-    /// Container for redirect information. You can redirect requests to another host, to another page, or with another protocol. In the event of an error, you can can specify a different error code to return.
+    /// <p>Container for redirect information. You can redirect requests to another host, to another page, or with another protocol. In the event of an error, you can can specify a different error code to return.</p>
     pub redirect: Redirect,
 }
 
@@ -11805,13 +11805,13 @@ impl RoutingRulesSerializer {
 pub struct Rule {
     pub abort_incomplete_multipart_upload: Option<AbortIncompleteMultipartUpload>,
     pub expiration: Option<LifecycleExpiration>,
-    /// Unique identifier for the rule. The value cannot be longer than 255 characters.
+    /// <p>Unique identifier for the rule. The value cannot be longer than 255 characters.</p>
     pub id: Option<String>,
     pub noncurrent_version_expiration: Option<NoncurrentVersionExpiration>,
     pub noncurrent_version_transition: Option<NoncurrentVersionTransition>,
-    /// Prefix identifying one or more objects to which the rule applies.
+    /// <p>Prefix identifying one or more objects to which the rule applies.</p>
     pub prefix: String,
-    /// If 'Enabled', the rule is currently being applied. If 'Disabled', the rule is not currently being applied.
+    /// <p>If &#39;Enabled&#39;, the rule is currently being applied. If &#39;Disabled&#39;, the rule is not currently being applied.</p>
     pub status: String,
     pub transition: Option<Transition>,
 }
@@ -12004,7 +12004,7 @@ impl RulesSerializer {
     }
 }
 
-/// Container for object key name prefix and suffix filtering rules.
+/// <p>Container for object key name prefix and suffix filtering rules.</p>
 #[derive(Default, Debug)]
 pub struct S3KeyFilter {
     pub filter_rules: Option<Vec<FilterRule>>,
@@ -12158,7 +12158,7 @@ impl StorageClassSerializer {
 
 #[derive(Default, Debug)]
 pub struct StorageClassAnalysis {
-    /// A container used to describe how data related to the storage class analysis should be exported.
+    /// <p>A container used to describe how data related to the storage class analysis should be exported.</p>
     pub data_export: Option<StorageClassAnalysisDataExport>,
 }
 
@@ -12228,9 +12228,9 @@ impl StorageClassAnalysisSerializer {
 
 #[derive(Default, Debug)]
 pub struct StorageClassAnalysisDataExport {
-    /// The place to store the data for an analysis.
+    /// <p>The place to store the data for an analysis.</p>
     pub destination: AnalyticsExportDestination,
-    /// The version of the output schema to use when exporting data. Must be V_1.
+    /// <p>The version of the output schema to use when exporting data. Must be V_1.</p>
     pub output_schema_version: String,
 }
 
@@ -12384,9 +12384,9 @@ impl SuffixSerializer {
 
 #[derive(Default, Debug)]
 pub struct Tag {
-    /// Name of the tag.
+    /// <p>Name of the tag.</p>
     pub key: String,
-    /// Value of the tag.
+    /// <p>Value of the tag.</p>
     pub value: String,
 }
 
@@ -12582,7 +12582,7 @@ impl TargetBucketSerializer {
 #[derive(Default, Debug)]
 pub struct TargetGrant {
     pub grantee: Option<Grantee>,
-    /// Logging permissions assigned to the Grantee for the bucket.
+    /// <p>Logging permissions assigned to the Grantee for the bucket.</p>
     pub permission: Option<String>,
 }
 
@@ -12845,13 +12845,13 @@ impl TopicArnSerializer {
     }
 }
 
-/// Container for specifying the configuration when you want Amazon S3 to publish events to an Amazon Simple Notification Service (Amazon SNS) topic.
+/// <p>Container for specifying the configuration when you want Amazon S3 to publish events to an Amazon Simple Notification Service (Amazon SNS) topic.</p>
 #[derive(Default, Debug)]
 pub struct TopicConfiguration {
     pub events: Vec<String>,
     pub filter: Option<NotificationConfigurationFilter>,
     pub id: Option<String>,
-    /// Amazon SNS topic ARN to which Amazon S3 will publish a message when it detects events of specified type.
+    /// <p>Amazon SNS topic ARN to which Amazon S3 will publish a message when it detects events of specified type.</p>
     pub topic_arn: String,
 }
 
@@ -12947,7 +12947,7 @@ impl TopicConfigurationSerializer {
 pub struct TopicConfigurationDeprecated {
     pub events: Option<Vec<String>>,
     pub id: Option<String>,
-    /// Amazon SNS topic to which Amazon S3 will publish a message to report the specified events for the bucket.
+    /// <p>Amazon SNS topic to which Amazon S3 will publish a message to report the specified events for the bucket.</p>
     pub topic: Option<String>,
 }
 
@@ -13081,11 +13081,11 @@ impl TopicConfigurationListSerializer {
 
 #[derive(Default, Debug)]
 pub struct Transition {
-    /// Indicates at what date the object is to be moved or deleted. Should be in GMT ISO 8601 Format.
+    /// <p>Indicates at what date the object is to be moved or deleted. Should be in GMT ISO 8601 Format.</p>
     pub date: Option<String>,
-    /// Indicates the lifetime, in days, of the objects that are subject to the rule. The value must be a non-zero positive integer.
+    /// <p>Indicates the lifetime, in days, of the objects that are subject to the rule. The value must be a non-zero positive integer.</p>
     pub days: Option<i64>,
-    /// The class of storage used to store the object.
+    /// <p>The class of storage used to store the object.</p>
     pub storage_class: Option<String>,
 }
 
@@ -13364,16 +13364,16 @@ impl UploadIdMarkerSerializer {
 #[derive(Default, Debug)]
 pub struct UploadPartCopyOutput {
     pub copy_part_result: Option<CopyPartResult>,
-    /// The version of the source object that was copied, if you have enabled versioning on the source bucket.
+    /// <p>The version of the source object that was copied, if you have enabled versioning on the source bucket.</p>
     pub copy_source_version_id: Option<String>,
     pub request_charged: Option<String>,
-    /// If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.
+    /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.</p>
     pub sse_customer_algorithm: Option<String>,
-    /// If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key.
+    /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key.</p>
     pub sse_customer_key_md5: Option<String>,
-    /// If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object.
+    /// <p>If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object.</p>
     pub ssekms_key_id: Option<String>,
-    /// The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).
+    /// <p>The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).</p>
     pub server_side_encryption: Option<String>,
 }
 
@@ -13421,50 +13421,50 @@ impl UploadPartCopyOutputDeserializer {
 #[derive(Default, Debug)]
 pub struct UploadPartCopyRequest {
     pub bucket: String,
-    /// The name of the source bucket and key name of the source object, separated by a slash (/). Must be URL-encoded.
+    /// <p>The name of the source bucket and key name of the source object, separated by a slash (/). Must be URL-encoded.</p>
     pub copy_source: String,
-    /// Copies the object if its entity tag (ETag) matches the specified tag.
+    /// <p>Copies the object if its entity tag (ETag) matches the specified tag.</p>
     pub copy_source_if_match: Option<String>,
-    /// Copies the object if it has been modified since the specified time.
+    /// <p>Copies the object if it has been modified since the specified time.</p>
     pub copy_source_if_modified_since: Option<String>,
-    /// Copies the object if its entity tag (ETag) is different than the specified ETag.
+    /// <p>Copies the object if its entity tag (ETag) is different than the specified ETag.</p>
     pub copy_source_if_none_match: Option<String>,
-    /// Copies the object if it hasn't been modified since the specified time.
+    /// <p>Copies the object if it hasn&#39;t been modified since the specified time.</p>
     pub copy_source_if_unmodified_since: Option<String>,
-    /// The range of bytes to copy from the source object. The range value must use the form bytes=first-last, where the first and last are the zero-based byte offsets to copy. For example, bytes=0-9 indicates that you want to copy the first ten bytes of the source. You can copy a range only if the source object is greater than 5 GB.
+    /// <p>The range of bytes to copy from the source object. The range value must use the form bytes=first-last, where the first and last are the zero-based byte offsets to copy. For example, bytes=0-9 indicates that you want to copy the first ten bytes of the source. You can copy a range only if the source object is greater than 5 GB.</p>
     pub copy_source_range: Option<String>,
-    /// Specifies the algorithm to use when decrypting the source object (e.g., AES256).
+    /// <p>Specifies the algorithm to use when decrypting the source object (e.g., AES256).</p>
     pub copy_source_sse_customer_algorithm: Option<String>,
-    /// Specifies the customer-provided encryption key for Amazon S3 to use to decrypt the source object. The encryption key provided in this header must be one that was used when the source object was created.
+    /// <p>Specifies the customer-provided encryption key for Amazon S3 to use to decrypt the source object. The encryption key provided in this header must be one that was used when the source object was created.</p>
     pub copy_source_sse_customer_key: Option<String>,
-    /// Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error.
+    /// <p>Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error.</p>
     pub copy_source_sse_customer_key_md5: Option<String>,
     pub key: String,
-    /// Part number of part being copied. This is a positive integer between 1 and 10,000.
+    /// <p>Part number of part being copied. This is a positive integer between 1 and 10,000.</p>
     pub part_number: i64,
     pub request_payer: Option<String>,
-    /// Specifies the algorithm to use to when encrypting the object (e.g., AES256).
+    /// <p>Specifies the algorithm to use to when encrypting the object (e.g., AES256).</p>
     pub sse_customer_algorithm: Option<String>,
-    /// Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header. This must be the same encryption key specified in the initiate multipart upload request.
+    /// <p>Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header. This must be the same encryption key specified in the initiate multipart upload request.</p>
     pub sse_customer_key: Option<String>,
-    /// Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error.
+    /// <p>Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error.</p>
     pub sse_customer_key_md5: Option<String>,
-    /// Upload ID identifying the multipart upload whose part is being copied.
+    /// <p>Upload ID identifying the multipart upload whose part is being copied.</p>
     pub upload_id: String,
 }
 
 #[derive(Default, Debug)]
 pub struct UploadPartOutput {
-    /// Entity tag for the uploaded object.
+    /// <p>Entity tag for the uploaded object.</p>
     pub e_tag: Option<String>,
     pub request_charged: Option<String>,
-    /// If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.
+    /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header confirming the encryption algorithm used.</p>
     pub sse_customer_algorithm: Option<String>,
-    /// If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key.
+    /// <p>If server-side encryption with a customer-provided encryption key was requested, the response will include this header to provide round trip message integrity verification of the customer-provided encryption key.</p>
     pub sse_customer_key_md5: Option<String>,
-    /// If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object.
+    /// <p>If present, specifies the ID of the AWS Key Management Service (KMS) master encryption key that was used for the object.</p>
     pub ssekms_key_id: Option<String>,
-    /// The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).
+    /// <p>The Server-side encryption algorithm used when storing this object in S3 (e.g., AES256, aws:kms).</p>
     pub server_side_encryption: Option<String>,
 }
 
@@ -13486,26 +13486,26 @@ impl UploadPartOutputDeserializer {
 }
 #[derive(Default, Debug)]
 pub struct UploadPartRequest {
-    /// Object data.
+    /// <p>Object data.</p>
     pub body: Option<Vec<u8>>,
-    /// Name of the bucket to which the multipart upload was initiated.
+    /// <p>Name of the bucket to which the multipart upload was initiated.</p>
     pub bucket: String,
-    /// Size of the body in bytes. This parameter is useful when the size of the body cannot be determined automatically.
+    /// <p>Size of the body in bytes. This parameter is useful when the size of the body cannot be determined automatically.</p>
     pub content_length: Option<i64>,
-    /// The base64-encoded 128-bit MD5 digest of the part data.
+    /// <p>The base64-encoded 128-bit MD5 digest of the part data.</p>
     pub content_md5: Option<String>,
-    /// Object key for which the multipart upload was initiated.
+    /// <p>Object key for which the multipart upload was initiated.</p>
     pub key: String,
-    /// Part number of part being uploaded. This is a positive integer between 1 and 10,000.
+    /// <p>Part number of part being uploaded. This is a positive integer between 1 and 10,000.</p>
     pub part_number: i64,
     pub request_payer: Option<String>,
-    /// Specifies the algorithm to use to when encrypting the object (e.g., AES256).
+    /// <p>Specifies the algorithm to use to when encrypting the object (e.g., AES256).</p>
     pub sse_customer_algorithm: Option<String>,
-    /// Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header. This must be the same encryption key specified in the initiate multipart upload request.
+    /// <p>Specifies the customer-provided encryption key for Amazon S3 to use in encrypting data. This value is used to store the object and then it is discarded; Amazon does not store the encryption key. The key must be appropriate for use with the algorithm specified in the x-amz-server-side​-encryption​-customer-algorithm header. This must be the same encryption key specified in the initiate multipart upload request.</p>
     pub sse_customer_key: Option<String>,
-    /// Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error.
+    /// <p>Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error.</p>
     pub sse_customer_key_md5: Option<String>,
-    /// Upload ID identifying the multipart upload whose part is being uploaded.
+    /// <p>Upload ID identifying the multipart upload whose part is being uploaded.</p>
     pub upload_id: String,
 }
 
@@ -13581,9 +13581,9 @@ impl VersionIdMarkerSerializer {
 
 #[derive(Default, Debug)]
 pub struct VersioningConfiguration {
-    /// Specifies whether MFA delete is enabled in the bucket versioning configuration. This element is only returned if the bucket has been configured with MFA delete. If the bucket has never been so configured, this element is not returned.
+    /// <p>Specifies whether MFA delete is enabled in the bucket versioning configuration. This element is only returned if the bucket has been configured with MFA delete. If the bucket has never been so configured, this element is not returned.</p>
     pub mfa_delete: Option<String>,
-    /// The versioning state of the bucket.
+    /// <p>The versioning state of the bucket.</p>
     pub status: Option<String>,
 }
 
@@ -13662,7 +13662,7 @@ impl WebsiteConfigurationSerializer {
 /// Errors returned by AbortMultipartUpload
 #[derive(Debug, PartialEq)]
 pub enum AbortMultipartUploadError {
-    ///The specified multipart upload does not exist.
+    /// <p>The specified multipart upload does not exist.</p>
     NoSuchUpload(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13798,7 +13798,7 @@ impl Error for CompleteMultipartUploadError {
 /// Errors returned by CopyObject
 #[derive(Debug, PartialEq)]
 pub enum CopyObjectError {
-    ///The source object of the COPY operation is not in the active tier and is only stored in Amazon Glacier.
+    /// <p>The source object of the COPY operation is not in the active tier and is only stored in Amazon Glacier.</p>
     ObjectNotInActiveTierError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13867,9 +13867,9 @@ impl Error for CopyObjectError {
 /// Errors returned by CreateBucket
 #[derive(Debug, PartialEq)]
 pub enum CreateBucketError {
-    ///The requested bucket name is not available. The bucket namespace is shared by all users of the system. Please select a different name and try again.
+    /// <p>The requested bucket name is not available. The bucket namespace is shared by all users of the system. Please select a different name and try again.</p>
     BucketAlreadyExists(String),
-    ///
+
     BucketAlreadyOwnedByYou(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -16002,7 +16002,7 @@ impl Error for GetBucketWebsiteError {
 /// Errors returned by GetObject
 #[derive(Debug, PartialEq)]
 pub enum GetObjectError {
-    ///The specified key does not exist.
+    /// <p>The specified key does not exist.</p>
     NoSuchKey(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -16069,7 +16069,7 @@ impl Error for GetObjectError {
 /// Errors returned by GetObjectAcl
 #[derive(Debug, PartialEq)]
 pub enum GetObjectAclError {
-    ///The specified key does not exist.
+    /// <p>The specified key does not exist.</p>
     NoSuchKey(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -16262,7 +16262,7 @@ impl Error for GetObjectTorrentError {
 /// Errors returned by HeadBucket
 #[derive(Debug, PartialEq)]
 pub enum HeadBucketError {
-    ///The specified bucket does not exist.
+    /// <p>The specified bucket does not exist.</p>
     NoSuchBucket(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -16329,7 +16329,7 @@ impl Error for HeadBucketError {
 /// Errors returned by HeadObject
 #[derive(Debug, PartialEq)]
 pub enum HeadObjectError {
-    ///The specified key does not exist.
+    /// <p>The specified key does not exist.</p>
     NoSuchKey(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -16784,7 +16784,7 @@ impl Error for ListObjectVersionsError {
 /// Errors returned by ListObjects
 #[derive(Debug, PartialEq)]
 pub enum ListObjectsError {
-    ///The specified bucket does not exist.
+    /// <p>The specified bucket does not exist.</p>
     NoSuchBucket(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -16853,7 +16853,7 @@ impl Error for ListObjectsError {
 /// Errors returned by ListObjectsV2
 #[derive(Debug, PartialEq)]
 pub enum ListObjectsV2Error {
-    ///The specified bucket does not exist.
+    /// <p>The specified bucket does not exist.</p>
     NoSuchBucket(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -18141,7 +18141,7 @@ impl Error for PutObjectError {
 /// Errors returned by PutObjectAcl
 #[derive(Debug, PartialEq)]
 pub enum PutObjectAclError {
-    ///The specified key does not exist.
+    /// <p>The specified key does not exist.</p>
     NoSuchKey(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -18271,7 +18271,7 @@ impl Error for PutObjectTaggingError {
 /// Errors returned by RestoreObject
 #[derive(Debug, PartialEq)]
 pub enum RestoreObjectError {
-    ///This operation is not allowed against this storage tier
+    /// <p>This operation is not allowed against this storage tier</p>
     ObjectAlreadyInActiveTierError(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -18467,410 +18467,410 @@ impl Error for UploadPartCopyError {
 }
 /// Trait representing the capabilities of the Amazon S3 API. Amazon S3 clients implement this trait.
 pub trait S3 {
-    #[doc="<p>Aborts a multipart upload.</p><p>To verify that all parts have been removed, so you don't get charged for the part storage, you should call the List Parts operation and ensure the parts list is empty.</p>"]
+    /// <p>Aborts a multipart upload.</p><p>To verify that all parts have been removed, so you don't get charged for the part storage, you should call the List Parts operation and ensure the parts list is empty.</p>
     fn abort_multipart_upload(
         &self,
         input: &AbortMultipartUploadRequest,
     ) -> Result<AbortMultipartUploadOutput, AbortMultipartUploadError>;
 
-    #[doc = "Completes a multipart upload by assembling previously uploaded parts."]
+    /// <p>Completes a multipart upload by assembling previously uploaded parts.</p>
     fn complete_multipart_upload(
         &self,
         input: &CompleteMultipartUploadRequest,
     ) -> Result<CompleteMultipartUploadOutput, CompleteMultipartUploadError>;
 
-    #[doc = "Creates a copy of an object that is already stored in Amazon S3."]
+    /// <p>Creates a copy of an object that is already stored in Amazon S3.</p>
     fn copy_object(&self, input: &CopyObjectRequest) -> Result<CopyObjectOutput, CopyObjectError>;
 
-    #[doc = "Creates a new bucket."]
+    /// <p>Creates a new bucket.</p>
     fn create_bucket(
         &self,
         input: &CreateBucketRequest,
     ) -> Result<CreateBucketOutput, CreateBucketError>;
 
-    #[doc="<p>Initiates a multipart upload and returns an upload ID.</p><p><b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>"]
+    /// <p>Initiates a multipart upload and returns an upload ID.</p><p><b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>
     fn create_multipart_upload(
         &self,
         input: &CreateMultipartUploadRequest,
     ) -> Result<CreateMultipartUploadOutput, CreateMultipartUploadError>;
 
-    #[doc="Deletes the bucket. All objects (including all object versions and Delete Markers) in the bucket must be deleted before the bucket itself can be deleted."]
+    /// <p>Deletes the bucket. All objects (including all object versions and Delete Markers) in the bucket must be deleted before the bucket itself can be deleted.</p>
     fn delete_bucket(&self, input: &DeleteBucketRequest) -> Result<(), DeleteBucketError>;
 
-    #[doc="Deletes an analytics configuration for the bucket (specified by the analytics configuration ID)."]
+    /// <p>Deletes an analytics configuration for the bucket (specified by the analytics configuration ID).</p>
     fn delete_bucket_analytics_configuration(
         &self,
         input: &DeleteBucketAnalyticsConfigurationRequest,
     ) -> Result<(), DeleteBucketAnalyticsConfigurationError>;
 
-    #[doc = "Deletes the cors configuration information set for the bucket."]
+    /// <p>Deletes the cors configuration information set for the bucket.</p>
     fn delete_bucket_cors(
         &self,
         input: &DeleteBucketCorsRequest,
     ) -> Result<(), DeleteBucketCorsError>;
 
-    #[doc = "Deletes an inventory configuration (identified by the inventory ID) from the bucket."]
+    /// <p>Deletes an inventory configuration (identified by the inventory ID) from the bucket.</p>
     fn delete_bucket_inventory_configuration(
         &self,
         input: &DeleteBucketInventoryConfigurationRequest,
     ) -> Result<(), DeleteBucketInventoryConfigurationError>;
 
-    #[doc = "Deletes the lifecycle configuration from the bucket."]
+    /// <p>Deletes the lifecycle configuration from the bucket.</p>
     fn delete_bucket_lifecycle(
         &self,
         input: &DeleteBucketLifecycleRequest,
     ) -> Result<(), DeleteBucketLifecycleError>;
 
-    #[doc="Deletes a metrics configuration (specified by the metrics configuration ID) from the bucket."]
+    /// <p>Deletes a metrics configuration (specified by the metrics configuration ID) from the bucket.</p>
     fn delete_bucket_metrics_configuration(
         &self,
         input: &DeleteBucketMetricsConfigurationRequest,
     ) -> Result<(), DeleteBucketMetricsConfigurationError>;
 
-    #[doc = "Deletes the policy from the bucket."]
+    /// <p>Deletes the policy from the bucket.</p>
     fn delete_bucket_policy(
         &self,
         input: &DeleteBucketPolicyRequest,
     ) -> Result<(), DeleteBucketPolicyError>;
 
-    #[doc = "Deletes the replication configuration from the bucket."]
+    /// <p>Deletes the replication configuration from the bucket.</p>
     fn delete_bucket_replication(
         &self,
         input: &DeleteBucketReplicationRequest,
     ) -> Result<(), DeleteBucketReplicationError>;
 
-    #[doc = "Deletes the tags from the bucket."]
+    /// <p>Deletes the tags from the bucket.</p>
     fn delete_bucket_tagging(
         &self,
         input: &DeleteBucketTaggingRequest,
     ) -> Result<(), DeleteBucketTaggingError>;
 
-    #[doc = "This operation removes the website configuration from the bucket."]
+    /// <p>This operation removes the website configuration from the bucket.</p>
     fn delete_bucket_website(
         &self,
         input: &DeleteBucketWebsiteRequest,
     ) -> Result<(), DeleteBucketWebsiteError>;
 
-    #[doc="Removes the null version (if there is one) of an object and inserts a delete marker, which becomes the latest version of the object. If there isn't a null version, Amazon S3 does not remove any objects."]
+    /// <p>Removes the null version (if there is one) of an object and inserts a delete marker, which becomes the latest version of the object. If there isn&#39;t a null version, Amazon S3 does not remove any objects.</p>
     fn delete_object(
         &self,
         input: &DeleteObjectRequest,
     ) -> Result<DeleteObjectOutput, DeleteObjectError>;
 
-    #[doc = "Removes the tag-set from an existing object."]
+    /// <p>Removes the tag-set from an existing object.</p>
     fn delete_object_tagging(
         &self,
         input: &DeleteObjectTaggingRequest,
     ) -> Result<DeleteObjectTaggingOutput, DeleteObjectTaggingError>;
 
-    #[doc="This operation enables you to delete multiple objects from a bucket using a single HTTP request. You may specify up to 1000 keys."]
+    /// <p>This operation enables you to delete multiple objects from a bucket using a single HTTP request. You may specify up to 1000 keys.</p>
     fn delete_objects(
         &self,
         input: &DeleteObjectsRequest,
     ) -> Result<DeleteObjectsOutput, DeleteObjectsError>;
 
-    #[doc = "Returns the accelerate configuration of a bucket."]
+    /// <p>Returns the accelerate configuration of a bucket.</p>
     fn get_bucket_accelerate_configuration(
         &self,
         input: &GetBucketAccelerateConfigurationRequest,
     ) -> Result<GetBucketAccelerateConfigurationOutput, GetBucketAccelerateConfigurationError>;
 
-    #[doc = "Gets the access control policy for the bucket."]
+    /// <p>Gets the access control policy for the bucket.</p>
     fn get_bucket_acl(
         &self,
         input: &GetBucketAclRequest,
     ) -> Result<GetBucketAclOutput, GetBucketAclError>;
 
-    #[doc="Gets an analytics configuration for the bucket (specified by the analytics configuration ID)."]
+    /// <p>Gets an analytics configuration for the bucket (specified by the analytics configuration ID).</p>
     fn get_bucket_analytics_configuration(
         &self,
         input: &GetBucketAnalyticsConfigurationRequest,
     ) -> Result<GetBucketAnalyticsConfigurationOutput, GetBucketAnalyticsConfigurationError>;
 
-    #[doc = "Returns the cors configuration for the bucket."]
+    /// <p>Returns the cors configuration for the bucket.</p>
     fn get_bucket_cors(
         &self,
         input: &GetBucketCorsRequest,
     ) -> Result<GetBucketCorsOutput, GetBucketCorsError>;
 
-    #[doc = "Returns an inventory configuration (identified by the inventory ID) from the bucket."]
+    /// <p>Returns an inventory configuration (identified by the inventory ID) from the bucket.</p>
     fn get_bucket_inventory_configuration(
         &self,
         input: &GetBucketInventoryConfigurationRequest,
     ) -> Result<GetBucketInventoryConfigurationOutput, GetBucketInventoryConfigurationError>;
 
-    #[doc = "Deprecated, see the GetBucketLifecycleConfiguration operation."]
+    /// <p>Deprecated, see the GetBucketLifecycleConfiguration operation.</p>
     fn get_bucket_lifecycle(
         &self,
         input: &GetBucketLifecycleRequest,
     ) -> Result<GetBucketLifecycleOutput, GetBucketLifecycleError>;
 
-    #[doc = "Returns the lifecycle configuration information set on the bucket."]
+    /// <p>Returns the lifecycle configuration information set on the bucket.</p>
     fn get_bucket_lifecycle_configuration(
         &self,
         input: &GetBucketLifecycleConfigurationRequest,
     ) -> Result<GetBucketLifecycleConfigurationOutput, GetBucketLifecycleConfigurationError>;
 
-    #[doc = "Returns the region the bucket resides in."]
+    /// <p>Returns the region the bucket resides in.</p>
     fn get_bucket_location(
         &self,
         input: &GetBucketLocationRequest,
     ) -> Result<GetBucketLocationOutput, GetBucketLocationError>;
 
-    #[doc="Returns the logging status of a bucket and the permissions users have to view and modify that status. To use GET, you must be the bucket owner."]
+    /// <p>Returns the logging status of a bucket and the permissions users have to view and modify that status. To use GET, you must be the bucket owner.</p>
     fn get_bucket_logging(
         &self,
         input: &GetBucketLoggingRequest,
     ) -> Result<GetBucketLoggingOutput, GetBucketLoggingError>;
 
-    #[doc="Gets a metrics configuration (specified by the metrics configuration ID) from the bucket."]
+    /// <p>Gets a metrics configuration (specified by the metrics configuration ID) from the bucket.</p>
     fn get_bucket_metrics_configuration(
         &self,
         input: &GetBucketMetricsConfigurationRequest,
     ) -> Result<GetBucketMetricsConfigurationOutput, GetBucketMetricsConfigurationError>;
 
-    #[doc = "Deprecated, see the GetBucketNotificationConfiguration operation."]
+    /// <p>Deprecated, see the GetBucketNotificationConfiguration operation.</p>
     fn get_bucket_notification(
         &self,
         input: &GetBucketNotificationConfigurationRequest,
     ) -> Result<NotificationConfigurationDeprecated, GetBucketNotificationError>;
 
-    #[doc = "Returns the notification configuration of a bucket."]
+    /// <p>Returns the notification configuration of a bucket.</p>
     fn get_bucket_notification_configuration(
         &self,
         input: &GetBucketNotificationConfigurationRequest,
     ) -> Result<NotificationConfiguration, GetBucketNotificationConfigurationError>;
 
-    #[doc = "Returns the policy of a specified bucket."]
+    /// <p>Returns the policy of a specified bucket.</p>
     fn get_bucket_policy(
         &self,
         input: &GetBucketPolicyRequest,
     ) -> Result<GetBucketPolicyOutput, GetBucketPolicyError>;
 
-    #[doc = "Returns the replication configuration of a bucket."]
+    /// <p>Returns the replication configuration of a bucket.</p>
     fn get_bucket_replication(
         &self,
         input: &GetBucketReplicationRequest,
     ) -> Result<GetBucketReplicationOutput, GetBucketReplicationError>;
 
-    #[doc = "Returns the request payment configuration of a bucket."]
+    /// <p>Returns the request payment configuration of a bucket.</p>
     fn get_bucket_request_payment(
         &self,
         input: &GetBucketRequestPaymentRequest,
     ) -> Result<GetBucketRequestPaymentOutput, GetBucketRequestPaymentError>;
 
-    #[doc = "Returns the tag set associated with the bucket."]
+    /// <p>Returns the tag set associated with the bucket.</p>
     fn get_bucket_tagging(
         &self,
         input: &GetBucketTaggingRequest,
     ) -> Result<GetBucketTaggingOutput, GetBucketTaggingError>;
 
-    #[doc = "Returns the versioning state of a bucket."]
+    /// <p>Returns the versioning state of a bucket.</p>
     fn get_bucket_versioning(
         &self,
         input: &GetBucketVersioningRequest,
     ) -> Result<GetBucketVersioningOutput, GetBucketVersioningError>;
 
-    #[doc = "Returns the website configuration for a bucket."]
+    /// <p>Returns the website configuration for a bucket.</p>
     fn get_bucket_website(
         &self,
         input: &GetBucketWebsiteRequest,
     ) -> Result<GetBucketWebsiteOutput, GetBucketWebsiteError>;
 
-    #[doc = "Retrieves objects from Amazon S3."]
+    /// <p>Retrieves objects from Amazon S3.</p>
     fn get_object(&self, input: &GetObjectRequest) -> Result<GetObjectOutput, GetObjectError>;
 
-    #[doc = "Returns the access control list (ACL) of an object."]
+    /// <p>Returns the access control list (ACL) of an object.</p>
     fn get_object_acl(
         &self,
         input: &GetObjectAclRequest,
     ) -> Result<GetObjectAclOutput, GetObjectAclError>;
 
-    #[doc = "Returns the tag-set of an object."]
+    /// <p>Returns the tag-set of an object.</p>
     fn get_object_tagging(
         &self,
         input: &GetObjectTaggingRequest,
     ) -> Result<GetObjectTaggingOutput, GetObjectTaggingError>;
 
-    #[doc = "Return torrent files from a bucket."]
+    /// <p>Return torrent files from a bucket.</p>
     fn get_object_torrent(
         &self,
         input: &GetObjectTorrentRequest,
     ) -> Result<GetObjectTorrentOutput, GetObjectTorrentError>;
 
-    #[doc="This operation is useful to determine if a bucket exists and you have permission to access it."]
+    /// <p>This operation is useful to determine if a bucket exists and you have permission to access it.</p>
     fn head_bucket(&self, input: &HeadBucketRequest) -> Result<(), HeadBucketError>;
 
-    #[doc="The HEAD operation retrieves metadata from an object without returning the object itself. This operation is useful if you're only interested in an object's metadata. To use HEAD, you must have READ access to the object."]
+    /// <p>The HEAD operation retrieves metadata from an object without returning the object itself. This operation is useful if you&#39;re only interested in an object&#39;s metadata. To use HEAD, you must have READ access to the object.</p>
     fn head_object(&self, input: &HeadObjectRequest) -> Result<HeadObjectOutput, HeadObjectError>;
 
-    #[doc = "Lists the analytics configurations for the bucket."]
+    /// <p>Lists the analytics configurations for the bucket.</p>
     fn list_bucket_analytics_configurations(
         &self,
         input: &ListBucketAnalyticsConfigurationsRequest,
     ) -> Result<ListBucketAnalyticsConfigurationsOutput, ListBucketAnalyticsConfigurationsError>;
 
-    #[doc = "Returns a list of inventory configurations for the bucket."]
+    /// <p>Returns a list of inventory configurations for the bucket.</p>
     fn list_bucket_inventory_configurations(
         &self,
         input: &ListBucketInventoryConfigurationsRequest,
     ) -> Result<ListBucketInventoryConfigurationsOutput, ListBucketInventoryConfigurationsError>;
 
-    #[doc = "Lists the metrics configurations for the bucket."]
+    /// <p>Lists the metrics configurations for the bucket.</p>
     fn list_bucket_metrics_configurations(
         &self,
         input: &ListBucketMetricsConfigurationsRequest,
     ) -> Result<ListBucketMetricsConfigurationsOutput, ListBucketMetricsConfigurationsError>;
 
-    #[doc = "Returns a list of all buckets owned by the authenticated sender of the request."]
+    /// <p>Returns a list of all buckets owned by the authenticated sender of the request.</p>
     fn list_buckets(&self) -> Result<ListBucketsOutput, ListBucketsError>;
 
-    #[doc = "This operation lists in-progress multipart uploads."]
+    /// <p>This operation lists in-progress multipart uploads.</p>
     fn list_multipart_uploads(
         &self,
         input: &ListMultipartUploadsRequest,
     ) -> Result<ListMultipartUploadsOutput, ListMultipartUploadsError>;
 
-    #[doc = "Returns metadata about all of the versions of objects in a bucket."]
+    /// <p>Returns metadata about all of the versions of objects in a bucket.</p>
     fn list_object_versions(
         &self,
         input: &ListObjectVersionsRequest,
     ) -> Result<ListObjectVersionsOutput, ListObjectVersionsError>;
 
-    #[doc="Returns some or all (up to 1000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket."]
+    /// <p>Returns some or all (up to 1000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket.</p>
     fn list_objects(
         &self,
         input: &ListObjectsRequest,
     ) -> Result<ListObjectsOutput, ListObjectsError>;
 
-    #[doc="Returns some or all (up to 1000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket. Note: ListObjectsV2 is the revised List Objects API and we recommend you use this revised API for new application development."]
+    /// <p>Returns some or all (up to 1000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket. Note: ListObjectsV2 is the revised List Objects API and we recommend you use this revised API for new application development.</p>
     fn list_objects_v2(
         &self,
         input: &ListObjectsV2Request,
     ) -> Result<ListObjectsV2Output, ListObjectsV2Error>;
 
-    #[doc = "Lists the parts that have been uploaded for a specific multipart upload."]
+    /// <p>Lists the parts that have been uploaded for a specific multipart upload.</p>
     fn list_parts(&self, input: &ListPartsRequest) -> Result<ListPartsOutput, ListPartsError>;
 
-    #[doc = "Sets the accelerate configuration of an existing bucket."]
+    /// <p>Sets the accelerate configuration of an existing bucket.</p>
     fn put_bucket_accelerate_configuration(
         &self,
         input: &PutBucketAccelerateConfigurationRequest,
     ) -> Result<(), PutBucketAccelerateConfigurationError>;
 
-    #[doc = "Sets the permissions on a bucket using access control lists (ACL)."]
+    /// <p>Sets the permissions on a bucket using access control lists (ACL).</p>
     fn put_bucket_acl(&self, input: &PutBucketAclRequest) -> Result<(), PutBucketAclError>;
 
-    #[doc="Sets an analytics configuration for the bucket (specified by the analytics configuration ID)."]
+    /// <p>Sets an analytics configuration for the bucket (specified by the analytics configuration ID).</p>
     fn put_bucket_analytics_configuration(
         &self,
         input: &PutBucketAnalyticsConfigurationRequest,
     ) -> Result<(), PutBucketAnalyticsConfigurationError>;
 
-    #[doc = "Sets the cors configuration for a bucket."]
+    /// <p>Sets the cors configuration for a bucket.</p>
     fn put_bucket_cors(&self, input: &PutBucketCorsRequest) -> Result<(), PutBucketCorsError>;
 
-    #[doc = "Adds an inventory configuration (identified by the inventory ID) from the bucket."]
+    /// <p>Adds an inventory configuration (identified by the inventory ID) from the bucket.</p>
     fn put_bucket_inventory_configuration(
         &self,
         input: &PutBucketInventoryConfigurationRequest,
     ) -> Result<(), PutBucketInventoryConfigurationError>;
 
-    #[doc = "Deprecated, see the PutBucketLifecycleConfiguration operation."]
+    /// <p>Deprecated, see the PutBucketLifecycleConfiguration operation.</p>
     fn put_bucket_lifecycle(
         &self,
         input: &PutBucketLifecycleRequest,
     ) -> Result<(), PutBucketLifecycleError>;
 
-    #[doc="Sets lifecycle configuration for your bucket. If a lifecycle configuration exists, it replaces it."]
+    /// <p>Sets lifecycle configuration for your bucket. If a lifecycle configuration exists, it replaces it.</p>
     fn put_bucket_lifecycle_configuration(
         &self,
         input: &PutBucketLifecycleConfigurationRequest,
     ) -> Result<(), PutBucketLifecycleConfigurationError>;
 
-    #[doc="Set the logging parameters for a bucket and to specify permissions for who can view and modify the logging parameters. To set the logging status of a bucket, you must be the bucket owner."]
+    /// <p>Set the logging parameters for a bucket and to specify permissions for who can view and modify the logging parameters. To set the logging status of a bucket, you must be the bucket owner.</p>
     fn put_bucket_logging(
         &self,
         input: &PutBucketLoggingRequest,
     ) -> Result<(), PutBucketLoggingError>;
 
-    #[doc="Sets a metrics configuration (specified by the metrics configuration ID) for the bucket."]
+    /// <p>Sets a metrics configuration (specified by the metrics configuration ID) for the bucket.</p>
     fn put_bucket_metrics_configuration(
         &self,
         input: &PutBucketMetricsConfigurationRequest,
     ) -> Result<(), PutBucketMetricsConfigurationError>;
 
-    #[doc = "Deprecated, see the PutBucketNotificationConfiguraiton operation."]
+    /// <p>Deprecated, see the PutBucketNotificationConfiguraiton operation.</p>
     fn put_bucket_notification(
         &self,
         input: &PutBucketNotificationRequest,
     ) -> Result<(), PutBucketNotificationError>;
 
-    #[doc = "Enables notifications of specified events for a bucket."]
+    /// <p>Enables notifications of specified events for a bucket.</p>
     fn put_bucket_notification_configuration(
         &self,
         input: &PutBucketNotificationConfigurationRequest,
     ) -> Result<(), PutBucketNotificationConfigurationError>;
 
-    #[doc="Replaces a policy on a bucket. If the bucket already has a policy, the one in this request completely replaces it."]
+    /// <p>Replaces a policy on a bucket. If the bucket already has a policy, the one in this request completely replaces it.</p>
     fn put_bucket_policy(&self, input: &PutBucketPolicyRequest)
         -> Result<(), PutBucketPolicyError>;
 
-    #[doc = "Creates a new replication configuration (or replaces an existing one, if present)."]
+    /// <p>Creates a new replication configuration (or replaces an existing one, if present).</p>
     fn put_bucket_replication(
         &self,
         input: &PutBucketReplicationRequest,
     ) -> Result<(), PutBucketReplicationError>;
 
-    #[doc="Sets the request payment configuration for a bucket. By default, the bucket owner pays for downloads from the bucket. This configuration parameter enables the bucket owner (only) to specify that the person requesting the download will be charged for the download. Documentation on requester pays buckets can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/RequesterPaysBuckets.html"]
+    /// <p>Sets the request payment configuration for a bucket. By default, the bucket owner pays for downloads from the bucket. This configuration parameter enables the bucket owner (only) to specify that the person requesting the download will be charged for the download. Documentation on requester pays buckets can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/RequesterPaysBuckets.html</p>
     fn put_bucket_request_payment(
         &self,
         input: &PutBucketRequestPaymentRequest,
     ) -> Result<(), PutBucketRequestPaymentError>;
 
-    #[doc = "Sets the tags for a bucket."]
+    /// <p>Sets the tags for a bucket.</p>
     fn put_bucket_tagging(
         &self,
         input: &PutBucketTaggingRequest,
     ) -> Result<(), PutBucketTaggingError>;
 
-    #[doc="Sets the versioning state of an existing bucket. To set the versioning state, you must be the bucket owner."]
+    /// <p>Sets the versioning state of an existing bucket. To set the versioning state, you must be the bucket owner.</p>
     fn put_bucket_versioning(
         &self,
         input: &PutBucketVersioningRequest,
     ) -> Result<(), PutBucketVersioningError>;
 
-    #[doc = "Set the website configuration for a bucket."]
+    /// <p>Set the website configuration for a bucket.</p>
     fn put_bucket_website(
         &self,
         input: &PutBucketWebsiteRequest,
     ) -> Result<(), PutBucketWebsiteError>;
 
-    #[doc = "Adds an object to a bucket."]
+    /// <p>Adds an object to a bucket.</p>
     fn put_object(&self, input: &PutObjectRequest) -> Result<PutObjectOutput, PutObjectError>;
 
-    #[doc="uses the acl subresource to set the access control list (ACL) permissions for an object that already exists in a bucket"]
+    /// <p>uses the acl subresource to set the access control list (ACL) permissions for an object that already exists in a bucket</p>
     fn put_object_acl(
         &self,
         input: &PutObjectAclRequest,
     ) -> Result<PutObjectAclOutput, PutObjectAclError>;
 
-    #[doc = "Sets the supplied tag-set to an object that already exists in a bucket"]
+    /// <p>Sets the supplied tag-set to an object that already exists in a bucket</p>
     fn put_object_tagging(
         &self,
         input: &PutObjectTaggingRequest,
     ) -> Result<PutObjectTaggingOutput, PutObjectTaggingError>;
 
-    #[doc = "Restores an archived copy of an object back into Amazon S3"]
+    /// <p>Restores an archived copy of an object back into Amazon S3</p>
     fn restore_object(
         &self,
         input: &RestoreObjectRequest,
     ) -> Result<RestoreObjectOutput, RestoreObjectError>;
 
-    #[doc="<p>Uploads a part in a multipart upload.</p><p><b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>"]
+    /// <p>Uploads a part in a multipart upload.</p><p><b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>
     fn upload_part(&self, input: &UploadPartRequest) -> Result<UploadPartOutput, UploadPartError>;
 
-    #[doc = "Uploads a part by copying data from an existing object as data source."]
+    /// <p>Uploads a part by copying data from an existing object as data source.</p>
     fn upload_part_copy(
         &self,
         input: &UploadPartCopyRequest,
@@ -18906,8 +18906,8 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Aborts a multipart upload.</p><p>To verify that all parts have been removed, so you don't get charged for the part storage, you should call the List Parts operation and ensure the parts list is empty.</p>"]
-                    #[allow(unused_variables, warnings)]
+    /// <p>Aborts a multipart upload.</p><p>To verify that all parts have been removed, so you don't get charged for the part storage, you should call the List Parts operation and ensure the parts list is empty.</p>
+    #[allow(unused_variables, warnings)]
     fn abort_multipart_upload(
         &self,
         input: &AbortMultipartUploadRequest,
@@ -18964,7 +18964,7 @@ where
         }
     }
 
-    #[doc = "Completes a multipart upload by assembling previously uploaded parts."]
+    /// <p>Completes a multipart upload by assembling previously uploaded parts.</p>
     #[allow(unused_variables, warnings)]
     fn complete_multipart_upload(
         &self,
@@ -19057,7 +19057,7 @@ where
         }
     }
 
-    #[doc = "Creates a copy of an object that is already stored in Amazon S3."]
+    /// <p>Creates a copy of an object that is already stored in Amazon S3.</p>
     #[allow(unused_variables, warnings)]
     fn copy_object(&self, input: &CopyObjectRequest) -> Result<CopyObjectOutput, CopyObjectError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
@@ -19311,7 +19311,7 @@ where
         }
     }
 
-    #[doc = "Creates a new bucket."]
+    /// <p>Creates a new bucket.</p>
     #[allow(unused_variables, warnings)]
     fn create_bucket(
         &self,
@@ -19401,8 +19401,8 @@ where
         }
     }
 
-    #[doc="<p>Initiates a multipart upload and returns an upload ID.</p><p><b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>"]
-                    #[allow(unused_variables, warnings)]
+    /// <p>Initiates a multipart upload and returns an upload ID.</p><p><b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>
+    #[allow(unused_variables, warnings)]
     fn create_multipart_upload(
         &self,
         input: &CreateMultipartUploadRequest,
@@ -19595,8 +19595,8 @@ where
         }
     }
 
-    #[doc="Deletes the bucket. All objects (including all object versions and Delete Markers) in the bucket must be deleted before the bucket itself can be deleted."]
-                    #[allow(unused_variables, warnings)]
+    /// <p>Deletes the bucket. All objects (including all object versions and Delete Markers) in the bucket must be deleted before the bucket itself can be deleted.</p>
+    #[allow(unused_variables, warnings)]
     fn delete_bucket(&self, input: &DeleteBucketRequest) -> Result<(), DeleteBucketError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
@@ -19622,8 +19622,8 @@ where
         }
     }
 
-    #[doc="Deletes an analytics configuration for the bucket (specified by the analytics configuration ID)."]
-                    #[allow(unused_variables, warnings)]
+    /// <p>Deletes an analytics configuration for the bucket (specified by the analytics configuration ID).</p>
+    #[allow(unused_variables, warnings)]
     fn delete_bucket_analytics_configuration(
         &self,
         input: &DeleteBucketAnalyticsConfigurationRequest,
@@ -19657,7 +19657,7 @@ where
         }
     }
 
-    #[doc = "Deletes the cors configuration information set for the bucket."]
+    /// <p>Deletes the cors configuration information set for the bucket.</p>
     #[allow(unused_variables, warnings)]
     fn delete_bucket_cors(
         &self,
@@ -19691,7 +19691,7 @@ where
         }
     }
 
-    #[doc = "Deletes an inventory configuration (identified by the inventory ID) from the bucket."]
+    /// <p>Deletes an inventory configuration (identified by the inventory ID) from the bucket.</p>
     #[allow(unused_variables, warnings)]
     fn delete_bucket_inventory_configuration(
         &self,
@@ -19726,7 +19726,7 @@ where
         }
     }
 
-    #[doc = "Deletes the lifecycle configuration from the bucket."]
+    /// <p>Deletes the lifecycle configuration from the bucket.</p>
     #[allow(unused_variables, warnings)]
     fn delete_bucket_lifecycle(
         &self,
@@ -19760,8 +19760,8 @@ where
         }
     }
 
-    #[doc="Deletes a metrics configuration (specified by the metrics configuration ID) from the bucket."]
-                    #[allow(unused_variables, warnings)]
+    /// <p>Deletes a metrics configuration (specified by the metrics configuration ID) from the bucket.</p>
+    #[allow(unused_variables, warnings)]
     fn delete_bucket_metrics_configuration(
         &self,
         input: &DeleteBucketMetricsConfigurationRequest,
@@ -19795,7 +19795,7 @@ where
         }
     }
 
-    #[doc = "Deletes the policy from the bucket."]
+    /// <p>Deletes the policy from the bucket.</p>
     #[allow(unused_variables, warnings)]
     fn delete_bucket_policy(
         &self,
@@ -19829,7 +19829,7 @@ where
         }
     }
 
-    #[doc = "Deletes the replication configuration from the bucket."]
+    /// <p>Deletes the replication configuration from the bucket.</p>
     #[allow(unused_variables, warnings)]
     fn delete_bucket_replication(
         &self,
@@ -19863,7 +19863,7 @@ where
         }
     }
 
-    #[doc = "Deletes the tags from the bucket."]
+    /// <p>Deletes the tags from the bucket.</p>
     #[allow(unused_variables, warnings)]
     fn delete_bucket_tagging(
         &self,
@@ -19897,7 +19897,7 @@ where
         }
     }
 
-    #[doc = "This operation removes the website configuration from the bucket."]
+    /// <p>This operation removes the website configuration from the bucket.</p>
     #[allow(unused_variables, warnings)]
     fn delete_bucket_website(
         &self,
@@ -19931,8 +19931,8 @@ where
         }
     }
 
-    #[doc="Removes the null version (if there is one) of an object and inserts a delete marker, which becomes the latest version of the object. If there isn't a null version, Amazon S3 does not remove any objects."]
-                    #[allow(unused_variables, warnings)]
+    /// <p>Removes the null version (if there is one) of an object and inserts a delete marker, which becomes the latest version of the object. If there isn&#39;t a null version, Amazon S3 does not remove any objects.</p>
+    #[allow(unused_variables, warnings)]
     fn delete_object(
         &self,
         input: &DeleteObjectRequest,
@@ -20003,7 +20003,7 @@ where
         }
     }
 
-    #[doc = "Removes the tag-set from an existing object."]
+    /// <p>Removes the tag-set from an existing object.</p>
     #[allow(unused_variables, warnings)]
     fn delete_object_tagging(
         &self,
@@ -20061,8 +20061,8 @@ where
         }
     }
 
-    #[doc="This operation enables you to delete multiple objects from a bucket using a single HTTP request. You may specify up to 1000 keys."]
-                    #[allow(unused_variables, warnings)]
+    /// <p>This operation enables you to delete multiple objects from a bucket using a single HTTP request. You may specify up to 1000 keys.</p>
+    #[allow(unused_variables, warnings)]
     fn delete_objects(
         &self,
         input: &DeleteObjectsRequest,
@@ -20131,7 +20131,7 @@ where
         }
     }
 
-    #[doc = "Returns the accelerate configuration of a bucket."]
+    /// <p>Returns the accelerate configuration of a bucket.</p>
     #[allow(unused_variables, warnings)]
     fn get_bucket_accelerate_configuration(
         &self,
@@ -20185,7 +20185,7 @@ where
         }
     }
 
-    #[doc = "Gets the access control policy for the bucket."]
+    /// <p>Gets the access control policy for the bucket.</p>
     #[allow(unused_variables, warnings)]
     fn get_bucket_acl(
         &self,
@@ -20237,8 +20237,8 @@ where
         }
     }
 
-    #[doc="Gets an analytics configuration for the bucket (specified by the analytics configuration ID)."]
-                    #[allow(unused_variables, warnings)]
+    /// <p>Gets an analytics configuration for the bucket (specified by the analytics configuration ID).</p>
+    #[allow(unused_variables, warnings)]
     fn get_bucket_analytics_configuration(
         &self,
         input: &GetBucketAnalyticsConfigurationRequest,
@@ -20292,7 +20292,7 @@ where
         }
     }
 
-    #[doc = "Returns the cors configuration for the bucket."]
+    /// <p>Returns the cors configuration for the bucket.</p>
     #[allow(unused_variables, warnings)]
     fn get_bucket_cors(
         &self,
@@ -20344,7 +20344,7 @@ where
         }
     }
 
-    #[doc = "Returns an inventory configuration (identified by the inventory ID) from the bucket."]
+    /// <p>Returns an inventory configuration (identified by the inventory ID) from the bucket.</p>
     #[allow(unused_variables, warnings)]
     fn get_bucket_inventory_configuration(
         &self,
@@ -20399,7 +20399,7 @@ where
         }
     }
 
-    #[doc = "Deprecated, see the GetBucketLifecycleConfiguration operation."]
+    /// <p>Deprecated, see the GetBucketLifecycleConfiguration operation.</p>
     #[allow(unused_variables, warnings)]
     fn get_bucket_lifecycle(
         &self,
@@ -20451,7 +20451,7 @@ where
         }
     }
 
-    #[doc = "Returns the lifecycle configuration information set on the bucket."]
+    /// <p>Returns the lifecycle configuration information set on the bucket.</p>
     #[allow(unused_variables, warnings)]
     fn get_bucket_lifecycle_configuration(
         &self,
@@ -20505,7 +20505,7 @@ where
         }
     }
 
-    #[doc = "Returns the region the bucket resides in."]
+    /// <p>Returns the region the bucket resides in.</p>
     #[allow(unused_variables, warnings)]
     fn get_bucket_location(
         &self,
@@ -20557,8 +20557,8 @@ where
         }
     }
 
-    #[doc="Returns the logging status of a bucket and the permissions users have to view and modify that status. To use GET, you must be the bucket owner."]
-                    #[allow(unused_variables, warnings)]
+    /// <p>Returns the logging status of a bucket and the permissions users have to view and modify that status. To use GET, you must be the bucket owner.</p>
+    #[allow(unused_variables, warnings)]
     fn get_bucket_logging(
         &self,
         input: &GetBucketLoggingRequest,
@@ -20609,8 +20609,8 @@ where
         }
     }
 
-    #[doc="Gets a metrics configuration (specified by the metrics configuration ID) from the bucket."]
-                    #[allow(unused_variables, warnings)]
+    /// <p>Gets a metrics configuration (specified by the metrics configuration ID) from the bucket.</p>
+    #[allow(unused_variables, warnings)]
     fn get_bucket_metrics_configuration(
         &self,
         input: &GetBucketMetricsConfigurationRequest,
@@ -20664,7 +20664,7 @@ where
         }
     }
 
-    #[doc = "Deprecated, see the GetBucketNotificationConfiguration operation."]
+    /// <p>Deprecated, see the GetBucketNotificationConfiguration operation.</p>
     #[allow(unused_variables, warnings)]
     fn get_bucket_notification(
         &self,
@@ -20718,7 +20718,7 @@ where
         }
     }
 
-    #[doc = "Returns the notification configuration of a bucket."]
+    /// <p>Returns the notification configuration of a bucket.</p>
     #[allow(unused_variables, warnings)]
     fn get_bucket_notification_configuration(
         &self,
@@ -20770,7 +20770,7 @@ where
         }
     }
 
-    #[doc = "Returns the policy of a specified bucket."]
+    /// <p>Returns the policy of a specified bucket.</p>
     #[allow(unused_variables, warnings)]
     fn get_bucket_policy(
         &self,
@@ -20808,7 +20808,7 @@ where
         }
     }
 
-    #[doc = "Returns the replication configuration of a bucket."]
+    /// <p>Returns the replication configuration of a bucket.</p>
     #[allow(unused_variables, warnings)]
     fn get_bucket_replication(
         &self,
@@ -20860,7 +20860,7 @@ where
         }
     }
 
-    #[doc = "Returns the request payment configuration of a bucket."]
+    /// <p>Returns the request payment configuration of a bucket.</p>
     #[allow(unused_variables, warnings)]
     fn get_bucket_request_payment(
         &self,
@@ -20912,7 +20912,7 @@ where
         }
     }
 
-    #[doc = "Returns the tag set associated with the bucket."]
+    /// <p>Returns the tag set associated with the bucket.</p>
     #[allow(unused_variables, warnings)]
     fn get_bucket_tagging(
         &self,
@@ -20964,7 +20964,7 @@ where
         }
     }
 
-    #[doc = "Returns the versioning state of a bucket."]
+    /// <p>Returns the versioning state of a bucket.</p>
     #[allow(unused_variables, warnings)]
     fn get_bucket_versioning(
         &self,
@@ -21016,7 +21016,7 @@ where
         }
     }
 
-    #[doc = "Returns the website configuration for a bucket."]
+    /// <p>Returns the website configuration for a bucket.</p>
     #[allow(unused_variables, warnings)]
     fn get_bucket_website(
         &self,
@@ -21068,7 +21068,7 @@ where
         }
     }
 
-    #[doc = "Retrieves objects from Amazon S3."]
+    /// <p>Retrieves objects from Amazon S3.</p>
     #[allow(unused_variables, warnings)]
     fn get_object(&self, input: &GetObjectRequest) -> Result<GetObjectOutput, GetObjectError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
@@ -21291,7 +21291,7 @@ where
         }
     }
 
-    #[doc = "Returns the access control list (ACL) of an object."]
+    /// <p>Returns the access control list (ACL) of an object.</p>
     #[allow(unused_variables, warnings)]
     fn get_object_acl(
         &self,
@@ -21352,7 +21352,7 @@ where
         }
     }
 
-    #[doc = "Returns the tag-set of an object."]
+    /// <p>Returns the tag-set of an object.</p>
     #[allow(unused_variables, warnings)]
     fn get_object_tagging(
         &self,
@@ -21410,7 +21410,7 @@ where
         }
     }
 
-    #[doc = "Return torrent files from a bucket."]
+    /// <p>Return torrent files from a bucket.</p>
     #[allow(unused_variables, warnings)]
     fn get_object_torrent(
         &self,
@@ -21452,8 +21452,8 @@ where
         }
     }
 
-    #[doc="This operation is useful to determine if a bucket exists and you have permission to access it."]
-                    #[allow(unused_variables, warnings)]
+    /// <p>This operation is useful to determine if a bucket exists and you have permission to access it.</p>
+    #[allow(unused_variables, warnings)]
     fn head_bucket(&self, input: &HeadBucketRequest) -> Result<(), HeadBucketError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
@@ -21479,8 +21479,8 @@ where
         }
     }
 
-    #[doc="The HEAD operation retrieves metadata from an object without returning the object itself. This operation is useful if you're only interested in an object's metadata. To use HEAD, you must have READ access to the object."]
-                    #[allow(unused_variables, warnings)]
+    /// <p>The HEAD operation retrieves metadata from an object without returning the object itself. This operation is useful if you&#39;re only interested in an object&#39;s metadata. To use HEAD, you must have READ access to the object.</p>
+    #[allow(unused_variables, warnings)]
     fn head_object(&self, input: &HeadObjectRequest) -> Result<HeadObjectOutput, HeadObjectError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
@@ -21692,7 +21692,7 @@ where
         }
     }
 
-    #[doc = "Lists the analytics configurations for the bucket."]
+    /// <p>Lists the analytics configurations for the bucket.</p>
     #[allow(unused_variables, warnings)]
     fn list_bucket_analytics_configurations(
         &self,
@@ -21750,7 +21750,7 @@ where
         }
     }
 
-    #[doc = "Returns a list of inventory configurations for the bucket."]
+    /// <p>Returns a list of inventory configurations for the bucket.</p>
     #[allow(unused_variables, warnings)]
     fn list_bucket_inventory_configurations(
         &self,
@@ -21808,7 +21808,7 @@ where
         }
     }
 
-    #[doc = "Lists the metrics configurations for the bucket."]
+    /// <p>Lists the metrics configurations for the bucket.</p>
     #[allow(unused_variables, warnings)]
     fn list_bucket_metrics_configurations(
         &self,
@@ -21865,7 +21865,7 @@ where
         }
     }
 
-    #[doc = "Returns a list of all buckets owned by the authenticated sender of the request."]
+    /// <p>Returns a list of all buckets owned by the authenticated sender of the request.</p>
     #[allow(unused_variables, warnings)]
     fn list_buckets(&self) -> Result<ListBucketsOutput, ListBucketsError> {
         let request_uri = "/";
@@ -21910,7 +21910,7 @@ where
         }
     }
 
-    #[doc = "This operation lists in-progress multipart uploads."]
+    /// <p>This operation lists in-progress multipart uploads.</p>
     #[allow(unused_variables, warnings)]
     fn list_multipart_uploads(
         &self,
@@ -21980,7 +21980,7 @@ where
         }
     }
 
-    #[doc = "Returns metadata about all of the versions of objects in a bucket."]
+    /// <p>Returns metadata about all of the versions of objects in a bucket.</p>
     #[allow(unused_variables, warnings)]
     fn list_object_versions(
         &self,
@@ -22050,8 +22050,8 @@ where
         }
     }
 
-    #[doc="Returns some or all (up to 1000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket."]
-                    #[allow(unused_variables, warnings)]
+    /// <p>Returns some or all (up to 1000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket.</p>
+    #[allow(unused_variables, warnings)]
     fn list_objects(
         &self,
         input: &ListObjectsRequest,
@@ -22119,8 +22119,8 @@ where
         }
     }
 
-    #[doc="Returns some or all (up to 1000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket. Note: ListObjectsV2 is the revised List Objects API and we recommend you use this revised API for new application development."]
-                    #[allow(unused_variables, warnings)]
+    /// <p>Returns some or all (up to 1000) of the objects in a bucket. You can use the request parameters as selection criteria to return a subset of the objects in a bucket. Note: ListObjectsV2 is the revised List Objects API and we recommend you use this revised API for new application development.</p>
+    #[allow(unused_variables, warnings)]
     fn list_objects_v2(
         &self,
         input: &ListObjectsV2Request,
@@ -22195,7 +22195,7 @@ where
         }
     }
 
-    #[doc = "Lists the parts that have been uploaded for a specific multipart upload."]
+    /// <p>Lists the parts that have been uploaded for a specific multipart upload.</p>
     #[allow(unused_variables, warnings)]
     fn list_parts(&self, input: &ListPartsRequest) -> Result<ListPartsOutput, ListPartsError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
@@ -22264,7 +22264,7 @@ where
         }
     }
 
-    #[doc = "Sets the accelerate configuration of an existing bucket."]
+    /// <p>Sets the accelerate configuration of an existing bucket.</p>
     #[allow(unused_variables, warnings)]
     fn put_bucket_accelerate_configuration(
         &self,
@@ -22308,7 +22308,7 @@ where
         }
     }
 
-    #[doc = "Sets the permissions on a bucket using access control lists (ACL)."]
+    /// <p>Sets the permissions on a bucket using access control lists (ACL).</p>
     #[allow(unused_variables, warnings)]
     fn put_bucket_acl(&self, input: &PutBucketAclRequest) -> Result<(), PutBucketAclError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
@@ -22380,8 +22380,8 @@ where
         }
     }
 
-    #[doc="Sets an analytics configuration for the bucket (specified by the analytics configuration ID)."]
-                    #[allow(unused_variables, warnings)]
+    /// <p>Sets an analytics configuration for the bucket (specified by the analytics configuration ID).</p>
+    #[allow(unused_variables, warnings)]
     fn put_bucket_analytics_configuration(
         &self,
         input: &PutBucketAnalyticsConfigurationRequest,
@@ -22425,7 +22425,7 @@ where
         }
     }
 
-    #[doc = "Sets the cors configuration for a bucket."]
+    /// <p>Sets the cors configuration for a bucket.</p>
     #[allow(unused_variables, warnings)]
     fn put_bucket_cors(&self, input: &PutBucketCorsRequest) -> Result<(), PutBucketCorsError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
@@ -22471,7 +22471,7 @@ where
         }
     }
 
-    #[doc = "Adds an inventory configuration (identified by the inventory ID) from the bucket."]
+    /// <p>Adds an inventory configuration (identified by the inventory ID) from the bucket.</p>
     #[allow(unused_variables, warnings)]
     fn put_bucket_inventory_configuration(
         &self,
@@ -22516,7 +22516,7 @@ where
         }
     }
 
-    #[doc = "Deprecated, see the PutBucketLifecycleConfiguration operation."]
+    /// <p>Deprecated, see the PutBucketLifecycleConfiguration operation.</p>
     #[allow(unused_variables, warnings)]
     fn put_bucket_lifecycle(
         &self,
@@ -22569,8 +22569,8 @@ where
         }
     }
 
-    #[doc="Sets lifecycle configuration for your bucket. If a lifecycle configuration exists, it replaces it."]
-                    #[allow(unused_variables, warnings)]
+    /// <p>Sets lifecycle configuration for your bucket. If a lifecycle configuration exists, it replaces it.</p>
+    #[allow(unused_variables, warnings)]
     fn put_bucket_lifecycle_configuration(
         &self,
         input: &PutBucketLifecycleConfigurationRequest,
@@ -22619,8 +22619,8 @@ where
         }
     }
 
-    #[doc="Set the logging parameters for a bucket and to specify permissions for who can view and modify the logging parameters. To set the logging status of a bucket, you must be the bucket owner."]
-                    #[allow(unused_variables, warnings)]
+    /// <p>Set the logging parameters for a bucket and to specify permissions for who can view and modify the logging parameters. To set the logging status of a bucket, you must be the bucket owner.</p>
+    #[allow(unused_variables, warnings)]
     fn put_bucket_logging(
         &self,
         input: &PutBucketLoggingRequest,
@@ -22666,8 +22666,8 @@ where
         }
     }
 
-    #[doc="Sets a metrics configuration (specified by the metrics configuration ID) for the bucket."]
-                    #[allow(unused_variables, warnings)]
+    /// <p>Sets a metrics configuration (specified by the metrics configuration ID) for the bucket.</p>
+    #[allow(unused_variables, warnings)]
     fn put_bucket_metrics_configuration(
         &self,
         input: &PutBucketMetricsConfigurationRequest,
@@ -22711,7 +22711,7 @@ where
         }
     }
 
-    #[doc = "Deprecated, see the PutBucketNotificationConfiguraiton operation."]
+    /// <p>Deprecated, see the PutBucketNotificationConfiguraiton operation.</p>
     #[allow(unused_variables, warnings)]
     fn put_bucket_notification(
         &self,
@@ -22758,7 +22758,7 @@ where
         }
     }
 
-    #[doc = "Enables notifications of specified events for a bucket."]
+    /// <p>Enables notifications of specified events for a bucket.</p>
     #[allow(unused_variables, warnings)]
     fn put_bucket_notification_configuration(
         &self,
@@ -22802,8 +22802,8 @@ where
         }
     }
 
-    #[doc="Replaces a policy on a bucket. If the bucket already has a policy, the one in this request completely replaces it."]
-                    #[allow(unused_variables, warnings)]
+    /// <p>Replaces a policy on a bucket. If the bucket already has a policy, the one in this request completely replaces it.</p>
+    #[allow(unused_variables, warnings)]
     fn put_bucket_policy(
         &self,
         input: &PutBucketPolicyRequest,
@@ -22845,7 +22845,7 @@ where
         }
     }
 
-    #[doc = "Creates a new replication configuration (or replaces an existing one, if present)."]
+    /// <p>Creates a new replication configuration (or replaces an existing one, if present).</p>
     #[allow(unused_variables, warnings)]
     fn put_bucket_replication(
         &self,
@@ -22894,8 +22894,8 @@ where
         }
     }
 
-    #[doc="Sets the request payment configuration for a bucket. By default, the bucket owner pays for downloads from the bucket. This configuration parameter enables the bucket owner (only) to specify that the person requesting the download will be charged for the download. Documentation on requester pays buckets can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/RequesterPaysBuckets.html"]
-                    #[allow(unused_variables, warnings)]
+    /// <p>Sets the request payment configuration for a bucket. By default, the bucket owner pays for downloads from the bucket. This configuration parameter enables the bucket owner (only) to specify that the person requesting the download will be charged for the download. Documentation on requester pays buckets can be found at http://docs.aws.amazon.com/AmazonS3/latest/dev/RequesterPaysBuckets.html</p>
+    #[allow(unused_variables, warnings)]
     fn put_bucket_request_payment(
         &self,
         input: &PutBucketRequestPaymentRequest,
@@ -22941,7 +22941,7 @@ where
         }
     }
 
-    #[doc = "Sets the tags for a bucket."]
+    /// <p>Sets the tags for a bucket.</p>
     #[allow(unused_variables, warnings)]
     fn put_bucket_tagging(
         &self,
@@ -22986,8 +22986,8 @@ where
         }
     }
 
-    #[doc="Sets the versioning state of an existing bucket. To set the versioning state, you must be the bucket owner."]
-                    #[allow(unused_variables, warnings)]
+    /// <p>Sets the versioning state of an existing bucket. To set the versioning state, you must be the bucket owner.</p>
+    #[allow(unused_variables, warnings)]
     fn put_bucket_versioning(
         &self,
         input: &PutBucketVersioningRequest,
@@ -23037,7 +23037,7 @@ where
         }
     }
 
-    #[doc = "Set the website configuration for a bucket."]
+    /// <p>Set the website configuration for a bucket.</p>
     #[allow(unused_variables, warnings)]
     fn put_bucket_website(
         &self,
@@ -23084,7 +23084,7 @@ where
         }
     }
 
-    #[doc = "Adds an object to a bucket."]
+    /// <p>Adds an object to a bucket.</p>
     #[allow(unused_variables, warnings)]
     fn put_object(&self, input: &PutObjectRequest) -> Result<PutObjectOutput, PutObjectError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
@@ -23289,8 +23289,8 @@ where
         }
     }
 
-    #[doc="uses the acl subresource to set the access control list (ACL) permissions for an object that already exists in a bucket"]
-                    #[allow(unused_variables, warnings)]
+    /// <p>uses the acl subresource to set the access control list (ACL) permissions for an object that already exists in a bucket</p>
+    #[allow(unused_variables, warnings)]
     fn put_object_acl(
         &self,
         input: &PutObjectAclRequest,
@@ -23392,7 +23392,7 @@ where
         }
     }
 
-    #[doc = "Sets the supplied tag-set to an object that already exists in a bucket"]
+    /// <p>Sets the supplied tag-set to an object that already exists in a bucket</p>
     #[allow(unused_variables, warnings)]
     fn put_object_tagging(
         &self,
@@ -23459,7 +23459,7 @@ where
         }
     }
 
-    #[doc = "Restores an archived copy of an object back into Amazon S3"]
+    /// <p>Restores an archived copy of an object back into Amazon S3</p>
     #[allow(unused_variables, warnings)]
     fn restore_object(
         &self,
@@ -23534,8 +23534,8 @@ where
         }
     }
 
-    #[doc="<p>Uploads a part in a multipart upload.</p><p><b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>"]
-                    #[allow(unused_variables, warnings)]
+    /// <p>Uploads a part in a multipart upload.</p><p><b>Note:</b> After you initiate multipart upload and upload one or more parts, you must either complete or abort multipart upload in order to stop getting charged for storage of the uploaded parts. Only after you either complete or abort multipart upload, Amazon S3 frees up the parts storage and stops charging you for the parts storage.</p>
+    #[allow(unused_variables, warnings)]
     fn upload_part(&self, input: &UploadPartRequest) -> Result<UploadPartOutput, UploadPartError> {
         let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
 
@@ -23654,7 +23654,7 @@ where
         }
     }
 
-    #[doc = "Uploads a part by copying data from an existing object as data source."]
+    /// <p>Uploads a part by copying data from an existing object as data source.</p>
     #[allow(unused_variables, warnings)]
     fn upload_part_copy(
         &self,

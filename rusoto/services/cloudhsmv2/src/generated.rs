@@ -138,7 +138,7 @@ pub struct CreateClusterRequest {
     #[serde(rename = "SourceBackupId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_backup_id: Option<String>,
-    /// <p>The identifiers (IDs) of the subnets where you are creating the cluster. You must specify at least one subnet. If you specify multiple subnets, they must meet the following criteria:</p> <ul> <li> <p>All subnets must be in the same virtual private cloud (VPC).</p> </li> <li> <p>You can specify only one subnet per Availability Zone.</p> </li> </ul>
+    /// <p><p>The identifiers (IDs) of the subnets where you are creating the cluster. You must specify at least one subnet. If you specify multiple subnets, they must meet the following criteria:</p> <ul> <li> <p>All subnets must be in the same virtual private cloud (VPC).</p> </li> <li> <p>You can specify only one subnet per Availability Zone.</p> </li> </ul></p>
     #[serde(rename = "SubnetIds")]
     pub subnet_ids: Vec<String>,
 }
@@ -398,15 +398,15 @@ pub struct UntagResourceResponse;
 /// Errors returned by CreateCluster
 #[derive(Debug, PartialEq)]
 pub enum CreateClusterError {
-    ///<p>The request was rejected because the requester does not have permission to perform the requested operation.</p>
+    /// <p>The request was rejected because the requester does not have permission to perform the requested operation.</p>
     CloudHsmAccessDenied(String),
-    ///<p>The request was rejected because of an AWS CloudHSM internal failure. The request can be retried.</p>
+    /// <p>The request was rejected because of an AWS CloudHSM internal failure. The request can be retried.</p>
     CloudHsmInternalFailure(String),
-    ///<p>The request was rejected because it is not a valid request.</p>
+    /// <p>The request was rejected because it is not a valid request.</p>
     CloudHsmInvalidRequest(String),
-    ///<p>The request was rejected because it refers to a resource that cannot be found.</p>
+    /// <p>The request was rejected because it refers to a resource that cannot be found.</p>
     CloudHsmResourceNotFound(String),
-    ///<p>The request was rejected because an error occurred.</p>
+    /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -500,15 +500,15 @@ impl Error for CreateClusterError {
 /// Errors returned by CreateHsm
 #[derive(Debug, PartialEq)]
 pub enum CreateHsmError {
-    ///<p>The request was rejected because the requester does not have permission to perform the requested operation.</p>
+    /// <p>The request was rejected because the requester does not have permission to perform the requested operation.</p>
     CloudHsmAccessDenied(String),
-    ///<p>The request was rejected because of an AWS CloudHSM internal failure. The request can be retried.</p>
+    /// <p>The request was rejected because of an AWS CloudHSM internal failure. The request can be retried.</p>
     CloudHsmInternalFailure(String),
-    ///<p>The request was rejected because it is not a valid request.</p>
+    /// <p>The request was rejected because it is not a valid request.</p>
     CloudHsmInvalidRequest(String),
-    ///<p>The request was rejected because it refers to a resource that cannot be found.</p>
+    /// <p>The request was rejected because it refers to a resource that cannot be found.</p>
     CloudHsmResourceNotFound(String),
-    ///<p>The request was rejected because an error occurred.</p>
+    /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -600,15 +600,15 @@ impl Error for CreateHsmError {
 /// Errors returned by DeleteCluster
 #[derive(Debug, PartialEq)]
 pub enum DeleteClusterError {
-    ///<p>The request was rejected because the requester does not have permission to perform the requested operation.</p>
+    /// <p>The request was rejected because the requester does not have permission to perform the requested operation.</p>
     CloudHsmAccessDenied(String),
-    ///<p>The request was rejected because of an AWS CloudHSM internal failure. The request can be retried.</p>
+    /// <p>The request was rejected because of an AWS CloudHSM internal failure. The request can be retried.</p>
     CloudHsmInternalFailure(String),
-    ///<p>The request was rejected because it is not a valid request.</p>
+    /// <p>The request was rejected because it is not a valid request.</p>
     CloudHsmInvalidRequest(String),
-    ///<p>The request was rejected because it refers to a resource that cannot be found.</p>
+    /// <p>The request was rejected because it refers to a resource that cannot be found.</p>
     CloudHsmResourceNotFound(String),
-    ///<p>The request was rejected because an error occurred.</p>
+    /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -702,15 +702,15 @@ impl Error for DeleteClusterError {
 /// Errors returned by DeleteHsm
 #[derive(Debug, PartialEq)]
 pub enum DeleteHsmError {
-    ///<p>The request was rejected because the requester does not have permission to perform the requested operation.</p>
+    /// <p>The request was rejected because the requester does not have permission to perform the requested operation.</p>
     CloudHsmAccessDenied(String),
-    ///<p>The request was rejected because of an AWS CloudHSM internal failure. The request can be retried.</p>
+    /// <p>The request was rejected because of an AWS CloudHSM internal failure. The request can be retried.</p>
     CloudHsmInternalFailure(String),
-    ///<p>The request was rejected because it is not a valid request.</p>
+    /// <p>The request was rejected because it is not a valid request.</p>
     CloudHsmInvalidRequest(String),
-    ///<p>The request was rejected because it refers to a resource that cannot be found.</p>
+    /// <p>The request was rejected because it refers to a resource that cannot be found.</p>
     CloudHsmResourceNotFound(String),
-    ///<p>The request was rejected because an error occurred.</p>
+    /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -802,15 +802,15 @@ impl Error for DeleteHsmError {
 /// Errors returned by DescribeBackups
 #[derive(Debug, PartialEq)]
 pub enum DescribeBackupsError {
-    ///<p>The request was rejected because the requester does not have permission to perform the requested operation.</p>
+    /// <p>The request was rejected because the requester does not have permission to perform the requested operation.</p>
     CloudHsmAccessDenied(String),
-    ///<p>The request was rejected because of an AWS CloudHSM internal failure. The request can be retried.</p>
+    /// <p>The request was rejected because of an AWS CloudHSM internal failure. The request can be retried.</p>
     CloudHsmInternalFailure(String),
-    ///<p>The request was rejected because it is not a valid request.</p>
+    /// <p>The request was rejected because it is not a valid request.</p>
     CloudHsmInvalidRequest(String),
-    ///<p>The request was rejected because it refers to a resource that cannot be found.</p>
+    /// <p>The request was rejected because it refers to a resource that cannot be found.</p>
     CloudHsmResourceNotFound(String),
-    ///<p>The request was rejected because an error occurred.</p>
+    /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -904,13 +904,13 @@ impl Error for DescribeBackupsError {
 /// Errors returned by DescribeClusters
 #[derive(Debug, PartialEq)]
 pub enum DescribeClustersError {
-    ///<p>The request was rejected because the requester does not have permission to perform the requested operation.</p>
+    /// <p>The request was rejected because the requester does not have permission to perform the requested operation.</p>
     CloudHsmAccessDenied(String),
-    ///<p>The request was rejected because of an AWS CloudHSM internal failure. The request can be retried.</p>
+    /// <p>The request was rejected because of an AWS CloudHSM internal failure. The request can be retried.</p>
     CloudHsmInternalFailure(String),
-    ///<p>The request was rejected because it is not a valid request.</p>
+    /// <p>The request was rejected because it is not a valid request.</p>
     CloudHsmInvalidRequest(String),
-    ///<p>The request was rejected because an error occurred.</p>
+    /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1000,15 +1000,15 @@ impl Error for DescribeClustersError {
 /// Errors returned by InitializeCluster
 #[derive(Debug, PartialEq)]
 pub enum InitializeClusterError {
-    ///<p>The request was rejected because the requester does not have permission to perform the requested operation.</p>
+    /// <p>The request was rejected because the requester does not have permission to perform the requested operation.</p>
     CloudHsmAccessDenied(String),
-    ///<p>The request was rejected because of an AWS CloudHSM internal failure. The request can be retried.</p>
+    /// <p>The request was rejected because of an AWS CloudHSM internal failure. The request can be retried.</p>
     CloudHsmInternalFailure(String),
-    ///<p>The request was rejected because it is not a valid request.</p>
+    /// <p>The request was rejected because it is not a valid request.</p>
     CloudHsmInvalidRequest(String),
-    ///<p>The request was rejected because it refers to a resource that cannot be found.</p>
+    /// <p>The request was rejected because it refers to a resource that cannot be found.</p>
     CloudHsmResourceNotFound(String),
-    ///<p>The request was rejected because an error occurred.</p>
+    /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1106,15 +1106,15 @@ impl Error for InitializeClusterError {
 /// Errors returned by ListTags
 #[derive(Debug, PartialEq)]
 pub enum ListTagsError {
-    ///<p>The request was rejected because the requester does not have permission to perform the requested operation.</p>
+    /// <p>The request was rejected because the requester does not have permission to perform the requested operation.</p>
     CloudHsmAccessDenied(String),
-    ///<p>The request was rejected because of an AWS CloudHSM internal failure. The request can be retried.</p>
+    /// <p>The request was rejected because of an AWS CloudHSM internal failure. The request can be retried.</p>
     CloudHsmInternalFailure(String),
-    ///<p>The request was rejected because it is not a valid request.</p>
+    /// <p>The request was rejected because it is not a valid request.</p>
     CloudHsmInvalidRequest(String),
-    ///<p>The request was rejected because it refers to a resource that cannot be found.</p>
+    /// <p>The request was rejected because it refers to a resource that cannot be found.</p>
     CloudHsmResourceNotFound(String),
-    ///<p>The request was rejected because an error occurred.</p>
+    /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1206,15 +1206,15 @@ impl Error for ListTagsError {
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
-    ///<p>The request was rejected because the requester does not have permission to perform the requested operation.</p>
+    /// <p>The request was rejected because the requester does not have permission to perform the requested operation.</p>
     CloudHsmAccessDenied(String),
-    ///<p>The request was rejected because of an AWS CloudHSM internal failure. The request can be retried.</p>
+    /// <p>The request was rejected because of an AWS CloudHSM internal failure. The request can be retried.</p>
     CloudHsmInternalFailure(String),
-    ///<p>The request was rejected because it is not a valid request.</p>
+    /// <p>The request was rejected because it is not a valid request.</p>
     CloudHsmInvalidRequest(String),
-    ///<p>The request was rejected because it refers to a resource that cannot be found.</p>
+    /// <p>The request was rejected because it refers to a resource that cannot be found.</p>
     CloudHsmResourceNotFound(String),
-    ///<p>The request was rejected because an error occurred.</p>
+    /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1308,15 +1308,15 @@ impl Error for TagResourceError {
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
-    ///<p>The request was rejected because the requester does not have permission to perform the requested operation.</p>
+    /// <p>The request was rejected because the requester does not have permission to perform the requested operation.</p>
     CloudHsmAccessDenied(String),
-    ///<p>The request was rejected because of an AWS CloudHSM internal failure. The request can be retried.</p>
+    /// <p>The request was rejected because of an AWS CloudHSM internal failure. The request can be retried.</p>
     CloudHsmInternalFailure(String),
-    ///<p>The request was rejected because it is not a valid request.</p>
+    /// <p>The request was rejected because it is not a valid request.</p>
     CloudHsmInvalidRequest(String),
-    ///<p>The request was rejected because it refers to a resource that cannot be found.</p>
+    /// <p>The request was rejected because it refers to a resource that cannot be found.</p>
     CloudHsmResourceNotFound(String),
-    ///<p>The request was rejected because an error occurred.</p>
+    /// <p>The request was rejected because an error occurred.</p>
     CloudHsmService(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1409,52 +1409,52 @@ impl Error for UntagResourceError {
 }
 /// Trait representing the capabilities of the CloudHSM V2 API. CloudHSM V2 clients implement this trait.
 pub trait CloudHsmv2 {
-    #[doc = "<p>Creates a new AWS CloudHSM cluster.</p>"]
+    /// <p>Creates a new AWS CloudHSM cluster.</p>
     fn create_cluster(
         &self,
         input: &CreateClusterRequest,
     ) -> Result<CreateClusterResponse, CreateClusterError>;
 
-    #[doc="<p>Creates a new hardware security module (HSM) in the specified AWS CloudHSM cluster.</p>"]
+    /// <p>Creates a new hardware security module (HSM) in the specified AWS CloudHSM cluster.</p>
     fn create_hsm(&self, input: &CreateHsmRequest) -> Result<CreateHsmResponse, CreateHsmError>;
 
-    #[doc="<p>Deletes the specified AWS CloudHSM cluster. Before you can delete a cluster, you must delete all HSMs in the cluster. To see if the cluster contains any HSMs, use <a>DescribeClusters</a>. To delete an HSM, use <a>DeleteHsm</a>.</p>"]
+    /// <p>Deletes the specified AWS CloudHSM cluster. Before you can delete a cluster, you must delete all HSMs in the cluster. To see if the cluster contains any HSMs, use <a>DescribeClusters</a>. To delete an HSM, use <a>DeleteHsm</a>.</p>
     fn delete_cluster(
         &self,
         input: &DeleteClusterRequest,
     ) -> Result<DeleteClusterResponse, DeleteClusterError>;
 
-    #[doc="<p>Deletes the specified HSM. To specify an HSM, you can use its identifier (ID), the IP address of the HSM's elastic network interface (ENI), or the ID of the HSM's ENI. You need to specify only one of these values. To find these values, use <a>DescribeClusters</a>.</p>"]
+    /// <p>Deletes the specified HSM. To specify an HSM, you can use its identifier (ID), the IP address of the HSM's elastic network interface (ENI), or the ID of the HSM's ENI. You need to specify only one of these values. To find these values, use <a>DescribeClusters</a>.</p>
     fn delete_hsm(&self, input: &DeleteHsmRequest) -> Result<DeleteHsmResponse, DeleteHsmError>;
 
-    #[doc="<p>Gets information about backups of AWS CloudHSM clusters.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the backups. When the response contains only a subset of backups, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>DescribeBackups</code> request to get more backups. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more backups to get.</p>"]
+    /// <p>Gets information about backups of AWS CloudHSM clusters.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the backups. When the response contains only a subset of backups, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>DescribeBackups</code> request to get more backups. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more backups to get.</p>
     fn describe_backups(
         &self,
         input: &DescribeBackupsRequest,
     ) -> Result<DescribeBackupsResponse, DescribeBackupsError>;
 
-    #[doc="<p>Gets information about AWS CloudHSM clusters.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the clusters. When the response contains only a subset of clusters, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>DescribeClusters</code> request to get more clusters. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more clusters to get.</p>"]
+    /// <p>Gets information about AWS CloudHSM clusters.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the clusters. When the response contains only a subset of clusters, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>DescribeClusters</code> request to get more clusters. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more clusters to get.</p>
     fn describe_clusters(
         &self,
         input: &DescribeClustersRequest,
     ) -> Result<DescribeClustersResponse, DescribeClustersError>;
 
-    #[doc="<p>Claims an AWS CloudHSM cluster by submitting the cluster certificate issued by your issuing certificate authority (CA) and the CA's root certificate. Before you can claim a cluster, you must sign the cluster's certificate signing request (CSR) with your issuing CA. To get the cluster's CSR, use <a>DescribeClusters</a>.</p>"]
+    /// <p>Claims an AWS CloudHSM cluster by submitting the cluster certificate issued by your issuing certificate authority (CA) and the CA's root certificate. Before you can claim a cluster, you must sign the cluster's certificate signing request (CSR) with your issuing CA. To get the cluster's CSR, use <a>DescribeClusters</a>.</p>
     fn initialize_cluster(
         &self,
         input: &InitializeClusterRequest,
     ) -> Result<InitializeClusterResponse, InitializeClusterError>;
 
-    #[doc="<p>Gets a list of tags for the specified AWS CloudHSM cluster.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the tags. When the response contains only a subset of tags, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>ListTags</code> request to get more tags. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more tags to get.</p>"]
+    /// <p>Gets a list of tags for the specified AWS CloudHSM cluster.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the tags. When the response contains only a subset of tags, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>ListTags</code> request to get more tags. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more tags to get.</p>
     fn list_tags(&self, input: &ListTagsRequest) -> Result<ListTagsResponse, ListTagsError>;
 
-    #[doc = "<p>Adds or overwrites one or more tags for the specified AWS CloudHSM cluster.</p>"]
+    /// <p>Adds or overwrites one or more tags for the specified AWS CloudHSM cluster.</p>
     fn tag_resource(
         &self,
         input: &TagResourceRequest,
     ) -> Result<TagResourceResponse, TagResourceError>;
 
-    #[doc = "<p>Removes the specified tag or tags from the specified AWS CloudHSM cluster.</p>"]
+    /// <p>Removes the specified tag or tags from the specified AWS CloudHSM cluster.</p>
     fn untag_resource(
         &self,
         input: &UntagResourceRequest,
@@ -1490,7 +1490,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc = "<p>Creates a new AWS CloudHSM cluster.</p>"]
+    /// <p>Creates a new AWS CloudHSM cluster.</p>
     fn create_cluster(
         &self,
         input: &CreateClusterRequest,
@@ -1524,7 +1524,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new hardware security module (HSM) in the specified AWS CloudHSM cluster.</p>"]
+    /// <p>Creates a new hardware security module (HSM) in the specified AWS CloudHSM cluster.</p>
     fn create_hsm(&self, input: &CreateHsmRequest) -> Result<CreateHsmResponse, CreateHsmError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
         request.set_endpoint_prefix("cloudhsmv2".to_string());
@@ -1555,7 +1555,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified AWS CloudHSM cluster. Before you can delete a cluster, you must delete all HSMs in the cluster. To see if the cluster contains any HSMs, use <a>DescribeClusters</a>. To delete an HSM, use <a>DeleteHsm</a>.</p>"]
+    /// <p>Deletes the specified AWS CloudHSM cluster. Before you can delete a cluster, you must delete all HSMs in the cluster. To see if the cluster contains any HSMs, use <a>DescribeClusters</a>. To delete an HSM, use <a>DeleteHsm</a>.</p>
     fn delete_cluster(
         &self,
         input: &DeleteClusterRequest,
@@ -1589,7 +1589,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified HSM. To specify an HSM, you can use its identifier (ID), the IP address of the HSM's elastic network interface (ENI), or the ID of the HSM's ENI. You need to specify only one of these values. To find these values, use <a>DescribeClusters</a>.</p>"]
+    /// <p>Deletes the specified HSM. To specify an HSM, you can use its identifier (ID), the IP address of the HSM's elastic network interface (ENI), or the ID of the HSM's ENI. You need to specify only one of these values. To find these values, use <a>DescribeClusters</a>.</p>
     fn delete_hsm(&self, input: &DeleteHsmRequest) -> Result<DeleteHsmResponse, DeleteHsmError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
         request.set_endpoint_prefix("cloudhsmv2".to_string());
@@ -1620,7 +1620,7 @@ where
         }
     }
 
-    #[doc="<p>Gets information about backups of AWS CloudHSM clusters.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the backups. When the response contains only a subset of backups, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>DescribeBackups</code> request to get more backups. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more backups to get.</p>"]
+    /// <p>Gets information about backups of AWS CloudHSM clusters.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the backups. When the response contains only a subset of backups, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>DescribeBackups</code> request to get more backups. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more backups to get.</p>
     fn describe_backups(
         &self,
         input: &DescribeBackupsRequest,
@@ -1654,7 +1654,7 @@ where
         }
     }
 
-    #[doc="<p>Gets information about AWS CloudHSM clusters.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the clusters. When the response contains only a subset of clusters, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>DescribeClusters</code> request to get more clusters. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more clusters to get.</p>"]
+    /// <p>Gets information about AWS CloudHSM clusters.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the clusters. When the response contains only a subset of clusters, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>DescribeClusters</code> request to get more clusters. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more clusters to get.</p>
     fn describe_clusters(
         &self,
         input: &DescribeClustersRequest,
@@ -1688,7 +1688,7 @@ where
         }
     }
 
-    #[doc="<p>Claims an AWS CloudHSM cluster by submitting the cluster certificate issued by your issuing certificate authority (CA) and the CA's root certificate. Before you can claim a cluster, you must sign the cluster's certificate signing request (CSR) with your issuing CA. To get the cluster's CSR, use <a>DescribeClusters</a>.</p>"]
+    /// <p>Claims an AWS CloudHSM cluster by submitting the cluster certificate issued by your issuing certificate authority (CA) and the CA's root certificate. Before you can claim a cluster, you must sign the cluster's certificate signing request (CSR) with your issuing CA. To get the cluster's CSR, use <a>DescribeClusters</a>.</p>
     fn initialize_cluster(
         &self,
         input: &InitializeClusterRequest,
@@ -1722,7 +1722,7 @@ where
         }
     }
 
-    #[doc="<p>Gets a list of tags for the specified AWS CloudHSM cluster.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the tags. When the response contains only a subset of tags, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>ListTags</code> request to get more tags. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more tags to get.</p>"]
+    /// <p>Gets a list of tags for the specified AWS CloudHSM cluster.</p> <p>This is a paginated operation, which means that each response might contain only a subset of all the tags. When the response contains only a subset of tags, it includes a <code>NextToken</code> value. Use this value in a subsequent <code>ListTags</code> request to get more tags. When you receive a response with no <code>NextToken</code> (or an empty or null value), that means there are no more tags to get.</p>
     fn list_tags(&self, input: &ListTagsRequest) -> Result<ListTagsResponse, ListTagsError> {
         let mut request = SignedRequest::new("POST", "cloudhsm", &self.region, "/");
         request.set_endpoint_prefix("cloudhsmv2".to_string());
@@ -1753,7 +1753,7 @@ where
         }
     }
 
-    #[doc = "<p>Adds or overwrites one or more tags for the specified AWS CloudHSM cluster.</p>"]
+    /// <p>Adds or overwrites one or more tags for the specified AWS CloudHSM cluster.</p>
     fn tag_resource(
         &self,
         input: &TagResourceRequest,
@@ -1787,7 +1787,7 @@ where
         }
     }
 
-    #[doc = "<p>Removes the specified tag or tags from the specified AWS CloudHSM cluster.</p>"]
+    /// <p>Removes the specified tag or tags from the specified AWS CloudHSM cluster.</p>
     fn untag_resource(
         &self,
         input: &UntagResourceRequest,

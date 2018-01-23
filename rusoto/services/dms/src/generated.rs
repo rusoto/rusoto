@@ -44,7 +44,7 @@ pub struct AccountQuota {
     pub used: Option<i64>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AddTagsToResourceMessage {
     /// <p>The Amazon Resource Name (ARN) of the AWS DMS resource the tag is to be added to. AWS DMS resources include a replication instance, endpoint, and a replication task.</p>
@@ -55,11 +55,11 @@ pub struct AddTagsToResourceMessage {
     pub tags: Vec<Tag>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AddTagsToResourceResponse;
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AvailabilityZone {
     /// <p>The name of the availability zone.</p>
@@ -114,7 +114,7 @@ pub struct Certificate {
     pub valid_to_date: Option<f64>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Connection {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
@@ -143,7 +143,7 @@ pub struct Connection {
     pub status: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateEndpointMessage {
     /// <p>The Amazon Resource Number (ARN) for the certificate.</p>
@@ -209,7 +209,7 @@ pub struct CreateEndpointMessage {
     pub username: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateEndpointResponse {
     /// <p>The endpoint that was created.</p>
@@ -218,7 +218,7 @@ pub struct CreateEndpointResponse {
     pub endpoint: Option<Endpoint>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateEventSubscriptionMessage {
     /// <p> A Boolean value; set to <b>true</b> to activate the subscription, or set to <b>false</b> to create the subscription but not activate it. </p>
@@ -249,7 +249,7 @@ pub struct CreateEventSubscriptionMessage {
     pub tags: Option<Vec<Tag>>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateEventSubscriptionResponse {
     /// <p>The event subscription that was created.</p>
@@ -258,7 +258,7 @@ pub struct CreateEventSubscriptionResponse {
     pub event_subscription: Option<EventSubscription>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateReplicationInstanceMessage {
     /// <p>The amount of storage (in gigabytes) to be initially allocated for the replication instance.</p>
@@ -313,7 +313,7 @@ pub struct CreateReplicationInstanceMessage {
     pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateReplicationInstanceResponse {
     /// <p>The replication instance that was created.</p>
@@ -322,7 +322,7 @@ pub struct CreateReplicationInstanceResponse {
     pub replication_instance: Option<ReplicationInstance>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateReplicationSubnetGroupMessage {
     /// <p>The description for the subnet group.</p>
@@ -340,7 +340,7 @@ pub struct CreateReplicationSubnetGroupMessage {
     pub tags: Option<Vec<Tag>>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateReplicationSubnetGroupResponse {
     /// <p>The replication subnet group that was created.</p>
@@ -349,7 +349,7 @@ pub struct CreateReplicationSubnetGroupResponse {
     pub replication_subnet_group: Option<ReplicationSubnetGroup>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateReplicationTaskMessage {
     /// <p>The start time for the Change Data Capture (CDC) operation.</p>
@@ -362,7 +362,7 @@ pub struct CreateReplicationTaskMessage {
     /// <p>The Amazon Resource Name (ARN) of the replication instance.</p>
     #[serde(rename = "ReplicationInstanceArn")]
     pub replication_instance_arn: String,
-    /// <p>The replication task identifier.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>
+    /// <p><p>The replication task identifier.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
     #[serde(rename = "ReplicationTaskIdentifier")]
     pub replication_task_identifier: String,
     /// <p>Settings for the task, such as target metadata settings. For a complete list of task settings, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TaskSettings.html">Task Settings for AWS Database Migration Service Tasks</a>.</p>
@@ -384,7 +384,7 @@ pub struct CreateReplicationTaskMessage {
     pub target_endpoint_arn: String,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateReplicationTaskResponse {
     /// <p>The replication task that was created.</p>
@@ -408,7 +408,7 @@ pub struct DeleteCertificateResponse {
     pub certificate: Option<Certificate>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteEndpointMessage {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
@@ -416,7 +416,7 @@ pub struct DeleteEndpointMessage {
     pub endpoint_arn: String,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteEndpointResponse {
     /// <p>The endpoint that was deleted.</p>
@@ -425,7 +425,7 @@ pub struct DeleteEndpointResponse {
     pub endpoint: Option<Endpoint>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteEventSubscriptionMessage {
     /// <p>The name of the DMS event notification subscription to be deleted.</p>
@@ -433,7 +433,7 @@ pub struct DeleteEventSubscriptionMessage {
     pub subscription_name: String,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteEventSubscriptionResponse {
     /// <p>The event subscription that was deleted.</p>
@@ -442,7 +442,7 @@ pub struct DeleteEventSubscriptionResponse {
     pub event_subscription: Option<EventSubscription>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteReplicationInstanceMessage {
     /// <p>The Amazon Resource Name (ARN) of the replication instance to be deleted.</p>
@@ -450,7 +450,7 @@ pub struct DeleteReplicationInstanceMessage {
     pub replication_instance_arn: String,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteReplicationInstanceResponse {
     /// <p>The replication instance that was deleted.</p>
@@ -459,7 +459,7 @@ pub struct DeleteReplicationInstanceResponse {
     pub replication_instance: Option<ReplicationInstance>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteReplicationSubnetGroupMessage {
     /// <p>The subnet group name of the replication instance.</p>
@@ -467,11 +467,11 @@ pub struct DeleteReplicationSubnetGroupMessage {
     pub replication_subnet_group_identifier: String,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteReplicationSubnetGroupResponse;
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteReplicationTaskMessage {
     /// <p>The Amazon Resource Name (ARN) of the replication task to be deleted.</p>
@@ -479,7 +479,7 @@ pub struct DeleteReplicationTaskMessage {
     pub replication_task_arn: String,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteReplicationTaskResponse {
     /// <p>The deleted replication task.</p>
@@ -488,11 +488,11 @@ pub struct DeleteReplicationTaskResponse {
     pub replication_task: Option<ReplicationTask>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeAccountAttributesMessage;
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeAccountAttributesResponse {
     /// <p>Account quota information.</p>
@@ -529,7 +529,7 @@ pub struct DescribeCertificatesResponse {
     pub marker: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeConnectionsMessage {
     /// <p>The filters applied to the connection.</p> <p>Valid filter names: endpoint-arn | replication-instance-arn</p>
@@ -546,7 +546,7 @@ pub struct DescribeConnectionsMessage {
     pub max_records: Option<i64>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeConnectionsResponse {
     /// <p>A description of the connections.</p>
@@ -559,7 +559,7 @@ pub struct DescribeConnectionsResponse {
     pub marker: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeEndpointTypesMessage {
     /// <p>Filters applied to the describe action.</p> <p>Valid filter names: engine-name | endpoint-type</p>
@@ -576,7 +576,7 @@ pub struct DescribeEndpointTypesMessage {
     pub max_records: Option<i64>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeEndpointTypesResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
@@ -589,7 +589,7 @@ pub struct DescribeEndpointTypesResponse {
     pub supported_endpoint_types: Option<Vec<SupportedEndpointType>>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeEndpointsMessage {
     /// <p>Filters applied to the describe action.</p> <p>Valid filter names: endpoint-arn | endpoint-type | endpoint-id | engine-name</p>
@@ -606,7 +606,7 @@ pub struct DescribeEndpointsMessage {
     pub max_records: Option<i64>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeEndpointsResponse {
     /// <p>Endpoint description.</p>
@@ -619,7 +619,7 @@ pub struct DescribeEndpointsResponse {
     pub marker: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeEventCategoriesMessage {
     /// <p>Filters applied to the action.</p>
@@ -632,7 +632,7 @@ pub struct DescribeEventCategoriesMessage {
     pub source_type: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeEventCategoriesResponse {
     /// <p>A list of event categories.</p>
@@ -641,7 +641,7 @@ pub struct DescribeEventCategoriesResponse {
     pub event_category_group_list: Option<Vec<EventCategoryGroup>>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeEventSubscriptionsMessage {
     /// <p>Filters applied to the action.</p>
@@ -662,7 +662,7 @@ pub struct DescribeEventSubscriptionsMessage {
     pub subscription_name: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeEventSubscriptionsResponse {
     /// <p>A list of event subscriptions.</p>
@@ -675,7 +675,7 @@ pub struct DescribeEventSubscriptionsResponse {
     pub marker: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeEventsMessage {
     /// <p>The duration of the events to be listed.</p>
@@ -716,7 +716,7 @@ pub struct DescribeEventsMessage {
     pub start_time: Option<f64>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeEventsResponse {
     /// <p>The events described.</p>
@@ -729,7 +729,7 @@ pub struct DescribeEventsResponse {
     pub marker: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeOrderableReplicationInstancesMessage {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
@@ -742,7 +742,7 @@ pub struct DescribeOrderableReplicationInstancesMessage {
     pub max_records: Option<i64>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeOrderableReplicationInstancesResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
@@ -755,7 +755,7 @@ pub struct DescribeOrderableReplicationInstancesResponse {
     pub orderable_replication_instances: Option<Vec<OrderableReplicationInstance>>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeRefreshSchemasStatusMessage {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
@@ -763,7 +763,7 @@ pub struct DescribeRefreshSchemasStatusMessage {
     pub endpoint_arn: String,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeRefreshSchemasStatusResponse {
     /// <p>The status of the schema.</p>
@@ -772,7 +772,7 @@ pub struct DescribeRefreshSchemasStatusResponse {
     pub refresh_schemas_status: Option<RefreshSchemasStatus>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeReplicationInstancesMessage {
     /// <p>Filters applied to the describe action.</p> <p>Valid filter names: replication-instance-arn | replication-instance-id | replication-instance-class | engine-version</p>
@@ -789,7 +789,7 @@ pub struct DescribeReplicationInstancesMessage {
     pub max_records: Option<i64>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeReplicationInstancesResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
@@ -802,7 +802,7 @@ pub struct DescribeReplicationInstancesResponse {
     pub replication_instances: Option<Vec<ReplicationInstance>>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeReplicationSubnetGroupsMessage {
     /// <p>Filters applied to the describe action.</p>
@@ -819,7 +819,7 @@ pub struct DescribeReplicationSubnetGroupsMessage {
     pub max_records: Option<i64>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeReplicationSubnetGroupsResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
@@ -832,7 +832,7 @@ pub struct DescribeReplicationSubnetGroupsResponse {
     pub replication_subnet_groups: Option<Vec<ReplicationSubnetGroup>>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeReplicationTasksMessage {
     /// <p>Filters applied to the describe action.</p> <p>Valid filter names: replication-task-arn | replication-task-id | migration-type | endpoint-arn | replication-instance-arn</p>
@@ -849,7 +849,7 @@ pub struct DescribeReplicationTasksMessage {
     pub max_records: Option<i64>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeReplicationTasksResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
@@ -862,7 +862,7 @@ pub struct DescribeReplicationTasksResponse {
     pub replication_tasks: Option<Vec<ReplicationTask>>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeSchemasMessage {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
@@ -878,7 +878,7 @@ pub struct DescribeSchemasMessage {
     pub max_records: Option<i64>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeSchemasResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
@@ -891,7 +891,7 @@ pub struct DescribeSchemasResponse {
     pub schemas: Option<Vec<String>>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeTableStatisticsMessage {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
@@ -907,7 +907,7 @@ pub struct DescribeTableStatisticsMessage {
     pub replication_task_arn: String,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeTableStatisticsResponse {
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
@@ -924,7 +924,7 @@ pub struct DescribeTableStatisticsResponse {
     pub table_statistics: Option<Vec<TableStatistics>>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct DynamoDbSettings {
     /// <p> The Amazon Resource Name (ARN) used by the service access IAM role. </p>
@@ -932,7 +932,7 @@ pub struct DynamoDbSettings {
     pub service_access_role_arn: String,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Endpoint {
     /// <p>The Amazon Resource Name (ARN) used for SSL connection to the endpoint.</p>
@@ -1005,7 +1005,7 @@ pub struct Endpoint {
     pub username: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Event {
     /// <p>The date of the event.</p>
@@ -1030,7 +1030,7 @@ pub struct Event {
     pub source_type: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct EventCategoryGroup {
     /// <p> A list of event categories for a <code>SourceType</code> that you want to subscribe to. </p>
@@ -1043,7 +1043,7 @@ pub struct EventCategoryGroup {
     pub source_type: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct EventSubscription {
     /// <p>The AWS DMS event notification subscription Id.</p>
@@ -1084,7 +1084,7 @@ pub struct EventSubscription {
     pub subscription_creation_time: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct Filter {
     /// <p>The name of the filter.</p>
@@ -1123,7 +1123,7 @@ pub struct ImportCertificateResponse {
     pub certificate: Option<Certificate>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListTagsForResourceMessage {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the AWS DMS resource.</p>
@@ -1131,7 +1131,7 @@ pub struct ListTagsForResourceMessage {
     pub resource_arn: String,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListTagsForResourceResponse {
     /// <p>A list of tags for the resource.</p>
@@ -1140,7 +1140,7 @@ pub struct ListTagsForResourceResponse {
     pub tag_list: Option<Vec<Tag>>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ModifyEndpointMessage {
     /// <p>The Amazon Resource Name (ARN) of the certificate used for SSL connection.</p>
@@ -1204,7 +1204,7 @@ pub struct ModifyEndpointMessage {
     pub username: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ModifyEndpointResponse {
     /// <p>The modified endpoint.</p>
@@ -1213,7 +1213,7 @@ pub struct ModifyEndpointResponse {
     pub endpoint: Option<Endpoint>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ModifyEventSubscriptionMessage {
     /// <p> A Boolean value; set to <b>true</b> to activate the subscription. </p>
@@ -1237,7 +1237,7 @@ pub struct ModifyEventSubscriptionMessage {
     pub subscription_name: String,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ModifyEventSubscriptionResponse {
     /// <p>The modified event subscription.</p>
@@ -1246,7 +1246,7 @@ pub struct ModifyEventSubscriptionResponse {
     pub event_subscription: Option<EventSubscription>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ModifyReplicationInstanceMessage {
     /// <p>The amount of storage (in gigabytes) to be allocated for the replication instance.</p>
@@ -1294,7 +1294,7 @@ pub struct ModifyReplicationInstanceMessage {
     pub vpc_security_group_ids: Option<Vec<String>>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ModifyReplicationInstanceResponse {
     /// <p>The modified replication instance.</p>
@@ -1303,7 +1303,7 @@ pub struct ModifyReplicationInstanceResponse {
     pub replication_instance: Option<ReplicationInstance>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ModifyReplicationSubnetGroupMessage {
     /// <p>The description of the replication instance subnet group.</p>
@@ -1318,7 +1318,7 @@ pub struct ModifyReplicationSubnetGroupMessage {
     pub subnet_ids: Vec<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ModifyReplicationSubnetGroupResponse {
     /// <p>The modified replication subnet group.</p>
@@ -1327,7 +1327,7 @@ pub struct ModifyReplicationSubnetGroupResponse {
     pub replication_subnet_group: Option<ReplicationSubnetGroup>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ModifyReplicationTaskMessage {
     /// <p>The start time for the Change Data Capture (CDC) operation.</p>
@@ -1341,7 +1341,7 @@ pub struct ModifyReplicationTaskMessage {
     /// <p>The Amazon Resource Name (ARN) of the replication task.</p>
     #[serde(rename = "ReplicationTaskArn")]
     pub replication_task_arn: String,
-    /// <p>The replication task identifier.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>
+    /// <p><p>The replication task identifier.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
     #[serde(rename = "ReplicationTaskIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task_identifier: Option<String>,
@@ -1355,7 +1355,7 @@ pub struct ModifyReplicationTaskMessage {
     pub table_mappings: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ModifyReplicationTaskResponse {
     /// <p>The replication task that was modified.</p>
@@ -1364,7 +1364,7 @@ pub struct ModifyReplicationTaskResponse {
     pub replication_task: Option<ReplicationTask>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct MongoDbSettings {
     /// <p> The authentication mechanism you use to access the MongoDB source endpoint.</p> <p>Valid values: DEFAULT, MONGODB_CR, SCRAM_SHA_1 </p> <p>DEFAULT – For MongoDB version 2.x, use MONGODB_CR. For MongoDB version 3.x, use SCRAM_SHA_1. This attribute is not used when authType=No.</p>
@@ -1413,7 +1413,7 @@ pub struct MongoDbSettings {
     pub username: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct OrderableReplicationInstance {
     /// <p>The default amount of storage (in gigabytes) that is allocated for the replication instance.</p>
@@ -1446,7 +1446,7 @@ pub struct OrderableReplicationInstance {
     pub storage_type: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct RefreshSchemasMessage {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
@@ -1457,7 +1457,7 @@ pub struct RefreshSchemasMessage {
     pub replication_instance_arn: String,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct RefreshSchemasResponse {
     /// <p>The status of the refreshed schema.</p>
@@ -1466,7 +1466,7 @@ pub struct RefreshSchemasResponse {
     pub refresh_schemas_status: Option<RefreshSchemasStatus>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct RefreshSchemasStatus {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
@@ -1509,7 +1509,7 @@ pub struct ReloadTablesResponse {
     pub replication_task_arn: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct RemoveTagsFromResourceMessage {
     /// <p>&gt;The Amazon Resource Name (ARN) of the AWS DMS resource the tag is to be removed from.</p>
@@ -1520,11 +1520,11 @@ pub struct RemoveTagsFromResourceMessage {
     pub tag_keys: Vec<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct RemoveTagsFromResourceResponse;
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ReplicationInstance {
     /// <p>The amount of storage (in gigabytes) that is allocated for the replication instance.</p>
@@ -1605,7 +1605,7 @@ pub struct ReplicationInstance {
     pub vpc_security_groups: Option<Vec<VpcSecurityGroupMembership>>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ReplicationPendingModifiedValues {
     /// <p>The amount of storage (in gigabytes) that is allocated for the replication instance.</p>
@@ -1626,7 +1626,7 @@ pub struct ReplicationPendingModifiedValues {
     pub replication_instance_class: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ReplicationSubnetGroup {
     /// <p>The description of the replication subnet group.</p>
@@ -1651,7 +1651,7 @@ pub struct ReplicationSubnetGroup {
     pub vpc_id: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ReplicationTask {
     /// <p>The last error (failure) message generated for the replication instance.</p>
@@ -1674,7 +1674,7 @@ pub struct ReplicationTask {
     #[serde(rename = "ReplicationTaskCreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task_creation_date: Option<f64>,
-    /// <p>The replication task identifier.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul>
+    /// <p><p>The replication task identifier.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
     #[serde(rename = "ReplicationTaskIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task_identifier: Option<String>,
@@ -1712,7 +1712,7 @@ pub struct ReplicationTask {
     pub target_endpoint_arn: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ReplicationTaskStats {
     /// <p>The elapsed time of the task, in milliseconds.</p>
@@ -1741,7 +1741,7 @@ pub struct ReplicationTaskStats {
     pub tables_queued: Option<i64>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct S3Settings {
     /// <p> An optional parameter to set a folder name in the S3 bucket. If provided, tables are created in the path &lt;bucketFolder&gt;/&lt;schema_name&gt;/&lt;table_name&gt;/. If this parameter is not specified, then the path used is &lt;schema_name&gt;/&lt;table_name&gt;/. </p>
@@ -1774,7 +1774,7 @@ pub struct S3Settings {
     pub service_access_role_arn: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct StartReplicationTaskMessage {
     /// <p>The start time for the Change Data Capture (CDC) operation.</p>
@@ -1789,7 +1789,7 @@ pub struct StartReplicationTaskMessage {
     pub start_replication_task_type: String,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct StartReplicationTaskResponse {
     /// <p>The replication task started.</p>
@@ -1798,7 +1798,7 @@ pub struct StartReplicationTaskResponse {
     pub replication_task: Option<ReplicationTask>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct StopReplicationTaskMessage {
     /// <p>The Amazon Resource Number(ARN) of the replication task to be stopped.</p>
@@ -1806,7 +1806,7 @@ pub struct StopReplicationTaskMessage {
     pub replication_task_arn: String,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct StopReplicationTaskResponse {
     /// <p>The replication task stopped.</p>
@@ -1815,7 +1815,7 @@ pub struct StopReplicationTaskResponse {
     pub replication_task: Option<ReplicationTask>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Subnet {
     /// <p>The Availability Zone of the subnet.</p>
@@ -1832,7 +1832,7 @@ pub struct Subnet {
     pub subnet_status: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct SupportedEndpointType {
     /// <p>The type of endpoint.</p>
@@ -1849,7 +1849,7 @@ pub struct SupportedEndpointType {
     pub supports_cdc: Option<bool>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct TableStatistics {
     /// <p>The Data Definition Language (DDL) used to build and modify the structure of your tables.</p>
@@ -1898,7 +1898,7 @@ pub struct TableStatistics {
     pub updates: Option<i64>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct TableToReload {
     /// <p>The schema name of the table to be reloaded.</p>
@@ -1911,7 +1911,7 @@ pub struct TableToReload {
     pub table_name: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Tag {
     /// <p>A key is the required name of the tag. The string value can be from 1 to 128 Unicode characters in length and cannot be prefixed with "aws:" or "dms:". The string can only contain only the set of Unicode letters, digits, white-space, '_', '.', '/', '=', '+', '-' (Java regex: "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-]*)$").</p>
@@ -1924,7 +1924,7 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct TestConnectionMessage {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
@@ -1935,7 +1935,7 @@ pub struct TestConnectionMessage {
     pub replication_instance_arn: String,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct TestConnectionResponse {
     /// <p>The connection tested.</p>
@@ -1944,7 +1944,7 @@ pub struct TestConnectionResponse {
     pub connection: Option<Connection>,
 }
 
-/// <p/>
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct VpcSecurityGroupMembership {
     /// <p>The status of the VPC security group.</p>
@@ -1960,7 +1960,7 @@ pub struct VpcSecurityGroupMembership {
 /// Errors returned by AddTagsToResource
 #[derive(Debug, PartialEq)]
 pub enum AddTagsToResourceError {
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2040,17 +2040,17 @@ impl Error for AddTagsToResourceError {
 /// Errors returned by CreateEndpoint
 #[derive(Debug, PartialEq)]
 pub enum CreateEndpointError {
-    ///<p>AWS DMS was denied access to the endpoint.</p>
+    /// <p>AWS DMS was denied access to the endpoint.</p>
     AccessDeniedFault(String),
-    ///<p>The resource is in a state that prevents it from being used for database migration.</p>
+    /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    ///<p>AWS DMS cannot access the KMS key.</p>
+    /// <p>AWS DMS cannot access the KMS key.</p>
     KMSKeyNotAccessibleFault(String),
-    ///<p>The resource you are attempting to create already exists.</p>
+    /// <p>The resource you are attempting to create already exists.</p>
     ResourceAlreadyExistsFault(String),
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
-    ///<p>The quota for this resource quota has been exceeded.</p>
+    /// <p>The quota for this resource quota has been exceeded.</p>
     ResourceQuotaExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2148,15 +2148,15 @@ impl Error for CreateEndpointError {
 /// Errors returned by CreateEventSubscription
 #[derive(Debug, PartialEq)]
 pub enum CreateEventSubscriptionError {
-    ///<p>The resource you are attempting to create already exists.</p>
+    /// <p>The resource you are attempting to create already exists.</p>
     ResourceAlreadyExistsFault(String),
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
-    ///<p>The quota for this resource quota has been exceeded.</p>
+    /// <p>The quota for this resource quota has been exceeded.</p>
     ResourceQuotaExceededFault(String),
-    ///<p>The SNS topic is invalid.</p>
+    /// <p>The SNS topic is invalid.</p>
     SNSInvalidTopicFault(String),
-    ///<p>You are not authorized for the SNS subscription.</p>
+    /// <p>You are not authorized for the SNS subscription.</p>
     SNSNoAuthorizationFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2260,25 +2260,25 @@ impl Error for CreateEventSubscriptionError {
 /// Errors returned by CreateReplicationInstance
 #[derive(Debug, PartialEq)]
 pub enum CreateReplicationInstanceError {
-    ///<p>AWS DMS was denied access to the endpoint.</p>
+    /// <p>AWS DMS was denied access to the endpoint.</p>
     AccessDeniedFault(String),
-    ///<p>There are not enough resources allocated to the database migration.</p>
+    /// <p>There are not enough resources allocated to the database migration.</p>
     InsufficientResourceCapacityFault(String),
-    ///<p>The resource is in a state that prevents it from being used for database migration.</p>
+    /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    ///<p>The subnet provided is invalid.</p>
+    /// <p>The subnet provided is invalid.</p>
     InvalidSubnet(String),
-    ///<p>AWS DMS cannot access the KMS key.</p>
+    /// <p>AWS DMS cannot access the KMS key.</p>
     KMSKeyNotAccessibleFault(String),
-    ///<p>The replication subnet group does not cover enough Availability Zones (AZs). Edit the replication subnet group and add more AZs.</p>
+    /// <p>The replication subnet group does not cover enough Availability Zones (AZs). Edit the replication subnet group and add more AZs.</p>
     ReplicationSubnetGroupDoesNotCoverEnoughAZs(String),
-    ///<p>The resource you are attempting to create already exists.</p>
+    /// <p>The resource you are attempting to create already exists.</p>
     ResourceAlreadyExistsFault(String),
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
-    ///<p>The quota for this resource quota has been exceeded.</p>
+    /// <p>The quota for this resource quota has been exceeded.</p>
     ResourceQuotaExceededFault(String),
-    ///<p>The storage quota has been exceeded.</p>
+    /// <p>The storage quota has been exceeded.</p>
     StorageQuotaExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2374,17 +2374,17 @@ impl Error for CreateReplicationInstanceError {
 /// Errors returned by CreateReplicationSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateReplicationSubnetGroupError {
-    ///<p>AWS DMS was denied access to the endpoint.</p>
+    /// <p>AWS DMS was denied access to the endpoint.</p>
     AccessDeniedFault(String),
-    ///<p>The subnet provided is invalid.</p>
+    /// <p>The subnet provided is invalid.</p>
     InvalidSubnet(String),
-    ///<p>The replication subnet group does not cover enough Availability Zones (AZs). Edit the replication subnet group and add more AZs.</p>
+    /// <p>The replication subnet group does not cover enough Availability Zones (AZs). Edit the replication subnet group and add more AZs.</p>
     ReplicationSubnetGroupDoesNotCoverEnoughAZs(String),
-    ///<p>The resource you are attempting to create already exists.</p>
+    /// <p>The resource you are attempting to create already exists.</p>
     ResourceAlreadyExistsFault(String),
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
-    ///<p>The quota for this resource quota has been exceeded.</p>
+    /// <p>The quota for this resource quota has been exceeded.</p>
     ResourceQuotaExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2472,17 +2472,17 @@ impl Error for CreateReplicationSubnetGroupError {
 /// Errors returned by CreateReplicationTask
 #[derive(Debug, PartialEq)]
 pub enum CreateReplicationTaskError {
-    ///<p>AWS DMS was denied access to the endpoint.</p>
+    /// <p>AWS DMS was denied access to the endpoint.</p>
     AccessDeniedFault(String),
-    ///<p>The resource is in a state that prevents it from being used for database migration.</p>
+    /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    ///<p>AWS DMS cannot access the KMS key.</p>
+    /// <p>AWS DMS cannot access the KMS key.</p>
     KMSKeyNotAccessibleFault(String),
-    ///<p>The resource you are attempting to create already exists.</p>
+    /// <p>The resource you are attempting to create already exists.</p>
     ResourceAlreadyExistsFault(String),
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
-    ///<p>The quota for this resource quota has been exceeded.</p>
+    /// <p>The quota for this resource quota has been exceeded.</p>
     ResourceQuotaExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2590,9 +2590,9 @@ impl Error for CreateReplicationTaskError {
 /// Errors returned by DeleteCertificate
 #[derive(Debug, PartialEq)]
 pub enum DeleteCertificateError {
-    ///<p>The resource is in a state that prevents it from being used for database migration.</p>
+    /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2678,9 +2678,9 @@ impl Error for DeleteCertificateError {
 /// Errors returned by DeleteEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DeleteEndpointError {
-    ///<p>The resource is in a state that prevents it from being used for database migration.</p>
+    /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2762,9 +2762,9 @@ impl Error for DeleteEndpointError {
 /// Errors returned by DeleteEventSubscription
 #[derive(Debug, PartialEq)]
 pub enum DeleteEventSubscriptionError {
-    ///<p>The resource is in a state that prevents it from being used for database migration.</p>
+    /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2852,9 +2852,9 @@ impl Error for DeleteEventSubscriptionError {
 /// Errors returned by DeleteReplicationInstance
 #[derive(Debug, PartialEq)]
 pub enum DeleteReplicationInstanceError {
-    ///<p>The resource is in a state that prevents it from being used for database migration.</p>
+    /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2942,9 +2942,9 @@ impl Error for DeleteReplicationInstanceError {
 /// Errors returned by DeleteReplicationSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteReplicationSubnetGroupError {
-    ///<p>The resource is in a state that prevents it from being used for database migration.</p>
+    /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3032,9 +3032,9 @@ impl Error for DeleteReplicationSubnetGroupError {
 /// Errors returned by DeleteReplicationTask
 #[derive(Debug, PartialEq)]
 pub enum DeleteReplicationTaskError {
-    ///<p>The resource is in a state that prevents it from being used for database migration.</p>
+    /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3194,7 +3194,7 @@ impl Error for DescribeAccountAttributesError {
 /// Errors returned by DescribeCertificates
 #[derive(Debug, PartialEq)]
 pub enum DescribeCertificatesError {
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3274,7 +3274,7 @@ impl Error for DescribeCertificatesError {
 /// Errors returned by DescribeConnections
 #[derive(Debug, PartialEq)]
 pub enum DescribeConnectionsError {
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3428,7 +3428,7 @@ impl Error for DescribeEndpointTypesError {
 /// Errors returned by DescribeEndpoints
 #[derive(Debug, PartialEq)]
 pub enum DescribeEndpointsError {
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3582,7 +3582,7 @@ impl Error for DescribeEventCategoriesError {
 /// Errors returned by DescribeEventSubscriptions
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventSubscriptionsError {
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3812,9 +3812,9 @@ impl Error for DescribeOrderableReplicationInstancesError {
 /// Errors returned by DescribeRefreshSchemasStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeRefreshSchemasStatusError {
-    ///<p>The resource is in a state that prevents it from being used for database migration.</p>
+    /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3902,7 +3902,7 @@ impl Error for DescribeRefreshSchemasStatusError {
 /// Errors returned by DescribeReplicationInstances
 #[derive(Debug, PartialEq)]
 pub enum DescribeReplicationInstancesError {
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3984,7 +3984,7 @@ impl Error for DescribeReplicationInstancesError {
 /// Errors returned by DescribeReplicationSubnetGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeReplicationSubnetGroupsError {
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4066,7 +4066,7 @@ impl Error for DescribeReplicationSubnetGroupsError {
 /// Errors returned by DescribeReplicationTasks
 #[derive(Debug, PartialEq)]
 pub enum DescribeReplicationTasksError {
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4148,9 +4148,9 @@ impl Error for DescribeReplicationTasksError {
 /// Errors returned by DescribeSchemas
 #[derive(Debug, PartialEq)]
 pub enum DescribeSchemasError {
-    ///<p>The resource is in a state that prevents it from being used for database migration.</p>
+    /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4232,9 +4232,9 @@ impl Error for DescribeSchemasError {
 /// Errors returned by DescribeTableStatistics
 #[derive(Debug, PartialEq)]
 pub enum DescribeTableStatisticsError {
-    ///<p>The resource is in a state that prevents it from being used for database migration.</p>
+    /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4322,9 +4322,9 @@ impl Error for DescribeTableStatisticsError {
 /// Errors returned by ImportCertificate
 #[derive(Debug, PartialEq)]
 pub enum ImportCertificateError {
-    ///<p>The certificate was not valid.</p>
+    /// <p>The certificate was not valid.</p>
     InvalidCertificateFault(String),
-    ///<p>The resource you are attempting to create already exists.</p>
+    /// <p>The resource you are attempting to create already exists.</p>
     ResourceAlreadyExistsFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4410,7 +4410,7 @@ impl Error for ImportCertificateError {
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4490,15 +4490,15 @@ impl Error for ListTagsForResourceError {
 /// Errors returned by ModifyEndpoint
 #[derive(Debug, PartialEq)]
 pub enum ModifyEndpointError {
-    ///<p>AWS DMS was denied access to the endpoint.</p>
+    /// <p>AWS DMS was denied access to the endpoint.</p>
     AccessDeniedFault(String),
-    ///<p>The resource is in a state that prevents it from being used for database migration.</p>
+    /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    ///<p>AWS DMS cannot access the KMS key.</p>
+    /// <p>AWS DMS cannot access the KMS key.</p>
     KMSKeyNotAccessibleFault(String),
-    ///<p>The resource you are attempting to create already exists.</p>
+    /// <p>The resource you are attempting to create already exists.</p>
     ResourceAlreadyExistsFault(String),
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4592,13 +4592,13 @@ impl Error for ModifyEndpointError {
 /// Errors returned by ModifyEventSubscription
 #[derive(Debug, PartialEq)]
 pub enum ModifyEventSubscriptionError {
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
-    ///<p>The quota for this resource quota has been exceeded.</p>
+    /// <p>The quota for this resource quota has been exceeded.</p>
     ResourceQuotaExceededFault(String),
-    ///<p>The SNS topic is invalid.</p>
+    /// <p>The SNS topic is invalid.</p>
     SNSInvalidTopicFault(String),
-    ///<p>You are not authorized for the SNS subscription.</p>
+    /// <p>You are not authorized for the SNS subscription.</p>
     SNSNoAuthorizationFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4696,17 +4696,17 @@ impl Error for ModifyEventSubscriptionError {
 /// Errors returned by ModifyReplicationInstance
 #[derive(Debug, PartialEq)]
 pub enum ModifyReplicationInstanceError {
-    ///<p>There are not enough resources allocated to the database migration.</p>
+    /// <p>There are not enough resources allocated to the database migration.</p>
     InsufficientResourceCapacityFault(String),
-    ///<p>The resource is in a state that prevents it from being used for database migration.</p>
+    /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    ///<p>The resource you are attempting to create already exists.</p>
+    /// <p>The resource you are attempting to create already exists.</p>
     ResourceAlreadyExistsFault(String),
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
-    ///<p>The storage quota has been exceeded.</p>
+    /// <p>The storage quota has been exceeded.</p>
     StorageQuotaExceededFault(String),
-    ///<p>An upgrade dependency is preventing the database migration.</p>
+    /// <p>An upgrade dependency is preventing the database migration.</p>
     UpgradeDependencyFailureFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4818,17 +4818,17 @@ impl Error for ModifyReplicationInstanceError {
 /// Errors returned by ModifyReplicationSubnetGroup
 #[derive(Debug, PartialEq)]
 pub enum ModifyReplicationSubnetGroupError {
-    ///<p>AWS DMS was denied access to the endpoint.</p>
+    /// <p>AWS DMS was denied access to the endpoint.</p>
     AccessDeniedFault(String),
-    ///<p>The subnet provided is invalid.</p>
+    /// <p>The subnet provided is invalid.</p>
     InvalidSubnet(String),
-    ///<p>The replication subnet group does not cover enough Availability Zones (AZs). Edit the replication subnet group and add more AZs.</p>
+    /// <p>The replication subnet group does not cover enough Availability Zones (AZs). Edit the replication subnet group and add more AZs.</p>
     ReplicationSubnetGroupDoesNotCoverEnoughAZs(String),
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
-    ///<p>The quota for this resource quota has been exceeded.</p>
+    /// <p>The quota for this resource quota has been exceeded.</p>
     ResourceQuotaExceededFault(String),
-    ///<p>The specified subnet is already in use.</p>
+    /// <p>The specified subnet is already in use.</p>
     SubnetAlreadyInUse(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4916,13 +4916,13 @@ impl Error for ModifyReplicationSubnetGroupError {
 /// Errors returned by ModifyReplicationTask
 #[derive(Debug, PartialEq)]
 pub enum ModifyReplicationTaskError {
-    ///<p>The resource is in a state that prevents it from being used for database migration.</p>
+    /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    ///<p>AWS DMS cannot access the KMS key.</p>
+    /// <p>AWS DMS cannot access the KMS key.</p>
     KMSKeyNotAccessibleFault(String),
-    ///<p>The resource you are attempting to create already exists.</p>
+    /// <p>The resource you are attempting to create already exists.</p>
     ResourceAlreadyExistsFault(String),
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5020,13 +5020,13 @@ impl Error for ModifyReplicationTaskError {
 /// Errors returned by RefreshSchemas
 #[derive(Debug, PartialEq)]
 pub enum RefreshSchemasError {
-    ///<p>The resource is in a state that prevents it from being used for database migration.</p>
+    /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    ///<p>AWS DMS cannot access the KMS key.</p>
+    /// <p>AWS DMS cannot access the KMS key.</p>
     KMSKeyNotAccessibleFault(String),
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
-    ///<p>The quota for this resource quota has been exceeded.</p>
+    /// <p>The quota for this resource quota has been exceeded.</p>
     ResourceQuotaExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5116,9 +5116,9 @@ impl Error for RefreshSchemasError {
 /// Errors returned by ReloadTables
 #[derive(Debug, PartialEq)]
 pub enum ReloadTablesError {
-    ///<p>The resource is in a state that prevents it from being used for database migration.</p>
+    /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5200,7 +5200,7 @@ impl Error for ReloadTablesError {
 /// Errors returned by RemoveTagsFromResource
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsFromResourceError {
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5280,9 +5280,9 @@ impl Error for RemoveTagsFromResourceError {
 /// Errors returned by StartReplicationTask
 #[derive(Debug, PartialEq)]
 pub enum StartReplicationTaskError {
-    ///<p>The resource is in a state that prevents it from being used for database migration.</p>
+    /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5368,9 +5368,9 @@ impl Error for StartReplicationTaskError {
 /// Errors returned by StopReplicationTask
 #[derive(Debug, PartialEq)]
 pub enum StopReplicationTaskError {
-    ///<p>The resource is in a state that prevents it from being used for database migration.</p>
+    /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5456,13 +5456,13 @@ impl Error for StopReplicationTaskError {
 /// Errors returned by TestConnection
 #[derive(Debug, PartialEq)]
 pub enum TestConnectionError {
-    ///<p>The resource is in a state that prevents it from being used for database migration.</p>
+    /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
-    ///<p>AWS DMS cannot access the KMS key.</p>
+    /// <p>AWS DMS cannot access the KMS key.</p>
     KMSKeyNotAccessibleFault(String),
-    ///<p>The resource could not be found.</p>
+    /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
-    ///<p>The quota for this resource quota has been exceeded.</p>
+    /// <p>The quota for this resource quota has been exceeded.</p>
     ResourceQuotaExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5551,126 +5551,126 @@ impl Error for TestConnectionError {
 }
 /// Trait representing the capabilities of the AWS Database Migration Service API. AWS Database Migration Service clients implement this trait.
 pub trait DatabaseMigrationService {
-    #[doc="<p>Adds metadata tags to a DMS resource, including replication instance, endpoint, security group, and migration task. These tags can also be used with cost allocation reporting to track cost associated with DMS resources, or used in a Condition statement in an IAM policy for DMS.</p>"]
+    /// <p>Adds metadata tags to a DMS resource, including replication instance, endpoint, security group, and migration task. These tags can also be used with cost allocation reporting to track cost associated with DMS resources, or used in a Condition statement in an IAM policy for DMS.</p>
     fn add_tags_to_resource(
         &self,
         input: &AddTagsToResourceMessage,
     ) -> Result<AddTagsToResourceResponse, AddTagsToResourceError>;
 
-    #[doc = "<p>Creates an endpoint using the provided settings.</p>"]
+    /// <p>Creates an endpoint using the provided settings.</p>
     fn create_endpoint(
         &self,
         input: &CreateEndpointMessage,
     ) -> Result<CreateEndpointResponse, CreateEndpointError>;
 
-    #[doc="<p> Creates an AWS DMS event notification subscription. </p> <p>You can specify the type of source (<code>SourceType</code>) you want to be notified of, provide a list of AWS DMS source IDs (<code>SourceIds</code>) that triggers the events, and provide a list of event categories (<code>EventCategories</code>) for events you want to be notified of. If you specify both the <code>SourceType</code> and <code>SourceIds</code>, such as <code>SourceType = replication-instance</code> and <code>SourceIdentifier = my-replinstance</code>, you will be notified of all the replication instance events for the specified source. If you specify a <code>SourceType</code> but don't specify a <code>SourceIdentifier</code>, you receive notice of the events for that source type for all your AWS DMS sources. If you don't specify either <code>SourceType</code> nor <code>SourceIdentifier</code>, you will be notified of events generated from all AWS DMS sources belonging to your customer account.</p> <p>For more information about AWS DMS events, see <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html\"> Working with Events and Notifications </a> in the AWS Database MIgration Service User Guide.</p>"]
+    /// <p> Creates an AWS DMS event notification subscription. </p> <p>You can specify the type of source (<code>SourceType</code>) you want to be notified of, provide a list of AWS DMS source IDs (<code>SourceIds</code>) that triggers the events, and provide a list of event categories (<code>EventCategories</code>) for events you want to be notified of. If you specify both the <code>SourceType</code> and <code>SourceIds</code>, such as <code>SourceType = replication-instance</code> and <code>SourceIdentifier = my-replinstance</code>, you will be notified of all the replication instance events for the specified source. If you specify a <code>SourceType</code> but don't specify a <code>SourceIdentifier</code>, you receive notice of the events for that source type for all your AWS DMS sources. If you don't specify either <code>SourceType</code> nor <code>SourceIdentifier</code>, you will be notified of events generated from all AWS DMS sources belonging to your customer account.</p> <p>For more information about AWS DMS events, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html"> Working with Events and Notifications </a> in the AWS Database MIgration Service User Guide.</p>
     fn create_event_subscription(
         &self,
         input: &CreateEventSubscriptionMessage,
     ) -> Result<CreateEventSubscriptionResponse, CreateEventSubscriptionError>;
 
-    #[doc = "<p>Creates the replication instance using the specified parameters.</p>"]
+    /// <p>Creates the replication instance using the specified parameters.</p>
     fn create_replication_instance(
         &self,
         input: &CreateReplicationInstanceMessage,
     ) -> Result<CreateReplicationInstanceResponse, CreateReplicationInstanceError>;
 
-    #[doc = "<p>Creates a replication subnet group given a list of the subnet IDs in a VPC.</p>"]
+    /// <p>Creates a replication subnet group given a list of the subnet IDs in a VPC.</p>
     fn create_replication_subnet_group(
         &self,
         input: &CreateReplicationSubnetGroupMessage,
     ) -> Result<CreateReplicationSubnetGroupResponse, CreateReplicationSubnetGroupError>;
 
-    #[doc = "<p>Creates a replication task using the specified parameters.</p>"]
+    /// <p>Creates a replication task using the specified parameters.</p>
     fn create_replication_task(
         &self,
         input: &CreateReplicationTaskMessage,
     ) -> Result<CreateReplicationTaskResponse, CreateReplicationTaskError>;
 
-    #[doc = "<p>Deletes the specified certificate. </p>"]
+    /// <p>Deletes the specified certificate. </p>
     fn delete_certificate(
         &self,
         input: &DeleteCertificateMessage,
     ) -> Result<DeleteCertificateResponse, DeleteCertificateError>;
 
-    #[doc="<p>Deletes the specified endpoint.</p> <note> <p>All tasks associated with the endpoint must be deleted before you can delete the endpoint.</p> </note> <p/>"]
+    /// <p><p>Deletes the specified endpoint.</p> <note> <p>All tasks associated with the endpoint must be deleted before you can delete the endpoint.</p> </note> <p/></p>
     fn delete_endpoint(
         &self,
         input: &DeleteEndpointMessage,
     ) -> Result<DeleteEndpointResponse, DeleteEndpointError>;
 
-    #[doc = "<p> Deletes an AWS DMS event subscription. </p>"]
+    /// <p> Deletes an AWS DMS event subscription. </p>
     fn delete_event_subscription(
         &self,
         input: &DeleteEventSubscriptionMessage,
     ) -> Result<DeleteEventSubscriptionResponse, DeleteEventSubscriptionError>;
 
-    #[doc="<p>Deletes the specified replication instance.</p> <note> <p>You must delete any migration tasks that are associated with the replication instance before you can delete it.</p> </note> <p/>"]
+    /// <p><p>Deletes the specified replication instance.</p> <note> <p>You must delete any migration tasks that are associated with the replication instance before you can delete it.</p> </note> <p/></p>
     fn delete_replication_instance(
         &self,
         input: &DeleteReplicationInstanceMessage,
     ) -> Result<DeleteReplicationInstanceResponse, DeleteReplicationInstanceError>;
 
-    #[doc = "<p>Deletes a subnet group.</p>"]
+    /// <p>Deletes a subnet group.</p>
     fn delete_replication_subnet_group(
         &self,
         input: &DeleteReplicationSubnetGroupMessage,
     ) -> Result<DeleteReplicationSubnetGroupResponse, DeleteReplicationSubnetGroupError>;
 
-    #[doc = "<p>Deletes the specified replication task.</p>"]
+    /// <p>Deletes the specified replication task.</p>
     fn delete_replication_task(
         &self,
         input: &DeleteReplicationTaskMessage,
     ) -> Result<DeleteReplicationTaskResponse, DeleteReplicationTaskError>;
 
-    #[doc="<p>Lists all of the AWS DMS attributes for a customer account. The attributes include AWS DMS quotas for the account, such as the number of replication instances allowed. The description for a quota includes the quota name, current usage toward that quota, and the quota's maximum value.</p> <p>This command does not take any parameters.</p>"]
+    /// <p>Lists all of the AWS DMS attributes for a customer account. The attributes include AWS DMS quotas for the account, such as the number of replication instances allowed. The description for a quota includes the quota name, current usage toward that quota, and the quota's maximum value.</p> <p>This command does not take any parameters.</p>
     fn describe_account_attributes(
         &self,
     ) -> Result<DescribeAccountAttributesResponse, DescribeAccountAttributesError>;
 
-    #[doc = "<p>Provides a description of the certificate.</p>"]
+    /// <p>Provides a description of the certificate.</p>
     fn describe_certificates(
         &self,
         input: &DescribeCertificatesMessage,
     ) -> Result<DescribeCertificatesResponse, DescribeCertificatesError>;
 
-    #[doc="<p>Describes the status of the connections that have been made between the replication instance and an endpoint. Connections are created when you test an endpoint.</p>"]
+    /// <p>Describes the status of the connections that have been made between the replication instance and an endpoint. Connections are created when you test an endpoint.</p>
     fn describe_connections(
         &self,
         input: &DescribeConnectionsMessage,
     ) -> Result<DescribeConnectionsResponse, DescribeConnectionsError>;
 
-    #[doc = "<p>Returns information about the type of endpoints available.</p>"]
+    /// <p>Returns information about the type of endpoints available.</p>
     fn describe_endpoint_types(
         &self,
         input: &DescribeEndpointTypesMessage,
     ) -> Result<DescribeEndpointTypesResponse, DescribeEndpointTypesError>;
 
-    #[doc = "<p>Returns information about the endpoints for your account in the current region.</p>"]
+    /// <p>Returns information about the endpoints for your account in the current region.</p>
     fn describe_endpoints(
         &self,
         input: &DescribeEndpointsMessage,
     ) -> Result<DescribeEndpointsResponse, DescribeEndpointsError>;
 
-    #[doc="<p>Lists categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html\"> Working with Events and Notifications </a> in the AWS Database Migration Service User Guide. </p>"]
+    /// <p>Lists categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html"> Working with Events and Notifications </a> in the AWS Database Migration Service User Guide. </p>
     fn describe_event_categories(
         &self,
         input: &DescribeEventCategoriesMessage,
     ) -> Result<DescribeEventCategoriesResponse, DescribeEventCategoriesError>;
 
-    #[doc="<p>Lists all the event subscriptions for a customer account. The description of a subscription includes <code>SubscriptionName</code>, <code>SNSTopicARN</code>, <code>CustomerID</code>, <code>SourceType</code>, <code>SourceID</code>, <code>CreationTime</code>, and <code>Status</code>. </p> <p>If you specify <code>SubscriptionName</code>, this action lists the description for that subscription.</p>"]
+    /// <p>Lists all the event subscriptions for a customer account. The description of a subscription includes <code>SubscriptionName</code>, <code>SNSTopicARN</code>, <code>CustomerID</code>, <code>SourceType</code>, <code>SourceID</code>, <code>CreationTime</code>, and <code>Status</code>. </p> <p>If you specify <code>SubscriptionName</code>, this action lists the description for that subscription.</p>
     fn describe_event_subscriptions(
         &self,
         input: &DescribeEventSubscriptionsMessage,
     ) -> Result<DescribeEventSubscriptionsResponse, DescribeEventSubscriptionsError>;
 
-    #[doc="<p> Lists events for a given source identifier and source type. You can also specify a start and end time. For more information on AWS DMS events, see <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html\"> Working with Events and Notifications </a>. </p>"]
+    /// <p> Lists events for a given source identifier and source type. You can also specify a start and end time. For more information on AWS DMS events, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html"> Working with Events and Notifications </a>. </p>
     fn describe_events(
         &self,
         input: &DescribeEventsMessage,
     ) -> Result<DescribeEventsResponse, DescribeEventsError>;
 
-    #[doc="<p>Returns information about the replication instance types that can be created in the specified region.</p>"]
+    /// <p>Returns information about the replication instance types that can be created in the specified region.</p>
     fn describe_orderable_replication_instances(
         &self,
         input: &DescribeOrderableReplicationInstancesMessage,
@@ -5679,115 +5679,115 @@ pub trait DatabaseMigrationService {
         DescribeOrderableReplicationInstancesError,
     >;
 
-    #[doc = "<p>Returns the status of the RefreshSchemas operation.</p>"]
+    /// <p>Returns the status of the RefreshSchemas operation.</p>
     fn describe_refresh_schemas_status(
         &self,
         input: &DescribeRefreshSchemasStatusMessage,
     ) -> Result<DescribeRefreshSchemasStatusResponse, DescribeRefreshSchemasStatusError>;
 
-    #[doc="<p>Returns information about replication instances for your account in the current region.</p>"]
+    /// <p>Returns information about replication instances for your account in the current region.</p>
     fn describe_replication_instances(
         &self,
         input: &DescribeReplicationInstancesMessage,
     ) -> Result<DescribeReplicationInstancesResponse, DescribeReplicationInstancesError>;
 
-    #[doc = "<p>Returns information about the replication subnet groups.</p>"]
+    /// <p>Returns information about the replication subnet groups.</p>
     fn describe_replication_subnet_groups(
         &self,
         input: &DescribeReplicationSubnetGroupsMessage,
     ) -> Result<DescribeReplicationSubnetGroupsResponse, DescribeReplicationSubnetGroupsError>;
 
-    #[doc="<p>Returns information about replication tasks for your account in the current region.</p>"]
+    /// <p>Returns information about replication tasks for your account in the current region.</p>
     fn describe_replication_tasks(
         &self,
         input: &DescribeReplicationTasksMessage,
     ) -> Result<DescribeReplicationTasksResponse, DescribeReplicationTasksError>;
 
-    #[doc = "<p>Returns information about the schema for the specified endpoint.</p> <p/>"]
+    /// <p><p>Returns information about the schema for the specified endpoint.</p> <p/></p>
     fn describe_schemas(
         &self,
         input: &DescribeSchemasMessage,
     ) -> Result<DescribeSchemasResponse, DescribeSchemasError>;
 
-    #[doc="<p>Returns table statistics on the database migration task, including table name, rows inserted, rows updated, and rows deleted.</p>"]
+    /// <p>Returns table statistics on the database migration task, including table name, rows inserted, rows updated, and rows deleted.</p>
     fn describe_table_statistics(
         &self,
         input: &DescribeTableStatisticsMessage,
     ) -> Result<DescribeTableStatisticsResponse, DescribeTableStatisticsError>;
 
-    #[doc = "<p>Uploads the specified certificate.</p>"]
+    /// <p>Uploads the specified certificate.</p>
     fn import_certificate(
         &self,
         input: &ImportCertificateMessage,
     ) -> Result<ImportCertificateResponse, ImportCertificateError>;
 
-    #[doc = "<p>Lists all tags for an AWS DMS resource.</p>"]
+    /// <p>Lists all tags for an AWS DMS resource.</p>
     fn list_tags_for_resource(
         &self,
         input: &ListTagsForResourceMessage,
     ) -> Result<ListTagsForResourceResponse, ListTagsForResourceError>;
 
-    #[doc = "<p>Modifies the specified endpoint.</p>"]
+    /// <p>Modifies the specified endpoint.</p>
     fn modify_endpoint(
         &self,
         input: &ModifyEndpointMessage,
     ) -> Result<ModifyEndpointResponse, ModifyEndpointError>;
 
-    #[doc = "<p>Modifies an existing AWS DMS event notification subscription. </p>"]
+    /// <p>Modifies an existing AWS DMS event notification subscription. </p>
     fn modify_event_subscription(
         &self,
         input: &ModifyEventSubscriptionMessage,
     ) -> Result<ModifyEventSubscriptionResponse, ModifyEventSubscriptionError>;
 
-    #[doc="<p>Modifies the replication instance to apply new settings. You can change one or more parameters by specifying these parameters and the new values in the request.</p> <p>Some settings are applied during the maintenance window.</p> <p/>"]
+    /// <p><p>Modifies the replication instance to apply new settings. You can change one or more parameters by specifying these parameters and the new values in the request.</p> <p>Some settings are applied during the maintenance window.</p> <p/></p>
     fn modify_replication_instance(
         &self,
         input: &ModifyReplicationInstanceMessage,
     ) -> Result<ModifyReplicationInstanceResponse, ModifyReplicationInstanceError>;
 
-    #[doc = "<p>Modifies the settings for the specified replication subnet group.</p>"]
+    /// <p>Modifies the settings for the specified replication subnet group.</p>
     fn modify_replication_subnet_group(
         &self,
         input: &ModifyReplicationSubnetGroupMessage,
     ) -> Result<ModifyReplicationSubnetGroupResponse, ModifyReplicationSubnetGroupError>;
 
-    #[doc="<p>Modifies the specified replication task.</p> <p>You can't modify the task endpoints. The task must be stopped before you can modify it. </p> <p>For more information about AWS DMS tasks, see the AWS DMS user guide at <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html\"> Working with Migration Tasks </a> </p>"]
+    /// <p>Modifies the specified replication task.</p> <p>You can't modify the task endpoints. The task must be stopped before you can modify it. </p> <p>For more information about AWS DMS tasks, see the AWS DMS user guide at <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html"> Working with Migration Tasks </a> </p>
     fn modify_replication_task(
         &self,
         input: &ModifyReplicationTaskMessage,
     ) -> Result<ModifyReplicationTaskResponse, ModifyReplicationTaskError>;
 
-    #[doc="<p>Populates the schema for the specified endpoint. This is an asynchronous operation and can take several minutes. You can check the status of this operation by calling the DescribeRefreshSchemasStatus operation.</p>"]
+    /// <p>Populates the schema for the specified endpoint. This is an asynchronous operation and can take several minutes. You can check the status of this operation by calling the DescribeRefreshSchemasStatus operation.</p>
     fn refresh_schemas(
         &self,
         input: &RefreshSchemasMessage,
     ) -> Result<RefreshSchemasResponse, RefreshSchemasError>;
 
-    #[doc = "<p>Reloads the target database table with the source data. </p>"]
+    /// <p>Reloads the target database table with the source data. </p>
     fn reload_tables(
         &self,
         input: &ReloadTablesMessage,
     ) -> Result<ReloadTablesResponse, ReloadTablesError>;
 
-    #[doc = "<p>Removes metadata tags from a DMS resource.</p>"]
+    /// <p>Removes metadata tags from a DMS resource.</p>
     fn remove_tags_from_resource(
         &self,
         input: &RemoveTagsFromResourceMessage,
     ) -> Result<RemoveTagsFromResourceResponse, RemoveTagsFromResourceError>;
 
-    #[doc="<p>Starts the replication task.</p> <p>For more information about AWS DMS tasks, see the AWS DMS user guide at <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html\"> Working with Migration Tasks </a> </p>"]
+    /// <p>Starts the replication task.</p> <p>For more information about AWS DMS tasks, see the AWS DMS user guide at <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html"> Working with Migration Tasks </a> </p>
     fn start_replication_task(
         &self,
         input: &StartReplicationTaskMessage,
     ) -> Result<StartReplicationTaskResponse, StartReplicationTaskError>;
 
-    #[doc = "<p>Stops the replication task.</p> <p/>"]
+    /// <p><p>Stops the replication task.</p> <p/></p>
     fn stop_replication_task(
         &self,
         input: &StopReplicationTaskMessage,
     ) -> Result<StopReplicationTaskResponse, StopReplicationTaskError>;
 
-    #[doc = "<p>Tests the connection between the replication instance and the endpoint.</p>"]
+    /// <p>Tests the connection between the replication instance and the endpoint.</p>
     fn test_connection(
         &self,
         input: &TestConnectionMessage,
@@ -5823,7 +5823,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Adds metadata tags to a DMS resource, including replication instance, endpoint, security group, and migration task. These tags can also be used with cost allocation reporting to track cost associated with DMS resources, or used in a Condition statement in an IAM policy for DMS.</p>"]
+    /// <p>Adds metadata tags to a DMS resource, including replication instance, endpoint, security group, and migration task. These tags can also be used with cost allocation reporting to track cost associated with DMS resources, or used in a Condition statement in an IAM policy for DMS.</p>
     fn add_tags_to_resource(
         &self,
         input: &AddTagsToResourceMessage,
@@ -5857,7 +5857,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates an endpoint using the provided settings.</p>"]
+    /// <p>Creates an endpoint using the provided settings.</p>
     fn create_endpoint(
         &self,
         input: &CreateEndpointMessage,
@@ -5891,7 +5891,7 @@ where
         }
     }
 
-    #[doc="<p> Creates an AWS DMS event notification subscription. </p> <p>You can specify the type of source (<code>SourceType</code>) you want to be notified of, provide a list of AWS DMS source IDs (<code>SourceIds</code>) that triggers the events, and provide a list of event categories (<code>EventCategories</code>) for events you want to be notified of. If you specify both the <code>SourceType</code> and <code>SourceIds</code>, such as <code>SourceType = replication-instance</code> and <code>SourceIdentifier = my-replinstance</code>, you will be notified of all the replication instance events for the specified source. If you specify a <code>SourceType</code> but don't specify a <code>SourceIdentifier</code>, you receive notice of the events for that source type for all your AWS DMS sources. If you don't specify either <code>SourceType</code> nor <code>SourceIdentifier</code>, you will be notified of events generated from all AWS DMS sources belonging to your customer account.</p> <p>For more information about AWS DMS events, see <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html\"> Working with Events and Notifications </a> in the AWS Database MIgration Service User Guide.</p>"]
+    /// <p> Creates an AWS DMS event notification subscription. </p> <p>You can specify the type of source (<code>SourceType</code>) you want to be notified of, provide a list of AWS DMS source IDs (<code>SourceIds</code>) that triggers the events, and provide a list of event categories (<code>EventCategories</code>) for events you want to be notified of. If you specify both the <code>SourceType</code> and <code>SourceIds</code>, such as <code>SourceType = replication-instance</code> and <code>SourceIdentifier = my-replinstance</code>, you will be notified of all the replication instance events for the specified source. If you specify a <code>SourceType</code> but don't specify a <code>SourceIdentifier</code>, you receive notice of the events for that source type for all your AWS DMS sources. If you don't specify either <code>SourceType</code> nor <code>SourceIdentifier</code>, you will be notified of events generated from all AWS DMS sources belonging to your customer account.</p> <p>For more information about AWS DMS events, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html"> Working with Events and Notifications </a> in the AWS Database MIgration Service User Guide.</p>
     fn create_event_subscription(
         &self,
         input: &CreateEventSubscriptionMessage,
@@ -5925,7 +5925,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates the replication instance using the specified parameters.</p>"]
+    /// <p>Creates the replication instance using the specified parameters.</p>
     fn create_replication_instance(
         &self,
         input: &CreateReplicationInstanceMessage,
@@ -5962,7 +5962,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a replication subnet group given a list of the subnet IDs in a VPC.</p>"]
+    /// <p>Creates a replication subnet group given a list of the subnet IDs in a VPC.</p>
     fn create_replication_subnet_group(
         &self,
         input: &CreateReplicationSubnetGroupMessage,
@@ -6001,7 +6001,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a replication task using the specified parameters.</p>"]
+    /// <p>Creates a replication task using the specified parameters.</p>
     fn create_replication_task(
         &self,
         input: &CreateReplicationTaskMessage,
@@ -6035,7 +6035,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the specified certificate. </p>"]
+    /// <p>Deletes the specified certificate. </p>
     fn delete_certificate(
         &self,
         input: &DeleteCertificateMessage,
@@ -6069,7 +6069,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified endpoint.</p> <note> <p>All tasks associated with the endpoint must be deleted before you can delete the endpoint.</p> </note> <p/>"]
+    /// <p><p>Deletes the specified endpoint.</p> <note> <p>All tasks associated with the endpoint must be deleted before you can delete the endpoint.</p> </note> <p/></p>
     fn delete_endpoint(
         &self,
         input: &DeleteEndpointMessage,
@@ -6103,7 +6103,7 @@ where
         }
     }
 
-    #[doc = "<p> Deletes an AWS DMS event subscription. </p>"]
+    /// <p> Deletes an AWS DMS event subscription. </p>
     fn delete_event_subscription(
         &self,
         input: &DeleteEventSubscriptionMessage,
@@ -6137,7 +6137,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes the specified replication instance.</p> <note> <p>You must delete any migration tasks that are associated with the replication instance before you can delete it.</p> </note> <p/>"]
+    /// <p><p>Deletes the specified replication instance.</p> <note> <p>You must delete any migration tasks that are associated with the replication instance before you can delete it.</p> </note> <p/></p>
     fn delete_replication_instance(
         &self,
         input: &DeleteReplicationInstanceMessage,
@@ -6174,7 +6174,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a subnet group.</p>"]
+    /// <p>Deletes a subnet group.</p>
     fn delete_replication_subnet_group(
         &self,
         input: &DeleteReplicationSubnetGroupMessage,
@@ -6213,7 +6213,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the specified replication task.</p>"]
+    /// <p>Deletes the specified replication task.</p>
     fn delete_replication_task(
         &self,
         input: &DeleteReplicationTaskMessage,
@@ -6247,7 +6247,7 @@ where
         }
     }
 
-    #[doc="<p>Lists all of the AWS DMS attributes for a customer account. The attributes include AWS DMS quotas for the account, such as the number of replication instances allowed. The description for a quota includes the quota name, current usage toward that quota, and the quota's maximum value.</p> <p>This command does not take any parameters.</p>"]
+    /// <p>Lists all of the AWS DMS attributes for a customer account. The attributes include AWS DMS quotas for the account, such as the number of replication instances allowed. The description for a quota includes the quota name, current usage toward that quota, and the quota's maximum value.</p> <p>This command does not take any parameters.</p>
     fn describe_account_attributes(
         &self,
     ) -> Result<DescribeAccountAttributesResponse, DescribeAccountAttributesError> {
@@ -6282,7 +6282,7 @@ where
         }
     }
 
-    #[doc = "<p>Provides a description of the certificate.</p>"]
+    /// <p>Provides a description of the certificate.</p>
     fn describe_certificates(
         &self,
         input: &DescribeCertificatesMessage,
@@ -6316,7 +6316,7 @@ where
         }
     }
 
-    #[doc="<p>Describes the status of the connections that have been made between the replication instance and an endpoint. Connections are created when you test an endpoint.</p>"]
+    /// <p>Describes the status of the connections that have been made between the replication instance and an endpoint. Connections are created when you test an endpoint.</p>
     fn describe_connections(
         &self,
         input: &DescribeConnectionsMessage,
@@ -6350,7 +6350,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns information about the type of endpoints available.</p>"]
+    /// <p>Returns information about the type of endpoints available.</p>
     fn describe_endpoint_types(
         &self,
         input: &DescribeEndpointTypesMessage,
@@ -6384,7 +6384,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns information about the endpoints for your account in the current region.</p>"]
+    /// <p>Returns information about the endpoints for your account in the current region.</p>
     fn describe_endpoints(
         &self,
         input: &DescribeEndpointsMessage,
@@ -6418,7 +6418,7 @@ where
         }
     }
 
-    #[doc="<p>Lists categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html\"> Working with Events and Notifications </a> in the AWS Database Migration Service User Guide. </p>"]
+    /// <p>Lists categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html"> Working with Events and Notifications </a> in the AWS Database Migration Service User Guide. </p>
     fn describe_event_categories(
         &self,
         input: &DescribeEventCategoriesMessage,
@@ -6452,7 +6452,7 @@ where
         }
     }
 
-    #[doc="<p>Lists all the event subscriptions for a customer account. The description of a subscription includes <code>SubscriptionName</code>, <code>SNSTopicARN</code>, <code>CustomerID</code>, <code>SourceType</code>, <code>SourceID</code>, <code>CreationTime</code>, and <code>Status</code>. </p> <p>If you specify <code>SubscriptionName</code>, this action lists the description for that subscription.</p>"]
+    /// <p>Lists all the event subscriptions for a customer account. The description of a subscription includes <code>SubscriptionName</code>, <code>SNSTopicARN</code>, <code>CustomerID</code>, <code>SourceType</code>, <code>SourceID</code>, <code>CreationTime</code>, and <code>Status</code>. </p> <p>If you specify <code>SubscriptionName</code>, this action lists the description for that subscription.</p>
     fn describe_event_subscriptions(
         &self,
         input: &DescribeEventSubscriptionsMessage,
@@ -6489,7 +6489,7 @@ where
         }
     }
 
-    #[doc="<p> Lists events for a given source identifier and source type. You can also specify a start and end time. For more information on AWS DMS events, see <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html\"> Working with Events and Notifications </a>. </p>"]
+    /// <p> Lists events for a given source identifier and source type. You can also specify a start and end time. For more information on AWS DMS events, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html"> Working with Events and Notifications </a>. </p>
     fn describe_events(
         &self,
         input: &DescribeEventsMessage,
@@ -6523,7 +6523,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about the replication instance types that can be created in the specified region.</p>"]
+    /// <p>Returns information about the replication instance types that can be created in the specified region.</p>
     fn describe_orderable_replication_instances(
         &self,
         input: &DescribeOrderableReplicationInstancesMessage,
@@ -6565,7 +6565,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns the status of the RefreshSchemas operation.</p>"]
+    /// <p>Returns the status of the RefreshSchemas operation.</p>
     fn describe_refresh_schemas_status(
         &self,
         input: &DescribeRefreshSchemasStatusMessage,
@@ -6604,7 +6604,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about replication instances for your account in the current region.</p>"]
+    /// <p>Returns information about replication instances for your account in the current region.</p>
     fn describe_replication_instances(
         &self,
         input: &DescribeReplicationInstancesMessage,
@@ -6643,7 +6643,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns information about the replication subnet groups.</p>"]
+    /// <p>Returns information about the replication subnet groups.</p>
     fn describe_replication_subnet_groups(
         &self,
         input: &DescribeReplicationSubnetGroupsMessage,
@@ -6682,7 +6682,7 @@ where
         }
     }
 
-    #[doc="<p>Returns information about replication tasks for your account in the current region.</p>"]
+    /// <p>Returns information about replication tasks for your account in the current region.</p>
     fn describe_replication_tasks(
         &self,
         input: &DescribeReplicationTasksMessage,
@@ -6719,7 +6719,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns information about the schema for the specified endpoint.</p> <p/>"]
+    /// <p><p>Returns information about the schema for the specified endpoint.</p> <p/></p>
     fn describe_schemas(
         &self,
         input: &DescribeSchemasMessage,
@@ -6753,7 +6753,7 @@ where
         }
     }
 
-    #[doc="<p>Returns table statistics on the database migration task, including table name, rows inserted, rows updated, and rows deleted.</p>"]
+    /// <p>Returns table statistics on the database migration task, including table name, rows inserted, rows updated, and rows deleted.</p>
     fn describe_table_statistics(
         &self,
         input: &DescribeTableStatisticsMessage,
@@ -6787,7 +6787,7 @@ where
         }
     }
 
-    #[doc = "<p>Uploads the specified certificate.</p>"]
+    /// <p>Uploads the specified certificate.</p>
     fn import_certificate(
         &self,
         input: &ImportCertificateMessage,
@@ -6821,7 +6821,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists all tags for an AWS DMS resource.</p>"]
+    /// <p>Lists all tags for an AWS DMS resource.</p>
     fn list_tags_for_resource(
         &self,
         input: &ListTagsForResourceMessage,
@@ -6855,7 +6855,7 @@ where
         }
     }
 
-    #[doc = "<p>Modifies the specified endpoint.</p>"]
+    /// <p>Modifies the specified endpoint.</p>
     fn modify_endpoint(
         &self,
         input: &ModifyEndpointMessage,
@@ -6889,7 +6889,7 @@ where
         }
     }
 
-    #[doc = "<p>Modifies an existing AWS DMS event notification subscription. </p>"]
+    /// <p>Modifies an existing AWS DMS event notification subscription. </p>
     fn modify_event_subscription(
         &self,
         input: &ModifyEventSubscriptionMessage,
@@ -6923,7 +6923,7 @@ where
         }
     }
 
-    #[doc="<p>Modifies the replication instance to apply new settings. You can change one or more parameters by specifying these parameters and the new values in the request.</p> <p>Some settings are applied during the maintenance window.</p> <p/>"]
+    /// <p><p>Modifies the replication instance to apply new settings. You can change one or more parameters by specifying these parameters and the new values in the request.</p> <p>Some settings are applied during the maintenance window.</p> <p/></p>
     fn modify_replication_instance(
         &self,
         input: &ModifyReplicationInstanceMessage,
@@ -6960,7 +6960,7 @@ where
         }
     }
 
-    #[doc = "<p>Modifies the settings for the specified replication subnet group.</p>"]
+    /// <p>Modifies the settings for the specified replication subnet group.</p>
     fn modify_replication_subnet_group(
         &self,
         input: &ModifyReplicationSubnetGroupMessage,
@@ -6999,7 +6999,7 @@ where
         }
     }
 
-    #[doc="<p>Modifies the specified replication task.</p> <p>You can't modify the task endpoints. The task must be stopped before you can modify it. </p> <p>For more information about AWS DMS tasks, see the AWS DMS user guide at <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html\"> Working with Migration Tasks </a> </p>"]
+    /// <p>Modifies the specified replication task.</p> <p>You can't modify the task endpoints. The task must be stopped before you can modify it. </p> <p>For more information about AWS DMS tasks, see the AWS DMS user guide at <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html"> Working with Migration Tasks </a> </p>
     fn modify_replication_task(
         &self,
         input: &ModifyReplicationTaskMessage,
@@ -7033,7 +7033,7 @@ where
         }
     }
 
-    #[doc="<p>Populates the schema for the specified endpoint. This is an asynchronous operation and can take several minutes. You can check the status of this operation by calling the DescribeRefreshSchemasStatus operation.</p>"]
+    /// <p>Populates the schema for the specified endpoint. This is an asynchronous operation and can take several minutes. You can check the status of this operation by calling the DescribeRefreshSchemasStatus operation.</p>
     fn refresh_schemas(
         &self,
         input: &RefreshSchemasMessage,
@@ -7067,7 +7067,7 @@ where
         }
     }
 
-    #[doc = "<p>Reloads the target database table with the source data. </p>"]
+    /// <p>Reloads the target database table with the source data. </p>
     fn reload_tables(
         &self,
         input: &ReloadTablesMessage,
@@ -7101,7 +7101,7 @@ where
         }
     }
 
-    #[doc = "<p>Removes metadata tags from a DMS resource.</p>"]
+    /// <p>Removes metadata tags from a DMS resource.</p>
     fn remove_tags_from_resource(
         &self,
         input: &RemoveTagsFromResourceMessage,
@@ -7135,7 +7135,7 @@ where
         }
     }
 
-    #[doc="<p>Starts the replication task.</p> <p>For more information about AWS DMS tasks, see the AWS DMS user guide at <a href=\"http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html\"> Working with Migration Tasks </a> </p>"]
+    /// <p>Starts the replication task.</p> <p>For more information about AWS DMS tasks, see the AWS DMS user guide at <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html"> Working with Migration Tasks </a> </p>
     fn start_replication_task(
         &self,
         input: &StartReplicationTaskMessage,
@@ -7169,7 +7169,7 @@ where
         }
     }
 
-    #[doc = "<p>Stops the replication task.</p> <p/>"]
+    /// <p><p>Stops the replication task.</p> <p/></p>
     fn stop_replication_task(
         &self,
         input: &StopReplicationTaskMessage,
@@ -7203,7 +7203,7 @@ where
         }
     }
 
-    #[doc = "<p>Tests the connection between the replication instance and the endpoint.</p>"]
+    /// <p>Tests the connection between the replication instance and the endpoint.</p>
     fn test_connection(
         &self,
         input: &TestConnectionMessage,

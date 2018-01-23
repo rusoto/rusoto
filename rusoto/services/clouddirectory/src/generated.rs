@@ -1130,7 +1130,7 @@ pub struct CreateFacetRequest {
     /// <p>The name of the <a>Facet</a>, which is unique for a given schema.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>Specifies whether a given object created from this facet is of type node, leaf node, policy or index.</p> <ul> <li> <p>Node: Can have multiple children but one parent.</p> </li> </ul> <ul> <li> <p>Leaf node: Cannot have children but can have multiple parents.</p> </li> </ul> <ul> <li> <p>Policy: Allows you to store a policy document and policy type. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#policies">Policies</a>.</p> </li> </ul> <ul> <li> <p>Index: Can be created with the Index API.</p> </li> </ul>
+    /// <p><p>Specifies whether a given object created from this facet is of type node, leaf node, policy or index.</p> <ul> <li> <p>Node: Can have multiple children but one parent.</p> </li> </ul> <ul> <li> <p>Leaf node: Cannot have children but can have multiple parents.</p> </li> </ul> <ul> <li> <p>Policy: Allows you to store a policy document and policy type. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#policies">Policies</a>.</p> </li> </ul> <ul> <li> <p>Index: Can be created with the Index API.</p> </li> </ul></p>
     #[serde(rename = "ObjectType")]
     pub object_type: String,
     /// <p>The schema ARN in which the new <a>Facet</a> will be created. For more information, see <a>arns</a>.</p>
@@ -2273,7 +2273,7 @@ pub struct ObjectAttributeUpdate {
 /// <p>The reference that identifies an object.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ObjectReference {
-    /// <p>A path selector supports easy selection of an object by the parent/child links leading to it from the directory root. Use the link names from each parent/child link to construct the path. Path selectors start with a slash (/) and link names are separated by slashes. For more information about paths, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#accessingobjects">Accessing Objects</a>. You can identify an object in one of the following ways:</p> <ul> <li> <p> <i>$ObjectIdentifier</i> - An object identifier is an opaque string provided by Amazon Cloud Directory. When creating objects, the system will provide you with the identifier of the created object. An object’s identifier is immutable and no two objects will ever share the same object identifier</p> </li> <li> <p> <i>/some/path</i> - Identifies the object based on path</p> </li> <li> <p> <i>#SomeBatchReference</i> - Identifies the object in a batch call</p> </li> </ul>
+    /// <p><p>A path selector supports easy selection of an object by the parent/child links leading to it from the directory root. Use the link names from each parent/child link to construct the path. Path selectors start with a slash (/) and link names are separated by slashes. For more information about paths, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#accessingobjects">Accessing Objects</a>. You can identify an object in one of the following ways:</p> <ul> <li> <p> <i>$ObjectIdentifier</i> - An object identifier is an opaque string provided by Amazon Cloud Directory. When creating objects, the system will provide you with the identifier of the created object. An object’s identifier is immutable and no two objects will ever share the same object identifier</p> </li> <li> <p> <i>/some/path</i> - Identifies the object based on path</p> </li> <li> <p> <i>#SomeBatchReference</i> - Identifies the object in a batch call</p> </li> </ul></p>
     #[serde(rename = "Selector")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub selector: Option<String>,
@@ -2661,21 +2661,21 @@ pub struct UpdateTypedLinkFacetResponse;
 /// Errors returned by AddFacetToObject
 #[derive(Debug, PartialEq)]
 pub enum AddFacetToObjectError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>An operation can only operate on a directory that is not enabled.</p>
     DirectoryNotEnabled(String),
-    ///<p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
+    /// <p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
     FacetValidation(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2781,19 +2781,19 @@ impl Error for AddFacetToObjectError {
 /// Errors returned by ApplySchema
 #[derive(Debug, PartialEq)]
 pub enum ApplySchemaError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that an attempt to attach an object with the same link name or to apply a schema with the same name has occurred. Rename the link or the schema and then try again.</p>
+    /// <p>Indicates that an attempt to attach an object with the same link name or to apply a schema with the same name has occurred. Rename the link or the schema and then try again.</p>
     InvalidAttachment(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2895,25 +2895,25 @@ impl Error for ApplySchemaError {
 /// Errors returned by AttachObject
 #[derive(Debug, PartialEq)]
 pub enum AttachObjectError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>An operation can only operate on a directory that is not enabled.</p>
     DirectoryNotEnabled(String),
-    ///<p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
+    /// <p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
     FacetValidation(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that an attempt to attach an object with the same link name or to apply a schema with the same name has occurred. Rename the link or the schema and then try again.</p>
+    /// <p>Indicates that an attempt to attach an object with the same link name or to apply a schema with the same name has occurred. Rename the link or the schema and then try again.</p>
     InvalidAttachment(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>Indicates that a link could not be created due to a naming conflict. Choose a different name and then try again.</p>
+    /// <p>Indicates that a link could not be created due to a naming conflict. Choose a different name and then try again.</p>
     LinkNameAlreadyInUse(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3027,21 +3027,21 @@ impl Error for AttachObjectError {
 /// Errors returned by AttachPolicy
 #[derive(Debug, PartialEq)]
 pub enum AttachPolicyError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>An operation can only operate on a directory that is not enabled.</p>
     DirectoryNotEnabled(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>Indicates that the requested operation can only operate on policy objects.</p>
+    /// <p>Indicates that the requested operation can only operate on policy objects.</p>
     NotPolicy(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3147,25 +3147,25 @@ impl Error for AttachPolicyError {
 /// Errors returned by AttachToIndex
 #[derive(Debug, PartialEq)]
 pub enum AttachToIndexError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>An operation can only operate on a directory that is not enabled.</p>
     DirectoryNotEnabled(String),
-    ///<p>An object has been attempted to be attached to an object that does not have the appropriate attribute value.</p>
+    /// <p>An object has been attempted to be attached to an object that does not have the appropriate attribute value.</p>
     IndexedAttributeMissing(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>Indicates that a link could not be created due to a naming conflict. Choose a different name and then try again.</p>
+    /// <p>Indicates that a link could not be created due to a naming conflict. Choose a different name and then try again.</p>
     LinkNameAlreadyInUse(String),
-    ///<p>Indicates that the requested operation can only operate on index objects.</p>
+    /// <p>Indicates that the requested operation can only operate on index objects.</p>
     NotIndex(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3279,23 +3279,23 @@ impl Error for AttachToIndexError {
 /// Errors returned by AttachTypedLink
 #[derive(Debug, PartialEq)]
 pub enum AttachTypedLinkError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>An operation can only operate on a directory that is not enabled.</p>
     DirectoryNotEnabled(String),
-    ///<p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
+    /// <p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
     FacetValidation(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that an attempt to attach an object with the same link name or to apply a schema with the same name has occurred. Rename the link or the schema and then try again.</p>
+    /// <p>Indicates that an attempt to attach an object with the same link name or to apply a schema with the same name has occurred. Rename the link or the schema and then try again.</p>
     InvalidAttachment(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3405,17 +3405,17 @@ impl Error for AttachTypedLinkError {
 /// Errors returned by BatchRead
 #[derive(Debug, PartialEq)]
 pub enum BatchReadError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>An operation can only operate on a directory that is not enabled.</p>
     DirectoryNotEnabled(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3511,19 +3511,19 @@ impl Error for BatchReadError {
 /// Errors returned by BatchWrite
 #[derive(Debug, PartialEq)]
 pub enum BatchWriteError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>A <code>BatchWrite</code> exception has occurred.</p>
+    /// <p>A <code>BatchWrite</code> exception has occurred.</p>
     BatchWrite(String),
-    ///<p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>An operation can only operate on a directory that is not enabled.</p>
     DirectoryNotEnabled(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3623,19 +3623,19 @@ impl Error for BatchWriteError {
 /// Errors returned by CreateDirectory
 #[derive(Debug, PartialEq)]
 pub enum CreateDirectoryError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>Indicates that a <a>Directory</a> could not be created due to a naming conflict. Choose a different name and try again.</p>
+    /// <p>Indicates that a <a>Directory</a> could not be created due to a naming conflict. Choose a different name and try again.</p>
     DirectoryAlreadyExists(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3737,23 +3737,23 @@ impl Error for CreateDirectoryError {
 /// Errors returned by CreateFacet
 #[derive(Debug, PartialEq)]
 pub enum CreateFacetError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>A facet with the same name already exists.</p>
+    /// <p>A facet with the same name already exists.</p>
     FacetAlreadyExists(String),
-    ///<p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
+    /// <p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
     FacetValidation(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Occurs when any of the rule parameter keys or values are invalid.</p>
+    /// <p>Occurs when any of the rule parameter keys or values are invalid.</p>
     InvalidRule(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3863,25 +3863,25 @@ impl Error for CreateFacetError {
 /// Errors returned by CreateIndex
 #[derive(Debug, PartialEq)]
 pub enum CreateIndexError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>An operation can only operate on a directory that is not enabled.</p>
     DirectoryNotEnabled(String),
-    ///<p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
+    /// <p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
     FacetValidation(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>Indicates that a link could not be created due to a naming conflict. Choose a different name and then try again.</p>
+    /// <p>Indicates that a link could not be created due to a naming conflict. Choose a different name and then try again.</p>
     LinkNameAlreadyInUse(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    ///<p>Indicates that the requested index type is not supported.</p>
+    /// <p>Indicates that the requested index type is not supported.</p>
     UnsupportedIndexType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3995,25 +3995,25 @@ impl Error for CreateIndexError {
 /// Errors returned by CreateObject
 #[derive(Debug, PartialEq)]
 pub enum CreateObjectError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>An operation can only operate on a directory that is not enabled.</p>
     DirectoryNotEnabled(String),
-    ///<p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
+    /// <p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
     FacetValidation(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>Indicates that a link could not be created due to a naming conflict. Choose a different name and then try again.</p>
+    /// <p>Indicates that a link could not be created due to a naming conflict. Choose a different name and then try again.</p>
     LinkNameAlreadyInUse(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    ///<p>Indicates that the requested index type is not supported.</p>
+    /// <p>Indicates that the requested index type is not supported.</p>
     UnsupportedIndexType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4127,17 +4127,17 @@ impl Error for CreateObjectError {
 /// Errors returned by CreateSchema
 #[derive(Debug, PartialEq)]
 pub enum CreateSchemaError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    ///<p>Indicates that a schema could not be created due to a naming conflict. Please select a different name and then try again.</p>
+    /// <p>Indicates that a schema could not be created due to a naming conflict. Please select a different name and then try again.</p>
     SchemaAlreadyExists(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4235,23 +4235,23 @@ impl Error for CreateSchemaError {
 /// Errors returned by CreateTypedLinkFacet
 #[derive(Debug, PartialEq)]
 pub enum CreateTypedLinkFacetError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>A facet with the same name already exists.</p>
+    /// <p>A facet with the same name already exists.</p>
     FacetAlreadyExists(String),
-    ///<p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
+    /// <p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
     FacetValidation(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Occurs when any of the rule parameter keys or values are invalid.</p>
+    /// <p>Occurs when any of the rule parameter keys or values are invalid.</p>
     InvalidRule(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4363,21 +4363,21 @@ impl Error for CreateTypedLinkFacetError {
 /// Errors returned by DeleteDirectory
 #[derive(Debug, PartialEq)]
 pub enum DeleteDirectoryError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>A directory that has been deleted and to which access has been attempted. Note: The requested resource will eventually cease to exist.</p>
+    /// <p>A directory that has been deleted and to which access has been attempted. Note: The requested resource will eventually cease to exist.</p>
     DirectoryDeleted(String),
-    ///<p>An operation can only operate on a disabled directory.</p>
+    /// <p>An operation can only operate on a disabled directory.</p>
     DirectoryNotDisabled(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4483,21 +4483,21 @@ impl Error for DeleteDirectoryError {
 /// Errors returned by DeleteFacet
 #[derive(Debug, PartialEq)]
 pub enum DeleteFacetError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>Occurs when deleting a facet that contains an attribute that is a target to an attribute reference in a different facet.</p>
+    /// <p>Occurs when deleting a facet that contains an attribute that is a target to an attribute reference in a different facet.</p>
     FacetInUse(String),
-    ///<p>The specified <a>Facet</a> could not be found.</p>
+    /// <p>The specified <a>Facet</a> could not be found.</p>
     FacetNotFound(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4603,21 +4603,21 @@ impl Error for DeleteFacetError {
 /// Errors returned by DeleteObject
 #[derive(Debug, PartialEq)]
 pub enum DeleteObjectError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>An operation can only operate on a directory that is not enabled.</p>
     DirectoryNotEnabled(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>Indicates that the requested operation cannot be completed because the object has not been detached from the tree.</p>
+    /// <p>Indicates that the requested operation cannot be completed because the object has not been detached from the tree.</p>
     ObjectNotDetached(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4723,19 +4723,19 @@ impl Error for DeleteObjectError {
 /// Errors returned by DeleteSchema
 #[derive(Debug, PartialEq)]
 pub enum DeleteSchemaError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    ///<p>The object could not be deleted because links still exist. Remove the links and then try the operation again.</p>
+    /// <p>The object could not be deleted because links still exist. Remove the links and then try the operation again.</p>
     StillContainsLinks(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4837,19 +4837,19 @@ impl Error for DeleteSchemaError {
 /// Errors returned by DeleteTypedLinkFacet
 #[derive(Debug, PartialEq)]
 pub enum DeleteTypedLinkFacetError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>The specified <a>Facet</a> could not be found.</p>
+    /// <p>The specified <a>Facet</a> could not be found.</p>
     FacetNotFound(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4953,23 +4953,23 @@ impl Error for DeleteTypedLinkFacetError {
 /// Errors returned by DetachFromIndex
 #[derive(Debug, PartialEq)]
 pub enum DetachFromIndexError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>An operation can only operate on a directory that is not enabled.</p>
     DirectoryNotEnabled(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>Indicates that the requested operation can only operate on index objects.</p>
+    /// <p>Indicates that the requested operation can only operate on index objects.</p>
     NotIndex(String),
-    ///<p>Indicates that the object is not attached to the index.</p>
+    /// <p>Indicates that the object is not attached to the index.</p>
     ObjectAlreadyDetached(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5079,19 +5079,19 @@ impl Error for DetachFromIndexError {
 /// Errors returned by DetachObject
 #[derive(Debug, PartialEq)]
 pub enum DetachObjectError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>An operation can only operate on a directory that is not enabled.</p>
     DirectoryNotEnabled(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5193,21 +5193,21 @@ impl Error for DetachObjectError {
 /// Errors returned by DetachPolicy
 #[derive(Debug, PartialEq)]
 pub enum DetachPolicyError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>An operation can only operate on a directory that is not enabled.</p>
     DirectoryNotEnabled(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>Indicates that the requested operation can only operate on policy objects.</p>
+    /// <p>Indicates that the requested operation can only operate on policy objects.</p>
     NotPolicy(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5313,21 +5313,21 @@ impl Error for DetachPolicyError {
 /// Errors returned by DetachTypedLink
 #[derive(Debug, PartialEq)]
 pub enum DetachTypedLinkError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>An operation can only operate on a directory that is not enabled.</p>
     DirectoryNotEnabled(String),
-    ///<p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
+    /// <p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
     FacetValidation(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5433,19 +5433,19 @@ impl Error for DetachTypedLinkError {
 /// Errors returned by DisableDirectory
 #[derive(Debug, PartialEq)]
 pub enum DisableDirectoryError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>A directory that has been deleted and to which access has been attempted. Note: The requested resource will eventually cease to exist.</p>
+    /// <p>A directory that has been deleted and to which access has been attempted. Note: The requested resource will eventually cease to exist.</p>
     DirectoryDeleted(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5547,19 +5547,19 @@ impl Error for DisableDirectoryError {
 /// Errors returned by EnableDirectory
 #[derive(Debug, PartialEq)]
 pub enum EnableDirectoryError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>A directory that has been deleted and to which access has been attempted. Note: The requested resource will eventually cease to exist.</p>
+    /// <p>A directory that has been deleted and to which access has been attempted. Note: The requested resource will eventually cease to exist.</p>
     DirectoryDeleted(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5661,15 +5661,15 @@ impl Error for EnableDirectoryError {
 /// Errors returned by GetDirectory
 #[derive(Debug, PartialEq)]
 pub enum GetDirectoryError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5763,19 +5763,19 @@ impl Error for GetDirectoryError {
 /// Errors returned by GetFacet
 #[derive(Debug, PartialEq)]
 pub enum GetFacetError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>The specified <a>Facet</a> could not be found.</p>
+    /// <p>The specified <a>Facet</a> could not be found.</p>
     FacetNotFound(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5873,19 +5873,19 @@ impl Error for GetFacetError {
 /// Errors returned by GetObjectInformation
 #[derive(Debug, PartialEq)]
 pub enum GetObjectInformationError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>An operation can only operate on a directory that is not enabled.</p>
     DirectoryNotEnabled(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5989,17 +5989,17 @@ impl Error for GetObjectInformationError {
 /// Errors returned by GetSchemaAsJson
 #[derive(Debug, PartialEq)]
 pub enum GetSchemaAsJsonError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6097,21 +6097,21 @@ impl Error for GetSchemaAsJsonError {
 /// Errors returned by GetTypedLinkFacetInformation
 #[derive(Debug, PartialEq)]
 pub enum GetTypedLinkFacetInformationError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>The specified <a>Facet</a> could not be found.</p>
+    /// <p>The specified <a>Facet</a> could not be found.</p>
     FacetNotFound(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that the <code>NextToken</code> value is not valid.</p>
+    /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6227,19 +6227,19 @@ impl Error for GetTypedLinkFacetInformationError {
 /// Errors returned by ListAppliedSchemaArns
 #[derive(Debug, PartialEq)]
 pub enum ListAppliedSchemaArnsError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that the <code>NextToken</code> value is not valid.</p>
+    /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6343,19 +6343,19 @@ impl Error for ListAppliedSchemaArnsError {
 /// Errors returned by ListAttachedIndices
 #[derive(Debug, PartialEq)]
 pub enum ListAttachedIndicesError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>An operation can only operate on a directory that is not enabled.</p>
     DirectoryNotEnabled(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6459,19 +6459,19 @@ impl Error for ListAttachedIndicesError {
 /// Errors returned by ListDevelopmentSchemaArns
 #[derive(Debug, PartialEq)]
 pub enum ListDevelopmentSchemaArnsError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that the <code>NextToken</code> value is not valid.</p>
+    /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6581,17 +6581,17 @@ impl Error for ListDevelopmentSchemaArnsError {
 /// Errors returned by ListDirectories
 #[derive(Debug, PartialEq)]
 pub enum ListDirectoriesError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that the <code>NextToken</code> value is not valid.</p>
+    /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6689,21 +6689,21 @@ impl Error for ListDirectoriesError {
 /// Errors returned by ListFacetAttributes
 #[derive(Debug, PartialEq)]
 pub enum ListFacetAttributesError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>The specified <a>Facet</a> could not be found.</p>
+    /// <p>The specified <a>Facet</a> could not be found.</p>
     FacetNotFound(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that the <code>NextToken</code> value is not valid.</p>
+    /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6811,19 +6811,19 @@ impl Error for ListFacetAttributesError {
 /// Errors returned by ListFacetNames
 #[derive(Debug, PartialEq)]
 pub enum ListFacetNamesError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that the <code>NextToken</code> value is not valid.</p>
+    /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6925,23 +6925,23 @@ impl Error for ListFacetNamesError {
 /// Errors returned by ListIncomingTypedLinks
 #[derive(Debug, PartialEq)]
 pub enum ListIncomingTypedLinksError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>An operation can only operate on a directory that is not enabled.</p>
     DirectoryNotEnabled(String),
-    ///<p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
+    /// <p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
     FacetValidation(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that the <code>NextToken</code> value is not valid.</p>
+    /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7055,21 +7055,21 @@ impl Error for ListIncomingTypedLinksError {
 /// Errors returned by ListIndex
 #[derive(Debug, PartialEq)]
 pub enum ListIndexError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>An operation can only operate on a directory that is not enabled.</p>
     DirectoryNotEnabled(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>Indicates that the requested operation can only operate on index objects.</p>
+    /// <p>Indicates that the requested operation can only operate on index objects.</p>
     NotIndex(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7171,23 +7171,23 @@ impl Error for ListIndexError {
 /// Errors returned by ListObjectAttributes
 #[derive(Debug, PartialEq)]
 pub enum ListObjectAttributesError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>An operation can only operate on a directory that is not enabled.</p>
     DirectoryNotEnabled(String),
-    ///<p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
+    /// <p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
     FacetValidation(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that the <code>NextToken</code> value is not valid.</p>
+    /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7299,23 +7299,23 @@ impl Error for ListObjectAttributesError {
 /// Errors returned by ListObjectChildren
 #[derive(Debug, PartialEq)]
 pub enum ListObjectChildrenError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>An operation can only operate on a directory that is not enabled.</p>
     DirectoryNotEnabled(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that the <code>NextToken</code> value is not valid.</p>
+    /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>Occurs when any invalid operations are performed on an object that is not a node, such as calling <code>ListObjectChildren</code> for a leaf node object.</p>
+    /// <p>Occurs when any invalid operations are performed on an object that is not a node, such as calling <code>ListObjectChildren</code> for a leaf node object.</p>
     NotNode(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7427,21 +7427,21 @@ impl Error for ListObjectChildrenError {
 /// Errors returned by ListObjectParentPaths
 #[derive(Debug, PartialEq)]
 pub enum ListObjectParentPathsError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>An operation can only operate on a directory that is not enabled.</p>
     DirectoryNotEnabled(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that the <code>NextToken</code> value is not valid.</p>
+    /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7549,23 +7549,23 @@ impl Error for ListObjectParentPathsError {
 /// Errors returned by ListObjectParents
 #[derive(Debug, PartialEq)]
 pub enum ListObjectParentsError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>Cannot list the parents of a <a>Directory</a> root.</p>
+    /// <p>Cannot list the parents of a <a>Directory</a> root.</p>
     CannotListParentOfRoot(String),
-    ///<p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>An operation can only operate on a directory that is not enabled.</p>
     DirectoryNotEnabled(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that the <code>NextToken</code> value is not valid.</p>
+    /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7677,21 +7677,21 @@ impl Error for ListObjectParentsError {
 /// Errors returned by ListObjectPolicies
 #[derive(Debug, PartialEq)]
 pub enum ListObjectPoliciesError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>An operation can only operate on a directory that is not enabled.</p>
     DirectoryNotEnabled(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that the <code>NextToken</code> value is not valid.</p>
+    /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7799,23 +7799,23 @@ impl Error for ListObjectPoliciesError {
 /// Errors returned by ListOutgoingTypedLinks
 #[derive(Debug, PartialEq)]
 pub enum ListOutgoingTypedLinksError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>An operation can only operate on a directory that is not enabled.</p>
     DirectoryNotEnabled(String),
-    ///<p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
+    /// <p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
     FacetValidation(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that the <code>NextToken</code> value is not valid.</p>
+    /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7929,23 +7929,23 @@ impl Error for ListOutgoingTypedLinksError {
 /// Errors returned by ListPolicyAttachments
 #[derive(Debug, PartialEq)]
 pub enum ListPolicyAttachmentsError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>An operation can only operate on a directory that is not enabled.</p>
     DirectoryNotEnabled(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that the <code>NextToken</code> value is not valid.</p>
+    /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>Indicates that the requested operation can only operate on policy objects.</p>
+    /// <p>Indicates that the requested operation can only operate on policy objects.</p>
     NotPolicy(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8057,19 +8057,19 @@ impl Error for ListPolicyAttachmentsError {
 /// Errors returned by ListPublishedSchemaArns
 #[derive(Debug, PartialEq)]
 pub enum ListPublishedSchemaArnsError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that the <code>NextToken</code> value is not valid.</p>
+    /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8173,19 +8173,19 @@ impl Error for ListPublishedSchemaArnsError {
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Can occur for multiple reasons such as when you tag a resource that doesn’t exist or if you specify a higher number of tags for a resource than the allowed limit. Allowed limit is 50 tags per resource.</p>
+    /// <p>Can occur for multiple reasons such as when you tag a resource that doesn’t exist or if you specify a higher number of tags for a resource than the allowed limit. Allowed limit is 50 tags per resource.</p>
     InvalidTaggingRequest(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8289,21 +8289,21 @@ impl Error for ListTagsForResourceError {
 /// Errors returned by ListTypedLinkFacetAttributes
 #[derive(Debug, PartialEq)]
 pub enum ListTypedLinkFacetAttributesError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>The specified <a>Facet</a> could not be found.</p>
+    /// <p>The specified <a>Facet</a> could not be found.</p>
     FacetNotFound(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that the <code>NextToken</code> value is not valid.</p>
+    /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8419,19 +8419,19 @@ impl Error for ListTypedLinkFacetAttributesError {
 /// Errors returned by ListTypedLinkFacetNames
 #[derive(Debug, PartialEq)]
 pub enum ListTypedLinkFacetNamesError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that the <code>NextToken</code> value is not valid.</p>
+    /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8535,21 +8535,21 @@ impl Error for ListTypedLinkFacetNamesError {
 /// Errors returned by LookupPolicy
 #[derive(Debug, PartialEq)]
 pub enum LookupPolicyError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>An operation can only operate on a directory that is not enabled.</p>
     DirectoryNotEnabled(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that the <code>NextToken</code> value is not valid.</p>
+    /// <p>Indicates that the <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8655,19 +8655,19 @@ impl Error for LookupPolicyError {
 /// Errors returned by PublishSchema
 #[derive(Debug, PartialEq)]
 pub enum PublishSchemaError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
-    ///<p>Indicates that a schema is already published.</p>
+    /// <p>Indicates that a schema is already published.</p>
     SchemaAlreadyPublished(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8769,19 +8769,19 @@ impl Error for PublishSchemaError {
 /// Errors returned by PutSchemaFromJson
 #[derive(Debug, PartialEq)]
 pub enum PutSchemaFromJsonError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Occurs when any of the rule parameter keys or values are invalid.</p>
+    /// <p>Occurs when any of the rule parameter keys or values are invalid.</p>
     InvalidRule(String),
-    ///<p>Indicates that the provided <code>SchemaDoc</code> value is not valid.</p>
+    /// <p>Indicates that the provided <code>SchemaDoc</code> value is not valid.</p>
     InvalidSchemaDoc(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8885,21 +8885,21 @@ impl Error for PutSchemaFromJsonError {
 /// Errors returned by RemoveFacetFromObject
 #[derive(Debug, PartialEq)]
 pub enum RemoveFacetFromObjectError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>An operation can only operate on a directory that is not enabled.</p>
     DirectoryNotEnabled(String),
-    ///<p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
+    /// <p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
     FacetValidation(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9007,19 +9007,19 @@ impl Error for RemoveFacetFromObjectError {
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Can occur for multiple reasons such as when you tag a resource that doesn’t exist or if you specify a higher number of tags for a resource than the allowed limit. Allowed limit is 50 tags per resource.</p>
+    /// <p>Can occur for multiple reasons such as when you tag a resource that doesn’t exist or if you specify a higher number of tags for a resource than the allowed limit. Allowed limit is 50 tags per resource.</p>
     InvalidTaggingRequest(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9121,19 +9121,19 @@ impl Error for TagResourceError {
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Can occur for multiple reasons such as when you tag a resource that doesn’t exist or if you specify a higher number of tags for a resource than the allowed limit. Allowed limit is 50 tags per resource.</p>
+    /// <p>Can occur for multiple reasons such as when you tag a resource that doesn’t exist or if you specify a higher number of tags for a resource than the allowed limit. Allowed limit is 50 tags per resource.</p>
     InvalidTaggingRequest(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9235,23 +9235,23 @@ impl Error for UntagResourceError {
 /// Errors returned by UpdateFacet
 #[derive(Debug, PartialEq)]
 pub enum UpdateFacetError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>The specified <a>Facet</a> could not be found.</p>
+    /// <p>The specified <a>Facet</a> could not be found.</p>
     FacetNotFound(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>An attempt to modify a <a>Facet</a> resulted in an invalid schema exception.</p>
+    /// <p>An attempt to modify a <a>Facet</a> resulted in an invalid schema exception.</p>
     InvalidFacetUpdate(String),
-    ///<p>Occurs when any of the rule parameter keys or values are invalid.</p>
+    /// <p>Occurs when any of the rule parameter keys or values are invalid.</p>
     InvalidRule(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9361,21 +9361,21 @@ impl Error for UpdateFacetError {
 /// Errors returned by UpdateObjectAttributes
 #[derive(Debug, PartialEq)]
 pub enum UpdateObjectAttributesError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>An operation can only operate on a directory that is not enabled.</p>
+    /// <p>An operation can only operate on a directory that is not enabled.</p>
     DirectoryNotEnabled(String),
-    ///<p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
+    /// <p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
     FacetValidation(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9485,17 +9485,17 @@ impl Error for UpdateObjectAttributesError {
 /// Errors returned by UpdateSchema
 #[derive(Debug, PartialEq)]
 pub enum UpdateSchemaError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9593,25 +9593,25 @@ impl Error for UpdateSchemaError {
 /// Errors returned by UpdateTypedLinkFacet
 #[derive(Debug, PartialEq)]
 pub enum UpdateTypedLinkFacetError {
-    ///<p>Access denied. Check your permissions.</p>
+    /// <p>Access denied. Check your permissions.</p>
     AccessDenied(String),
-    ///<p>The specified <a>Facet</a> could not be found.</p>
+    /// <p>The specified <a>Facet</a> could not be found.</p>
     FacetNotFound(String),
-    ///<p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
+    /// <p>The <a>Facet</a> that you provided was not well formed or could not be validated with the schema.</p>
     FacetValidation(String),
-    ///<p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
     InternalService(String),
-    ///<p>Indicates that the provided ARN value is not valid.</p>
+    /// <p>Indicates that the provided ARN value is not valid.</p>
     InvalidArn(String),
-    ///<p>An attempt to modify a <a>Facet</a> resulted in an invalid schema exception.</p>
+    /// <p>An attempt to modify a <a>Facet</a> resulted in an invalid schema exception.</p>
     InvalidFacetUpdate(String),
-    ///<p>Occurs when any of the rule parameter keys or values are invalid.</p>
+    /// <p>Occurs when any of the rule parameter keys or values are invalid.</p>
     InvalidRule(String),
-    ///<p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
     LimitExceeded(String),
-    ///<p>The specified resource could not be found.</p>
+    /// <p>The specified resource could not be found.</p>
     ResourceNotFound(String),
-    ///<p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
     RetryableConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9726,342 +9726,342 @@ impl Error for UpdateTypedLinkFacetError {
 }
 /// Trait representing the capabilities of the Amazon CloudDirectory API. Amazon CloudDirectory clients implement this trait.
 pub trait CloudDirectory {
-    #[doc = "<p>Adds a new <a>Facet</a> to an object.</p>"]
+    /// <p>Adds a new <a>Facet</a> to an object.</p>
     fn add_facet_to_object(
         &self,
         input: &AddFacetToObjectRequest,
     ) -> Result<AddFacetToObjectResponse, AddFacetToObjectError>;
 
-    #[doc="<p>Copies the input published schema into the <a>Directory</a> with the same name and version as that of the published schema .</p>"]
+    /// <p>Copies the input published schema into the <a>Directory</a> with the same name and version as that of the published schema .</p>
     fn apply_schema(
         &self,
         input: &ApplySchemaRequest,
     ) -> Result<ApplySchemaResponse, ApplySchemaError>;
 
-    #[doc="<p>Attaches an existing object to another object. An object can be accessed in two ways:</p> <ol> <li> <p>Using the path</p> </li> <li> <p>Using <code>ObjectIdentifier</code> </p> </li> </ol>"]
+    /// <p><p>Attaches an existing object to another object. An object can be accessed in two ways:</p> <ol> <li> <p>Using the path</p> </li> <li> <p>Using <code>ObjectIdentifier</code> </p> </li> </ol></p>
     fn attach_object(
         &self,
         input: &AttachObjectRequest,
     ) -> Result<AttachObjectResponse, AttachObjectError>;
 
-    #[doc="<p>Attaches a policy object to a regular object. An object can have a limited number of attached policies.</p>"]
+    /// <p>Attaches a policy object to a regular object. An object can have a limited number of attached policies.</p>
     fn attach_policy(
         &self,
         input: &AttachPolicyRequest,
     ) -> Result<AttachPolicyResponse, AttachPolicyError>;
 
-    #[doc = "<p>Attaches the specified object to the specified index.</p>"]
+    /// <p>Attaches the specified object to the specified index.</p>
     fn attach_to_index(
         &self,
         input: &AttachToIndexRequest,
     ) -> Result<AttachToIndexResponse, AttachToIndexError>;
 
-    #[doc="<p>Attaches a typed link to a specified source and target object. For more information, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink\">Typed link</a>.</p>"]
+    /// <p>Attaches a typed link to a specified source and target object. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn attach_typed_link(
         &self,
         input: &AttachTypedLinkRequest,
     ) -> Result<AttachTypedLinkResponse, AttachTypedLinkError>;
 
-    #[doc = "<p>Performs all the read operations in a batch. </p>"]
+    /// <p>Performs all the read operations in a batch. </p>
     fn batch_read(&self, input: &BatchReadRequest) -> Result<BatchReadResponse, BatchReadError>;
 
-    #[doc="<p>Performs all the write operations in a batch. Either all the operations succeed or none. Batch writes supports only object-related operations.</p>"]
+    /// <p>Performs all the write operations in a batch. Either all the operations succeed or none. Batch writes supports only object-related operations.</p>
     fn batch_write(&self, input: &BatchWriteRequest)
         -> Result<BatchWriteResponse, BatchWriteError>;
 
-    #[doc="<p>Creates a <a>Directory</a> by copying the published schema into the directory. A directory cannot be created without a schema.</p>"]
+    /// <p>Creates a <a>Directory</a> by copying the published schema into the directory. A directory cannot be created without a schema.</p>
     fn create_directory(
         &self,
         input: &CreateDirectoryRequest,
     ) -> Result<CreateDirectoryResponse, CreateDirectoryError>;
 
-    #[doc="<p>Creates a new <a>Facet</a> in a schema. Facet creation is allowed only in development or applied schemas.</p>"]
+    /// <p>Creates a new <a>Facet</a> in a schema. Facet creation is allowed only in development or applied schemas.</p>
     fn create_facet(
         &self,
         input: &CreateFacetRequest,
     ) -> Result<CreateFacetResponse, CreateFacetError>;
 
-    #[doc="<p>Creates an index object. See <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_indexing.html\">Indexing</a> for more information.</p>"]
+    /// <p>Creates an index object. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_indexing.html">Indexing</a> for more information.</p>
     fn create_index(
         &self,
         input: &CreateIndexRequest,
     ) -> Result<CreateIndexResponse, CreateIndexError>;
 
-    #[doc="<p>Creates an object in a <a>Directory</a>. Additionally attaches the object to a parent, if a parent reference and <code>LinkName</code> is specified. An object is simply a collection of <a>Facet</a> attributes. You can also use this API call to create a policy object, if the facet from which you create the object is a policy facet. </p>"]
+    /// <p>Creates an object in a <a>Directory</a>. Additionally attaches the object to a parent, if a parent reference and <code>LinkName</code> is specified. An object is simply a collection of <a>Facet</a> attributes. You can also use this API call to create a policy object, if the facet from which you create the object is a policy facet. </p>
     fn create_object(
         &self,
         input: &CreateObjectRequest,
     ) -> Result<CreateObjectResponse, CreateObjectError>;
 
-    #[doc="<p>Creates a new schema in a development state. A schema can exist in three phases:</p> <ul> <li> <p> <i>Development:</i> This is a mutable phase of the schema. All new schemas are in the development phase. Once the schema is finalized, it can be published.</p> </li> <li> <p> <i>Published:</i> Published schemas are immutable and have a version associated with them.</p> </li> <li> <p> <i>Applied:</i> Applied schemas are mutable in a way that allows you to add new schema facets. You can also add new, nonrequired attributes to existing schema facets. You can apply only published schemas to directories. </p> </li> </ul>"]
+    /// <p><p>Creates a new schema in a development state. A schema can exist in three phases:</p> <ul> <li> <p> <i>Development:</i> This is a mutable phase of the schema. All new schemas are in the development phase. Once the schema is finalized, it can be published.</p> </li> <li> <p> <i>Published:</i> Published schemas are immutable and have a version associated with them.</p> </li> <li> <p> <i>Applied:</i> Applied schemas are mutable in a way that allows you to add new schema facets. You can also add new, nonrequired attributes to existing schema facets. You can apply only published schemas to directories. </p> </li> </ul></p>
     fn create_schema(
         &self,
         input: &CreateSchemaRequest,
     ) -> Result<CreateSchemaResponse, CreateSchemaError>;
 
-    #[doc="<p>Creates a <a>TypedLinkFacet</a>. For more information, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink\">Typed link</a>.</p>"]
+    /// <p>Creates a <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn create_typed_link_facet(
         &self,
         input: &CreateTypedLinkFacetRequest,
     ) -> Result<CreateTypedLinkFacetResponse, CreateTypedLinkFacetError>;
 
-    #[doc="<p>Deletes a directory. Only disabled directories can be deleted. A deleted directory cannot be undone. Exercise extreme caution when deleting directories.</p>"]
+    /// <p>Deletes a directory. Only disabled directories can be deleted. A deleted directory cannot be undone. Exercise extreme caution when deleting directories.</p>
     fn delete_directory(
         &self,
         input: &DeleteDirectoryRequest,
     ) -> Result<DeleteDirectoryResponse, DeleteDirectoryError>;
 
-    #[doc="<p>Deletes a given <a>Facet</a>. All attributes and <a>Rule</a>s that are associated with the facet will be deleted. Only development schema facets are allowed deletion.</p>"]
+    /// <p>Deletes a given <a>Facet</a>. All attributes and <a>Rule</a>s that are associated with the facet will be deleted. Only development schema facets are allowed deletion.</p>
     fn delete_facet(
         &self,
         input: &DeleteFacetRequest,
     ) -> Result<DeleteFacetResponse, DeleteFacetError>;
 
-    #[doc="<p>Deletes an object and its associated attributes. Only objects with no children and no parents can be deleted.</p>"]
+    /// <p>Deletes an object and its associated attributes. Only objects with no children and no parents can be deleted.</p>
     fn delete_object(
         &self,
         input: &DeleteObjectRequest,
     ) -> Result<DeleteObjectResponse, DeleteObjectError>;
 
-    #[doc="<p>Deletes a given schema. Schemas in a development and published state can only be deleted. </p>"]
+    /// <p>Deletes a given schema. Schemas in a development and published state can only be deleted. </p>
     fn delete_schema(
         &self,
         input: &DeleteSchemaRequest,
     ) -> Result<DeleteSchemaResponse, DeleteSchemaError>;
 
-    #[doc="<p>Deletes a <a>TypedLinkFacet</a>. For more information, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink\">Typed link</a>.</p>"]
+    /// <p>Deletes a <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn delete_typed_link_facet(
         &self,
         input: &DeleteTypedLinkFacetRequest,
     ) -> Result<DeleteTypedLinkFacetResponse, DeleteTypedLinkFacetError>;
 
-    #[doc = "<p>Detaches the specified object from the specified index.</p>"]
+    /// <p>Detaches the specified object from the specified index.</p>
     fn detach_from_index(
         &self,
         input: &DetachFromIndexRequest,
     ) -> Result<DetachFromIndexResponse, DetachFromIndexError>;
 
-    #[doc="<p>Detaches a given object from the parent object. The object that is to be detached from the parent is specified by the link name.</p>"]
+    /// <p>Detaches a given object from the parent object. The object that is to be detached from the parent is specified by the link name.</p>
     fn detach_object(
         &self,
         input: &DetachObjectRequest,
     ) -> Result<DetachObjectResponse, DetachObjectError>;
 
-    #[doc = "<p>Detaches a policy from an object.</p>"]
+    /// <p>Detaches a policy from an object.</p>
     fn detach_policy(
         &self,
         input: &DetachPolicyRequest,
     ) -> Result<DetachPolicyResponse, DetachPolicyError>;
 
-    #[doc="<p>Detaches a typed link from a specified source and target object. For more information, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink\">Typed link</a>.</p>"]
+    /// <p>Detaches a typed link from a specified source and target object. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn detach_typed_link(&self, input: &DetachTypedLinkRequest)
         -> Result<(), DetachTypedLinkError>;
 
-    #[doc="<p>Disables the specified directory. Disabled directories cannot be read or written to. Only enabled directories can be disabled. Disabled directories may be reenabled.</p>"]
+    /// <p>Disables the specified directory. Disabled directories cannot be read or written to. Only enabled directories can be disabled. Disabled directories may be reenabled.</p>
     fn disable_directory(
         &self,
         input: &DisableDirectoryRequest,
     ) -> Result<DisableDirectoryResponse, DisableDirectoryError>;
 
-    #[doc="<p>Enables the specified directory. Only disabled directories can be enabled. Once enabled, the directory can then be read and written to.</p>"]
+    /// <p>Enables the specified directory. Only disabled directories can be enabled. Once enabled, the directory can then be read and written to.</p>
     fn enable_directory(
         &self,
         input: &EnableDirectoryRequest,
     ) -> Result<EnableDirectoryResponse, EnableDirectoryError>;
 
-    #[doc = "<p>Retrieves metadata about a directory.</p>"]
+    /// <p>Retrieves metadata about a directory.</p>
     fn get_directory(
         &self,
         input: &GetDirectoryRequest,
     ) -> Result<GetDirectoryResponse, GetDirectoryError>;
 
-    #[doc="<p>Gets details of the <a>Facet</a>, such as facet name, attributes, <a>Rule</a>s, or <code>ObjectType</code>. You can call this on all kinds of schema facets -- published, development, or applied.</p>"]
+    /// <p>Gets details of the <a>Facet</a>, such as facet name, attributes, <a>Rule</a>s, or <code>ObjectType</code>. You can call this on all kinds of schema facets -- published, development, or applied.</p>
     fn get_facet(&self, input: &GetFacetRequest) -> Result<GetFacetResponse, GetFacetError>;
 
-    #[doc = "<p>Retrieves metadata about an object.</p>"]
+    /// <p>Retrieves metadata about an object.</p>
     fn get_object_information(
         &self,
         input: &GetObjectInformationRequest,
     ) -> Result<GetObjectInformationResponse, GetObjectInformationError>;
 
-    #[doc="<p>Retrieves a JSON representation of the schema. See <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_schemas.html#jsonformat\">JSON Schema Format</a> for more information.</p>"]
+    /// <p>Retrieves a JSON representation of the schema. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_schemas.html#jsonformat">JSON Schema Format</a> for more information.</p>
     fn get_schema_as_json(
         &self,
         input: &GetSchemaAsJsonRequest,
     ) -> Result<GetSchemaAsJsonResponse, GetSchemaAsJsonError>;
 
-    #[doc="<p>Returns the identity attribute order for a specific <a>TypedLinkFacet</a>. For more information, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink\">Typed link</a>.</p>"]
+    /// <p>Returns the identity attribute order for a specific <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn get_typed_link_facet_information(
         &self,
         input: &GetTypedLinkFacetInformationRequest,
     ) -> Result<GetTypedLinkFacetInformationResponse, GetTypedLinkFacetInformationError>;
 
-    #[doc = "<p>Lists schemas applied to a directory.</p>"]
+    /// <p>Lists schemas applied to a directory.</p>
     fn list_applied_schema_arns(
         &self,
         input: &ListAppliedSchemaArnsRequest,
     ) -> Result<ListAppliedSchemaArnsResponse, ListAppliedSchemaArnsError>;
 
-    #[doc = "<p>Lists indices attached to an object.</p>"]
+    /// <p>Lists indices attached to an object.</p>
     fn list_attached_indices(
         &self,
         input: &ListAttachedIndicesRequest,
     ) -> Result<ListAttachedIndicesResponse, ListAttachedIndicesError>;
 
-    #[doc = "<p>Retrieves each Amazon Resource Name (ARN) of schemas in the development state.</p>"]
+    /// <p>Retrieves each Amazon Resource Name (ARN) of schemas in the development state.</p>
     fn list_development_schema_arns(
         &self,
         input: &ListDevelopmentSchemaArnsRequest,
     ) -> Result<ListDevelopmentSchemaArnsResponse, ListDevelopmentSchemaArnsError>;
 
-    #[doc = "<p>Lists directories created within an account.</p>"]
+    /// <p>Lists directories created within an account.</p>
     fn list_directories(
         &self,
         input: &ListDirectoriesRequest,
     ) -> Result<ListDirectoriesResponse, ListDirectoriesError>;
 
-    #[doc = "<p>Retrieves attributes attached to the facet.</p>"]
+    /// <p>Retrieves attributes attached to the facet.</p>
     fn list_facet_attributes(
         &self,
         input: &ListFacetAttributesRequest,
     ) -> Result<ListFacetAttributesResponse, ListFacetAttributesError>;
 
-    #[doc = "<p>Retrieves the names of facets that exist in a schema.</p>"]
+    /// <p>Retrieves the names of facets that exist in a schema.</p>
     fn list_facet_names(
         &self,
         input: &ListFacetNamesRequest,
     ) -> Result<ListFacetNamesResponse, ListFacetNamesError>;
 
-    #[doc="<p>Returns a paginated list of all the incoming <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink\">Typed link</a>.</p>"]
+    /// <p>Returns a paginated list of all the incoming <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn list_incoming_typed_links(
         &self,
         input: &ListIncomingTypedLinksRequest,
     ) -> Result<ListIncomingTypedLinksResponse, ListIncomingTypedLinksError>;
 
-    #[doc = "<p>Lists objects attached to the specified index.</p>"]
+    /// <p>Lists objects attached to the specified index.</p>
     fn list_index(&self, input: &ListIndexRequest) -> Result<ListIndexResponse, ListIndexError>;
 
-    #[doc = "<p>Lists all attributes that are associated with an object. </p>"]
+    /// <p>Lists all attributes that are associated with an object. </p>
     fn list_object_attributes(
         &self,
         input: &ListObjectAttributesRequest,
     ) -> Result<ListObjectAttributesResponse, ListObjectAttributesError>;
 
-    #[doc="<p>Returns a paginated list of child objects that are associated with a given object.</p>"]
+    /// <p>Returns a paginated list of child objects that are associated with a given object.</p>
     fn list_object_children(
         &self,
         input: &ListObjectChildrenRequest,
     ) -> Result<ListObjectChildrenResponse, ListObjectChildrenError>;
 
-    #[doc="<p>Retrieves all available parent paths for any object type such as node, leaf node, policy node, and index node objects. For more information about objects, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#dirstructure\">Directory Structure</a>.</p> <p>Use this API to evaluate all parents for an object. The call returns all objects from the root of the directory up to the requested object. The API returns the number of paths based on user-defined <code>MaxResults</code>, in case there are multiple paths to the parent. The order of the paths and nodes returned is consistent among multiple API calls unless the objects are deleted or moved. Paths not leading to the directory root are ignored from the target object.</p>"]
+    /// <p>Retrieves all available parent paths for any object type such as node, leaf node, policy node, and index node objects. For more information about objects, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#dirstructure">Directory Structure</a>.</p> <p>Use this API to evaluate all parents for an object. The call returns all objects from the root of the directory up to the requested object. The API returns the number of paths based on user-defined <code>MaxResults</code>, in case there are multiple paths to the parent. The order of the paths and nodes returned is consistent among multiple API calls unless the objects are deleted or moved. Paths not leading to the directory root are ignored from the target object.</p>
     fn list_object_parent_paths(
         &self,
         input: &ListObjectParentPathsRequest,
     ) -> Result<ListObjectParentPathsResponse, ListObjectParentPathsError>;
 
-    #[doc="<p>Lists parent objects that are associated with a given object in pagination fashion.</p>"]
+    /// <p>Lists parent objects that are associated with a given object in pagination fashion.</p>
     fn list_object_parents(
         &self,
         input: &ListObjectParentsRequest,
     ) -> Result<ListObjectParentsResponse, ListObjectParentsError>;
 
-    #[doc = "<p>Returns policies attached to an object in pagination fashion.</p>"]
+    /// <p>Returns policies attached to an object in pagination fashion.</p>
     fn list_object_policies(
         &self,
         input: &ListObjectPoliciesRequest,
     ) -> Result<ListObjectPoliciesResponse, ListObjectPoliciesError>;
 
-    #[doc="<p>Returns a paginated list of all the outgoing <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink\">Typed link</a>.</p>"]
+    /// <p>Returns a paginated list of all the outgoing <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn list_outgoing_typed_links(
         &self,
         input: &ListOutgoingTypedLinksRequest,
     ) -> Result<ListOutgoingTypedLinksResponse, ListOutgoingTypedLinksError>;
 
-    #[doc="<p>Returns all of the <code>ObjectIdentifiers</code> to which a given policy is attached.</p>"]
+    /// <p>Returns all of the <code>ObjectIdentifiers</code> to which a given policy is attached.</p>
     fn list_policy_attachments(
         &self,
         input: &ListPolicyAttachmentsRequest,
     ) -> Result<ListPolicyAttachmentsResponse, ListPolicyAttachmentsError>;
 
-    #[doc = "<p>Retrieves each published schema Amazon Resource Name (ARN).</p>"]
+    /// <p>Retrieves each published schema Amazon Resource Name (ARN).</p>
     fn list_published_schema_arns(
         &self,
         input: &ListPublishedSchemaArnsRequest,
     ) -> Result<ListPublishedSchemaArnsResponse, ListPublishedSchemaArnsError>;
 
-    #[doc="<p>Returns tags for a resource. Tagging is currently supported only for directories with a limit of 50 tags per directory. All 50 tags are returned for a given directory with this API call.</p>"]
+    /// <p>Returns tags for a resource. Tagging is currently supported only for directories with a limit of 50 tags per directory. All 50 tags are returned for a given directory with this API call.</p>
     fn list_tags_for_resource(
         &self,
         input: &ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, ListTagsForResourceError>;
 
-    #[doc="<p>Returns a paginated list of all attribute definitions for a particular <a>TypedLinkFacet</a>. For more information, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink\">Typed link</a>.</p>"]
+    /// <p>Returns a paginated list of all attribute definitions for a particular <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn list_typed_link_facet_attributes(
         &self,
         input: &ListTypedLinkFacetAttributesRequest,
     ) -> Result<ListTypedLinkFacetAttributesResponse, ListTypedLinkFacetAttributesError>;
 
-    #[doc="<p>Returns a paginated list of <code>TypedLink</code> facet names for a particular schema. For more information, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink\">Typed link</a>.</p>"]
+    /// <p>Returns a paginated list of <code>TypedLink</code> facet names for a particular schema. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn list_typed_link_facet_names(
         &self,
         input: &ListTypedLinkFacetNamesRequest,
     ) -> Result<ListTypedLinkFacetNamesResponse, ListTypedLinkFacetNamesError>;
 
-    #[doc="<p>Lists all policies from the root of the <a>Directory</a> to the object specified. If there are no policies present, an empty list is returned. If policies are present, and if some objects don't have the policies attached, it returns the <code>ObjectIdentifier</code> for such objects. If policies are present, it returns <code>ObjectIdentifier</code>, <code>policyId</code>, and <code>policyType</code>. Paths that don't lead to the root from the target object are ignored. For more information, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#policies\">Policies</a>.</p>"]
+    /// <p>Lists all policies from the root of the <a>Directory</a> to the object specified. If there are no policies present, an empty list is returned. If policies are present, and if some objects don't have the policies attached, it returns the <code>ObjectIdentifier</code> for such objects. If policies are present, it returns <code>ObjectIdentifier</code>, <code>policyId</code>, and <code>policyType</code>. Paths that don't lead to the root from the target object are ignored. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#policies">Policies</a>.</p>
     fn lookup_policy(
         &self,
         input: &LookupPolicyRequest,
     ) -> Result<LookupPolicyResponse, LookupPolicyError>;
 
-    #[doc="<p>Publishes a development schema with a version. If description and attributes are specified, <code>PublishSchema</code> overrides the development schema description and attributes. If not, the development schema description and attributes are used.</p>"]
+    /// <p>Publishes a development schema with a version. If description and attributes are specified, <code>PublishSchema</code> overrides the development schema description and attributes. If not, the development schema description and attributes are used.</p>
     fn publish_schema(
         &self,
         input: &PublishSchemaRequest,
     ) -> Result<PublishSchemaResponse, PublishSchemaError>;
 
-    #[doc="<p>Allows a schema to be updated using JSON upload. Only available for development schemas. See <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_schemas.html#jsonformat\">JSON Schema Format</a> for more information.</p>"]
+    /// <p>Allows a schema to be updated using JSON upload. Only available for development schemas. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_schemas.html#jsonformat">JSON Schema Format</a> for more information.</p>
     fn put_schema_from_json(
         &self,
         input: &PutSchemaFromJsonRequest,
     ) -> Result<PutSchemaFromJsonResponse, PutSchemaFromJsonError>;
 
-    #[doc = "<p>Removes the specified facet from the specified object.</p>"]
+    /// <p>Removes the specified facet from the specified object.</p>
     fn remove_facet_from_object(
         &self,
         input: &RemoveFacetFromObjectRequest,
     ) -> Result<RemoveFacetFromObjectResponse, RemoveFacetFromObjectError>;
 
-    #[doc = "<p>An API operation for adding tags to a resource.</p>"]
+    /// <p>An API operation for adding tags to a resource.</p>
     fn tag_resource(
         &self,
         input: &TagResourceRequest,
     ) -> Result<TagResourceResponse, TagResourceError>;
 
-    #[doc = "<p>An API operation for removing tags from a resource.</p>"]
+    /// <p>An API operation for removing tags from a resource.</p>
     fn untag_resource(
         &self,
         input: &UntagResourceRequest,
     ) -> Result<UntagResourceResponse, UntagResourceError>;
 
-    #[doc="<p>Does the following:</p> <ol> <li> <p>Adds new <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> <li> <p>Updates existing <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> <li> <p>Deletes existing <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> </ol>"]
+    /// <p><p>Does the following:</p> <ol> <li> <p>Adds new <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> <li> <p>Updates existing <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> <li> <p>Deletes existing <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> </ol></p>
     fn update_facet(
         &self,
         input: &UpdateFacetRequest,
     ) -> Result<UpdateFacetResponse, UpdateFacetError>;
 
-    #[doc = "<p>Updates a given object's attributes.</p>"]
+    /// <p>Updates a given object's attributes.</p>
     fn update_object_attributes(
         &self,
         input: &UpdateObjectAttributesRequest,
     ) -> Result<UpdateObjectAttributesResponse, UpdateObjectAttributesError>;
 
-    #[doc="<p>Updates the schema name with a new name. Only development schema names can be updated.</p>"]
+    /// <p>Updates the schema name with a new name. Only development schema names can be updated.</p>
     fn update_schema(
         &self,
         input: &UpdateSchemaRequest,
     ) -> Result<UpdateSchemaResponse, UpdateSchemaError>;
 
-    #[doc="<p>Updates a <a>TypedLinkFacet</a>. For more information, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink\">Typed link</a>.</p>"]
+    /// <p>Updates a <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn update_typed_link_facet(
         &self,
         input: &UpdateTypedLinkFacetRequest,
@@ -10097,7 +10097,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc = "<p>Adds a new <a>Facet</a> to an object.</p>"]
+    /// <p>Adds a new <a>Facet</a> to an object.</p>
     fn add_facet_to_object(
         &self,
         input: &AddFacetToObjectRequest,
@@ -10139,7 +10139,7 @@ where
         }
     }
 
-    #[doc="<p>Copies the input published schema into the <a>Directory</a> with the same name and version as that of the published schema .</p>"]
+    /// <p>Copies the input published schema into the <a>Directory</a> with the same name and version as that of the published schema .</p>
     fn apply_schema(
         &self,
         input: &ApplySchemaRequest,
@@ -10181,7 +10181,7 @@ where
         }
     }
 
-    #[doc="<p>Attaches an existing object to another object. An object can be accessed in two ways:</p> <ol> <li> <p>Using the path</p> </li> <li> <p>Using <code>ObjectIdentifier</code> </p> </li> </ol>"]
+    /// <p><p>Attaches an existing object to another object. An object can be accessed in two ways:</p> <ol> <li> <p>Using the path</p> </li> <li> <p>Using <code>ObjectIdentifier</code> </p> </li> </ol></p>
     fn attach_object(
         &self,
         input: &AttachObjectRequest,
@@ -10223,7 +10223,7 @@ where
         }
     }
 
-    #[doc="<p>Attaches a policy object to a regular object. An object can have a limited number of attached policies.</p>"]
+    /// <p>Attaches a policy object to a regular object. An object can have a limited number of attached policies.</p>
     fn attach_policy(
         &self,
         input: &AttachPolicyRequest,
@@ -10268,7 +10268,7 @@ where
         }
     }
 
-    #[doc = "<p>Attaches the specified object to the specified index.</p>"]
+    /// <p>Attaches the specified object to the specified index.</p>
     fn attach_to_index(
         &self,
         input: &AttachToIndexRequest,
@@ -10310,7 +10310,7 @@ where
         }
     }
 
-    #[doc="<p>Attaches a typed link to a specified source and target object. For more information, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink\">Typed link</a>.</p>"]
+    /// <p>Attaches a typed link to a specified source and target object. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn attach_typed_link(
         &self,
         input: &AttachTypedLinkRequest,
@@ -10352,7 +10352,7 @@ where
         }
     }
 
-    #[doc = "<p>Performs all the read operations in a batch. </p>"]
+    /// <p>Performs all the read operations in a batch. </p>
     fn batch_read(&self, input: &BatchReadRequest) -> Result<BatchReadResponse, BatchReadError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/batchread";
 
@@ -10395,7 +10395,7 @@ where
         }
     }
 
-    #[doc="<p>Performs all the write operations in a batch. Either all the operations succeed or none. Batch writes supports only object-related operations.</p>"]
+    /// <p>Performs all the write operations in a batch. Either all the operations succeed or none. Batch writes supports only object-related operations.</p>
     fn batch_write(
         &self,
         input: &BatchWriteRequest,
@@ -10437,7 +10437,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a <a>Directory</a> by copying the published schema into the directory. A directory cannot be created without a schema.</p>"]
+    /// <p>Creates a <a>Directory</a> by copying the published schema into the directory. A directory cannot be created without a schema.</p>
     fn create_directory(
         &self,
         input: &CreateDirectoryRequest,
@@ -10479,7 +10479,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new <a>Facet</a> in a schema. Facet creation is allowed only in development or applied schemas.</p>"]
+    /// <p>Creates a new <a>Facet</a> in a schema. Facet creation is allowed only in development or applied schemas.</p>
     fn create_facet(
         &self,
         input: &CreateFacetRequest,
@@ -10521,7 +10521,7 @@ where
         }
     }
 
-    #[doc="<p>Creates an index object. See <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_indexing.html\">Indexing</a> for more information.</p>"]
+    /// <p>Creates an index object. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_indexing.html">Indexing</a> for more information.</p>
     fn create_index(
         &self,
         input: &CreateIndexRequest,
@@ -10563,7 +10563,7 @@ where
         }
     }
 
-    #[doc="<p>Creates an object in a <a>Directory</a>. Additionally attaches the object to a parent, if a parent reference and <code>LinkName</code> is specified. An object is simply a collection of <a>Facet</a> attributes. You can also use this API call to create a policy object, if the facet from which you create the object is a policy facet. </p>"]
+    /// <p>Creates an object in a <a>Directory</a>. Additionally attaches the object to a parent, if a parent reference and <code>LinkName</code> is specified. An object is simply a collection of <a>Facet</a> attributes. You can also use this API call to create a policy object, if the facet from which you create the object is a policy facet. </p>
     fn create_object(
         &self,
         input: &CreateObjectRequest,
@@ -10605,7 +10605,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new schema in a development state. A schema can exist in three phases:</p> <ul> <li> <p> <i>Development:</i> This is a mutable phase of the schema. All new schemas are in the development phase. Once the schema is finalized, it can be published.</p> </li> <li> <p> <i>Published:</i> Published schemas are immutable and have a version associated with them.</p> </li> <li> <p> <i>Applied:</i> Applied schemas are mutable in a way that allows you to add new schema facets. You can also add new, nonrequired attributes to existing schema facets. You can apply only published schemas to directories. </p> </li> </ul>"]
+    /// <p><p>Creates a new schema in a development state. A schema can exist in three phases:</p> <ul> <li> <p> <i>Development:</i> This is a mutable phase of the schema. All new schemas are in the development phase. Once the schema is finalized, it can be published.</p> </li> <li> <p> <i>Published:</i> Published schemas are immutable and have a version associated with them.</p> </li> <li> <p> <i>Applied:</i> Applied schemas are mutable in a way that allows you to add new schema facets. You can also add new, nonrequired attributes to existing schema facets. You can apply only published schemas to directories. </p> </li> </ul></p>
     fn create_schema(
         &self,
         input: &CreateSchemaRequest,
@@ -10646,7 +10646,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a <a>TypedLinkFacet</a>. For more information, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink\">Typed link</a>.</p>"]
+    /// <p>Creates a <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn create_typed_link_facet(
         &self,
         input: &CreateTypedLinkFacetRequest,
@@ -10688,7 +10688,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a directory. Only disabled directories can be deleted. A deleted directory cannot be undone. Exercise extreme caution when deleting directories.</p>"]
+    /// <p>Deletes a directory. Only disabled directories can be deleted. A deleted directory cannot be undone. Exercise extreme caution when deleting directories.</p>
     fn delete_directory(
         &self,
         input: &DeleteDirectoryRequest,
@@ -10728,7 +10728,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a given <a>Facet</a>. All attributes and <a>Rule</a>s that are associated with the facet will be deleted. Only development schema facets are allowed deletion.</p>"]
+    /// <p>Deletes a given <a>Facet</a>. All attributes and <a>Rule</a>s that are associated with the facet will be deleted. Only development schema facets are allowed deletion.</p>
     fn delete_facet(
         &self,
         input: &DeleteFacetRequest,
@@ -10770,7 +10770,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes an object and its associated attributes. Only objects with no children and no parents can be deleted.</p>"]
+    /// <p>Deletes an object and its associated attributes. Only objects with no children and no parents can be deleted.</p>
     fn delete_object(
         &self,
         input: &DeleteObjectRequest,
@@ -10812,7 +10812,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a given schema. Schemas in a development and published state can only be deleted. </p>"]
+    /// <p>Deletes a given schema. Schemas in a development and published state can only be deleted. </p>
     fn delete_schema(
         &self,
         input: &DeleteSchemaRequest,
@@ -10852,7 +10852,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a <a>TypedLinkFacet</a>. For more information, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink\">Typed link</a>.</p>"]
+    /// <p>Deletes a <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn delete_typed_link_facet(
         &self,
         input: &DeleteTypedLinkFacetRequest,
@@ -10894,7 +10894,7 @@ where
         }
     }
 
-    #[doc = "<p>Detaches the specified object from the specified index.</p>"]
+    /// <p>Detaches the specified object from the specified index.</p>
     fn detach_from_index(
         &self,
         input: &DetachFromIndexRequest,
@@ -10936,7 +10936,7 @@ where
         }
     }
 
-    #[doc="<p>Detaches a given object from the parent object. The object that is to be detached from the parent is specified by the link name.</p>"]
+    /// <p>Detaches a given object from the parent object. The object that is to be detached from the parent is specified by the link name.</p>
     fn detach_object(
         &self,
         input: &DetachObjectRequest,
@@ -10978,7 +10978,7 @@ where
         }
     }
 
-    #[doc = "<p>Detaches a policy from an object.</p>"]
+    /// <p>Detaches a policy from an object.</p>
     fn detach_policy(
         &self,
         input: &DetachPolicyRequest,
@@ -11020,7 +11020,7 @@ where
         }
     }
 
-    #[doc="<p>Detaches a typed link from a specified source and target object. For more information, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink\">Typed link</a>.</p>"]
+    /// <p>Detaches a typed link from a specified source and target object. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn detach_typed_link(
         &self,
         input: &DetachTypedLinkRequest,
@@ -11053,7 +11053,7 @@ where
         }
     }
 
-    #[doc="<p>Disables the specified directory. Disabled directories cannot be read or written to. Only enabled directories can be disabled. Disabled directories may be reenabled.</p>"]
+    /// <p>Disables the specified directory. Disabled directories cannot be read or written to. Only enabled directories can be disabled. Disabled directories may be reenabled.</p>
     fn disable_directory(
         &self,
         input: &DisableDirectoryRequest,
@@ -11093,7 +11093,7 @@ where
         }
     }
 
-    #[doc="<p>Enables the specified directory. Only disabled directories can be enabled. Once enabled, the directory can then be read and written to.</p>"]
+    /// <p>Enables the specified directory. Only disabled directories can be enabled. Once enabled, the directory can then be read and written to.</p>
     fn enable_directory(
         &self,
         input: &EnableDirectoryRequest,
@@ -11133,7 +11133,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves metadata about a directory.</p>"]
+    /// <p>Retrieves metadata about a directory.</p>
     fn get_directory(
         &self,
         input: &GetDirectoryRequest,
@@ -11173,7 +11173,7 @@ where
         }
     }
 
-    #[doc="<p>Gets details of the <a>Facet</a>, such as facet name, attributes, <a>Rule</a>s, or <code>ObjectType</code>. You can call this on all kinds of schema facets -- published, development, or applied.</p>"]
+    /// <p>Gets details of the <a>Facet</a>, such as facet name, attributes, <a>Rule</a>s, or <code>ObjectType</code>. You can call this on all kinds of schema facets -- published, development, or applied.</p>
     fn get_facet(&self, input: &GetFacetRequest) -> Result<GetFacetResponse, GetFacetError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/facet";
 
@@ -11212,7 +11212,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves metadata about an object.</p>"]
+    /// <p>Retrieves metadata about an object.</p>
     fn get_object_information(
         &self,
         input: &GetObjectInformationRequest,
@@ -11258,7 +11258,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves a JSON representation of the schema. See <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_schemas.html#jsonformat\">JSON Schema Format</a> for more information.</p>"]
+    /// <p>Retrieves a JSON representation of the schema. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_schemas.html#jsonformat">JSON Schema Format</a> for more information.</p>
     fn get_schema_as_json(
         &self,
         input: &GetSchemaAsJsonRequest,
@@ -11298,7 +11298,7 @@ where
         }
     }
 
-    #[doc="<p>Returns the identity attribute order for a specific <a>TypedLinkFacet</a>. For more information, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink\">Typed link</a>.</p>"]
+    /// <p>Returns the identity attribute order for a specific <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn get_typed_link_facet_information(
         &self,
         input: &GetTypedLinkFacetInformationRequest,
@@ -11341,7 +11341,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists schemas applied to a directory.</p>"]
+    /// <p>Lists schemas applied to a directory.</p>
     fn list_applied_schema_arns(
         &self,
         input: &ListAppliedSchemaArnsRequest,
@@ -11383,7 +11383,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists indices attached to an object.</p>"]
+    /// <p>Lists indices attached to an object.</p>
     fn list_attached_indices(
         &self,
         input: &ListAttachedIndicesRequest,
@@ -11429,7 +11429,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves each Amazon Resource Name (ARN) of schemas in the development state.</p>"]
+    /// <p>Retrieves each Amazon Resource Name (ARN) of schemas in the development state.</p>
     fn list_development_schema_arns(
         &self,
         input: &ListDevelopmentSchemaArnsRequest,
@@ -11471,7 +11471,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists directories created within an account.</p>"]
+    /// <p>Lists directories created within an account.</p>
     fn list_directories(
         &self,
         input: &ListDirectoriesRequest,
@@ -11512,7 +11512,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves attributes attached to the facet.</p>"]
+    /// <p>Retrieves attributes attached to the facet.</p>
     fn list_facet_attributes(
         &self,
         input: &ListFacetAttributesRequest,
@@ -11554,7 +11554,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves the names of facets that exist in a schema.</p>"]
+    /// <p>Retrieves the names of facets that exist in a schema.</p>
     fn list_facet_names(
         &self,
         input: &ListFacetNamesRequest,
@@ -11596,7 +11596,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a paginated list of all the incoming <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink\">Typed link</a>.</p>"]
+    /// <p>Returns a paginated list of all the incoming <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn list_incoming_typed_links(
         &self,
         input: &ListIncomingTypedLinksRequest,
@@ -11639,7 +11639,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists objects attached to the specified index.</p>"]
+    /// <p>Lists objects attached to the specified index.</p>
     fn list_index(&self, input: &ListIndexRequest) -> Result<ListIndexResponse, ListIndexError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/index/targets";
 
@@ -11682,7 +11682,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists all attributes that are associated with an object. </p>"]
+    /// <p>Lists all attributes that are associated with an object. </p>
     fn list_object_attributes(
         &self,
         input: &ListObjectAttributesRequest,
@@ -11728,7 +11728,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a paginated list of child objects that are associated with a given object.</p>"]
+    /// <p>Returns a paginated list of child objects that are associated with a given object.</p>
     fn list_object_children(
         &self,
         input: &ListObjectChildrenRequest,
@@ -11774,7 +11774,7 @@ where
         }
     }
 
-    #[doc="<p>Retrieves all available parent paths for any object type such as node, leaf node, policy node, and index node objects. For more information about objects, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#dirstructure\">Directory Structure</a>.</p> <p>Use this API to evaluate all parents for an object. The call returns all objects from the root of the directory up to the requested object. The API returns the number of paths based on user-defined <code>MaxResults</code>, in case there are multiple paths to the parent. The order of the paths and nodes returned is consistent among multiple API calls unless the objects are deleted or moved. Paths not leading to the directory root are ignored from the target object.</p>"]
+    /// <p>Retrieves all available parent paths for any object type such as node, leaf node, policy node, and index node objects. For more information about objects, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#dirstructure">Directory Structure</a>.</p> <p>Use this API to evaluate all parents for an object. The call returns all objects from the root of the directory up to the requested object. The API returns the number of paths based on user-defined <code>MaxResults</code>, in case there are multiple paths to the parent. The order of the paths and nodes returned is consistent among multiple API calls unless the objects are deleted or moved. Paths not leading to the directory root are ignored from the target object.</p>
     fn list_object_parent_paths(
         &self,
         input: &ListObjectParentPathsRequest,
@@ -11817,7 +11817,7 @@ where
         }
     }
 
-    #[doc="<p>Lists parent objects that are associated with a given object in pagination fashion.</p>"]
+    /// <p>Lists parent objects that are associated with a given object in pagination fashion.</p>
     fn list_object_parents(
         &self,
         input: &ListObjectParentsRequest,
@@ -11863,7 +11863,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns policies attached to an object in pagination fashion.</p>"]
+    /// <p>Returns policies attached to an object in pagination fashion.</p>
     fn list_object_policies(
         &self,
         input: &ListObjectPoliciesRequest,
@@ -11909,7 +11909,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a paginated list of all the outgoing <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink\">Typed link</a>.</p>"]
+    /// <p>Returns a paginated list of all the outgoing <a>TypedLinkSpecifier</a> information for an object. It also supports filtering by typed link facet and identity attributes. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn list_outgoing_typed_links(
         &self,
         input: &ListOutgoingTypedLinksRequest,
@@ -11952,7 +11952,7 @@ where
         }
     }
 
-    #[doc="<p>Returns all of the <code>ObjectIdentifiers</code> to which a given policy is attached.</p>"]
+    /// <p>Returns all of the <code>ObjectIdentifiers</code> to which a given policy is attached.</p>
     fn list_policy_attachments(
         &self,
         input: &ListPolicyAttachmentsRequest,
@@ -11999,7 +11999,7 @@ where
         }
     }
 
-    #[doc = "<p>Retrieves each published schema Amazon Resource Name (ARN).</p>"]
+    /// <p>Retrieves each published schema Amazon Resource Name (ARN).</p>
     fn list_published_schema_arns(
         &self,
         input: &ListPublishedSchemaArnsRequest,
@@ -12041,7 +12041,7 @@ where
         }
     }
 
-    #[doc="<p>Returns tags for a resource. Tagging is currently supported only for directories with a limit of 50 tags per directory. All 50 tags are returned for a given directory with this API call.</p>"]
+    /// <p>Returns tags for a resource. Tagging is currently supported only for directories with a limit of 50 tags per directory. All 50 tags are returned for a given directory with this API call.</p>
     fn list_tags_for_resource(
         &self,
         input: &ListTagsForResourceRequest,
@@ -12082,7 +12082,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a paginated list of all attribute definitions for a particular <a>TypedLinkFacet</a>. For more information, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink\">Typed link</a>.</p>"]
+    /// <p>Returns a paginated list of all attribute definitions for a particular <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn list_typed_link_facet_attributes(
         &self,
         input: &ListTypedLinkFacetAttributesRequest,
@@ -12125,7 +12125,7 @@ where
         }
     }
 
-    #[doc="<p>Returns a paginated list of <code>TypedLink</code> facet names for a particular schema. For more information, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink\">Typed link</a>.</p>"]
+    /// <p>Returns a paginated list of <code>TypedLink</code> facet names for a particular schema. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn list_typed_link_facet_names(
         &self,
         input: &ListTypedLinkFacetNamesRequest,
@@ -12168,7 +12168,7 @@ where
         }
     }
 
-    #[doc="<p>Lists all policies from the root of the <a>Directory</a> to the object specified. If there are no policies present, an empty list is returned. If policies are present, and if some objects don't have the policies attached, it returns the <code>ObjectIdentifier</code> for such objects. If policies are present, it returns <code>ObjectIdentifier</code>, <code>policyId</code>, and <code>policyType</code>. Paths that don't lead to the root from the target object are ignored. For more information, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#policies\">Policies</a>.</p>"]
+    /// <p>Lists all policies from the root of the <a>Directory</a> to the object specified. If there are no policies present, an empty list is returned. If policies are present, and if some objects don't have the policies attached, it returns the <code>ObjectIdentifier</code> for such objects. If policies are present, it returns <code>ObjectIdentifier</code>, <code>policyId</code>, and <code>policyType</code>. Paths that don't lead to the root from the target object are ignored. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_key_concepts.html#policies">Policies</a>.</p>
     fn lookup_policy(
         &self,
         input: &LookupPolicyRequest,
@@ -12210,7 +12210,7 @@ where
         }
     }
 
-    #[doc="<p>Publishes a development schema with a version. If description and attributes are specified, <code>PublishSchema</code> overrides the development schema description and attributes. If not, the development schema description and attributes are used.</p>"]
+    /// <p>Publishes a development schema with a version. If description and attributes are specified, <code>PublishSchema</code> overrides the development schema description and attributes. If not, the development schema description and attributes are used.</p>
     fn publish_schema(
         &self,
         input: &PublishSchemaRequest,
@@ -12252,7 +12252,7 @@ where
         }
     }
 
-    #[doc="<p>Allows a schema to be updated using JSON upload. Only available for development schemas. See <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_schemas.html#jsonformat\">JSON Schema Format</a> for more information.</p>"]
+    /// <p>Allows a schema to be updated using JSON upload. Only available for development schemas. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/cd_schemas.html#jsonformat">JSON Schema Format</a> for more information.</p>
     fn put_schema_from_json(
         &self,
         input: &PutSchemaFromJsonRequest,
@@ -12294,7 +12294,7 @@ where
         }
     }
 
-    #[doc = "<p>Removes the specified facet from the specified object.</p>"]
+    /// <p>Removes the specified facet from the specified object.</p>
     fn remove_facet_from_object(
         &self,
         input: &RemoveFacetFromObjectRequest,
@@ -12337,7 +12337,7 @@ where
         }
     }
 
-    #[doc = "<p>An API operation for adding tags to a resource.</p>"]
+    /// <p>An API operation for adding tags to a resource.</p>
     fn tag_resource(
         &self,
         input: &TagResourceRequest,
@@ -12378,7 +12378,7 @@ where
         }
     }
 
-    #[doc = "<p>An API operation for removing tags from a resource.</p>"]
+    /// <p>An API operation for removing tags from a resource.</p>
     fn untag_resource(
         &self,
         input: &UntagResourceRequest,
@@ -12419,7 +12419,7 @@ where
         }
     }
 
-    #[doc="<p>Does the following:</p> <ol> <li> <p>Adds new <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> <li> <p>Updates existing <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> <li> <p>Deletes existing <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> </ol>"]
+    /// <p><p>Does the following:</p> <ol> <li> <p>Adds new <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> <li> <p>Updates existing <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> <li> <p>Deletes existing <code>Attributes</code>, <code>Rules</code>, or <code>ObjectTypes</code>.</p> </li> </ol></p>
     fn update_facet(
         &self,
         input: &UpdateFacetRequest,
@@ -12461,7 +12461,7 @@ where
         }
     }
 
-    #[doc = "<p>Updates a given object's attributes.</p>"]
+    /// <p>Updates a given object's attributes.</p>
     fn update_object_attributes(
         &self,
         input: &UpdateObjectAttributesRequest,
@@ -12504,7 +12504,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the schema name with a new name. Only development schema names can be updated.</p>"]
+    /// <p>Updates the schema name with a new name. Only development schema names can be updated.</p>
     fn update_schema(
         &self,
         input: &UpdateSchemaRequest,
@@ -12546,7 +12546,7 @@ where
         }
     }
 
-    #[doc="<p>Updates a <a>TypedLinkFacet</a>. For more information, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink\">Typed link</a>.</p>"]
+    /// <p>Updates a <a>TypedLinkFacet</a>. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/objectsandlinks.html#typedlink">Typed link</a>.</p>
     fn update_typed_link_facet(
         &self,
         input: &UpdateTypedLinkFacetRequest,

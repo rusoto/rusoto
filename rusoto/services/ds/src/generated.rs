@@ -608,7 +608,7 @@ pub struct DirectoryConnectSettings {
     /// <p>A list of one or more IP addresses of DNS servers or domain controllers in the on-premises directory.</p>
     #[serde(rename = "CustomerDnsIps")]
     pub customer_dns_ips: Vec<String>,
-    /// <p>The username of an account in the on-premises directory that is used to connect to the directory. This account must have the following privileges:</p> <ul> <li> <p>Read users and groups</p> </li> <li> <p>Create computer objects</p> </li> <li> <p>Join computers to the domain</p> </li> </ul>
+    /// <p><p>The username of an account in the on-premises directory that is used to connect to the directory. This account must have the following privileges:</p> <ul> <li> <p>Read users and groups</p> </li> <li> <p>Create computer objects</p> </li> <li> <p>Join computers to the domain</p> </li> </ul></p>
     #[serde(rename = "CustomerUserName")]
     pub customer_user_name: String,
     /// <p>A list of subnet identifiers in the VPC in which the AD Connector is created.</p>
@@ -1407,19 +1407,19 @@ pub struct VerifyTrustResult {
 /// Errors returned by AddIpRoutes
 #[derive(Debug, PartialEq)]
 pub enum AddIpRoutesError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified directory is unavailable or could not be found.</p>
+    /// <p>The specified directory is unavailable or could not be found.</p>
     DirectoryUnavailable(String),
-    ///<p>The specified entity already exists.</p>
+    /// <p>The specified entity already exists.</p>
     EntityAlreadyExists(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>The maximum allowed number of IP addresses was exceeded. The default limit is 100 IP address blocks.</p>
+    /// <p>The maximum allowed number of IP addresses was exceeded. The default limit is 100 IP address blocks.</p>
     IpRouteLimitExceeded(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1517,15 +1517,15 @@ impl Error for AddIpRoutesError {
 /// Errors returned by AddTagsToResource
 #[derive(Debug, PartialEq)]
 pub enum AddTagsToResourceError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
-    ///<p>The maximum allowed number of tags was exceeded.</p>
+    /// <p>The maximum allowed number of tags was exceeded.</p>
     TagLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1621,11 +1621,11 @@ impl Error for AddTagsToResourceError {
 /// Errors returned by CancelSchemaExtension
 #[derive(Debug, PartialEq)]
 pub enum CancelSchemaExtensionError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1713,13 +1713,13 @@ impl Error for CancelSchemaExtensionError {
 /// Errors returned by ConnectDirectory
 #[derive(Debug, PartialEq)]
 pub enum ConnectDirectoryError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The maximum number of directories in the region has been reached. You can use the <a>GetDirectoryLimits</a> operation to determine your directory limits in the region.</p>
+    /// <p>The maximum number of directories in the region has been reached. You can use the <a>GetDirectoryLimits</a> operation to determine your directory limits in the region.</p>
     DirectoryLimitExceeded(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1807,15 +1807,15 @@ impl Error for ConnectDirectoryError {
 /// Errors returned by CreateAlias
 #[derive(Debug, PartialEq)]
 pub enum CreateAliasError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified entity already exists.</p>
+    /// <p>The specified entity already exists.</p>
     EntityAlreadyExists(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1905,21 +1905,21 @@ impl Error for CreateAliasError {
 /// Errors returned by CreateComputer
 #[derive(Debug, PartialEq)]
 pub enum CreateComputerError {
-    ///<p>An authentication error occurred.</p>
+    /// <p>An authentication error occurred.</p>
     AuthenticationFailed(String),
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified directory is unavailable or could not be found.</p>
+    /// <p>The specified directory is unavailable or could not be found.</p>
     DirectoryUnavailable(String),
-    ///<p>The specified entity already exists.</p>
+    /// <p>The specified entity already exists.</p>
     EntityAlreadyExists(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
-    ///<p>The operation is not supported.</p>
+    /// <p>The operation is not supported.</p>
     UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2021,19 +2021,19 @@ impl Error for CreateComputerError {
 /// Errors returned by CreateConditionalForwarder
 #[derive(Debug, PartialEq)]
 pub enum CreateConditionalForwarderError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified directory is unavailable or could not be found.</p>
+    /// <p>The specified directory is unavailable or could not be found.</p>
     DirectoryUnavailable(String),
-    ///<p>The specified entity already exists.</p>
+    /// <p>The specified entity already exists.</p>
     EntityAlreadyExists(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
-    ///<p>The operation is not supported.</p>
+    /// <p>The operation is not supported.</p>
     UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2147,13 +2147,13 @@ impl Error for CreateConditionalForwarderError {
 /// Errors returned by CreateDirectory
 #[derive(Debug, PartialEq)]
 pub enum CreateDirectoryError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The maximum number of directories in the region has been reached. You can use the <a>GetDirectoryLimits</a> operation to determine your directory limits in the region.</p>
+    /// <p>The maximum number of directories in the region has been reached. You can use the <a>GetDirectoryLimits</a> operation to determine your directory limits in the region.</p>
     DirectoryLimitExceeded(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2241,15 +2241,15 @@ impl Error for CreateDirectoryError {
 /// Errors returned by CreateMicrosoftAD
 #[derive(Debug, PartialEq)]
 pub enum CreateMicrosoftADError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The maximum number of directories in the region has been reached. You can use the <a>GetDirectoryLimits</a> operation to determine your directory limits in the region.</p>
+    /// <p>The maximum number of directories in the region has been reached. You can use the <a>GetDirectoryLimits</a> operation to determine your directory limits in the region.</p>
     DirectoryLimitExceeded(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
-    ///<p>The operation is not supported.</p>
+    /// <p>The operation is not supported.</p>
     UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2345,15 +2345,15 @@ impl Error for CreateMicrosoftADError {
 /// Errors returned by CreateSnapshot
 #[derive(Debug, PartialEq)]
 pub enum CreateSnapshotError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
-    ///<p>The maximum number of manual snapshots for the directory has been reached. You can use the <a>GetSnapshotLimits</a> operation to determine the snapshot limits for a directory.</p>
+    /// <p>The maximum number of manual snapshots for the directory has been reached. You can use the <a>GetSnapshotLimits</a> operation to determine the snapshot limits for a directory.</p>
     SnapshotLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2443,17 +2443,17 @@ impl Error for CreateSnapshotError {
 /// Errors returned by CreateTrust
 #[derive(Debug, PartialEq)]
 pub enum CreateTrustError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified entity already exists.</p>
+    /// <p>The specified entity already exists.</p>
     EntityAlreadyExists(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
-    ///<p>The operation is not supported.</p>
+    /// <p>The operation is not supported.</p>
     UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2547,17 +2547,17 @@ impl Error for CreateTrustError {
 /// Errors returned by DeleteConditionalForwarder
 #[derive(Debug, PartialEq)]
 pub enum DeleteConditionalForwarderError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified directory is unavailable or could not be found.</p>
+    /// <p>The specified directory is unavailable or could not be found.</p>
     DirectoryUnavailable(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
-    ///<p>The operation is not supported.</p>
+    /// <p>The operation is not supported.</p>
     UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2665,11 +2665,11 @@ impl Error for DeleteConditionalForwarderError {
 /// Errors returned by DeleteDirectory
 #[derive(Debug, PartialEq)]
 pub enum DeleteDirectoryError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2753,13 +2753,13 @@ impl Error for DeleteDirectoryError {
 /// Errors returned by DeleteSnapshot
 #[derive(Debug, PartialEq)]
 pub enum DeleteSnapshotError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2845,15 +2845,15 @@ impl Error for DeleteSnapshotError {
 /// Errors returned by DeleteTrust
 #[derive(Debug, PartialEq)]
 pub enum DeleteTrustError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
-    ///<p>The operation is not supported.</p>
+    /// <p>The operation is not supported.</p>
     UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2943,13 +2943,13 @@ impl Error for DeleteTrustError {
 /// Errors returned by DeregisterEventTopic
 #[derive(Debug, PartialEq)]
 pub enum DeregisterEventTopicError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3041,17 +3041,17 @@ impl Error for DeregisterEventTopicError {
 /// Errors returned by DescribeConditionalForwarders
 #[derive(Debug, PartialEq)]
 pub enum DescribeConditionalForwardersError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified directory is unavailable or could not be found.</p>
+    /// <p>The specified directory is unavailable or could not be found.</p>
     DirectoryUnavailable(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
-    ///<p>The operation is not supported.</p>
+    /// <p>The operation is not supported.</p>
     UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3159,15 +3159,15 @@ impl Error for DescribeConditionalForwardersError {
 /// Errors returned by DescribeDirectories
 #[derive(Debug, PartialEq)]
 pub enum DescribeDirectoriesError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>The <i>NextToken</i> value is not valid.</p>
+    /// <p>The <i>NextToken</i> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3263,17 +3263,17 @@ impl Error for DescribeDirectoriesError {
 /// Errors returned by DescribeDomainControllers
 #[derive(Debug, PartialEq)]
 pub enum DescribeDomainControllersError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>The <i>NextToken</i> value is not valid.</p>
+    /// <p>The <i>NextToken</i> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
-    ///<p>The operation is not supported.</p>
+    /// <p>The operation is not supported.</p>
     UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3381,13 +3381,13 @@ impl Error for DescribeDomainControllersError {
 /// Errors returned by DescribeEventTopics
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventTopicsError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3479,15 +3479,15 @@ impl Error for DescribeEventTopicsError {
 /// Errors returned by DescribeSnapshots
 #[derive(Debug, PartialEq)]
 pub enum DescribeSnapshotsError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>The <i>NextToken</i> value is not valid.</p>
+    /// <p>The <i>NextToken</i> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3583,17 +3583,17 @@ impl Error for DescribeSnapshotsError {
 /// Errors returned by DescribeTrusts
 #[derive(Debug, PartialEq)]
 pub enum DescribeTrustsError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>The <i>NextToken</i> value is not valid.</p>
+    /// <p>The <i>NextToken</i> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
-    ///<p>The operation is not supported.</p>
+    /// <p>The operation is not supported.</p>
     UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3687,11 +3687,11 @@ impl Error for DescribeTrustsError {
 /// Errors returned by DisableRadius
 #[derive(Debug, PartialEq)]
 pub enum DisableRadiusError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3773,15 +3773,15 @@ impl Error for DisableRadiusError {
 /// Errors returned by DisableSso
 #[derive(Debug, PartialEq)]
 pub enum DisableSsoError {
-    ///<p>An authentication error occurred.</p>
+    /// <p>An authentication error occurred.</p>
     AuthenticationFailed(String),
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>The account does not have sufficient permission to perform the operation.</p>
+    /// <p>The account does not have sufficient permission to perform the operation.</p>
     InsufficientPermissions(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3869,15 +3869,15 @@ impl Error for DisableSsoError {
 /// Errors returned by EnableRadius
 #[derive(Debug, PartialEq)]
 pub enum EnableRadiusError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified entity already exists.</p>
+    /// <p>The specified entity already exists.</p>
     EntityAlreadyExists(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3967,15 +3967,15 @@ impl Error for EnableRadiusError {
 /// Errors returned by EnableSso
 #[derive(Debug, PartialEq)]
 pub enum EnableSsoError {
-    ///<p>An authentication error occurred.</p>
+    /// <p>An authentication error occurred.</p>
     AuthenticationFailed(String),
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>The account does not have sufficient permission to perform the operation.</p>
+    /// <p>The account does not have sufficient permission to perform the operation.</p>
     InsufficientPermissions(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4063,11 +4063,11 @@ impl Error for EnableSsoError {
 /// Errors returned by GetDirectoryLimits
 #[derive(Debug, PartialEq)]
 pub enum GetDirectoryLimitsError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4155,11 +4155,11 @@ impl Error for GetDirectoryLimitsError {
 /// Errors returned by GetSnapshotLimits
 #[derive(Debug, PartialEq)]
 pub enum GetSnapshotLimitsError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4247,15 +4247,15 @@ impl Error for GetSnapshotLimitsError {
 /// Errors returned by ListIpRoutes
 #[derive(Debug, PartialEq)]
 pub enum ListIpRoutesError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>The <i>NextToken</i> value is not valid.</p>
+    /// <p>The <i>NextToken</i> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4345,13 +4345,13 @@ impl Error for ListIpRoutesError {
 /// Errors returned by ListSchemaExtensions
 #[derive(Debug, PartialEq)]
 pub enum ListSchemaExtensionsError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>The <i>NextToken</i> value is not valid.</p>
+    /// <p>The <i>NextToken</i> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4443,15 +4443,15 @@ impl Error for ListSchemaExtensionsError {
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>The <i>NextToken</i> value is not valid.</p>
+    /// <p>The <i>NextToken</i> value is not valid.</p>
     InvalidNextToken(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4547,13 +4547,13 @@ impl Error for ListTagsForResourceError {
 /// Errors returned by RegisterEventTopic
 #[derive(Debug, PartialEq)]
 pub enum RegisterEventTopicError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4645,15 +4645,15 @@ impl Error for RegisterEventTopicError {
 /// Errors returned by RemoveIpRoutes
 #[derive(Debug, PartialEq)]
 pub enum RemoveIpRoutesError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified directory is unavailable or could not be found.</p>
+    /// <p>The specified directory is unavailable or could not be found.</p>
     DirectoryUnavailable(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4743,13 +4743,13 @@ impl Error for RemoveIpRoutesError {
 /// Errors returned by RemoveTagsFromResource
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsFromResourceError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4841,13 +4841,13 @@ impl Error for RemoveTagsFromResourceError {
 /// Errors returned by RestoreFromSnapshot
 #[derive(Debug, PartialEq)]
 pub enum RestoreFromSnapshotError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4939,17 +4939,17 @@ impl Error for RestoreFromSnapshotError {
 /// Errors returned by StartSchemaExtension
 #[derive(Debug, PartialEq)]
 pub enum StartSchemaExtensionError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified directory is unavailable or could not be found.</p>
+    /// <p>The specified directory is unavailable or could not be found.</p>
     DirectoryUnavailable(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
-    ///<p>The maximum number of manual snapshots for the directory has been reached. You can use the <a>GetSnapshotLimits</a> operation to determine the snapshot limits for a directory.</p>
+    /// <p>The maximum number of manual snapshots for the directory has been reached. You can use the <a>GetSnapshotLimits</a> operation to determine the snapshot limits for a directory.</p>
     SnapshotLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5051,17 +5051,17 @@ impl Error for StartSchemaExtensionError {
 /// Errors returned by UpdateConditionalForwarder
 #[derive(Debug, PartialEq)]
 pub enum UpdateConditionalForwarderError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified directory is unavailable or could not be found.</p>
+    /// <p>The specified directory is unavailable or could not be found.</p>
     DirectoryUnavailable(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
-    ///<p>The operation is not supported.</p>
+    /// <p>The operation is not supported.</p>
     UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5169,19 +5169,19 @@ impl Error for UpdateConditionalForwarderError {
 /// Errors returned by UpdateNumberOfDomainControllers
 #[derive(Debug, PartialEq)]
 pub enum UpdateNumberOfDomainControllersError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified directory is unavailable or could not be found.</p>
+    /// <p>The specified directory is unavailable or could not be found.</p>
     DirectoryUnavailable(String),
-    ///<p>The maximum allowed number of domain controllers per directory was exceeded. The default limit per directory is 20 domain controllers.</p>
+    /// <p>The maximum allowed number of domain controllers per directory was exceeded. The default limit per directory is 20 domain controllers.</p>
     DomainControllerLimitExceeded(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
-    ///<p>The operation is not supported.</p>
+    /// <p>The operation is not supported.</p>
     UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5295,13 +5295,13 @@ impl Error for UpdateNumberOfDomainControllersError {
 /// Errors returned by UpdateRadius
 #[derive(Debug, PartialEq)]
 pub enum UpdateRadiusError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5387,15 +5387,15 @@ impl Error for UpdateRadiusError {
 /// Errors returned by VerifyTrust
 #[derive(Debug, PartialEq)]
 pub enum VerifyTrustError {
-    ///<p>A client exception has occurred.</p>
+    /// <p>A client exception has occurred.</p>
     Client(String),
-    ///<p>The specified entity could not be found.</p>
+    /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    ///<p>One or more parameters are not valid.</p>
+    /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
-    ///<p>An exception has occurred in AWS Directory Service.</p>
+    /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
-    ///<p>The operation is not supported.</p>
+    /// <p>The operation is not supported.</p>
     UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5484,232 +5484,232 @@ impl Error for VerifyTrustError {
 }
 /// Trait representing the capabilities of the Directory Service API. Directory Service clients implement this trait.
 pub trait DirectoryService {
-    #[doc="<p>If the DNS server for your on-premises domain uses a publicly addressable IP address, you must add a CIDR address block to correctly route traffic to and from your Microsoft AD on Amazon Web Services. <i>AddIpRoutes</i> adds this address block. You can also use <i>AddIpRoutes</i> to facilitate routing traffic that uses public IP ranges from your Microsoft AD on AWS to a peer VPC. </p> <p>Before you call <i>AddIpRoutes</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>AddIpRoutes</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>"]
+    /// <p>If the DNS server for your on-premises domain uses a publicly addressable IP address, you must add a CIDR address block to correctly route traffic to and from your Microsoft AD on Amazon Web Services. <i>AddIpRoutes</i> adds this address block. You can also use <i>AddIpRoutes</i> to facilitate routing traffic that uses public IP ranges from your Microsoft AD on AWS to a peer VPC. </p> <p>Before you call <i>AddIpRoutes</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>AddIpRoutes</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn add_ip_routes(
         &self,
         input: &AddIpRoutesRequest,
     ) -> Result<AddIpRoutesResult, AddIpRoutesError>;
 
-    #[doc="<p>Adds or overwrites one or more tags for the specified directory. Each directory can have a maximum of 50 tags. Each tag consists of a key and optional value. Tag keys must be unique to each resource.</p>"]
+    /// <p>Adds or overwrites one or more tags for the specified directory. Each directory can have a maximum of 50 tags. Each tag consists of a key and optional value. Tag keys must be unique to each resource.</p>
     fn add_tags_to_resource(
         &self,
         input: &AddTagsToResourceRequest,
     ) -> Result<AddTagsToResourceResult, AddTagsToResourceError>;
 
-    #[doc="<p>Cancels an in-progress schema extension to a Microsoft AD directory. Once a schema extension has started replicating to all domain controllers, the task can no longer be canceled. A schema extension can be canceled during any of the following states; <code>Initializing</code>, <code>CreatingSnapshot</code>, and <code>UpdatingSchema</code>.</p>"]
+    /// <p>Cancels an in-progress schema extension to a Microsoft AD directory. Once a schema extension has started replicating to all domain controllers, the task can no longer be canceled. A schema extension can be canceled during any of the following states; <code>Initializing</code>, <code>CreatingSnapshot</code>, and <code>UpdatingSchema</code>.</p>
     fn cancel_schema_extension(
         &self,
         input: &CancelSchemaExtensionRequest,
     ) -> Result<CancelSchemaExtensionResult, CancelSchemaExtensionError>;
 
-    #[doc="<p>Creates an AD Connector to connect to an on-premises directory.</p> <p>Before you call <i>ConnectDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>ConnectDirectory</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>"]
+    /// <p>Creates an AD Connector to connect to an on-premises directory.</p> <p>Before you call <i>ConnectDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>ConnectDirectory</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn connect_directory(
         &self,
         input: &ConnectDirectoryRequest,
     ) -> Result<ConnectDirectoryResult, ConnectDirectoryError>;
 
-    #[doc="<p>Creates an alias for a directory and assigns the alias to the directory. The alias is used to construct the access URL for the directory, such as <code>http://&lt;alias&gt;.awsapps.com</code>.</p> <important> <p>After an alias has been created, it cannot be deleted or reused, so this operation should only be used when absolutely necessary.</p> </important>"]
+    /// <p><p>Creates an alias for a directory and assigns the alias to the directory. The alias is used to construct the access URL for the directory, such as <code>http://&lt;alias&gt;.awsapps.com</code>.</p> <important> <p>After an alias has been created, it cannot be deleted or reused, so this operation should only be used when absolutely necessary.</p> </important></p>
     fn create_alias(
         &self,
         input: &CreateAliasRequest,
     ) -> Result<CreateAliasResult, CreateAliasError>;
 
-    #[doc="<p>Creates a computer account in the specified directory, and joins the computer to the directory.</p>"]
+    /// <p>Creates a computer account in the specified directory, and joins the computer to the directory.</p>
     fn create_computer(
         &self,
         input: &CreateComputerRequest,
     ) -> Result<CreateComputerResult, CreateComputerError>;
 
-    #[doc="<p>Creates a conditional forwarder associated with your AWS directory. Conditional forwarders are required in order to set up a trust relationship with another domain. The conditional forwarder points to the trusted domain.</p>"]
+    /// <p>Creates a conditional forwarder associated with your AWS directory. Conditional forwarders are required in order to set up a trust relationship with another domain. The conditional forwarder points to the trusted domain.</p>
     fn create_conditional_forwarder(
         &self,
         input: &CreateConditionalForwarderRequest,
     ) -> Result<CreateConditionalForwarderResult, CreateConditionalForwarderError>;
 
-    #[doc="<p>Creates a Simple AD directory.</p> <p>Before you call <i>CreateDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateDirectory</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>"]
+    /// <p>Creates a Simple AD directory.</p> <p>Before you call <i>CreateDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateDirectory</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn create_directory(
         &self,
         input: &CreateDirectoryRequest,
     ) -> Result<CreateDirectoryResult, CreateDirectoryError>;
 
-    #[doc="<p>Creates a Microsoft AD in the AWS cloud.</p> <p>Before you call <i>CreateMicrosoftAD</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateMicrosoftAD</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>"]
+    /// <p>Creates a Microsoft AD in the AWS cloud.</p> <p>Before you call <i>CreateMicrosoftAD</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateMicrosoftAD</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn create_microsoft_ad(
         &self,
         input: &CreateMicrosoftADRequest,
     ) -> Result<CreateMicrosoftADResult, CreateMicrosoftADError>;
 
-    #[doc="<p>Creates a snapshot of a Simple AD or Microsoft AD directory in the AWS cloud.</p> <note> <p>You cannot take snapshots of AD Connector directories.</p> </note>"]
+    /// <p><p>Creates a snapshot of a Simple AD or Microsoft AD directory in the AWS cloud.</p> <note> <p>You cannot take snapshots of AD Connector directories.</p> </note></p>
     fn create_snapshot(
         &self,
         input: &CreateSnapshotRequest,
     ) -> Result<CreateSnapshotResult, CreateSnapshotError>;
 
-    #[doc="<p>AWS Directory Service for Microsoft Active Directory allows you to configure trust relationships. For example, you can establish a trust between your Microsoft AD in the AWS cloud, and your existing on-premises Microsoft Active Directory. This would allow you to provide users and groups access to resources in either domain, with a single set of credentials.</p> <p>This action initiates the creation of the AWS side of a trust relationship between a Microsoft AD in the AWS cloud and an external domain.</p>"]
+    /// <p>AWS Directory Service for Microsoft Active Directory allows you to configure trust relationships. For example, you can establish a trust between your Microsoft AD in the AWS cloud, and your existing on-premises Microsoft Active Directory. This would allow you to provide users and groups access to resources in either domain, with a single set of credentials.</p> <p>This action initiates the creation of the AWS side of a trust relationship between a Microsoft AD in the AWS cloud and an external domain.</p>
     fn create_trust(
         &self,
         input: &CreateTrustRequest,
     ) -> Result<CreateTrustResult, CreateTrustError>;
 
-    #[doc = "<p>Deletes a conditional forwarder that has been set up for your AWS directory.</p>"]
+    /// <p>Deletes a conditional forwarder that has been set up for your AWS directory.</p>
     fn delete_conditional_forwarder(
         &self,
         input: &DeleteConditionalForwarderRequest,
     ) -> Result<DeleteConditionalForwarderResult, DeleteConditionalForwarderError>;
 
-    #[doc="<p>Deletes an AWS Directory Service directory.</p> <p>Before you call <i>DeleteDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>DeleteDirectory</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>"]
+    /// <p>Deletes an AWS Directory Service directory.</p> <p>Before you call <i>DeleteDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>DeleteDirectory</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn delete_directory(
         &self,
         input: &DeleteDirectoryRequest,
     ) -> Result<DeleteDirectoryResult, DeleteDirectoryError>;
 
-    #[doc = "<p>Deletes a directory snapshot.</p>"]
+    /// <p>Deletes a directory snapshot.</p>
     fn delete_snapshot(
         &self,
         input: &DeleteSnapshotRequest,
     ) -> Result<DeleteSnapshotResult, DeleteSnapshotError>;
 
-    #[doc="<p>Deletes an existing trust relationship between your Microsoft AD in the AWS cloud and an external domain.</p>"]
+    /// <p>Deletes an existing trust relationship between your Microsoft AD in the AWS cloud and an external domain.</p>
     fn delete_trust(
         &self,
         input: &DeleteTrustRequest,
     ) -> Result<DeleteTrustResult, DeleteTrustError>;
 
-    #[doc = "<p>Removes the specified directory as a publisher to the specified SNS topic.</p>"]
+    /// <p>Removes the specified directory as a publisher to the specified SNS topic.</p>
     fn deregister_event_topic(
         &self,
         input: &DeregisterEventTopicRequest,
     ) -> Result<DeregisterEventTopicResult, DeregisterEventTopicError>;
 
-    #[doc="<p>Obtains information about the conditional forwarders for this account.</p> <p>If no input parameters are provided for RemoteDomainNames, this request describes all conditional forwarders for the specified directory ID.</p>"]
+    /// <p>Obtains information about the conditional forwarders for this account.</p> <p>If no input parameters are provided for RemoteDomainNames, this request describes all conditional forwarders for the specified directory ID.</p>
     fn describe_conditional_forwarders(
         &self,
         input: &DescribeConditionalForwardersRequest,
     ) -> Result<DescribeConditionalForwardersResult, DescribeConditionalForwardersError>;
 
-    #[doc="<p>Obtains information about the directories that belong to this account.</p> <p>You can retrieve information about specific directories by passing the directory identifiers in the <i>DirectoryIds</i> parameter. Otherwise, all directories that belong to the current account are returned.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> request and response parameters. If more results are available, the <i>DescribeDirectoriesResult.NextToken</i> member contains a token that you pass in the next call to <a>DescribeDirectories</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <i>Limit</i> parameter.</p>"]
+    /// <p>Obtains information about the directories that belong to this account.</p> <p>You can retrieve information about specific directories by passing the directory identifiers in the <i>DirectoryIds</i> parameter. Otherwise, all directories that belong to the current account are returned.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> request and response parameters. If more results are available, the <i>DescribeDirectoriesResult.NextToken</i> member contains a token that you pass in the next call to <a>DescribeDirectories</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <i>Limit</i> parameter.</p>
     fn describe_directories(
         &self,
         input: &DescribeDirectoriesRequest,
     ) -> Result<DescribeDirectoriesResult, DescribeDirectoriesError>;
 
-    #[doc = "<p>Provides information about any domain controllers in your directory.</p>"]
+    /// <p>Provides information about any domain controllers in your directory.</p>
     fn describe_domain_controllers(
         &self,
         input: &DescribeDomainControllersRequest,
     ) -> Result<DescribeDomainControllersResult, DescribeDomainControllersError>;
 
-    #[doc="<p>Obtains information about which SNS topics receive status messages from the specified directory.</p> <p>If no input parameters are provided, such as DirectoryId or TopicName, this request describes all of the associations in the account.</p>"]
+    /// <p>Obtains information about which SNS topics receive status messages from the specified directory.</p> <p>If no input parameters are provided, such as DirectoryId or TopicName, this request describes all of the associations in the account.</p>
     fn describe_event_topics(
         &self,
         input: &DescribeEventTopicsRequest,
     ) -> Result<DescribeEventTopicsResult, DescribeEventTopicsError>;
 
-    #[doc="<p>Obtains information about the directory snapshots that belong to this account.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> request and response parameters. If more results are available, the <i>DescribeSnapshots.NextToken</i> member contains a token that you pass in the next call to <a>DescribeSnapshots</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <i>Limit</i> parameter.</p>"]
+    /// <p>Obtains information about the directory snapshots that belong to this account.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> request and response parameters. If more results are available, the <i>DescribeSnapshots.NextToken</i> member contains a token that you pass in the next call to <a>DescribeSnapshots</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <i>Limit</i> parameter.</p>
     fn describe_snapshots(
         &self,
         input: &DescribeSnapshotsRequest,
     ) -> Result<DescribeSnapshotsResult, DescribeSnapshotsError>;
 
-    #[doc="<p>Obtains information about the trust relationships for this account.</p> <p>If no input parameters are provided, such as DirectoryId or TrustIds, this request describes all the trust relationships belonging to the account.</p>"]
+    /// <p>Obtains information about the trust relationships for this account.</p> <p>If no input parameters are provided, such as DirectoryId or TrustIds, this request describes all the trust relationships belonging to the account.</p>
     fn describe_trusts(
         &self,
         input: &DescribeTrustsRequest,
     ) -> Result<DescribeTrustsResult, DescribeTrustsError>;
 
-    #[doc="<p>Disables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector directory.</p>"]
+    /// <p>Disables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector directory.</p>
     fn disable_radius(
         &self,
         input: &DisableRadiusRequest,
     ) -> Result<DisableRadiusResult, DisableRadiusError>;
 
-    #[doc = "<p>Disables single-sign on for a directory.</p>"]
+    /// <p>Disables single-sign on for a directory.</p>
     fn disable_sso(&self, input: &DisableSsoRequest) -> Result<DisableSsoResult, DisableSsoError>;
 
-    #[doc="<p>Enables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector directory.</p>"]
+    /// <p>Enables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector directory.</p>
     fn enable_radius(
         &self,
         input: &EnableRadiusRequest,
     ) -> Result<EnableRadiusResult, EnableRadiusError>;
 
-    #[doc = "<p>Enables single sign-on for a directory.</p>"]
+    /// <p>Enables single sign-on for a directory.</p>
     fn enable_sso(&self, input: &EnableSsoRequest) -> Result<EnableSsoResult, EnableSsoError>;
 
-    #[doc = "<p>Obtains directory limit information for the current region.</p>"]
+    /// <p>Obtains directory limit information for the current region.</p>
     fn get_directory_limits(&self) -> Result<GetDirectoryLimitsResult, GetDirectoryLimitsError>;
 
-    #[doc = "<p>Obtains the manual snapshot limits for a directory.</p>"]
+    /// <p>Obtains the manual snapshot limits for a directory.</p>
     fn get_snapshot_limits(
         &self,
         input: &GetSnapshotLimitsRequest,
     ) -> Result<GetSnapshotLimitsResult, GetSnapshotLimitsError>;
 
-    #[doc = "<p>Lists the address blocks that you have added to a directory.</p>"]
+    /// <p>Lists the address blocks that you have added to a directory.</p>
     fn list_ip_routes(
         &self,
         input: &ListIpRoutesRequest,
     ) -> Result<ListIpRoutesResult, ListIpRoutesError>;
 
-    #[doc = "<p>Lists all schema extensions applied to a Microsoft AD Directory.</p>"]
+    /// <p>Lists all schema extensions applied to a Microsoft AD Directory.</p>
     fn list_schema_extensions(
         &self,
         input: &ListSchemaExtensionsRequest,
     ) -> Result<ListSchemaExtensionsResult, ListSchemaExtensionsError>;
 
-    #[doc = "<p>Lists all tags on a directory.</p>"]
+    /// <p>Lists all tags on a directory.</p>
     fn list_tags_for_resource(
         &self,
         input: &ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResult, ListTagsForResourceError>;
 
-    #[doc="<p>Associates a directory with an SNS topic. This establishes the directory as a publisher to the specified SNS topic. You can then receive email or text (SMS) messages when the status of your directory changes. You get notified if your directory goes from an Active status to an Impaired or Inoperable status. You also receive a notification when the directory returns to an Active status.</p>"]
+    /// <p>Associates a directory with an SNS topic. This establishes the directory as a publisher to the specified SNS topic. You can then receive email or text (SMS) messages when the status of your directory changes. You get notified if your directory goes from an Active status to an Impaired or Inoperable status. You also receive a notification when the directory returns to an Active status.</p>
     fn register_event_topic(
         &self,
         input: &RegisterEventTopicRequest,
     ) -> Result<RegisterEventTopicResult, RegisterEventTopicError>;
 
-    #[doc = "<p>Removes IP address blocks from a directory.</p>"]
+    /// <p>Removes IP address blocks from a directory.</p>
     fn remove_ip_routes(
         &self,
         input: &RemoveIpRoutesRequest,
     ) -> Result<RemoveIpRoutesResult, RemoveIpRoutesError>;
 
-    #[doc = "<p>Removes tags from a directory.</p>"]
+    /// <p>Removes tags from a directory.</p>
     fn remove_tags_from_resource(
         &self,
         input: &RemoveTagsFromResourceRequest,
     ) -> Result<RemoveTagsFromResourceResult, RemoveTagsFromResourceError>;
 
-    #[doc="<p>Restores a directory using an existing directory snapshot.</p> <p>When you restore a directory from a snapshot, any changes made to the directory after the snapshot date are overwritten.</p> <p>This action returns as soon as the restore operation is initiated. You can monitor the progress of the restore operation by calling the <a>DescribeDirectories</a> operation with the directory identifier. When the <b>DirectoryDescription.Stage</b> value changes to <code>Active</code>, the restore operation is complete.</p>"]
+    /// <p>Restores a directory using an existing directory snapshot.</p> <p>When you restore a directory from a snapshot, any changes made to the directory after the snapshot date are overwritten.</p> <p>This action returns as soon as the restore operation is initiated. You can monitor the progress of the restore operation by calling the <a>DescribeDirectories</a> operation with the directory identifier. When the <b>DirectoryDescription.Stage</b> value changes to <code>Active</code>, the restore operation is complete.</p>
     fn restore_from_snapshot(
         &self,
         input: &RestoreFromSnapshotRequest,
     ) -> Result<RestoreFromSnapshotResult, RestoreFromSnapshotError>;
 
-    #[doc = "<p>Applies a schema extension to a Microsoft AD directory.</p>"]
+    /// <p>Applies a schema extension to a Microsoft AD directory.</p>
     fn start_schema_extension(
         &self,
         input: &StartSchemaExtensionRequest,
     ) -> Result<StartSchemaExtensionResult, StartSchemaExtensionError>;
 
-    #[doc = "<p>Updates a conditional forwarder that has been set up for your AWS directory.</p>"]
+    /// <p>Updates a conditional forwarder that has been set up for your AWS directory.</p>
     fn update_conditional_forwarder(
         &self,
         input: &UpdateConditionalForwarderRequest,
     ) -> Result<UpdateConditionalForwarderResult, UpdateConditionalForwarderError>;
 
-    #[doc="<p>Adds or removes domain controllers to or from the directory. Based on the difference between current value and new value (provided through this API call), domain controllers will be added or removed. It may take up to 45 minutes for any new domain controllers to become fully active once the requested number of domain controllers is updated. During this time, you cannot make another update request.</p>"]
+    /// <p>Adds or removes domain controllers to or from the directory. Based on the difference between current value and new value (provided through this API call), domain controllers will be added or removed. It may take up to 45 minutes for any new domain controllers to become fully active once the requested number of domain controllers is updated. During this time, you cannot make another update request.</p>
     fn update_number_of_domain_controllers(
         &self,
         input: &UpdateNumberOfDomainControllersRequest,
     ) -> Result<UpdateNumberOfDomainControllersResult, UpdateNumberOfDomainControllersError>;
 
-    #[doc="<p>Updates the Remote Authentication Dial In User Service (RADIUS) server information for an AD Connector directory.</p>"]
+    /// <p>Updates the Remote Authentication Dial In User Service (RADIUS) server information for an AD Connector directory.</p>
     fn update_radius(
         &self,
         input: &UpdateRadiusRequest,
     ) -> Result<UpdateRadiusResult, UpdateRadiusError>;
 
-    #[doc="<p>AWS Directory Service for Microsoft Active Directory allows you to configure and verify trust relationships.</p> <p>This action verifies a trust relationship between your Microsoft AD in the AWS cloud and an external domain.</p>"]
+    /// <p>AWS Directory Service for Microsoft Active Directory allows you to configure and verify trust relationships.</p> <p>This action verifies a trust relationship between your Microsoft AD in the AWS cloud and an external domain.</p>
     fn verify_trust(
         &self,
         input: &VerifyTrustRequest,
@@ -5745,7 +5745,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>If the DNS server for your on-premises domain uses a publicly addressable IP address, you must add a CIDR address block to correctly route traffic to and from your Microsoft AD on Amazon Web Services. <i>AddIpRoutes</i> adds this address block. You can also use <i>AddIpRoutes</i> to facilitate routing traffic that uses public IP ranges from your Microsoft AD on AWS to a peer VPC. </p> <p>Before you call <i>AddIpRoutes</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>AddIpRoutes</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>"]
+    /// <p>If the DNS server for your on-premises domain uses a publicly addressable IP address, you must add a CIDR address block to correctly route traffic to and from your Microsoft AD on Amazon Web Services. <i>AddIpRoutes</i> adds this address block. You can also use <i>AddIpRoutes</i> to facilitate routing traffic that uses public IP ranges from your Microsoft AD on AWS to a peer VPC. </p> <p>Before you call <i>AddIpRoutes</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>AddIpRoutes</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn add_ip_routes(
         &self,
         input: &AddIpRoutesRequest,
@@ -5779,7 +5779,7 @@ where
         }
     }
 
-    #[doc="<p>Adds or overwrites one or more tags for the specified directory. Each directory can have a maximum of 50 tags. Each tag consists of a key and optional value. Tag keys must be unique to each resource.</p>"]
+    /// <p>Adds or overwrites one or more tags for the specified directory. Each directory can have a maximum of 50 tags. Each tag consists of a key and optional value. Tag keys must be unique to each resource.</p>
     fn add_tags_to_resource(
         &self,
         input: &AddTagsToResourceRequest,
@@ -5816,7 +5816,7 @@ where
         }
     }
 
-    #[doc="<p>Cancels an in-progress schema extension to a Microsoft AD directory. Once a schema extension has started replicating to all domain controllers, the task can no longer be canceled. A schema extension can be canceled during any of the following states; <code>Initializing</code>, <code>CreatingSnapshot</code>, and <code>UpdatingSchema</code>.</p>"]
+    /// <p>Cancels an in-progress schema extension to a Microsoft AD directory. Once a schema extension has started replicating to all domain controllers, the task can no longer be canceled. A schema extension can be canceled during any of the following states; <code>Initializing</code>, <code>CreatingSnapshot</code>, and <code>UpdatingSchema</code>.</p>
     fn cancel_schema_extension(
         &self,
         input: &CancelSchemaExtensionRequest,
@@ -5853,7 +5853,7 @@ where
         }
     }
 
-    #[doc="<p>Creates an AD Connector to connect to an on-premises directory.</p> <p>Before you call <i>ConnectDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>ConnectDirectory</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>"]
+    /// <p>Creates an AD Connector to connect to an on-premises directory.</p> <p>Before you call <i>ConnectDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>ConnectDirectory</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn connect_directory(
         &self,
         input: &ConnectDirectoryRequest,
@@ -5887,7 +5887,7 @@ where
         }
     }
 
-    #[doc="<p>Creates an alias for a directory and assigns the alias to the directory. The alias is used to construct the access URL for the directory, such as <code>http://&lt;alias&gt;.awsapps.com</code>.</p> <important> <p>After an alias has been created, it cannot be deleted or reused, so this operation should only be used when absolutely necessary.</p> </important>"]
+    /// <p><p>Creates an alias for a directory and assigns the alias to the directory. The alias is used to construct the access URL for the directory, such as <code>http://&lt;alias&gt;.awsapps.com</code>.</p> <important> <p>After an alias has been created, it cannot be deleted or reused, so this operation should only be used when absolutely necessary.</p> </important></p>
     fn create_alias(
         &self,
         input: &CreateAliasRequest,
@@ -5921,7 +5921,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a computer account in the specified directory, and joins the computer to the directory.</p>"]
+    /// <p>Creates a computer account in the specified directory, and joins the computer to the directory.</p>
     fn create_computer(
         &self,
         input: &CreateComputerRequest,
@@ -5955,7 +5955,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a conditional forwarder associated with your AWS directory. Conditional forwarders are required in order to set up a trust relationship with another domain. The conditional forwarder points to the trusted domain.</p>"]
+    /// <p>Creates a conditional forwarder associated with your AWS directory. Conditional forwarders are required in order to set up a trust relationship with another domain. The conditional forwarder points to the trusted domain.</p>
     fn create_conditional_forwarder(
         &self,
         input: &CreateConditionalForwarderRequest,
@@ -5992,7 +5992,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a Simple AD directory.</p> <p>Before you call <i>CreateDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateDirectory</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>"]
+    /// <p>Creates a Simple AD directory.</p> <p>Before you call <i>CreateDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateDirectory</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn create_directory(
         &self,
         input: &CreateDirectoryRequest,
@@ -6026,7 +6026,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a Microsoft AD in the AWS cloud.</p> <p>Before you call <i>CreateMicrosoftAD</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateMicrosoftAD</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>"]
+    /// <p>Creates a Microsoft AD in the AWS cloud.</p> <p>Before you call <i>CreateMicrosoftAD</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateMicrosoftAD</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn create_microsoft_ad(
         &self,
         input: &CreateMicrosoftADRequest,
@@ -6063,7 +6063,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a snapshot of a Simple AD or Microsoft AD directory in the AWS cloud.</p> <note> <p>You cannot take snapshots of AD Connector directories.</p> </note>"]
+    /// <p><p>Creates a snapshot of a Simple AD or Microsoft AD directory in the AWS cloud.</p> <note> <p>You cannot take snapshots of AD Connector directories.</p> </note></p>
     fn create_snapshot(
         &self,
         input: &CreateSnapshotRequest,
@@ -6097,7 +6097,7 @@ where
         }
     }
 
-    #[doc="<p>AWS Directory Service for Microsoft Active Directory allows you to configure trust relationships. For example, you can establish a trust between your Microsoft AD in the AWS cloud, and your existing on-premises Microsoft Active Directory. This would allow you to provide users and groups access to resources in either domain, with a single set of credentials.</p> <p>This action initiates the creation of the AWS side of a trust relationship between a Microsoft AD in the AWS cloud and an external domain.</p>"]
+    /// <p>AWS Directory Service for Microsoft Active Directory allows you to configure trust relationships. For example, you can establish a trust between your Microsoft AD in the AWS cloud, and your existing on-premises Microsoft Active Directory. This would allow you to provide users and groups access to resources in either domain, with a single set of credentials.</p> <p>This action initiates the creation of the AWS side of a trust relationship between a Microsoft AD in the AWS cloud and an external domain.</p>
     fn create_trust(
         &self,
         input: &CreateTrustRequest,
@@ -6131,7 +6131,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a conditional forwarder that has been set up for your AWS directory.</p>"]
+    /// <p>Deletes a conditional forwarder that has been set up for your AWS directory.</p>
     fn delete_conditional_forwarder(
         &self,
         input: &DeleteConditionalForwarderRequest,
@@ -6168,7 +6168,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes an AWS Directory Service directory.</p> <p>Before you call <i>DeleteDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>DeleteDirectory</i> operation, see <a href=\"http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html\">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>"]
+    /// <p>Deletes an AWS Directory Service directory.</p> <p>Before you call <i>DeleteDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>DeleteDirectory</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn delete_directory(
         &self,
         input: &DeleteDirectoryRequest,
@@ -6202,7 +6202,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a directory snapshot.</p>"]
+    /// <p>Deletes a directory snapshot.</p>
     fn delete_snapshot(
         &self,
         input: &DeleteSnapshotRequest,
@@ -6236,7 +6236,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes an existing trust relationship between your Microsoft AD in the AWS cloud and an external domain.</p>"]
+    /// <p>Deletes an existing trust relationship between your Microsoft AD in the AWS cloud and an external domain.</p>
     fn delete_trust(
         &self,
         input: &DeleteTrustRequest,
@@ -6270,7 +6270,7 @@ where
         }
     }
 
-    #[doc = "<p>Removes the specified directory as a publisher to the specified SNS topic.</p>"]
+    /// <p>Removes the specified directory as a publisher to the specified SNS topic.</p>
     fn deregister_event_topic(
         &self,
         input: &DeregisterEventTopicRequest,
@@ -6307,7 +6307,7 @@ where
         }
     }
 
-    #[doc="<p>Obtains information about the conditional forwarders for this account.</p> <p>If no input parameters are provided for RemoteDomainNames, this request describes all conditional forwarders for the specified directory ID.</p>"]
+    /// <p>Obtains information about the conditional forwarders for this account.</p> <p>If no input parameters are provided for RemoteDomainNames, this request describes all conditional forwarders for the specified directory ID.</p>
     fn describe_conditional_forwarders(
         &self,
         input: &DescribeConditionalForwardersRequest,
@@ -6344,7 +6344,7 @@ where
         }
     }
 
-    #[doc="<p>Obtains information about the directories that belong to this account.</p> <p>You can retrieve information about specific directories by passing the directory identifiers in the <i>DirectoryIds</i> parameter. Otherwise, all directories that belong to the current account are returned.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> request and response parameters. If more results are available, the <i>DescribeDirectoriesResult.NextToken</i> member contains a token that you pass in the next call to <a>DescribeDirectories</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <i>Limit</i> parameter.</p>"]
+    /// <p>Obtains information about the directories that belong to this account.</p> <p>You can retrieve information about specific directories by passing the directory identifiers in the <i>DirectoryIds</i> parameter. Otherwise, all directories that belong to the current account are returned.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> request and response parameters. If more results are available, the <i>DescribeDirectoriesResult.NextToken</i> member contains a token that you pass in the next call to <a>DescribeDirectories</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <i>Limit</i> parameter.</p>
     fn describe_directories(
         &self,
         input: &DescribeDirectoriesRequest,
@@ -6381,7 +6381,7 @@ where
         }
     }
 
-    #[doc = "<p>Provides information about any domain controllers in your directory.</p>"]
+    /// <p>Provides information about any domain controllers in your directory.</p>
     fn describe_domain_controllers(
         &self,
         input: &DescribeDomainControllersRequest,
@@ -6418,7 +6418,7 @@ where
         }
     }
 
-    #[doc="<p>Obtains information about which SNS topics receive status messages from the specified directory.</p> <p>If no input parameters are provided, such as DirectoryId or TopicName, this request describes all of the associations in the account.</p>"]
+    /// <p>Obtains information about which SNS topics receive status messages from the specified directory.</p> <p>If no input parameters are provided, such as DirectoryId or TopicName, this request describes all of the associations in the account.</p>
     fn describe_event_topics(
         &self,
         input: &DescribeEventTopicsRequest,
@@ -6455,7 +6455,7 @@ where
         }
     }
 
-    #[doc="<p>Obtains information about the directory snapshots that belong to this account.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> request and response parameters. If more results are available, the <i>DescribeSnapshots.NextToken</i> member contains a token that you pass in the next call to <a>DescribeSnapshots</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <i>Limit</i> parameter.</p>"]
+    /// <p>Obtains information about the directory snapshots that belong to this account.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> request and response parameters. If more results are available, the <i>DescribeSnapshots.NextToken</i> member contains a token that you pass in the next call to <a>DescribeSnapshots</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <i>Limit</i> parameter.</p>
     fn describe_snapshots(
         &self,
         input: &DescribeSnapshotsRequest,
@@ -6492,7 +6492,7 @@ where
         }
     }
 
-    #[doc="<p>Obtains information about the trust relationships for this account.</p> <p>If no input parameters are provided, such as DirectoryId or TrustIds, this request describes all the trust relationships belonging to the account.</p>"]
+    /// <p>Obtains information about the trust relationships for this account.</p> <p>If no input parameters are provided, such as DirectoryId or TrustIds, this request describes all the trust relationships belonging to the account.</p>
     fn describe_trusts(
         &self,
         input: &DescribeTrustsRequest,
@@ -6526,7 +6526,7 @@ where
         }
     }
 
-    #[doc="<p>Disables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector directory.</p>"]
+    /// <p>Disables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector directory.</p>
     fn disable_radius(
         &self,
         input: &DisableRadiusRequest,
@@ -6560,7 +6560,7 @@ where
         }
     }
 
-    #[doc = "<p>Disables single-sign on for a directory.</p>"]
+    /// <p>Disables single-sign on for a directory.</p>
     fn disable_sso(&self, input: &DisableSsoRequest) -> Result<DisableSsoResult, DisableSsoError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
@@ -6591,7 +6591,7 @@ where
         }
     }
 
-    #[doc="<p>Enables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector directory.</p>"]
+    /// <p>Enables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector directory.</p>
     fn enable_radius(
         &self,
         input: &EnableRadiusRequest,
@@ -6625,7 +6625,7 @@ where
         }
     }
 
-    #[doc = "<p>Enables single sign-on for a directory.</p>"]
+    /// <p>Enables single sign-on for a directory.</p>
     fn enable_sso(&self, input: &EnableSsoRequest) -> Result<EnableSsoResult, EnableSsoError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
@@ -6658,7 +6658,7 @@ where
         }
     }
 
-    #[doc = "<p>Obtains directory limit information for the current region.</p>"]
+    /// <p>Obtains directory limit information for the current region.</p>
     fn get_directory_limits(&self) -> Result<GetDirectoryLimitsResult, GetDirectoryLimitsError> {
         let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
 
@@ -6691,7 +6691,7 @@ where
         }
     }
 
-    #[doc = "<p>Obtains the manual snapshot limits for a directory.</p>"]
+    /// <p>Obtains the manual snapshot limits for a directory.</p>
     fn get_snapshot_limits(
         &self,
         input: &GetSnapshotLimitsRequest,
@@ -6728,7 +6728,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists the address blocks that you have added to a directory.</p>"]
+    /// <p>Lists the address blocks that you have added to a directory.</p>
     fn list_ip_routes(
         &self,
         input: &ListIpRoutesRequest,
@@ -6762,7 +6762,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists all schema extensions applied to a Microsoft AD Directory.</p>"]
+    /// <p>Lists all schema extensions applied to a Microsoft AD Directory.</p>
     fn list_schema_extensions(
         &self,
         input: &ListSchemaExtensionsRequest,
@@ -6799,7 +6799,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists all tags on a directory.</p>"]
+    /// <p>Lists all tags on a directory.</p>
     fn list_tags_for_resource(
         &self,
         input: &ListTagsForResourceRequest,
@@ -6836,7 +6836,7 @@ where
         }
     }
 
-    #[doc="<p>Associates a directory with an SNS topic. This establishes the directory as a publisher to the specified SNS topic. You can then receive email or text (SMS) messages when the status of your directory changes. You get notified if your directory goes from an Active status to an Impaired or Inoperable status. You also receive a notification when the directory returns to an Active status.</p>"]
+    /// <p>Associates a directory with an SNS topic. This establishes the directory as a publisher to the specified SNS topic. You can then receive email or text (SMS) messages when the status of your directory changes. You get notified if your directory goes from an Active status to an Impaired or Inoperable status. You also receive a notification when the directory returns to an Active status.</p>
     fn register_event_topic(
         &self,
         input: &RegisterEventTopicRequest,
@@ -6873,7 +6873,7 @@ where
         }
     }
 
-    #[doc = "<p>Removes IP address blocks from a directory.</p>"]
+    /// <p>Removes IP address blocks from a directory.</p>
     fn remove_ip_routes(
         &self,
         input: &RemoveIpRoutesRequest,
@@ -6907,7 +6907,7 @@ where
         }
     }
 
-    #[doc = "<p>Removes tags from a directory.</p>"]
+    /// <p>Removes tags from a directory.</p>
     fn remove_tags_from_resource(
         &self,
         input: &RemoveTagsFromResourceRequest,
@@ -6944,7 +6944,7 @@ where
         }
     }
 
-    #[doc="<p>Restores a directory using an existing directory snapshot.</p> <p>When you restore a directory from a snapshot, any changes made to the directory after the snapshot date are overwritten.</p> <p>This action returns as soon as the restore operation is initiated. You can monitor the progress of the restore operation by calling the <a>DescribeDirectories</a> operation with the directory identifier. When the <b>DirectoryDescription.Stage</b> value changes to <code>Active</code>, the restore operation is complete.</p>"]
+    /// <p>Restores a directory using an existing directory snapshot.</p> <p>When you restore a directory from a snapshot, any changes made to the directory after the snapshot date are overwritten.</p> <p>This action returns as soon as the restore operation is initiated. You can monitor the progress of the restore operation by calling the <a>DescribeDirectories</a> operation with the directory identifier. When the <b>DirectoryDescription.Stage</b> value changes to <code>Active</code>, the restore operation is complete.</p>
     fn restore_from_snapshot(
         &self,
         input: &RestoreFromSnapshotRequest,
@@ -6981,7 +6981,7 @@ where
         }
     }
 
-    #[doc = "<p>Applies a schema extension to a Microsoft AD directory.</p>"]
+    /// <p>Applies a schema extension to a Microsoft AD directory.</p>
     fn start_schema_extension(
         &self,
         input: &StartSchemaExtensionRequest,
@@ -7018,7 +7018,7 @@ where
         }
     }
 
-    #[doc = "<p>Updates a conditional forwarder that has been set up for your AWS directory.</p>"]
+    /// <p>Updates a conditional forwarder that has been set up for your AWS directory.</p>
     fn update_conditional_forwarder(
         &self,
         input: &UpdateConditionalForwarderRequest,
@@ -7055,7 +7055,7 @@ where
         }
     }
 
-    #[doc="<p>Adds or removes domain controllers to or from the directory. Based on the difference between current value and new value (provided through this API call), domain controllers will be added or removed. It may take up to 45 minutes for any new domain controllers to become fully active once the requested number of domain controllers is updated. During this time, you cannot make another update request.</p>"]
+    /// <p>Adds or removes domain controllers to or from the directory. Based on the difference between current value and new value (provided through this API call), domain controllers will be added or removed. It may take up to 45 minutes for any new domain controllers to become fully active once the requested number of domain controllers is updated. During this time, you cannot make another update request.</p>
     fn update_number_of_domain_controllers(
         &self,
         input: &UpdateNumberOfDomainControllersRequest,
@@ -7094,7 +7094,7 @@ where
         }
     }
 
-    #[doc="<p>Updates the Remote Authentication Dial In User Service (RADIUS) server information for an AD Connector directory.</p>"]
+    /// <p>Updates the Remote Authentication Dial In User Service (RADIUS) server information for an AD Connector directory.</p>
     fn update_radius(
         &self,
         input: &UpdateRadiusRequest,
@@ -7128,7 +7128,7 @@ where
         }
     }
 
-    #[doc="<p>AWS Directory Service for Microsoft Active Directory allows you to configure and verify trust relationships.</p> <p>This action verifies a trust relationship between your Microsoft AD in the AWS cloud and an external domain.</p>"]
+    /// <p>AWS Directory Service for Microsoft Active Directory allows you to configure and verify trust relationships.</p> <p>This action verifies a trust relationship between your Microsoft AD in the AWS cloud and an external domain.</p>
     fn verify_trust(
         &self,
         input: &VerifyTrustRequest,

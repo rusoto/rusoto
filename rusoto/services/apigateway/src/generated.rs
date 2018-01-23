@@ -28,7 +28,7 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
-/// <p>Represents an AWS account that is associated with Amazon API Gateway.</p> <div class="remarks"> <p>To view the account info, call <code>GET</code> on this resource.</p> <h4>Error Codes</h4> <p>The following exception may be thrown when the request fails.</p> <ul> <li>UnauthorizedException</li> <li>NotFoundException</li> <li>TooManyRequestsException</li> </ul> <p>For detailed error code information, including the corresponding HTTP Status Codes, see <a href="http://docs.aws.amazon.com/apigateway/api-reference/handling-errors/#api-error-codes">API Gateway Error Codes</a></p> <h4>Example: Get the information about an account.</h4> <h5>Request</h5> <pre><code>GET /account HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160531T184618Z Authorization: AWS4-HMAC-SHA256 Credential={access_key_ID}/us-east-1/apigateway/aws4_request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4_hash} </code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ "_links": { "curies": { "href": "http://docs.aws.amazon.com/apigateway/latest/developerguide/account-apigateway-{rel}.html", "name": "account", "templated": true }, "self": { "href": "/account" }, "account:update": { "href": "/account" } }, "cloudwatchRoleArn": "arn:aws:iam::123456789012:role/apigAwsProxyRole", "throttleSettings": { "rateLimit": 500, "burstLimit": 1000 } } </code></pre> <p>In addition to making the REST API call directly, you can use the AWS CLI and an AWS SDK to access this resource.</p> </div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-limits.html">API Gateway Limits</a> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html">Developer Guide</a>, <a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-account.html">AWS CLI</a> </div>
+/// <p><p>Represents an AWS account that is associated with Amazon API Gateway.</p> <div class="remarks"> <p>To view the account info, call <code>GET</code> on this resource.</p> <h4>Error Codes</h4> <p>The following exception may be thrown when the request fails.</p> <ul> <li>UnauthorizedException</li> <li>NotFoundException</li> <li>TooManyRequestsException</li> </ul> <p>For detailed error code information, including the corresponding HTTP Status Codes, see <a href="http://docs.aws.amazon.com/apigateway/api-reference/handling-errors/#api-error-codes">API Gateway Error Codes</a></p> <h4>Example: Get the information about an account.</h4> <h5>Request</h5> <pre><code>GET /account HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160531T184618Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash} </code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;_links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/account-apigateway-{rel}.html&quot;, &quot;name&quot;: &quot;account&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/account&quot; }, &quot;account:update&quot;: { &quot;href&quot;: &quot;/account&quot; } }, &quot;cloudwatchRoleArn&quot;: &quot;arn:aws:iam::123456789012:role/apigAwsProxyRole&quot;, &quot;throttleSettings&quot;: { &quot;rateLimit&quot;: 500, &quot;burstLimit&quot;: 1000 } } </code></pre> <p>In addition to making the REST API call directly, you can use the AWS CLI and an AWS SDK to access this resource.</p> </div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-limits.html">API Gateway Limits</a> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html">Developer Guide</a>, <a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-account.html">AWS CLI</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Account {
     /// <p>The version of the API keys used for the account.</p>
@@ -49,7 +49,7 @@ pub struct Account {
     pub throttle_settings: Option<ThrottleSettings>,
 }
 
-/// <p>A resource that can be distributed to callers for executing <a>Method</a> resources that require an API key. API keys can be mapped to any <a>Stage</a> on any <a>RestApi</a>, which indicates that the callers with the API key can make requests to that stage.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-api-keys.html">Use API Keys</a> </div>
+/// <p><p>A resource that can be distributed to callers for executing <a>Method</a> resources that require an API key. API keys can be mapped to any <a>Stage</a> on any <a>RestApi</a>, which indicates that the callers with the API key can make requests to that stage.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-api-keys.html">Use API Keys</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ApiKey {
     /// <p>The timestamp when the API Key was created.</p>
@@ -103,7 +103,7 @@ pub struct ApiKeyIds {
     pub warnings: Option<Vec<String>>,
 }
 
-/// <p>Represents a collection of API keys as represented by an <a>ApiKeys</a> resource.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-api-keys.html">Use API Keys</a> </div>
+/// <p><p>Represents a collection of API keys as represented by an <a>ApiKeys</a> resource.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-api-keys.html">Use API Keys</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ApiKeys {
     /// <p>The current page of elements from this collection.</p>
@@ -132,7 +132,7 @@ pub struct ApiStage {
     pub stage: Option<String>,
 }
 
-/// <p>Represents an authorization layer for methods. If enabled on a method, API Gateway will activate the authorizer when a client calls the method.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html">Enable custom authorization</a> </div>
+/// <p><p>Represents an authorization layer for methods. If enabled on a method, API Gateway will activate the authorizer when a client calls the method.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html">Enable custom authorization</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Authorizer {
     /// <p>Optional customer-defined field, used in Swagger imports/exports. Has no functional impact.</p>
@@ -177,7 +177,7 @@ pub struct Authorizer {
     pub type_: Option<String>,
 }
 
-/// <p>Represents a collection of <a>Authorizer</a> resources.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html">Enable custom authorization</a> </div>
+/// <p><p>Represents a collection of <a>Authorizer</a> resources.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html">Enable custom authorization</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Authorizers {
     /// <p>The current page of elements from this collection.</p>
@@ -189,7 +189,7 @@ pub struct Authorizers {
     pub position: Option<String>,
 }
 
-/// <p>Represents the base path that callers of the API must provide as part of the URL after the domain name.</p> <div class="remarks">A custom domain name plus a <code>BasePathMapping</code> specification identifies a deployed <a>RestApi</a> in a given stage of the owner <a>Account</a>.</div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Use Custom Domain Names</a> </div>
+/// <p><p>Represents the base path that callers of the API must provide as part of the URL after the domain name.</p> <div class="remarks">A custom domain name plus a <code>BasePathMapping</code> specification identifies a deployed <a>RestApi</a> in a given stage of the owner <a>Account</a>.</div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Use Custom Domain Names</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct BasePathMapping {
     /// <p>The base path name that callers of the API must provide as part of the URL after the domain name.</p>
@@ -206,7 +206,7 @@ pub struct BasePathMapping {
     pub stage: Option<String>,
 }
 
-/// <p>Represents a collection of <a>BasePathMapping</a> resources.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Use Custom Domain Names</a> </div>
+/// <p><p>Represents a collection of <a>BasePathMapping</a> resources.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Use Custom Domain Names</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct BasePathMappings {
     /// <p>The current page of elements from this collection.</p>
@@ -218,7 +218,7 @@ pub struct BasePathMappings {
     pub position: Option<String>,
 }
 
-/// <p>Represents a client certificate used to configure client-side SSL authentication while sending requests to the integration endpoint.</p> <div class="remarks">Client certificates are used authenticate an API by the back-end server. To authenticate an API client (or user), use a custom <a>Authorizer</a>.</div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/getting-started-client-side-ssl-authentication.html">Use Client-Side Certificate</a> </div>
+/// <p><p>Represents a client certificate used to configure client-side SSL authentication while sending requests to the integration endpoint.</p> <div class="remarks">Client certificates are used authenticate an API by the back-end server. To authenticate an API client (or user), use a custom <a>Authorizer</a>.</div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/getting-started-client-side-ssl-authentication.html">Use Client-Side Certificate</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ClientCertificate {
     /// <p>The identifier of the client certificate.</p>
@@ -243,7 +243,7 @@ pub struct ClientCertificate {
     pub pem_encoded_certificate: Option<String>,
 }
 
-/// <p>Represents a collection of <a>ClientCertificate</a> resources.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/getting-started-client-side-ssl-authentication.html">Use Client-Side Certificate</a> </div>
+/// <p><p>Represents a collection of <a>ClientCertificate</a> resources.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/getting-started-client-side-ssl-authentication.html">Use Client-Side Certificate</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ClientCertificates {
     /// <p>The current page of elements from this collection.</p>
@@ -816,7 +816,7 @@ pub struct DeleteUsagePlanRequest {
     pub usage_plan_id: String,
 }
 
-/// <p>An immutable representation of a <a>RestApi</a> resource that can be called by users using <a>Stages</a>. A deployment must be associated with a <a>Stage</a> for it to be callable over the Internet.</p> <div class="remarks">To create a deployment, call <code>POST</code> on the <a>Deployments</a> resource of a <a>RestApi</a>. To view, update, or delete a deployment, call <code>GET</code>, <code>PATCH</code>, or <code>DELETE</code> on the specified deployment resource (<code>/restapis/{restapi_id}/deployments/{deployment_id}</code>).</div> <div class="seeAlso"><a>RestApi</a>, <a>Deployments</a>, <a>Stage</a>, <a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-deployment.html">AWS CLI</a>, <a href="https://aws.amazon.com/tools/">AWS SDKs</a> </div>
+/// <p><p>An immutable representation of a <a>RestApi</a> resource that can be called by users using <a>Stages</a>. A deployment must be associated with a <a>Stage</a> for it to be callable over the Internet.</p> <div class="remarks">To create a deployment, call <code>POST</code> on the <a>Deployments</a> resource of a <a>RestApi</a>. To view, update, or delete a deployment, call <code>GET</code>, <code>PATCH</code>, or <code>DELETE</code> on the specified deployment resource (<code>/restapis/{restapi<em>id}/deployments/{deployment</em>id}</code>).</div> <div class="seeAlso"><a>RestApi</a>, <a>Deployments</a>, <a>Stage</a>, <a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-deployment.html">AWS CLI</a>, <a href="https://aws.amazon.com/tools/">AWS SDKs</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Deployment {
     /// <p>A summary of the <a>RestApi</a> at the date and time that the deployment resource was created.</p>
@@ -839,7 +839,7 @@ pub struct Deployment {
     pub id: Option<String>,
 }
 
-/// <p>Represents a collection resource that contains zero or more references to your existing deployments, and links that guide you on how to interact with your collection. The collection offers a paginated view of the contained deployments.</p> <div class="remarks">To create a new deployment of a <a>RestApi</a>, make a <code>POST</code> request against this resource. To view, update, or delete an existing deployment, make a <code>GET</code>, <code>PATCH</code>, or <code>DELETE</code> request, respectively, on a specified <a>Deployment</a> resource.</div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-deploy-api.html">Deploying an API</a>, <a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-deployment.html">AWS CLI</a>, <a href="https://aws.amazon.com/tools/">AWS SDKs</a> </div>
+/// <p><p>Represents a collection resource that contains zero or more references to your existing deployments, and links that guide you on how to interact with your collection. The collection offers a paginated view of the contained deployments.</p> <div class="remarks">To create a new deployment of a <a>RestApi</a>, make a <code>POST</code> request against this resource. To view, update, or delete an existing deployment, make a <code>GET</code>, <code>PATCH</code>, or <code>DELETE</code> request, respectively, on a specified <a>Deployment</a> resource.</div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-deploy-api.html">Deploying an API</a>, <a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-deployment.html">AWS CLI</a>, <a href="https://aws.amazon.com/tools/">AWS SDKs</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Deployments {
     /// <p>The current page of elements from this collection.</p>
@@ -851,7 +851,7 @@ pub struct Deployments {
     pub position: Option<String>,
 }
 
-/// <p>A documentation part for a targeted API entity.</p> <div class="remarks"> <p>A documentation part consists of a content map (<code>properties</code>) and a target (<code>location</code>). The target specifies an API entity to which the documentation content applies. The supported API entity types are <code>API</code>, <code>AUTHORIZER</code>, <code>MODEL</code>, <code>RESOURCE</code>, <code>METHOD</code>, <code>PATH_PARAMETER</code>, <code>QUERY_PARAMETER</code>, <code>REQUEST_HEADER</code>, <code>REQUEST_BODY</code>, <code>RESPONSE</code>, <code>RESPONSE_HEADER</code>, and <code>RESPONSE_BODY</code>. Valid <code>location</code> fields depend on the API entity type. All valid fields are not required.</p> <p>The content map is a JSON string of API-specific key-value pairs. Although an API can use any shape for the content map, only the Swagger-compliant documentation fields will be injected into the associated API entity definition in the exported Swagger definition file.</p></div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a>DocumentationParts</a> </div>
+/// <p><p>A documentation part for a targeted API entity.</p> <div class="remarks"> <p>A documentation part consists of a content map (<code>properties</code>) and a target (<code>location</code>). The target specifies an API entity to which the documentation content applies. The supported API entity types are <code>API</code>, <code>AUTHORIZER</code>, <code>MODEL</code>, <code>RESOURCE</code>, <code>METHOD</code>, <code>PATH<em>PARAMETER</code>, <code>QUERY</em>PARAMETER</code>, <code>REQUEST<em>HEADER</code>, <code>REQUEST</em>BODY</code>, <code>RESPONSE</code>, <code>RESPONSE<em>HEADER</code>, and <code>RESPONSE</em>BODY</code>. Valid <code>location</code> fields depend on the API entity type. All valid fields are not required.</p> <p>The content map is a JSON string of API-specific key-value pairs. Although an API can use any shape for the content map, only the Swagger-compliant documentation fields will be injected into the associated API entity definition in the exported Swagger definition file.</p></div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a>DocumentationParts</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DocumentationPart {
     /// <p>The <a>DocumentationPart</a> identifier, generated by Amazon API Gateway when the <code>DocumentationPart</code> is created.</p>
@@ -868,7 +868,7 @@ pub struct DocumentationPart {
     pub properties: Option<String>,
 }
 
-/// <p>A collection of the imported <a>DocumentationPart</a> identifiers.</p> <div class="remarks">This is used to return the result when documentation parts in an external (e.g., Swagger) file are imported into Amazon API Gateway</div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a href="http://docs.aws.amazon.com/apigateway/api-reference/link-relation/documentationpart-import/">documentationpart:import</a>, <a>DocumentationPart</a> </div>
+/// <p><p>A collection of the imported <a>DocumentationPart</a> identifiers.</p> <div class="remarks">This is used to return the result when documentation parts in an external (e.g., Swagger) file are imported into Amazon API Gateway</div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a href="http://docs.aws.amazon.com/apigateway/api-reference/link-relation/documentationpart-import/">documentationpart:import</a>, <a>DocumentationPart</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DocumentationPartIds {
     /// <p>A list of the returned documentation part identifiers.</p>
@@ -905,7 +905,7 @@ pub struct DocumentationPartLocation {
     pub type_: String,
 }
 
-/// <p>The collection of documentation parts of an API.</p> <div class="remarks"/> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a>DocumentationPart</a> </div>
+/// <p><p>The collection of documentation parts of an API.</p> <div class="remarks"/> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a>DocumentationPart</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DocumentationParts {
     /// <p>The current page of elements from this collection.</p>
@@ -917,7 +917,7 @@ pub struct DocumentationParts {
     pub position: Option<String>,
 }
 
-/// <p>A snapshot of the documentation of an API.</p> <div class="remarks"><p>Publishing API documentation involves creating a documentation version associated with an API stage and exporting the versioned documentation to an external (e.g., Swagger) file.</p></div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a>DocumentationPart</a>, <a>DocumentationVersions</a> </div>
+/// <p><p>A snapshot of the documentation of an API.</p> <div class="remarks"><p>Publishing API documentation involves creating a documentation version associated with an API stage and exporting the versioned documentation to an external (e.g., Swagger) file.</p></div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a>DocumentationPart</a>, <a>DocumentationVersions</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DocumentationVersion {
     /// <p>The date when the API documentation snapshot is created.</p>
@@ -934,7 +934,7 @@ pub struct DocumentationVersion {
     pub version: Option<String>,
 }
 
-/// <p>The collection of documentation snapshots of an API. </p> <div class="remarks"><p>Use the <a>DocumentationVersions</a> to manage documentation snapshots associated with various API stages.</p></div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a>DocumentationPart</a>, <a>DocumentationVersion</a> </div>
+/// <p><p>The collection of documentation snapshots of an API. </p> <div class="remarks"><p>Use the <a>DocumentationVersions</a> to manage documentation snapshots associated with various API stages.</p></div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a>DocumentationPart</a>, <a>DocumentationVersion</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DocumentationVersions {
     /// <p>The current page of elements from this collection.</p>
@@ -946,7 +946,7 @@ pub struct DocumentationVersions {
     pub position: Option<String>,
 }
 
-/// <p>Represents a domain name that is contained in a simpler, more intuitive URL that can be called.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Use Client-Side Certificate</a> </div>
+/// <p><p>Represents a domain name that is contained in a simpler, more intuitive URL that can be called.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Use Client-Side Certificate</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DomainName {
     /// <p>The reference to an AWS-managed certificate. AWS Certificate Manager is the only supported source.</p>
@@ -971,7 +971,7 @@ pub struct DomainName {
     pub domain_name: Option<String>,
 }
 
-/// <p>Represents a collection of <a>DomainName</a> resources.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Use Client-Side Certificate</a> </div>
+/// <p><p>Represents a collection of <a>DomainName</a> resources.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Use Client-Side Certificate</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DomainNames {
     /// <p>The current page of elements from this collection.</p>
@@ -1016,7 +1016,7 @@ pub struct FlushStageCacheRequest {
     pub stage_name: String,
 }
 
-/// <p>A gateway response of a given response type and status code, with optional response parameters and mapping templates.</p> <div class="remarks"> For more information about valid gateway response types, see <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/supported-gateway-response-types.html">Gateway Response Types Supported by Amazon API Gateway</a> <div class="example"> <h4>Example: Get a Gateway Response of a given response type</h4> <h5>Request</h5> <p>This example shows how to get a gateway response of the <code>MISSING_AUTHNETICATION_TOKEN</code> type.</p> <pre><code>GET /restapis/o81lxisefl/gatewayresponses/MISSING_AUTHENTICATION_TOKEN HTTP/1.1 Host: beta-apigateway.us-east-1.amazonaws.com Content-Type: application/json X-Amz-Date: 20170503T202516Z Authorization: AWS4-HMAC-SHA256 Credential={access-key-id}/20170503/us-east-1/apigateway/aws4_request, SignedHeaders=content-type;host;x-amz-date, Signature=1b52460e3159c1a26cff29093855d50ea141c1c5b937528fecaf60f51129697a Cache-Control: no-cache Postman-Token: 3b2a1ce9-c848-2e26-2e2f-9c2caefbed45 </code></pre> <p>The response type is specified as a URL path.</p> <h5>Response</h5> <p>The successful operation returns the <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ "_links": { "curies": { "href": "http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-gatewayresponse-{rel}.html", "name": "gatewayresponse", "templated": true }, "self": { "href": "/restapis/o81lxisefl/gatewayresponses/MISSING_AUTHENTICATION_TOKEN" }, "gatewayresponse:delete": { "href": "/restapis/o81lxisefl/gatewayresponses/MISSING_AUTHENTICATION_TOKEN" }, "gatewayresponse:put": { "href": "/restapis/o81lxisefl/gatewayresponses/{response_type}", "templated": true }, "gatewayresponse:update": { "href": "/restapis/o81lxisefl/gatewayresponses/MISSING_AUTHENTICATION_TOKEN" } }, "defaultResponse": false, "responseParameters": { "gatewayresponse.header.x-request-path": "method.request.path.petId", "gatewayresponse.header.Access-Control-Allow-Origin": "&apos;a.b.c&apos;", "gatewayresponse.header.x-request-query": "method.request.querystring.q", "gatewayresponse.header.x-request-header": "method.request.header.Accept" }, "responseTemplates": { "application/json": "{\n \"message\": $context.error.messageString,\n \"type\": \"$context.error.responseType\",\n \"stage\": \"$context.stage\",\n \"resourcePath\": \"$context.resourcePath\",\n \"stageVariables.a\": \"$stageVariables.a\",\n \"statusCode\": \"&apos;404&apos;\"\n}" }, "responseType": "MISSING_AUTHENTICATION_TOKEN", "statusCode": "404" }</code></pre> <p></p> </div> </div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/customize-gateway-responses.html">Customize Gateway Responses</a> </div>
+/// <p><p>A gateway response of a given response type and status code, with optional response parameters and mapping templates.</p> <div class="remarks"> For more information about valid gateway response types, see <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/supported-gateway-response-types.html">Gateway Response Types Supported by Amazon API Gateway</a> <div class="example"> <h4>Example: Get a Gateway Response of a given response type</h4> <h5>Request</h5> <p>This example shows how to get a gateway response of the <code>MISSING<em>AUTHNETICATION</em>TOKEN</code> type.</p> <pre><code>GET /restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN HTTP/1.1 Host: beta-apigateway.us-east-1.amazonaws.com Content-Type: application/json X-Amz-Date: 20170503T202516Z Authorization: AWS4-HMAC-SHA256 Credential={access-key-id}/20170503/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature=1b52460e3159c1a26cff29093855d50ea141c1c5b937528fecaf60f51129697a Cache-Control: no-cache Postman-Token: 3b2a1ce9-c848-2e26-2e2f-9c2caefbed45 </code></pre> <p>The response type is specified as a URL path.</p> <h5>Response</h5> <p>The successful operation returns the <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;</em>links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-gatewayresponse-{rel}.html&quot;, &quot;name&quot;: &quot;gatewayresponse&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; }, &quot;gatewayresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING</em>AUTHENTICATION<em>TOKEN&quot; } }, &quot;defaultResponse&quot;: false, &quot;responseParameters&quot;: { &quot;gatewayresponse.header.x-request-path&quot;: &quot;method.request.path.petId&quot;, &quot;gatewayresponse.header.Access-Control-Allow-Origin&quot;: &quot;&apos;a.b.c&apos;&quot;, &quot;gatewayresponse.header.x-request-query&quot;: &quot;method.request.querystring.q&quot;, &quot;gatewayresponse.header.x-request-header&quot;: &quot;method.request.header.Accept&quot; }, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{\n &quot;message&quot;: $context.error.messageString,\n &quot;type&quot;: &quot;$context.error.responseType&quot;,\n &quot;stage&quot;: &quot;$context.stage&quot;,\n &quot;resourcePath&quot;: &quot;$context.resourcePath&quot;,\n &quot;stageVariables.a&quot;: &quot;$stageVariables.a&quot;,\n &quot;statusCode&quot;: &quot;&apos;404&apos;&quot;\n}&quot; }, &quot;responseType&quot;: &quot;MISSING</em>AUTHENTICATION_TOKEN&quot;, &quot;statusCode&quot;: &quot;404&quot; }</code></pre> <p></p> </div> </div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/customize-gateway-responses.html">Customize Gateway Responses</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct GatewayResponse {
     /// <p>A Boolean flag to indicate whether this <a>GatewayResponse</a> is the default gateway response (<code>true</code>) or not (<code>false</code>). A default gateway response is one generated by Amazon API Gateway without any customization by an API developer. </p>
@@ -1041,7 +1041,7 @@ pub struct GatewayResponse {
     pub status_code: Option<String>,
 }
 
-/// <p>The collection of the <a>GatewayResponse</a> instances of a <a>RestApi</a> as a <code>responseType</code>-to-<a>GatewayResponse</a> object map of key-value pairs. As such, pagination is not supported for querying this collection.</p> <div class="remarks"> For more information about valid gateway response types, see <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/supported-gateway-response-types.html">Gateway Response Types Supported by Amazon API Gateway</a> <div class="example"> <h4>Example: Get the collection of gateway responses of an API</h4> <h5>Request</h5> <p>This example request shows how to retrieve the <a>GatewayResponses</a> collection from an API.</p> <pre><code>GET /restapis/o81lxisefl/gatewayresponses HTTP/1.1 Host: beta-apigateway.us-east-1.amazonaws.com Content-Type: application/json X-Amz-Date: 20170503T220604Z Authorization: AWS4-HMAC-SHA256 Credential={access-key-id}/20170503/us-east-1/apigateway/aws4_request, SignedHeaders=content-type;host;x-amz-date, Signature=59b42fe54a76a5de8adf2c67baa6d39206f8e9ad49a1d77ccc6a5da3103a398a Cache-Control: no-cache Postman-Token: 5637af27-dc29-fc5c-9dfe-0645d52cb515 </code></pre> <p></p> <h5>Response</h5> <p>The successful operation returns the <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ "_links": { "curies": { "href": "http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-gatewayresponse-{rel}.html", "name": "gatewayresponse", "templated": true }, "self": { "href": "/restapis/o81lxisefl/gatewayresponses" }, "first": { "href": "/restapis/o81lxisefl/gatewayresponses" }, "gatewayresponse:by-type": { "href": "/restapis/o81lxisefl/gatewayresponses/{response_type}", "templated": true }, "item": [ { "href": "/restapis/o81lxisefl/gatewayresponses/INTEGRATION_FAILURE" }, { "href": "/restapis/o81lxisefl/gatewayresponses/RESOURCE_NOT_FOUND" }, { "href": "/restapis/o81lxisefl/gatewayresponses/REQUEST_TOO_LARGE" }, { "href": "/restapis/o81lxisefl/gatewayresponses/THROTTLED" }, { "href": "/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED_MEDIA_TYPE" }, { "href": "/restapis/o81lxisefl/gatewayresponses/AUTHORIZER_CONFIGURATION_ERROR" }, { "href": "/restapis/o81lxisefl/gatewayresponses/DEFAULT_5XX" }, { "href": "/restapis/o81lxisefl/gatewayresponses/DEFAULT_4XX" }, { "href": "/restapis/o81lxisefl/gatewayresponses/BAD_REQUEST_PARAMETERS" }, { "href": "/restapis/o81lxisefl/gatewayresponses/BAD_REQUEST_BODY" }, { "href": "/restapis/o81lxisefl/gatewayresponses/EXPIRED_TOKEN" }, { "href": "/restapis/o81lxisefl/gatewayresponses/ACCESS_DENIED" }, { "href": "/restapis/o81lxisefl/gatewayresponses/INVALID_API_KEY" }, { "href": "/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED" }, { "href": "/restapis/o81lxisefl/gatewayresponses/API_CONFIGURATION_ERROR" }, { "href": "/restapis/o81lxisefl/gatewayresponses/QUOTA_EXCEEDED" }, { "href": "/restapis/o81lxisefl/gatewayresponses/INTEGRATION_TIMEOUT" }, { "href": "/restapis/o81lxisefl/gatewayresponses/MISSING_AUTHENTICATION_TOKEN" }, { "href": "/restapis/o81lxisefl/gatewayresponses/INVALID_SIGNATURE" }, { "href": "/restapis/o81lxisefl/gatewayresponses/AUTHORIZER_FAILURE" } ] }, "_embedded": { "item": [ { "_links": { "self": { "href": "/restapis/o81lxisefl/gatewayresponses/INTEGRATION_FAILURE" }, "gatewayresponse:put": { "href": "/restapis/o81lxisefl/gatewayresponses/{response_type}", "templated": true }, "gatewayresponse:update": { "href": "/restapis/o81lxisefl/gatewayresponses/INTEGRATION_FAILURE" } }, "defaultResponse": true, "responseParameters": {}, "responseTemplates": { "application/json": "{\"message\":$context.error.messageString}" }, "responseType": "INTEGRATION_FAILURE", "statusCode": "504" }, { "_links": { "self": { "href": "/restapis/o81lxisefl/gatewayresponses/RESOURCE_NOT_FOUND" }, "gatewayresponse:put": { "href": "/restapis/o81lxisefl/gatewayresponses/{response_type}", "templated": true }, "gatewayresponse:update": { "href": "/restapis/o81lxisefl/gatewayresponses/RESOURCE_NOT_FOUND" } }, "defaultResponse": true, "responseParameters": {}, "responseTemplates": { "application/json": "{\"message\":$context.error.messageString}" }, "responseType": "RESOURCE_NOT_FOUND", "statusCode": "404" }, { "_links": { "self": { "href": "/restapis/o81lxisefl/gatewayresponses/REQUEST_TOO_LARGE" }, "gatewayresponse:put": { "href": "/restapis/o81lxisefl/gatewayresponses/{response_type}", "templated": true }, "gatewayresponse:update": { "href": "/restapis/o81lxisefl/gatewayresponses/REQUEST_TOO_LARGE" } }, "defaultResponse": true, "responseParameters": {}, "responseTemplates": { "application/json": "{\"message\":$context.error.messageString}" }, "responseType": "REQUEST_TOO_LARGE", "statusCode": "413" }, { "_links": { "self": { "href": "/restapis/o81lxisefl/gatewayresponses/THROTTLED" }, "gatewayresponse:put": { "href": "/restapis/o81lxisefl/gatewayresponses/{response_type}", "templated": true }, "gatewayresponse:update": { "href": "/restapis/o81lxisefl/gatewayresponses/THROTTLED" } }, "defaultResponse": true, "responseParameters": {}, "responseTemplates": { "application/json": "{\"message\":$context.error.messageString}" }, "responseType": "THROTTLED", "statusCode": "429" }, { "_links": { "self": { "href": "/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED_MEDIA_TYPE" }, "gatewayresponse:put": { "href": "/restapis/o81lxisefl/gatewayresponses/{response_type}", "templated": true }, "gatewayresponse:update": { "href": "/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED_MEDIA_TYPE" } }, "defaultResponse": true, "responseParameters": {}, "responseTemplates": { "application/json": "{\"message\":$context.error.messageString}" }, "responseType": "UNSUPPORTED_MEDIA_TYPE", "statusCode": "415" }, { "_links": { "self": { "href": "/restapis/o81lxisefl/gatewayresponses/AUTHORIZER_CONFIGURATION_ERROR" }, "gatewayresponse:put": { "href": "/restapis/o81lxisefl/gatewayresponses/{response_type}", "templated": true }, "gatewayresponse:update": { "href": "/restapis/o81lxisefl/gatewayresponses/AUTHORIZER_CONFIGURATION_ERROR" } }, "defaultResponse": true, "responseParameters": {}, "responseTemplates": { "application/json": "{\"message\":$context.error.messageString}" }, "responseType": "AUTHORIZER_CONFIGURATION_ERROR", "statusCode": "500" }, { "_links": { "self": { "href": "/restapis/o81lxisefl/gatewayresponses/DEFAULT_5XX" }, "gatewayresponse:put": { "href": "/restapis/o81lxisefl/gatewayresponses/{response_type}", "templated": true }, "gatewayresponse:update": { "href": "/restapis/o81lxisefl/gatewayresponses/DEFAULT_5XX" } }, "defaultResponse": true, "responseParameters": {}, "responseTemplates": { "application/json": "{\"message\":$context.error.messageString}" }, "responseType": "DEFAULT_5XX" }, { "_links": { "self": { "href": "/restapis/o81lxisefl/gatewayresponses/DEFAULT_4XX" }, "gatewayresponse:put": { "href": "/restapis/o81lxisefl/gatewayresponses/{response_type}", "templated": true }, "gatewayresponse:update": { "href": "/restapis/o81lxisefl/gatewayresponses/DEFAULT_4XX" } }, "defaultResponse": true, "responseParameters": {}, "responseTemplates": { "application/json": "{\"message\":$context.error.messageString}" }, "responseType": "DEFAULT_4XX" }, { "_links": { "self": { "href": "/restapis/o81lxisefl/gatewayresponses/BAD_REQUEST_PARAMETERS" }, "gatewayresponse:put": { "href": "/restapis/o81lxisefl/gatewayresponses/{response_type}", "templated": true }, "gatewayresponse:update": { "href": "/restapis/o81lxisefl/gatewayresponses/BAD_REQUEST_PARAMETERS" } }, "defaultResponse": true, "responseParameters": {}, "responseTemplates": { "application/json": "{\"message\":$context.error.messageString}" }, "responseType": "BAD_REQUEST_PARAMETERS", "statusCode": "400" }, { "_links": { "self": { "href": "/restapis/o81lxisefl/gatewayresponses/BAD_REQUEST_BODY" }, "gatewayresponse:put": { "href": "/restapis/o81lxisefl/gatewayresponses/{response_type}", "templated": true }, "gatewayresponse:update": { "href": "/restapis/o81lxisefl/gatewayresponses/BAD_REQUEST_BODY" } }, "defaultResponse": true, "responseParameters": {}, "responseTemplates": { "application/json": "{\"message\":$context.error.messageString}" }, "responseType": "BAD_REQUEST_BODY", "statusCode": "400" }, { "_links": { "self": { "href": "/restapis/o81lxisefl/gatewayresponses/EXPIRED_TOKEN" }, "gatewayresponse:put": { "href": "/restapis/o81lxisefl/gatewayresponses/{response_type}", "templated": true }, "gatewayresponse:update": { "href": "/restapis/o81lxisefl/gatewayresponses/EXPIRED_TOKEN" } }, "defaultResponse": true, "responseParameters": {}, "responseTemplates": { "application/json": "{\"message\":$context.error.messageString}" }, "responseType": "EXPIRED_TOKEN", "statusCode": "403" }, { "_links": { "self": { "href": "/restapis/o81lxisefl/gatewayresponses/ACCESS_DENIED" }, "gatewayresponse:put": { "href": "/restapis/o81lxisefl/gatewayresponses/{response_type}", "templated": true }, "gatewayresponse:update": { "href": "/restapis/o81lxisefl/gatewayresponses/ACCESS_DENIED" } }, "defaultResponse": true, "responseParameters": {}, "responseTemplates": { "application/json": "{\"message\":$context.error.messageString}" }, "responseType": "ACCESS_DENIED", "statusCode": "403" }, { "_links": { "self": { "href": "/restapis/o81lxisefl/gatewayresponses/INVALID_API_KEY" }, "gatewayresponse:put": { "href": "/restapis/o81lxisefl/gatewayresponses/{response_type}", "templated": true }, "gatewayresponse:update": { "href": "/restapis/o81lxisefl/gatewayresponses/INVALID_API_KEY" } }, "defaultResponse": true, "responseParameters": {}, "responseTemplates": { "application/json": "{\"message\":$context.error.messageString}" }, "responseType": "INVALID_API_KEY", "statusCode": "403" }, { "_links": { "self": { "href": "/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED" }, "gatewayresponse:put": { "href": "/restapis/o81lxisefl/gatewayresponses/{response_type}", "templated": true }, "gatewayresponse:update": { "href": "/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED" } }, "defaultResponse": true, "responseParameters": {}, "responseTemplates": { "application/json": "{\"message\":$context.error.messageString}" }, "responseType": "UNAUTHORIZED", "statusCode": "401" }, { "_links": { "self": { "href": "/restapis/o81lxisefl/gatewayresponses/API_CONFIGURATION_ERROR" }, "gatewayresponse:put": { "href": "/restapis/o81lxisefl/gatewayresponses/{response_type}", "templated": true }, "gatewayresponse:update": { "href": "/restapis/o81lxisefl/gatewayresponses/API_CONFIGURATION_ERROR" } }, "defaultResponse": true, "responseParameters": {}, "responseTemplates": { "application/json": "{\"message\":$context.error.messageString}" }, "responseType": "API_CONFIGURATION_ERROR", "statusCode": "500" }, { "_links": { "self": { "href": "/restapis/o81lxisefl/gatewayresponses/QUOTA_EXCEEDED" }, "gatewayresponse:put": { "href": "/restapis/o81lxisefl/gatewayresponses/{response_type}", "templated": true }, "gatewayresponse:update": { "href": "/restapis/o81lxisefl/gatewayresponses/QUOTA_EXCEEDED" } }, "defaultResponse": true, "responseParameters": {}, "responseTemplates": { "application/json": "{\"message\":$context.error.messageString}" }, "responseType": "QUOTA_EXCEEDED", "statusCode": "429" }, { "_links": { "self": { "href": "/restapis/o81lxisefl/gatewayresponses/INTEGRATION_TIMEOUT" }, "gatewayresponse:put": { "href": "/restapis/o81lxisefl/gatewayresponses/{response_type}", "templated": true }, "gatewayresponse:update": { "href": "/restapis/o81lxisefl/gatewayresponses/INTEGRATION_TIMEOUT" } }, "defaultResponse": true, "responseParameters": {}, "responseTemplates": { "application/json": "{\"message\":$context.error.messageString}" }, "responseType": "INTEGRATION_TIMEOUT", "statusCode": "504" }, { "_links": { "self": { "href": "/restapis/o81lxisefl/gatewayresponses/MISSING_AUTHENTICATION_TOKEN" }, "gatewayresponse:put": { "href": "/restapis/o81lxisefl/gatewayresponses/{response_type}", "templated": true }, "gatewayresponse:update": { "href": "/restapis/o81lxisefl/gatewayresponses/MISSING_AUTHENTICATION_TOKEN" } }, "defaultResponse": true, "responseParameters": {}, "responseTemplates": { "application/json": "{\"message\":$context.error.messageString}" }, "responseType": "MISSING_AUTHENTICATION_TOKEN", "statusCode": "403" }, { "_links": { "self": { "href": "/restapis/o81lxisefl/gatewayresponses/INVALID_SIGNATURE" }, "gatewayresponse:put": { "href": "/restapis/o81lxisefl/gatewayresponses/{response_type}", "templated": true }, "gatewayresponse:update": { "href": "/restapis/o81lxisefl/gatewayresponses/INVALID_SIGNATURE" } }, "defaultResponse": true, "responseParameters": {}, "responseTemplates": { "application/json": "{\"message\":$context.error.messageString}" }, "responseType": "INVALID_SIGNATURE", "statusCode": "403" }, { "_links": { "self": { "href": "/restapis/o81lxisefl/gatewayresponses/AUTHORIZER_FAILURE" }, "gatewayresponse:put": { "href": "/restapis/o81lxisefl/gatewayresponses/{response_type}", "templated": true }, "gatewayresponse:update": { "href": "/restapis/o81lxisefl/gatewayresponses/AUTHORIZER_FAILURE" } }, "defaultResponse": true, "responseParameters": {}, "responseTemplates": { "application/json": "{\"message\":$context.error.messageString}" }, "responseType": "AUTHORIZER_FAILURE", "statusCode": "500" } ] } }</code></pre> <p></p> </div> </div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/customize-gateway-responses.html">Customize Gateway Responses</a> </div>
+/// <p><p>The collection of the <a>GatewayResponse</a> instances of a <a>RestApi</a> as a <code>responseType</code>-to-<a>GatewayResponse</a> object map of key-value pairs. As such, pagination is not supported for querying this collection.</p> <div class="remarks"> For more information about valid gateway response types, see <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/supported-gateway-response-types.html">Gateway Response Types Supported by Amazon API Gateway</a> <div class="example"> <h4>Example: Get the collection of gateway responses of an API</h4> <h5>Request</h5> <p>This example request shows how to retrieve the <a>GatewayResponses</a> collection from an API.</p> <pre><code>GET /restapis/o81lxisefl/gatewayresponses HTTP/1.1 Host: beta-apigateway.us-east-1.amazonaws.com Content-Type: application/json X-Amz-Date: 20170503T220604Z Authorization: AWS4-HMAC-SHA256 Credential={access-key-id}/20170503/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature=59b42fe54a76a5de8adf2c67baa6d39206f8e9ad49a1d77ccc6a5da3103a398a Cache-Control: no-cache Postman-Token: 5637af27-dc29-fc5c-9dfe-0645d52cb515 </code></pre> <p></p> <h5>Response</h5> <p>The successful operation returns the <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;</em>links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-gatewayresponse-{rel}.html&quot;, &quot;name&quot;: &quot;gatewayresponse&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses&quot; }, &quot;first&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses&quot; }, &quot;gatewayresponse:by-type&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;item&quot;: [ { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION</em>FAILURE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/RESOURCE<em>NOT</em>FOUND&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/REQUEST<em>TOO</em>LARGE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/THROTTLED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED<em>MEDIA</em>TYPE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>CONFIGURATION</em>ERROR&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT<em>5XX&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT</em>4XX&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>PARAMETERS&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>BODY&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/EXPIRED<em>TOKEN&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/ACCESS</em>DENIED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID<em>API</em>KEY&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/API<em>CONFIGURATION</em>ERROR&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/QUOTA<em>EXCEEDED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION</em>TIMEOUT&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID<em>SIGNATURE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER</em>FAILURE&quot; } ] }, &quot;<em>embedded&quot;: { &quot;item&quot;: [ { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>FAILURE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>FAILURE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INTEGRATION</em>FAILURE&quot;, &quot;statusCode&quot;: &quot;504&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/RESOURCE</em>NOT<em>FOUND&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/RESOURCE<em>NOT</em>FOUND&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;RESOURCE<em>NOT</em>FOUND&quot;, &quot;statusCode&quot;: &quot;404&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/REQUEST</em>TOO<em>LARGE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/REQUEST<em>TOO</em>LARGE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;REQUEST<em>TOO</em>LARGE&quot;, &quot;statusCode&quot;: &quot;413&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/THROTTLED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/THROTTLED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;THROTTLED&quot;, &quot;statusCode&quot;: &quot;429&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED</em>MEDIA<em>TYPE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED<em>MEDIA</em>TYPE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;UNSUPPORTED<em>MEDIA</em>TYPE&quot;, &quot;statusCode&quot;: &quot;415&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER</em>CONFIGURATION<em>ERROR&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>CONFIGURATION</em>ERROR&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;AUTHORIZER<em>CONFIGURATION</em>ERROR&quot;, &quot;statusCode&quot;: &quot;500&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT</em>5XX&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT</em>5XX&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;DEFAULT<em>5XX&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT<em>4XX&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT<em>4XX&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;DEFAULT</em>4XX&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD</em>REQUEST<em>PARAMETERS&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>PARAMETERS&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;BAD<em>REQUEST</em>PARAMETERS&quot;, &quot;statusCode&quot;: &quot;400&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD</em>REQUEST<em>BODY&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>BODY&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;BAD<em>REQUEST</em>BODY&quot;, &quot;statusCode&quot;: &quot;400&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/EXPIRED</em>TOKEN&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/EXPIRED</em>TOKEN&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;EXPIRED<em>TOKEN&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/ACCESS<em>DENIED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/ACCESS<em>DENIED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;ACCESS</em>DENIED&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID</em>API<em>KEY&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID<em>API</em>KEY&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INVALID<em>API</em>KEY&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;UNAUTHORIZED&quot;, &quot;statusCode&quot;: &quot;401&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/API</em>CONFIGURATION<em>ERROR&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/API<em>CONFIGURATION</em>ERROR&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;API<em>CONFIGURATION</em>ERROR&quot;, &quot;statusCode&quot;: &quot;500&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/QUOTA</em>EXCEEDED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/QUOTA</em>EXCEEDED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;QUOTA<em>EXCEEDED&quot;, &quot;statusCode&quot;: &quot;429&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>TIMEOUT&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>TIMEOUT&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INTEGRATION</em>TIMEOUT&quot;, &quot;statusCode&quot;: &quot;504&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING</em>AUTHENTICATION<em>TOKEN&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;MISSING<em>AUTHENTICATION</em>TOKEN&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID</em>SIGNATURE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID</em>SIGNATURE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INVALID<em>SIGNATURE&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>FAILURE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>FAILURE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;AUTHORIZER</em>FAILURE&quot;, &quot;statusCode&quot;: &quot;500&quot; } ] } }</code></pre> <p></p> </div> </div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/customize-gateway-responses.html">Customize Gateway Responses</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct GatewayResponses {
     /// <p>Returns the entire collection, because of no pagination support.</p>
@@ -1732,7 +1732,7 @@ pub struct ImportRestApiRequest {
     pub parameters: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p>Represents an HTTP, HTTP_PROXY, AWS, AWS_PROXY, or Mock integration.</p> <div class="remarks">In the API Gateway console, the built-in Lambda integration is an AWS integration.</div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Creating an API</a> </div>
+/// <p><p>Represents an HTTP, HTTP<em>PROXY, AWS, AWS</em>PROXY, or Mock integration.</p> <div class="remarks">In the API Gateway console, the built-in Lambda integration is an AWS integration.</div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Creating an API</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Integration {
     /// <p>Specifies the integration's cache key parameters.</p>
@@ -1755,7 +1755,7 @@ pub struct Integration {
     #[serde(rename = "httpMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub http_method: Option<String>,
-    /// <p>Specifies the integration's responses.</p> <div class="remarks"> <p/> <h4>Example: Get integration responses of a method</h4> <h5>Request</h5> <p/> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200 HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160607T191449Z Authorization: AWS4-HMAC-SHA256 Credential={access_key_ID}/20160607/us-east-1/apigateway/aws4_request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4_hash} </code></pre> <h5>Response</h5> <p>The successful response returns <code>200 OK</code> status and a payload as follows:</p> <pre><code>{ "_links": { "curies": { "href": "http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html", "name": "integrationresponse", "templated": true }, "self": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200", "title": "200" }, "integrationresponse:delete": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200" }, "integrationresponse:update": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200" } }, "responseParameters": { "method.response.header.Content-Type": "'application/xml'" }, "responseTemplates": { "application/json": "$util.urlDecode(\"%3CkinesisStreams%3E#foreach($stream in $input.path('$.StreamNames'))%3Cstream%3E%3Cname%3E$stream%3C/name%3E%3C/stream%3E#end%3C/kinesisStreams%3E\")\n" }, "statusCode": "200" }</code></pre> <p/> </div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Creating an API</a> </div>
+    /// <p><p>Specifies the integration&#39;s responses.</p> <div class="remarks"> <p/> <h4>Example: Get integration responses of a method</h4> <h5>Request</h5> <p/> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200 HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160607T191449Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/20160607/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash} </code></pre> <h5>Response</h5> <p>The successful response returns <code>200 OK</code> status and a payload as follows:</p> <pre><code>{ &quot;_links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html&quot;, &quot;name&quot;: &quot;integrationresponse&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integrationresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot; }, &quot;integrationresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot; } }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: &quot;&#39;application/xml&#39;&quot; }, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;$util.urlDecode(&quot;%3CkinesisStreams%3E#foreach($stream in $input.path(&#39;$.StreamNames&#39;))%3Cstream%3E%3Cname%3E$stream%3C/name%3E%3C/stream%3E#end%3C/kinesisStreams%3E&quot;)\n&quot; }, &quot;statusCode&quot;: &quot;200&quot; }</code></pre> <p/> </div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Creating an API</a> </div></p>
     #[serde(rename = "integrationResponses")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_responses: Option<::std::collections::HashMap<String, IntegrationResponse>>,
@@ -1781,7 +1781,7 @@ pub struct Integration {
     pub uri: Option<String>,
 }
 
-/// <p>Represents an integration response. The status code must map to an existing <a>MethodResponse</a>, and parameters and templates can be used to transform the back-end response.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Creating an API</a> </div>
+/// <p><p>Represents an integration response. The status code must map to an existing <a>MethodResponse</a>, and parameters and templates can be used to transform the back-end response.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Creating an API</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct IntegrationResponse {
     /// <p>Specifies how to handle response payload content type conversions. Supported values are <code>CONVERT_TO_BINARY</code> and <code>CONVERT_TO_TEXT</code>, with the following behaviors:</p> <ul> <li><p><code>CONVERT_TO_BINARY</code>: Converts a response payload from a Base64-encoded string to the corresponding binary blob.</p></li> <li><p><code>CONVERT_TO_TEXT</code>: Converts a response payload from a binary blob to a Base64-encoded string.</p></li> </ul> <p>If this property is not defined, the response payload will be passed through from the integration response to the method response without modification.</p>
@@ -1806,7 +1806,7 @@ pub struct IntegrationResponse {
     pub status_code: Option<String>,
 }
 
-/// <p> Represents a client-facing interface by which the client calls the API to access back-end resources. A <b>Method</b> resource is integrated with an <a>Integration</a> resource. Both consist of a request and one or more responses. The method request takes the client input that is passed to the back end through the integration request. A method response returns the output from the back end to the client through an integration response. A method request is embodied in a <b>Method</b> resource, whereas an integration request is embodied in an <a>Integration</a> resource. On the other hand, a method response is represented by a <a>MethodResponse</a> resource, whereas an integration response is represented by an <a>IntegrationResponse</a> resource. </p> <div class="remarks"> <p/> <h4>Example: Retrive the GET method on a specified resource</h4> <h5>Request</h5> <p>The following example request retrieves the information about the GET method on an API resource (<code>3kzxbg5sa2</code>) of an API (<code>fugvjdxtri</code>). </p> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160603T210259Z Authorization: AWS4-HMAC-SHA256 Credential={access_key_ID}/20160603/us-east-1/apigateway/aws4_request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4_hash}</code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ "_links": { "curies": [ { "href": "http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-{rel}.html", "name": "integration", "templated": true }, { "href": "http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html", "name": "integrationresponse", "templated": true }, { "href": "http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-{rel}.html", "name": "method", "templated": true }, { "href": "http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html", "name": "methodresponse", "templated": true } ], "self": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET", "name": "GET", "title": "GET" }, "integration:put": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration" }, "method:delete": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET" }, "method:integration": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration" }, "method:responses": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200", "name": "200", "title": "200" }, "method:update": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET" }, "methodresponse:put": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/{status_code}", "templated": true } }, "apiKeyRequired": true, "authorizationType": "NONE", "httpMethod": "GET", "_embedded": { "method:integration": { "_links": { "self": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration" }, "integration:delete": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration" }, "integration:responses": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200", "name": "200", "title": "200" }, "integration:update": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration" }, "integrationresponse:put": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/{status_code}", "templated": true } }, "cacheKeyParameters": [], "cacheNamespace": "3kzxbg5sa2", "credentials": "arn:aws:iam::123456789012:role/apigAwsProxyRole", "httpMethod": "POST", "passthroughBehavior": "WHEN_NO_MATCH", "requestParameters": { "integration.request.header.Content-Type": "'application/x-amz-json-1.1'" }, "requestTemplates": { "application/json": "{\n}" }, "type": "AWS", "uri": "arn:aws:apigateway:us-east-1:kinesis:action/ListStreams", "_embedded": { "integration:responses": { "_links": { "self": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200", "name": "200", "title": "200" }, "integrationresponse:delete": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200" }, "integrationresponse:update": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200" } }, "responseParameters": { "method.response.header.Content-Type": "'application/xml'" }, "responseTemplates": { "application/json": "$util.urlDecode(\"%3CkinesisStreams%3E%23foreach(%24stream%20in%20%24input.path(%27%24.StreamNames%27))%3Cstream%3E%3Cname%3E%24stream%3C%2Fname%3E%3C%2Fstream%3E%23end%3C%2FkinesisStreams%3E\")" }, "statusCode": "200" } } }, "method:responses": { "_links": { "self": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200", "name": "200", "title": "200" }, "methodresponse:delete": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200" }, "methodresponse:update": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200" } }, "responseModels": { "application/json": "Empty" }, "responseParameters": { "method.response.header.Content-Type": false }, "statusCode": "200" } } }</code></pre> <p>In the example above, the response template for the <code>200 OK</code> response maps the JSON output from the <code>ListStreams</code> action in the back end to an XML output. The mapping template is URL-encoded as <code>%3CkinesisStreams%3E%23foreach(%24stream%20in%20%24input.path(%27%24.StreamNames%27))%3Cstream%3E%3Cname%3E%24stream%3C%2Fname%3E%3C%2Fstream%3E%23end%3C%2FkinesisStreams%3E</code> and the output is decoded using the <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html#util-templat-reference">$util.urlDecode()</a> helper function.</p> </div> <div class="seeAlso"> <a>MethodResponse</a>, <a>Integration</a>, <a>IntegrationResponse</a>, <a>Resource</a>, <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-method-settings.html">Set up an API's method</a> </div>
+/// <p><p> Represents a client-facing interface by which the client calls the API to access back-end resources. A <b>Method</b> resource is integrated with an <a>Integration</a> resource. Both consist of a request and one or more responses. The method request takes the client input that is passed to the back end through the integration request. A method response returns the output from the back end to the client through an integration response. A method request is embodied in a <b>Method</b> resource, whereas an integration request is embodied in an <a>Integration</a> resource. On the other hand, a method response is represented by a <a>MethodResponse</a> resource, whereas an integration response is represented by an <a>IntegrationResponse</a> resource. </p> <div class="remarks"> <p/> <h4>Example: Retrive the GET method on a specified resource</h4> <h5>Request</h5> <p>The following example request retrieves the information about the GET method on an API resource (<code>3kzxbg5sa2</code>) of an API (<code>fugvjdxtri</code>). </p> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160603T210259Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/20160603/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash}</code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;<em>links&quot;: { &quot;curies&quot;: [ { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-{rel}.html&quot;, &quot;name&quot;: &quot;integration&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html&quot;, &quot;name&quot;: &quot;integrationresponse&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-{rel}.html&quot;, &quot;name&quot;: &quot;method&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html&quot;, &quot;name&quot;: &quot;methodresponse&quot;, &quot;templated&quot;: true } ], &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot;, &quot;name&quot;: &quot;GET&quot;, &quot;title&quot;: &quot;GET&quot; }, &quot;integration:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;method:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot; }, &quot;method:integration&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;method:responses&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;method:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot; }, &quot;methodresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/{status</em>code}&quot;, &quot;templated&quot;: true } }, &quot;apiKeyRequired&quot;: true, &quot;authorizationType&quot;: &quot;NONE&quot;, &quot;httpMethod&quot;: &quot;GET&quot;, &quot;<em>embedded&quot;: { &quot;method:integration&quot;: { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integration:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integration:responses&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integration:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integrationresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/{status<em>code}&quot;, &quot;templated&quot;: true } }, &quot;cacheKeyParameters&quot;: [], &quot;cacheNamespace&quot;: &quot;3kzxbg5sa2&quot;, &quot;credentials&quot;: &quot;arn:aws:iam::123456789012:role/apigAwsProxyRole&quot;, &quot;httpMethod&quot;: &quot;POST&quot;, &quot;passthroughBehavior&quot;: &quot;WHEN</em>NO<em>MATCH&quot;, &quot;requestParameters&quot;: { &quot;integration.request.header.Content-Type&quot;: &quot;&#39;application/x-amz-json-1.1&#39;&quot; }, &quot;requestTemplates&quot;: { &quot;application/json&quot;: &quot;{\n}&quot; }, &quot;type&quot;: &quot;AWS&quot;, &quot;uri&quot;: &quot;arn:aws:apigateway:us-east-1:kinesis:action/ListStreams&quot;, &quot;</em>embedded&quot;: { &quot;integration:responses&quot;: { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integrationresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot; }, &quot;integrationresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot; } }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: &quot;&#39;application/xml&#39;&quot; }, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;$util.urlDecode(&quot;%3CkinesisStreams%3E%23foreach(%24stream%20in%20%24input.path(%27%24.StreamNames%27))%3Cstream%3E%3Cname%3E%24stream%3C%2Fname%3E%3C%2Fstream%3E%23end%3C%2FkinesisStreams%3E&quot;)&quot; }, &quot;statusCode&quot;: &quot;200&quot; } } }, &quot;method:responses&quot;: { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;methodresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; }, &quot;methodresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; } }, &quot;responseModels&quot;: { &quot;application/json&quot;: &quot;Empty&quot; }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: false }, &quot;statusCode&quot;: &quot;200&quot; } } }</code></pre> <p>In the example above, the response template for the <code>200 OK</code> response maps the JSON output from the <code>ListStreams</code> action in the back end to an XML output. The mapping template is URL-encoded as <code>%3CkinesisStreams%3E%23foreach(%24stream%20in%20%24input.path(%27%24.StreamNames%27))%3Cstream%3E%3Cname%3E%24stream%3C%2Fname%3E%3C%2Fstream%3E%23end%3C%2FkinesisStreams%3E</code> and the output is decoded using the <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html#util-templat-reference">$util.urlDecode()</a> helper function.</p> </div> <div class="seeAlso"> <a>MethodResponse</a>, <a>Integration</a>, <a>IntegrationResponse</a>, <a>Resource</a>, <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-method-settings.html">Set up an API&#39;s method</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Method {
     /// <p>A boolean flag specifying whether a valid <a>ApiKey</a> is required to invoke this method.</p>
@@ -1825,11 +1825,11 @@ pub struct Method {
     #[serde(rename = "httpMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub http_method: Option<String>,
-    /// <p>Gets the method's integration responsible for passing the client-submitted request to the back end and performing necessary transformations to make the request compliant with the back end.</p> <div class="remarks"> <p/> <h4>Example: </h4> <h5>Request</h5> <p/> <pre><code>GET /restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com Content-Length: 117 X-Amz-Date: 20160613T213210Z Authorization: AWS4-HMAC-SHA256 Credential={access_key_ID}/20160613/us-east-1/apigateway/aws4_request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4_hash}</code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ "_links": { "curies": [ { "href": "http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-{rel}.html", "name": "integration", "templated": true }, { "href": "http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html", "name": "integrationresponse", "templated": true } ], "self": { "href": "/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration" }, "integration:delete": { "href": "/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration" }, "integration:responses": { "href": "/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/200", "name": "200", "title": "200" }, "integration:update": { "href": "/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration" }, "integrationresponse:put": { "href": "/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/{status_code}", "templated": true } }, "cacheKeyParameters": [], "cacheNamespace": "0cjtch", "credentials": "arn:aws:iam::123456789012:role/apigAwsProxyRole", "httpMethod": "POST", "passthroughBehavior": "WHEN_NO_MATCH", "requestTemplates": { "application/json": "{\n \"a\": \"$input.params('operand1')\",\n \"b\": \"$input.params('operand2')\", \n \"op\": \"$input.params('operator')\" \n}" }, "type": "AWS", "uri": "arn:aws:apigateway:us-west-2:lambda:path//2015-03-31/functions/arn:aws:lambda:us-west-2:123456789012:function:Calc/invocations", "_embedded": { "integration:responses": { "_links": { "self": { "href": "/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/200", "name": "200", "title": "200" }, "integrationresponse:delete": { "href": "/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/200" }, "integrationresponse:update": { "href": "/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/200" } }, "responseParameters": { "method.response.header.operator": "integration.response.body.op", "method.response.header.operand_2": "integration.response.body.b", "method.response.header.operand_1": "integration.response.body.a" }, "responseTemplates": { "application/json": "#set($res = $input.path('$'))\n{\n \"result\": \"$res.a, $res.b, $res.op => $res.c\",\n \"a\" : \"$res.a\",\n \"b\" : \"$res.b\",\n \"op\" : \"$res.op\",\n \"c\" : \"$res.c\"\n}" }, "selectionPattern": "", "statusCode": "200" } } }</code></pre> <p/> </div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-integration.html">AWS CLI</a> </div>
+    /// <p><p>Gets the method&#39;s integration responsible for passing the client-submitted request to the back end and performing necessary transformations to make the request compliant with the back end.</p> <div class="remarks"> <p/> <h4>Example: </h4> <h5>Request</h5> <p/> <pre><code>GET /restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com Content-Length: 117 X-Amz-Date: 20160613T213210Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/20160613/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash}</code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;<em>links&quot;: { &quot;curies&quot;: [ { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-{rel}.html&quot;, &quot;name&quot;: &quot;integration&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html&quot;, &quot;name&quot;: &quot;integrationresponse&quot;, &quot;templated&quot;: true } ], &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration&quot; }, &quot;integration:delete&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration&quot; }, &quot;integration:responses&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integration:update&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration&quot; }, &quot;integrationresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/{status</em>code}&quot;, &quot;templated&quot;: true } }, &quot;cacheKeyParameters&quot;: [], &quot;cacheNamespace&quot;: &quot;0cjtch&quot;, &quot;credentials&quot;: &quot;arn:aws:iam::123456789012:role/apigAwsProxyRole&quot;, &quot;httpMethod&quot;: &quot;POST&quot;, &quot;passthroughBehavior&quot;: &quot;WHEN<em>NO</em>MATCH&quot;, &quot;requestTemplates&quot;: { &quot;application/json&quot;: &quot;{\n &quot;a&quot;: &quot;$input.params(&#39;operand1&#39;)&quot;,\n &quot;b&quot;: &quot;$input.params(&#39;operand2&#39;)&quot;, \n &quot;op&quot;: &quot;$input.params(&#39;operator&#39;)&quot; \n}&quot; }, &quot;type&quot;: &quot;AWS&quot;, &quot;uri&quot;: &quot;arn:aws:apigateway:us-west-2:lambda:path//2015-03-31/functions/arn:aws:lambda:us-west-2:123456789012:function:Calc/invocations&quot;, &quot;<em>embedded&quot;: { &quot;integration:responses&quot;: { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integrationresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/200&quot; }, &quot;integrationresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/integration/responses/200&quot; } }, &quot;responseParameters&quot;: { &quot;method.response.header.operator&quot;: &quot;integration.response.body.op&quot;, &quot;method.response.header.operand<em>2&quot;: &quot;integration.response.body.b&quot;, &quot;method.response.header.operand</em>1&quot;: &quot;integration.response.body.a&quot; }, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;#set($res = $input.path(&#39;$&#39;))\n{\n &quot;result&quot;: &quot;$res.a, $res.b, $res.op =&gt; $res.c&quot;,\n &quot;a&quot; : &quot;$res.a&quot;,\n &quot;b&quot; : &quot;$res.b&quot;,\n &quot;op&quot; : &quot;$res.op&quot;,\n &quot;c&quot; : &quot;$res.c&quot;\n}&quot; }, &quot;selectionPattern&quot;: &quot;&quot;, &quot;statusCode&quot;: &quot;200&quot; } } }</code></pre> <p/> </div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-integration.html">AWS CLI</a> </div></p>
     #[serde(rename = "methodIntegration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub method_integration: Option<Integration>,
-    /// <p>Gets a method response associated with a given HTTP status code. </p> <div class="remarks"> <p>The collection of method responses are encapsulated in a key-value map, where the key is a response's HTTP status code and the value is a <a>MethodResponse</a> resource that specifies the response returned to the caller from the back end through the integration response.</p> <h4>Example: Get a 200 OK response of a GET method</h4> <h5>Request</h5> <p/> <pre><code>GET /restapis/uojnr9hd57/resources/0cjtch/methods/GET/responses/200 HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com Content-Length: 117 X-Amz-Date: 20160613T215008Z Authorization: AWS4-HMAC-SHA256 Credential={access_key_ID}/20160613/us-east-1/apigateway/aws4_request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4_hash}</code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ "_links": { "curies": { "href": "http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html", "name": "methodresponse", "templated": true }, "self": { "href": "/restapis/uojnr9hd57/resources/0cjtch/methods/GET/responses/200", "title": "200" }, "methodresponse:delete": { "href": "/restapis/uojnr9hd57/resources/0cjtch/methods/GET/responses/200" }, "methodresponse:update": { "href": "/restapis/uojnr9hd57/resources/0cjtch/methods/GET/responses/200" } }, "responseModels": { "application/json": "Empty" }, "responseParameters": { "method.response.header.operator": false, "method.response.header.operand_2": false, "method.response.header.operand_1": false }, "statusCode": "200" }</code></pre> <p/> </div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-method-response.html">AWS CLI</a> </div>
+    /// <p><p>Gets a method response associated with a given HTTP status code. </p> <div class="remarks"> <p>The collection of method responses are encapsulated in a key-value map, where the key is a response&#39;s HTTP status code and the value is a <a>MethodResponse</a> resource that specifies the response returned to the caller from the back end through the integration response.</p> <h4>Example: Get a 200 OK response of a GET method</h4> <h5>Request</h5> <p/> <pre><code>GET /restapis/uojnr9hd57/resources/0cjtch/methods/GET/responses/200 HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com Content-Length: 117 X-Amz-Date: 20160613T215008Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/20160613/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash}</code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;<em>links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html&quot;, &quot;name&quot;: &quot;methodresponse&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/responses/200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;methodresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/responses/200&quot; }, &quot;methodresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/uojnr9hd57/resources/0cjtch/methods/GET/responses/200&quot; } }, &quot;responseModels&quot;: { &quot;application/json&quot;: &quot;Empty&quot; }, &quot;responseParameters&quot;: { &quot;method.response.header.operator&quot;: false, &quot;method.response.header.operand</em>2&quot;: false, &quot;method.response.header.operand_1&quot;: false }, &quot;statusCode&quot;: &quot;200&quot; }</code></pre> <p/> </div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-method-response.html">AWS CLI</a> </div></p>
     #[serde(rename = "methodResponses")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub method_responses: Option<::std::collections::HashMap<String, MethodResponse>>,
@@ -1851,7 +1851,7 @@ pub struct Method {
     pub request_validator_id: Option<String>,
 }
 
-/// <p>Represents a method response of a given HTTP status code returned to the client. The method response is passed from the back end through the associated integration response that can be transformed using a mapping template. </p> <div class="remarks"> <p/> <h4>Example: A <b>MethodResponse</b> instance of an API</h4> <h5>Request</h5> <p>The example request retrieves a <b>MethodResponse</b> of the 200 status code.</p> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200 HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160603T222952Z Authorization: AWS4-HMAC-SHA256 Credential={access_key_ID}/20160603/us-east-1/apigateway/aws4_request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4_hash}</code></pre> <h5>Response</h5> <p>The successful response returns <code>200 OK</code> status and a payload as follows:</p> <pre><code>{ "_links": { "curies": { "href": "http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html", "name": "methodresponse", "templated": true }, "self": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200", "title": "200" }, "methodresponse:delete": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200" }, "methodresponse:update": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200" } }, "responseModels": { "application/json": "Empty" }, "responseParameters": { "method.response.header.Content-Type": false }, "statusCode": "200" }</code></pre> <p/> </div> <div class="seeAlso"> <a>Method</a>, <a>IntegrationResponse</a>, <a>Integration</a> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Creating an API</a> </div>
+/// <p><p>Represents a method response of a given HTTP status code returned to the client. The method response is passed from the back end through the associated integration response that can be transformed using a mapping template. </p> <div class="remarks"> <p/> <h4>Example: A <b>MethodResponse</b> instance of an API</h4> <h5>Request</h5> <p>The example request retrieves a <b>MethodResponse</b> of the 200 status code.</p> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200 HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160603T222952Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/20160603/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash}</code></pre> <h5>Response</h5> <p>The successful response returns <code>200 OK</code> status and a payload as follows:</p> <pre><code>{ &quot;_links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html&quot;, &quot;name&quot;: &quot;methodresponse&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;methodresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; }, &quot;methodresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; } }, &quot;responseModels&quot;: { &quot;application/json&quot;: &quot;Empty&quot; }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: false }, &quot;statusCode&quot;: &quot;200&quot; }</code></pre> <p/> </div> <div class="seeAlso"> <a>Method</a>, <a>IntegrationResponse</a>, <a>Integration</a> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Creating an API</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct MethodResponse {
     /// <p>Specifies the <a>Model</a> resources used for the response's content-type. Response models are represented as a key/value map, with a content-type as the key and a <a>Model</a> name as the value.</p>
@@ -1926,7 +1926,7 @@ pub struct MethodSnapshot {
     pub authorization_type: Option<String>,
 }
 
-/// <p>Represents the data structure of a method's request or response payload.</p> <div class="remarks"> <p>A request model defines the data structure of the client-supplied request payload. A response model defines the data structure of the response payload returned by the back end. Although not required, models are useful for mapping payloads between the front end and back end.</p> <p>A model is used for generating an API's SDK, validating the input request body, and creating a skeletal mapping template.</p> </div> <div class="seeAlso"> <a>Method</a>, <a>MethodResponse</a>, <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html">Models and Mappings</a> </div>
+/// <p><p>Represents the data structure of a method&#39;s request or response payload.</p> <div class="remarks"> <p>A request model defines the data structure of the client-supplied request payload. A response model defines the data structure of the response payload returned by the back end. Although not required, models are useful for mapping payloads between the front end and back end.</p> <p>A model is used for generating an API&#39;s SDK, validating the input request body, and creating a skeletal mapping template.</p> </div> <div class="seeAlso"> <a>Method</a>, <a>MethodResponse</a>, <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html">Models and Mappings</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Model {
     /// <p>The content-type for the model.</p>
@@ -1951,7 +1951,7 @@ pub struct Model {
     pub schema: Option<String>,
 }
 
-/// <p>Represents a collection of <a>Model</a> resources.</p> <div class="seeAlso"> <a>Method</a>, <a>MethodResponse</a>, <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html">Models and Mappings</a> </div>
+/// <p><p>Represents a collection of <a>Model</a> resources.</p> <div class="seeAlso"> <a>Method</a>, <a>MethodResponse</a>, <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html">Models and Mappings</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Models {
     /// <p>The current page of elements from this collection.</p>
@@ -1963,7 +1963,7 @@ pub struct Models {
     pub position: Option<String>,
 }
 
-/// A single patch operation to apply to the specified resource. Please refer to http://tools.ietf.org/html/rfc6902#section-4 for an explanation of how each operation is used.
+/// <p>A single patch operation to apply to the specified resource. Please refer to http://tools.ietf.org/html/rfc6902#section-4 for an explanation of how each operation is used.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct PatchOperation {
     /// <p> Not supported.</p>
@@ -2001,7 +2001,7 @@ pub struct PutGatewayResponseRequest {
     /// <p>The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
-    /// The HTTP status code of the <a>GatewayResponse</a>.
+    /// <p>The HTTP status code of the <a>GatewayResponse</a>.</p>
     #[serde(rename = "statusCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_code: Option<String>,
@@ -2033,7 +2033,7 @@ pub struct PutIntegrationRequest {
     #[serde(rename = "integrationHttpMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_http_method: Option<String>,
-    /// <p>Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the <code>requestTemplates</code> property on the Integration resource. There are three valid values: <code>WHEN_NO_MATCH</code>, <code>WHEN_NO_TEMPLATES</code>, and <code>NEVER</code>. </p> <ul> <li><p><code>WHEN_NO_MATCH</code> passes the request body for unmapped content types through to the integration back end without transformation.</p></li> <li><p><code>NEVER</code> rejects unmapped content types with an HTTP 415 'Unsupported Media Type' response.</p></li> <li><p><code>WHEN_NO_TEMPLATES</code> allows pass-through when the integration has NO content types mapped to templates. However if there is at least one content type defined, unmapped content types will be rejected with the same 415 response.</p></li> </ul>
+    /// <p><p>Specifies the pass-through behavior for incoming requests based on the Content-Type header in the request, and the available mapping templates specified as the <code>requestTemplates</code> property on the Integration resource. There are three valid values: <code>WHEN<em>NO</em>MATCH</code>, <code>WHEN<em>NO</em>TEMPLATES</code>, and <code>NEVER</code>. </p> <ul> <li><p><code>WHEN<em>NO</em>MATCH</code> passes the request body for unmapped content types through to the integration back end without transformation.</p></li> <li><p><code>NEVER</code> rejects unmapped content types with an HTTP 415 &#39;Unsupported Media Type&#39; response.</p></li> <li><p><code>WHEN<em>NO</em>TEMPLATES</code> allows pass-through when the integration has NO content types mapped to templates. However if there is at least one content type defined, unmapped content types will be rejected with the same 415 response.</p></li> </ul></p>
     #[serde(rename = "passthroughBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub passthrough_behavior: Option<String>,
@@ -2201,7 +2201,7 @@ pub struct QuotaSettings {
     pub period: Option<String>,
 }
 
-/// <p>A set of validation rules for incoming <a>Method</a> requests.</p> <div class="remarks"> <p>In Swagger, a <a>RequestValidator</a> of an API is defined by the <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validators.requestValidator.html">x-amazon-apigateway-request-validators.requestValidator</a> object. It the referenced using the <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validator">x-amazon-apigateway-request-validator</a> property.</p> </div> <div class="seeAlso"><a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-method-request-validation.html">Enable Basic Request Validation in API Gateway</a></div>
+/// <p><p>A set of validation rules for incoming <a>Method</a> requests.</p> <div class="remarks"> <p>In Swagger, a <a>RequestValidator</a> of an API is defined by the <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validators.requestValidator.html">x-amazon-apigateway-request-validators.requestValidator</a> object. It the referenced using the <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validator">x-amazon-apigateway-request-validator</a> property.</p> </div> <div class="seeAlso"><a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-method-request-validation.html">Enable Basic Request Validation in API Gateway</a></div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct RequestValidator {
     /// <p>The identifier of this <a>RequestValidator</a>.</p>
@@ -2222,7 +2222,7 @@ pub struct RequestValidator {
     pub validate_request_parameters: Option<bool>,
 }
 
-/// <p>A collection of <a>RequestValidator</a> resources of a given <a>RestApi</a>.</p> <div class="remarks"> <p>In Swagger, the <a>RequestValidators</a> of an API is defined by the <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validators.html">x-amazon-apigateway-request-validators</a> extension.</p> </div> <div class="seeAlso"><a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-method-request-validation.html">Enable Basic Request Validation in API Gateway</a></div>
+/// <p><p>A collection of <a>RequestValidator</a> resources of a given <a>RestApi</a>.</p> <div class="remarks"> <p>In Swagger, the <a>RequestValidators</a> of an API is defined by the <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-swagger-extensions.html#api-gateway-swagger-extensions-request-validators.html">x-amazon-apigateway-request-validators</a> extension.</p> </div> <div class="seeAlso"><a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-method-request-validation.html">Enable Basic Request Validation in API Gateway</a></div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct RequestValidators {
     /// <p>The current page of elements from this collection.</p>
@@ -2234,7 +2234,7 @@ pub struct RequestValidators {
     pub position: Option<String>,
 }
 
-/// <p>Represents an API resource.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div>
+/// <p><p>Represents an API resource.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Resource {
     /// <p>The resource's identifier.</p>
@@ -2253,13 +2253,13 @@ pub struct Resource {
     #[serde(rename = "pathPart")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub path_part: Option<String>,
-    /// <p>Gets an API resource's method of a given HTTP verb.</p> <div class="remarks"> <p>The resource methods are a map of methods indexed by methods' HTTP verbs enabled on the resource. This method map is included in the <code>200 OK</code> response of the <code>GET /restapis/{restapi_id}/resources/{resource_id}</code> or <code>GET /restapis/{restapi_id}/resources/{resource_id}?embed=methods</code> request.</p> <h4>Example: Get the GET method of an API resource</h4> <h5>Request</h5> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20170223T031827Z Authorization: AWS4-HMAC-SHA256 Credential={access_key_ID}/20170223/us-east-1/apigateway/aws4_request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4_hash}</code></pre> <h5>Response</h5> <pre><code>{ "_links": { "curies": [ { "href": "http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-{rel}.html", "name": "integration", "templated": true }, { "href": "http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html", "name": "integrationresponse", "templated": true }, { "href": "http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-{rel}.html", "name": "method", "templated": true }, { "href": "http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html", "name": "methodresponse", "templated": true } ], "self": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET", "name": "GET", "title": "GET" }, "integration:put": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration" }, "method:delete": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET" }, "method:integration": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration" }, "method:responses": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200", "name": "200", "title": "200" }, "method:update": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET" }, "methodresponse:put": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/{status_code}", "templated": true } }, "apiKeyRequired": false, "authorizationType": "NONE", "httpMethod": "GET", "_embedded": { "method:integration": { "_links": { "self": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration" }, "integration:delete": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration" }, "integration:responses": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200", "name": "200", "title": "200" }, "integration:update": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration" }, "integrationresponse:put": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/{status_code}", "templated": true } }, "cacheKeyParameters": [], "cacheNamespace": "3kzxbg5sa2", "credentials": "arn:aws:iam::123456789012:role/apigAwsProxyRole", "httpMethod": "POST", "passthroughBehavior": "WHEN_NO_MATCH", "requestParameters": { "integration.request.header.Content-Type": "'application/x-amz-json-1.1'" }, "requestTemplates": { "application/json": "{\n}" }, "type": "AWS", "uri": "arn:aws:apigateway:us-east-1:kinesis:action/ListStreams", "_embedded": { "integration:responses": { "_links": { "self": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200", "name": "200", "title": "200" }, "integrationresponse:delete": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200" }, "integrationresponse:update": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200" } }, "responseParameters": { "method.response.header.Content-Type": "'application/xml'" }, "responseTemplates": { "application/json": "$util.urlDecode(\"%3CkinesisStreams%3E#foreach($stream in $input.path('$.StreamNames'))%3Cstream%3E%3Cname%3E$stream%3C/name%3E%3C/stream%3E#end%3C/kinesisStreams%3E\")\n" }, "statusCode": "200" } } }, "method:responses": { "_links": { "self": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200", "name": "200", "title": "200" }, "methodresponse:delete": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200" }, "methodresponse:update": { "href": "/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200" } }, "responseModels": { "application/json": "Empty" }, "responseParameters": { "method.response.header.Content-Type": false }, "statusCode": "200" } } }</code></pre> <p>If the <code>OPTIONS</code> is enabled on the resource, you can follow the example here to get that method. Just replace the <code>GET</code> of the last path segment in the request URL with <code>OPTIONS</code>.</p> </div> <div class="seeAlso"> </div>
+    /// <p><p>Gets an API resource&#39;s method of a given HTTP verb.</p> <div class="remarks"> <p>The resource methods are a map of methods indexed by methods&#39; HTTP verbs enabled on the resource. This method map is included in the <code>200 OK</code> response of the <code>GET /restapis/{restapi<em>id}/resources/{resource</em>id}</code> or <code>GET /restapis/{restapi<em>id}/resources/{resource</em>id}?embed=methods</code> request.</p> <h4>Example: Get the GET method of an API resource</h4> <h5>Request</h5> <pre><code>GET /restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20170223T031827Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/20170223/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash}</code></pre> <h5>Response</h5> <pre><code>{ &quot;<em>links&quot;: { &quot;curies&quot;: [ { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-{rel}.html&quot;, &quot;name&quot;: &quot;integration&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-integration-response-{rel}.html&quot;, &quot;name&quot;: &quot;integrationresponse&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-{rel}.html&quot;, &quot;name&quot;: &quot;method&quot;, &quot;templated&quot;: true }, { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-method-response-{rel}.html&quot;, &quot;name&quot;: &quot;methodresponse&quot;, &quot;templated&quot;: true } ], &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot;, &quot;name&quot;: &quot;GET&quot;, &quot;title&quot;: &quot;GET&quot; }, &quot;integration:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;method:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot; }, &quot;method:integration&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;method:responses&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;method:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET&quot; }, &quot;methodresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/{status</em>code}&quot;, &quot;templated&quot;: true } }, &quot;apiKeyRequired&quot;: false, &quot;authorizationType&quot;: &quot;NONE&quot;, &quot;httpMethod&quot;: &quot;GET&quot;, &quot;<em>embedded&quot;: { &quot;method:integration&quot;: { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integration:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integration:responses&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integration:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration&quot; }, &quot;integrationresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/{status<em>code}&quot;, &quot;templated&quot;: true } }, &quot;cacheKeyParameters&quot;: [], &quot;cacheNamespace&quot;: &quot;3kzxbg5sa2&quot;, &quot;credentials&quot;: &quot;arn:aws:iam::123456789012:role/apigAwsProxyRole&quot;, &quot;httpMethod&quot;: &quot;POST&quot;, &quot;passthroughBehavior&quot;: &quot;WHEN</em>NO<em>MATCH&quot;, &quot;requestParameters&quot;: { &quot;integration.request.header.Content-Type&quot;: &quot;&#39;application/x-amz-json-1.1&#39;&quot; }, &quot;requestTemplates&quot;: { &quot;application/json&quot;: &quot;{\n}&quot; }, &quot;type&quot;: &quot;AWS&quot;, &quot;uri&quot;: &quot;arn:aws:apigateway:us-east-1:kinesis:action/ListStreams&quot;, &quot;</em>embedded&quot;: { &quot;integration:responses&quot;: { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;integrationresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot; }, &quot;integrationresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/integration/responses/200&quot; } }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: &quot;&#39;application/xml&#39;&quot; }, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;$util.urlDecode(&quot;%3CkinesisStreams%3E#foreach($stream in $input.path(&#39;$.StreamNames&#39;))%3Cstream%3E%3Cname%3E$stream%3C/name%3E%3C/stream%3E#end%3C/kinesisStreams%3E&quot;)\n&quot; }, &quot;statusCode&quot;: &quot;200&quot; } } }, &quot;method:responses&quot;: { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot;, &quot;name&quot;: &quot;200&quot;, &quot;title&quot;: &quot;200&quot; }, &quot;methodresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; }, &quot;methodresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/fugvjdxtri/resources/3kzxbg5sa2/methods/GET/responses/200&quot; } }, &quot;responseModels&quot;: { &quot;application/json&quot;: &quot;Empty&quot; }, &quot;responseParameters&quot;: { &quot;method.response.header.Content-Type&quot;: false }, &quot;statusCode&quot;: &quot;200&quot; } } }</code></pre> <p>If the <code>OPTIONS</code> is enabled on the resource, you can follow the example here to get that method. Just replace the <code>GET</code> of the last path segment in the request URL with <code>OPTIONS</code>.</p> </div> <div class="seeAlso"> </div></p>
     #[serde(rename = "resourceMethods")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_methods: Option<::std::collections::HashMap<String, Method>>,
 }
 
-/// <p>Represents a collection of <a>Resource</a> resources.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div>
+/// <p><p>Represents a collection of <a>Resource</a> resources.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Resources {
     /// <p>The current page of elements from this collection.</p>
@@ -2271,7 +2271,7 @@ pub struct Resources {
     pub position: Option<String>,
 }
 
-/// <p>Represents a REST API.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div>
+/// <p><p>Represents a REST API.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct RestApi {
     /// <p>The list of binary media types supported by the <a>RestApi</a>. By default, the <a>RestApi</a> supports only UTF-8-encoded text payloads.</p>
@@ -2304,7 +2304,7 @@ pub struct RestApi {
     pub warnings: Option<Vec<String>>,
 }
 
-/// <p>Contains references to your APIs and links that guide you in how to interact with your collection. A collection offers a paginated view of your APIs.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div>
+/// <p><p>Contains references to your APIs and links that guide you in how to interact with your collection. A collection offers a paginated view of your APIs.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct RestApis {
     /// <p>The current page of elements from this collection.</p>
@@ -2385,7 +2385,7 @@ pub struct SdkTypes {
     pub position: Option<String>,
 }
 
-/// <p>Represents a unique identifier for a version of a deployed <a>RestApi</a> that is callable by users.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-deploy-api.html">Deploy an API</a> </div>
+/// <p><p>Represents a unique identifier for a version of a deployed <a>RestApi</a> that is callable by users.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-deploy-api.html">Deploy an API</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Stage {
     /// <p>Specifies whether a cache cluster is enabled for the stage.</p>
@@ -2451,7 +2451,7 @@ pub struct StageKey {
     pub stage_name: Option<String>,
 }
 
-/// <p>A list of <a>Stage</a> resources that are associated with the <a>ApiKey</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/stages.html">Deploying API in Stages</a></div>
+/// <p><p>A list of <a>Stage</a> resources that are associated with the <a>ApiKey</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/stages.html">Deploying API in Stages</a></div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Stages {
     /// <p>The current page of elements from this collection.</p>
@@ -2460,7 +2460,7 @@ pub struct Stages {
     pub item: Option<Vec<Stage>>,
 }
 
-/// <p>Represents a mapping template used to transform a payload.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html#models-mappings-mappings">Mapping Templates</a> </div>
+/// <p><p>Represents a mapping template used to transform a payload.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html#models-mappings-mappings">Mapping Templates</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Template {
     /// <p>The Apache <a href="http://velocity.apache.org/engine/devel/vtl-reference-guide.html" target="_blank">Velocity Template Language (VTL)</a> template content used for the template resource.</p>
@@ -2566,7 +2566,7 @@ pub struct TestInvokeMethodRequest {
     pub stage_variables: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p>Represents the response of the test invoke request in the HTTP method.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-test-method.html#how-to-test-method-console">Test API using the API Gateway console</a> </div>
+/// <p><p>Represents the response of the test invoke request in the HTTP method.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-test-method.html#how-to-test-method-console">Test API using the API Gateway console</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct TestInvokeMethodResponse {
     /// <p>The body of the HTTP response.</p>
@@ -2916,7 +2916,7 @@ pub struct UpdateUsageRequest {
     pub usage_plan_id: String,
 }
 
-/// <p>Represents the usage data of a usage plan.</p> <div class="remarks"/> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a>, <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-create-usage-plans-with-console.html#api-gateway-usage-plan-manage-usage">Manage Usage in a Usage Plan</a> </div>
+/// <p><p>Represents the usage data of a usage plan.</p> <div class="remarks"/> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a>, <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-create-usage-plans-with-console.html#api-gateway-usage-plan-manage-usage">Manage Usage in a Usage Plan</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Usage {
     /// <p>The ending date of the usage data.</p>
@@ -2940,7 +2940,7 @@ pub struct Usage {
     pub usage_plan_id: Option<String>,
 }
 
-/// <p>Represents a usage plan than can specify who can assess associated API stages with specified request limits and quotas.</p> <div class="remarks"> <p>In a usage plan, you associate an API by specifying the API's Id and a stage name of the specified API. You add plan customers by adding API keys to the plan. </p> </div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a> </div>
+/// <p><p>Represents a usage plan than can specify who can assess associated API stages with specified request limits and quotas.</p> <div class="remarks"> <p>In a usage plan, you associate an API by specifying the API&#39;s Id and a stage name of the specified API. You add plan customers by adding API keys to the plan. </p> </div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UsagePlan {
     /// <p>The associated API stages of a usage plan.</p>
@@ -2973,7 +2973,7 @@ pub struct UsagePlan {
     pub throttle: Option<ThrottleSettings>,
 }
 
-/// <p>Represents a usage plan key to identify a plan customer.</p> <div class="remarks"> <p>To associate an API stage with a selected API key in a usage plan, you must create a UsagePlanKey resource to represent the selected <a>ApiKey</a>.</p> </div>" <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a> </div>
+/// <p><p>Represents a usage plan key to identify a plan customer.</p> <div class="remarks"> <p>To associate an API stage with a selected API key in a usage plan, you must create a UsagePlanKey resource to represent the selected <a>ApiKey</a>.</p> </div>&quot; <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UsagePlanKey {
     /// <p>The Id of a usage plan key.</p>
@@ -2994,7 +2994,7 @@ pub struct UsagePlanKey {
     pub value: Option<String>,
 }
 
-/// <p>Represents the collection of usage plan keys added to usage plans for the associated API keys and, possibly, other types of keys.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a> </div>
+/// <p><p>Represents the collection of usage plan keys added to usage plans for the associated API keys and, possibly, other types of keys.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UsagePlanKeys {
     /// <p>The current page of elements from this collection.</p>
@@ -3006,7 +3006,7 @@ pub struct UsagePlanKeys {
     pub position: Option<String>,
 }
 
-/// <p>Represents a collection of usage plans for an AWS account.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a> </div>
+/// <p><p>Represents a collection of usage plans for an AWS account.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UsagePlans {
     /// <p>The current page of elements from this collection.</p>
@@ -3021,17 +3021,16 @@ pub struct UsagePlans {
 /// Errors returned by CreateApiKey
 #[derive(Debug, PartialEq)]
 pub enum CreateApiKeyError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     LimitExceeded(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3125,15 +3124,14 @@ impl Error for CreateApiKeyError {
 /// Errors returned by CreateAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum CreateAuthorizerError {
-    ///
     BadRequest(String),
-    ///
+
     LimitExceeded(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3227,15 +3225,14 @@ impl Error for CreateAuthorizerError {
 /// Errors returned by CreateBasePathMapping
 #[derive(Debug, PartialEq)]
 pub enum CreateBasePathMappingError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3331,19 +3328,18 @@ impl Error for CreateBasePathMappingError {
 /// Errors returned by CreateDeployment
 #[derive(Debug, PartialEq)]
 pub enum CreateDeploymentError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     LimitExceeded(String),
-    ///
+
     NotFound(String),
-    ///
+
     ServiceUnavailable(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3445,17 +3441,16 @@ impl Error for CreateDeploymentError {
 /// Errors returned by CreateDocumentationPart
 #[derive(Debug, PartialEq)]
 pub enum CreateDocumentationPartError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     LimitExceeded(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3555,17 +3550,16 @@ impl Error for CreateDocumentationPartError {
 /// Errors returned by CreateDocumentationVersion
 #[derive(Debug, PartialEq)]
 pub enum CreateDocumentationVersionError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     LimitExceeded(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3667,13 +3661,12 @@ impl Error for CreateDocumentationVersionError {
 /// Errors returned by CreateDomainName
 #[derive(Debug, PartialEq)]
 pub enum CreateDomainNameError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3763,17 +3756,16 @@ impl Error for CreateDomainNameError {
 /// Errors returned by CreateModel
 #[derive(Debug, PartialEq)]
 pub enum CreateModelError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     LimitExceeded(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3867,15 +3859,14 @@ impl Error for CreateModelError {
 /// Errors returned by CreateRequestValidator
 #[derive(Debug, PartialEq)]
 pub enum CreateRequestValidatorError {
-    ///
     BadRequest(String),
-    ///
+
     LimitExceeded(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3971,17 +3962,16 @@ impl Error for CreateRequestValidatorError {
 /// Errors returned by CreateResource
 #[derive(Debug, PartialEq)]
 pub enum CreateResourceError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     LimitExceeded(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4079,13 +4069,12 @@ impl Error for CreateResourceError {
 /// Errors returned by CreateRestApi
 #[derive(Debug, PartialEq)]
 pub enum CreateRestApiError {
-    ///
     BadRequest(String),
-    ///
+
     LimitExceeded(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4175,17 +4164,16 @@ impl Error for CreateRestApiError {
 /// Errors returned by CreateStage
 #[derive(Debug, PartialEq)]
 pub enum CreateStageError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     LimitExceeded(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4279,17 +4267,16 @@ impl Error for CreateStageError {
 /// Errors returned by CreateUsagePlan
 #[derive(Debug, PartialEq)]
 pub enum CreateUsagePlanError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     LimitExceeded(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4387,15 +4374,14 @@ impl Error for CreateUsagePlanError {
 /// Errors returned by CreateUsagePlanKey
 #[derive(Debug, PartialEq)]
 pub enum CreateUsagePlanKeyError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4491,11 +4477,10 @@ impl Error for CreateUsagePlanKeyError {
 /// Errors returned by DeleteApiKey
 #[derive(Debug, PartialEq)]
 pub enum DeleteApiKeyError {
-    ///
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4579,15 +4564,14 @@ impl Error for DeleteApiKeyError {
 /// Errors returned by DeleteAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum DeleteAuthorizerError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4681,11 +4665,10 @@ impl Error for DeleteAuthorizerError {
 /// Errors returned by DeleteBasePathMapping
 #[derive(Debug, PartialEq)]
 pub enum DeleteBasePathMappingError {
-    ///
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4773,13 +4756,12 @@ impl Error for DeleteBasePathMappingError {
 /// Errors returned by DeleteClientCertificate
 #[derive(Debug, PartialEq)]
 pub enum DeleteClientCertificateError {
-    ///
     BadRequest(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4871,13 +4853,12 @@ impl Error for DeleteClientCertificateError {
 /// Errors returned by DeleteDeployment
 #[derive(Debug, PartialEq)]
 pub enum DeleteDeploymentError {
-    ///
     BadRequest(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4967,15 +4948,14 @@ impl Error for DeleteDeploymentError {
 /// Errors returned by DeleteDocumentationPart
 #[derive(Debug, PartialEq)]
 pub enum DeleteDocumentationPartError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5071,15 +5051,14 @@ impl Error for DeleteDocumentationPartError {
 /// Errors returned by DeleteDocumentationVersion
 #[derive(Debug, PartialEq)]
 pub enum DeleteDocumentationVersionError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5177,11 +5156,10 @@ impl Error for DeleteDocumentationVersionError {
 /// Errors returned by DeleteDomainName
 #[derive(Debug, PartialEq)]
 pub enum DeleteDomainNameError {
-    ///
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5267,15 +5245,14 @@ impl Error for DeleteDomainNameError {
 /// Errors returned by DeleteGatewayResponse
 #[derive(Debug, PartialEq)]
 pub enum DeleteGatewayResponseError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5371,13 +5348,12 @@ impl Error for DeleteGatewayResponseError {
 /// Errors returned by DeleteIntegration
 #[derive(Debug, PartialEq)]
 pub enum DeleteIntegrationError {
-    ///
     Conflict(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5469,15 +5445,14 @@ impl Error for DeleteIntegrationError {
 /// Errors returned by DeleteIntegrationResponse
 #[derive(Debug, PartialEq)]
 pub enum DeleteIntegrationResponseError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5573,13 +5548,12 @@ impl Error for DeleteIntegrationResponseError {
 /// Errors returned by DeleteMethod
 #[derive(Debug, PartialEq)]
 pub enum DeleteMethodError {
-    ///
     Conflict(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5665,15 +5639,14 @@ impl Error for DeleteMethodError {
 /// Errors returned by DeleteMethodResponse
 #[derive(Debug, PartialEq)]
 pub enum DeleteMethodResponseError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5769,15 +5742,14 @@ impl Error for DeleteMethodResponseError {
 /// Errors returned by DeleteModel
 #[derive(Debug, PartialEq)]
 pub enum DeleteModelError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5867,15 +5839,14 @@ impl Error for DeleteModelError {
 /// Errors returned by DeleteRequestValidator
 #[derive(Debug, PartialEq)]
 pub enum DeleteRequestValidatorError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5971,15 +5942,14 @@ impl Error for DeleteRequestValidatorError {
 /// Errors returned by DeleteResource
 #[derive(Debug, PartialEq)]
 pub enum DeleteResourceError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6073,13 +6043,12 @@ impl Error for DeleteResourceError {
 /// Errors returned by DeleteRestApi
 #[derive(Debug, PartialEq)]
 pub enum DeleteRestApiError {
-    ///
     BadRequest(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6169,13 +6138,12 @@ impl Error for DeleteRestApiError {
 /// Errors returned by DeleteStage
 #[derive(Debug, PartialEq)]
 pub enum DeleteStageError {
-    ///
     BadRequest(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6263,13 +6231,12 @@ impl Error for DeleteStageError {
 /// Errors returned by DeleteUsagePlan
 #[derive(Debug, PartialEq)]
 pub enum DeleteUsagePlanError {
-    ///
     BadRequest(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6359,15 +6326,14 @@ impl Error for DeleteUsagePlanError {
 /// Errors returned by DeleteUsagePlanKey
 #[derive(Debug, PartialEq)]
 pub enum DeleteUsagePlanKeyError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6463,13 +6429,12 @@ impl Error for DeleteUsagePlanKeyError {
 /// Errors returned by FlushStageAuthorizersCache
 #[derive(Debug, PartialEq)]
 pub enum FlushStageAuthorizersCacheError {
-    ///
     BadRequest(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6563,13 +6528,12 @@ impl Error for FlushStageAuthorizersCacheError {
 /// Errors returned by FlushStageCache
 #[derive(Debug, PartialEq)]
 pub enum FlushStageCacheError {
-    ///
     BadRequest(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6659,11 +6623,10 @@ impl Error for FlushStageCacheError {
 /// Errors returned by GenerateClientCertificate
 #[derive(Debug, PartialEq)]
 pub enum GenerateClientCertificateError {
-    ///
     LimitExceeded(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6751,11 +6714,10 @@ impl Error for GenerateClientCertificateError {
 /// Errors returned by GetAccount
 #[derive(Debug, PartialEq)]
 pub enum GetAccountError {
-    ///
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6837,11 +6799,10 @@ impl Error for GetAccountError {
 /// Errors returned by GetApiKey
 #[derive(Debug, PartialEq)]
 pub enum GetApiKeyError {
-    ///
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6923,11 +6884,10 @@ impl Error for GetApiKeyError {
 /// Errors returned by GetApiKeys
 #[derive(Debug, PartialEq)]
 pub enum GetApiKeysError {
-    ///
     BadRequest(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7011,11 +6971,10 @@ impl Error for GetApiKeysError {
 /// Errors returned by GetAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum GetAuthorizerError {
-    ///
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7101,13 +7060,12 @@ impl Error for GetAuthorizerError {
 /// Errors returned by GetAuthorizers
 #[derive(Debug, PartialEq)]
 pub enum GetAuthorizersError {
-    ///
     BadRequest(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7197,11 +7155,10 @@ impl Error for GetAuthorizersError {
 /// Errors returned by GetBasePathMapping
 #[derive(Debug, PartialEq)]
 pub enum GetBasePathMappingError {
-    ///
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7289,11 +7246,10 @@ impl Error for GetBasePathMappingError {
 /// Errors returned by GetBasePathMappings
 #[derive(Debug, PartialEq)]
 pub enum GetBasePathMappingsError {
-    ///
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7381,11 +7337,10 @@ impl Error for GetBasePathMappingsError {
 /// Errors returned by GetClientCertificate
 #[derive(Debug, PartialEq)]
 pub enum GetClientCertificateError {
-    ///
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7473,11 +7428,10 @@ impl Error for GetClientCertificateError {
 /// Errors returned by GetClientCertificates
 #[derive(Debug, PartialEq)]
 pub enum GetClientCertificatesError {
-    ///
     BadRequest(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7565,13 +7519,12 @@ impl Error for GetClientCertificatesError {
 /// Errors returned by GetDeployment
 #[derive(Debug, PartialEq)]
 pub enum GetDeploymentError {
-    ///
     NotFound(String),
-    ///
+
     ServiceUnavailable(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7661,13 +7614,12 @@ impl Error for GetDeploymentError {
 /// Errors returned by GetDeployments
 #[derive(Debug, PartialEq)]
 pub enum GetDeploymentsError {
-    ///
     BadRequest(String),
-    ///
+
     ServiceUnavailable(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7757,11 +7709,10 @@ impl Error for GetDeploymentsError {
 /// Errors returned by GetDocumentationPart
 #[derive(Debug, PartialEq)]
 pub enum GetDocumentationPartError {
-    ///
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7849,13 +7800,12 @@ impl Error for GetDocumentationPartError {
 /// Errors returned by GetDocumentationParts
 #[derive(Debug, PartialEq)]
 pub enum GetDocumentationPartsError {
-    ///
     BadRequest(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7947,11 +7897,10 @@ impl Error for GetDocumentationPartsError {
 /// Errors returned by GetDocumentationVersion
 #[derive(Debug, PartialEq)]
 pub enum GetDocumentationVersionError {
-    ///
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8039,13 +7988,12 @@ impl Error for GetDocumentationVersionError {
 /// Errors returned by GetDocumentationVersions
 #[derive(Debug, PartialEq)]
 pub enum GetDocumentationVersionsError {
-    ///
     BadRequest(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8137,13 +8085,12 @@ impl Error for GetDocumentationVersionsError {
 /// Errors returned by GetDomainName
 #[derive(Debug, PartialEq)]
 pub enum GetDomainNameError {
-    ///
     NotFound(String),
-    ///
+
     ServiceUnavailable(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8233,11 +8180,10 @@ impl Error for GetDomainNameError {
 /// Errors returned by GetDomainNames
 #[derive(Debug, PartialEq)]
 pub enum GetDomainNamesError {
-    ///
     BadRequest(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8323,15 +8269,14 @@ impl Error for GetDomainNamesError {
 /// Errors returned by GetExport
 #[derive(Debug, PartialEq)]
 pub enum GetExportError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8419,11 +8364,10 @@ impl Error for GetExportError {
 /// Errors returned by GetGatewayResponse
 #[derive(Debug, PartialEq)]
 pub enum GetGatewayResponseError {
-    ///
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8511,13 +8455,12 @@ impl Error for GetGatewayResponseError {
 /// Errors returned by GetGatewayResponses
 #[derive(Debug, PartialEq)]
 pub enum GetGatewayResponsesError {
-    ///
     BadRequest(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8609,11 +8552,10 @@ impl Error for GetGatewayResponsesError {
 /// Errors returned by GetIntegration
 #[derive(Debug, PartialEq)]
 pub enum GetIntegrationError {
-    ///
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8699,11 +8641,10 @@ impl Error for GetIntegrationError {
 /// Errors returned by GetIntegrationResponse
 #[derive(Debug, PartialEq)]
 pub enum GetIntegrationResponseError {
-    ///
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8791,11 +8732,10 @@ impl Error for GetIntegrationResponseError {
 /// Errors returned by GetMethod
 #[derive(Debug, PartialEq)]
 pub enum GetMethodError {
-    ///
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8877,11 +8817,10 @@ impl Error for GetMethodError {
 /// Errors returned by GetMethodResponse
 #[derive(Debug, PartialEq)]
 pub enum GetMethodResponseError {
-    ///
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8969,11 +8908,10 @@ impl Error for GetMethodResponseError {
 /// Errors returned by GetModel
 #[derive(Debug, PartialEq)]
 pub enum GetModelError {
-    ///
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9055,13 +8993,12 @@ impl Error for GetModelError {
 /// Errors returned by GetModelTemplate
 #[derive(Debug, PartialEq)]
 pub enum GetModelTemplateError {
-    ///
     BadRequest(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9151,13 +9088,12 @@ impl Error for GetModelTemplateError {
 /// Errors returned by GetModels
 #[derive(Debug, PartialEq)]
 pub enum GetModelsError {
-    ///
     BadRequest(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9243,11 +9179,10 @@ impl Error for GetModelsError {
 /// Errors returned by GetRequestValidator
 #[derive(Debug, PartialEq)]
 pub enum GetRequestValidatorError {
-    ///
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9335,13 +9270,12 @@ impl Error for GetRequestValidatorError {
 /// Errors returned by GetRequestValidators
 #[derive(Debug, PartialEq)]
 pub enum GetRequestValidatorsError {
-    ///
     BadRequest(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9433,11 +9367,10 @@ impl Error for GetRequestValidatorsError {
 /// Errors returned by GetResource
 #[derive(Debug, PartialEq)]
 pub enum GetResourceError {
-    ///
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9521,13 +9454,12 @@ impl Error for GetResourceError {
 /// Errors returned by GetResources
 #[derive(Debug, PartialEq)]
 pub enum GetResourcesError {
-    ///
     BadRequest(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9615,11 +9547,10 @@ impl Error for GetResourcesError {
 /// Errors returned by GetRestApi
 #[derive(Debug, PartialEq)]
 pub enum GetRestApiError {
-    ///
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9701,11 +9632,10 @@ impl Error for GetRestApiError {
 /// Errors returned by GetRestApis
 #[derive(Debug, PartialEq)]
 pub enum GetRestApisError {
-    ///
     BadRequest(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9791,15 +9721,14 @@ impl Error for GetRestApisError {
 /// Errors returned by GetSdk
 #[derive(Debug, PartialEq)]
 pub enum GetSdkError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9885,11 +9814,10 @@ impl Error for GetSdkError {
 /// Errors returned by GetSdkType
 #[derive(Debug, PartialEq)]
 pub enum GetSdkTypeError {
-    ///
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9971,9 +9899,8 @@ impl Error for GetSdkTypeError {
 /// Errors returned by GetSdkTypes
 #[derive(Debug, PartialEq)]
 pub enum GetSdkTypesError {
-    ///
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10055,11 +9982,10 @@ impl Error for GetSdkTypesError {
 /// Errors returned by GetStage
 #[derive(Debug, PartialEq)]
 pub enum GetStageError {
-    ///
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10141,11 +10067,10 @@ impl Error for GetStageError {
 /// Errors returned by GetStages
 #[derive(Debug, PartialEq)]
 pub enum GetStagesError {
-    ///
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10227,13 +10152,12 @@ impl Error for GetStagesError {
 /// Errors returned by GetUsage
 #[derive(Debug, PartialEq)]
 pub enum GetUsageError {
-    ///
     BadRequest(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10317,13 +10241,12 @@ impl Error for GetUsageError {
 /// Errors returned by GetUsagePlan
 #[derive(Debug, PartialEq)]
 pub enum GetUsagePlanError {
-    ///
     BadRequest(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10411,13 +10334,12 @@ impl Error for GetUsagePlanError {
 /// Errors returned by GetUsagePlanKey
 #[derive(Debug, PartialEq)]
 pub enum GetUsagePlanKeyError {
-    ///
     BadRequest(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10507,13 +10429,12 @@ impl Error for GetUsagePlanKeyError {
 /// Errors returned by GetUsagePlanKeys
 #[derive(Debug, PartialEq)]
 pub enum GetUsagePlanKeysError {
-    ///
     BadRequest(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10603,15 +10524,14 @@ impl Error for GetUsagePlanKeysError {
 /// Errors returned by GetUsagePlans
 #[derive(Debug, PartialEq)]
 pub enum GetUsagePlansError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10705,17 +10625,16 @@ impl Error for GetUsagePlansError {
 /// Errors returned by ImportApiKeys
 #[derive(Debug, PartialEq)]
 pub enum ImportApiKeysError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     LimitExceeded(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10813,15 +10732,14 @@ impl Error for ImportApiKeysError {
 /// Errors returned by ImportDocumentationParts
 #[derive(Debug, PartialEq)]
 pub enum ImportDocumentationPartsError {
-    ///
     BadRequest(String),
-    ///
+
     LimitExceeded(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10917,15 +10835,14 @@ impl Error for ImportDocumentationPartsError {
 /// Errors returned by ImportRestApi
 #[derive(Debug, PartialEq)]
 pub enum ImportRestApiError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     LimitExceeded(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11019,15 +10936,14 @@ impl Error for ImportRestApiError {
 /// Errors returned by PutGatewayResponse
 #[derive(Debug, PartialEq)]
 pub enum PutGatewayResponseError {
-    ///
     BadRequest(String),
-    ///
+
     LimitExceeded(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11123,15 +11039,14 @@ impl Error for PutGatewayResponseError {
 /// Errors returned by PutIntegration
 #[derive(Debug, PartialEq)]
 pub enum PutIntegrationError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11225,17 +11140,16 @@ impl Error for PutIntegrationError {
 /// Errors returned by PutIntegrationResponse
 #[derive(Debug, PartialEq)]
 pub enum PutIntegrationResponseError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     LimitExceeded(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11335,17 +11249,16 @@ impl Error for PutIntegrationResponseError {
 /// Errors returned by PutMethod
 #[derive(Debug, PartialEq)]
 pub enum PutMethodError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     LimitExceeded(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11437,17 +11350,16 @@ impl Error for PutMethodError {
 /// Errors returned by PutMethodResponse
 #[derive(Debug, PartialEq)]
 pub enum PutMethodResponseError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     LimitExceeded(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11547,17 +11459,16 @@ impl Error for PutMethodResponseError {
 /// Errors returned by PutRestApi
 #[derive(Debug, PartialEq)]
 pub enum PutRestApiError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     LimitExceeded(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11649,13 +11560,12 @@ impl Error for PutRestApiError {
 /// Errors returned by TestInvokeAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum TestInvokeAuthorizerError {
-    ///
     BadRequest(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11747,13 +11657,12 @@ impl Error for TestInvokeAuthorizerError {
 /// Errors returned by TestInvokeMethod
 #[derive(Debug, PartialEq)]
 pub enum TestInvokeMethodError {
-    ///
     BadRequest(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11843,13 +11752,12 @@ impl Error for TestInvokeMethodError {
 /// Errors returned by UpdateAccount
 #[derive(Debug, PartialEq)]
 pub enum UpdateAccountError {
-    ///
     BadRequest(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11939,15 +11847,14 @@ impl Error for UpdateAccountError {
 /// Errors returned by UpdateApiKey
 #[derive(Debug, PartialEq)]
 pub enum UpdateApiKeyError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12037,13 +11944,12 @@ impl Error for UpdateApiKeyError {
 /// Errors returned by UpdateAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum UpdateAuthorizerError {
-    ///
     BadRequest(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12133,15 +12039,14 @@ impl Error for UpdateAuthorizerError {
 /// Errors returned by UpdateBasePathMapping
 #[derive(Debug, PartialEq)]
 pub enum UpdateBasePathMappingError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12237,13 +12142,12 @@ impl Error for UpdateBasePathMappingError {
 /// Errors returned by UpdateClientCertificate
 #[derive(Debug, PartialEq)]
 pub enum UpdateClientCertificateError {
-    ///
     BadRequest(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12335,15 +12239,14 @@ impl Error for UpdateClientCertificateError {
 /// Errors returned by UpdateDeployment
 #[derive(Debug, PartialEq)]
 pub enum UpdateDeploymentError {
-    ///
     BadRequest(String),
-    ///
+
     NotFound(String),
-    ///
+
     ServiceUnavailable(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12437,17 +12340,16 @@ impl Error for UpdateDeploymentError {
 /// Errors returned by UpdateDocumentationPart
 #[derive(Debug, PartialEq)]
 pub enum UpdateDocumentationPartError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     LimitExceeded(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12547,15 +12449,14 @@ impl Error for UpdateDocumentationPartError {
 /// Errors returned by UpdateDocumentationVersion
 #[derive(Debug, PartialEq)]
 pub enum UpdateDocumentationVersionError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12653,15 +12554,14 @@ impl Error for UpdateDocumentationVersionError {
 /// Errors returned by UpdateDomainName
 #[derive(Debug, PartialEq)]
 pub enum UpdateDomainNameError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12755,13 +12655,12 @@ impl Error for UpdateDomainNameError {
 /// Errors returned by UpdateGatewayResponse
 #[derive(Debug, PartialEq)]
 pub enum UpdateGatewayResponseError {
-    ///
     BadRequest(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12853,15 +12752,14 @@ impl Error for UpdateGatewayResponseError {
 /// Errors returned by UpdateIntegration
 #[derive(Debug, PartialEq)]
 pub enum UpdateIntegrationError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12957,15 +12855,14 @@ impl Error for UpdateIntegrationError {
 /// Errors returned by UpdateIntegrationResponse
 #[derive(Debug, PartialEq)]
 pub enum UpdateIntegrationResponseError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13061,15 +12958,14 @@ impl Error for UpdateIntegrationResponseError {
 /// Errors returned by UpdateMethod
 #[derive(Debug, PartialEq)]
 pub enum UpdateMethodError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13159,17 +13055,16 @@ impl Error for UpdateMethodError {
 /// Errors returned by UpdateMethodResponse
 #[derive(Debug, PartialEq)]
 pub enum UpdateMethodResponseError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     LimitExceeded(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13269,15 +13164,14 @@ impl Error for UpdateMethodResponseError {
 /// Errors returned by UpdateModel
 #[derive(Debug, PartialEq)]
 pub enum UpdateModelError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13367,13 +13261,12 @@ impl Error for UpdateModelError {
 /// Errors returned by UpdateRequestValidator
 #[derive(Debug, PartialEq)]
 pub enum UpdateRequestValidatorError {
-    ///
     BadRequest(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13465,15 +13358,14 @@ impl Error for UpdateRequestValidatorError {
 /// Errors returned by UpdateResource
 #[derive(Debug, PartialEq)]
 pub enum UpdateResourceError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13567,15 +13459,14 @@ impl Error for UpdateResourceError {
 /// Errors returned by UpdateRestApi
 #[derive(Debug, PartialEq)]
 pub enum UpdateRestApiError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13669,15 +13560,14 @@ impl Error for UpdateRestApiError {
 /// Errors returned by UpdateStage
 #[derive(Debug, PartialEq)]
 pub enum UpdateStageError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13767,13 +13657,12 @@ impl Error for UpdateStageError {
 /// Errors returned by UpdateUsage
 #[derive(Debug, PartialEq)]
 pub enum UpdateUsageError {
-    ///
     BadRequest(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13861,15 +13750,14 @@ impl Error for UpdateUsageError {
 /// Errors returned by UpdateUsagePlan
 #[derive(Debug, PartialEq)]
 pub enum UpdateUsagePlanError {
-    ///
     BadRequest(String),
-    ///
+
     Conflict(String),
-    ///
+
     NotFound(String),
-    ///
+
     TooManyRequests(String),
-    ///
+
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13962,22 +13850,22 @@ impl Error for UpdateUsagePlanError {
 }
 /// Trait representing the capabilities of the Amazon API Gateway API. Amazon API Gateway clients implement this trait.
 pub trait ApiGateway {
-    #[doc="<p>Create an <a>ApiKey</a> resource. </p> <div class=\"seeAlso\"><a href=\"http://docs.aws.amazon.com/cli/latest/reference/apigateway/create-api-key.html\">AWS CLI</a></div>"]
+    /// <p><p>Create an <a>ApiKey</a> resource. </p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/create-api-key.html">AWS CLI</a></div></p>
     fn create_api_key(&self, input: &CreateApiKeyRequest) -> Result<ApiKey, CreateApiKeyError>;
 
-    #[doc="<p>Adds a new <a>Authorizer</a> resource to an existing <a>RestApi</a> resource.</p> <div class=\"seeAlso\"><a href=\"http://docs.aws.amazon.com/cli/latest/reference/apigateway/create-authorizer.html\">AWS CLI</a></div>"]
+    /// <p><p>Adds a new <a>Authorizer</a> resource to an existing <a>RestApi</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/create-authorizer.html">AWS CLI</a></div></p>
     fn create_authorizer(
         &self,
         input: &CreateAuthorizerRequest,
     ) -> Result<Authorizer, CreateAuthorizerError>;
 
-    #[doc = "<p>Creates a new <a>BasePathMapping</a> resource.</p>"]
+    /// <p>Creates a new <a>BasePathMapping</a> resource.</p>
     fn create_base_path_mapping(
         &self,
         input: &CreateBasePathMappingRequest,
     ) -> Result<BasePathMapping, CreateBasePathMappingError>;
 
-    #[doc="<p>Creates a <a>Deployment</a> resource, which makes a specified <a>RestApi</a> callable over the internet.</p>"]
+    /// <p>Creates a <a>Deployment</a> resource, which makes a specified <a>RestApi</a> callable over the internet.</p>
     fn create_deployment(
         &self,
         input: &CreateDeploymentRequest,
@@ -13993,67 +13881,67 @@ pub trait ApiGateway {
         input: &CreateDocumentationVersionRequest,
     ) -> Result<DocumentationVersion, CreateDocumentationVersionError>;
 
-    #[doc = "<p>Creates a new domain name.</p>"]
+    /// <p>Creates a new domain name.</p>
     fn create_domain_name(
         &self,
         input: &CreateDomainNameRequest,
     ) -> Result<DomainName, CreateDomainNameError>;
 
-    #[doc = "<p>Adds a new <a>Model</a> resource to an existing <a>RestApi</a> resource.</p>"]
+    /// <p>Adds a new <a>Model</a> resource to an existing <a>RestApi</a> resource.</p>
     fn create_model(&self, input: &CreateModelRequest) -> Result<Model, CreateModelError>;
 
-    #[doc = "<p>Creates a <a>ReqeustValidator</a> of a given <a>RestApi</a>.</p>"]
+    /// <p>Creates a <a>ReqeustValidator</a> of a given <a>RestApi</a>.</p>
     fn create_request_validator(
         &self,
         input: &CreateRequestValidatorRequest,
     ) -> Result<RequestValidator, CreateRequestValidatorError>;
 
-    #[doc = "<p>Creates a <a>Resource</a> resource.</p>"]
+    /// <p>Creates a <a>Resource</a> resource.</p>
     fn create_resource(
         &self,
         input: &CreateResourceRequest,
     ) -> Result<Resource, CreateResourceError>;
 
-    #[doc = "<p>Creates a new <a>RestApi</a> resource.</p>"]
+    /// <p>Creates a new <a>RestApi</a> resource.</p>
     fn create_rest_api(&self, input: &CreateRestApiRequest) -> Result<RestApi, CreateRestApiError>;
 
-    #[doc="<p>Creates a new <a>Stage</a> resource that references a pre-existing <a>Deployment</a> for the API. </p>"]
+    /// <p>Creates a new <a>Stage</a> resource that references a pre-existing <a>Deployment</a> for the API. </p>
     fn create_stage(&self, input: &CreateStageRequest) -> Result<Stage, CreateStageError>;
 
-    #[doc="<p>Creates a usage plan with the throttle and quota limits, as well as the associated API stages, specified in the payload. </p>"]
+    /// <p>Creates a usage plan with the throttle and quota limits, as well as the associated API stages, specified in the payload. </p>
     fn create_usage_plan(
         &self,
         input: &CreateUsagePlanRequest,
     ) -> Result<UsagePlan, CreateUsagePlanError>;
 
-    #[doc = "<p>Creates a usage plan key for adding an existing API key to a usage plan.</p>"]
+    /// <p>Creates a usage plan key for adding an existing API key to a usage plan.</p>
     fn create_usage_plan_key(
         &self,
         input: &CreateUsagePlanKeyRequest,
     ) -> Result<UsagePlanKey, CreateUsagePlanKeyError>;
 
-    #[doc = "<p>Deletes the <a>ApiKey</a> resource.</p>"]
+    /// <p>Deletes the <a>ApiKey</a> resource.</p>
     fn delete_api_key(&self, input: &DeleteApiKeyRequest) -> Result<(), DeleteApiKeyError>;
 
-    #[doc="<p>Deletes an existing <a>Authorizer</a> resource.</p> <div class=\"seeAlso\"><a href=\"http://docs.aws.amazon.com/cli/latest/reference/apigateway/delete-authorizer.html\">AWS CLI</a></div>"]
+    /// <p><p>Deletes an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/delete-authorizer.html">AWS CLI</a></div></p>
     fn delete_authorizer(
         &self,
         input: &DeleteAuthorizerRequest,
     ) -> Result<(), DeleteAuthorizerError>;
 
-    #[doc = "<p>Deletes the <a>BasePathMapping</a> resource.</p>"]
+    /// <p>Deletes the <a>BasePathMapping</a> resource.</p>
     fn delete_base_path_mapping(
         &self,
         input: &DeleteBasePathMappingRequest,
     ) -> Result<(), DeleteBasePathMappingError>;
 
-    #[doc = "<p>Deletes the <a>ClientCertificate</a> resource.</p>"]
+    /// <p>Deletes the <a>ClientCertificate</a> resource.</p>
     fn delete_client_certificate(
         &self,
         input: &DeleteClientCertificateRequest,
     ) -> Result<(), DeleteClientCertificateError>;
 
-    #[doc="<p>Deletes a <a>Deployment</a> resource. Deleting a deployment will only succeed if there are no <a>Stage</a> resources associated with it.</p>"]
+    /// <p>Deletes a <a>Deployment</a> resource. Deleting a deployment will only succeed if there are no <a>Stage</a> resources associated with it.</p>
     fn delete_deployment(
         &self,
         input: &DeleteDeploymentRequest,
@@ -14069,135 +13957,135 @@ pub trait ApiGateway {
         input: &DeleteDocumentationVersionRequest,
     ) -> Result<(), DeleteDocumentationVersionError>;
 
-    #[doc = "<p>Deletes the <a>DomainName</a> resource.</p>"]
+    /// <p>Deletes the <a>DomainName</a> resource.</p>
     fn delete_domain_name(
         &self,
         input: &DeleteDomainNameRequest,
     ) -> Result<(), DeleteDomainNameError>;
 
-    #[doc="<p>Clears any customization of a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a> and resets it with the default settings.</p>"]
+    /// <p>Clears any customization of a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a> and resets it with the default settings.</p>
     fn delete_gateway_response(
         &self,
         input: &DeleteGatewayResponseRequest,
     ) -> Result<(), DeleteGatewayResponseError>;
 
-    #[doc = "<p>Represents a delete integration.</p>"]
+    /// <p>Represents a delete integration.</p>
     fn delete_integration(
         &self,
         input: &DeleteIntegrationRequest,
     ) -> Result<(), DeleteIntegrationError>;
 
-    #[doc = "<p>Represents a delete integration response.</p>"]
+    /// <p>Represents a delete integration response.</p>
     fn delete_integration_response(
         &self,
         input: &DeleteIntegrationResponseRequest,
     ) -> Result<(), DeleteIntegrationResponseError>;
 
-    #[doc = "<p>Deletes an existing <a>Method</a> resource.</p>"]
+    /// <p>Deletes an existing <a>Method</a> resource.</p>
     fn delete_method(&self, input: &DeleteMethodRequest) -> Result<(), DeleteMethodError>;
 
-    #[doc = "<p>Deletes an existing <a>MethodResponse</a> resource.</p>"]
+    /// <p>Deletes an existing <a>MethodResponse</a> resource.</p>
     fn delete_method_response(
         &self,
         input: &DeleteMethodResponseRequest,
     ) -> Result<(), DeleteMethodResponseError>;
 
-    #[doc = "<p>Deletes a model.</p>"]
+    /// <p>Deletes a model.</p>
     fn delete_model(&self, input: &DeleteModelRequest) -> Result<(), DeleteModelError>;
 
-    #[doc = "<p>Deletes a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>"]
+    /// <p>Deletes a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
     fn delete_request_validator(
         &self,
         input: &DeleteRequestValidatorRequest,
     ) -> Result<(), DeleteRequestValidatorError>;
 
-    #[doc = "<p>Deletes a <a>Resource</a> resource.</p>"]
+    /// <p>Deletes a <a>Resource</a> resource.</p>
     fn delete_resource(&self, input: &DeleteResourceRequest) -> Result<(), DeleteResourceError>;
 
-    #[doc = "<p>Deletes the specified API.</p>"]
+    /// <p>Deletes the specified API.</p>
     fn delete_rest_api(&self, input: &DeleteRestApiRequest) -> Result<(), DeleteRestApiError>;
 
-    #[doc = "<p>Deletes a <a>Stage</a> resource.</p>"]
+    /// <p>Deletes a <a>Stage</a> resource.</p>
     fn delete_stage(&self, input: &DeleteStageRequest) -> Result<(), DeleteStageError>;
 
-    #[doc = "<p>Deletes a usage plan of a given plan Id.</p>"]
+    /// <p>Deletes a usage plan of a given plan Id.</p>
     fn delete_usage_plan(&self, input: &DeleteUsagePlanRequest)
         -> Result<(), DeleteUsagePlanError>;
 
-    #[doc="<p>Deletes a usage plan key and remove the underlying API key from the associated usage plan.</p>"]
+    /// <p>Deletes a usage plan key and remove the underlying API key from the associated usage plan.</p>
     fn delete_usage_plan_key(
         &self,
         input: &DeleteUsagePlanKeyRequest,
     ) -> Result<(), DeleteUsagePlanKeyError>;
 
-    #[doc = "<p>Flushes all authorizer cache entries on a stage.</p>"]
+    /// <p>Flushes all authorizer cache entries on a stage.</p>
     fn flush_stage_authorizers_cache(
         &self,
         input: &FlushStageAuthorizersCacheRequest,
     ) -> Result<(), FlushStageAuthorizersCacheError>;
 
-    #[doc = "<p>Flushes a stage's cache.</p>"]
+    /// <p>Flushes a stage's cache.</p>
     fn flush_stage_cache(&self, input: &FlushStageCacheRequest)
         -> Result<(), FlushStageCacheError>;
 
-    #[doc = "<p>Generates a <a>ClientCertificate</a> resource.</p>"]
+    /// <p>Generates a <a>ClientCertificate</a> resource.</p>
     fn generate_client_certificate(
         &self,
         input: &GenerateClientCertificateRequest,
     ) -> Result<ClientCertificate, GenerateClientCertificateError>;
 
-    #[doc = "<p>Gets information about the current <a>Account</a> resource.</p>"]
+    /// <p>Gets information about the current <a>Account</a> resource.</p>
     fn get_account(&self) -> Result<Account, GetAccountError>;
 
-    #[doc = "<p>Gets information about the current <a>ApiKey</a> resource.</p>"]
+    /// <p>Gets information about the current <a>ApiKey</a> resource.</p>
     fn get_api_key(&self, input: &GetApiKeyRequest) -> Result<ApiKey, GetApiKeyError>;
 
-    #[doc = "<p>Gets information about the current <a>ApiKeys</a> resource.</p>"]
+    /// <p>Gets information about the current <a>ApiKeys</a> resource.</p>
     fn get_api_keys(&self, input: &GetApiKeysRequest) -> Result<ApiKeys, GetApiKeysError>;
 
-    #[doc="<p>Describe an existing <a>Authorizer</a> resource.</p> <div class=\"seeAlso\"><a href=\"http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizer.html\">AWS CLI</a></div>"]
+    /// <p><p>Describe an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizer.html">AWS CLI</a></div></p>
     fn get_authorizer(
         &self,
         input: &GetAuthorizerRequest,
     ) -> Result<Authorizer, GetAuthorizerError>;
 
-    #[doc="<p>Describe an existing <a>Authorizers</a> resource.</p> <div class=\"seeAlso\"><a href=\"http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizers.html\">AWS CLI</a></div>"]
+    /// <p><p>Describe an existing <a>Authorizers</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizers.html">AWS CLI</a></div></p>
     fn get_authorizers(
         &self,
         input: &GetAuthorizersRequest,
     ) -> Result<Authorizers, GetAuthorizersError>;
 
-    #[doc = "<p>Describe a <a>BasePathMapping</a> resource.</p>"]
+    /// <p>Describe a <a>BasePathMapping</a> resource.</p>
     fn get_base_path_mapping(
         &self,
         input: &GetBasePathMappingRequest,
     ) -> Result<BasePathMapping, GetBasePathMappingError>;
 
-    #[doc = "<p>Represents a collection of <a>BasePathMapping</a> resources.</p>"]
+    /// <p>Represents a collection of <a>BasePathMapping</a> resources.</p>
     fn get_base_path_mappings(
         &self,
         input: &GetBasePathMappingsRequest,
     ) -> Result<BasePathMappings, GetBasePathMappingsError>;
 
-    #[doc = "<p>Gets information about the current <a>ClientCertificate</a> resource.</p>"]
+    /// <p>Gets information about the current <a>ClientCertificate</a> resource.</p>
     fn get_client_certificate(
         &self,
         input: &GetClientCertificateRequest,
     ) -> Result<ClientCertificate, GetClientCertificateError>;
 
-    #[doc = "<p>Gets a collection of <a>ClientCertificate</a> resources.</p>"]
+    /// <p>Gets a collection of <a>ClientCertificate</a> resources.</p>
     fn get_client_certificates(
         &self,
         input: &GetClientCertificatesRequest,
     ) -> Result<ClientCertificates, GetClientCertificatesError>;
 
-    #[doc = "<p>Gets information about a <a>Deployment</a> resource.</p>"]
+    /// <p>Gets information about a <a>Deployment</a> resource.</p>
     fn get_deployment(
         &self,
         input: &GetDeploymentRequest,
     ) -> Result<Deployment, GetDeploymentError>;
 
-    #[doc = "<p>Gets information about a <a>Deployments</a> collection.</p>"]
+    /// <p>Gets information about a <a>Deployments</a> collection.</p>
     fn get_deployments(
         &self,
         input: &GetDeploymentsRequest,
@@ -14223,128 +14111,128 @@ pub trait ApiGateway {
         input: &GetDocumentationVersionsRequest,
     ) -> Result<DocumentationVersions, GetDocumentationVersionsError>;
 
-    #[doc="<p>Represents a domain name that is contained in a simpler, more intuitive URL that can be called.</p>"]
+    /// <p>Represents a domain name that is contained in a simpler, more intuitive URL that can be called.</p>
     fn get_domain_name(
         &self,
         input: &GetDomainNameRequest,
     ) -> Result<DomainName, GetDomainNameError>;
 
-    #[doc = "<p>Represents a collection of <a>DomainName</a> resources.</p>"]
+    /// <p>Represents a collection of <a>DomainName</a> resources.</p>
     fn get_domain_names(
         &self,
         input: &GetDomainNamesRequest,
     ) -> Result<DomainNames, GetDomainNamesError>;
 
-    #[doc = "<p>Exports a deployed version of a <a>RestApi</a> in a specified format.</p>"]
+    /// <p>Exports a deployed version of a <a>RestApi</a> in a specified format.</p>
     fn get_export(&self, input: &GetExportRequest) -> Result<ExportResponse, GetExportError>;
 
-    #[doc="<p>Gets a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>"]
+    /// <p>Gets a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
     fn get_gateway_response(
         &self,
         input: &GetGatewayResponseRequest,
     ) -> Result<GatewayResponse, GetGatewayResponseError>;
 
-    #[doc="<p>Gets the <a>GatewayResponses</a> collection on the given <a>RestApi</a>. If an API developer has not added any definitions for gateway responses, the result will be the Amazon API Gateway-generated default <a>GatewayResponses</a> collection for the supported response types.</p>"]
+    /// <p>Gets the <a>GatewayResponses</a> collection on the given <a>RestApi</a>. If an API developer has not added any definitions for gateway responses, the result will be the Amazon API Gateway-generated default <a>GatewayResponses</a> collection for the supported response types.</p>
     fn get_gateway_responses(
         &self,
         input: &GetGatewayResponsesRequest,
     ) -> Result<GatewayResponses, GetGatewayResponsesError>;
 
-    #[doc = "<p>Represents a get integration.</p>"]
+    /// <p>Represents a get integration.</p>
     fn get_integration(
         &self,
         input: &GetIntegrationRequest,
     ) -> Result<Integration, GetIntegrationError>;
 
-    #[doc = "<p>Represents a get integration response.</p>"]
+    /// <p>Represents a get integration response.</p>
     fn get_integration_response(
         &self,
         input: &GetIntegrationResponseRequest,
     ) -> Result<IntegrationResponse, GetIntegrationResponseError>;
 
-    #[doc = "<p>Describe an existing <a>Method</a> resource.</p>"]
+    /// <p>Describe an existing <a>Method</a> resource.</p>
     fn get_method(&self, input: &GetMethodRequest) -> Result<Method, GetMethodError>;
 
-    #[doc = "<p>Describes a <a>MethodResponse</a> resource.</p>"]
+    /// <p>Describes a <a>MethodResponse</a> resource.</p>
     fn get_method_response(
         &self,
         input: &GetMethodResponseRequest,
     ) -> Result<MethodResponse, GetMethodResponseError>;
 
-    #[doc = "<p>Describes an existing model defined for a <a>RestApi</a> resource.</p>"]
+    /// <p>Describes an existing model defined for a <a>RestApi</a> resource.</p>
     fn get_model(&self, input: &GetModelRequest) -> Result<Model, GetModelError>;
 
-    #[doc="<p>Generates a sample mapping template that can be used to transform a payload into the structure of a model.</p>"]
+    /// <p>Generates a sample mapping template that can be used to transform a payload into the structure of a model.</p>
     fn get_model_template(
         &self,
         input: &GetModelTemplateRequest,
     ) -> Result<Template, GetModelTemplateError>;
 
-    #[doc = "<p>Describes existing <a>Models</a> defined for a <a>RestApi</a> resource.</p>"]
+    /// <p>Describes existing <a>Models</a> defined for a <a>RestApi</a> resource.</p>
     fn get_models(&self, input: &GetModelsRequest) -> Result<Models, GetModelsError>;
 
-    #[doc = "<p>Gets a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>"]
+    /// <p>Gets a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
     fn get_request_validator(
         &self,
         input: &GetRequestValidatorRequest,
     ) -> Result<RequestValidator, GetRequestValidatorError>;
 
-    #[doc = "<p>Gets the <a>RequestValidators</a> collection of a given <a>RestApi</a>.</p>"]
+    /// <p>Gets the <a>RequestValidators</a> collection of a given <a>RestApi</a>.</p>
     fn get_request_validators(
         &self,
         input: &GetRequestValidatorsRequest,
     ) -> Result<RequestValidators, GetRequestValidatorsError>;
 
-    #[doc = "<p>Lists information about a resource.</p>"]
+    /// <p>Lists information about a resource.</p>
     fn get_resource(&self, input: &GetResourceRequest) -> Result<Resource, GetResourceError>;
 
-    #[doc = "<p>Lists information about a collection of <a>Resource</a> resources.</p>"]
+    /// <p>Lists information about a collection of <a>Resource</a> resources.</p>
     fn get_resources(&self, input: &GetResourcesRequest) -> Result<Resources, GetResourcesError>;
 
-    #[doc = "<p>Lists the <a>RestApi</a> resource in the collection.</p>"]
+    /// <p>Lists the <a>RestApi</a> resource in the collection.</p>
     fn get_rest_api(&self, input: &GetRestApiRequest) -> Result<RestApi, GetRestApiError>;
 
-    #[doc = "<p>Lists the <a>RestApis</a> resources for your collection.</p>"]
+    /// <p>Lists the <a>RestApis</a> resources for your collection.</p>
     fn get_rest_apis(&self, input: &GetRestApisRequest) -> Result<RestApis, GetRestApisError>;
 
-    #[doc = "<p>Generates a client SDK for a <a>RestApi</a> and <a>Stage</a>.</p>"]
+    /// <p>Generates a client SDK for a <a>RestApi</a> and <a>Stage</a>.</p>
     fn get_sdk(&self, input: &GetSdkRequest) -> Result<SdkResponse, GetSdkError>;
 
     fn get_sdk_type(&self, input: &GetSdkTypeRequest) -> Result<SdkType, GetSdkTypeError>;
 
     fn get_sdk_types(&self, input: &GetSdkTypesRequest) -> Result<SdkTypes, GetSdkTypesError>;
 
-    #[doc = "<p>Gets information about a <a>Stage</a> resource.</p>"]
+    /// <p>Gets information about a <a>Stage</a> resource.</p>
     fn get_stage(&self, input: &GetStageRequest) -> Result<Stage, GetStageError>;
 
-    #[doc = "<p>Gets information about one or more <a>Stage</a> resources.</p>"]
+    /// <p>Gets information about one or more <a>Stage</a> resources.</p>
     fn get_stages(&self, input: &GetStagesRequest) -> Result<Stages, GetStagesError>;
 
-    #[doc = "<p>Gets the usage data of a usage plan in a specified time interval.</p>"]
+    /// <p>Gets the usage data of a usage plan in a specified time interval.</p>
     fn get_usage(&self, input: &GetUsageRequest) -> Result<Usage, GetUsageError>;
 
-    #[doc = "<p>Gets a usage plan of a given plan identifier.</p>"]
+    /// <p>Gets a usage plan of a given plan identifier.</p>
     fn get_usage_plan(&self, input: &GetUsagePlanRequest) -> Result<UsagePlan, GetUsagePlanError>;
 
-    #[doc = "<p>Gets a usage plan key of a given key identifier.</p>"]
+    /// <p>Gets a usage plan key of a given key identifier.</p>
     fn get_usage_plan_key(
         &self,
         input: &GetUsagePlanKeyRequest,
     ) -> Result<UsagePlanKey, GetUsagePlanKeyError>;
 
-    #[doc="<p>Gets all the usage plan keys representing the API keys added to a specified usage plan.</p>"]
+    /// <p>Gets all the usage plan keys representing the API keys added to a specified usage plan.</p>
     fn get_usage_plan_keys(
         &self,
         input: &GetUsagePlanKeysRequest,
     ) -> Result<UsagePlanKeys, GetUsagePlanKeysError>;
 
-    #[doc = "<p>Gets all the usage plans of the caller's account.</p>"]
+    /// <p>Gets all the usage plans of the caller's account.</p>
     fn get_usage_plans(
         &self,
         input: &GetUsagePlansRequest,
     ) -> Result<UsagePlans, GetUsagePlansError>;
 
-    #[doc = "<p>Import API keys from an external source, such as a CSV-formatted file.</p>"]
+    /// <p>Import API keys from an external source, such as a CSV-formatted file.</p>
     fn import_api_keys(
         &self,
         input: &ImportApiKeysRequest,
@@ -14355,76 +14243,76 @@ pub trait ApiGateway {
         input: &ImportDocumentationPartsRequest,
     ) -> Result<DocumentationPartIds, ImportDocumentationPartsError>;
 
-    #[doc="<p>A feature of the Amazon API Gateway control service for creating a new API from an external API definition file.</p>"]
+    /// <p>A feature of the Amazon API Gateway control service for creating a new API from an external API definition file.</p>
     fn import_rest_api(&self, input: &ImportRestApiRequest) -> Result<RestApi, ImportRestApiError>;
 
-    #[doc="<p>Creates a customization of a <a>GatewayResponse</a> of a specified response type and status code on the given <a>RestApi</a>.</p>"]
+    /// <p>Creates a customization of a <a>GatewayResponse</a> of a specified response type and status code on the given <a>RestApi</a>.</p>
     fn put_gateway_response(
         &self,
         input: &PutGatewayResponseRequest,
     ) -> Result<GatewayResponse, PutGatewayResponseError>;
 
-    #[doc = "<p>Sets up a method's integration.</p>"]
+    /// <p>Sets up a method's integration.</p>
     fn put_integration(
         &self,
         input: &PutIntegrationRequest,
     ) -> Result<Integration, PutIntegrationError>;
 
-    #[doc = "<p>Represents a put integration.</p>"]
+    /// <p>Represents a put integration.</p>
     fn put_integration_response(
         &self,
         input: &PutIntegrationResponseRequest,
     ) -> Result<IntegrationResponse, PutIntegrationResponseError>;
 
-    #[doc = "<p>Add a method to an existing <a>Resource</a> resource.</p>"]
+    /// <p>Add a method to an existing <a>Resource</a> resource.</p>
     fn put_method(&self, input: &PutMethodRequest) -> Result<Method, PutMethodError>;
 
-    #[doc = "<p>Adds a <a>MethodResponse</a> to an existing <a>Method</a> resource.</p>"]
+    /// <p>Adds a <a>MethodResponse</a> to an existing <a>Method</a> resource.</p>
     fn put_method_response(
         &self,
         input: &PutMethodResponseRequest,
     ) -> Result<MethodResponse, PutMethodResponseError>;
 
-    #[doc="<p>A feature of the Amazon API Gateway control service for updating an existing API with an input of external API definitions. The update can take the form of merging the supplied definition into the existing API or overwriting the existing API.</p>"]
+    /// <p>A feature of the Amazon API Gateway control service for updating an existing API with an input of external API definitions. The update can take the form of merging the supplied definition into the existing API or overwriting the existing API.</p>
     fn put_rest_api(&self, input: &PutRestApiRequest) -> Result<RestApi, PutRestApiError>;
 
-    #[doc="<p>Simulate the execution of an <a>Authorizer</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html\">Enable custom authorizers</a> </div>"]
+    /// <p><p>Simulate the execution of an <a>Authorizer</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html">Enable custom authorizers</a> </div></p>
     fn test_invoke_authorizer(
         &self,
         input: &TestInvokeAuthorizerRequest,
     ) -> Result<TestInvokeAuthorizerResponse, TestInvokeAuthorizerError>;
 
-    #[doc="<p>Simulate the execution of a <a>Method</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p>"]
+    /// <p>Simulate the execution of a <a>Method</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p>
     fn test_invoke_method(
         &self,
         input: &TestInvokeMethodRequest,
     ) -> Result<TestInvokeMethodResponse, TestInvokeMethodError>;
 
-    #[doc = "<p>Changes information about the current <a>Account</a> resource.</p>"]
+    /// <p>Changes information about the current <a>Account</a> resource.</p>
     fn update_account(&self, input: &UpdateAccountRequest) -> Result<Account, UpdateAccountError>;
 
-    #[doc = "<p>Changes information about an <a>ApiKey</a> resource.</p>"]
+    /// <p>Changes information about an <a>ApiKey</a> resource.</p>
     fn update_api_key(&self, input: &UpdateApiKeyRequest) -> Result<ApiKey, UpdateApiKeyError>;
 
-    #[doc="<p>Updates an existing <a>Authorizer</a> resource.</p> <div class=\"seeAlso\"><a href=\"http://docs.aws.amazon.com/cli/latest/reference/apigateway/update-authorizer.html\">AWS CLI</a></div>"]
+    /// <p><p>Updates an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/update-authorizer.html">AWS CLI</a></div></p>
     fn update_authorizer(
         &self,
         input: &UpdateAuthorizerRequest,
     ) -> Result<Authorizer, UpdateAuthorizerError>;
 
-    #[doc = "<p>Changes information about the <a>BasePathMapping</a> resource.</p>"]
+    /// <p>Changes information about the <a>BasePathMapping</a> resource.</p>
     fn update_base_path_mapping(
         &self,
         input: &UpdateBasePathMappingRequest,
     ) -> Result<BasePathMapping, UpdateBasePathMappingError>;
 
-    #[doc = "<p>Changes information about an <a>ClientCertificate</a> resource.</p>"]
+    /// <p>Changes information about an <a>ClientCertificate</a> resource.</p>
     fn update_client_certificate(
         &self,
         input: &UpdateClientCertificateRequest,
     ) -> Result<ClientCertificate, UpdateClientCertificateError>;
 
-    #[doc = "<p>Changes information about a <a>Deployment</a> resource.</p>"]
+    /// <p>Changes information about a <a>Deployment</a> resource.</p>
     fn update_deployment(
         &self,
         input: &UpdateDeploymentRequest,
@@ -14440,64 +14328,64 @@ pub trait ApiGateway {
         input: &UpdateDocumentationVersionRequest,
     ) -> Result<DocumentationVersion, UpdateDocumentationVersionError>;
 
-    #[doc = "<p>Changes information about the <a>DomainName</a> resource.</p>"]
+    /// <p>Changes information about the <a>DomainName</a> resource.</p>
     fn update_domain_name(
         &self,
         input: &UpdateDomainNameRequest,
     ) -> Result<DomainName, UpdateDomainNameError>;
 
-    #[doc="<p>Updates a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>"]
+    /// <p>Updates a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
     fn update_gateway_response(
         &self,
         input: &UpdateGatewayResponseRequest,
     ) -> Result<GatewayResponse, UpdateGatewayResponseError>;
 
-    #[doc = "<p>Represents an update integration.</p>"]
+    /// <p>Represents an update integration.</p>
     fn update_integration(
         &self,
         input: &UpdateIntegrationRequest,
     ) -> Result<Integration, UpdateIntegrationError>;
 
-    #[doc = "<p>Represents an update integration response.</p>"]
+    /// <p>Represents an update integration response.</p>
     fn update_integration_response(
         &self,
         input: &UpdateIntegrationResponseRequest,
     ) -> Result<IntegrationResponse, UpdateIntegrationResponseError>;
 
-    #[doc = "<p>Updates an existing <a>Method</a> resource.</p>"]
+    /// <p>Updates an existing <a>Method</a> resource.</p>
     fn update_method(&self, input: &UpdateMethodRequest) -> Result<Method, UpdateMethodError>;
 
-    #[doc = "<p>Updates an existing <a>MethodResponse</a> resource.</p>"]
+    /// <p>Updates an existing <a>MethodResponse</a> resource.</p>
     fn update_method_response(
         &self,
         input: &UpdateMethodResponseRequest,
     ) -> Result<MethodResponse, UpdateMethodResponseError>;
 
-    #[doc = "<p>Changes information about a model.</p>"]
+    /// <p>Changes information about a model.</p>
     fn update_model(&self, input: &UpdateModelRequest) -> Result<Model, UpdateModelError>;
 
-    #[doc = "<p>Updates a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>"]
+    /// <p>Updates a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
     fn update_request_validator(
         &self,
         input: &UpdateRequestValidatorRequest,
     ) -> Result<RequestValidator, UpdateRequestValidatorError>;
 
-    #[doc = "<p>Changes information about a <a>Resource</a> resource.</p>"]
+    /// <p>Changes information about a <a>Resource</a> resource.</p>
     fn update_resource(
         &self,
         input: &UpdateResourceRequest,
     ) -> Result<Resource, UpdateResourceError>;
 
-    #[doc = "<p>Changes information about the specified API.</p>"]
+    /// <p>Changes information about the specified API.</p>
     fn update_rest_api(&self, input: &UpdateRestApiRequest) -> Result<RestApi, UpdateRestApiError>;
 
-    #[doc = "<p>Changes information about a <a>Stage</a> resource.</p>"]
+    /// <p>Changes information about a <a>Stage</a> resource.</p>
     fn update_stage(&self, input: &UpdateStageRequest) -> Result<Stage, UpdateStageError>;
 
-    #[doc="<p>Grants a temporary extension to the remaining quota of a usage plan associated with a specified API key.</p>"]
+    /// <p>Grants a temporary extension to the remaining quota of a usage plan associated with a specified API key.</p>
     fn update_usage(&self, input: &UpdateUsageRequest) -> Result<Usage, UpdateUsageError>;
 
-    #[doc = "<p>Updates a usage plan of a given plan Id.</p>"]
+    /// <p>Updates a usage plan of a given plan Id.</p>
     fn update_usage_plan(
         &self,
         input: &UpdateUsagePlanRequest,
@@ -14533,7 +14421,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Create an <a>ApiKey</a> resource. </p> <div class=\"seeAlso\"><a href=\"http://docs.aws.amazon.com/cli/latest/reference/apigateway/create-api-key.html\">AWS CLI</a></div>"]
+    /// <p><p>Create an <a>ApiKey</a> resource. </p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/create-api-key.html">AWS CLI</a></div></p>
     fn create_api_key(&self, input: &CreateApiKeyRequest) -> Result<ApiKey, CreateApiKeyError> {
         let request_uri = "/apikeys";
 
@@ -14571,7 +14459,7 @@ where
         }
     }
 
-    #[doc="<p>Adds a new <a>Authorizer</a> resource to an existing <a>RestApi</a> resource.</p> <div class=\"seeAlso\"><a href=\"http://docs.aws.amazon.com/cli/latest/reference/apigateway/create-authorizer.html\">AWS CLI</a></div>"]
+    /// <p><p>Adds a new <a>Authorizer</a> resource to an existing <a>RestApi</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/create-authorizer.html">AWS CLI</a></div></p>
     fn create_authorizer(
         &self,
         input: &CreateAuthorizerRequest,
@@ -14615,7 +14503,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a new <a>BasePathMapping</a> resource.</p>"]
+    /// <p>Creates a new <a>BasePathMapping</a> resource.</p>
     fn create_base_path_mapping(
         &self,
         input: &CreateBasePathMappingRequest,
@@ -14659,7 +14547,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a <a>Deployment</a> resource, which makes a specified <a>RestApi</a> callable over the internet.</p>"]
+    /// <p>Creates a <a>Deployment</a> resource, which makes a specified <a>RestApi</a> callable over the internet.</p>
     fn create_deployment(
         &self,
         input: &CreateDeploymentRequest,
@@ -14789,7 +14677,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a new domain name.</p>"]
+    /// <p>Creates a new domain name.</p>
     fn create_domain_name(
         &self,
         input: &CreateDomainNameRequest,
@@ -14830,7 +14718,7 @@ where
         }
     }
 
-    #[doc = "<p>Adds a new <a>Model</a> resource to an existing <a>RestApi</a> resource.</p>"]
+    /// <p>Adds a new <a>Model</a> resource to an existing <a>RestApi</a> resource.</p>
     fn create_model(&self, input: &CreateModelRequest) -> Result<Model, CreateModelError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/models",
@@ -14871,7 +14759,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a <a>ReqeustValidator</a> of a given <a>RestApi</a>.</p>"]
+    /// <p>Creates a <a>ReqeustValidator</a> of a given <a>RestApi</a>.</p>
     fn create_request_validator(
         &self,
         input: &CreateRequestValidatorRequest,
@@ -14915,7 +14803,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a <a>Resource</a> resource.</p>"]
+    /// <p>Creates a <a>Resource</a> resource.</p>
     fn create_resource(
         &self,
         input: &CreateResourceRequest,
@@ -14960,7 +14848,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a new <a>RestApi</a> resource.</p>"]
+    /// <p>Creates a new <a>RestApi</a> resource.</p>
     fn create_rest_api(&self, input: &CreateRestApiRequest) -> Result<RestApi, CreateRestApiError> {
         let request_uri = "/restapis";
 
@@ -14998,7 +14886,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a new <a>Stage</a> resource that references a pre-existing <a>Deployment</a> for the API. </p>"]
+    /// <p>Creates a new <a>Stage</a> resource that references a pre-existing <a>Deployment</a> for the API. </p>
     fn create_stage(&self, input: &CreateStageRequest) -> Result<Stage, CreateStageError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages",
@@ -15039,7 +14927,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a usage plan with the throttle and quota limits, as well as the associated API stages, specified in the payload. </p>"]
+    /// <p>Creates a usage plan with the throttle and quota limits, as well as the associated API stages, specified in the payload. </p>
     fn create_usage_plan(
         &self,
         input: &CreateUsagePlanRequest,
@@ -15080,7 +14968,7 @@ where
         }
     }
 
-    #[doc = "<p>Creates a usage plan key for adding an existing API key to a usage plan.</p>"]
+    /// <p>Creates a usage plan key for adding an existing API key to a usage plan.</p>
     fn create_usage_plan_key(
         &self,
         input: &CreateUsagePlanKeyRequest,
@@ -15124,7 +15012,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the <a>ApiKey</a> resource.</p>"]
+    /// <p>Deletes the <a>ApiKey</a> resource.</p>
     fn delete_api_key(&self, input: &DeleteApiKeyRequest) -> Result<(), DeleteApiKeyError> {
         let request_uri = format!("/apikeys/{api_key}", api_key = input.api_key);
 
@@ -15150,7 +15038,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes an existing <a>Authorizer</a> resource.</p> <div class=\"seeAlso\"><a href=\"http://docs.aws.amazon.com/cli/latest/reference/apigateway/delete-authorizer.html\">AWS CLI</a></div>"]
+    /// <p><p>Deletes an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/delete-authorizer.html">AWS CLI</a></div></p>
     fn delete_authorizer(
         &self,
         input: &DeleteAuthorizerRequest,
@@ -15183,7 +15071,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the <a>BasePathMapping</a> resource.</p>"]
+    /// <p>Deletes the <a>BasePathMapping</a> resource.</p>
     fn delete_base_path_mapping(
         &self,
         input: &DeleteBasePathMappingRequest,
@@ -15216,7 +15104,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the <a>ClientCertificate</a> resource.</p>"]
+    /// <p>Deletes the <a>ClientCertificate</a> resource.</p>
     fn delete_client_certificate(
         &self,
         input: &DeleteClientCertificateRequest,
@@ -15248,7 +15136,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a <a>Deployment</a> resource. Deleting a deployment will only succeed if there are no <a>Stage</a> resources associated with it.</p>"]
+    /// <p>Deletes a <a>Deployment</a> resource. Deleting a deployment will only succeed if there are no <a>Stage</a> resources associated with it.</p>
     fn delete_deployment(
         &self,
         input: &DeleteDeploymentRequest,
@@ -15345,7 +15233,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the <a>DomainName</a> resource.</p>"]
+    /// <p>Deletes the <a>DomainName</a> resource.</p>
     fn delete_domain_name(
         &self,
         input: &DeleteDomainNameRequest,
@@ -15377,7 +15265,7 @@ where
         }
     }
 
-    #[doc="<p>Clears any customization of a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a> and resets it with the default settings.</p>"]
+    /// <p>Clears any customization of a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a> and resets it with the default settings.</p>
     fn delete_gateway_response(
         &self,
         input: &DeleteGatewayResponseRequest,
@@ -15410,7 +15298,7 @@ where
         }
     }
 
-    #[doc = "<p>Represents a delete integration.</p>"]
+    /// <p>Represents a delete integration.</p>
     fn delete_integration(
         &self,
         input: &DeleteIntegrationRequest,
@@ -15444,7 +15332,7 @@ where
         }
     }
 
-    #[doc = "<p>Represents a delete integration response.</p>"]
+    /// <p>Represents a delete integration response.</p>
     fn delete_integration_response(
         &self,
         input: &DeleteIntegrationResponseRequest,
@@ -15473,7 +15361,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes an existing <a>Method</a> resource.</p>"]
+    /// <p>Deletes an existing <a>Method</a> resource.</p>
     fn delete_method(&self, input: &DeleteMethodRequest) -> Result<(), DeleteMethodError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
@@ -15504,7 +15392,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes an existing <a>MethodResponse</a> resource.</p>"]
+    /// <p>Deletes an existing <a>MethodResponse</a> resource.</p>
     fn delete_method_response(
         &self,
         input: &DeleteMethodResponseRequest,
@@ -15533,7 +15421,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a model.</p>"]
+    /// <p>Deletes a model.</p>
     fn delete_model(&self, input: &DeleteModelRequest) -> Result<(), DeleteModelError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/models/{model_name}",
@@ -15563,7 +15451,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>"]
+    /// <p>Deletes a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
     fn delete_request_validator(
         &self,
         input: &DeleteRequestValidatorRequest,
@@ -15596,7 +15484,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a <a>Resource</a> resource.</p>"]
+    /// <p>Deletes a <a>Resource</a> resource.</p>
     fn delete_resource(&self, input: &DeleteResourceRequest) -> Result<(), DeleteResourceError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}",
@@ -15626,7 +15514,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes the specified API.</p>"]
+    /// <p>Deletes the specified API.</p>
     fn delete_rest_api(&self, input: &DeleteRestApiRequest) -> Result<(), DeleteRestApiError> {
         let request_uri = format!("/restapis/{restapi_id}", restapi_id = input.rest_api_id);
 
@@ -15652,7 +15540,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a <a>Stage</a> resource.</p>"]
+    /// <p>Deletes a <a>Stage</a> resource.</p>
     fn delete_stage(&self, input: &DeleteStageRequest) -> Result<(), DeleteStageError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}",
@@ -15682,7 +15570,7 @@ where
         }
     }
 
-    #[doc = "<p>Deletes a usage plan of a given plan Id.</p>"]
+    /// <p>Deletes a usage plan of a given plan Id.</p>
     fn delete_usage_plan(
         &self,
         input: &DeleteUsagePlanRequest,
@@ -15714,7 +15602,7 @@ where
         }
     }
 
-    #[doc="<p>Deletes a usage plan key and remove the underlying API key from the associated usage plan.</p>"]
+    /// <p>Deletes a usage plan key and remove the underlying API key from the associated usage plan.</p>
     fn delete_usage_plan_key(
         &self,
         input: &DeleteUsagePlanKeyRequest,
@@ -15747,7 +15635,7 @@ where
         }
     }
 
-    #[doc = "<p>Flushes all authorizer cache entries on a stage.</p>"]
+    /// <p>Flushes all authorizer cache entries on a stage.</p>
     fn flush_stage_authorizers_cache(
         &self,
         input: &FlushStageAuthorizersCacheRequest,
@@ -15780,7 +15668,7 @@ where
         }
     }
 
-    #[doc = "<p>Flushes a stage's cache.</p>"]
+    /// <p>Flushes a stage's cache.</p>
     fn flush_stage_cache(
         &self,
         input: &FlushStageCacheRequest,
@@ -15813,7 +15701,7 @@ where
         }
     }
 
-    #[doc = "<p>Generates a <a>ClientCertificate</a> resource.</p>"]
+    /// <p>Generates a <a>ClientCertificate</a> resource.</p>
     fn generate_client_certificate(
         &self,
         input: &GenerateClientCertificateRequest,
@@ -15854,7 +15742,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about the current <a>Account</a> resource.</p>"]
+    /// <p>Gets information about the current <a>Account</a> resource.</p>
     fn get_account(&self) -> Result<Account, GetAccountError> {
         let request_uri = "/account";
 
@@ -15889,7 +15777,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about the current <a>ApiKey</a> resource.</p>"]
+    /// <p>Gets information about the current <a>ApiKey</a> resource.</p>
     fn get_api_key(&self, input: &GetApiKeyRequest) -> Result<ApiKey, GetApiKeyError> {
         let request_uri = format!("/apikeys/{api_key}", api_key = input.api_key);
 
@@ -15930,7 +15818,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about the current <a>ApiKeys</a> resource.</p>"]
+    /// <p>Gets information about the current <a>ApiKeys</a> resource.</p>
     fn get_api_keys(&self, input: &GetApiKeysRequest) -> Result<ApiKeys, GetApiKeysError> {
         let request_uri = "/apikeys";
 
@@ -15983,7 +15871,7 @@ where
         }
     }
 
-    #[doc="<p>Describe an existing <a>Authorizer</a> resource.</p> <div class=\"seeAlso\"><a href=\"http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizer.html\">AWS CLI</a></div>"]
+    /// <p><p>Describe an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizer.html">AWS CLI</a></div></p>
     fn get_authorizer(
         &self,
         input: &GetAuthorizerRequest,
@@ -16025,7 +15913,7 @@ where
         }
     }
 
-    #[doc="<p>Describe an existing <a>Authorizers</a> resource.</p> <div class=\"seeAlso\"><a href=\"http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizers.html\">AWS CLI</a></div>"]
+    /// <p><p>Describe an existing <a>Authorizers</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizers.html">AWS CLI</a></div></p>
     fn get_authorizers(
         &self,
         input: &GetAuthorizersRequest,
@@ -16075,7 +15963,7 @@ where
         }
     }
 
-    #[doc = "<p>Describe a <a>BasePathMapping</a> resource.</p>"]
+    /// <p>Describe a <a>BasePathMapping</a> resource.</p>
     fn get_base_path_mapping(
         &self,
         input: &GetBasePathMappingRequest,
@@ -16117,7 +16005,7 @@ where
         }
     }
 
-    #[doc = "<p>Represents a collection of <a>BasePathMapping</a> resources.</p>"]
+    /// <p>Represents a collection of <a>BasePathMapping</a> resources.</p>
     fn get_base_path_mappings(
         &self,
         input: &GetBasePathMappingsRequest,
@@ -16167,7 +16055,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about the current <a>ClientCertificate</a> resource.</p>"]
+    /// <p>Gets information about the current <a>ClientCertificate</a> resource.</p>
     fn get_client_certificate(
         &self,
         input: &GetClientCertificateRequest,
@@ -16208,7 +16096,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets a collection of <a>ClientCertificate</a> resources.</p>"]
+    /// <p>Gets a collection of <a>ClientCertificate</a> resources.</p>
     fn get_client_certificates(
         &self,
         input: &GetClientCertificatesRequest,
@@ -16255,7 +16143,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about a <a>Deployment</a> resource.</p>"]
+    /// <p>Gets information about a <a>Deployment</a> resource.</p>
     fn get_deployment(
         &self,
         input: &GetDeploymentRequest,
@@ -16305,7 +16193,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about a <a>Deployments</a> collection.</p>"]
+    /// <p>Gets information about a <a>Deployments</a> collection.</p>
     fn get_deployments(
         &self,
         input: &GetDeploymentsRequest,
@@ -16544,7 +16432,7 @@ where
         }
     }
 
-    #[doc="<p>Represents a domain name that is contained in a simpler, more intuitive URL that can be called.</p>"]
+    /// <p>Represents a domain name that is contained in a simpler, more intuitive URL that can be called.</p>
     fn get_domain_name(
         &self,
         input: &GetDomainNameRequest,
@@ -16585,7 +16473,7 @@ where
         }
     }
 
-    #[doc = "<p>Represents a collection of <a>DomainName</a> resources.</p>"]
+    /// <p>Represents a collection of <a>DomainName</a> resources.</p>
     fn get_domain_names(
         &self,
         input: &GetDomainNamesRequest,
@@ -16632,7 +16520,7 @@ where
         }
     }
 
-    #[doc = "<p>Exports a deployed version of a <a>RestApi</a> in a specified format.</p>"]
+    /// <p>Exports a deployed version of a <a>RestApi</a> in a specified format.</p>
     fn get_export(&self, input: &GetExportRequest) -> Result<ExportResponse, GetExportError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}/exports/{export_type}",
@@ -16688,7 +16576,7 @@ where
         }
     }
 
-    #[doc="<p>Gets a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>"]
+    /// <p>Gets a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
     fn get_gateway_response(
         &self,
         input: &GetGatewayResponseRequest,
@@ -16730,7 +16618,7 @@ where
         }
     }
 
-    #[doc="<p>Gets the <a>GatewayResponses</a> collection on the given <a>RestApi</a>. If an API developer has not added any definitions for gateway responses, the result will be the Amazon API Gateway-generated default <a>GatewayResponses</a> collection for the supported response types.</p>"]
+    /// <p>Gets the <a>GatewayResponses</a> collection on the given <a>RestApi</a>. If an API developer has not added any definitions for gateway responses, the result will be the Amazon API Gateway-generated default <a>GatewayResponses</a> collection for the supported response types.</p>
     fn get_gateway_responses(
         &self,
         input: &GetGatewayResponsesRequest,
@@ -16780,7 +16668,7 @@ where
         }
     }
 
-    #[doc = "<p>Represents a get integration.</p>"]
+    /// <p>Represents a get integration.</p>
     fn get_integration(
         &self,
         input: &GetIntegrationRequest,
@@ -16823,7 +16711,7 @@ where
         }
     }
 
-    #[doc = "<p>Represents a get integration response.</p>"]
+    /// <p>Represents a get integration response.</p>
     fn get_integration_response(
         &self,
         input: &GetIntegrationResponseRequest,
@@ -16861,7 +16749,7 @@ where
         }
     }
 
-    #[doc = "<p>Describe an existing <a>Method</a> resource.</p>"]
+    /// <p>Describe an existing <a>Method</a> resource.</p>
     fn get_method(&self, input: &GetMethodRequest) -> Result<Method, GetMethodError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
@@ -16901,7 +16789,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes a <a>MethodResponse</a> resource.</p>"]
+    /// <p>Describes a <a>MethodResponse</a> resource.</p>
     fn get_method_response(
         &self,
         input: &GetMethodResponseRequest,
@@ -16939,7 +16827,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes an existing model defined for a <a>RestApi</a> resource.</p>"]
+    /// <p>Describes an existing model defined for a <a>RestApi</a> resource.</p>
     fn get_model(&self, input: &GetModelRequest) -> Result<Model, GetModelError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/models/{model_name}",
@@ -16984,7 +16872,7 @@ where
         }
     }
 
-    #[doc="<p>Generates a sample mapping template that can be used to transform a payload into the structure of a model.</p>"]
+    /// <p>Generates a sample mapping template that can be used to transform a payload into the structure of a model.</p>
     fn get_model_template(
         &self,
         input: &GetModelTemplateRequest,
@@ -17026,7 +16914,7 @@ where
         }
     }
 
-    #[doc = "<p>Describes existing <a>Models</a> defined for a <a>RestApi</a> resource.</p>"]
+    /// <p>Describes existing <a>Models</a> defined for a <a>RestApi</a> resource.</p>
     fn get_models(&self, input: &GetModelsRequest) -> Result<Models, GetModelsError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/models",
@@ -17073,7 +16961,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>"]
+    /// <p>Gets a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
     fn get_request_validator(
         &self,
         input: &GetRequestValidatorRequest,
@@ -17115,7 +17003,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets the <a>RequestValidators</a> collection of a given <a>RestApi</a>.</p>"]
+    /// <p>Gets the <a>RequestValidators</a> collection of a given <a>RestApi</a>.</p>
     fn get_request_validators(
         &self,
         input: &GetRequestValidatorsRequest,
@@ -17165,7 +17053,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists information about a resource.</p>"]
+    /// <p>Lists information about a resource.</p>
     fn get_resource(&self, input: &GetResourceRequest) -> Result<Resource, GetResourceError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}",
@@ -17212,7 +17100,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists information about a collection of <a>Resource</a> resources.</p>"]
+    /// <p>Lists information about a collection of <a>Resource</a> resources.</p>
     fn get_resources(&self, input: &GetResourcesRequest) -> Result<Resources, GetResourcesError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources",
@@ -17264,7 +17152,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists the <a>RestApi</a> resource in the collection.</p>"]
+    /// <p>Lists the <a>RestApi</a> resource in the collection.</p>
     fn get_rest_api(&self, input: &GetRestApiRequest) -> Result<RestApi, GetRestApiError> {
         let request_uri = format!("/restapis/{restapi_id}", restapi_id = input.rest_api_id);
 
@@ -17299,7 +17187,7 @@ where
         }
     }
 
-    #[doc = "<p>Lists the <a>RestApis</a> resources for your collection.</p>"]
+    /// <p>Lists the <a>RestApis</a> resources for your collection.</p>
     fn get_rest_apis(&self, input: &GetRestApisRequest) -> Result<RestApis, GetRestApisError> {
         let request_uri = "/restapis";
 
@@ -17343,7 +17231,7 @@ where
         }
     }
 
-    #[doc = "<p>Generates a client SDK for a <a>RestApi</a> and <a>Stage</a>.</p>"]
+    /// <p>Generates a client SDK for a <a>RestApi</a> and <a>Stage</a>.</p>
     fn get_sdk(&self, input: &GetSdkRequest) -> Result<SdkResponse, GetSdkError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}/sdks/{sdk_type}",
@@ -17473,7 +17361,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about a <a>Stage</a> resource.</p>"]
+    /// <p>Gets information about a <a>Stage</a> resource.</p>
     fn get_stage(&self, input: &GetStageRequest) -> Result<Stage, GetStageError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}",
@@ -17512,7 +17400,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets information about one or more <a>Stage</a> resources.</p>"]
+    /// <p>Gets information about one or more <a>Stage</a> resources.</p>
     fn get_stages(&self, input: &GetStagesRequest) -> Result<Stages, GetStagesError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages",
@@ -17556,7 +17444,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets the usage data of a usage plan in a specified time interval.</p>"]
+    /// <p>Gets the usage data of a usage plan in a specified time interval.</p>
     fn get_usage(&self, input: &GetUsageRequest) -> Result<Usage, GetUsageError> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}/usage",
@@ -17608,7 +17496,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets a usage plan of a given plan identifier.</p>"]
+    /// <p>Gets a usage plan of a given plan identifier.</p>
     fn get_usage_plan(&self, input: &GetUsagePlanRequest) -> Result<UsagePlan, GetUsagePlanError> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}",
@@ -17646,7 +17534,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets a usage plan key of a given key identifier.</p>"]
+    /// <p>Gets a usage plan key of a given key identifier.</p>
     fn get_usage_plan_key(
         &self,
         input: &GetUsagePlanKeyRequest,
@@ -17688,7 +17576,7 @@ where
         }
     }
 
-    #[doc="<p>Gets all the usage plan keys representing the API keys added to a specified usage plan.</p>"]
+    /// <p>Gets all the usage plan keys representing the API keys added to a specified usage plan.</p>
     fn get_usage_plan_keys(
         &self,
         input: &GetUsagePlanKeysRequest,
@@ -17741,7 +17629,7 @@ where
         }
     }
 
-    #[doc = "<p>Gets all the usage plans of the caller's account.</p>"]
+    /// <p>Gets all the usage plans of the caller's account.</p>
     fn get_usage_plans(
         &self,
         input: &GetUsagePlansRequest,
@@ -17791,7 +17679,7 @@ where
         }
     }
 
-    #[doc = "<p>Import API keys from an external source, such as a CSV-formatted file.</p>"]
+    /// <p>Import API keys from an external source, such as a CSV-formatted file.</p>
     fn import_api_keys(
         &self,
         input: &ImportApiKeysRequest,
@@ -17892,7 +17780,7 @@ where
         }
     }
 
-    #[doc="<p>A feature of the Amazon API Gateway control service for creating a new API from an external API definition file.</p>"]
+    /// <p>A feature of the Amazon API Gateway control service for creating a new API from an external API definition file.</p>
     fn import_rest_api(&self, input: &ImportRestApiRequest) -> Result<RestApi, ImportRestApiError> {
         let request_uri = "/restapis";
 
@@ -17942,7 +17830,7 @@ where
         }
     }
 
-    #[doc="<p>Creates a customization of a <a>GatewayResponse</a> of a specified response type and status code on the given <a>RestApi</a>.</p>"]
+    /// <p>Creates a customization of a <a>GatewayResponse</a> of a specified response type and status code on the given <a>RestApi</a>.</p>
     fn put_gateway_response(
         &self,
         input: &PutGatewayResponseRequest,
@@ -17987,7 +17875,7 @@ where
         }
     }
 
-    #[doc = "<p>Sets up a method's integration.</p>"]
+    /// <p>Sets up a method's integration.</p>
     fn put_integration(
         &self,
         input: &PutIntegrationRequest,
@@ -18033,7 +17921,7 @@ where
         }
     }
 
-    #[doc = "<p>Represents a put integration.</p>"]
+    /// <p>Represents a put integration.</p>
     fn put_integration_response(
         &self,
         input: &PutIntegrationResponseRequest,
@@ -18074,7 +17962,7 @@ where
         }
     }
 
-    #[doc = "<p>Add a method to an existing <a>Resource</a> resource.</p>"]
+    /// <p>Add a method to an existing <a>Resource</a> resource.</p>
     fn put_method(&self, input: &PutMethodRequest) -> Result<Method, PutMethodError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
@@ -18117,7 +18005,7 @@ where
         }
     }
 
-    #[doc = "<p>Adds a <a>MethodResponse</a> to an existing <a>Method</a> resource.</p>"]
+    /// <p>Adds a <a>MethodResponse</a> to an existing <a>Method</a> resource.</p>
     fn put_method_response(
         &self,
         input: &PutMethodResponseRequest,
@@ -18158,7 +18046,7 @@ where
         }
     }
 
-    #[doc="<p>A feature of the Amazon API Gateway control service for updating an existing API with an input of external API definitions. The update can take the form of merging the supplied definition into the existing API or overwriting the existing API.</p>"]
+    /// <p>A feature of the Amazon API Gateway control service for updating an existing API with an input of external API definitions. The update can take the form of merging the supplied definition into the existing API or overwriting the existing API.</p>
     fn put_rest_api(&self, input: &PutRestApiRequest) -> Result<RestApi, PutRestApiError> {
         let request_uri = format!("/restapis/{restapi_id}", restapi_id = input.rest_api_id);
 
@@ -18210,7 +18098,7 @@ where
         }
     }
 
-    #[doc="<p>Simulate the execution of an <a>Authorizer</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p> <div class=\"seeAlso\"> <a href=\"http://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html\">Enable custom authorizers</a> </div>"]
+    /// <p><p>Simulate the execution of an <a>Authorizer</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html">Enable custom authorizers</a> </div></p>
     fn test_invoke_authorizer(
         &self,
         input: &TestInvokeAuthorizerRequest,
@@ -18255,7 +18143,7 @@ where
         }
     }
 
-    #[doc="<p>Simulate the execution of a <a>Method</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p>"]
+    /// <p>Simulate the execution of a <a>Method</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p>
     fn test_invoke_method(
         &self,
         input: &TestInvokeMethodRequest,
@@ -18301,7 +18189,7 @@ where
         }
     }
 
-    #[doc = "<p>Changes information about the current <a>Account</a> resource.</p>"]
+    /// <p>Changes information about the current <a>Account</a> resource.</p>
     fn update_account(&self, input: &UpdateAccountRequest) -> Result<Account, UpdateAccountError> {
         let request_uri = "/account";
 
@@ -18339,7 +18227,7 @@ where
         }
     }
 
-    #[doc = "<p>Changes information about an <a>ApiKey</a> resource.</p>"]
+    /// <p>Changes information about an <a>ApiKey</a> resource.</p>
     fn update_api_key(&self, input: &UpdateApiKeyRequest) -> Result<ApiKey, UpdateApiKeyError> {
         let request_uri = format!("/apikeys/{api_key}", api_key = input.api_key);
 
@@ -18377,7 +18265,7 @@ where
         }
     }
 
-    #[doc="<p>Updates an existing <a>Authorizer</a> resource.</p> <div class=\"seeAlso\"><a href=\"http://docs.aws.amazon.com/cli/latest/reference/apigateway/update-authorizer.html\">AWS CLI</a></div>"]
+    /// <p><p>Updates an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/update-authorizer.html">AWS CLI</a></div></p>
     fn update_authorizer(
         &self,
         input: &UpdateAuthorizerRequest,
@@ -18422,7 +18310,7 @@ where
         }
     }
 
-    #[doc = "<p>Changes information about the <a>BasePathMapping</a> resource.</p>"]
+    /// <p>Changes information about the <a>BasePathMapping</a> resource.</p>
     fn update_base_path_mapping(
         &self,
         input: &UpdateBasePathMappingRequest,
@@ -18467,7 +18355,7 @@ where
         }
     }
 
-    #[doc = "<p>Changes information about an <a>ClientCertificate</a> resource.</p>"]
+    /// <p>Changes information about an <a>ClientCertificate</a> resource.</p>
     fn update_client_certificate(
         &self,
         input: &UpdateClientCertificateRequest,
@@ -18511,7 +18399,7 @@ where
         }
     }
 
-    #[doc = "<p>Changes information about a <a>Deployment</a> resource.</p>"]
+    /// <p>Changes information about a <a>Deployment</a> resource.</p>
     fn update_deployment(
         &self,
         input: &UpdateDeploymentRequest,
@@ -18644,7 +18532,7 @@ where
         }
     }
 
-    #[doc = "<p>Changes information about the <a>DomainName</a> resource.</p>"]
+    /// <p>Changes information about the <a>DomainName</a> resource.</p>
     fn update_domain_name(
         &self,
         input: &UpdateDomainNameRequest,
@@ -18688,7 +18576,7 @@ where
         }
     }
 
-    #[doc="<p>Updates a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>"]
+    /// <p>Updates a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
     fn update_gateway_response(
         &self,
         input: &UpdateGatewayResponseRequest,
@@ -18733,7 +18621,7 @@ where
         }
     }
 
-    #[doc = "<p>Represents an update integration.</p>"]
+    /// <p>Represents an update integration.</p>
     fn update_integration(
         &self,
         input: &UpdateIntegrationRequest,
@@ -18779,7 +18667,7 @@ where
         }
     }
 
-    #[doc = "<p>Represents an update integration response.</p>"]
+    /// <p>Represents an update integration response.</p>
     fn update_integration_response(
         &self,
         input: &UpdateIntegrationResponseRequest,
@@ -18820,7 +18708,7 @@ where
         }
     }
 
-    #[doc = "<p>Updates an existing <a>Method</a> resource.</p>"]
+    /// <p>Updates an existing <a>Method</a> resource.</p>
     fn update_method(&self, input: &UpdateMethodRequest) -> Result<Method, UpdateMethodError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
@@ -18863,7 +18751,7 @@ where
         }
     }
 
-    #[doc = "<p>Updates an existing <a>MethodResponse</a> resource.</p>"]
+    /// <p>Updates an existing <a>MethodResponse</a> resource.</p>
     fn update_method_response(
         &self,
         input: &UpdateMethodResponseRequest,
@@ -18904,7 +18792,7 @@ where
         }
     }
 
-    #[doc = "<p>Changes information about a model.</p>"]
+    /// <p>Changes information about a model.</p>
     fn update_model(&self, input: &UpdateModelRequest) -> Result<Model, UpdateModelError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/models/{model_name}",
@@ -18946,7 +18834,7 @@ where
         }
     }
 
-    #[doc = "<p>Updates a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>"]
+    /// <p>Updates a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
     fn update_request_validator(
         &self,
         input: &UpdateRequestValidatorRequest,
@@ -18991,7 +18879,7 @@ where
         }
     }
 
-    #[doc = "<p>Changes information about a <a>Resource</a> resource.</p>"]
+    /// <p>Changes information about a <a>Resource</a> resource.</p>
     fn update_resource(
         &self,
         input: &UpdateResourceRequest,
@@ -19036,7 +18924,7 @@ where
         }
     }
 
-    #[doc = "<p>Changes information about the specified API.</p>"]
+    /// <p>Changes information about the specified API.</p>
     fn update_rest_api(&self, input: &UpdateRestApiRequest) -> Result<RestApi, UpdateRestApiError> {
         let request_uri = format!("/restapis/{restapi_id}", restapi_id = input.rest_api_id);
 
@@ -19074,7 +18962,7 @@ where
         }
     }
 
-    #[doc = "<p>Changes information about a <a>Stage</a> resource.</p>"]
+    /// <p>Changes information about a <a>Stage</a> resource.</p>
     fn update_stage(&self, input: &UpdateStageRequest) -> Result<Stage, UpdateStageError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}",
@@ -19116,7 +19004,7 @@ where
         }
     }
 
-    #[doc="<p>Grants a temporary extension to the remaining quota of a usage plan associated with a specified API key.</p>"]
+    /// <p>Grants a temporary extension to the remaining quota of a usage plan associated with a specified API key.</p>
     fn update_usage(&self, input: &UpdateUsageRequest) -> Result<Usage, UpdateUsageError> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}/keys/{key_id}/usage",
@@ -19158,7 +19046,7 @@ where
         }
     }
 
-    #[doc = "<p>Updates a usage plan of a given plan Id.</p>"]
+    /// <p>Updates a usage plan of a given plan Id.</p>
     fn update_usage_plan(
         &self,
         input: &UpdateUsagePlanRequest,

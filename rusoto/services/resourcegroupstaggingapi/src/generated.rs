@@ -50,7 +50,7 @@ pub struct GetResourcesInput {
     #[serde(rename = "PaginationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pagination_token: Option<String>,
-    /// <p>The constraints on the resources that you want returned. The format of each resource type is <code>service[:resourceType]</code>. For example, specifying a resource type of <code>ec2</code> returns all tagged Amazon EC2 resources (which includes tagged EC2 instances). Specifying a resource type of <code>ec2:instance</code> returns only EC2 instances. </p> <p>The string for each service name and resource type is the same as that embedded in a resource's Amazon Resource Name (ARN). Consult the <i>AWS General Reference</i> for the following:</p> <ul> <li> <p>For a list of service name strings, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#genref-aws-service-namespaces">AWS Service Namespaces</a>.</p> </li> <li> <p>For resource type strings, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arns-syntax">Example ARNs</a>.</p> </li> <li> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p> </li> </ul>
+    /// <p><p>The constraints on the resources that you want returned. The format of each resource type is <code>service[:resourceType]</code>. For example, specifying a resource type of <code>ec2</code> returns all tagged Amazon EC2 resources (which includes tagged EC2 instances). Specifying a resource type of <code>ec2:instance</code> returns only EC2 instances. </p> <p>The string for each service name and resource type is the same as that embedded in a resource&#39;s Amazon Resource Name (ARN). Consult the <i>AWS General Reference</i> for the following:</p> <ul> <li> <p>For a list of service name strings, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#genref-aws-service-namespaces">AWS Service Namespaces</a>.</p> </li> <li> <p>For resource type strings, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arns-syntax">Example ARNs</a>.</p> </li> <li> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p> </li> </ul></p>
     #[serde(rename = "ResourceTypeFilters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type_filters: Option<Vec<String>>,
@@ -199,13 +199,13 @@ pub struct UntagResourcesOutput {
 /// Errors returned by GetResources
 #[derive(Debug, PartialEq)]
 pub enum GetResourcesError {
-    ///<p>The request processing failed because of an unknown error, exception, or failure. You can retry the request.</p>
+    /// <p>The request processing failed because of an unknown error, exception, or failure. You can retry the request.</p>
     InternalService(String),
-    ///<p>A parameter is missing or a malformed string or invalid or out-of-range value was supplied for the request parameter.</p>
+    /// <p>A parameter is missing or a malformed string or invalid or out-of-range value was supplied for the request parameter.</p>
     InvalidParameter(String),
-    ///<p>A <code>PaginationToken</code> is valid for a maximum of 15 minutes. Your request was denied because the specified <code>PaginationToken</code> has expired.</p>
+    /// <p>A <code>PaginationToken</code> is valid for a maximum of 15 minutes. Your request was denied because the specified <code>PaginationToken</code> has expired.</p>
     PaginationTokenExpired(String),
-    ///<p>The request was denied to limit the frequency of submitted requests.</p>
+    /// <p>The request was denied to limit the frequency of submitted requests.</p>
     Throttled(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -295,13 +295,13 @@ impl Error for GetResourcesError {
 /// Errors returned by GetTagKeys
 #[derive(Debug, PartialEq)]
 pub enum GetTagKeysError {
-    ///<p>The request processing failed because of an unknown error, exception, or failure. You can retry the request.</p>
+    /// <p>The request processing failed because of an unknown error, exception, or failure. You can retry the request.</p>
     InternalService(String),
-    ///<p>A parameter is missing or a malformed string or invalid or out-of-range value was supplied for the request parameter.</p>
+    /// <p>A parameter is missing or a malformed string or invalid or out-of-range value was supplied for the request parameter.</p>
     InvalidParameter(String),
-    ///<p>A <code>PaginationToken</code> is valid for a maximum of 15 minutes. Your request was denied because the specified <code>PaginationToken</code> has expired.</p>
+    /// <p>A <code>PaginationToken</code> is valid for a maximum of 15 minutes. Your request was denied because the specified <code>PaginationToken</code> has expired.</p>
     PaginationTokenExpired(String),
-    ///<p>The request was denied to limit the frequency of submitted requests.</p>
+    /// <p>The request was denied to limit the frequency of submitted requests.</p>
     Throttled(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -387,13 +387,13 @@ impl Error for GetTagKeysError {
 /// Errors returned by GetTagValues
 #[derive(Debug, PartialEq)]
 pub enum GetTagValuesError {
-    ///<p>The request processing failed because of an unknown error, exception, or failure. You can retry the request.</p>
+    /// <p>The request processing failed because of an unknown error, exception, or failure. You can retry the request.</p>
     InternalService(String),
-    ///<p>A parameter is missing or a malformed string or invalid or out-of-range value was supplied for the request parameter.</p>
+    /// <p>A parameter is missing or a malformed string or invalid or out-of-range value was supplied for the request parameter.</p>
     InvalidParameter(String),
-    ///<p>A <code>PaginationToken</code> is valid for a maximum of 15 minutes. Your request was denied because the specified <code>PaginationToken</code> has expired.</p>
+    /// <p>A <code>PaginationToken</code> is valid for a maximum of 15 minutes. Your request was denied because the specified <code>PaginationToken</code> has expired.</p>
     PaginationTokenExpired(String),
-    ///<p>The request was denied to limit the frequency of submitted requests.</p>
+    /// <p>The request was denied to limit the frequency of submitted requests.</p>
     Throttled(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -483,11 +483,11 @@ impl Error for GetTagValuesError {
 /// Errors returned by TagResources
 #[derive(Debug, PartialEq)]
 pub enum TagResourcesError {
-    ///<p>The request processing failed because of an unknown error, exception, or failure. You can retry the request.</p>
+    /// <p>The request processing failed because of an unknown error, exception, or failure. You can retry the request.</p>
     InternalService(String),
-    ///<p>A parameter is missing or a malformed string or invalid or out-of-range value was supplied for the request parameter.</p>
+    /// <p>A parameter is missing or a malformed string or invalid or out-of-range value was supplied for the request parameter.</p>
     InvalidParameter(String),
-    ///<p>The request was denied to limit the frequency of submitted requests.</p>
+    /// <p>The request was denied to limit the frequency of submitted requests.</p>
     Throttled(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -573,11 +573,11 @@ impl Error for TagResourcesError {
 /// Errors returned by UntagResources
 #[derive(Debug, PartialEq)]
 pub enum UntagResourcesError {
-    ///<p>The request processing failed because of an unknown error, exception, or failure. You can retry the request.</p>
+    /// <p>The request processing failed because of an unknown error, exception, or failure. You can retry the request.</p>
     InternalService(String),
-    ///<p>A parameter is missing or a malformed string or invalid or out-of-range value was supplied for the request parameter.</p>
+    /// <p>A parameter is missing or a malformed string or invalid or out-of-range value was supplied for the request parameter.</p>
     InvalidParameter(String),
-    ///<p>The request was denied to limit the frequency of submitted requests.</p>
+    /// <p>The request was denied to limit the frequency of submitted requests.</p>
     Throttled(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -662,28 +662,28 @@ impl Error for UntagResourcesError {
 }
 /// Trait representing the capabilities of the AWS Resource Groups Tagging API API. AWS Resource Groups Tagging API clients implement this trait.
 pub trait ResourceGroupsTaggingApi {
-    #[doc="<p>Returns all the tagged resources that are associated with the specified tags (keys and values) located in the specified region for the AWS account. The tags and the resource types that you specify in the request are known as <i>filters</i>. The response includes all tags that are associated with the requested resources. If no filter is provided, this action returns a paginated resource list with the associated tags.</p>"]
+    /// <p>Returns all the tagged resources that are associated with the specified tags (keys and values) located in the specified region for the AWS account. The tags and the resource types that you specify in the request are known as <i>filters</i>. The response includes all tags that are associated with the requested resources. If no filter is provided, this action returns a paginated resource list with the associated tags.</p>
     fn get_resources(
         &self,
         input: &GetResourcesInput,
     ) -> Result<GetResourcesOutput, GetResourcesError>;
 
-    #[doc = "<p>Returns all tag keys in the specified region for the AWS account.</p>"]
+    /// <p>Returns all tag keys in the specified region for the AWS account.</p>
     fn get_tag_keys(&self, input: &GetTagKeysInput) -> Result<GetTagKeysOutput, GetTagKeysError>;
 
-    #[doc="<p>Returns all tag values for the specified key in the specified region for the AWS account.</p>"]
+    /// <p>Returns all tag values for the specified key in the specified region for the AWS account.</p>
     fn get_tag_values(
         &self,
         input: &GetTagValuesInput,
     ) -> Result<GetTagValuesOutput, GetTagValuesError>;
 
-    #[doc="<p>Applies one or more tags to the specified resources. Note the following:</p> <ul> <li> <p>Not all resources can have tags. For a list of resources that support tagging, see <a href=\"http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/supported-resources.html\">Supported Resources</a> in the <i>AWS Resource Groups and Tag Editor User Guide</i>.</p> </li> <li> <p>Each resource can have up to 50 tags. For other limits, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html#tag-restrictions\">Tag Restrictions</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> </li> <li> <p>You can only tag resources that are located in the specified region for the AWS account.</p> </li> <li> <p>To add tags to a resource, you need the necessary permissions for the service that the resource belongs to as well as permissions for adding tags. For more information, see <a href=\"http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/obtaining-permissions-for-tagging.html\">Obtaining Permissions for Tagging</a> in the <i>AWS Resource Groups and Tag Editor User Guide</i>.</p> </li> </ul>"]
+    /// <p><p>Applies one or more tags to the specified resources. Note the following:</p> <ul> <li> <p>Not all resources can have tags. For a list of resources that support tagging, see <a href="http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/supported-resources.html">Supported Resources</a> in the <i>AWS Resource Groups and Tag Editor User Guide</i>.</p> </li> <li> <p>Each resource can have up to 50 tags. For other limits, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html#tag-restrictions">Tag Restrictions</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> </li> <li> <p>You can only tag resources that are located in the specified region for the AWS account.</p> </li> <li> <p>To add tags to a resource, you need the necessary permissions for the service that the resource belongs to as well as permissions for adding tags. For more information, see <a href="http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/obtaining-permissions-for-tagging.html">Obtaining Permissions for Tagging</a> in the <i>AWS Resource Groups and Tag Editor User Guide</i>.</p> </li> </ul></p>
     fn tag_resources(
         &self,
         input: &TagResourcesInput,
     ) -> Result<TagResourcesOutput, TagResourcesError>;
 
-    #[doc="<p>Removes the specified tags from the specified resources. When you specify a tag key, the action removes both that key and its associated value. The operation succeeds even if you attempt to remove tags from a resource that were already removed. Note the following:</p> <ul> <li> <p>To remove tags from a resource, you need the necessary permissions for the service that the resource belongs to as well as permissions for removing tags. For more information, see <a href=\"http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/obtaining-permissions-for-tagging.html\">Obtaining Permissions for Tagging</a> in the <i>AWS Resource Groups and Tag Editor User Guide</i>.</p> </li> <li> <p>You can only tag resources that are located in the specified region for the AWS account.</p> </li> </ul>"]
+    /// <p><p>Removes the specified tags from the specified resources. When you specify a tag key, the action removes both that key and its associated value. The operation succeeds even if you attempt to remove tags from a resource that were already removed. Note the following:</p> <ul> <li> <p>To remove tags from a resource, you need the necessary permissions for the service that the resource belongs to as well as permissions for removing tags. For more information, see <a href="http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/obtaining-permissions-for-tagging.html">Obtaining Permissions for Tagging</a> in the <i>AWS Resource Groups and Tag Editor User Guide</i>.</p> </li> <li> <p>You can only tag resources that are located in the specified region for the AWS account.</p> </li> </ul></p>
     fn untag_resources(
         &self,
         input: &UntagResourcesInput,
@@ -719,7 +719,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    #[doc="<p>Returns all the tagged resources that are associated with the specified tags (keys and values) located in the specified region for the AWS account. The tags and the resource types that you specify in the request are known as <i>filters</i>. The response includes all tags that are associated with the requested resources. If no filter is provided, this action returns a paginated resource list with the associated tags.</p>"]
+    /// <p>Returns all the tagged resources that are associated with the specified tags (keys and values) located in the specified region for the AWS account. The tags and the resource types that you specify in the request are known as <i>filters</i>. The response includes all tags that are associated with the requested resources. If no filter is provided, this action returns a paginated resource list with the associated tags.</p>
     fn get_resources(
         &self,
         input: &GetResourcesInput,
@@ -756,7 +756,7 @@ where
         }
     }
 
-    #[doc = "<p>Returns all tag keys in the specified region for the AWS account.</p>"]
+    /// <p>Returns all tag keys in the specified region for the AWS account.</p>
     fn get_tag_keys(&self, input: &GetTagKeysInput) -> Result<GetTagKeysOutput, GetTagKeysError> {
         let mut request = SignedRequest::new("POST", "tagging", &self.region, "/");
 
@@ -790,7 +790,7 @@ where
         }
     }
 
-    #[doc="<p>Returns all tag values for the specified key in the specified region for the AWS account.</p>"]
+    /// <p>Returns all tag values for the specified key in the specified region for the AWS account.</p>
     fn get_tag_values(
         &self,
         input: &GetTagValuesInput,
@@ -827,7 +827,7 @@ where
         }
     }
 
-    #[doc="<p>Applies one or more tags to the specified resources. Note the following:</p> <ul> <li> <p>Not all resources can have tags. For a list of resources that support tagging, see <a href=\"http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/supported-resources.html\">Supported Resources</a> in the <i>AWS Resource Groups and Tag Editor User Guide</i>.</p> </li> <li> <p>Each resource can have up to 50 tags. For other limits, see <a href=\"http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html#tag-restrictions\">Tag Restrictions</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> </li> <li> <p>You can only tag resources that are located in the specified region for the AWS account.</p> </li> <li> <p>To add tags to a resource, you need the necessary permissions for the service that the resource belongs to as well as permissions for adding tags. For more information, see <a href=\"http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/obtaining-permissions-for-tagging.html\">Obtaining Permissions for Tagging</a> in the <i>AWS Resource Groups and Tag Editor User Guide</i>.</p> </li> </ul>"]
+    /// <p><p>Applies one or more tags to the specified resources. Note the following:</p> <ul> <li> <p>Not all resources can have tags. For a list of resources that support tagging, see <a href="http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/supported-resources.html">Supported Resources</a> in the <i>AWS Resource Groups and Tag Editor User Guide</i>.</p> </li> <li> <p>Each resource can have up to 50 tags. For other limits, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html#tag-restrictions">Tag Restrictions</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> </li> <li> <p>You can only tag resources that are located in the specified region for the AWS account.</p> </li> <li> <p>To add tags to a resource, you need the necessary permissions for the service that the resource belongs to as well as permissions for adding tags. For more information, see <a href="http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/obtaining-permissions-for-tagging.html">Obtaining Permissions for Tagging</a> in the <i>AWS Resource Groups and Tag Editor User Guide</i>.</p> </li> </ul></p>
     fn tag_resources(
         &self,
         input: &TagResourcesInput,
@@ -864,7 +864,7 @@ where
         }
     }
 
-    #[doc="<p>Removes the specified tags from the specified resources. When you specify a tag key, the action removes both that key and its associated value. The operation succeeds even if you attempt to remove tags from a resource that were already removed. Note the following:</p> <ul> <li> <p>To remove tags from a resource, you need the necessary permissions for the service that the resource belongs to as well as permissions for removing tags. For more information, see <a href=\"http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/obtaining-permissions-for-tagging.html\">Obtaining Permissions for Tagging</a> in the <i>AWS Resource Groups and Tag Editor User Guide</i>.</p> </li> <li> <p>You can only tag resources that are located in the specified region for the AWS account.</p> </li> </ul>"]
+    /// <p><p>Removes the specified tags from the specified resources. When you specify a tag key, the action removes both that key and its associated value. The operation succeeds even if you attempt to remove tags from a resource that were already removed. Note the following:</p> <ul> <li> <p>To remove tags from a resource, you need the necessary permissions for the service that the resource belongs to as well as permissions for removing tags. For more information, see <a href="http://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/obtaining-permissions-for-tagging.html">Obtaining Permissions for Tagging</a> in the <i>AWS Resource Groups and Tag Editor User Guide</i>.</p> </li> <li> <p>You can only tag resources that are located in the specified region for the AWS account.</p> </li> </ul></p>
     fn untag_resources(
         &self,
         input: &UntagResourcesInput,

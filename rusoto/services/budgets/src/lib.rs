@@ -11,7 +11,7 @@
 //
 // =================================================================
 
-//! All public APIs for AWS Budgets
+//! <p>All public APIs for AWS Budgets</p>
 //!
 //! If you're using the service, you're probably looking for [BudgetsClient](struct.BudgetsClient.html) and [Budgets](trait.Budgets.html).
 
