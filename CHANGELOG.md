@@ -3,7 +3,7 @@
 ## [Unreleased]
 (Please put an entry here in each PR)
 
-## [0.30.0] - 2018-01-21
+## [0.31.0] - 2018-01-21
 
 - Update Rusoto Core ReadMe
 - use correct China-northwest region domain
