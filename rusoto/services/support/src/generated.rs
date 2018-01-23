@@ -599,7 +599,8 @@ pub struct TrustedAdvisorCheckResult {
     /// <p>The details about each resource listed in the check result.</p>
     #[serde(rename = "flaggedResources")]
     pub flagged_resources: Vec<TrustedAdvisorResourceDetail>,
-    #[serde(rename = "resourcesSummary")] pub resources_summary: TrustedAdvisorResourcesSummary,
+    #[serde(rename = "resourcesSummary")]
+    pub resources_summary: TrustedAdvisorResourcesSummary,
     /// <p>The alert status of the check: "ok" (green), "warning" (yellow), "error" (red), or "not_available".</p>
     #[serde(rename = "status")]
     pub status: String,
@@ -621,7 +622,8 @@ pub struct TrustedAdvisorCheckSummary {
     #[serde(rename = "hasFlaggedResources")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub has_flagged_resources: Option<bool>,
-    #[serde(rename = "resourcesSummary")] pub resources_summary: TrustedAdvisorResourcesSummary,
+    #[serde(rename = "resourcesSummary")]
+    pub resources_summary: TrustedAdvisorResourcesSummary,
     /// <p>The alert status of the check: "ok" (green), "warning" (yellow), "error" (red), or "not_available".</p>
     #[serde(rename = "status")]
     pub status: String,

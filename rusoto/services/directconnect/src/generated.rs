@@ -157,7 +157,8 @@ pub struct BGPPeer {
 /// <p>Container for the parameters to the ConfirmConnection operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ConfirmConnectionRequest {
-    #[serde(rename = "connectionId")] pub connection_id: String,
+    #[serde(rename = "connectionId")]
+    pub connection_id: String,
 }
 
 /// <p>The response received when ConfirmConnection is called.</p>
@@ -174,7 +175,8 @@ pub struct ConfirmPrivateVirtualInterfaceRequest {
     /// <p>ID of the virtual private gateway that will be attached to the virtual interface.</p> <p> A virtual private gateway can be managed via the Amazon Virtual Private Cloud (VPC) console or the <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-CreateVpnGateway.html">EC2 CreateVpnGateway</a> action.</p> <p>Default: None</p>
     #[serde(rename = "virtualGatewayId")]
     pub virtual_gateway_id: String,
-    #[serde(rename = "virtualInterfaceId")] pub virtual_interface_id: String,
+    #[serde(rename = "virtualInterfaceId")]
+    pub virtual_interface_id: String,
 }
 
 /// <p>The response received when ConfirmPrivateVirtualInterface is called.</p>
@@ -188,7 +190,8 @@ pub struct ConfirmPrivateVirtualInterfaceResponse {
 /// <p>Container for the parameters to the ConfirmPublicVirtualInterface operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ConfirmPublicVirtualInterfaceRequest {
-    #[serde(rename = "virtualInterfaceId")] pub virtual_interface_id: String,
+    #[serde(rename = "virtualInterfaceId")]
+    pub virtual_interface_id: String,
 }
 
 /// <p>The response received when ConfirmPublicVirtualInterface is called.</p>
@@ -278,12 +281,15 @@ pub struct CreateBGPPeerResponse {
 /// <p>Container for the parameters to the CreateConnection operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateConnectionRequest {
-    #[serde(rename = "bandwidth")] pub bandwidth: String,
-    #[serde(rename = "connectionName")] pub connection_name: String,
+    #[serde(rename = "bandwidth")]
+    pub bandwidth: String,
+    #[serde(rename = "connectionName")]
+    pub connection_name: String,
     #[serde(rename = "lagId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lag_id: Option<String>,
-    #[serde(rename = "location")] pub location: String,
+    #[serde(rename = "location")]
+    pub location: String,
 }
 
 /// <p>Container for the parameters to the CreateInterconnect operation.</p>
@@ -327,7 +333,8 @@ pub struct CreateLagRequest {
 /// <p>Container for the parameters to the CreatePrivateVirtualInterface operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreatePrivateVirtualInterfaceRequest {
-    #[serde(rename = "connectionId")] pub connection_id: String,
+    #[serde(rename = "connectionId")]
+    pub connection_id: String,
     /// <p>Detailed information for the private virtual interface to be created.</p> <p>Default: None</p>
     #[serde(rename = "newPrivateVirtualInterface")]
     pub new_private_virtual_interface: NewPrivateVirtualInterface,
@@ -336,7 +343,8 @@ pub struct CreatePrivateVirtualInterfaceRequest {
 /// <p>Container for the parameters to the CreatePublicVirtualInterface operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreatePublicVirtualInterfaceRequest {
-    #[serde(rename = "connectionId")] pub connection_id: String,
+    #[serde(rename = "connectionId")]
+    pub connection_id: String,
     /// <p>Detailed information for the public virtual interface to be created.</p> <p>Default: None</p>
     #[serde(rename = "newPublicVirtualInterface")]
     pub new_public_virtual_interface: NewPublicVirtualInterface,
@@ -368,13 +376,15 @@ pub struct DeleteBGPPeerResponse {
 /// <p>Container for the parameters to the DeleteConnection operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteConnectionRequest {
-    #[serde(rename = "connectionId")] pub connection_id: String,
+    #[serde(rename = "connectionId")]
+    pub connection_id: String,
 }
 
 /// <p>Container for the parameters to the DeleteInterconnect operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteInterconnectRequest {
-    #[serde(rename = "interconnectId")] pub interconnect_id: String,
+    #[serde(rename = "interconnectId")]
+    pub interconnect_id: String,
 }
 
 /// <p>The response received when DeleteInterconnect is called.</p>
@@ -396,7 +406,8 @@ pub struct DeleteLagRequest {
 /// <p>Container for the parameters to the DeleteVirtualInterface operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteVirtualInterfaceRequest {
-    #[serde(rename = "virtualInterfaceId")] pub virtual_interface_id: String,
+    #[serde(rename = "virtualInterfaceId")]
+    pub virtual_interface_id: String,
 }
 
 /// <p>The response received when DeleteVirtualInterface is called.</p>
@@ -410,7 +421,8 @@ pub struct DeleteVirtualInterfaceResponse {
 /// <p>Container for the parameters to the DescribeConnectionLoa operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeConnectionLoaRequest {
-    #[serde(rename = "connectionId")] pub connection_id: String,
+    #[serde(rename = "connectionId")]
+    pub connection_id: String,
     #[serde(rename = "loaContentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub loa_content_type: Option<String>,
@@ -455,7 +467,8 @@ pub struct DescribeHostedConnectionsRequest {
 /// <p>Container for the parameters to the DescribeInterconnectLoa operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeInterconnectLoaRequest {
-    #[serde(rename = "interconnectId")] pub interconnect_id: String,
+    #[serde(rename = "interconnectId")]
+    pub interconnect_id: String,
     #[serde(rename = "loaContentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub loa_content_type: Option<String>,
@@ -709,16 +722,20 @@ pub struct NewPrivateVirtualInterface {
     #[serde(rename = "amazonAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amazon_address: Option<String>,
-    #[serde(rename = "asn")] pub asn: i64,
+    #[serde(rename = "asn")]
+    pub asn: i64,
     #[serde(rename = "authKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_key: Option<String>,
     #[serde(rename = "customerAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_address: Option<String>,
-    #[serde(rename = "virtualGatewayId")] pub virtual_gateway_id: String,
-    #[serde(rename = "virtualInterfaceName")] pub virtual_interface_name: String,
-    #[serde(rename = "vlan")] pub vlan: i64,
+    #[serde(rename = "virtualGatewayId")]
+    pub virtual_gateway_id: String,
+    #[serde(rename = "virtualInterfaceName")]
+    pub virtual_interface_name: String,
+    #[serde(rename = "vlan")]
+    pub vlan: i64,
 }
 
 /// <p>A structure containing information about a private virtual interface that will be provisioned on a connection.</p>
@@ -730,15 +747,18 @@ pub struct NewPrivateVirtualInterfaceAllocation {
     #[serde(rename = "amazonAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amazon_address: Option<String>,
-    #[serde(rename = "asn")] pub asn: i64,
+    #[serde(rename = "asn")]
+    pub asn: i64,
     #[serde(rename = "authKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_key: Option<String>,
     #[serde(rename = "customerAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_address: Option<String>,
-    #[serde(rename = "virtualInterfaceName")] pub virtual_interface_name: String,
-    #[serde(rename = "vlan")] pub vlan: i64,
+    #[serde(rename = "virtualInterfaceName")]
+    pub virtual_interface_name: String,
+    #[serde(rename = "vlan")]
+    pub vlan: i64,
 }
 
 /// <p>A structure containing information about a new public virtual interface.</p>
@@ -750,7 +770,8 @@ pub struct NewPublicVirtualInterface {
     #[serde(rename = "amazonAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amazon_address: Option<String>,
-    #[serde(rename = "asn")] pub asn: i64,
+    #[serde(rename = "asn")]
+    pub asn: i64,
     #[serde(rename = "authKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_key: Option<String>,
@@ -760,8 +781,10 @@ pub struct NewPublicVirtualInterface {
     #[serde(rename = "routeFilterPrefixes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub route_filter_prefixes: Option<Vec<RouteFilterPrefix>>,
-    #[serde(rename = "virtualInterfaceName")] pub virtual_interface_name: String,
-    #[serde(rename = "vlan")] pub vlan: i64,
+    #[serde(rename = "virtualInterfaceName")]
+    pub virtual_interface_name: String,
+    #[serde(rename = "vlan")]
+    pub vlan: i64,
 }
 
 /// <p>A structure containing information about a public virtual interface that will be provisioned on a connection.</p>
@@ -773,7 +796,8 @@ pub struct NewPublicVirtualInterfaceAllocation {
     #[serde(rename = "amazonAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amazon_address: Option<String>,
-    #[serde(rename = "asn")] pub asn: i64,
+    #[serde(rename = "asn")]
+    pub asn: i64,
     #[serde(rename = "authKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_key: Option<String>,
@@ -783,8 +807,10 @@ pub struct NewPublicVirtualInterfaceAllocation {
     #[serde(rename = "routeFilterPrefixes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub route_filter_prefixes: Option<Vec<RouteFilterPrefix>>,
-    #[serde(rename = "virtualInterfaceName")] pub virtual_interface_name: String,
-    #[serde(rename = "vlan")] pub vlan: i64,
+    #[serde(rename = "virtualInterfaceName")]
+    pub virtual_interface_name: String,
+    #[serde(rename = "vlan")]
+    pub vlan: i64,
 }
 
 /// <p>The tags associated with a Direct Connect resource.</p>

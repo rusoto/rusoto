@@ -345,7 +345,8 @@ pub struct DescribeEventsResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeNodeAssociationStatusRequest {
-    #[serde(rename = "NodeAssociationStatusToken")] pub node_association_status_token: String,
+    #[serde(rename = "NodeAssociationStatusToken")]
+    pub node_association_status_token: String,
     /// <p>The name of the server from which to disassociate the node. </p>
     #[serde(rename = "ServerName")]
     pub server_name: String,

@@ -66,8 +66,10 @@ pub struct ActivateGatewayOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AddCacheInput {
-    #[serde(rename = "DiskIds")] pub disk_ids: Vec<String>,
-    #[serde(rename = "GatewayARN")] pub gateway_arn: String,
+    #[serde(rename = "DiskIds")]
+    pub disk_ids: Vec<String>,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -99,8 +101,10 @@ pub struct AddTagsToResourceOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AddUploadBufferInput {
-    #[serde(rename = "DiskIds")] pub disk_ids: Vec<String>,
-    #[serde(rename = "GatewayARN")] pub gateway_arn: String,
+    #[serde(rename = "DiskIds")]
+    pub disk_ids: Vec<String>,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -116,7 +120,8 @@ pub struct AddWorkingStorageInput {
     /// <p>An array of strings that identify disks that are to be configured as working storage. Each string have a minimum length of 1 and maximum length of 300. You can get the disk IDs from the <a>ListLocalDisks</a> API.</p>
     #[serde(rename = "DiskIds")]
     pub disk_ids: Vec<String>,
-    #[serde(rename = "GatewayARN")] pub gateway_arn: String,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
 }
 
 /// <p>A JSON object containing the of the gateway for which working storage was configured.</p>
@@ -171,7 +176,8 @@ pub struct CachediSCSIVolume {
 /// <p>CancelArchivalInput</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CancelArchivalInput {
-    #[serde(rename = "GatewayARN")] pub gateway_arn: String,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
     /// <p>The Amazon Resource Name (ARN) of the virtual tape you want to cancel archiving for.</p>
     #[serde(rename = "TapeARN")]
     pub tape_arn: String,
@@ -189,7 +195,8 @@ pub struct CancelArchivalOutput {
 /// <p>CancelRetrievalInput</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CancelRetrievalInput {
-    #[serde(rename = "GatewayARN")] pub gateway_arn: String,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
     /// <p>The Amazon Resource Name (ARN) of the virtual tape you want to cancel retrieval for.</p>
     #[serde(rename = "TapeARN")]
     pub tape_arn: String,
@@ -227,9 +234,12 @@ pub struct ChapInfo {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateCachediSCSIVolumeInput {
-    #[serde(rename = "ClientToken")] pub client_token: String,
-    #[serde(rename = "GatewayARN")] pub gateway_arn: String,
-    #[serde(rename = "NetworkInterfaceId")] pub network_interface_id: String,
+    #[serde(rename = "ClientToken")]
+    pub client_token: String,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
+    #[serde(rename = "NetworkInterfaceId")]
+    pub network_interface_id: String,
     #[serde(rename = "SnapshotId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snapshot_id: Option<String>,
@@ -237,8 +247,10 @@ pub struct CreateCachediSCSIVolumeInput {
     #[serde(rename = "SourceVolumeARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_volume_arn: Option<String>,
-    #[serde(rename = "TargetName")] pub target_name: String,
-    #[serde(rename = "VolumeSizeInBytes")] pub volume_size_in_bytes: i64,
+    #[serde(rename = "TargetName")]
+    pub target_name: String,
+    #[serde(rename = "VolumeSizeInBytes")]
+    pub volume_size_in_bytes: i64,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -307,8 +319,10 @@ pub struct CreateNFSFileShareOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateSnapshotFromVolumeRecoveryPointInput {
-    #[serde(rename = "SnapshotDescription")] pub snapshot_description: String,
-    #[serde(rename = "VolumeARN")] pub volume_arn: String,
+    #[serde(rename = "SnapshotDescription")]
+    pub snapshot_description: String,
+    #[serde(rename = "VolumeARN")]
+    pub volume_arn: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -354,7 +368,8 @@ pub struct CreateStorediSCSIVolumeInput {
     /// <p>The unique identifier for the gateway local disk that is configured as a stored volume. Use <a href="http://docs.aws.amazon.com/storagegateway/latest/userguide/API_ListLocalDisks.html">ListLocalDisks</a> to list disk IDs for a gateway.</p>
     #[serde(rename = "DiskId")]
     pub disk_id: String,
-    #[serde(rename = "GatewayARN")] pub gateway_arn: String,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
     /// <p>The network interface of the gateway on which to expose the iSCSI target. Only IPv4 addresses are accepted. Use <a>DescribeGatewayInformation</a> to get a list of the network interfaces available on a gateway.</p> <p> Valid Values: A valid IP address.</p>
     #[serde(rename = "NetworkInterfaceId")]
     pub network_interface_id: String,
@@ -445,7 +460,8 @@ pub struct DeleteBandwidthRateLimitInput {
     /// <p>One of the BandwidthType values that indicates the gateway bandwidth rate limit to delete.</p> <p>Valid Values: <code>Upload</code>, <code>Download</code>, <code>All</code>.</p>
     #[serde(rename = "BandwidthType")]
     pub bandwidth_type: String,
-    #[serde(rename = "GatewayARN")] pub gateway_arn: String,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
 }
 
 /// <p>A JSON object containing the of the gateway whose bandwidth rate information was deleted.</p>
@@ -504,7 +520,8 @@ pub struct DeleteFileShareOutput {
 /// <p>A JSON object containing the id of the gateway to delete.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteGatewayInput {
-    #[serde(rename = "GatewayARN")] pub gateway_arn: String,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
 }
 
 /// <p>A JSON object containing the id of the deleted gateway.</p>
@@ -517,7 +534,8 @@ pub struct DeleteGatewayOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteSnapshotScheduleInput {
-    #[serde(rename = "VolumeARN")] pub volume_arn: String,
+    #[serde(rename = "VolumeARN")]
+    pub volume_arn: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -584,7 +602,8 @@ pub struct DeleteVolumeOutput {
 /// <p>A JSON object containing the of the gateway.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeBandwidthRateLimitInput {
-    #[serde(rename = "GatewayARN")] pub gateway_arn: String,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
 }
 
 /// <p>A JSON object containing the following fields:</p>
@@ -605,7 +624,8 @@ pub struct DescribeBandwidthRateLimitOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeCacheInput {
-    #[serde(rename = "GatewayARN")] pub gateway_arn: String,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -635,7 +655,8 @@ pub struct DescribeCacheOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeCachediSCSIVolumesInput {
-    #[serde(rename = "VolumeARNs")] pub volume_ar_ns: Vec<String>,
+    #[serde(rename = "VolumeARNs")]
+    pub volume_ar_ns: Vec<String>,
 }
 
 /// <p>A JSON object containing the following fields:</p>
@@ -667,7 +688,8 @@ pub struct DescribeChapCredentialsOutput {
 /// <p>A JSON object containing the id of the gateway.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeGatewayInformationInput {
-    #[serde(rename = "GatewayARN")] pub gateway_arn: String,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
 }
 
 /// <p>A JSON object containing the following fields:</p>
@@ -713,7 +735,8 @@ pub struct DescribeGatewayInformationOutput {
 /// <p>A JSON object containing the of the gateway.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeMaintenanceStartTimeInput {
-    #[serde(rename = "GatewayARN")] pub gateway_arn: String,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
 }
 
 /// <p><p>A JSON object containing the following fields:</p> <ul> <li> <p> <a>DescribeMaintenanceStartTimeOutput$DayOfWeek</a> </p> </li> <li> <p> <a>DescribeMaintenanceStartTimeOutput$HourOfDay</a> </p> </li> <li> <p> <a>DescribeMaintenanceStartTimeOutput$MinuteOfHour</a> </p> </li> <li> <p> <a>DescribeMaintenanceStartTimeOutput$Timezone</a> </p> </li> </ul></p>
@@ -831,7 +854,8 @@ pub struct DescribeTapeArchivesOutput {
 /// <p>DescribeTapeRecoveryPointsInput</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeTapeRecoveryPointsInput {
-    #[serde(rename = "GatewayARN")] pub gateway_arn: String,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
     /// <p>Specifies that the number of virtual tape recovery points that are described be limited to the specified number.</p>
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -861,7 +885,8 @@ pub struct DescribeTapeRecoveryPointsOutput {
 /// <p>DescribeTapesInput</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeTapesInput {
-    #[serde(rename = "GatewayARN")] pub gateway_arn: String,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
     /// <p><p>Specifies that the number of virtual tapes described be limited to the specified number.</p> <note> <p>Amazon Web Services may impose its own limit, if this field is not set.</p> </note></p>
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -891,7 +916,8 @@ pub struct DescribeTapesOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeUploadBufferInput {
-    #[serde(rename = "GatewayARN")] pub gateway_arn: String,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -913,7 +939,8 @@ pub struct DescribeUploadBufferOutput {
 /// <p>DescribeVTLDevicesInput</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeVTLDevicesInput {
-    #[serde(rename = "GatewayARN")] pub gateway_arn: String,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
     /// <p>Specifies that the number of VTL devices described be limited to the specified number.</p>
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -947,7 +974,8 @@ pub struct DescribeVTLDevicesOutput {
 /// <p>A JSON object containing the of the gateway.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeWorkingStorageInput {
-    #[serde(rename = "GatewayARN")] pub gateway_arn: String,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
 }
 
 /// <p>A JSON object containing the following fields:</p>
@@ -994,7 +1022,8 @@ pub struct DeviceiSCSIAttributes {
 /// <p>DisableGatewayInput</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DisableGatewayInput {
-    #[serde(rename = "GatewayARN")] pub gateway_arn: String,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
 }
 
 /// <p>DisableGatewayOutput</p>
@@ -1133,7 +1162,8 @@ pub struct ListGatewaysOutput {
 /// <p>A JSON object containing the of the gateway.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListLocalDisksInput {
-    #[serde(rename = "GatewayARN")] pub gateway_arn: String,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -1226,7 +1256,8 @@ pub struct ListVolumeInitiatorsOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListVolumeRecoveryPointsInput {
-    #[serde(rename = "GatewayARN")] pub gateway_arn: String,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -1357,7 +1388,8 @@ pub struct NetworkInterface {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct RefreshCacheInput {
-    #[serde(rename = "FileShareARN")] pub file_share_arn: String,
+    #[serde(rename = "FileShareARN")]
+    pub file_share_arn: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -1389,7 +1421,8 @@ pub struct RemoveTagsFromResourceOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ResetCacheInput {
-    #[serde(rename = "GatewayARN")] pub gateway_arn: String,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -1422,7 +1455,8 @@ pub struct RetrieveTapeArchiveOutput {
 /// <p>RetrieveTapeRecoveryPointInput</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct RetrieveTapeRecoveryPointInput {
-    #[serde(rename = "GatewayARN")] pub gateway_arn: String,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
     /// <p>The Amazon Resource Name (ARN) of the virtual tape for which you want to retrieve the recovery point.</p>
     #[serde(rename = "TapeARN")]
     pub tape_arn: String,
@@ -1440,7 +1474,8 @@ pub struct RetrieveTapeRecoveryPointOutput {
 /// <p>SetLocalConsolePasswordInput</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct SetLocalConsolePasswordInput {
-    #[serde(rename = "GatewayARN")] pub gateway_arn: String,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
     /// <p>The password you want to set for your VM local console.</p>
     #[serde(rename = "LocalConsolePassword")]
     pub local_console_password: String,
@@ -1456,7 +1491,8 @@ pub struct SetLocalConsolePasswordOutput {
 /// <p>A JSON object containing the of the gateway to shut down.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ShutdownGatewayInput {
-    #[serde(rename = "GatewayARN")] pub gateway_arn: String,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
 }
 
 /// <p>A JSON object containing the of the gateway that was shut down.</p>
@@ -1470,7 +1506,8 @@ pub struct ShutdownGatewayOutput {
 /// <p>A JSON object containing the of the gateway to start.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct StartGatewayInput {
-    #[serde(rename = "GatewayARN")] pub gateway_arn: String,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
 }
 
 /// <p>A JSON object containing the of the gateway that was restarted.</p>
@@ -1541,8 +1578,10 @@ pub struct StorediSCSIVolume {
 
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Tag {
-    #[serde(rename = "Key")] pub key: String,
-    #[serde(rename = "Value")] pub value: String,
+    #[serde(rename = "Key")]
+    pub key: String,
+    #[serde(rename = "Value")]
+    pub value: String,
 }
 
 /// <p>Describes a virtual tape object.</p>
@@ -1674,7 +1713,8 @@ pub struct UpdateBandwidthRateLimitInput {
     #[serde(rename = "AverageUploadRateLimitInBitsPerSec")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub average_upload_rate_limit_in_bits_per_sec: Option<i64>,
-    #[serde(rename = "GatewayARN")] pub gateway_arn: String,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
 }
 
 /// <p>A JSON object containing the of the gateway whose throttle information was updated.</p>
@@ -1718,7 +1758,8 @@ pub struct UpdateChapCredentialsOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateGatewayInformationInput {
-    #[serde(rename = "GatewayARN")] pub gateway_arn: String,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
     #[serde(rename = "GatewayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gateway_name: Option<String>,
@@ -1741,7 +1782,8 @@ pub struct UpdateGatewayInformationOutput {
 /// <p>A JSON object containing the of the gateway to update.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateGatewaySoftwareNowInput {
-    #[serde(rename = "GatewayARN")] pub gateway_arn: String,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
 }
 
 /// <p>A JSON object containing the of the gateway that was updated.</p>
@@ -1758,7 +1800,8 @@ pub struct UpdateMaintenanceStartTimeInput {
     /// <p>The maintenance start time day of the week represented as an ordinal number from 0 to 6, where 0 represents Sunday and 6 Saturday.</p>
     #[serde(rename = "DayOfWeek")]
     pub day_of_week: i64,
-    #[serde(rename = "GatewayARN")] pub gateway_arn: String,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
     /// <p>The hour component of the maintenance start time represented as <i>hh</i>, where <i>hh</i> is the hour (00 to 23). The hour of the day is in the time zone of the gateway.</p>
     #[serde(rename = "HourOfDay")]
     pub hour_of_day: i64,

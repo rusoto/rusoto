@@ -68,7 +68,8 @@ pub struct DescribeReportDefinitionsResponse {
 /// <p>Request of PutReportDefinition</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct PutReportDefinitionRequest {
-    #[serde(rename = "ReportDefinition")] pub report_definition: ReportDefinition,
+    #[serde(rename = "ReportDefinition")]
+    pub report_definition: ReportDefinition,
 }
 
 /// <p>Response of PutReportDefinition</p>
@@ -81,14 +82,22 @@ pub struct ReportDefinition {
     #[serde(rename = "AdditionalArtifacts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_artifacts: Option<Vec<String>>,
-    #[serde(rename = "AdditionalSchemaElements")] pub additional_schema_elements: Vec<String>,
-    #[serde(rename = "Compression")] pub compression: String,
-    #[serde(rename = "Format")] pub format: String,
-    #[serde(rename = "ReportName")] pub report_name: String,
-    #[serde(rename = "S3Bucket")] pub s3_bucket: String,
-    #[serde(rename = "S3Prefix")] pub s3_prefix: String,
-    #[serde(rename = "S3Region")] pub s3_region: String,
-    #[serde(rename = "TimeUnit")] pub time_unit: String,
+    #[serde(rename = "AdditionalSchemaElements")]
+    pub additional_schema_elements: Vec<String>,
+    #[serde(rename = "Compression")]
+    pub compression: String,
+    #[serde(rename = "Format")]
+    pub format: String,
+    #[serde(rename = "ReportName")]
+    pub report_name: String,
+    #[serde(rename = "S3Bucket")]
+    pub s3_bucket: String,
+    #[serde(rename = "S3Prefix")]
+    pub s3_prefix: String,
+    #[serde(rename = "S3Region")]
+    pub s3_region: String,
+    #[serde(rename = "TimeUnit")]
+    pub time_unit: String,
 }
 
 /// Errors returned by DeleteReportDefinition

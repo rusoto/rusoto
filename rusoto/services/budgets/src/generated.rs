@@ -30,24 +30,31 @@ use serde_json::from_str;
 /// <p>AWS Budget model</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Budget {
-    #[serde(rename = "BudgetLimit")] pub budget_limit: Spend,
-    #[serde(rename = "BudgetName")] pub budget_name: String,
-    #[serde(rename = "BudgetType")] pub budget_type: String,
+    #[serde(rename = "BudgetLimit")]
+    pub budget_limit: Spend,
+    #[serde(rename = "BudgetName")]
+    pub budget_name: String,
+    #[serde(rename = "BudgetType")]
+    pub budget_type: String,
     #[serde(rename = "CalculatedSpend")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub calculated_spend: Option<CalculatedSpend>,
     #[serde(rename = "CostFilters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cost_filters: Option<::std::collections::HashMap<String, Vec<String>>>,
-    #[serde(rename = "CostTypes")] pub cost_types: CostTypes,
-    #[serde(rename = "TimePeriod")] pub time_period: TimePeriod,
-    #[serde(rename = "TimeUnit")] pub time_unit: String,
+    #[serde(rename = "CostTypes")]
+    pub cost_types: CostTypes,
+    #[serde(rename = "TimePeriod")]
+    pub time_period: TimePeriod,
+    #[serde(rename = "TimeUnit")]
+    pub time_unit: String,
 }
 
 /// <p>A structure holds the actual and forecasted spend for a budget.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct CalculatedSpend {
-    #[serde(rename = "ActualSpend")] pub actual_spend: Spend,
+    #[serde(rename = "ActualSpend")]
+    pub actual_spend: Spend,
     #[serde(rename = "ForecastedSpend")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub forecasted_spend: Option<Spend>,
@@ -56,16 +63,21 @@ pub struct CalculatedSpend {
 /// <p>This includes the options for getting the cost of a budget.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct CostTypes {
-    #[serde(rename = "IncludeSubscription")] pub include_subscription: bool,
-    #[serde(rename = "IncludeTax")] pub include_tax: bool,
-    #[serde(rename = "UseBlended")] pub use_blended: bool,
+    #[serde(rename = "IncludeSubscription")]
+    pub include_subscription: bool,
+    #[serde(rename = "IncludeTax")]
+    pub include_tax: bool,
+    #[serde(rename = "UseBlended")]
+    pub use_blended: bool,
 }
 
 /// <p>Request of CreateBudget</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateBudgetRequest {
-    #[serde(rename = "AccountId")] pub account_id: String,
-    #[serde(rename = "Budget")] pub budget: Budget,
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    #[serde(rename = "Budget")]
+    pub budget: Budget,
     #[serde(rename = "NotificationsWithSubscribers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notifications_with_subscribers: Option<Vec<NotificationWithSubscribers>>,
@@ -78,10 +90,14 @@ pub struct CreateBudgetResponse;
 /// <p>Request of CreateNotification</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateNotificationRequest {
-    #[serde(rename = "AccountId")] pub account_id: String,
-    #[serde(rename = "BudgetName")] pub budget_name: String,
-    #[serde(rename = "Notification")] pub notification: Notification,
-    #[serde(rename = "Subscribers")] pub subscribers: Vec<Subscriber>,
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    #[serde(rename = "BudgetName")]
+    pub budget_name: String,
+    #[serde(rename = "Notification")]
+    pub notification: Notification,
+    #[serde(rename = "Subscribers")]
+    pub subscribers: Vec<Subscriber>,
 }
 
 /// <p>Response of CreateNotification</p>
@@ -91,10 +107,14 @@ pub struct CreateNotificationResponse;
 /// <p>Request of CreateSubscriber</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateSubscriberRequest {
-    #[serde(rename = "AccountId")] pub account_id: String,
-    #[serde(rename = "BudgetName")] pub budget_name: String,
-    #[serde(rename = "Notification")] pub notification: Notification,
-    #[serde(rename = "Subscriber")] pub subscriber: Subscriber,
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    #[serde(rename = "BudgetName")]
+    pub budget_name: String,
+    #[serde(rename = "Notification")]
+    pub notification: Notification,
+    #[serde(rename = "Subscriber")]
+    pub subscriber: Subscriber,
 }
 
 /// <p>Response of CreateSubscriber</p>
@@ -104,8 +124,10 @@ pub struct CreateSubscriberResponse;
 /// <p>Request of DeleteBudget</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteBudgetRequest {
-    #[serde(rename = "AccountId")] pub account_id: String,
-    #[serde(rename = "BudgetName")] pub budget_name: String,
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    #[serde(rename = "BudgetName")]
+    pub budget_name: String,
 }
 
 /// <p>Response of DeleteBudget</p>
@@ -115,9 +137,12 @@ pub struct DeleteBudgetResponse;
 /// <p>Request of DeleteNotification</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteNotificationRequest {
-    #[serde(rename = "AccountId")] pub account_id: String,
-    #[serde(rename = "BudgetName")] pub budget_name: String,
-    #[serde(rename = "Notification")] pub notification: Notification,
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    #[serde(rename = "BudgetName")]
+    pub budget_name: String,
+    #[serde(rename = "Notification")]
+    pub notification: Notification,
 }
 
 /// <p>Response of DeleteNotification</p>
@@ -127,10 +152,14 @@ pub struct DeleteNotificationResponse;
 /// <p>Request of DeleteSubscriber</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteSubscriberRequest {
-    #[serde(rename = "AccountId")] pub account_id: String,
-    #[serde(rename = "BudgetName")] pub budget_name: String,
-    #[serde(rename = "Notification")] pub notification: Notification,
-    #[serde(rename = "Subscriber")] pub subscriber: Subscriber,
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    #[serde(rename = "BudgetName")]
+    pub budget_name: String,
+    #[serde(rename = "Notification")]
+    pub notification: Notification,
+    #[serde(rename = "Subscriber")]
+    pub subscriber: Subscriber,
 }
 
 /// <p>Response of DeleteSubscriber</p>
@@ -140,8 +169,10 @@ pub struct DeleteSubscriberResponse;
 /// <p>Request of DescribeBudget</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeBudgetRequest {
-    #[serde(rename = "AccountId")] pub account_id: String,
-    #[serde(rename = "BudgetName")] pub budget_name: String,
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    #[serde(rename = "BudgetName")]
+    pub budget_name: String,
 }
 
 /// <p>Response of DescribeBudget</p>
@@ -155,7 +186,8 @@ pub struct DescribeBudgetResponse {
 /// <p>Request of DescribeBudgets</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeBudgetsRequest {
-    #[serde(rename = "AccountId")] pub account_id: String,
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -178,8 +210,10 @@ pub struct DescribeBudgetsResponse {
 /// <p>Request of DescribeNotificationsForBudget</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeNotificationsForBudgetRequest {
-    #[serde(rename = "AccountId")] pub account_id: String,
-    #[serde(rename = "BudgetName")] pub budget_name: String,
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    #[serde(rename = "BudgetName")]
+    pub budget_name: String,
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -202,15 +236,18 @@ pub struct DescribeNotificationsForBudgetResponse {
 /// <p>Request of DescribeSubscribersForNotification</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeSubscribersForNotificationRequest {
-    #[serde(rename = "AccountId")] pub account_id: String,
-    #[serde(rename = "BudgetName")] pub budget_name: String,
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    #[serde(rename = "BudgetName")]
+    pub budget_name: String,
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[serde(rename = "Notification")] pub notification: Notification,
+    #[serde(rename = "Notification")]
+    pub notification: Notification,
 }
 
 /// <p>Response of DescribeSubscribersForNotification</p>
@@ -227,44 +264,57 @@ pub struct DescribeSubscribersForNotificationResponse {
 /// <p>Notification model. Each budget may contain multiple notifications with different settings.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Notification {
-    #[serde(rename = "ComparisonOperator")] pub comparison_operator: String,
-    #[serde(rename = "NotificationType")] pub notification_type: String,
-    #[serde(rename = "Threshold")] pub threshold: f64,
+    #[serde(rename = "ComparisonOperator")]
+    pub comparison_operator: String,
+    #[serde(rename = "NotificationType")]
+    pub notification_type: String,
+    #[serde(rename = "Threshold")]
+    pub threshold: f64,
 }
 
 /// <p>A structure to relate notification and a list of subscribers who belong to the notification.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct NotificationWithSubscribers {
-    #[serde(rename = "Notification")] pub notification: Notification,
-    #[serde(rename = "Subscribers")] pub subscribers: Vec<Subscriber>,
+    #[serde(rename = "Notification")]
+    pub notification: Notification,
+    #[serde(rename = "Subscribers")]
+    pub subscribers: Vec<Subscriber>,
 }
 
 /// <p>A structure represent either a cost spend or usage spend. Contains an amount and a unit.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Spend {
-    #[serde(rename = "Amount")] pub amount: String,
-    #[serde(rename = "Unit")] pub unit: String,
+    #[serde(rename = "Amount")]
+    pub amount: String,
+    #[serde(rename = "Unit")]
+    pub unit: String,
 }
 
 /// <p>Subscriber model. Each notification may contain multiple subscribers with different addresses.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Subscriber {
-    #[serde(rename = "Address")] pub address: String,
-    #[serde(rename = "SubscriptionType")] pub subscription_type: String,
+    #[serde(rename = "Address")]
+    pub address: String,
+    #[serde(rename = "SubscriptionType")]
+    pub subscription_type: String,
 }
 
 /// <p>A time period indicated the start date and end date of a budget.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct TimePeriod {
-    #[serde(rename = "End")] pub end: f64,
-    #[serde(rename = "Start")] pub start: f64,
+    #[serde(rename = "End")]
+    pub end: f64,
+    #[serde(rename = "Start")]
+    pub start: f64,
 }
 
 /// <p>Request of UpdateBudget</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateBudgetRequest {
-    #[serde(rename = "AccountId")] pub account_id: String,
-    #[serde(rename = "NewBudget")] pub new_budget: Budget,
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    #[serde(rename = "NewBudget")]
+    pub new_budget: Budget,
 }
 
 /// <p>Response of UpdateBudget</p>
@@ -274,10 +324,14 @@ pub struct UpdateBudgetResponse;
 /// <p>Request of UpdateNotification</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateNotificationRequest {
-    #[serde(rename = "AccountId")] pub account_id: String,
-    #[serde(rename = "BudgetName")] pub budget_name: String,
-    #[serde(rename = "NewNotification")] pub new_notification: Notification,
-    #[serde(rename = "OldNotification")] pub old_notification: Notification,
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    #[serde(rename = "BudgetName")]
+    pub budget_name: String,
+    #[serde(rename = "NewNotification")]
+    pub new_notification: Notification,
+    #[serde(rename = "OldNotification")]
+    pub old_notification: Notification,
 }
 
 /// <p>Response of UpdateNotification</p>
@@ -287,11 +341,16 @@ pub struct UpdateNotificationResponse;
 /// <p>Request of UpdateSubscriber</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateSubscriberRequest {
-    #[serde(rename = "AccountId")] pub account_id: String,
-    #[serde(rename = "BudgetName")] pub budget_name: String,
-    #[serde(rename = "NewSubscriber")] pub new_subscriber: Subscriber,
-    #[serde(rename = "Notification")] pub notification: Notification,
-    #[serde(rename = "OldSubscriber")] pub old_subscriber: Subscriber,
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    #[serde(rename = "BudgetName")]
+    pub budget_name: String,
+    #[serde(rename = "NewSubscriber")]
+    pub new_subscriber: Subscriber,
+    #[serde(rename = "Notification")]
+    pub notification: Notification,
+    #[serde(rename = "OldSubscriber")]
+    pub old_subscriber: Subscriber,
 }
 
 /// <p>Response of UpdateSubscriber</p>

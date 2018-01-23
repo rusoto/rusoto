@@ -85,7 +85,8 @@ pub struct CreateHsmRequest {
     /// <p>The identifier of the subnet in your VPC in which to place the HSM.</p>
     #[serde(rename = "SubnetId")]
     pub subnet_id: String,
-    #[serde(rename = "SubscriptionType")] pub subscription_type: String,
+    #[serde(rename = "SubscriptionType")]
+    pub subscription_type: String,
     /// <p>The IP address for the syslog monitoring server. The AWS CloudHSM service only supports one syslog monitoring server.</p>
     #[serde(rename = "SyslogIp")]
     #[serde(skip_serializing_if = "Option::is_none")]

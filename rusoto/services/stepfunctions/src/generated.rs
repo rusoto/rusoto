@@ -608,7 +608,8 @@ pub struct ListStateMachinesOutput {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    #[serde(rename = "stateMachines")] pub state_machines: Vec<StateMachineListItem>,
+    #[serde(rename = "stateMachines")]
+    pub state_machines: Vec<StateMachineListItem>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
