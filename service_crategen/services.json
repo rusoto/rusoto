@@ -490,9 +490,9 @@
     "coreVersion": "0.31.0",
     "protocolVersion": "2006-03-01",
     "customDependencies": {
-      "md5": "0.3.2",
-      "base64": "0.6",
-      "hex": "0.2"
+      "md5": "0.3.6",
+      "base64": "0.9",
+      "hex": "0.3"
     },
     "baseTypeName": "S3"
   },

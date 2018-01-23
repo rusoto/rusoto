@@ -9,7 +9,7 @@ use rusoto_core::default_tls_client;
 
 #[test]
 fn should_describe_db_clusters() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
     let credentials = DefaultCredentialsProvider::new().unwrap();
     let client = RdsClient::new(default_tls_client().unwrap(), credentials, Region::UsEast1);
     let request = DescribeDBClustersMessage::default();

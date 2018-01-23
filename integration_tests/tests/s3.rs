@@ -28,7 +28,7 @@ type TestClient = S3Client<DefaultCredentialsProvider, Client>;
 // executes those tests, and then destroys the resources
 #[test]
 fn test_all_the_things() {
-    let _ = env_logger::init();
+    let _ = env_logger::try_init();
 
     let region = if let Ok(endpoint) = env::var("S3_ENDPOINT") {
         let region = Region::Custom { name: "us-east-1".to_owned(), endpoint: endpoint.to_owned() };

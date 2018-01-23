@@ -21,7 +21,7 @@ use hyper::net::HttpsConnector;
 use hyper::client::pool::Pool;
 use hyper_native_tls::NativeTlsClient;
 
-use log::LogLevel::Debug;
+use log::Level::Debug;
 
 use signature::SignedRequest;
 
