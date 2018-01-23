@@ -98,7 +98,7 @@ impl <'b> Service <'b> {
         dependencies.insert("hyper".to_owned(), cargo::Dependency::Simple("0.10.0".into()));
         dependencies.insert("rusoto_core".to_owned(), cargo::Dependency::Extended {
             path: Some("../../core".into()),
-            version: Some(self.config.core_version.clone()),
+            version: Some(format!(">= 0.30")),
             optional: None,
             default_features: None,
             features: None
