@@ -20,7 +20,7 @@ md5 = "0.3.2"
 xml-rs = "0.7"
 
 [dependencies.rusoto_core]
-version = "0.31.0"
+version = ">= 0.30"
 path = "../../core"
 [dev-dependencies.rusoto_mock]
 version = "0.25.0"
