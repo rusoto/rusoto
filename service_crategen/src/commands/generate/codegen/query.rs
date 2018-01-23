@@ -86,13 +86,6 @@ impl GenerateProtocol for QueryGenerator {
         }}")
     }
 
-    fn generate_struct_attributes(&self,
-                                  _serialized: bool,
-                                  deserialized: bool)
-                                  -> String {
-        xml_payload_parser::generate_struct_attributes(deserialized)
-    }
-
     fn generate_serializer(&self, name: &str, shape: &Shape, service: &Service) -> Option<String> {
         if shape.is_primitive() {
             return None;

@@ -80,21 +80,12 @@ impl GenerateProtocol for JsonGenerator {
         use hyper::StatusCode;")
     }
 
-    fn generate_struct_attributes(&self,
-                                  serialized: bool,
-                                  deserialized: bool)
-                                  -> String {
-        let mut derived = vec!["Default", "Debug", "Clone"];
+    fn serialize_trait(&self) -> Option<&'static str> {
+        Some("Serialize")
+    }
 
-        if serialized {
-            derived.push("Serialize");
-        }
-
-        if deserialized {
-            derived.push("Deserialize")
-        }
-
-        format!("#[derive({})]", derived.join(","))
+    fn deserialize_trait(&self) -> Option<&'static str> {
+        Some("Deserialize")
     }
 
     fn timestamp_type(&self) -> &'static str {
