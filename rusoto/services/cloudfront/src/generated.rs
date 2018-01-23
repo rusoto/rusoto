@@ -45,7 +45,7 @@ enum DeserializerNext {
     Element(String),
 }
 /// <p>A complex type that lists the AWS accounts, if any, that you included in the <code>TrustedSigners</code> complex type for this distribution. These are the accounts that you want to allow to create signed URLs for private content.</p> <p>The <code>Signer</code> complex type lists the AWS account number of the trusted signer or <code>self</code> if the signer is the AWS account that created the distribution. The <code>Signer</code> element also includes the IDs of any active CloudFront key pairs that are associated with the trusted signer's AWS account. If no <code>KeyPairId</code> element appears for a <code>Signer</code>, that signer can't create signed URLs. </p> <p>For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ActiveTrustedSigners {
     /// <p>Enabled is <code>true</code> if any of the AWS accounts listed in the <code>TrustedSigners</code> complex type for this RTMP distribution have active CloudFront key pairs. If not, <code>Enabled</code> is <code>false</code>.</p> <p>For more information, see <a>ActiveTrustedSigners</a>.</p>
     pub enabled: bool,
@@ -162,7 +162,7 @@ impl AliasListSerializer {
 }
 
 /// <p>A complex type that contains information about CNAMEs (alternate domain names), if any, for this distribution. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct Aliases {
     /// <p>A complex type that contains the CNAME aliases, if any, that you want to associate with this distribution.</p>
     pub items: Option<Vec<String>>,
@@ -239,7 +239,7 @@ impl AliasesSerializer {
 }
 
 /// <p>A complex type that controls which HTTP methods CloudFront processes and forwards to your Amazon S3 bucket or your custom origin. There are three choices:</p> <ul> <li> <p>CloudFront forwards only <code>GET</code> and <code>HEAD</code> requests.</p> </li> <li> <p>CloudFront forwards only <code>GET</code>, <code>HEAD</code>, and <code>OPTIONS</code> requests.</p> </li> <li> <p>CloudFront forwards <code>GET, HEAD, OPTIONS, PUT, PATCH, POST</code>, and <code>DELETE</code> requests.</p> </li> </ul> <p>If you pick the third choice, you may need to restrict access to your Amazon S3 bucket or to your custom origin so users can't perform operations that you don't want them to. For example, you might not want users to have permissions to delete objects from your origin.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct AllowedMethods {
     pub cached_methods: Option<CachedMethods>,
     /// <p>A complex type that contains the HTTP methods that you want CloudFront to process and forward to your origin.</p>
@@ -423,7 +423,7 @@ impl BooleanSerializer {
 }
 
 /// <p>A complex type that describes how CloudFront processes requests.</p> <p>You must create at least as many cache behaviors (including the default cache behavior) as you have origins if you want CloudFront to distribute objects from all of the origins. Each cache behavior specifies the one origin from which you want CloudFront to get objects. If you have two origins and only the default cache behavior, the default cache behavior will cause CloudFront to get objects from one of the origins, but the other origin is never used.</p> <p>For the current limit on the number of cache behaviors that you can add to a distribution, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_cloudfront">Amazon CloudFront Limits</a> in the <i>AWS General Reference</i>.</p> <p>If you don't want to specify any cache behaviors, include only an empty <code>CacheBehaviors</code> element. Don't include an empty <code>CacheBehavior</code> element, or CloudFront returns a <code>MalformedXML</code> error.</p> <p>To delete all cache behaviors in an existing distribution, update the distribution configuration and include only an empty <code>CacheBehaviors</code> element.</p> <p>To add, change, or remove one or more cache behaviors, update the distribution configuration and specify all of the cache behaviors that you want to include in the updated distribution.</p> <p>For more information about cache behaviors, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValuesCacheBehavior">Cache Behaviors</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CacheBehavior {
     pub allowed_methods: Option<AllowedMethods>,
     /// <p>Whether you want CloudFront to automatically compress certain files for this cache behavior. If so, specify true; if not, specify false. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html">Serving Compressed Files</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
@@ -700,7 +700,7 @@ impl CacheBehaviorListSerializer {
 }
 
 /// <p>A complex type that contains zero or more <code>CacheBehavior</code> elements. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CacheBehaviors {
     /// <p>Optional: A complex type that contains cache behaviors for this distribution. If <code>Quantity</code> is <code>0</code>, you can omit <code>Items</code>.</p>
     pub items: Option<Vec<CacheBehavior>>,
@@ -780,7 +780,7 @@ impl CacheBehaviorsSerializer {
 }
 
 /// <p>A complex type that controls whether CloudFront caches the response to requests using the specified HTTP methods. There are two choices:</p> <ul> <li> <p>CloudFront caches responses to <code>GET</code> and <code>HEAD</code> requests.</p> </li> <li> <p>CloudFront caches responses to <code>GET</code>, <code>HEAD</code>, and <code>OPTIONS</code> requests.</p> </li> </ul> <p>If you pick the second choice for your Amazon S3 Origin, you may need to forward Access-Control-Request-Method, Access-Control-Request-Headers, and Origin headers for the responses to be cached correctly. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CachedMethods {
     /// <p>A complex type that contains the HTTP methods that you want CloudFront to cache responses to.</p>
     pub items: Vec<String>,
@@ -855,7 +855,7 @@ impl CachedMethodsSerializer {
 }
 
 /// <p>CloudFront origin access identity.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CloudFrontOriginAccessIdentity {
     /// <p>The current configuration information for the identity. </p>
     pub cloud_front_origin_access_identity_config: Option<CloudFrontOriginAccessIdentityConfig>,
@@ -917,7 +917,7 @@ impl CloudFrontOriginAccessIdentityDeserializer {
     }
 }
 /// <p>Origin access identity configuration. Send a <code>GET</code> request to the <code>/<i>CloudFront API version</i>/CloudFront/identity ID/config</code> resource. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CloudFrontOriginAccessIdentityConfig {
     /// <p>A unique number that ensures the request can't be replayed.</p> <p>If the <code>CallerReference</code> is new (no matter the content of the <code>CloudFrontOriginAccessIdentityConfig</code> object), a new origin access identity is created.</p> <p>If the <code>CallerReference</code> is a value already sent in a previous identity request, and the content of the <code>CloudFrontOriginAccessIdentityConfig</code> is identical to the original request (ignoring white space), the response includes the same information returned to the original request. </p> <p>If the <code>CallerReference</code> is a value you already sent in a previous request to create an identity, but the content of the <code>CloudFrontOriginAccessIdentityConfig</code> is different from the original request, CloudFront returns a <code>CloudFrontOriginAccessIdentityAlreadyExists</code> error. </p>
     pub caller_reference: String,
@@ -998,7 +998,7 @@ impl CloudFrontOriginAccessIdentityConfigSerializer {
 }
 
 /// <p>Lists the origin access identities for CloudFront.Send a <code>GET</code> request to the <code>/<i>CloudFront API version</i>/origin-access-identity/cloudfront</code> resource. The response includes a <code>CloudFrontOriginAccessIdentityList</code> element with zero or more <code>CloudFrontOriginAccessIdentitySummary</code> child elements. By default, your entire list of origin access identities is returned in one single page. If the list is long, you can paginate it using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CloudFrontOriginAccessIdentityList {
     /// <p>A flag that indicates whether more origin access identities remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more items in the list.</p>
     pub is_truncated: bool,
@@ -1075,7 +1075,7 @@ impl CloudFrontOriginAccessIdentityListDeserializer {
     }
 }
 /// <p>Summary of the information about a CloudFront origin access identity.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CloudFrontOriginAccessIdentitySummary {
     /// <p>The comment for this origin access identity, as originally specified when created.</p>
     pub comment: String,
@@ -1238,7 +1238,7 @@ impl CookieNameListSerializer {
 }
 
 /// <p>A complex type that specifies whether you want CloudFront to forward cookies to the origin and, if so, which ones. For more information about forwarding cookies to the origin, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Cookies.html">How CloudFront Forwards, Caches, and Logs Cookies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CookieNames {
     /// <p>A complex type that contains one <code>Name</code> element for each cookie that you want CloudFront to forward to the origin for this cache behavior.</p>
     pub items: Option<Vec<String>>,
@@ -1318,7 +1318,7 @@ impl CookieNamesSerializer {
 }
 
 /// <p>A complex type that specifies whether you want CloudFront to forward cookies to the origin and, if so, which ones. For more information about forwarding cookies to the origin, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Cookies.html">How CloudFront Forwards, Caches, and Logs Cookies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CookiePreference {
     /// <p>Specifies which cookies to forward to the origin for this cache behavior: all, none, or the list of cookies specified in the <code>WhitelistedNames</code> complex type.</p> <p>Amazon S3 doesn't process cookies. When the cache behavior is forwarding requests to an Amazon S3 origin, specify none for the <code>Forward</code> element. </p>
     pub forward: String,
@@ -1399,14 +1399,14 @@ impl CookiePreferenceSerializer {
 }
 
 /// <p>The request to create a new origin access identity.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CreateCloudFrontOriginAccessIdentityRequest {
     /// <p>The current configuration information for the identity.</p>
     pub cloud_front_origin_access_identity_config: CloudFrontOriginAccessIdentityConfig,
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CreateCloudFrontOriginAccessIdentityResult {
     /// <p>The origin access identity's information.</p>
     pub cloud_front_origin_access_identity: Option<CloudFrontOriginAccessIdentity>,
@@ -1461,14 +1461,14 @@ impl CreateCloudFrontOriginAccessIdentityResultDeserializer {
     }
 }
 /// <p>The request to create a new distribution.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CreateDistributionRequest {
     /// <p>The distribution's configuration information.</p>
     pub distribution_config: DistributionConfig,
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CreateDistributionResult {
     /// <p>The distribution's information.</p>
     pub distribution: Option<Distribution>,
@@ -1521,14 +1521,14 @@ impl CreateDistributionResultDeserializer {
     }
 }
 /// <p>The request to create a new distribution with tags. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CreateDistributionWithTagsRequest {
     /// <p>The distribution's configuration information. </p>
     pub distribution_config_with_tags: DistributionConfigWithTags,
 }
 
 /// <p>The returned result of the corresponding request. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CreateDistributionWithTagsResult {
     /// <p>The distribution's information. </p>
     pub distribution: Option<Distribution>,
@@ -1581,7 +1581,7 @@ impl CreateDistributionWithTagsResultDeserializer {
     }
 }
 /// <p>The request to create an invalidation.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CreateInvalidationRequest {
     /// <p>The distribution's id.</p>
     pub distribution_id: String,
@@ -1590,7 +1590,7 @@ pub struct CreateInvalidationRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CreateInvalidationResult {
     /// <p>The invalidation's information.</p>
     pub invalidation: Option<Invalidation>,
@@ -1641,14 +1641,14 @@ impl CreateInvalidationResultDeserializer {
     }
 }
 /// <p>The request to create a new streaming distribution.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CreateStreamingDistributionRequest {
     /// <p>The streaming distribution's configuration information.</p>
     pub streaming_distribution_config: StreamingDistributionConfig,
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CreateStreamingDistributionResult {
     /// <p>The current version of the streaming distribution created.</p>
     pub e_tag: Option<String>,
@@ -1702,14 +1702,14 @@ impl CreateStreamingDistributionResultDeserializer {
     }
 }
 /// <p>The request to create a new streaming distribution with tags.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CreateStreamingDistributionWithTagsRequest {
     /// <p> The streaming distribution's configuration information. </p>
     pub streaming_distribution_config_with_tags: StreamingDistributionConfigWithTags,
 }
 
 /// <p>The returned result of the corresponding request. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CreateStreamingDistributionWithTagsResult {
     pub e_tag: Option<String>,
     /// <p>The fully qualified URI of the new streaming distribution resource just created. For example:<code> https://cloudfront.amazonaws.com/2010-11-01/streaming-distribution/EGTXBD79H29TRA8</code>.</p>
@@ -1762,7 +1762,7 @@ impl CreateStreamingDistributionWithTagsResultDeserializer {
     }
 }
 /// <p>A complex type that controls:</p> <ul> <li> <p>Whether CloudFront replaces HTTP status codes in the 4xx and 5xx range with custom error messages before returning the response to the viewer. </p> </li> <li> <p>How long CloudFront caches HTTP status codes in the 4xx and 5xx range.</p> </li> </ul> <p>For more information about custom error pages, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html">Customizing Error Responses</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CustomErrorResponse {
     /// <p>The minimum amount of time, in seconds, that you want CloudFront to cache the HTTP status code specified in <code>ErrorCode</code>. When this time period has elapsed, CloudFront queries your origin to see whether the problem that caused the error has been resolved and the requested object is now available.</p> <p>If you don't want to specify a value, include an empty element, <code>&lt;ErrorCachingMinTTL&gt;</code>, in the XML document.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html">Customizing Error Responses</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub error_caching_min_ttl: Option<i64>,
@@ -1941,7 +1941,7 @@ impl CustomErrorResponseListSerializer {
 }
 
 /// <p>A complex type that controls:</p> <ul> <li> <p>Whether CloudFront replaces HTTP status codes in the 4xx and 5xx range with custom error messages before returning the response to the viewer.</p> </li> <li> <p>How long CloudFront caches HTTP status codes in the 4xx and 5xx range.</p> </li> </ul> <p>For more information about custom error pages, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html">Customizing Error Responses</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CustomErrorResponses {
     /// <p>A complex type that contains a <code>CustomErrorResponse</code> element for each HTTP status code for which you want to specify a custom error page and/or a caching duration. </p>
     pub items: Option<Vec<CustomErrorResponse>>,
@@ -2021,7 +2021,7 @@ impl CustomErrorResponsesSerializer {
 }
 
 /// <p>A complex type that contains the list of Custom Headers for each origin. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CustomHeaders {
     /// <p> <b>Optional</b>: A list that contains one <code>OriginCustomHeader</code> element for each custom header that you want CloudFront to forward to the origin. If Quantity is <code>0</code>, omit <code>Items</code>.</p>
     pub items: Option<Vec<OriginCustomHeader>>,
@@ -2101,7 +2101,7 @@ impl CustomHeadersSerializer {
 }
 
 /// <p>A customer origin.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct CustomOriginConfig {
     /// <p>The HTTP port the custom origin listens on.</p>
     pub http_port: i64,
@@ -2241,7 +2241,7 @@ impl CustomOriginConfigSerializer {
 }
 
 /// <p>A complex type that describes the default cache behavior if you don't specify a <code>CacheBehavior</code> element or if files don't match any of the values of <code>PathPattern</code> in <code>CacheBehavior</code> elements. You must create exactly one default cache behavior.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct DefaultCacheBehavior {
     pub allowed_methods: Option<AllowedMethods>,
     /// <p>Whether you want CloudFront to automatically compress certain files for this cache behavior. If so, specify <code>true</code>; if not, specify <code>false</code>. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html">Serving Compressed Files</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
@@ -2441,7 +2441,7 @@ impl DefaultCacheBehaviorSerializer {
 }
 
 /// <p>Deletes a origin access identity.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct DeleteCloudFrontOriginAccessIdentityRequest {
     /// <p>The origin access identity's ID.</p>
     pub id: String,
@@ -2450,7 +2450,7 @@ pub struct DeleteCloudFrontOriginAccessIdentityRequest {
 }
 
 /// <p>This action deletes a web distribution. To delete a web distribution using the CloudFront API, perform the following steps.</p> <p> <b>To delete a web distribution using the CloudFront API:</b> </p> <ol> <li> <p>Disable the web distribution </p> </li> <li> <p>Submit a <code>GET Distribution Config</code> request to get the current configuration and the <code>Etag</code> header for the distribution.</p> </li> <li> <p>Update the XML document that was returned in the response to your <code>GET Distribution Config</code> request to change the value of <code>Enabled</code> to <code>false</code>.</p> </li> <li> <p>Submit a <code>PUT Distribution Config</code> request to update the configuration for your distribution. In the request body, include the XML document that you updated in Step 3. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Distribution Config</code> request in Step 2.</p> </li> <li> <p>Review the response to the <code>PUT Distribution Config</code> request to confirm that the distribution was successfully disabled.</p> </li> <li> <p>Submit a <code>GET Distribution</code> request to confirm that your changes have propagated. When propagation is complete, the value of <code>Status</code> is <code>Deployed</code>.</p> </li> <li> <p>Submit a <code>DELETE Distribution</code> request. Set the value of the HTTP <code>If-Match</code> header to the value of the <code>ETag</code> header that CloudFront returned when you submitted the <code>GET Distribution Config</code> request in Step 6.</p> </li> <li> <p>Review the response to your <code>DELETE Distribution</code> request to confirm that the distribution was successfully deleted.</p> </li> </ol> <p>For information about deleting a distribution using the CloudFront console, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/HowToDeleteDistribution.html">Deleting a Distribution</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct DeleteDistributionRequest {
     /// <p>The distribution ID. </p>
     pub id: String,
@@ -2458,13 +2458,13 @@ pub struct DeleteDistributionRequest {
     pub if_match: Option<String>,
 }
 
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct DeleteServiceLinkedRoleRequest {
     pub role_name: String,
 }
 
 /// <p>The request to delete a streaming distribution.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct DeleteStreamingDistributionRequest {
     /// <p>The distribution ID. </p>
     pub id: String,
@@ -2473,7 +2473,7 @@ pub struct DeleteStreamingDistributionRequest {
 }
 
 /// <p>The distribution's information.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct Distribution {
     /// <p>The ARN (Amazon Resource Name) for the distribution. For example: <code>arn:aws:cloudfront::123456789012:distribution/EDFDVBD632BHDS5</code>, where <code>123456789012</code> is your AWS account ID.</p>
     pub arn: String,
@@ -2570,7 +2570,7 @@ impl DistributionDeserializer {
     }
 }
 /// <p>A distribution configuration.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct DistributionConfig {
     /// <p>A complex type that contains information about CNAMEs (alternate domain names), if any, for this distribution.</p>
     pub aliases: Option<Aliases>,
@@ -2822,7 +2822,7 @@ impl DistributionConfigSerializer {
 }
 
 /// <p>A distribution Configuration and a list of tags to be associated with the distribution.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct DistributionConfigWithTags {
     /// <p>A distribution configuration.</p>
     pub distribution_config: DistributionConfig,
@@ -2853,7 +2853,7 @@ impl DistributionConfigWithTagsSerializer {
 }
 
 /// <p>A distribution list.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct DistributionList {
     /// <p>A flag that indicates whether more distributions remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more distributions in the list.</p>
     pub is_truncated: bool,
@@ -2929,7 +2929,7 @@ impl DistributionListDeserializer {
     }
 }
 /// <p>A summary of the information about a CloudFront distribution.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct DistributionSummary {
     /// <p>The ARN (Amazon Resource Name) for the distribution. For example: <code>arn:aws:cloudfront::123456789012:distribution/EDFDVBD632BHDS5</code>, where <code>123456789012</code> is your AWS account ID.</p>
     pub arn: String,
@@ -3157,7 +3157,7 @@ impl EventTypeSerializer {
 }
 
 /// <p>A complex type that specifies how CloudFront handles query strings and cookies.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ForwardedValues {
     /// <p>A complex type that specifies whether you want CloudFront to forward cookies to the origin and, if so, which ones. For more information about forwarding cookies to the origin, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Cookies.html">How CloudFront Forwards, Caches, and Logs Cookies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub cookies: CookiePreference,
@@ -3255,7 +3255,7 @@ impl ForwardedValuesSerializer {
 }
 
 /// <p>A complex type that controls the countries in which your content is distributed. CloudFront determines the location of your users using <code>MaxMind</code> GeoIP databases. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GeoRestriction {
     /// <p> A complex type that contains a <code>Location</code> element for each country in which you want CloudFront either to distribute your content (<code>whitelist</code>) or not distribute your content (<code>blacklist</code>).</p> <p>The <code>Location</code> element is a two-letter, uppercase country code for a country that you want to include in your <code>blacklist</code> or <code>whitelist</code>. Include one <code>Location</code> element for each country.</p> <p>CloudFront and <code>MaxMind</code> both use <code>ISO 3166</code> country codes. For the current list of countries and the corresponding codes, see <code>ISO 3166-1-alpha-2</code> code on the <i>International Organization for Standardization</i> website. You can also refer to the country list on the CloudFront console, which includes both country names and codes.</p>
     pub items: Option<Vec<String>>,
@@ -3382,14 +3382,14 @@ impl GeoRestrictionTypeSerializer {
 }
 
 /// <p>The origin access identity's configuration information. For more information, see <a>CloudFrontOriginAccessIdentityConfigComplexType</a>.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetCloudFrontOriginAccessIdentityConfigRequest {
     /// <p>The identity's ID. </p>
     pub id: String,
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetCloudFrontOriginAccessIdentityConfigResult {
     /// <p>The origin access identity's configuration information. </p>
     pub cloud_front_origin_access_identity_config: Option<CloudFrontOriginAccessIdentityConfig>,
@@ -3442,14 +3442,14 @@ impl GetCloudFrontOriginAccessIdentityConfigResultDeserializer {
     }
 }
 /// <p>The request to get an origin access identity's information.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetCloudFrontOriginAccessIdentityRequest {
     /// <p>The identity's ID.</p>
     pub id: String,
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetCloudFrontOriginAccessIdentityResult {
     /// <p>The origin access identity's information.</p>
     pub cloud_front_origin_access_identity: Option<CloudFrontOriginAccessIdentity>,
@@ -3502,14 +3502,14 @@ impl GetCloudFrontOriginAccessIdentityResultDeserializer {
     }
 }
 /// <p>The request to get a distribution configuration.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetDistributionConfigRequest {
     /// <p>The distribution's ID.</p>
     pub id: String,
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetDistributionConfigResult {
     /// <p>The distribution's configuration information.</p>
     pub distribution_config: Option<DistributionConfig>,
@@ -3561,14 +3561,14 @@ impl GetDistributionConfigResultDeserializer {
     }
 }
 /// <p>The request to get a distribution's information.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetDistributionRequest {
     /// <p>The distribution's ID.</p>
     pub id: String,
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetDistributionResult {
     /// <p>The distribution's information.</p>
     pub distribution: Option<Distribution>,
@@ -3619,7 +3619,7 @@ impl GetDistributionResultDeserializer {
     }
 }
 /// <p>The request to get an invalidation's information. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetInvalidationRequest {
     /// <p>The distribution's ID.</p>
     pub distribution_id: String,
@@ -3628,7 +3628,7 @@ pub struct GetInvalidationRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetInvalidationResult {
     /// <p>The invalidation's information. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/InvalidationDatatype.html">Invalidation Complex Type</a>. </p>
     pub invalidation: Option<Invalidation>,
@@ -3677,14 +3677,14 @@ impl GetInvalidationResultDeserializer {
     }
 }
 /// <p>To request to get a streaming distribution configuration.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetStreamingDistributionConfigRequest {
     /// <p>The streaming distribution's ID.</p>
     pub id: String,
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetStreamingDistributionConfigResult {
     /// <p>The current version of the configuration. For example: <code>E2QWRUHAPOMQZL</code>. </p>
     pub e_tag: Option<String>,
@@ -3736,14 +3736,14 @@ impl GetStreamingDistributionConfigResultDeserializer {
     }
 }
 /// <p>The request to get a streaming distribution's information.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetStreamingDistributionRequest {
     /// <p>The streaming distribution's ID.</p>
     pub id: String,
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct GetStreamingDistributionResult {
     /// <p>The current version of the streaming distribution's information. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
@@ -3856,7 +3856,7 @@ impl HeaderListSerializer {
 }
 
 /// <p>A complex type that specifies the request headers, if any, that you want CloudFront to base caching on for this cache behavior. </p> <p>For the headers that you specify, CloudFront caches separate versions of a specified object based on the header values in viewer requests. For example, suppose viewer requests for <code>logo.jpg</code> contain a custom <code>product</code> header that has a value of either <code>acme</code> or <code>apex</code>, and you configure CloudFront to cache your content based on values in the <code>product</code> header. CloudFront forwards the <code>product</code> header to the origin and caches the response from the origin once for each header value. For more information about caching based on header values, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/header-caching.html">How CloudFront Forwards and Caches Headers</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct Headers {
     /// <p>A list that contains one <code>Name</code> element for each header that you want CloudFront to use for caching in this cache behavior. If <code>Quantity</code> is <code>0</code>, omit <code>Items</code>.</p>
     pub items: Option<Vec<String>>,
@@ -4003,7 +4003,7 @@ impl IntegerSerializer {
 }
 
 /// <p>An invalidation. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct Invalidation {
     /// <p>The date and time the invalidation request was first made. </p>
     pub create_time: String,
@@ -4068,7 +4068,7 @@ impl InvalidationDeserializer {
     }
 }
 /// <p>An invalidation batch.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct InvalidationBatch {
     /// <p>A value that you specify to uniquely identify an invalidation request. CloudFront uses the value to prevent you from accidentally resubmitting an identical request. Whenever you create a new invalidation request, you must specify a new value for <code>CallerReference</code> and change other values in the request as applicable. One way to ensure that the value of <code>CallerReference</code> is unique is to use a <code>timestamp</code>, for example, <code>20120301090000</code>.</p> <p>If you make a second invalidation request with the same value for <code>CallerReference</code>, and if the rest of the request is the same, CloudFront doesn't create a new invalidation request. Instead, CloudFront returns information about the invalidation request that you previously created with the same <code>CallerReference</code>.</p> <p>If <code>CallerReference</code> is a value you already sent in a previous invalidation batch request but the content of any <code>Path</code> is different from the original request, CloudFront returns an <code>InvalidationBatchAlreadyExists</code> error.</p>
     pub caller_reference: String,
@@ -4144,7 +4144,7 @@ impl InvalidationBatchSerializer {
 }
 
 /// <p>The <code>InvalidationList</code> complex type describes the list of invalidation objects. For more information about invalidation, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html">Invalidating Objects (Web Distributions Only)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct InvalidationList {
     /// <p>A flag that indicates whether more invalidation batch requests remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more invalidation batches in the list.</p>
     pub is_truncated: bool,
@@ -4220,7 +4220,7 @@ impl InvalidationListDeserializer {
     }
 }
 /// <p>A summary of an invalidation request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct InvalidationSummary {
     pub create_time: String,
     /// <p>The unique ID for an invalidation request.</p>
@@ -4394,7 +4394,7 @@ impl KeyPairIdListDeserializer {
     }
 }
 /// <p>A complex type that lists the active CloudFront key pairs, if any, that are associated with <code>AwsAccountNumber</code>. </p> <p>For more information, see <a>ActiveTrustedSigners</a>.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct KeyPairIds {
     /// <p>A complex type that lists the active CloudFront key pairs, if any, that are associated with <code>AwsAccountNumber</code>.</p> <p>For more information, see <a>ActiveTrustedSigners</a>.</p>
     pub items: Option<Vec<String>>,
@@ -4446,7 +4446,7 @@ impl KeyPairIdsDeserializer {
     }
 }
 /// <p>A complex type that contains a Lambda function association.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct LambdaFunctionAssociation {
     /// <p><p>Specifies the event type that triggers a Lambda function invocation. You can specify the following values:</p> <ul> <li> <p> <code>viewer-request</code>: The function executes when CloudFront receives a request from a viewer and before it checks to see whether the requested object is in the edge cache. </p> </li> <li> <p> <code>origin-request</code>: The function executes only when CloudFront forwards a request to your origin. When the requested object is in the edge cache, the function doesn&#39;t execute.</p> </li> <li> <p> <code>origin-response</code>: The function executes after CloudFront receives a response from the origin and before it caches the object in the response. When the requested object is in the edge cache, the function doesn&#39;t execute.</p> <p>If the origin returns an HTTP status code other than HTTP 200 (OK), the function doesn&#39;t execute.</p> </li> <li> <p> <code>viewer-response</code>: The function executes before CloudFront returns the requested object to the viewer. The function executes regardless of whether the object was already in the edge cache.</p> <p>If the origin returns an HTTP status code other than HTTP 200 (OK), the function doesn&#39;t execute.</p> </li> </ul></p>
     pub event_type: Option<String>,
@@ -4602,7 +4602,7 @@ impl LambdaFunctionAssociationListSerializer {
 }
 
 /// <p>A complex type that specifies a list of Lambda functions associations for a cache behavior.</p> <p>If you want to invoke one or more Lambda functions triggered by requests that match the <code>PathPattern</code> of the cache behavior, specify the applicable values for <code>Quantity</code> and <code>Items</code>. Note that there can be up to 4 <code>LambdaFunctionAssociation</code> items in this list (one for each possible value of <code>EventType</code>) and each <code>EventType</code> can be associated with the Lambda function only once.</p> <p>If you don't want to invoke any Lambda functions for the requests that match <code>PathPattern</code>, specify <code>0</code> for <code>Quantity</code> and omit <code>Items</code>. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct LambdaFunctionAssociations {
     /// <p> <b>Optional</b>: A complex type that contains <code>LambdaFunctionAssociation</code> items for this cache behavior. If <code>Quantity</code> is <code>0</code>, you can omit <code>Items</code>.</p>
     pub items: Option<Vec<LambdaFunctionAssociation>>,
@@ -4681,7 +4681,7 @@ impl LambdaFunctionAssociationsSerializer {
 }
 
 /// <p>The request to list origin access identities. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListCloudFrontOriginAccessIdentitiesRequest {
     /// <p>Use this when paginating results to indicate where to begin in your list of origin access identities. The results include identities in the list that occur after the marker. To get the next page of results, set the <code>Marker</code> to the value of the <code>NextMarker</code> from the current page's response (which is also the ID of the last identity on that page).</p>
     pub marker: Option<String>,
@@ -4690,7 +4690,7 @@ pub struct ListCloudFrontOriginAccessIdentitiesRequest {
 }
 
 /// <p>The returned result of the corresponding request. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListCloudFrontOriginAccessIdentitiesResult {
     /// <p>The <code>CloudFrontOriginAccessIdentityList</code> type. </p>
     pub cloud_front_origin_access_identity_list: Option<CloudFrontOriginAccessIdentityList>,
@@ -4741,7 +4741,7 @@ impl ListCloudFrontOriginAccessIdentitiesResultDeserializer {
     }
 }
 /// <p>The request to list distributions that are associated with a specified AWS WAF web ACL. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListDistributionsByWebACLIdRequest {
     /// <p>Use <code>Marker</code> and <code>MaxItems</code> to control pagination of results. If you have more than <code>MaxItems</code> distributions that satisfy the request, the response includes a <code>NextMarker</code> element. To get the next page of results, submit another request. For the value of <code>Marker</code>, specify the value of <code>NextMarker</code> from the last response. (For the first request, omit <code>Marker</code>.) </p>
     pub marker: Option<String>,
@@ -4752,7 +4752,7 @@ pub struct ListDistributionsByWebACLIdRequest {
 }
 
 /// <p>The response to a request to list the distributions that are associated with a specified AWS WAF web ACL. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListDistributionsByWebACLIdResult {
     /// <p>The <code>DistributionList</code> type. </p>
     pub distribution_list: Option<DistributionList>,
@@ -4800,7 +4800,7 @@ impl ListDistributionsByWebACLIdResultDeserializer {
     }
 }
 /// <p>The request to list your distributions. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListDistributionsRequest {
     /// <p>Use this when paginating results to indicate where to begin in your list of distributions. The results include distributions in the list that occur after the marker. To get the next page of results, set the <code>Marker</code> to the value of the <code>NextMarker</code> from the current page's response (which is also the ID of the last distribution on that page).</p>
     pub marker: Option<String>,
@@ -4809,7 +4809,7 @@ pub struct ListDistributionsRequest {
 }
 
 /// <p>The returned result of the corresponding request. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListDistributionsResult {
     /// <p>The <code>DistributionList</code> type. </p>
     pub distribution_list: Option<DistributionList>,
@@ -4857,7 +4857,7 @@ impl ListDistributionsResultDeserializer {
     }
 }
 /// <p>The request to list invalidations. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListInvalidationsRequest {
     /// <p>The distribution's ID.</p>
     pub distribution_id: String,
@@ -4868,7 +4868,7 @@ pub struct ListInvalidationsRequest {
 }
 
 /// <p>The returned result of the corresponding request. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListInvalidationsResult {
     /// <p>Information about invalidation batches. </p>
     pub invalidation_list: Option<InvalidationList>,
@@ -4916,7 +4916,7 @@ impl ListInvalidationsResultDeserializer {
     }
 }
 /// <p>The request to list your streaming distributions. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListStreamingDistributionsRequest {
     /// <p>The value that you provided for the <code>Marker</code> request parameter.</p>
     pub marker: Option<String>,
@@ -4925,7 +4925,7 @@ pub struct ListStreamingDistributionsRequest {
 }
 
 /// <p>The returned result of the corresponding request. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListStreamingDistributionsResult {
     /// <p>The <code>StreamingDistributionList</code> type. </p>
     pub streaming_distribution_list: Option<StreamingDistributionList>,
@@ -4975,14 +4975,14 @@ impl ListStreamingDistributionsResultDeserializer {
     }
 }
 /// <p> The request to list tags for a CloudFront resource.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListTagsForResourceRequest {
     /// <p> An ARN of a CloudFront resource.</p>
     pub resource: String,
 }
 
 /// <p> The returned result of the corresponding request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ListTagsForResourceResult {
     /// <p> A complex type that contains zero or more <code>Tag</code> elements.</p>
     pub tags: Tags,
@@ -5089,7 +5089,7 @@ impl LocationListSerializer {
 }
 
 /// <p>A complex type that controls whether access logs are written for the distribution.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct LoggingConfig {
     /// <p>The Amazon S3 bucket to store the access logs in, for example, <code>myawslogbucket.s3.amazonaws.com</code>.</p>
     pub bucket: String,
@@ -5358,7 +5358,7 @@ impl MinimumProtocolVersionSerializer {
 }
 
 /// <p>A complex type that describes the Amazon S3 bucket or the HTTP server (for example, a web server) from which CloudFront gets your files. You must create at least one origin.</p> <p>For the current limit on the number of origins that you can create for a distribution, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_cloudfront">Amazon CloudFront Limits</a> in the <i>AWS General Reference</i>.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct Origin {
     /// <p>A complex type that contains names and values for the custom headers that you want.</p>
     pub custom_headers: Option<CustomHeaders>,
@@ -5486,7 +5486,7 @@ impl OriginSerializer {
 }
 
 /// <p>A complex type that contains <code>HeaderName</code> and <code>HeaderValue</code> elements, if any, for this distribution. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct OriginCustomHeader {
     /// <p>The name of a header that you want CloudFront to forward to your origin. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/forward-custom-headers.html">Forwarding Custom Headers to Your Origin (Web Distributions Only)</a> in the <i>Amazon Amazon CloudFront Developer Guide</i>.</p>
     pub header_name: String,
@@ -5728,7 +5728,7 @@ impl OriginProtocolPolicySerializer {
 }
 
 /// <p>A complex type that contains information about the SSL/TLS protocols that CloudFront can use when establishing an HTTPS connection with your origin. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct OriginSslProtocols {
     /// <p>A list that contains allowed SSL/TLS protocols for this distribution.</p>
     pub items: Vec<String>,
@@ -5803,7 +5803,7 @@ impl OriginSslProtocolsSerializer {
 }
 
 /// <p>A complex type that contains information about origins for this distribution. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct Origins {
     /// <p>A complex type that contains origins for this distribution.</p>
     pub items: Option<Vec<Origin>>,
@@ -5941,7 +5941,7 @@ impl PathListSerializer {
 }
 
 /// <p>A complex type that contains information about the objects that you want to invalidate. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Invalidation.html#invalidation-specifying-objects">Specifying the Objects to Invalidate</a> in the <i>Amazon CloudFront Developer Guide</i>. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct Paths {
     /// <p>A complex type that contains a list of the paths that you want to invalidate.</p>
     pub items: Option<Vec<String>>,
@@ -6052,7 +6052,7 @@ impl PriceClassSerializer {
     }
 }
 
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct QueryStringCacheKeys {
     /// <p>(Optional) A list that contains the query string parameters that you want CloudFront to use as a basis for caching for this cache behavior. If <code>Quantity</code> is 0, you can omit <code>Items</code>. </p>
     pub items: Option<Vec<String>>,
@@ -6213,7 +6213,7 @@ impl ResourceARNSerializer {
 }
 
 /// <p>A complex type that identifies ways in which you want to restrict distribution of your content.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct Restrictions {
     pub geo_restriction: GeoRestriction,
 }
@@ -6279,7 +6279,7 @@ impl RestrictionsSerializer {
 }
 
 /// <p>A complex type that contains information about the Amazon S3 bucket from which you want CloudFront to get your media files for distribution.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct S3Origin {
     /// <p>The DNS name of the Amazon S3 origin. </p>
     pub domain_name: String,
@@ -6363,7 +6363,7 @@ impl S3OriginSerializer {
 }
 
 /// <p>A complex type that contains information about the Amazon S3 origin. If the origin is a custom origin, use the <code>CustomOriginConfig</code> element instead.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct S3OriginConfig {
     /// <p>The CloudFront origin access identity to associate with the origin. Use an origin access identity to configure the origin so that viewers can <i>only</i> access objects in an Amazon S3 bucket through CloudFront. The format of the value is:</p> <p>origin-access-identity/cloudfront/<i>ID-of-origin-access-identity</i> </p> <p>where <code> <i>ID-of-origin-access-identity</i> </code> is the value that CloudFront returned in the <code>ID</code> element when you created the origin access identity.</p> <p>If you want viewers to be able to access objects using either the CloudFront URL or the Amazon S3 URL, specify an empty <code>OriginAccessIdentity</code> element.</p> <p>To delete the origin access identity from an existing distribution, update the distribution configuration and include an empty <code>OriginAccessIdentity</code> element.</p> <p>To replace the origin access identity, update the distribution configuration and specify the new origin access identity.</p> <p>For more information about the origin access identity, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub origin_access_identity: String,
@@ -6470,7 +6470,7 @@ impl SSLSupportMethodSerializer {
 }
 
 /// <p>A complex type that lists the AWS accounts that were included in the <code>TrustedSigners</code> complex type, as well as their active CloudFront key pair IDs, if any. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct Signer {
     /// <p><p>An AWS account that is included in the <code>TrustedSigners</code> complex type for this RTMP distribution. Valid values include:</p> <ul> <li> <p> <code>self</code>, which is the AWS account used to create the distribution.</p> </li> <li> <p>An AWS account number.</p> </li> </ul></p>
     pub aws_account_number: Option<String>,
@@ -6666,7 +6666,7 @@ impl SslProtocolsListSerializer {
 }
 
 /// <p>A streaming distribution. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct StreamingDistribution {
     pub arn: String,
     /// <p>A complex type that lists the AWS accounts, if any, that you included in the <code>TrustedSigners</code> complex type for this distribution. These are the accounts that you want to allow to create signed URLs for private content.</p> <p>The <code>Signer</code> complex type lists the AWS account number of the trusted signer or <code>self</code> if the signer is the AWS account that created the distribution. The <code>Signer</code> element also includes the IDs of any active CloudFront key pairs that are associated with the trusted signer's AWS account. If no <code>KeyPairId</code> element appears for a <code>Signer</code>, that signer can't create signed URLs.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>. </p>
@@ -6753,7 +6753,7 @@ impl StreamingDistributionDeserializer {
     }
 }
 /// <p>The RTMP distribution's configuration information.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct StreamingDistributionConfig {
     /// <p>A complex type that contains information about CNAMEs (alternate domain names), if any, for this streaming distribution. </p>
     pub aliases: Option<Aliases>,
@@ -6896,7 +6896,7 @@ impl StreamingDistributionConfigSerializer {
 }
 
 /// <p>A streaming distribution Configuration and a list of tags to be associated with the streaming distribution.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct StreamingDistributionConfigWithTags {
     /// <p>A streaming distribution Configuration.</p>
     pub streaming_distribution_config: StreamingDistributionConfig,
@@ -6927,7 +6927,7 @@ impl StreamingDistributionConfigWithTagsSerializer {
 }
 
 /// <p>A streaming distribution list. </p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct StreamingDistributionList {
     /// <p>A flag that indicates whether more streaming distributions remain to be listed. If your results were truncated, you can make a follow-up pagination request using the <code>Marker</code> request parameter to retrieve more distributions in the list. </p>
     pub is_truncated: bool,
@@ -7005,7 +7005,7 @@ impl StreamingDistributionListDeserializer {
     }
 }
 /// <p> A summary of the information for an Amazon CloudFront streaming distribution.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct StreamingDistributionSummary {
     /// <p> The ARN (Amazon Resource Name) for the streaming distribution. For example: <code>arn:aws:cloudfront::123456789012:streaming-distribution/EDFDVBD632BHDS5</code>, where <code>123456789012</code> is your AWS account ID.</p>
     pub arn: String,
@@ -7153,7 +7153,7 @@ impl StreamingDistributionSummaryListDeserializer {
     }
 }
 /// <p>A complex type that controls whether access logs are written for this streaming distribution.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct StreamingLoggingConfig {
     /// <p>The Amazon S3 bucket to store the access logs in, for example, <code>myawslogbucket.s3.amazonaws.com</code>.</p>
     pub bucket: String,
@@ -7279,7 +7279,7 @@ impl StringSerializer {
 }
 
 /// <p> A complex type that contains <code>Tag</code> key and <code>Tag</code> value.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct Tag {
     /// <p> A string that contains <code>Tag</code> key.</p> <p>The string length should be between 1 and 128 characters. Valid characters include <code>a-z</code>, <code>A-Z</code>, <code>0-9</code>, space, and the special characters <code>_ - . : / = + @</code>.</p>
     pub key: String,
@@ -7416,7 +7416,7 @@ impl TagKeyListSerializer {
 }
 
 /// <p> A complex type that contains zero or more <code>Tag</code> elements.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct TagKeys {
     /// <p> A complex type that contains <code>Tag</code> key elements.</p>
     pub items: Option<Vec<String>>,
@@ -7503,7 +7503,7 @@ impl TagListSerializer {
 }
 
 /// <p> The request to add tags to a CloudFront resource.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct TagResourceRequest {
     /// <p> An ARN of a CloudFront resource.</p>
     pub resource: String,
@@ -7547,7 +7547,7 @@ impl TagValueSerializer {
 }
 
 /// <p> A complex type that contains zero or more <code>Tag</code> elements.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct Tags {
     /// <p> A complex type that contains <code>Tag</code> elements.</p>
     pub items: Option<Vec<Tag>>,
@@ -7627,7 +7627,7 @@ impl TimestampDeserializer {
     }
 }
 /// <p>A complex type that specifies the AWS accounts, if any, that you want to allow to create signed URLs for private content.</p> <p>If you want to require signed URLs in requests for objects in the target origin that match the <code>PathPattern</code> for this cache behavior, specify <code>true</code> for <code>Enabled</code>, and specify the applicable values for <code>Quantity</code> and <code>Items</code>. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">Serving Private Content through CloudFront</a> in the <i>Amazon Amazon CloudFront Developer Guide</i>.</p> <p>If you don't want to require signed URLs in requests for objects that match <code>PathPattern</code>, specify <code>false</code> for <code>Enabled</code> and <code>0</code> for <code>Quantity</code>. Omit <code>Items</code>.</p> <p>To add, change, or remove one or more trusted signers, change <code>Enabled</code> to <code>true</code> (if it's currently <code>false</code>), change <code>Quantity</code> as applicable, and specify all of the trusted signers that you want to include in the updated distribution.</p> <p>For more information about updating the distribution configuration, see <a>DistributionConfig</a> .</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct TrustedSigners {
     /// <p>Specifies whether you want to require viewers to use signed URLs to access the files specified by <code>PathPattern</code> and <code>TargetOriginId</code>.</p>
     pub enabled: bool,
@@ -7718,7 +7718,7 @@ impl TrustedSignersSerializer {
 }
 
 /// <p> The request to remove tags from a CloudFront resource.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct UntagResourceRequest {
     /// <p> An ARN of a CloudFront resource.</p>
     pub resource: String,
@@ -7727,7 +7727,7 @@ pub struct UntagResourceRequest {
 }
 
 /// <p>The request to update an origin access identity.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct UpdateCloudFrontOriginAccessIdentityRequest {
     /// <p>The identity's configuration information.</p>
     pub cloud_front_origin_access_identity_config: CloudFrontOriginAccessIdentityConfig,
@@ -7738,7 +7738,7 @@ pub struct UpdateCloudFrontOriginAccessIdentityRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct UpdateCloudFrontOriginAccessIdentityResult {
     /// <p>The origin access identity's information.</p>
     pub cloud_front_origin_access_identity: Option<CloudFrontOriginAccessIdentity>,
@@ -7791,7 +7791,7 @@ impl UpdateCloudFrontOriginAccessIdentityResultDeserializer {
     }
 }
 /// <p>The request to update a distribution.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct UpdateDistributionRequest {
     /// <p>The distribution's configuration information.</p>
     pub distribution_config: DistributionConfig,
@@ -7802,7 +7802,7 @@ pub struct UpdateDistributionRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct UpdateDistributionResult {
     /// <p>The distribution's information.</p>
     pub distribution: Option<Distribution>,
@@ -7853,7 +7853,7 @@ impl UpdateDistributionResultDeserializer {
     }
 }
 /// <p>The request to update a streaming distribution.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct UpdateStreamingDistributionRequest {
     /// <p>The streaming distribution's id.</p>
     pub id: String,
@@ -7864,7 +7864,7 @@ pub struct UpdateStreamingDistributionRequest {
 }
 
 /// <p>The returned result of the corresponding request.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct UpdateStreamingDistributionResult {
     /// <p>The current version of the configuration. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub e_tag: Option<String>,
@@ -7916,7 +7916,7 @@ impl UpdateStreamingDistributionResultDeserializer {
     }
 }
 /// <p>A complex type that specifies the following:</p> <ul> <li> <p>Whether you want viewers to use HTTP or HTTPS to request your objects.</p> </li> <li> <p>If you want viewers to use HTTPS, whether you're using an alternate domain name such as <code>example.com</code> or the CloudFront domain name for your distribution, such as <code>d111111abcdef8.cloudfront.net</code>.</p> </li> <li> <p>If you're using an alternate domain name, whether AWS Certificate Manager (ACM) provided the certificate, or you purchased a certificate from a third-party certificate authority and imported it into ACM or uploaded it to the IAM certificate store.</p> </li> </ul> <p>You must specify only one of the following values: </p> <ul> <li> <p> <a>ViewerCertificate$ACMCertificateArn</a> </p> </li> <li> <p> <a>ViewerCertificate$IAMCertificateId</a> </p> </li> <li> <p> <a>ViewerCertificate$CloudFrontDefaultCertificate</a> </p> </li> </ul> <p>Don't specify <code>false</code> for <code>CloudFrontDefaultCertificate</code>.</p> <p> <b>If you want viewers to use HTTP instead of HTTPS to request your objects</b>: Specify the following value:</p> <p> <code>&lt;CloudFrontDefaultCertificate&gt;true&lt;CloudFrontDefaultCertificate&gt;</code> </p> <p>In addition, specify <code>allow-all</code> for <code>ViewerProtocolPolicy</code> for all of your cache behaviors.</p> <p> <b>If you want viewers to use HTTPS to request your objects</b>: Choose the type of certificate that you want to use based on whether you're using an alternate domain name for your objects or the CloudFront domain name:</p> <ul> <li> <p> <b>If you're using an alternate domain name, such as example.com</b>: Specify one of the following values, depending on whether ACM provided your certificate or you purchased your certificate from third-party certificate authority:</p> <ul> <li> <p> <code>&lt;ACMCertificateArn&gt;<i>ARN for ACM SSL/TLS certificate</i>&lt;ACMCertificateArn&gt;</code> where <code> <i>ARN for ACM SSL/TLS certificate</i> </code> is the ARN for the ACM SSL/TLS certificate that you want to use for this distribution.</p> </li> <li> <p> <code>&lt;IAMCertificateId&gt;<i>IAM certificate ID</i>&lt;IAMCertificateId&gt;</code> where <code> <i>IAM certificate ID</i> </code> is the ID that IAM returned when you added the certificate to the IAM certificate store.</p> </li> </ul> <p>If you specify <code>ACMCertificateArn</code> or <code>IAMCertificateId</code>, you must also specify a value for <code>SSLSupportMethod</code>.</p> <p>If you choose to use an ACM certificate or a certificate in the IAM certificate store, we recommend that you use only an alternate domain name in your object URLs (<code>https://example.com/logo.jpg</code>). If you use the domain name that is associated with your CloudFront distribution (such as <code>https://d111111abcdef8.cloudfront.net/logo.jpg</code>) and the viewer supports <code>SNI</code>, then CloudFront behaves normally. However, if the browser does not support SNI, the user's experience depends on the value that you choose for <code>SSLSupportMethod</code>:</p> <ul> <li> <p> <code>vip</code>: The viewer displays a warning because there is a mismatch between the CloudFront domain name and the domain name in your SSL/TLS certificate.</p> </li> <li> <p> <code>sni-only</code>: CloudFront drops the connection with the browser without returning the object.</p> </li> </ul> </li> <li> <p> <b>If you're using the CloudFront domain name for your distribution, such as <code>d111111abcdef8.cloudfront.net</code> </b>: Specify the following value:</p> <p> <code>&lt;CloudFrontDefaultCertificate&gt;true&lt;CloudFrontDefaultCertificate&gt; </code> </p> </li> </ul> <p>If you want viewers to use HTTPS, you must also specify one of the following values in your cache behaviors:</p> <ul> <li> <p> <code> &lt;ViewerProtocolPolicy&gt;https-only&lt;ViewerProtocolPolicy&gt;</code> </p> </li> <li> <p> <code>&lt;ViewerProtocolPolicy&gt;redirect-to-https&lt;ViewerProtocolPolicy&gt;</code> </p> </li> </ul> <p>You can also optionally require that CloudFront use HTTPS to communicate with your origin by specifying one of the following values for the applicable origins:</p> <ul> <li> <p> <code>&lt;OriginProtocolPolicy&gt;https-only&lt;OriginProtocolPolicy&gt; </code> </p> </li> <li> <p> <code>&lt;OriginProtocolPolicy&gt;match-viewer&lt;OriginProtocolPolicy&gt; </code> </p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/SecureConnections.html#CNAMEsAndHTTPS">Using Alternate Domain Names and HTTPS</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Clone)]
 pub struct ViewerCertificate {
     /// <p>For information about how and when to use <code>ACMCertificateArn</code>, see <a>ViewerCertificate</a>.</p>
     pub acm_certificate_arn: Option<String>,
