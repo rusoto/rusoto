@@ -70,7 +70,7 @@ pub struct Activation {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AddTagsToResourceRequest {
-    /// <p>The resource ID you want to tag.</p>
+    /// <p>The resource ID you want to tag.</p> <p>For the ManagedInstance, MaintenanceWindow, and PatchBaseline values, use the ID of the resource, such as mw-01234361858c9b57b for a Maintenance Window.</p> <p>For the Document and Parameter values, use the name of the resource.</p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
     /// <p>Specifies the type of resource you are tagging.</p>
@@ -111,7 +111,7 @@ pub struct Association {
     #[serde(rename = "LastExecutionDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_execution_date: Option<f64>,
-    /// <p>The name of the SSM document.</p>
+    /// <p>The name of the Systems Manager document.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -168,7 +168,7 @@ pub struct AssociationDescription {
     #[serde(rename = "LastUpdateAssociationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_update_association_date: Option<f64>,
-    /// <p>The name of the SSM document.</p>
+    /// <p>The name of the Systems Manager document.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -263,7 +263,7 @@ pub struct AssociationVersionInfo {
     #[serde(rename = "CreatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
-    /// <p>The version of an SSM document used when the association version was created.</p>
+    /// <p>The version of a Systems Manager document used when the association version was created.</p>
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
@@ -300,6 +300,14 @@ pub struct AutomationExecution {
     #[serde(rename = "AutomationExecutionStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub automation_execution_status: Option<String>,
+    /// <p>The action of the currently executing step.</p>
+    #[serde(rename = "CurrentAction")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub current_action: Option<String>,
+    /// <p>The name of the currently executing step.</p>
+    #[serde(rename = "CurrentStepName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub current_step_name: Option<String>,
     /// <p>The name of the Automation document used during the execution.</p>
     #[serde(rename = "DocumentName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -308,6 +316,10 @@ pub struct AutomationExecution {
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the user who executed the automation.</p>
+    #[serde(rename = "ExecutedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub executed_by: Option<String>,
     /// <p>The time the execution finished.</p>
     #[serde(rename = "ExecutionEndTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -320,6 +332,18 @@ pub struct AutomationExecution {
     #[serde(rename = "FailureMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_message: Option<String>,
+    /// <p>The MaxConcurrency value specified by the user when the execution started.</p>
+    #[serde(rename = "MaxConcurrency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_concurrency: Option<String>,
+    /// <p>The MaxErrors value specified by the user when the execution started.</p>
+    #[serde(rename = "MaxErrors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_errors: Option<String>,
+    /// <p>The automation execution mode.</p>
+    #[serde(rename = "Mode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mode: Option<String>,
     /// <p>The list of execution outputs as defined in the automation document.</p>
     #[serde(rename = "Outputs")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -328,16 +352,40 @@ pub struct AutomationExecution {
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, Vec<String>>>,
+    /// <p>The AutomationExecutionId of the parent automation.</p>
+    #[serde(rename = "ParentAutomationExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parent_automation_execution_id: Option<String>,
+    /// <p>A list of resolved targets in the rate control execution.</p>
+    #[serde(rename = "ResolvedTargets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resolved_targets: Option<ResolvedTargets>,
     /// <p>A list of details about the current state of all steps that comprise an execution. An Automation document contains a list of steps that are executed in order.</p>
     #[serde(rename = "StepExecutions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub step_executions: Option<Vec<StepExecution>>,
+    /// <p>A boolean value that indicates if the response contains the full list of the Automation step executions. If true, use the DescribeAutomationStepExecutions API action to get the full list of step executions.</p>
+    #[serde(rename = "StepExecutionsTruncated")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub step_executions_truncated: Option<bool>,
+    /// <p>The target of the execution.</p>
+    #[serde(rename = "Target")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target: Option<String>,
+    /// <p>The parameter name.</p>
+    #[serde(rename = "TargetParameterName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_parameter_name: Option<String>,
+    /// <p>The specified targets.</p>
+    #[serde(rename = "Targets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub targets: Option<Vec<Target>>,
 }
 
 /// <p>A filter used to match specific automation executions. This is used to limit the scope of Automation execution information returned.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AutomationExecutionFilter {
-    /// <p>The aspect of the Automation execution information that should be limited.</p>
+    /// <p>One or more keys to limit the results. Valid filter keys include the following: DocumentNamePrefix, ExecutionStatus, ExecutionId, ParentExecutionId, CurrentAction, StartTimeBefore, StartTimeAfter.</p>
     #[serde(rename = "Key")]
     pub key: String,
     /// <p>The values used to limit the execution information associated with the filter's key.</p>
@@ -356,6 +404,14 @@ pub struct AutomationExecutionMetadata {
     #[serde(rename = "AutomationExecutionStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub automation_execution_status: Option<String>,
+    /// <p>The action of the currently executing step.</p>
+    #[serde(rename = "CurrentAction")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub current_action: Option<String>,
+    /// <p>The name of the currently executing step.</p>
+    #[serde(rename = "CurrentStepName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub current_step_name: Option<String>,
     /// <p>The name of the Automation document used during execution.</p>
     #[serde(rename = "DocumentName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -376,14 +432,50 @@ pub struct AutomationExecutionMetadata {
     #[serde(rename = "ExecutionStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_start_time: Option<f64>,
+    /// <p>The list of execution outputs as defined in the Automation document.</p>
+    #[serde(rename = "FailureMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_message: Option<String>,
     /// <p>An Amazon S3 bucket where execution information is stored.</p>
     #[serde(rename = "LogFile")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_file: Option<String>,
+    /// <p>The MaxConcurrency value specified by the user when starting the Automation.</p>
+    #[serde(rename = "MaxConcurrency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_concurrency: Option<String>,
+    /// <p>The MaxErrors value specified by the user when starting the Automation.</p>
+    #[serde(rename = "MaxErrors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_errors: Option<String>,
+    /// <p>The Automation execution mode.</p>
+    #[serde(rename = "Mode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mode: Option<String>,
     /// <p>The list of execution outputs as defined in the Automation document.</p>
     #[serde(rename = "Outputs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub outputs: Option<::std::collections::HashMap<String, Vec<String>>>,
+    /// <p>The ExecutionId of the parent Automation.</p>
+    #[serde(rename = "ParentAutomationExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parent_automation_execution_id: Option<String>,
+    /// <p>A list of targets that resolved during the execution.</p>
+    #[serde(rename = "ResolvedTargets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resolved_targets: Option<ResolvedTargets>,
+    /// <p>The list of execution outputs as defined in the Automation document.</p>
+    #[serde(rename = "Target")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target: Option<String>,
+    /// <p>The list of execution outputs as defined in the Automation document.</p>
+    #[serde(rename = "TargetParameterName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_parameter_name: Option<String>,
+    /// <p>The targets defined by the user when starting the Automation.</p>
+    #[serde(rename = "Targets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub targets: Option<Vec<Target>>,
 }
 
 /// <p><p/></p>
@@ -873,9 +965,13 @@ pub struct CreateAssociationResult {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateDocumentRequest {
-    /// <p>A valid JSON string.</p>
+    /// <p>A valid JSON or YAML string.</p>
     #[serde(rename = "Content")]
     pub content: String,
+    /// <p>Specify the document format for the request. The document format can be either JSON or YAML. JSON is the default format.</p>
+    #[serde(rename = "DocumentFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_format: Option<String>,
     /// <p>The type of document to create. Valid document types include: Policy, Automation, and Command.</p>
     #[serde(rename = "DocumentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -883,6 +979,10 @@ pub struct CreateDocumentRequest {
     /// <p>A name for the Systems Manager document.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>Specify a target type to define the kinds of resources the document can run on. For example, to run a document on EC2 instances, specify the following value: /AWS::EC2::Instance. If you specify a value of '/' the document can run on all types of resources. If you don't specify a value, the document can't run on any resources. For a list of valid resource types, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html">AWS Resource Types Reference</a> in the <i>AWS CloudFormation User Guide</i>. </p>
+    #[serde(rename = "TargetType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_type: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -957,7 +1057,7 @@ pub struct CreatePatchBaselineRequest {
     /// <p>The name of the patch baseline.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>Defines the operating system the patch baseline applies to. Supported operating systems include WINDOWS, AMAZON_LINUX, UBUNTU and REDHAT_ENTERPRISE_LINUX. The Default value is WINDOWS.</p>
+    /// <p>Defines the operating system the patch baseline applies to. The Default value is WINDOWS.</p>
     #[serde(rename = "OperatingSystem")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operating_system: Option<String>,
@@ -1231,7 +1331,7 @@ pub struct DescribeAssociationRequest {
     #[serde(rename = "InstanceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
-    /// <p>The name of the SSM document.</p>
+    /// <p>The name of the Systems Manager document.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -1271,6 +1371,41 @@ pub struct DescribeAutomationExecutionsResult {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribeAutomationStepExecutionsRequest {
+    /// <p>The Automation execution ID for which you want step execution descriptions.</p>
+    #[serde(rename = "AutomationExecutionId")]
+    pub automation_execution_id: String,
+    /// <p>One or more filters to limit the number of step executions returned by the request.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<StepExecutionFilter>>,
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A boolean that indicates whether to list step executions in reverse order by start time. The default value is false.</p>
+    #[serde(rename = "ReverseOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reverse_order: Option<bool>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeAutomationStepExecutionsResult {
+    /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of details about the current state of all steps that make up an execution.</p>
+    #[serde(rename = "StepExecutions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub step_executions: Option<Vec<StepExecution>>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
@@ -1325,14 +1460,14 @@ pub struct DescribeDocumentRequest {
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
-    /// <p>The name of the SSM document.</p>
+    /// <p>The name of the Systems Manager document.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeDocumentResult {
-    /// <p>Information about the SSM document.</p>
+    /// <p>Information about the Systems Manager document.</p>
     #[serde(rename = "Document")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document: Option<DocumentDescription>,
@@ -1863,7 +1998,7 @@ pub struct DocumentDefaultVersionDescription {
     pub name: Option<String>,
 }
 
-/// <p>Describes an SSM document. </p>
+/// <p>Describes a Systems Manager document. </p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DocumentDescription {
     /// <p>The date when the document was created.</p>
@@ -1878,6 +2013,10 @@ pub struct DocumentDescription {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>The document format, either JSON or YAML.</p>
+    #[serde(rename = "DocumentFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_format: Option<String>,
     /// <p>The type of document. </p>
     #[serde(rename = "DocumentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1898,11 +2037,11 @@ pub struct DocumentDescription {
     #[serde(rename = "LatestVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latest_version: Option<String>,
-    /// <p>The name of the SSM document.</p>
+    /// <p>The name of the Systems Manager document.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The AWS user account of the person who created the document.</p>
+    /// <p>The AWS user account that created the document.</p>
     #[serde(rename = "Owner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
@@ -1910,7 +2049,7 @@ pub struct DocumentDescription {
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<Vec<DocumentParameter>>,
-    /// <p>The list of OS platforms compatible with this SSM document. </p>
+    /// <p>The list of OS platforms compatible with this Systems Manager document. </p>
     #[serde(rename = "PlatformTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub platform_types: Option<Vec<String>>,
@@ -1918,14 +2057,22 @@ pub struct DocumentDescription {
     #[serde(rename = "SchemaVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_version: Option<String>,
-    /// <p>The SHA1 hash of the document, which you can use for verification purposes.</p>
+    /// <p>The SHA1 hash of the document, which you can use for verification.</p>
     #[serde(rename = "Sha1")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sha_1: Option<String>,
-    /// <p>The status of the SSM document.</p>
+    /// <p>The status of the Systems Manager document.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+    /// <p>The tags, or metadata, that have been applied to the document.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>The target type which defines the kinds of resources the document can run on. For example, /AWS::EC2::Instance. For a list of valid resource types, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html">AWS Resource Types Reference</a> in the <i>AWS CloudFormation User Guide</i>. </p>
+    #[serde(rename = "TargetType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_type: Option<String>,
 }
 
 /// <p>Describes a filter.</p>
@@ -1939,9 +2086,13 @@ pub struct DocumentFilter {
     pub value: String,
 }
 
-/// <p>Describes the name of an SSM document.</p>
+/// <p>Describes the name of a Systems Manager document.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DocumentIdentifier {
+    /// <p>The document format, either JSON or YAML.</p>
+    #[serde(rename = "DocumentFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_format: Option<String>,
     /// <p>The document type.</p>
     #[serde(rename = "DocumentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1950,11 +2101,11 @@ pub struct DocumentIdentifier {
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
-    /// <p>The name of the SSM document.</p>
+    /// <p>The name of the Systems Manager document.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The AWS user account of the person who created the document.</p>
+    /// <p>The AWS user account that created the document.</p>
     #[serde(rename = "Owner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
@@ -1966,6 +2117,27 @@ pub struct DocumentIdentifier {
     #[serde(rename = "SchemaVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_version: Option<String>,
+    /// <p>The tags, or metadata, that have been applied to the document.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>The target type which defines the kinds of resources the document can run on. For example, /AWS::EC2::Instance. For a list of valid resource types, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html">AWS Resource Types Reference</a> in the <i>AWS CloudFormation User Guide</i>. </p>
+    #[serde(rename = "TargetType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_type: Option<String>,
+}
+
+/// <p>One or more filters. Use a filter to return a more specific list of documents.</p> <p>For keys, you can specify one or more tags that have been applied to a document. </p> <p>Other valid values include Owner, Name, PlatformTypes, and DocumentType.</p> <p>Note that only one Owner can be specified in a request. For example: <code>Key=Owner,Values=Self</code>.</p> <p>If you use Name as a key, you can use a name prefix to return a list of documents. For example, in the AWS CLI, to return a list of all documents that begin with <code>Te</code>, run the following command:</p> <p> <code>aws ssm list-documents --filters Key=Name,Values=Te</code> </p> <p>If you specify more than two keys, only documents that are identified by all the tags are returned in the results. If you specify more than two values for a key, documents that are identified by any of the values are returned in the results.</p> <p>To specify a custom key and value pair, use the format <code>Key=tag:[tagName],Values=[valueName]</code>.</p> <p>For example, if you created a Key called region and are using the AWS CLI to call the <code>list-documents</code> command: </p> <p> <code>aws ssm list-documents --filters Key=tag:region,Values=east,west Key=Owner,Values=Self</code> </p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DocumentKeyValuesFilter {
+    /// <p>The name of the filter key.</p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    /// <p>The value for the filter key.</p>
+    #[serde(rename = "Values")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub values: Option<Vec<String>>,
 }
 
 /// <p>Parameters specified in a System Manager document that execute on the server when the command is run. </p>
@@ -1996,6 +2168,10 @@ pub struct DocumentVersionInfo {
     #[serde(rename = "CreatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
+    /// <p>The document format, either JSON or YAML.</p>
+    #[serde(rename = "DocumentFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_format: Option<String>,
     /// <p>The document version.</p>
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2202,21 +2378,29 @@ pub struct GetDeployablePatchSnapshotForInstanceResult {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDocumentRequest {
+    /// <p>Returns the document in the specified format. The document format can be either JSON or YAML. JSON is the default format.</p>
+    #[serde(rename = "DocumentFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_format: Option<String>,
     /// <p>The document version for which you want information.</p>
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
-    /// <p>The name of the SSM document.</p>
+    /// <p>The name of the Systems Manager document.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetDocumentResult {
-    /// <p>The contents of the SSM document.</p>
+    /// <p>The contents of the Systems Manager document.</p>
     #[serde(rename = "Content")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
+    /// <p>The document format, either JSON or YAML.</p>
+    #[serde(rename = "DocumentFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_format: Option<String>,
     /// <p>The document type.</p>
     #[serde(rename = "DocumentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2225,7 +2409,7 @@ pub struct GetDocumentResult {
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
-    /// <p>The name of the SSM document.</p>
+    /// <p>The name of the Systems Manager document.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -2233,6 +2417,10 @@ pub struct GetDocumentResult {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetInventoryRequest {
+    /// <p>Returns counts of inventory types based on one or more expressions. For example, if you aggregate by using an expression that uses the <code>AWS:InstanceInformation.PlatformType</code> type, you can see a count of how many Windows and Linux instances exist in your inventoried fleet.</p>
+    #[serde(rename = "Aggregators")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aggregators: Option<Vec<InventoryAggregator>>,
     /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2265,6 +2453,10 @@ pub struct GetInventoryResult {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetInventorySchemaRequest {
+    /// <p>Returns inventory schemas that support aggregation. For example, this call returns the <code>AWS:InstanceInformation</code> type, because it supports aggregation based on the <code>PlatformName</code>, <code>PlatformType</code>, and <code>PlatformVersion</code> attributes.</p>
+    #[serde(rename = "Aggregator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aggregator: Option<bool>,
     /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2558,7 +2750,7 @@ pub struct GetMaintenanceWindowTaskResult {
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
-    /// <p>The resource that the task used during execution. For RUN_COMMAND and AUTOMATION task types, the TaskArn is the SSM Document name/ARN. For LAMBDA tasks, the value is the function name/ARN. For STEP_FUNCTION tasks, the value is the state machine ARN.</p>
+    /// <p>The resource that the task used during execution. For RUN_COMMAND and AUTOMATION task types, the TaskArn is the Systems Manager Document name/ARN. For LAMBDA tasks, the value is the function name/ARN. For STEP_FUNCTION tasks, the value is the state machine ARN.</p>
     #[serde(rename = "TaskArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_arn: Option<String>,
@@ -2649,7 +2841,7 @@ pub struct GetParametersByPathRequest {
     #[serde(rename = "ParameterFilters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_filters: Option<Vec<ParameterStringFilter>>,
-    /// <p>The hierarchy for the parameter. Hierarchies start with a forward slash (/) and end with the parameter name. A hierarchy can have a maximum of five levels. Examples: /Environment/Test/DBString003</p> <p>/Finance/Prod/IAD/OS/WinServ2016/license15</p>
+    /// <p>The hierarchy for the parameter. Hierarchies start with a forward slash (/) and end with the parameter name. A hierarchy can have a maximum of 15 levels. Here is an example of a hierarchy: <code>/Finance/Prod/IAD/WinServ2016/license33</code> </p>
     #[serde(rename = "Path")]
     pub path: String,
     /// <p>Retrieve all parameters within a hierarchy.</p>
@@ -3057,6 +3249,19 @@ pub struct InstancePatchStateFilter {
     pub values: Vec<String>,
 }
 
+/// <p>Specifies the inventory type and attribute for the aggregation execution.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct InventoryAggregator {
+    /// <p>Nested aggregators to further refine aggregation for an inventory type.</p>
+    #[serde(rename = "Aggregators")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aggregators: Option<Vec<InventoryAggregator>>,
+    /// <p>The inventory type and attribute name for aggregation.</p>
+    #[serde(rename = "Expression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expression: Option<String>,
+}
+
 /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct InventoryFilter {
@@ -3115,6 +3320,10 @@ pub struct InventoryItemSchema {
     /// <p>The schema attributes for inventory. This contains data type and attribute name.</p>
     #[serde(rename = "Attributes")]
     pub attributes: Vec<InventoryItemAttribute>,
+    /// <p>The alias name of the inventory type. The alias name is used for display purposes.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
     /// <p>The name of the inventory type. Default inventory item type names start with AWS. Custom inventory type names will start with Custom. Default inventory item types include the following: AWS:AWSComponent, AWS:Application, AWS:InstanceInformation, AWS:Network, and AWS:WindowsUpdate.</p>
     #[serde(rename = "TypeName")]
     pub type_name: String,
@@ -3127,7 +3336,7 @@ pub struct InventoryItemSchema {
 /// <p>Inventory query results.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct InventoryResultEntity {
-    /// <p>The data section in the inventory result entity json.</p>
+    /// <p>The data section in the inventory result entity JSON.</p>
     #[serde(rename = "Data")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<::std::collections::HashMap<String, InventoryResultItem>>,
@@ -3387,6 +3596,10 @@ pub struct ListDocumentsRequest {
     #[serde(rename = "DocumentFilterList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_filter_list: Option<Vec<DocumentFilter>>,
+    /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<DocumentKeyValuesFilter>>,
     /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3399,7 +3612,7 @@ pub struct ListDocumentsRequest {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListDocumentsResult {
-    /// <p>The names of the SSM documents.</p>
+    /// <p>The names of the Systems Manager documents.</p>
     #[serde(rename = "DocumentIdentifiers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_identifiers: Option<Vec<DocumentIdentifier>>,
@@ -3858,7 +4071,7 @@ pub struct MaintenanceWindowTask {
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
-    /// <p>The resource that the task uses during execution. For RUN_COMMAND and AUTOMATION task types, <code>TaskArn</code> is the SSM document name or ARN. For LAMBDA tasks, it's the function name or ARN. For STEP_FUNCTION tasks, it's the state machine ARN.</p>
+    /// <p>The resource that the task uses during execution. For RUN_COMMAND and AUTOMATION task types, <code>TaskArn</code> is the Systems Manager document name or ARN. For LAMBDA tasks, it's the function name or ARN. For STEP_FUNCTION tasks, it's the state machine ARN.</p>
     #[serde(rename = "TaskArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_arn: Option<String>,
@@ -3952,7 +4165,7 @@ pub struct NotificationConfig {
     #[serde(rename = "NotificationArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_arn: Option<String>,
-    /// <p>The different events for which you can receive notifications. These events include the following: All (events), InProgress, Success, TimedOut, Cancelled, Failed. To learn more about these events, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-commands.html">Setting Up Events and Notifications</a> in the <i>Amazon EC2 Systems Manager User Guide</i>.</p>
+    /// <p>The different events for which you can receive notifications. These events include the following: All (events), InProgress, Success, TimedOut, Cancelled, Failed. To learn more about these events, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-commands.html">Setting Up Events and Notifications</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "NotificationEvents")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_events: Option<Vec<String>>,
@@ -3977,6 +4190,10 @@ pub struct Parameter {
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+    /// <p>The parameter version.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<i64>,
 }
 
 /// <p>Information about parameter usage.</p>
@@ -4014,6 +4231,10 @@ pub struct ParameterHistory {
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+    /// <p>The parameter version.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<i64>,
 }
 
 /// <p>Metada includes information like the ARN of the last user and the date/time the parameter was last used.</p>
@@ -4047,6 +4268,10 @@ pub struct ParameterMetadata {
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
+    /// <p>The parameter version.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<i64>,
 }
 
 /// <p>One or more filters. Use a filter to return a more specific list of results.</p>
@@ -4065,7 +4290,7 @@ pub struct ParameterStringFilter {
     pub values: Option<Vec<String>>,
 }
 
-/// <p>One or more filters. Use a filter to return a more specific list of results.</p>
+/// <p>This data type is deprecated. Instead, use <a>ParameterStringFilter</a>.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ParametersFilter {
     /// <p>The name of the filter.</p>
@@ -4152,7 +4377,7 @@ pub struct PatchBaselineIdentity {
     #[serde(rename = "DefaultBaseline")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_baseline: Option<bool>,
-    /// <p>Defines the operating system the patch baseline applies to. Supported operating systems include WINDOWS, AMAZON_LINUX, UBUNTU and REDHAT_ENTERPRISE_LINUX. The Default value is WINDOWS. </p>
+    /// <p>Defines the operating system the patch baseline applies to. The Default value is WINDOWS. </p>
     #[serde(rename = "OperatingSystem")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operating_system: Option<String>,
@@ -4181,13 +4406,13 @@ pub struct PatchComplianceData {
     pub title: String,
 }
 
-/// <p>Defines a patch filter.</p>
+/// <p><p>Defines a patch filter.</p> <p>A patch filter consists of key/value pairs, but not all keys are valid for all operating system types. For example, the key <code>PRODUCT</code> is valid for all supported operating system types. The key <code>MSRC<em>SEVERITY</code>, however, is valid only for Windows operating systems, and the key <code>SECTION</code> is valid only for Ubuntu operating systems.</p> <p>Refer to the following sections for information about which keys may be used with each major operating system, and which values are valid for each key.</p> <p> <b>Windows Operating Systems</b> </p> <p>The supported keys for Windows operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>MSRC</em>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Windows7</code> </p> </li> <li> <p> <code>Windows8</code> </p> </li> <li> <p> <code>Windows8.1</code> </p> </li> <li> <p> <code>Windows8Embedded</code> </p> </li> <li> <p> <code>Windows10</code> </p> </li> <li> <p> <code>Windows10LTSB</code> </p> </li> <li> <p> <code>WindowsServer2008</code> </p> </li> <li> <p> <code>WindowsServer2008R2</code> </p> </li> <li> <p> <code>WindowsServer2012</code> </p> </li> <li> <p> <code>WindowsServer2012R2</code> </p> </li> <li> <p> <code>WindowsServer2016</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>CriticalUpdates</code> </p> </li> <li> <p> <code>DefinitionUpdates</code> </p> </li> <li> <p> <code>Drivers</code> </p> </li> <li> <p> <code>FeaturePacks</code> </p> </li> <li> <p> <code>SecurityUpdates</code> </p> </li> <li> <p> <code>ServicePacks</code> </p> </li> <li> <p> <code>Tools</code> </p> </li> <li> <p> <code>UpdateRollups</code> </p> </li> <li> <p> <code>Updates</code> </p> </li> <li> <p> <code>Upgrades</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>MSRC_SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Moderate</code> </p> </li> <li> <p> <code>Low</code> </p> </li> <li> <p> <code>Unspecified</code> </p> </li> </ul> <p> <b>Ubuntu Operating Systems</b> </p> <p>The supported keys for Ubuntu operating systems are <code>PRODUCT</code>, <code>PRIORITY</code>, and <code>SECTION</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Ubuntu14.04</code> </p> </li> <li> <p> <code>Ubuntu16.04</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>PRIORITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Required</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Standard</code> </p> </li> <li> <p> <code>Optional</code> </p> </li> <li> <p> <code>Extra</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SECTION</code> </p> <p>Only the length of the key value is validated. Minimum length is 1. Maximum length is 64.</p> <p> <b>Amazon Linux Operating Systems</b> </p> <p>The supported keys for Amazon Linux operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>AmazonLinux2012.03</code> </p> </li> <li> <p> <code>AmazonLinux2012.09</code> </p> </li> <li> <p> <code>AmazonLinux2013.03</code> </p> </li> <li> <p> <code>AmazonLinux2013.09</code> </p> </li> <li> <p> <code>AmazonLinux2014.03</code> </p> </li> <li> <p> <code>AmazonLinux2014.09</code> </p> </li> <li> <p> <code>AmazonLinux2015.03</code> </p> </li> <li> <p> <code>AmazonLinux2015.09</code> </p> </li> <li> <p> <code>AmazonLinux2016.03</code> </p> </li> <li> <p> <code>AmazonLinux2016.09</code> </p> </li> <li> <p> <code>AmazonLinux2017.03</code> </p> </li> <li> <p> <code>AmazonLinux2017.09</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Security</code> </p> </li> <li> <p> <code>Bugfix</code> </p> </li> <li> <p> <code>Enhancement</code> </p> </li> <li> <p> <code>Recommended</code> </p> </li> <li> <p> <code>Newpackage</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Medium</code> </p> </li> <li> <p> <code>Low</code> </p> </li> </ul> <p> <b>RedHat Enterprise Linux (RHEL) Operating Systems</b> </p> <p>The supported keys for RedHat Enterprise Linux operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>RedhatEnterpriseLinux6.5</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.6</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.7</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.8</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.9</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.0</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.1</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.2</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.3</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.4</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Security</code> </p> </li> <li> <p> <code>Bugfix</code> </p> </li> <li> <p> <code>Enhancement</code> </p> </li> <li> <p> <code>Recommended</code> </p> </li> <li> <p> <code>Newpackage</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Medium</code> </p> </li> <li> <p> <code>Low</code> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct PatchFilter {
-    /// <p>The key for the filter (PRODUCT, CLASSIFICATION, MSRC_SEVERITY, PATCH_ID)</p>
+    /// <p>The key for the filter.</p> <p>See <a>PatchFilter</a> for lists of valid keys for each operating system type.</p>
     #[serde(rename = "Key")]
     pub key: String,
-    /// <p>The value for the filter key.</p>
+    /// <p>The value for the filter key.</p> <p>See <a>PatchFilter</a> for lists of valid values for each key based on operating system type.</p>
     #[serde(rename = "Values")]
     pub values: Vec<String>,
 }
@@ -4311,7 +4536,7 @@ pub struct PutParameterRequest {
     #[serde(rename = "AllowedPattern")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_pattern: Option<String>,
-    /// <p>Information about the parameter that you want to add to the system</p>
+    /// <p>Information about the parameter that you want to add to the system.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -4319,7 +4544,7 @@ pub struct PutParameterRequest {
     #[serde(rename = "KeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_id: Option<String>,
-    /// <p>The name of the parameter that you want to add to the system.</p>
+    /// <p><p>The fully qualified name of the parameter that you want to add to the system. The fully qualified name includes the complete hierarchy of the parameter path and name. For example: <code>/Dev/DBServer/MySQL/db-string13</code> </p> <note> <p>The maximum length constraint listed below includes capacity for additional system attributes that are not part of the name. The maximum length for the fully qualified parameter name is 1011 characters. </p> </note></p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>Overwrite an existing parameter. If not specified, will default to "false".</p>
@@ -4335,7 +4560,12 @@ pub struct PutParameterRequest {
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct PutParameterResult;
+pub struct PutParameterResult {
+    /// <p>The new version number of a parameter. If you edit a parameter value, Parameter Store automatically creates a new version and assigns this new version a unique ID. You can reference a parameter version ID in API actions or in Systems Manager documents (SSM documents). By default, if you don't specify a specific version, the system returns the latest parameter value when a parameter is called.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<i64>,
+}
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct RegisterDefaultPatchBaselineRequest {
@@ -4489,6 +4719,19 @@ pub struct RemoveTagsFromResourceRequest {
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct RemoveTagsFromResourceResult;
 
+/// <p>Information about targets that resolved during the Automation execution.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ResolvedTargets {
+    /// <p>A list of parameter values sent to targets that resolved during the Automation execution.</p>
+    #[serde(rename = "ParameterValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameter_values: Option<Vec<String>>,
+    /// <p>A boolean value indicating whether the resolved target list is truncated.</p>
+    #[serde(rename = "Truncated")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub truncated: Option<bool>,
+}
+
 /// <p>Compliance summary information for a specific resource. </p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ResourceComplianceSummaryItem {
@@ -4558,6 +4801,10 @@ pub struct ResourceDataSyncItem {
 /// <p>Information about the target Amazon S3 bucket for the Resource Data Sync.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ResourceDataSyncS3Destination {
+    /// <p>The ARN of an encryption key for a destination in Amazon S3. Must belong to the same region as the destination Amazon S3 bucket.</p>
+    #[serde(rename = "AWSKMSKeyARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub awskms_key_arn: Option<String>,
     /// <p>The name of the Amazon S3 bucket where the aggregated data is stored.</p>
     #[serde(rename = "BucketName")]
     pub bucket_name: String,
@@ -4726,6 +4973,10 @@ pub struct SeveritySummary {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct StartAutomationExecutionRequest {
+    /// <p>User-provided idempotency token. The token must be unique, is case insensitive, enforces the UUID format, and can't be reused.</p>
+    #[serde(rename = "ClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_token: Option<String>,
     /// <p>The name of the Automation document to use for this execution.</p>
     #[serde(rename = "DocumentName")]
     pub document_name: String,
@@ -4733,10 +4984,30 @@ pub struct StartAutomationExecutionRequest {
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
+    /// <p>The maximum number of targets allowed to run this task in parallel. You can specify a number, such as 10, or a percentage, such as 10%. The default value is 10.</p>
+    #[serde(rename = "MaxConcurrency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_concurrency: Option<String>,
+    /// <p>The number of errors that are allowed before the system stops running the automation on additional targets. You can specify either an absolute number of errors, for example 10, or a percentage of the target set, for example 10%. If you specify 3, for example, the system stops running the automation when the fourth error is received. If you specify 0, then the system stops running the automation on additional targets after the first error result is returned. If you run an automation on 50 resources and set max-errors to 10%, then the system stops running the automation on additional targets when the sixth error is received.</p> <p>Executions that are already running an automation when max-errors is reached are allowed to complete, but some of these executions may fail as well. If you need to ensure that there won't be more than max-errors failed executions, set max-concurrency to 1 so the executions proceed one at a time.</p>
+    #[serde(rename = "MaxErrors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_errors: Option<String>,
+    /// <p>The execution mode of the automation. Valid modes include the following: Auto and Interactive. The default mode is Auto.</p>
+    #[serde(rename = "Mode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mode: Option<String>,
     /// <p>A key-value map of execution parameters, which match the declared parameters in the Automation document.</p>
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, Vec<String>>>,
+    /// <p>The name of the parameter used as the target resource for the rate-controlled execution. Required if you specify Targets.</p>
+    #[serde(rename = "TargetParameterName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_parameter_name: Option<String>,
+    /// <p>A key-value mapping to target resources. Required if you specify TargetParameterName.</p>
+    #[serde(rename = "Targets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub targets: Option<Vec<Target>>,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -4774,10 +5045,22 @@ pub struct StepExecution {
     #[serde(rename = "Inputs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inputs: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The maximum number of tries to run the action of the step. The default value is 1.</p>
+    #[serde(rename = "MaxAttempts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_attempts: Option<i64>,
+    /// <p>The action to take if the step fails. The default value is Abort.</p>
+    #[serde(rename = "OnFailure")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub on_failure: Option<String>,
     /// <p>Returned values from the execution of the step.</p>
     #[serde(rename = "Outputs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub outputs: Option<::std::collections::HashMap<String, Vec<String>>>,
+    /// <p>A user-specified list of parameters to override when executing a step.</p>
+    #[serde(rename = "OverriddenParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub overridden_parameters: Option<::std::collections::HashMap<String, Vec<String>>>,
     /// <p>A message associated with the response code for an execution.</p>
     #[serde(rename = "Response")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4786,6 +5069,10 @@ pub struct StepExecution {
     #[serde(rename = "ResponseCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_code: Option<String>,
+    /// <p>The unique ID of a step execution.</p>
+    #[serde(rename = "StepExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub step_execution_id: Option<String>,
     /// <p>The name of this execution step.</p>
     #[serde(rename = "StepName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4794,6 +5081,21 @@ pub struct StepExecution {
     #[serde(rename = "StepStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub step_status: Option<String>,
+    /// <p>The timeout seconds of the step.</p>
+    #[serde(rename = "TimeoutSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout_seconds: Option<i64>,
+}
+
+/// <p>A filter to limit the amount of step execution information returned by the call.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct StepExecutionFilter {
+    /// <p>One or more keys to limit the results. Valid filter keys include the following: StepName, Action, StepExecutionId, StepExecutionStatus, StartTimeBefore, StartTimeAfter.</p>
+    #[serde(rename = "Key")]
+    pub key: String,
+    /// <p>The values of the filter key.</p>
+    #[serde(rename = "Values")]
+    pub values: Vec<String>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
@@ -4801,12 +5103,16 @@ pub struct StopAutomationExecutionRequest {
     /// <p>The execution ID of the Automation to stop.</p>
     #[serde(rename = "AutomationExecutionId")]
     pub automation_execution_id: String,
+    /// <p>The stop request type. Valid types include the following: Cancel and Complete. The default type is Cancel.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct StopAutomationExecutionResult;
 
-/// <p>Metadata that you assign to your managed instances. Tags enable you to categorize your managed instances in different ways, for example, by purpose, owner, or environment.</p>
+/// <p>Metadata that you assign to your AWS resources. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. In Systems Manager, you can apply tags to documents, managed instances, Maintenance Windows, Parameter Store parameters, and patch baselines.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Tag {
     /// <p>The name of the tag.</p>
@@ -4885,7 +5191,7 @@ pub struct UpdateAssociationStatusRequest {
     /// <p>The ID of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    /// <p>The name of the SSM document.</p>
+    /// <p>The name of the Systems Manager document.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
@@ -4921,6 +5227,10 @@ pub struct UpdateDocumentRequest {
     /// <p>The content in a document that you want to update.</p>
     #[serde(rename = "Content")]
     pub content: String,
+    /// <p>Specify the document format for the new document version. Systems Manager supports JSON and YAML documents. JSON is the default format.</p>
+    #[serde(rename = "DocumentFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_format: Option<String>,
     /// <p>The version of the document that you want to update.</p>
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4928,6 +5238,10 @@ pub struct UpdateDocumentRequest {
     /// <p>The name of the document that you want to update.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>Specify a new target type for the document.</p>
+    #[serde(rename = "TargetType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_type: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -5290,7 +5604,7 @@ pub enum AddTagsToResourceError {
     InternalServerError(String),
     /// <p>The resource ID is not valid. Verify that you entered the correct ID and try again.</p>
     InvalidResourceId(String),
-    /// <p>The resource type is not valid. If you are attempting to tag an instance, the instance must be a registered, managed instance.</p>
+    /// <p>The resource type is not valid. For example, if you are attempting to tag an instance, the instance must be a registered, managed instance.</p>
     InvalidResourceType(String),
     /// <p>The Targets parameter includes too many tags. Remove one or more tags and try the command again.</p>
     TooManyTagsError(String),
@@ -5572,7 +5886,7 @@ pub enum CreateAssociationError {
     InvalidInstanceId(String),
     /// <p>The output location is not valid or does not exist.</p>
     InvalidOutputLocation(String),
-    /// <p>You must specify values for all required parameters in the SSM document. You can only supply values to parameters defined in the SSM document.</p>
+    /// <p>You must specify values for all required parameters in the Systems Manager document. You can only supply values to parameters defined in the Systems Manager document.</p>
     InvalidParameters(String),
     /// <p>The schedule is invalid. Verify your cron or rate expression and try again.</p>
     InvalidSchedule(String),
@@ -5716,7 +6030,7 @@ pub enum CreateAssociationBatchError {
     InvalidInstanceId(String),
     /// <p>The output location is not valid or does not exist.</p>
     InvalidOutputLocation(String),
-    /// <p>You must specify values for all required parameters in the SSM document. You can only supply values to parameters defined in the SSM document.</p>
+    /// <p>You must specify values for all required parameters in the Systems Manager document. You can only supply values to parameters defined in the Systems Manager document.</p>
     InvalidParameters(String),
     /// <p>The schedule is invalid. Verify your cron or rate expression and try again.</p>
     InvalidSchedule(String),
@@ -5850,7 +6164,7 @@ impl Error for CreateAssociationBatchError {
 pub enum CreateDocumentError {
     /// <p>The specified document already exists.</p>
     DocumentAlreadyExists(String),
-    /// <p>You can have at most 200 active SSM documents.</p>
+    /// <p>You can have at most 200 active Systems Manager documents.</p>
     DocumentLimitExceeded(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -5962,7 +6276,7 @@ pub enum CreateMaintenanceWindowError {
     IdempotentParameterMismatch(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>Error returned when the caller has exceeded the default resource limits (e.g. too many Maintenance Windows have been created).</p>
+    /// <p>Error returned when the caller has exceeded the default resource limits. For example, too many Maintenance Windows or Patch baselines have been created.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     ResourceLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6058,7 +6372,7 @@ pub enum CreatePatchBaselineError {
     IdempotentParameterMismatch(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>Error returned when the caller has exceeded the default resource limits (e.g. too many Maintenance Windows have been created).</p>
+    /// <p>Error returned when the caller has exceeded the default resource limits. For example, too many Maintenance Windows or Patch baselines have been created.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     ResourceLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6258,6 +6572,8 @@ pub enum DeleteActivationError {
     InvalidActivation(String),
     /// <p>The activation ID is not valid. Verify the you entered the correct ActivationId or ActivationCode and try again.</p>
     InvalidActivationId(String),
+    /// <p>There are concurrent updates for a resource that supports one update at a time.</p>
+    TooManyUpdates(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -6289,6 +6605,9 @@ impl DeleteActivationError {
                     }
                     "InvalidActivationId" => {
                         DeleteActivationError::InvalidActivationId(String::from(error_message))
+                    }
+                    "TooManyUpdates" => {
+                        DeleteActivationError::TooManyUpdates(String::from(error_message))
                     }
                     "ValidationException" => {
                         DeleteActivationError::Validation(error_message.to_string())
@@ -6332,6 +6651,7 @@ impl Error for DeleteActivationError {
             DeleteActivationError::InternalServerError(ref cause) => cause,
             DeleteActivationError::InvalidActivation(ref cause) => cause,
             DeleteActivationError::InvalidActivationId(ref cause) => cause,
+            DeleteActivationError::TooManyUpdates(ref cause) => cause,
             DeleteActivationError::Validation(ref cause) => cause,
             DeleteActivationError::Credentials(ref err) => err.description(),
             DeleteActivationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -7136,7 +7456,7 @@ impl Error for DeregisterPatchBaselineForPatchGroupError {
 /// Errors returned by DeregisterTargetFromMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum DeregisterTargetFromMaintenanceWindowError {
-    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -7236,7 +7556,7 @@ impl Error for DeregisterTargetFromMaintenanceWindowError {
 /// Errors returned by DeregisterTaskFromMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum DeregisterTaskFromMaintenanceWindowError {
-    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -7528,6 +7848,10 @@ impl Error for DescribeAssociationError {
 pub enum DescribeAutomationExecutionsError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
+    /// <p>The specified key is not valid.</p>
+    InvalidFilterKey(String),
+    /// <p>The filter value is not valid. Verify the value and try again.</p>
+    InvalidFilterValue(String),
     /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
     /// An error occurred dispatching the HTTP request
@@ -7558,6 +7882,12 @@ impl DescribeAutomationExecutionsError {
                             error_message,
                         ))
                     }
+                    "InvalidFilterKey" => DescribeAutomationExecutionsError::InvalidFilterKey(
+                        String::from(error_message),
+                    ),
+                    "InvalidFilterValue" => DescribeAutomationExecutionsError::InvalidFilterValue(
+                        String::from(error_message),
+                    ),
                     "InvalidNextToken" => DescribeAutomationExecutionsError::InvalidNextToken(
                         String::from(error_message),
                     ),
@@ -7601,6 +7931,8 @@ impl Error for DescribeAutomationExecutionsError {
     fn description(&self) -> &str {
         match *self {
             DescribeAutomationExecutionsError::InternalServerError(ref cause) => cause,
+            DescribeAutomationExecutionsError::InvalidFilterKey(ref cause) => cause,
+            DescribeAutomationExecutionsError::InvalidFilterValue(ref cause) => cause,
             DescribeAutomationExecutionsError::InvalidNextToken(ref cause) => cause,
             DescribeAutomationExecutionsError::Validation(ref cause) => cause,
             DescribeAutomationExecutionsError::Credentials(ref err) => err.description(),
@@ -7608,6 +7940,116 @@ impl Error for DescribeAutomationExecutionsError {
                 dispatch_error.description()
             }
             DescribeAutomationExecutionsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeAutomationStepExecutions
+#[derive(Debug, PartialEq)]
+pub enum DescribeAutomationStepExecutionsError {
+    /// <p>There is no automation execution information for the requested automation execution ID.</p>
+    AutomationExecutionNotFound(String),
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>The specified key is not valid.</p>
+    InvalidFilterKey(String),
+    /// <p>The filter value is not valid. Verify the value and try again.</p>
+    InvalidFilterValue(String),
+    /// <p>The specified token is not valid.</p>
+    InvalidNextToken(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeAutomationStepExecutionsError {
+    pub fn from_body(body: &str) -> DescribeAutomationStepExecutionsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AutomationExecutionNotFoundException" => {
+                        DescribeAutomationStepExecutionsError::AutomationExecutionNotFound(
+                            String::from(error_message),
+                        )
+                    }
+                    "InternalServerError" => {
+                        DescribeAutomationStepExecutionsError::InternalServerError(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidFilterKey" => DescribeAutomationStepExecutionsError::InvalidFilterKey(
+                        String::from(error_message),
+                    ),
+                    "InvalidFilterValue" => {
+                        DescribeAutomationStepExecutionsError::InvalidFilterValue(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidNextToken" => DescribeAutomationStepExecutionsError::InvalidNextToken(
+                        String::from(error_message),
+                    ),
+                    "ValidationException" => {
+                        DescribeAutomationStepExecutionsError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeAutomationStepExecutionsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeAutomationStepExecutionsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeAutomationStepExecutionsError {
+    fn from(err: serde_json::error::Error) -> DescribeAutomationStepExecutionsError {
+        DescribeAutomationStepExecutionsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeAutomationStepExecutionsError {
+    fn from(err: CredentialsError) -> DescribeAutomationStepExecutionsError {
+        DescribeAutomationStepExecutionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeAutomationStepExecutionsError {
+    fn from(err: HttpDispatchError) -> DescribeAutomationStepExecutionsError {
+        DescribeAutomationStepExecutionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeAutomationStepExecutionsError {
+    fn from(err: io::Error) -> DescribeAutomationStepExecutionsError {
+        DescribeAutomationStepExecutionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeAutomationStepExecutionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeAutomationStepExecutionsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeAutomationStepExecutionsError::AutomationExecutionNotFound(ref cause) => cause,
+            DescribeAutomationStepExecutionsError::InternalServerError(ref cause) => cause,
+            DescribeAutomationStepExecutionsError::InvalidFilterKey(ref cause) => cause,
+            DescribeAutomationStepExecutionsError::InvalidFilterValue(ref cause) => cause,
+            DescribeAutomationStepExecutionsError::InvalidNextToken(ref cause) => cause,
+            DescribeAutomationStepExecutionsError::Validation(ref cause) => cause,
+            DescribeAutomationStepExecutionsError::Credentials(ref err) => err.description(),
+            DescribeAutomationStepExecutionsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeAutomationStepExecutionsError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -7978,7 +8420,7 @@ impl Error for DescribeEffectiveInstanceAssociationsError {
 /// Errors returned by DescribeEffectivePatchesForPatchBaseline
 #[derive(Debug, PartialEq)]
 pub enum DescribeEffectivePatchesForPatchBaselineError {
-    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -8586,7 +9028,7 @@ impl Error for DescribeInstancePatchesError {
 /// Errors returned by DescribeMaintenanceWindowExecutionTaskInvocations
 #[derive(Debug, PartialEq)]
 pub enum DescribeMaintenanceWindowExecutionTaskInvocationsError {
-    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -8680,7 +9122,7 @@ impl Error for DescribeMaintenanceWindowExecutionTaskInvocationsError {
 /// Errors returned by DescribeMaintenanceWindowExecutionTasks
 #[derive(Debug, PartialEq)]
 pub enum DescribeMaintenanceWindowExecutionTasksError {
-    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -8854,7 +9296,7 @@ impl Error for DescribeMaintenanceWindowExecutionsError {
 /// Errors returned by DescribeMaintenanceWindowTargets
 #[derive(Debug, PartialEq)]
 pub enum DescribeMaintenanceWindowTargetsError {
-    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -8944,7 +9386,7 @@ impl Error for DescribeMaintenanceWindowTargetsError {
 /// Errors returned by DescribeMaintenanceWindowTasks
 #[derive(Debug, PartialEq)]
 pub enum DescribeMaintenanceWindowTasksError {
-    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -10112,7 +10554,7 @@ impl Error for GetInventorySchemaError {
 /// Errors returned by GetMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum GetMaintenanceWindowError {
-    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -10198,7 +10640,7 @@ impl Error for GetMaintenanceWindowError {
 /// Errors returned by GetMaintenanceWindowExecution
 #[derive(Debug, PartialEq)]
 pub enum GetMaintenanceWindowExecutionError {
-    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -10286,7 +10728,7 @@ impl Error for GetMaintenanceWindowExecutionError {
 /// Errors returned by GetMaintenanceWindowExecutionTask
 #[derive(Debug, PartialEq)]
 pub enum GetMaintenanceWindowExecutionTaskError {
-    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -10376,7 +10818,7 @@ impl Error for GetMaintenanceWindowExecutionTaskError {
 /// Errors returned by GetMaintenanceWindowExecutionTaskInvocation
 #[derive(Debug, PartialEq)]
 pub enum GetMaintenanceWindowExecutionTaskInvocationError {
-    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -10474,7 +10916,7 @@ impl Error for GetMaintenanceWindowExecutionTaskInvocationError {
 /// Errors returned by GetMaintenanceWindowTask
 #[derive(Debug, PartialEq)]
 pub enum GetMaintenanceWindowTaskError {
-    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -10566,6 +11008,8 @@ pub enum GetParameterError {
     InvalidKeyId(String),
     /// <p>The parameter could not be found. Verify the name and try again.</p>
     ParameterNotFound(String),
+    /// <p>The specified parameter version was not found. Verify the parameter name and version, and try again.</p>
+    ParameterVersionNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -10595,6 +11039,9 @@ impl GetParameterError {
                     "InvalidKeyId" => GetParameterError::InvalidKeyId(String::from(error_message)),
                     "ParameterNotFound" => {
                         GetParameterError::ParameterNotFound(String::from(error_message))
+                    }
+                    "ParameterVersionNotFound" => {
+                        GetParameterError::ParameterVersionNotFound(String::from(error_message))
                     }
                     "ValidationException" => {
                         GetParameterError::Validation(error_message.to_string())
@@ -10638,6 +11085,7 @@ impl Error for GetParameterError {
             GetParameterError::InternalServerError(ref cause) => cause,
             GetParameterError::InvalidKeyId(ref cause) => cause,
             GetParameterError::ParameterNotFound(ref cause) => cause,
+            GetParameterError::ParameterVersionNotFound(ref cause) => cause,
             GetParameterError::Validation(ref cause) => cause,
             GetParameterError::Credentials(ref err) => err.description(),
             GetParameterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -10938,7 +11386,7 @@ impl Error for GetParametersByPathError {
 /// Errors returned by GetPatchBaseline
 #[derive(Debug, PartialEq)]
 pub enum GetPatchBaselineError {
-    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -11502,7 +11950,7 @@ pub enum ListComplianceItemsError {
     InvalidNextToken(String),
     /// <p>The resource ID is not valid. Verify that you entered the correct ID and try again.</p>
     InvalidResourceId(String),
-    /// <p>The resource type is not valid. If you are attempting to tag an instance, the instance must be a registered, managed instance.</p>
+    /// <p>The resource type is not valid. For example, if you are attempting to tag an instance, the instance must be a registered, managed instance.</p>
     InvalidResourceType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12160,7 +12608,7 @@ pub enum ListTagsForResourceError {
     InternalServerError(String),
     /// <p>The resource ID is not valid. Verify that you entered the correct ID and try again.</p>
     InvalidResourceId(String),
-    /// <p>The resource type is not valid. If you are attempting to tag an instance, the instance must be a registered, managed instance.</p>
+    /// <p>The resource type is not valid. For example, if you are attempting to tag an instance, the instance must be a registered, managed instance.</p>
     InvalidResourceType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12248,7 +12696,7 @@ impl Error for ListTagsForResourceError {
 /// Errors returned by ModifyDocumentPermission
 #[derive(Debug, PartialEq)]
 pub enum ModifyDocumentPermissionError {
-    /// <p>You can have at most 200 active SSM documents.</p>
+    /// <p>You can have at most 200 active Systems Manager documents.</p>
     DocumentLimitExceeded(String),
     /// <p>The document cannot be shared with more AWS user accounts. You can share a document with a maximum of 20 accounts. You can publicly share up to five documents. If you need to increase this limit, contact AWS Support.</p>
     DocumentPermissionLimit(String),
@@ -12366,7 +12814,7 @@ pub enum PutComplianceItemsError {
     InvalidItemContent(String),
     /// <p>The resource ID is not valid. Verify that you entered the correct ID and try again.</p>
     InvalidResourceId(String),
-    /// <p>The resource type is not valid. If you are attempting to tag an instance, the instance must be a registered, managed instance.</p>
+    /// <p>The resource type is not valid. For example, if you are attempting to tag an instance, the instance must be a registered, managed instance.</p>
     InvalidResourceType(String),
     /// <p>The inventory item size has exceeded the size limit.</p>
     ItemSizeLimitExceeded(String),
@@ -12640,6 +13088,8 @@ pub enum PutParameterError {
     ParameterAlreadyExists(String),
     /// <p>You have exceeded the number of parameters for this AWS account. Delete one or more parameters and try again.</p>
     ParameterLimitExceeded(String),
+    /// <p>The parameter exceeded the maximum number of allowed versions.</p>
+    ParameterMaxVersionLimitExceeded(String),
     /// <p>The parameter name is not valid.</p>
     ParameterPatternMismatch(String),
     /// <p>There are concurrent updates for a resource that supports one update at a time.</p>
@@ -12687,6 +13137,11 @@ impl PutParameterError {
                     }
                     "ParameterLimitExceeded" => {
                         PutParameterError::ParameterLimitExceeded(String::from(error_message))
+                    }
+                    "ParameterMaxVersionLimitExceeded" => {
+                        PutParameterError::ParameterMaxVersionLimitExceeded(String::from(
+                            error_message,
+                        ))
                     }
                     "ParameterPatternMismatchException" => {
                         PutParameterError::ParameterPatternMismatch(String::from(error_message))
@@ -12743,6 +13198,7 @@ impl Error for PutParameterError {
             PutParameterError::InvalidKeyId(ref cause) => cause,
             PutParameterError::ParameterAlreadyExists(ref cause) => cause,
             PutParameterError::ParameterLimitExceeded(ref cause) => cause,
+            PutParameterError::ParameterMaxVersionLimitExceeded(ref cause) => cause,
             PutParameterError::ParameterPatternMismatch(ref cause) => cause,
             PutParameterError::TooManyUpdates(ref cause) => cause,
             PutParameterError::UnsupportedParameterType(ref cause) => cause,
@@ -12756,7 +13212,7 @@ impl Error for PutParameterError {
 /// Errors returned by RegisterDefaultPatchBaseline
 #[derive(Debug, PartialEq)]
 pub enum RegisterDefaultPatchBaselineError {
-    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -12852,13 +13308,13 @@ impl Error for RegisterDefaultPatchBaselineError {
 pub enum RegisterPatchBaselineForPatchGroupError {
     /// <p>Error returned if an attempt is made to register a patch group with a patch baseline that is already registered with a different patch baseline.</p>
     AlreadyExists(String),
-    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
     /// <p>The resource ID is not valid. Verify that you entered the correct ID and try again.</p>
     InvalidResourceId(String),
-    /// <p>Error returned when the caller has exceeded the default resource limits (e.g. too many Maintenance Windows have been created).</p>
+    /// <p>Error returned when the caller has exceeded the default resource limits. For example, too many Maintenance Windows or Patch baselines have been created.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     ResourceLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12964,13 +13420,13 @@ impl Error for RegisterPatchBaselineForPatchGroupError {
 /// Errors returned by RegisterTargetWithMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum RegisterTargetWithMaintenanceWindowError {
-    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>Error returned when an idempotent operation is retried and the parameters don't match the original call to the API with the same idempotency token. </p>
     IdempotentParameterMismatch(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>Error returned when the caller has exceeded the default resource limits (e.g. too many Maintenance Windows have been created).</p>
+    /// <p>Error returned when the caller has exceeded the default resource limits. For example, too many Maintenance Windows or Patch baselines have been created.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     ResourceLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13072,7 +13528,7 @@ impl Error for RegisterTargetWithMaintenanceWindowError {
 /// Errors returned by RegisterTaskWithMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum RegisterTaskWithMaintenanceWindowError {
-    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>You attempted to register a LAMBDA or STEP_FUNCTION task in a region where the corresponding service is not available. </p>
     FeatureNotAvailable(String),
@@ -13080,7 +13536,7 @@ pub enum RegisterTaskWithMaintenanceWindowError {
     IdempotentParameterMismatch(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-    /// <p>Error returned when the caller has exceeded the default resource limits (e.g. too many Maintenance Windows have been created).</p>
+    /// <p>Error returned when the caller has exceeded the default resource limits. For example, too many Maintenance Windows or Patch baselines have been created.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     ResourceLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13190,7 +13646,7 @@ pub enum RemoveTagsFromResourceError {
     InternalServerError(String),
     /// <p>The resource ID is not valid. Verify that you entered the correct ID and try again.</p>
     InvalidResourceId(String),
-    /// <p>The resource type is not valid. If you are attempting to tag an instance, the instance must be a registered, managed instance.</p>
+    /// <p>The resource type is not valid. For example, if you are attempting to tag an instance, the instance must be a registered, managed instance.</p>
     InvalidResourceType(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13280,6 +13736,8 @@ impl Error for RemoveTagsFromResourceError {
 pub enum SendAutomationSignalError {
     /// <p>There is no automation execution information for the requested automation execution ID.</p>
     AutomationExecutionNotFound(String),
+    /// <p>The specified step name and execution ID don't exist. Verify the information and try again.</p>
+    AutomationStepNotFound(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
     /// <p>The signal is not valid for the current Automation execution.</p>
@@ -13309,6 +13767,11 @@ impl SendAutomationSignalError {
                 match *error_type {
                     "AutomationExecutionNotFoundException" => {
                         SendAutomationSignalError::AutomationExecutionNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "AutomationStepNotFoundException" => {
+                        SendAutomationSignalError::AutomationStepNotFound(String::from(
                             error_message,
                         ))
                     }
@@ -13360,6 +13823,7 @@ impl Error for SendAutomationSignalError {
     fn description(&self) -> &str {
         match *self {
             SendAutomationSignalError::AutomationExecutionNotFound(ref cause) => cause,
+            SendAutomationSignalError::AutomationStepNotFound(ref cause) => cause,
             SendAutomationSignalError::InternalServerError(ref cause) => cause,
             SendAutomationSignalError::InvalidAutomationSignal(ref cause) => cause,
             SendAutomationSignalError::Validation(ref cause) => cause,
@@ -13386,9 +13850,9 @@ pub enum SendCommandError {
     InvalidNotificationConfig(String),
     /// <p>The S3 bucket does not exist.</p>
     InvalidOutputFolder(String),
-    /// <p>You must specify values for all required parameters in the SSM document. You can only supply values to parameters defined in the SSM document.</p>
+    /// <p>You must specify values for all required parameters in the Systems Manager document. You can only supply values to parameters defined in the Systems Manager document.</p>
     InvalidParameters(String),
-    /// <p>The role name can't contain invalid characters. Also verify that you specified an IAM role for notifications that includes the required trust policy. For information about configuring the IAM role for Run Command notifications, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/rc-sns-notifications.html">Configuring Amazon SNS Notifications for Run Command</a> in the <i>Amazon EC2 Systems Manager User Guide</i>.</p>
+    /// <p>The role name can't contain invalid characters. Also verify that you specified an IAM role for notifications that includes the required trust policy. For information about configuring the IAM role for Run Command notifications, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/rc-sns-notifications.html">Configuring Amazon SNS Notifications for Run Command</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     InvalidRole(String),
     /// <p>The size limit of a document is 64 KB.</p>
     MaxDocumentSizeExceeded(String),
@@ -13510,10 +13974,14 @@ pub enum StartAutomationExecutionError {
     AutomationDefinitionVersionNotFound(String),
     /// <p>The number of simultaneously running Automation executions exceeded the allowable limit.</p>
     AutomationExecutionLimitExceeded(String),
+    /// <p>Error returned when an idempotent operation is retried and the parameters don't match the original call to the API with the same idempotency token. </p>
+    IdempotentParameterMismatch(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
     /// <p>The supplied parameters for invoking the specified Automation document are incorrect. For example, they may not match the set of parameters permitted for the specified Automation document.</p>
     InvalidAutomationExecutionParameters(String),
+    /// <p>The target is not valid or does not exist. It might not be configured for EC2 Systems Manager or you might not have permission to perform the operation.</p>
+    InvalidTarget(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -13552,6 +14020,11 @@ impl StartAutomationExecutionError {
                             String::from(error_message),
                         )
                     }
+                    "IdempotentParameterMismatch" => {
+                        StartAutomationExecutionError::IdempotentParameterMismatch(String::from(
+                            error_message,
+                        ))
+                    }
                     "InternalServerError" => StartAutomationExecutionError::InternalServerError(
                         String::from(error_message),
                     ),
@@ -13559,6 +14032,9 @@ impl StartAutomationExecutionError {
                         StartAutomationExecutionError::InvalidAutomationExecutionParameters(
                             String::from(error_message),
                         )
+                    }
+                    "InvalidTarget" => {
+                        StartAutomationExecutionError::InvalidTarget(String::from(error_message))
                     }
                     "ValidationException" => {
                         StartAutomationExecutionError::Validation(error_message.to_string())
@@ -13602,8 +14078,10 @@ impl Error for StartAutomationExecutionError {
             StartAutomationExecutionError::AutomationDefinitionNotFound(ref cause) => cause,
             StartAutomationExecutionError::AutomationDefinitionVersionNotFound(ref cause) => cause,
             StartAutomationExecutionError::AutomationExecutionLimitExceeded(ref cause) => cause,
+            StartAutomationExecutionError::IdempotentParameterMismatch(ref cause) => cause,
             StartAutomationExecutionError::InternalServerError(ref cause) => cause,
             StartAutomationExecutionError::InvalidAutomationExecutionParameters(ref cause) => cause,
+            StartAutomationExecutionError::InvalidTarget(ref cause) => cause,
             StartAutomationExecutionError::Validation(ref cause) => cause,
             StartAutomationExecutionError::Credentials(ref err) => err.description(),
             StartAutomationExecutionError::HttpDispatch(ref dispatch_error) => {
@@ -13620,6 +14098,8 @@ pub enum StopAutomationExecutionError {
     AutomationExecutionNotFound(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
+    /// <p>The specified update status operation is not valid.</p>
+    InvalidAutomationStatusUpdate(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -13651,6 +14131,11 @@ impl StopAutomationExecutionError {
                     "InternalServerError" => StopAutomationExecutionError::InternalServerError(
                         String::from(error_message),
                     ),
+                    "InvalidAutomationStatusUpdateException" => {
+                        StopAutomationExecutionError::InvalidAutomationStatusUpdate(String::from(
+                            error_message,
+                        ))
+                    }
                     "ValidationException" => {
                         StopAutomationExecutionError::Validation(error_message.to_string())
                     }
@@ -13692,6 +14177,7 @@ impl Error for StopAutomationExecutionError {
         match *self {
             StopAutomationExecutionError::AutomationExecutionNotFound(ref cause) => cause,
             StopAutomationExecutionError::InternalServerError(ref cause) => cause,
+            StopAutomationExecutionError::InvalidAutomationStatusUpdate(ref cause) => cause,
             StopAutomationExecutionError::Validation(ref cause) => cause,
             StopAutomationExecutionError::Credentials(ref err) => err.description(),
             StopAutomationExecutionError::HttpDispatch(ref dispatch_error) => {
@@ -13718,7 +14204,7 @@ pub enum UpdateAssociationError {
     InvalidDocumentVersion(String),
     /// <p>The output location is not valid or does not exist.</p>
     InvalidOutputLocation(String),
-    /// <p>You must specify values for all required parameters in the SSM document. You can only supply values to parameters defined in the SSM document.</p>
+    /// <p>You must specify values for all required parameters in the Systems Manager document. You can only supply values to parameters defined in the Systems Manager document.</p>
     InvalidParameters(String),
     /// <p>The schedule is invalid. Verify your cron or rate expression and try again.</p>
     InvalidSchedule(String),
@@ -14194,7 +14680,7 @@ impl Error for UpdateDocumentDefaultVersionError {
 /// Errors returned by UpdateMaintenanceWindow
 #[derive(Debug, PartialEq)]
 pub enum UpdateMaintenanceWindowError {
-    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -14280,7 +14766,7 @@ impl Error for UpdateMaintenanceWindowError {
 /// Errors returned by UpdateMaintenanceWindowTarget
 #[derive(Debug, PartialEq)]
 pub enum UpdateMaintenanceWindowTargetError {
-    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -14368,7 +14854,7 @@ impl Error for UpdateMaintenanceWindowTargetError {
 /// Errors returned by UpdateMaintenanceWindowTask
 #[derive(Debug, PartialEq)]
 pub enum UpdateMaintenanceWindowTaskError {
-    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -14542,7 +15028,7 @@ impl Error for UpdateManagedInstanceRoleError {
 /// Errors returned by UpdatePatchBaseline
 #[derive(Debug, PartialEq)]
 pub enum UpdatePatchBaselineError {
-    /// <p>Error returned when the ID specified for a resource (e.g. a Maintenance Window) doesn't exist.</p>
+    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
     DoesNotExist(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
@@ -14627,7 +15113,7 @@ impl Error for UpdatePatchBaselineError {
 }
 /// Trait representing the capabilities of the Amazon SSM API. Amazon SSM clients implement this trait.
 pub trait Ssm {
-    /// <p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you assign to your managed instances, Maintenance Windows, or Parameter Store parameters. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test.</p> <p>Each resource can have a maximum of 10 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Amazon EC2 Resources</a> in the <i>Amazon EC2 User Guide</i>.</p>
+    /// <p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you can assign to your documents, managed instances, Maintenance Windows, Parameter Store parameters, and patch baselines. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test.</p> <p>Each resource can have a maximum of 50 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Amazon EC2 Resources</a> in the <i>Amazon EC2 User Guide</i>.</p>
     fn add_tags_to_resource(
         &self,
         input: &AddTagsToResourceRequest,
@@ -14669,13 +15155,13 @@ pub trait Ssm {
         input: &CreateMaintenanceWindowRequest,
     ) -> Result<CreateMaintenanceWindowResult, CreateMaintenanceWindowError>;
 
-    /// <p>Creates a patch baseline.</p>
+    /// <p><p>Creates a patch baseline.</p> <note> <p>For information about valid key and value pairs in <code>PatchFilters</code> for each supported operating system type, see <a href="http://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PatchFilter.html">PatchFilter</a>.</p> </note></p>
     fn create_patch_baseline(
         &self,
         input: &CreatePatchBaselineRequest,
     ) -> Result<CreatePatchBaselineResult, CreatePatchBaselineError>;
 
-    /// <p>Creates a resource data sync configuration to a single bucket in Amazon S3. This is an asynchronous operation that returns immediately. After a successful initial sync is completed, the system continuously syncs data to the Amazon S3 bucket. To check the status of the sync, use the <a href="API_ListResourceDataSync.html">ListResourceDataSync</a> operation.</p> <p>By default, data is not encrypted in Amazon S3. We strongly recommend that you enable encryption in Amazon S3 to ensure secure data storage. We also recommend that you secure access to the Amazon S3 bucket by creating a restrictive bucket policy. To view an example of a restrictive Amazon S3 bucket policy for Resource Data Sync, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-configuring.html#sysman-inventory-datasync">Configuring Resource Data Sync for Inventory</a>.</p>
+    /// <p>Creates a resource data sync configuration to a single bucket in Amazon S3. This is an asynchronous operation that returns immediately. After a successful initial sync is completed, the system continuously syncs data to the Amazon S3 bucket. To check the status of the sync, use the <a>ListResourceDataSync</a>.</p> <p>By default, data is not encrypted in Amazon S3. We strongly recommend that you enable encryption in Amazon S3 to ensure secure data storage. We also recommend that you secure access to the Amazon S3 bucket by creating a restrictive bucket policy. To view an example of a restrictive Amazon S3 bucket policy for Resource Data Sync, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-configuring.html#sysman-inventory-datasync">Configuring Resource Data Sync for Inventory</a>.</p>
     fn create_resource_data_sync(
         &self,
         input: &CreateResourceDataSyncRequest,
@@ -14762,7 +15248,7 @@ pub trait Ssm {
         input: &DescribeActivationsRequest,
     ) -> Result<DescribeActivationsResult, DescribeActivationsError>;
 
-    /// <p>Describes the associations for the specified Systems Manager document or instance.</p>
+    /// <p>Describes the association for the specified target or instance. If you created the association by using the <code>Targets</code> parameter, then you must retrieve the association by using the association ID. If you created the association by specifying an instance ID and a Systems Manager document, then you retrieve the association by specifying the document name and the instance ID. </p>
     fn describe_association(
         &self,
         input: &DescribeAssociationRequest,
@@ -14774,13 +15260,19 @@ pub trait Ssm {
         input: &DescribeAutomationExecutionsRequest,
     ) -> Result<DescribeAutomationExecutionsResult, DescribeAutomationExecutionsError>;
 
+    /// <p>Information about all active and terminated step executions in an Automation workflow.</p>
+    fn describe_automation_step_executions(
+        &self,
+        input: &DescribeAutomationStepExecutionsRequest,
+    ) -> Result<DescribeAutomationStepExecutionsResult, DescribeAutomationStepExecutionsError>;
+
     /// <p>Lists all patches that could possibly be included in a patch baseline.</p>
     fn describe_available_patches(
         &self,
         input: &DescribeAvailablePatchesRequest,
     ) -> Result<DescribeAvailablePatchesResult, DescribeAvailablePatchesError>;
 
-    /// <p>Describes the specified SSM document.</p>
+    /// <p>Describes the specified Systems Manager document.</p>
     fn describe_document(
         &self,
         input: &DescribeDocumentRequest,
@@ -14936,7 +15428,7 @@ pub trait Ssm {
         GetDeployablePatchSnapshotForInstanceError,
     >;
 
-    /// <p>Gets the contents of the specified SSM document.</p>
+    /// <p>Gets the contents of the specified Systems Manager document.</p>
     fn get_document(
         &self,
         input: &GetDocumentRequest,
@@ -15005,7 +15497,7 @@ pub trait Ssm {
         input: &GetParametersRequest,
     ) -> Result<GetParametersResult, GetParametersError>;
 
-    /// <p>Retrieve parameters in a specific hierarchy. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html">Working with Systems Manager Parameters</a>. </p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p>
+    /// <p><p>Retrieve parameters in a specific hierarchy. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html">Working with Systems Manager Parameters</a>. </p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p> <note> <p>This API action doesn&#39;t support filtering by tags. </p> </note></p>
     fn get_parameters_by_path(
         &self,
         input: &GetParametersByPathRequest,
@@ -15065,7 +15557,7 @@ pub trait Ssm {
         input: &ListDocumentVersionsRequest,
     ) -> Result<ListDocumentVersionsResult, ListDocumentVersionsError>;
 
-    /// <p>Describes one or more of your SSM documents.</p>
+    /// <p>Describes one or more of your Systems Manager documents.</p>
     fn list_documents(
         &self,
         input: &ListDocumentsRequest,
@@ -15101,7 +15593,7 @@ pub trait Ssm {
         input: &ModifyDocumentPermissionRequest,
     ) -> Result<ModifyDocumentPermissionResponse, ModifyDocumentPermissionError>;
 
-    /// <p>Registers a compliance type and other compliance details on a designated resource. This action lets you register custom compliance details with a resource. This call overwrites existing compliance information on the resource, so you must provide a full list of compliance items each time that you send the request.</p>
+    /// <p><p>Registers a compliance type and other compliance details on a designated resource. This action lets you register custom compliance details with a resource. This call overwrites existing compliance information on the resource, so you must provide a full list of compliance items each time that you send the request.</p> <p>ComplianceType can be one of the following:</p> <ul> <li> <p>ExecutionId: The execution ID when the patch, association, or custom compliance item was applied.</p> </li> <li> <p>ExecutionType: Specify patch, association, or Custom:<code>string</code>.</p> </li> <li> <p>ExecutionTime. The time the patch, association, or custom compliance item was applied to the instance.</p> </li> <li> <p>Id: The patch, association, or custom compliance ID.</p> </li> <li> <p>Title: A title.</p> </li> <li> <p>Status: The status of the compliance item. For example, <code>approved</code> for patches, or <code>Failed</code> for associations.</p> </li> <li> <p>Severity: A patch severity. For example, <code>critical</code>.</p> </li> <li> <p>DocumentName: A SSM document name. For example, AWS-RunPatchBaseline.</p> </li> <li> <p>DocumentVersion: An SSM document version number. For example, 4.</p> </li> <li> <p>Classification: A patch classification. For example, <code>security updates</code>.</p> </li> <li> <p>PatchBaselineId: A patch baseline ID.</p> </li> <li> <p>PatchSeverity: A patch severity. For example, <code>Critical</code>.</p> </li> <li> <p>PatchState: A patch state. For example, <code>InstancesWithFailedPatches</code>.</p> </li> <li> <p>PatchGroup: The name of a patch group.</p> </li> <li> <p>InstalledTime: The time the association, patch, or custom compliance item was applied to the resource. Specify the time by using the following format: yyyy-MM-dd&#39;T&#39;HH:mm:ss&#39;Z&#39;</p> </li> </ul></p>
     fn put_compliance_items(
         &self,
         input: &PutComplianceItemsRequest,
@@ -15221,7 +15713,7 @@ pub trait Ssm {
         input: &UpdateManagedInstanceRoleRequest,
     ) -> Result<UpdateManagedInstanceRoleResult, UpdateManagedInstanceRoleError>;
 
-    /// <p>Modifies an existing patch baseline. Fields not specified in the request are left unchanged.</p>
+    /// <p><p>Modifies an existing patch baseline. Fields not specified in the request are left unchanged.</p> <note> <p>For information about valid key and value pairs in <code>PatchFilters</code> for each supported operating system type, see <a href="http://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PatchFilter.html">PatchFilter</a>.</p> </note></p>
     fn update_patch_baseline(
         &self,
         input: &UpdatePatchBaselineRequest,
@@ -15257,7 +15749,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    /// <p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you assign to your managed instances, Maintenance Windows, or Parameter Store parameters. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test.</p> <p>Each resource can have a maximum of 10 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Amazon EC2 Resources</a> in the <i>Amazon EC2 User Guide</i>.</p>
+    /// <p>Adds or overwrites one or more tags for the specified resource. Tags are metadata that you can assign to your documents, managed instances, Maintenance Windows, Parameter Store parameters, and patch baselines. Tags enable you to categorize your resources in different ways, for example, by purpose, owner, or environment. Each tag consists of a key and an optional value, both of which you define. For example, you could define a set of tags for your account's managed instances that helps you track each instance's owner and stack level. For example: Key=Owner and Value=DbAdmin, SysAdmin, or Dev. Or Key=Stack and Value=Production, Pre-Production, or Test.</p> <p>Each resource can have a maximum of 50 tags. </p> <p>We recommend that you devise a set of tag keys that meets your needs for each resource type. Using a consistent set of tag keys makes it easier for you to manage your resources. You can search and filter the resources based on the tags you add. Tags don't have any semantic meaning to Amazon EC2 and are interpreted strictly as a string of characters. </p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Amazon EC2 Resources</a> in the <i>Amazon EC2 User Guide</i>.</p>
     fn add_tags_to_resource(
         &self,
         input: &AddTagsToResourceRequest,
@@ -15495,7 +15987,7 @@ where
         }
     }
 
-    /// <p>Creates a patch baseline.</p>
+    /// <p><p>Creates a patch baseline.</p> <note> <p>For information about valid key and value pairs in <code>PatchFilters</code> for each supported operating system type, see <a href="http://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PatchFilter.html">PatchFilter</a>.</p> </note></p>
     fn create_patch_baseline(
         &self,
         input: &CreatePatchBaselineRequest,
@@ -15529,7 +16021,7 @@ where
         }
     }
 
-    /// <p>Creates a resource data sync configuration to a single bucket in Amazon S3. This is an asynchronous operation that returns immediately. After a successful initial sync is completed, the system continuously syncs data to the Amazon S3 bucket. To check the status of the sync, use the <a href="API_ListResourceDataSync.html">ListResourceDataSync</a> operation.</p> <p>By default, data is not encrypted in Amazon S3. We strongly recommend that you enable encryption in Amazon S3 to ensure secure data storage. We also recommend that you secure access to the Amazon S3 bucket by creating a restrictive bucket policy. To view an example of a restrictive Amazon S3 bucket policy for Resource Data Sync, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-configuring.html#sysman-inventory-datasync">Configuring Resource Data Sync for Inventory</a>.</p>
+    /// <p>Creates a resource data sync configuration to a single bucket in Amazon S3. This is an asynchronous operation that returns immediately. After a successful initial sync is completed, the system continuously syncs data to the Amazon S3 bucket. To check the status of the sync, use the <a>ListResourceDataSync</a>.</p> <p>By default, data is not encrypted in Amazon S3. We strongly recommend that you enable encryption in Amazon S3 to ensure secure data storage. We also recommend that you secure access to the Amazon S3 bucket by creating a restrictive bucket policy. To view an example of a restrictive Amazon S3 bucket policy for Resource Data Sync, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-inventory-configuring.html#sysman-inventory-datasync">Configuring Resource Data Sync for Inventory</a>.</p>
     fn create_resource_data_sync(
         &self,
         input: &CreateResourceDataSyncRequest,
@@ -16025,7 +16517,7 @@ where
         }
     }
 
-    /// <p>Describes the associations for the specified Systems Manager document or instance.</p>
+    /// <p>Describes the association for the specified target or instance. If you created the association by using the <code>Targets</code> parameter, then you must retrieve the association by using the association ID. If you created the association by specifying an instance ID and a Systems Manager document, then you retrieve the association by specifying the document name and the instance ID. </p>
     fn describe_association(
         &self,
         input: &DescribeAssociationRequest,
@@ -16093,6 +16585,42 @@ where
         }
     }
 
+    /// <p>Information about all active and terminated step executions in an Automation workflow.</p>
+    fn describe_automation_step_executions(
+        &self,
+        input: &DescribeAutomationStepExecutionsRequest,
+    ) -> Result<DescribeAutomationStepExecutionsResult, DescribeAutomationStepExecutionsError> {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.DescribeAutomationStepExecutions");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(
+                    serde_json::from_str::<DescribeAutomationStepExecutionsResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAutomationStepExecutionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Lists all patches that could possibly be included in a patch baseline.</p>
     fn describe_available_patches(
         &self,
@@ -16127,7 +16655,7 @@ where
         }
     }
 
-    /// <p>Describes the specified SSM document.</p>
+    /// <p>Describes the specified Systems Manager document.</p>
     fn describe_document(
         &self,
         input: &DescribeDocumentRequest,
@@ -16971,7 +17499,7 @@ where
         }
     }
 
-    /// <p>Gets the contents of the specified SSM document.</p>
+    /// <p>Gets the contents of the specified Systems Manager document.</p>
     fn get_document(
         &self,
         input: &GetDocumentRequest,
@@ -17361,7 +17889,7 @@ where
         }
     }
 
-    /// <p>Retrieve parameters in a specific hierarchy. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html">Working with Systems Manager Parameters</a>. </p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p>
+    /// <p><p>Retrieve parameters in a specific hierarchy. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-working.html">Working with Systems Manager Parameters</a>. </p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p> <note> <p>This API action doesn&#39;t support filtering by tags. </p> </note></p>
     fn get_parameters_by_path(
         &self,
         input: &GetParametersByPathRequest,
@@ -17701,7 +18229,7 @@ where
         }
     }
 
-    /// <p>Describes one or more of your SSM documents.</p>
+    /// <p>Describes one or more of your Systems Manager documents.</p>
     fn list_documents(
         &self,
         input: &ListDocumentsRequest,
@@ -17907,7 +18435,7 @@ where
         }
     }
 
-    /// <p>Registers a compliance type and other compliance details on a designated resource. This action lets you register custom compliance details with a resource. This call overwrites existing compliance information on the resource, so you must provide a full list of compliance items each time that you send the request.</p>
+    /// <p><p>Registers a compliance type and other compliance details on a designated resource. This action lets you register custom compliance details with a resource. This call overwrites existing compliance information on the resource, so you must provide a full list of compliance items each time that you send the request.</p> <p>ComplianceType can be one of the following:</p> <ul> <li> <p>ExecutionId: The execution ID when the patch, association, or custom compliance item was applied.</p> </li> <li> <p>ExecutionType: Specify patch, association, or Custom:<code>string</code>.</p> </li> <li> <p>ExecutionTime. The time the patch, association, or custom compliance item was applied to the instance.</p> </li> <li> <p>Id: The patch, association, or custom compliance ID.</p> </li> <li> <p>Title: A title.</p> </li> <li> <p>Status: The status of the compliance item. For example, <code>approved</code> for patches, or <code>Failed</code> for associations.</p> </li> <li> <p>Severity: A patch severity. For example, <code>critical</code>.</p> </li> <li> <p>DocumentName: A SSM document name. For example, AWS-RunPatchBaseline.</p> </li> <li> <p>DocumentVersion: An SSM document version number. For example, 4.</p> </li> <li> <p>Classification: A patch classification. For example, <code>security updates</code>.</p> </li> <li> <p>PatchBaselineId: A patch baseline ID.</p> </li> <li> <p>PatchSeverity: A patch severity. For example, <code>Critical</code>.</p> </li> <li> <p>PatchState: A patch state. For example, <code>InstancesWithFailedPatches</code>.</p> </li> <li> <p>PatchGroup: The name of a patch group.</p> </li> <li> <p>InstalledTime: The time the association, patch, or custom compliance item was applied to the resource. Specify the time by using the following format: yyyy-MM-dd&#39;T&#39;HH:mm:ss&#39;Z&#39;</p> </li> </ul></p>
     fn put_compliance_items(
         &self,
         input: &PutComplianceItemsRequest,
@@ -18605,7 +19133,7 @@ where
         }
     }
 
-    /// <p>Modifies an existing patch baseline. Fields not specified in the request are left unchanged.</p>
+    /// <p><p>Modifies an existing patch baseline. Fields not specified in the request are left unchanged.</p> <note> <p>For information about valid key and value pairs in <code>PatchFilters</code> for each supported operating system type, see <a href="http://docs.aws.amazon.com/systems-manager/latest/APIReference/API_PatchFilter.html">PatchFilter</a>.</p> </note></p>
     fn update_patch_baseline(
         &self,
         input: &UpdatePatchBaselineRequest,

@@ -97,6 +97,81 @@ pub struct AttributeValueUpdate {
     pub value: Option<AttributeValue>,
 }
 
+/// <p>Contains the description of the backup created for the table.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct BackupDescription {
+    /// <p>Contains the details of the backup created for the table. </p>
+    #[serde(rename = "BackupDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_details: Option<BackupDetails>,
+    /// <p>Contains the details of the table when the backup was created. </p>
+    #[serde(rename = "SourceTableDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_table_details: Option<SourceTableDetails>,
+    /// <p>Contains the details of the features enabled on the table when the backup was created. For example, LSIs, GSIs, streams, TTL.</p>
+    #[serde(rename = "SourceTableFeatureDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_table_feature_details: Option<SourceTableFeatureDetails>,
+}
+
+/// <p>Contains the details of the backup created for the table.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct BackupDetails {
+    /// <p>ARN associated with the backup.</p>
+    #[serde(rename = "BackupArn")]
+    pub backup_arn: String,
+    /// <p>Time at which the backup was created. This is the request time of the backup. </p>
+    #[serde(rename = "BackupCreationDateTime")]
+    pub backup_creation_date_time: f64,
+    /// <p>Name of the requested backup.</p>
+    #[serde(rename = "BackupName")]
+    pub backup_name: String,
+    /// <p>Size of the backup in bytes.</p>
+    #[serde(rename = "BackupSizeBytes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_size_bytes: Option<i64>,
+    /// <p>Backup can be in one of the following states: CREATING, ACTIVE, DELETED. </p>
+    #[serde(rename = "BackupStatus")]
+    pub backup_status: String,
+}
+
+/// <p>Contains details for the backup.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct BackupSummary {
+    /// <p>ARN associated with the backup.</p>
+    #[serde(rename = "BackupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_arn: Option<String>,
+    /// <p>Time at which the backup was created.</p>
+    #[serde(rename = "BackupCreationDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_creation_date_time: Option<f64>,
+    /// <p>Name of the specified backup.</p>
+    #[serde(rename = "BackupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_name: Option<String>,
+    /// <p>Size of the backup in bytes.</p>
+    #[serde(rename = "BackupSizeBytes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_size_bytes: Option<i64>,
+    /// <p>Backup can be in one of the following states: CREATING, ACTIVE, DELETED.</p>
+    #[serde(rename = "BackupStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_status: Option<String>,
+    /// <p>ARN associated with the table.</p>
+    #[serde(rename = "TableArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_arn: Option<String>,
+    /// <p>Unique identifier for the table.</p>
+    #[serde(rename = "TableId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_id: Option<String>,
+    /// <p>Name of the table.</p>
+    #[serde(rename = "TableName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_name: Option<String>,
+}
+
 /// <p>Represents the input of a <code>BatchGetItem</code> operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct BatchGetItemInput {
@@ -152,7 +227,7 @@ pub struct BatchWriteItemOutput {
     #[serde(rename = "ConsumedCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub consumed_capacity: Option<Vec<ConsumedCapacity>>,
-    /// <p><p>A list of tables that were processed by <code>BatchWriteItem</code> and, for each table, information about any item collections that were affected by individual <code>DeleteItem</code> or <code>PutItem</code> operations.</p> <p>Each entry consists of the following subelements:</p> <ul> <li> <p> <code>ItemCollectionKey</code> - The partition key value of the item collection. This is the same as the partition key value of the item.</p> </li> <li> <p> <code>SizeEstimateRange</code> - An estimate of item collection size, expressed in GB. This is a two-element array containing a lower bound and an upper bound for the estimate. The estimate includes the size of all the items in the table, plus the size of all attributes projected into all of the local secondary indexes on the table. Use this estimate to measure whether a local secondary index is approaching its size limit.</p> <p>The estimate is subject to change over time; therefore, do not rely on the precision or accuracy of the estimate.</p> </li> </ul></p>
+    /// <p><p>A list of tables that were processed by <code>BatchWriteItem</code> and, for each table, information about any item collections that were affected by individual <code>DeleteItem</code> or <code>PutItem</code> operations.</p> <p>Each entry consists of the following subelements:</p> <ul> <li> <p> <code>ItemCollectionKey</code> - The partition key value of the item collection. This is the same as the partition key value of the item.</p> </li> <li> <p> <code>SizeEstimateRangeGB</code> - An estimate of item collection size, expressed in GB. This is a two-element array containing a lower bound and an upper bound for the estimate. The estimate includes the size of all the items in the table, plus the size of all attributes projected into all of the local secondary indexes on the table. Use this estimate to measure whether a local secondary index is approaching its size limit.</p> <p>The estimate is subject to change over time; therefore, do not rely on the precision or accuracy of the estimate.</p> </li> </ul></p>
     #[serde(rename = "ItemCollectionMetrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub item_collection_metrics:
@@ -209,6 +284,32 @@ pub struct ConsumedCapacity {
     pub table_name: Option<String>,
 }
 
+/// <p>Represents the backup and restore settings on the table when the backup was created.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ContinuousBackupsDescription {
+    /// <p>ContinuousBackupsStatus can be one of the following states : ENABLED, DISABLED</p>
+    #[serde(rename = "ContinuousBackupsStatus")]
+    pub continuous_backups_status: String,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateBackupInput {
+    /// <p>Specified name for the backup.</p>
+    #[serde(rename = "BackupName")]
+    pub backup_name: String,
+    /// <p>The name of the table.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CreateBackupOutput {
+    /// <p>Contains the details of the backup created for the table.</p>
+    #[serde(rename = "BackupDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_details: Option<BackupDetails>,
+}
+
 /// <p>Represents a new global secondary index to be added to an existing table.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateGlobalSecondaryIndexAction {
@@ -224,6 +325,32 @@ pub struct CreateGlobalSecondaryIndexAction {
     /// <p>Represents the provisioned throughput settings for the specified global secondary index.</p> <p>For current minimum and maximum provisioned throughput values, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html">Limits</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ProvisionedThroughput")]
     pub provisioned_throughput: ProvisionedThroughput,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateGlobalTableInput {
+    /// <p>The global table name.</p>
+    #[serde(rename = "GlobalTableName")]
+    pub global_table_name: String,
+    /// <p>The regions where the global table needs to be created.</p>
+    #[serde(rename = "ReplicationGroup")]
+    pub replication_group: Vec<Replica>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CreateGlobalTableOutput {
+    /// <p>Contains the details of the global table.</p>
+    #[serde(rename = "GlobalTableDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub global_table_description: Option<GlobalTableDescription>,
+}
+
+/// <p>Represents a replica to be added.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateReplicaAction {
+    /// <p>The region of the replica to be added.</p>
+    #[serde(rename = "RegionName")]
+    pub region_name: String,
 }
 
 /// <p>Represents the input of a <code>CreateTable</code> operation.</p>
@@ -262,6 +389,21 @@ pub struct CreateTableOutput {
     #[serde(rename = "TableDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_description: Option<TableDescription>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteBackupInput {
+    /// <p>The ARN associated with the backup.</p>
+    #[serde(rename = "BackupArn")]
+    pub backup_arn: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteBackupOutput {
+    /// <p>Contains the description of the backup created for the table.</p>
+    #[serde(rename = "BackupDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_description: Option<BackupDescription>,
 }
 
 /// <p>Represents a global secondary index to be deleted from an existing table.</p>
@@ -325,10 +467,18 @@ pub struct DeleteItemOutput {
     #[serde(rename = "ConsumedCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub consumed_capacity: Option<ConsumedCapacity>,
-    /// <p><p>Information about item collections, if any, that were affected by the <code>DeleteItem</code> operation. <code>ItemCollectionMetrics</code> is only returned if the <code>ReturnItemCollectionMetrics</code> parameter was specified. If the table does not have any local secondary indexes, this information is not returned in the response.</p> <p>Each <code>ItemCollectionMetrics</code> element consists of:</p> <ul> <li> <p> <code>ItemCollectionKey</code> - The partition key value of the item collection. This is the same as the partition key value of the item itself.</p> </li> <li> <p> <code>SizeEstimateRange</code> - An estimate of item collection size, in gigabytes. This value is a two-element array containing a lower bound and an upper bound for the estimate. The estimate includes the size of all the items in the table, plus the size of all attributes projected into all of the local secondary indexes on that table. Use this estimate to measure whether a local secondary index is approaching its size limit.</p> <p>The estimate is subject to change over time; therefore, do not rely on the precision or accuracy of the estimate.</p> </li> </ul></p>
+    /// <p><p>Information about item collections, if any, that were affected by the <code>DeleteItem</code> operation. <code>ItemCollectionMetrics</code> is only returned if the <code>ReturnItemCollectionMetrics</code> parameter was specified. If the table does not have any local secondary indexes, this information is not returned in the response.</p> <p>Each <code>ItemCollectionMetrics</code> element consists of:</p> <ul> <li> <p> <code>ItemCollectionKey</code> - The partition key value of the item collection. This is the same as the partition key value of the item itself.</p> </li> <li> <p> <code>SizeEstimateRangeGB</code> - An estimate of item collection size, in gigabytes. This value is a two-element array containing a lower bound and an upper bound for the estimate. The estimate includes the size of all the items in the table, plus the size of all attributes projected into all of the local secondary indexes on that table. Use this estimate to measure whether a local secondary index is approaching its size limit.</p> <p>The estimate is subject to change over time; therefore, do not rely on the precision or accuracy of the estimate.</p> </li> </ul></p>
     #[serde(rename = "ItemCollectionMetrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub item_collection_metrics: Option<ItemCollectionMetrics>,
+}
+
+/// <p>Represents a replica to be removed.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteReplicaAction {
+    /// <p>The region of the replica to be removed.</p>
+    #[serde(rename = "RegionName")]
+    pub region_name: String,
 }
 
 /// <p>Represents a request to perform a <code>DeleteItem</code> operation on an item.</p>
@@ -354,6 +504,51 @@ pub struct DeleteTableOutput {
     #[serde(rename = "TableDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_description: Option<TableDescription>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribeBackupInput {
+    /// <p>The ARN associated with the backup.</p>
+    #[serde(rename = "BackupArn")]
+    pub backup_arn: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeBackupOutput {
+    /// <p>Contains the description of the backup created for the table.</p>
+    #[serde(rename = "BackupDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_description: Option<BackupDescription>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribeContinuousBackupsInput {
+    /// <p>Name of the table for which the customer wants to check the backup and restore settings.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeContinuousBackupsOutput {
+    /// <p> <code>ContinuousBackupsDescription</code> can be one of the following : ENABLED, DISABLED. </p>
+    #[serde(rename = "ContinuousBackupsDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub continuous_backups_description: Option<ContinuousBackupsDescription>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribeGlobalTableInput {
+    /// <p>The name of the global table.</p>
+    #[serde(rename = "GlobalTableName")]
+    pub global_table_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeGlobalTableOutput {
+    /// <p>Contains the details of the global table.</p>
+    #[serde(rename = "GlobalTableDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub global_table_description: Option<GlobalTableDescription>,
 }
 
 /// <p>Represents the input of a <code>DescribeLimits</code> operation. Has no content.</p>
@@ -535,6 +730,27 @@ pub struct GlobalSecondaryIndexDescription {
     pub provisioned_throughput: Option<ProvisionedThroughputDescription>,
 }
 
+/// <p>Represents the properties of a global secondary index for the table when the backup was created.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GlobalSecondaryIndexInfo {
+    /// <p>The name of the global secondary index.</p>
+    #[serde(rename = "IndexName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_name: Option<String>,
+    /// <p><p>The complete key schema for a global secondary index, which consists of one or more pairs of attribute names and key types:</p> <ul> <li> <p> <code>HASH</code> - partition key</p> </li> <li> <p> <code>RANGE</code> - sort key</p> </li> </ul> <note> <p>The partition key of an item is also known as its <i>hash attribute</i>. The term &quot;hash attribute&quot; derives from DynamoDB&#39; usage of an internal hash function to evenly distribute data items across partitions, based on their partition key values.</p> <p>The sort key of an item is also known as its <i>range attribute</i>. The term &quot;range attribute&quot; derives from the way DynamoDB stores items with the same partition key physically close together, in sorted order by the sort key value.</p> </note></p>
+    #[serde(rename = "KeySchema")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key_schema: Option<Vec<KeySchemaElement>>,
+    /// <p>Represents attributes that are copied (projected) from the table into the global secondary index. These are in addition to the primary key attributes and index key attributes, which are automatically projected. </p>
+    #[serde(rename = "Projection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub projection: Option<Projection>,
+    /// <p>Represents the provisioned throughput settings for the specified global secondary index. </p>
+    #[serde(rename = "ProvisionedThroughput")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_throughput: Option<ProvisionedThroughput>,
+}
+
 /// <p><p>Represents one of the following:</p> <ul> <li> <p>A new global secondary index to be added to an existing table.</p> </li> <li> <p>New provisioned throughput parameters for an existing global secondary index.</p> </li> <li> <p>An existing global secondary index to be removed from an existing table.</p> </li> </ul></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GlobalSecondaryIndexUpdate {
@@ -550,6 +766,44 @@ pub struct GlobalSecondaryIndexUpdate {
     #[serde(rename = "Update")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub update: Option<UpdateGlobalSecondaryIndexAction>,
+}
+
+/// <p>Represents the properties of a global table.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GlobalTable {
+    /// <p>The global table name.</p>
+    #[serde(rename = "GlobalTableName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub global_table_name: Option<String>,
+    /// <p>The regions where the global table has replicas.</p>
+    #[serde(rename = "ReplicationGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replication_group: Option<Vec<Replica>>,
+}
+
+/// <p>Contains details about the global table.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GlobalTableDescription {
+    /// <p>The creation time of the global table.</p>
+    #[serde(rename = "CreationDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date_time: Option<f64>,
+    /// <p>The unique identifier of the global table.</p>
+    #[serde(rename = "GlobalTableArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub global_table_arn: Option<String>,
+    /// <p>The global table name.</p>
+    #[serde(rename = "GlobalTableName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub global_table_name: Option<String>,
+    /// <p><p>The current state of the global table:</p> <ul> <li> <p> <code>CREATING</code> - The global table is being created.</p> </li> <li> <p> <code>UPDATING</code> - The global table is being updated.</p> </li> <li> <p> <code>DELETING</code> - The global table is being deleted.</p> </li> <li> <p> <code>ACTIVE</code> - The global table is ready for use.</p> </li> </ul></p>
+    #[serde(rename = "GlobalTableStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub global_table_status: Option<String>,
+    /// <p>The regions where the global table has replicas.</p>
+    #[serde(rename = "ReplicationGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replication_group: Option<Vec<ReplicaDescription>>,
 }
 
 /// <p>Information about item collections, if any, that were affected by the operation. <code>ItemCollectionMetrics</code> is only returned if the request asked for it. If the table does not have any local secondary indexes, this information is not returned in the response.</p>
@@ -598,6 +852,70 @@ pub struct KeysAndAttributes {
     #[serde(rename = "ProjectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub projection_expression: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ListBackupsInput {
+    /// <p> <code>LastEvaluatedBackupARN</code> returned by the previous ListBackups call. </p>
+    #[serde(rename = "ExclusiveStartBackupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exclusive_start_backup_arn: Option<String>,
+    /// <p>Maximum number of backups to return at once.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The backups from the table specified by TableName are listed. </p>
+    #[serde(rename = "TableName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_name: Option<String>,
+    /// <p>Only backups created after this time are listed. <code>TimeRangeLowerBound</code> is inclusive.</p>
+    #[serde(rename = "TimeRangeLowerBound")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub time_range_lower_bound: Option<f64>,
+    /// <p>Only backups created before this time are listed. <code>TimeRangeUpperBound</code> is exclusive. </p>
+    #[serde(rename = "TimeRangeUpperBound")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub time_range_upper_bound: Option<f64>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ListBackupsOutput {
+    /// <p>List of <code>BackupSummary</code> objects.</p>
+    #[serde(rename = "BackupSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_summaries: Option<Vec<BackupSummary>>,
+    /// <p>Last evaluated BackupARN.</p>
+    #[serde(rename = "LastEvaluatedBackupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_evaluated_backup_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ListGlobalTablesInput {
+    /// <p>The first global table name that this operation will evaluate.</p>
+    #[serde(rename = "ExclusiveStartGlobalTableName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exclusive_start_global_table_name: Option<String>,
+    /// <p>The maximum number of table names to return.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>Lists the global tables in a specific region.</p>
+    #[serde(rename = "RegionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub region_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ListGlobalTablesOutput {
+    /// <p>List of global table names.</p>
+    #[serde(rename = "GlobalTables")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub global_tables: Option<Vec<GlobalTable>>,
+    /// <p>Last evaluated global table name.</p>
+    #[serde(rename = "LastEvaluatedGlobalTableName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_evaluated_global_table_name: Option<String>,
 }
 
 /// <p>Represents the input of a <code>ListTables</code> operation.</p>
@@ -692,6 +1010,23 @@ pub struct LocalSecondaryIndexDescription {
     pub projection: Option<Projection>,
 }
 
+/// <p>Represents the properties of a local secondary index for the table when the backup was created.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct LocalSecondaryIndexInfo {
+    /// <p>Represents the name of the local secondary index.</p>
+    #[serde(rename = "IndexName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_name: Option<String>,
+    /// <p><p>The complete key schema for a local secondary index, which consists of one or more pairs of attribute names and key types:</p> <ul> <li> <p> <code>HASH</code> - partition key</p> </li> <li> <p> <code>RANGE</code> - sort key</p> </li> </ul> <note> <p>The partition key of an item is also known as its <i>hash attribute</i>. The term &quot;hash attribute&quot; derives from DynamoDB&#39; usage of an internal hash function to evenly distribute data items across partitions, based on their partition key values.</p> <p>The sort key of an item is also known as its <i>range attribute</i>. The term &quot;range attribute&quot; derives from the way DynamoDB stores items with the same partition key physically close together, in sorted order by the sort key value.</p> </note></p>
+    #[serde(rename = "KeySchema")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key_schema: Option<Vec<KeySchemaElement>>,
+    /// <p>Represents attributes that are copied (projected) from the table into the global secondary index. These are in addition to the primary key attributes and index key attributes, which are automatically projected. </p>
+    #[serde(rename = "Projection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub projection: Option<Projection>,
+}
+
 /// <p>Represents attributes that are copied (projected) from the table into an index. These are in addition to the primary key attributes and index key attributes, which are automatically projected.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Projection {
@@ -706,7 +1041,7 @@ pub struct Projection {
 }
 
 /// <p>Represents the provisioned throughput settings for a specified table or index. The settings can be modified using the <code>UpdateTable</code> operation.</p> <p>For current minimum and maximum provisioned throughput values, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html">Limits</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ProvisionedThroughput {
     /// <p>The maximum number of strongly consistent reads consumed per second before DynamoDB returns a <code>ThrottlingException</code>. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.html#ProvisionedThroughput">Specifying Read and Write Requirements</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ReadCapacityUnits")]
@@ -794,7 +1129,7 @@ pub struct PutItemOutput {
     #[serde(rename = "ConsumedCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub consumed_capacity: Option<ConsumedCapacity>,
-    /// <p><p>Information about item collections, if any, that were affected by the <code>PutItem</code> operation. <code>ItemCollectionMetrics</code> is only returned if the <code>ReturnItemCollectionMetrics</code> parameter was specified. If the table does not have any local secondary indexes, this information is not returned in the response.</p> <p>Each <code>ItemCollectionMetrics</code> element consists of:</p> <ul> <li> <p> <code>ItemCollectionKey</code> - The partition key value of the item collection. This is the same as the partition key value of the item itself.</p> </li> <li> <p> <code>SizeEstimateRange</code> - An estimate of item collection size, in gigabytes. This value is a two-element array containing a lower bound and an upper bound for the estimate. The estimate includes the size of all the items in the table, plus the size of all attributes projected into all of the local secondary indexes on that table. Use this estimate to measure whether a local secondary index is approaching its size limit.</p> <p>The estimate is subject to change over time; therefore, do not rely on the precision or accuracy of the estimate.</p> </li> </ul></p>
+    /// <p><p>Information about item collections, if any, that were affected by the <code>PutItem</code> operation. <code>ItemCollectionMetrics</code> is only returned if the <code>ReturnItemCollectionMetrics</code> parameter was specified. If the table does not have any local secondary indexes, this information is not returned in the response.</p> <p>Each <code>ItemCollectionMetrics</code> element consists of:</p> <ul> <li> <p> <code>ItemCollectionKey</code> - The partition key value of the item collection. This is the same as the partition key value of the item itself.</p> </li> <li> <p> <code>SizeEstimateRangeGB</code> - An estimate of item collection size, in gigabytes. This value is a two-element array containing a lower bound and an upper bound for the estimate. The estimate includes the size of all the items in the table, plus the size of all attributes projected into all of the local secondary indexes on that table. Use this estimate to measure whether a local secondary index is approaching its size limit.</p> <p>The estimate is subject to change over time; therefore, do not rely on the precision or accuracy of the estimate.</p> </li> </ul></p>
     #[serde(rename = "ItemCollectionMetrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub item_collection_metrics: Option<ItemCollectionMetrics>,
@@ -904,6 +1239,74 @@ pub struct QueryOutput {
     pub scanned_count: Option<i64>,
 }
 
+/// <p>Represents the properties of a replica.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct Replica {
+    /// <p>The region where the replica needs to be created.</p>
+    #[serde(rename = "RegionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub region_name: Option<String>,
+}
+
+/// <p>Contains the details of the replica.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ReplicaDescription {
+    /// <p>The name of the region.</p>
+    #[serde(rename = "RegionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub region_name: Option<String>,
+}
+
+/// <p><p>Represents one of the following:</p> <ul> <li> <p>A new replica to be added to an existing global table.</p> </li> <li> <p>New parameters for an existing replica.</p> </li> <li> <p>An existing replica to be removed from an existing global table.</p> </li> </ul></p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ReplicaUpdate {
+    /// <p>The parameters required for creating a replica on an existing global table.</p>
+    #[serde(rename = "Create")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create: Option<CreateReplicaAction>,
+    /// <p>The name of the existing replica to be removed.</p>
+    #[serde(rename = "Delete")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delete: Option<DeleteReplicaAction>,
+}
+
+/// <p>Contains details for the restore.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct RestoreSummary {
+    /// <p>Point in time or source backup time.</p>
+    #[serde(rename = "RestoreDateTime")]
+    pub restore_date_time: f64,
+    /// <p>Indicates if a restore is in progress or not.</p>
+    #[serde(rename = "RestoreInProgress")]
+    pub restore_in_progress: bool,
+    /// <p>ARN of the backup from which the table was restored.</p>
+    #[serde(rename = "SourceBackupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_backup_arn: Option<String>,
+    /// <p>ARN of the source table of the backup that is being restored.</p>
+    #[serde(rename = "SourceTableArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_table_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct RestoreTableFromBackupInput {
+    /// <p>The ARN associated with the backup.</p>
+    #[serde(rename = "BackupArn")]
+    pub backup_arn: String,
+    /// <p>The name of the new table to which the backup must be restored.</p>
+    #[serde(rename = "TargetTableName")]
+    pub target_table_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct RestoreTableFromBackupOutput {
+    /// <p>The description of the table created from an existing backup.</p>
+    #[serde(rename = "TableDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_description: Option<TableDescription>,
+}
+
 /// <p>Represents the input of a <code>Scan</code> operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ScanInput {
@@ -996,6 +1399,59 @@ pub struct ScanOutput {
     pub scanned_count: Option<i64>,
 }
 
+/// <p>Contains the details of the table when the backup was created. </p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct SourceTableDetails {
+    /// <p>Number of items in the table. Please note this is an approximate value. </p>
+    #[serde(rename = "ItemCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub item_count: Option<i64>,
+    /// <p>Schema of the table. </p>
+    #[serde(rename = "KeySchema")]
+    pub key_schema: Vec<KeySchemaElement>,
+    /// <p>Read IOPs and Write IOPS on the table when the backup was created.</p>
+    #[serde(rename = "ProvisionedThroughput")]
+    pub provisioned_throughput: ProvisionedThroughput,
+    /// <p>ARN of the table for which backup was created. </p>
+    #[serde(rename = "TableArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_arn: Option<String>,
+    /// <p>Time when the source table was created. </p>
+    #[serde(rename = "TableCreationDateTime")]
+    pub table_creation_date_time: f64,
+    /// <p>Unique identifier for the table for which the backup was created. </p>
+    #[serde(rename = "TableId")]
+    pub table_id: String,
+    /// <p>The name of the table for which the backup was created. </p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
+    /// <p>Size of the table in bytes. Please note this is an approximate value.</p>
+    #[serde(rename = "TableSizeBytes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_size_bytes: Option<i64>,
+}
+
+/// <p>Contains the details of the features enabled on the table when the backup was created. For example, LSIs, GSIs, streams, TTL. </p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct SourceTableFeatureDetails {
+    /// <p>Represents the GSI properties for the table when the backup was created. It includes the IndexName, KeySchema, Projection and ProvisionedThroughput for the GSIs on the table at the time of backup. </p>
+    #[serde(rename = "GlobalSecondaryIndexes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub global_secondary_indexes: Option<Vec<GlobalSecondaryIndexInfo>>,
+    /// <p>Represents the LSI properties for the table when the backup was created. It includes the IndexName, KeySchema and Projection for the LSIs on the table at the time of backup. </p>
+    #[serde(rename = "LocalSecondaryIndexes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub local_secondary_indexes: Option<Vec<LocalSecondaryIndexInfo>>,
+    /// <p>Stream settings on the table when the backup was created.</p>
+    #[serde(rename = "StreamDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_description: Option<StreamSpecification>,
+    /// <p>Time to Live settings on the table when the backup was created.</p>
+    #[serde(rename = "TimeToLiveDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub time_to_live_description: Option<TimeToLiveDescription>,
+}
+
 /// <p>Represents the DynamoDB Streams configuration for a table in DynamoDB.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct StreamSpecification {
@@ -1048,6 +1504,10 @@ pub struct TableDescription {
     #[serde(rename = "ProvisionedThroughput")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_throughput: Option<ProvisionedThroughputDescription>,
+    /// <p>Contains details for the restore.</p>
+    #[serde(rename = "RestoreSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub restore_summary: Option<RestoreSummary>,
     /// <p>The current DynamoDB Streams configuration for the table.</p>
     #[serde(rename = "StreamSpecification")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1056,6 +1516,10 @@ pub struct TableDescription {
     #[serde(rename = "TableArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_arn: Option<String>,
+    /// <p>Unique identifier for the table for which the backup was created. </p>
+    #[serde(rename = "TableId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub table_id: Option<String>,
     /// <p>The name of the table.</p>
     #[serde(rename = "TableName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1136,6 +1600,24 @@ pub struct UpdateGlobalSecondaryIndexAction {
     pub provisioned_throughput: ProvisionedThroughput,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct UpdateGlobalTableInput {
+    /// <p>The global table name.</p>
+    #[serde(rename = "GlobalTableName")]
+    pub global_table_name: String,
+    /// <p>A list of regions that should be added or removed from the global table.</p>
+    #[serde(rename = "ReplicaUpdates")]
+    pub replica_updates: Vec<ReplicaUpdate>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct UpdateGlobalTableOutput {
+    /// <p>Contains the details of the global table.</p>
+    #[serde(rename = "GlobalTableDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub global_table_description: Option<GlobalTableDescription>,
+}
+
 /// <p>Represents the input of an <code>UpdateItem</code> operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateItemInput {
@@ -1197,7 +1679,7 @@ pub struct UpdateItemOutput {
     #[serde(rename = "ConsumedCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub consumed_capacity: Option<ConsumedCapacity>,
-    /// <p><p>Information about item collections, if any, that were affected by the <code>UpdateItem</code> operation. <code>ItemCollectionMetrics</code> is only returned if the <code>ReturnItemCollectionMetrics</code> parameter was specified. If the table does not have any local secondary indexes, this information is not returned in the response.</p> <p>Each <code>ItemCollectionMetrics</code> element consists of:</p> <ul> <li> <p> <code>ItemCollectionKey</code> - The partition key value of the item collection. This is the same as the partition key value of the item itself.</p> </li> <li> <p> <code>SizeEstimateRange</code> - An estimate of item collection size, in gigabytes. This value is a two-element array containing a lower bound and an upper bound for the estimate. The estimate includes the size of all the items in the table, plus the size of all attributes projected into all of the local secondary indexes on that table. Use this estimate to measure whether a local secondary index is approaching its size limit.</p> <p>The estimate is subject to change over time; therefore, do not rely on the precision or accuracy of the estimate.</p> </li> </ul></p>
+    /// <p><p>Information about item collections, if any, that were affected by the <code>UpdateItem</code> operation. <code>ItemCollectionMetrics</code> is only returned if the <code>ReturnItemCollectionMetrics</code> parameter was specified. If the table does not have any local secondary indexes, this information is not returned in the response.</p> <p>Each <code>ItemCollectionMetrics</code> element consists of:</p> <ul> <li> <p> <code>ItemCollectionKey</code> - The partition key value of the item collection. This is the same as the partition key value of the item itself.</p> </li> <li> <p> <code>SizeEstimateRangeGB</code> - An estimate of item collection size, in gigabytes. This value is a two-element array containing a lower bound and an upper bound for the estimate. The estimate includes the size of all the items in the table, plus the size of all attributes projected into all of the local secondary indexes on that table. Use this estimate to measure whether a local secondary index is approaching its size limit.</p> <p>The estimate is subject to change over time; therefore, do not rely on the precision or accuracy of the estimate.</p> </li> </ul></p>
     #[serde(rename = "ItemCollectionMetrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub item_collection_metrics: Option<ItemCollectionMetrics>,
@@ -1460,6 +1942,214 @@ impl Error for BatchWriteItemError {
         }
     }
 }
+/// Errors returned by CreateBackup
+#[derive(Debug, PartialEq)]
+pub enum CreateBackupError {
+    /// <p>There is another ongoing conflicting backup control plane operation on the table. The backups is either being created, deleted or restored to a table.</p>
+    BackupInUse(String),
+    /// <p>Backups have not yet been enabled for this table.</p>
+    ContinuousBackupsUnavailable(String),
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>The number of concurrent table requests (cumulative number of tables in the <code>CREATING</code>, <code>DELETING</code> or <code>UPDATING</code> state) exceeds the maximum allowed of 10.</p> <p>Also, for tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
+    LimitExceeded(String),
+    /// <p>A table by that name is either being created or deleted. </p>
+    TableInUse(String),
+    /// <p>A table with the name <code>TableName</code> does not currently exist within the subscriber's account.</p>
+    TableNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateBackupError {
+    pub fn from_body(body: &str) -> CreateBackupError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "BackupInUseException" => {
+                        CreateBackupError::BackupInUse(String::from(error_message))
+                    }
+                    "ContinuousBackupsUnavailableException" => {
+                        CreateBackupError::ContinuousBackupsUnavailable(String::from(error_message))
+                    }
+                    "InternalServerError" => {
+                        CreateBackupError::InternalServerError(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        CreateBackupError::LimitExceeded(String::from(error_message))
+                    }
+                    "TableInUseException" => {
+                        CreateBackupError::TableInUse(String::from(error_message))
+                    }
+                    "TableNotFoundException" => {
+                        CreateBackupError::TableNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CreateBackupError::Validation(error_message.to_string())
+                    }
+                    _ => CreateBackupError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateBackupError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateBackupError {
+    fn from(err: serde_json::error::Error) -> CreateBackupError {
+        CreateBackupError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateBackupError {
+    fn from(err: CredentialsError) -> CreateBackupError {
+        CreateBackupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateBackupError {
+    fn from(err: HttpDispatchError) -> CreateBackupError {
+        CreateBackupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateBackupError {
+    fn from(err: io::Error) -> CreateBackupError {
+        CreateBackupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateBackupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateBackupError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateBackupError::BackupInUse(ref cause) => cause,
+            CreateBackupError::ContinuousBackupsUnavailable(ref cause) => cause,
+            CreateBackupError::InternalServerError(ref cause) => cause,
+            CreateBackupError::LimitExceeded(ref cause) => cause,
+            CreateBackupError::TableInUse(ref cause) => cause,
+            CreateBackupError::TableNotFound(ref cause) => cause,
+            CreateBackupError::Validation(ref cause) => cause,
+            CreateBackupError::Credentials(ref err) => err.description(),
+            CreateBackupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CreateBackupError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateGlobalTable
+#[derive(Debug, PartialEq)]
+pub enum CreateGlobalTableError {
+    /// <p>The specified global table already exists.</p>
+    GlobalTableAlreadyExists(String),
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>The number of concurrent table requests (cumulative number of tables in the <code>CREATING</code>, <code>DELETING</code> or <code>UPDATING</code> state) exceeds the maximum allowed of 10.</p> <p>Also, for tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
+    LimitExceeded(String),
+    /// <p>A table with the name <code>TableName</code> does not currently exist within the subscriber's account.</p>
+    TableNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateGlobalTableError {
+    pub fn from_body(body: &str) -> CreateGlobalTableError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "GlobalTableAlreadyExistsException" => {
+                        CreateGlobalTableError::GlobalTableAlreadyExists(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InternalServerError" => {
+                        CreateGlobalTableError::InternalServerError(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        CreateGlobalTableError::LimitExceeded(String::from(error_message))
+                    }
+                    "TableNotFoundException" => {
+                        CreateGlobalTableError::TableNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CreateGlobalTableError::Validation(error_message.to_string())
+                    }
+                    _ => CreateGlobalTableError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateGlobalTableError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateGlobalTableError {
+    fn from(err: serde_json::error::Error) -> CreateGlobalTableError {
+        CreateGlobalTableError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateGlobalTableError {
+    fn from(err: CredentialsError) -> CreateGlobalTableError {
+        CreateGlobalTableError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateGlobalTableError {
+    fn from(err: HttpDispatchError) -> CreateGlobalTableError {
+        CreateGlobalTableError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateGlobalTableError {
+    fn from(err: io::Error) -> CreateGlobalTableError {
+        CreateGlobalTableError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateGlobalTableError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateGlobalTableError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateGlobalTableError::GlobalTableAlreadyExists(ref cause) => cause,
+            CreateGlobalTableError::InternalServerError(ref cause) => cause,
+            CreateGlobalTableError::LimitExceeded(ref cause) => cause,
+            CreateGlobalTableError::TableNotFound(ref cause) => cause,
+            CreateGlobalTableError::Validation(ref cause) => cause,
+            CreateGlobalTableError::Credentials(ref err) => err.description(),
+            CreateGlobalTableError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateGlobalTableError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateTable
 #[derive(Debug, PartialEq)]
 pub enum CreateTableError {
@@ -1547,6 +2237,102 @@ impl Error for CreateTableError {
             CreateTableError::Credentials(ref err) => err.description(),
             CreateTableError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             CreateTableError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteBackup
+#[derive(Debug, PartialEq)]
+pub enum DeleteBackupError {
+    /// <p>There is another ongoing conflicting backup control plane operation on the table. The backups is either being created, deleted or restored to a table.</p>
+    BackupInUse(String),
+    /// <p>Backup not found for the given BackupARN. </p>
+    BackupNotFound(String),
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>The number of concurrent table requests (cumulative number of tables in the <code>CREATING</code>, <code>DELETING</code> or <code>UPDATING</code> state) exceeds the maximum allowed of 10.</p> <p>Also, for tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
+    LimitExceeded(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteBackupError {
+    pub fn from_body(body: &str) -> DeleteBackupError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "BackupInUseException" => {
+                        DeleteBackupError::BackupInUse(String::from(error_message))
+                    }
+                    "BackupNotFoundException" => {
+                        DeleteBackupError::BackupNotFound(String::from(error_message))
+                    }
+                    "InternalServerError" => {
+                        DeleteBackupError::InternalServerError(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        DeleteBackupError::LimitExceeded(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteBackupError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteBackupError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteBackupError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteBackupError {
+    fn from(err: serde_json::error::Error) -> DeleteBackupError {
+        DeleteBackupError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteBackupError {
+    fn from(err: CredentialsError) -> DeleteBackupError {
+        DeleteBackupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteBackupError {
+    fn from(err: HttpDispatchError) -> DeleteBackupError {
+        DeleteBackupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteBackupError {
+    fn from(err: io::Error) -> DeleteBackupError {
+        DeleteBackupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteBackupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteBackupError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteBackupError::BackupInUse(ref cause) => cause,
+            DeleteBackupError::BackupNotFound(ref cause) => cause,
+            DeleteBackupError::InternalServerError(ref cause) => cause,
+            DeleteBackupError::LimitExceeded(ref cause) => cause,
+            DeleteBackupError::Validation(ref cause) => cause,
+            DeleteBackupError::Credentials(ref err) => err.description(),
+            DeleteBackupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteBackupError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -1745,6 +2531,262 @@ impl Error for DeleteTableError {
             DeleteTableError::Credentials(ref err) => err.description(),
             DeleteTableError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             DeleteTableError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeBackup
+#[derive(Debug, PartialEq)]
+pub enum DescribeBackupError {
+    /// <p>Backup not found for the given BackupARN. </p>
+    BackupNotFound(String),
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeBackupError {
+    pub fn from_body(body: &str) -> DescribeBackupError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "BackupNotFoundException" => {
+                        DescribeBackupError::BackupNotFound(String::from(error_message))
+                    }
+                    "InternalServerError" => {
+                        DescribeBackupError::InternalServerError(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DescribeBackupError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeBackupError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeBackupError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeBackupError {
+    fn from(err: serde_json::error::Error) -> DescribeBackupError {
+        DescribeBackupError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeBackupError {
+    fn from(err: CredentialsError) -> DescribeBackupError {
+        DescribeBackupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeBackupError {
+    fn from(err: HttpDispatchError) -> DescribeBackupError {
+        DescribeBackupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeBackupError {
+    fn from(err: io::Error) -> DescribeBackupError {
+        DescribeBackupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeBackupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeBackupError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeBackupError::BackupNotFound(ref cause) => cause,
+            DescribeBackupError::InternalServerError(ref cause) => cause,
+            DescribeBackupError::Validation(ref cause) => cause,
+            DescribeBackupError::Credentials(ref err) => err.description(),
+            DescribeBackupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DescribeBackupError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeContinuousBackups
+#[derive(Debug, PartialEq)]
+pub enum DescribeContinuousBackupsError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>A table with the name <code>TableName</code> does not currently exist within the subscriber's account.</p>
+    TableNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeContinuousBackupsError {
+    pub fn from_body(body: &str) -> DescribeContinuousBackupsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalServerError" => DescribeContinuousBackupsError::InternalServerError(
+                        String::from(error_message),
+                    ),
+                    "TableNotFoundException" => {
+                        DescribeContinuousBackupsError::TableNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DescribeContinuousBackupsError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeContinuousBackupsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeContinuousBackupsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeContinuousBackupsError {
+    fn from(err: serde_json::error::Error) -> DescribeContinuousBackupsError {
+        DescribeContinuousBackupsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeContinuousBackupsError {
+    fn from(err: CredentialsError) -> DescribeContinuousBackupsError {
+        DescribeContinuousBackupsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeContinuousBackupsError {
+    fn from(err: HttpDispatchError) -> DescribeContinuousBackupsError {
+        DescribeContinuousBackupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeContinuousBackupsError {
+    fn from(err: io::Error) -> DescribeContinuousBackupsError {
+        DescribeContinuousBackupsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeContinuousBackupsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeContinuousBackupsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeContinuousBackupsError::InternalServerError(ref cause) => cause,
+            DescribeContinuousBackupsError::TableNotFound(ref cause) => cause,
+            DescribeContinuousBackupsError::Validation(ref cause) => cause,
+            DescribeContinuousBackupsError::Credentials(ref err) => err.description(),
+            DescribeContinuousBackupsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeContinuousBackupsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeGlobalTable
+#[derive(Debug, PartialEq)]
+pub enum DescribeGlobalTableError {
+    /// <p>The specified global table does not exist.</p>
+    GlobalTableNotFound(String),
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeGlobalTableError {
+    pub fn from_body(body: &str) -> DescribeGlobalTableError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "GlobalTableNotFoundException" => {
+                        DescribeGlobalTableError::GlobalTableNotFound(String::from(error_message))
+                    }
+                    "InternalServerError" => {
+                        DescribeGlobalTableError::InternalServerError(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DescribeGlobalTableError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeGlobalTableError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeGlobalTableError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeGlobalTableError {
+    fn from(err: serde_json::error::Error) -> DescribeGlobalTableError {
+        DescribeGlobalTableError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeGlobalTableError {
+    fn from(err: CredentialsError) -> DescribeGlobalTableError {
+        DescribeGlobalTableError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeGlobalTableError {
+    fn from(err: HttpDispatchError) -> DescribeGlobalTableError {
+        DescribeGlobalTableError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeGlobalTableError {
+    fn from(err: io::Error) -> DescribeGlobalTableError {
+        DescribeGlobalTableError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeGlobalTableError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeGlobalTableError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeGlobalTableError::GlobalTableNotFound(ref cause) => cause,
+            DescribeGlobalTableError::InternalServerError(ref cause) => cause,
+            DescribeGlobalTableError::Validation(ref cause) => cause,
+            DescribeGlobalTableError::Credentials(ref err) => err.description(),
+            DescribeGlobalTableError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeGlobalTableError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -2081,6 +3123,162 @@ impl Error for GetItemError {
             GetItemError::Credentials(ref err) => err.description(),
             GetItemError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             GetItemError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListBackups
+#[derive(Debug, PartialEq)]
+pub enum ListBackupsError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListBackupsError {
+    pub fn from_body(body: &str) -> ListBackupsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalServerError" => {
+                        ListBackupsError::InternalServerError(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListBackupsError::Validation(error_message.to_string())
+                    }
+                    _ => ListBackupsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListBackupsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListBackupsError {
+    fn from(err: serde_json::error::Error) -> ListBackupsError {
+        ListBackupsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListBackupsError {
+    fn from(err: CredentialsError) -> ListBackupsError {
+        ListBackupsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListBackupsError {
+    fn from(err: HttpDispatchError) -> ListBackupsError {
+        ListBackupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListBackupsError {
+    fn from(err: io::Error) -> ListBackupsError {
+        ListBackupsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListBackupsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListBackupsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListBackupsError::InternalServerError(ref cause) => cause,
+            ListBackupsError::Validation(ref cause) => cause,
+            ListBackupsError::Credentials(ref err) => err.description(),
+            ListBackupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ListBackupsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListGlobalTables
+#[derive(Debug, PartialEq)]
+pub enum ListGlobalTablesError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListGlobalTablesError {
+    pub fn from_body(body: &str) -> ListGlobalTablesError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalServerError" => {
+                        ListGlobalTablesError::InternalServerError(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListGlobalTablesError::Validation(error_message.to_string())
+                    }
+                    _ => ListGlobalTablesError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListGlobalTablesError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListGlobalTablesError {
+    fn from(err: serde_json::error::Error) -> ListGlobalTablesError {
+        ListGlobalTablesError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListGlobalTablesError {
+    fn from(err: CredentialsError) -> ListGlobalTablesError {
+        ListGlobalTablesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListGlobalTablesError {
+    fn from(err: HttpDispatchError) -> ListGlobalTablesError {
+        ListGlobalTablesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListGlobalTablesError {
+    fn from(err: io::Error) -> ListGlobalTablesError {
+        ListGlobalTablesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListGlobalTablesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListGlobalTablesError {
+    fn description(&self) -> &str {
+        match *self {
+            ListGlobalTablesError::InternalServerError(ref cause) => cause,
+            ListGlobalTablesError::Validation(ref cause) => cause,
+            ListGlobalTablesError::Credentials(ref err) => err.description(),
+            ListGlobalTablesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ListGlobalTablesError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -2434,6 +3632,116 @@ impl Error for QueryError {
         }
     }
 }
+/// Errors returned by RestoreTableFromBackup
+#[derive(Debug, PartialEq)]
+pub enum RestoreTableFromBackupError {
+    /// <p>There is another ongoing conflicting backup control plane operation on the table. The backups is either being created, deleted or restored to a table.</p>
+    BackupInUse(String),
+    /// <p>Backup not found for the given BackupARN. </p>
+    BackupNotFound(String),
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>The number of concurrent table requests (cumulative number of tables in the <code>CREATING</code>, <code>DELETING</code> or <code>UPDATING</code> state) exceeds the maximum allowed of 10.</p> <p>Also, for tables with secondary indexes, only one of those tables can be in the <code>CREATING</code> state at any point in time. Do not attempt to create more than one such table simultaneously.</p> <p>The total limit of tables in the <code>ACTIVE</code> state is 250.</p>
+    LimitExceeded(String),
+    /// <p>A table with the name already exists. </p>
+    TableAlreadyExists(String),
+    /// <p>A table by that name is either being created or deleted. </p>
+    TableInUse(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl RestoreTableFromBackupError {
+    pub fn from_body(body: &str) -> RestoreTableFromBackupError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "BackupInUseException" => {
+                        RestoreTableFromBackupError::BackupInUse(String::from(error_message))
+                    }
+                    "BackupNotFoundException" => {
+                        RestoreTableFromBackupError::BackupNotFound(String::from(error_message))
+                    }
+                    "InternalServerError" => RestoreTableFromBackupError::InternalServerError(
+                        String::from(error_message),
+                    ),
+                    "LimitExceededException" => {
+                        RestoreTableFromBackupError::LimitExceeded(String::from(error_message))
+                    }
+                    "TableAlreadyExistsException" => {
+                        RestoreTableFromBackupError::TableAlreadyExists(String::from(error_message))
+                    }
+                    "TableInUseException" => {
+                        RestoreTableFromBackupError::TableInUse(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        RestoreTableFromBackupError::Validation(error_message.to_string())
+                    }
+                    _ => RestoreTableFromBackupError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => RestoreTableFromBackupError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for RestoreTableFromBackupError {
+    fn from(err: serde_json::error::Error) -> RestoreTableFromBackupError {
+        RestoreTableFromBackupError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for RestoreTableFromBackupError {
+    fn from(err: CredentialsError) -> RestoreTableFromBackupError {
+        RestoreTableFromBackupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for RestoreTableFromBackupError {
+    fn from(err: HttpDispatchError) -> RestoreTableFromBackupError {
+        RestoreTableFromBackupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RestoreTableFromBackupError {
+    fn from(err: io::Error) -> RestoreTableFromBackupError {
+        RestoreTableFromBackupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for RestoreTableFromBackupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for RestoreTableFromBackupError {
+    fn description(&self) -> &str {
+        match *self {
+            RestoreTableFromBackupError::BackupInUse(ref cause) => cause,
+            RestoreTableFromBackupError::BackupNotFound(ref cause) => cause,
+            RestoreTableFromBackupError::InternalServerError(ref cause) => cause,
+            RestoreTableFromBackupError::LimitExceeded(ref cause) => cause,
+            RestoreTableFromBackupError::TableAlreadyExists(ref cause) => cause,
+            RestoreTableFromBackupError::TableInUse(ref cause) => cause,
+            RestoreTableFromBackupError::Validation(ref cause) => cause,
+            RestoreTableFromBackupError::Credentials(ref err) => err.description(),
+            RestoreTableFromBackupError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            RestoreTableFromBackupError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by Scan
 #[derive(Debug, PartialEq)]
 pub enum ScanError {
@@ -2711,6 +4019,110 @@ impl Error for UntagResourceError {
             UntagResourceError::Credentials(ref err) => err.description(),
             UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             UntagResourceError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdateGlobalTable
+#[derive(Debug, PartialEq)]
+pub enum UpdateGlobalTableError {
+    /// <p>The specified global table does not exist.</p>
+    GlobalTableNotFound(String),
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>The specified replica is already part of the global table.</p>
+    ReplicaAlreadyExists(String),
+    /// <p>The specified replica is no longer part of the global table.</p>
+    ReplicaNotFound(String),
+    /// <p>A table with the name <code>TableName</code> does not currently exist within the subscriber's account.</p>
+    TableNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateGlobalTableError {
+    pub fn from_body(body: &str) -> UpdateGlobalTableError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "GlobalTableNotFoundException" => {
+                        UpdateGlobalTableError::GlobalTableNotFound(String::from(error_message))
+                    }
+                    "InternalServerError" => {
+                        UpdateGlobalTableError::InternalServerError(String::from(error_message))
+                    }
+                    "ReplicaAlreadyExistsException" => {
+                        UpdateGlobalTableError::ReplicaAlreadyExists(String::from(error_message))
+                    }
+                    "ReplicaNotFoundException" => {
+                        UpdateGlobalTableError::ReplicaNotFound(String::from(error_message))
+                    }
+                    "TableNotFoundException" => {
+                        UpdateGlobalTableError::TableNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateGlobalTableError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateGlobalTableError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateGlobalTableError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateGlobalTableError {
+    fn from(err: serde_json::error::Error) -> UpdateGlobalTableError {
+        UpdateGlobalTableError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateGlobalTableError {
+    fn from(err: CredentialsError) -> UpdateGlobalTableError {
+        UpdateGlobalTableError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateGlobalTableError {
+    fn from(err: HttpDispatchError) -> UpdateGlobalTableError {
+        UpdateGlobalTableError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateGlobalTableError {
+    fn from(err: io::Error) -> UpdateGlobalTableError {
+        UpdateGlobalTableError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateGlobalTableError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateGlobalTableError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateGlobalTableError::GlobalTableNotFound(ref cause) => cause,
+            UpdateGlobalTableError::InternalServerError(ref cause) => cause,
+            UpdateGlobalTableError::ReplicaAlreadyExists(ref cause) => cause,
+            UpdateGlobalTableError::ReplicaNotFound(ref cause) => cause,
+            UpdateGlobalTableError::TableNotFound(ref cause) => cause,
+            UpdateGlobalTableError::Validation(ref cause) => cause,
+            UpdateGlobalTableError::Credentials(ref err) => err.description(),
+            UpdateGlobalTableError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateGlobalTableError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -3022,9 +4434,27 @@ pub trait DynamoDb {
         input: &BatchWriteItemInput,
     ) -> Result<BatchWriteItemOutput, BatchWriteItemError>;
 
+    /// <p><p>Creates a backup for an existing table.</p> <p> Each time you create an On-Demand Backup, the entire table data is backed up. There is no limit to the number of on-demand backups that can be taken. </p> <p>You can call <code>CreateBackup</code> at a maximum rate of 50 times per second.</p> <p>All backups in DynamoDB work without consuming any provisioned throughput on the table. This results in a fast, low-cost, and scalable backup process. In general, the larger the table, the more time it takes to back up. The backup is stored in an S3 data store that is maintained and managed by DynamoDB.</p> <p>Backups incorporate all writes (delete, put, update) that were completed within the last minute before the backup request was initiated. Backups might include some writes (delete, put, update) that were completed before the backup request was finished.</p> <p> For example, if you submit the backup request on 2018-12-14 at 14:25:00, the backup is guaranteed to contain all data committed to the table up to 14:24:00, and data committed after 14:26:00 will not be. The backup may or may not contain data modifications made between 14:24:00 and 14:26:00. On-Demand Backup does not support causal consistency. </p> <p> Along with data, the following are also included on the backups: </p> <ul> <li> <p>Global secondary indexes (GSIs)</p> </li> <li> <p>Local secondary indexes (LSIs)</p> </li> <li> <p>Streams</p> </li> <li> <p>Provisioned read and write capacity</p> </li> </ul></p>
+    fn create_backup(
+        &self,
+        input: &CreateBackupInput,
+    ) -> Result<CreateBackupOutput, CreateBackupError>;
+
+    /// <p><p>Creates a global table from an existing table. A global table creates a replication relationship between two or more DynamoDB tables with the same table name in the provided regions. </p> <p> Tables can only be added as the replicas of a global table group under the following conditions: </p> <ul> <li> <p> The tables must have the same name. </p> </li> <li> <p> The tables must contain no items. </p> </li> <li> <p> The tables must have the same hash key and sort key (if present). </p> </li> <li> <p> The tables must have DynamoDB Streams enabled (NEW<em>AND</em>OLD_IMAGES). </p> </li> </ul></p>
+    fn create_global_table(
+        &self,
+        input: &CreateGlobalTableInput,
+    ) -> Result<CreateGlobalTableOutput, CreateGlobalTableError>;
+
     /// <p>The <code>CreateTable</code> operation adds a new table to your account. In an AWS account, table names must be unique within each region. That is, you can have two tables with same name if you create the tables in different regions.</p> <p> <code>CreateTable</code> is an asynchronous operation. Upon receiving a <code>CreateTable</code> request, DynamoDB immediately returns a response with a <code>TableStatus</code> of <code>CREATING</code>. After the table is created, DynamoDB sets the <code>TableStatus</code> to <code>ACTIVE</code>. You can perform read and write operations only on an <code>ACTIVE</code> table. </p> <p>You can optionally define secondary indexes on the new table, as part of the <code>CreateTable</code> operation. If you want to create multiple tables with secondary indexes on them, you must create the tables sequentially. Only one table with secondary indexes can be in the <code>CREATING</code> state at any given time.</p> <p>You can use the <code>DescribeTable</code> action to check the table status.</p>
     fn create_table(&self, input: &CreateTableInput)
         -> Result<CreateTableOutput, CreateTableError>;
+
+    /// <p>Deletes an existing backup of a table.</p> <p>You can call <code>DeleteBackup</code> at a maximum rate of 10 times per second.</p>
+    fn delete_backup(
+        &self,
+        input: &DeleteBackupInput,
+    ) -> Result<DeleteBackupOutput, DeleteBackupError>;
 
     /// <p>Deletes a single item in a table by primary key. You can perform a conditional delete operation that deletes the item if it exists, or if it has an expected attribute value.</p> <p>In addition to deleting an item, you can also return the item's attribute values in the same operation, using the <code>ReturnValues</code> parameter.</p> <p>Unless you specify conditions, the <code>DeleteItem</code> is an idempotent operation; running it multiple times on the same item or attribute does <i>not</i> result in an error response.</p> <p>Conditional deletes are useful for deleting items only if specific conditions are met. If those conditions are met, DynamoDB performs the delete. Otherwise, the item is not deleted.</p>
     fn delete_item(&self, input: &DeleteItemInput) -> Result<DeleteItemOutput, DeleteItemError>;
@@ -3032,6 +4462,24 @@ pub trait DynamoDb {
     /// <p>The <code>DeleteTable</code> operation deletes a table and all of its items. After a <code>DeleteTable</code> request, the specified table is in the <code>DELETING</code> state until DynamoDB completes the deletion. If the table is in the <code>ACTIVE</code> state, you can delete it. If a table is in <code>CREATING</code> or <code>UPDATING</code> states, then DynamoDB returns a <code>ResourceInUseException</code>. If the specified table does not exist, DynamoDB returns a <code>ResourceNotFoundException</code>. If table is already in the <code>DELETING</code> state, no error is returned. </p> <note> <p>DynamoDB might continue to accept data read and write operations, such as <code>GetItem</code> and <code>PutItem</code>, on a table in the <code>DELETING</code> state until the table deletion is complete.</p> </note> <p>When you delete a table, any indexes on that table are also deleted.</p> <p>If you have DynamoDB Streams enabled on the table, then the corresponding stream on that table goes into the <code>DISABLED</code> state, and the stream is automatically deleted after 24 hours.</p> <p>Use the <code>DescribeTable</code> action to check the status of the table. </p>
     fn delete_table(&self, input: &DeleteTableInput)
         -> Result<DeleteTableOutput, DeleteTableError>;
+
+    /// <p>Describes an existing backup of a table.</p> <p>You can call <code>DescribeBackup</code> at a maximum rate of 10 times per second.</p>
+    fn describe_backup(
+        &self,
+        input: &DescribeBackupInput,
+    ) -> Result<DescribeBackupOutput, DescribeBackupError>;
+
+    /// <p>Checks the status of the backup restore settings on the specified table. If backups are enabled, <code>ContinuousBackupsStatus</code> will bet set to ENABLED.</p> <p>You can call <code>DescribeContinuousBackups</code> at a maximum rate of 10 times per second.</p>
+    fn describe_continuous_backups(
+        &self,
+        input: &DescribeContinuousBackupsInput,
+    ) -> Result<DescribeContinuousBackupsOutput, DescribeContinuousBackupsError>;
+
+    /// <p>Returns information about the global table.</p>
+    fn describe_global_table(
+        &self,
+        input: &DescribeGlobalTableInput,
+    ) -> Result<DescribeGlobalTableOutput, DescribeGlobalTableError>;
 
     /// <p>Returns the current provisioned-capacity limits for your AWS account in a region, both for the region as a whole and for any one DynamoDB table that you create there.</p> <p>When you establish an AWS account, the account has initial limits on the maximum read capacity units and write capacity units that you can provision across all of your DynamoDB tables in a given region. Also, there are per-table limits that apply when you create a table there. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html">Limits</a> page in the <i>Amazon DynamoDB Developer Guide</i>.</p> <p>Although you can increase these limits by filing a case at <a href="https://console.aws.amazon.com/support/home#/">AWS Support Center</a>, obtaining the increase is not instantaneous. The <code>DescribeLimits</code> action lets you write code to compare the capacity you are currently using to those limits imposed by your account so that you have enough time to apply for an increase before you hit a limit.</p> <p>For example, you could use one of the AWS SDKs to do the following:</p> <ol> <li> <p>Call <code>DescribeLimits</code> for a particular region to obtain your current account limits on provisioned capacity there.</p> </li> <li> <p>Create a variable to hold the aggregate read capacity units provisioned for all your tables in that region, and one to hold the aggregate write capacity units. Zero them both.</p> </li> <li> <p>Call <code>ListTables</code> to obtain a list of all your DynamoDB tables.</p> </li> <li> <p>For each table name listed by <code>ListTables</code>, do the following:</p> <ul> <li> <p>Call <code>DescribeTable</code> with the table name.</p> </li> <li> <p>Use the data returned by <code>DescribeTable</code> to add the read capacity units and write capacity units provisioned for the table itself to your variables.</p> </li> <li> <p>If the table has one or more global secondary indexes (GSIs), loop over these GSIs and add their provisioned capacity values to your variables as well.</p> </li> </ul> </li> <li> <p>Report the account limits for that region returned by <code>DescribeLimits</code>, along with the total current provisioned capacity levels you have calculated.</p> </li> </ol> <p>This will let you see whether you are getting close to your account-level limits.</p> <p>The per-table limits apply only when you are creating a new table. They restrict the sum of the provisioned capacity of the new table itself and all its global secondary indexes.</p> <p>For existing tables and their GSIs, DynamoDB will not let you increase provisioned capacity extremely rapidly, but the only upper limit that applies is that the aggregate provisioned capacity over all your tables and GSIs cannot exceed either of the per-account limits.</p> <note> <p> <code>DescribeLimits</code> should only be called periodically. You can expect throttling errors if you call it more than once in a minute.</p> </note> <p>The <code>DescribeLimits</code> Request element has no content.</p>
     fn describe_limits(&self) -> Result<DescribeLimitsOutput, DescribeLimitsError>;
@@ -3051,6 +4499,16 @@ pub trait DynamoDb {
     /// <p>The <code>GetItem</code> operation returns a set of attributes for the item with the given primary key. If there is no matching item, <code>GetItem</code> does not return any data and there will be no <code>Item</code> element in the response.</p> <p> <code>GetItem</code> provides an eventually consistent read by default. If your application requires a strongly consistent read, set <code>ConsistentRead</code> to <code>true</code>. Although a strongly consistent read might take more time than an eventually consistent read, it always returns the last updated value.</p>
     fn get_item(&self, input: &GetItemInput) -> Result<GetItemOutput, GetItemError>;
 
+    /// <p>List backups associated with an AWS account. To list backups for a given table, specify <code>TableName</code>. <code>ListBackups</code> returns a paginated list of results with at most 1MB worth of items in a page. You can also specify a limit for the maximum number of entries to be returned in a page. </p> <p>In the request, start time is inclusive but end time is exclusive. Note that these limits are for the time at which the original backup was requested.</p> <p>You can call <code>ListBackups</code> a maximum of 5 times per second.</p>
+    fn list_backups(&self, input: &ListBackupsInput)
+        -> Result<ListBackupsOutput, ListBackupsError>;
+
+    /// <p>Lists all the global tables. Only those global tables that have replicas in the region specified as input are returned.</p>
+    fn list_global_tables(
+        &self,
+        input: &ListGlobalTablesInput,
+    ) -> Result<ListGlobalTablesOutput, ListGlobalTablesError>;
+
     /// <p>Returns an array of table names associated with the current account and endpoint. The output from <code>ListTables</code> is paginated, with each page returning a maximum of 100 table names.</p>
     fn list_tables(&self, input: &ListTablesInput) -> Result<ListTablesOutput, ListTablesError>;
 
@@ -3066,6 +4524,12 @@ pub trait DynamoDb {
     /// <p>The <code>Query</code> operation finds items based on primary key values. You can query any table or secondary index that has a composite primary key (a partition key and a sort key). </p> <p>Use the <code>KeyConditionExpression</code> parameter to provide a specific value for the partition key. The <code>Query</code> operation will return all of the items from the table or index with that partition key value. You can optionally narrow the scope of the <code>Query</code> operation by specifying a sort key value and a comparison operator in <code>KeyConditionExpression</code>. To further refine the <code>Query</code> results, you can optionally provide a <code>FilterExpression</code>. A <code>FilterExpression</code> determines which items within the results should be returned to you. All of the other results are discarded. </p> <p> A <code>Query</code> operation always returns a result set. If no matching items are found, the result set will be empty. Queries that do not return results consume the minimum number of read capacity units for that type of read operation. </p> <note> <p> DynamoDB calculates the number of read capacity units consumed based on item size, not on the amount of data that is returned to an application. The number of capacity units consumed will be the same whether you request all of the attributes (the default behavior) or just some of them (using a projection expression). The number will also be the same whether or not you use a <code>FilterExpression</code>. </p> </note> <p> <code>Query</code> results are always sorted by the sort key value. If the data type of the sort key is Number, the results are returned in numeric order; otherwise, the results are returned in order of UTF-8 bytes. By default, the sort order is ascending. To reverse the order, set the <code>ScanIndexForward</code> parameter to false. </p> <p> A single <code>Query</code> operation will read up to the maximum number of items set (if using the <code>Limit</code> parameter) or a maximum of 1 MB of data and then apply any filtering to the results using <code>FilterExpression</code>. If <code>LastEvaluatedKey</code> is present in the response, you will need to paginate the result set. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Query.html#Query.Pagination">Paginating the Results</a> in the <i>Amazon DynamoDB Developer Guide</i>. </p> <p> <code>FilterExpression</code> is applied after a <code>Query</code> finishes, but before the results are returned. A <code>FilterExpression</code> cannot contain partition key or sort key attributes. You need to specify those attributes in the <code>KeyConditionExpression</code>. </p> <note> <p> A <code>Query</code> operation can return an empty result set and a <code>LastEvaluatedKey</code> if all the items read for the page of results are filtered out. </p> </note> <p>You can query a table, a local secondary index, or a global secondary index. For a query on a table or on a local secondary index, you can set the <code>ConsistentRead</code> parameter to <code>true</code> and obtain a strongly consistent result. Global secondary indexes support eventually consistent reads only, so do not specify <code>ConsistentRead</code> when querying a global secondary index.</p>
     fn query(&self, input: &QueryInput) -> Result<QueryOutput, QueryError>;
 
+    /// <p><p>Creates a new table from an existing backup. Any number of users can execute up to 10 concurrent restores in a given account. </p> <p>You can call <code>RestoreTableFromBackup</code> at a maximum rate of 10 times per second.</p> <p>You must manually set up the following on the restored table:</p> <ul> <li> <p>Auto scaling policies</p> </li> <li> <p>IAM policies</p> </li> <li> <p>Cloudwatch metrics and alarms</p> </li> <li> <p>Tags</p> </li> <li> <p>Time to Live (TTL) settings</p> </li> </ul></p>
+    fn restore_table_from_backup(
+        &self,
+        input: &RestoreTableFromBackupInput,
+    ) -> Result<RestoreTableFromBackupOutput, RestoreTableFromBackupError>;
+
     /// <p>The <code>Scan</code> operation returns one or more items and item attributes by accessing every item in a table or a secondary index. To have DynamoDB return fewer items, you can provide a <code>FilterExpression</code> operation.</p> <p>If the total number of scanned items exceeds the maximum data set size limit of 1 MB, the scan stops and results are returned to the user as a <code>LastEvaluatedKey</code> value to continue the scan in a subsequent operation. The results also include the number of items exceeding the limit. A scan can result in no table data meeting the filter criteria. </p> <p>A single <code>Scan</code> operation will read up to the maximum number of items set (if using the <code>Limit</code> parameter) or a maximum of 1 MB of data and then apply any filtering to the results using <code>FilterExpression</code>. If <code>LastEvaluatedKey</code> is present in the response, you will need to paginate the result set. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Scan.html#Scan.Pagination">Paginating the Results</a> in the <i>Amazon DynamoDB Developer Guide</i>. </p> <p> <code>Scan</code> operations proceed sequentially; however, for faster performance on a large table or secondary index, applications can request a parallel <code>Scan</code> operation by providing the <code>Segment</code> and <code>TotalSegments</code> parameters. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Scan.html#Scan.ParallelScan">Parallel Scan</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p> <p> <code>Scan</code> uses eventually consistent reads when accessing the data in a table; therefore, the result set might not include the changes to data in the table immediately before the operation began. If you need a consistent copy of the data, as of the time that the <code>Scan</code> begins, you can set the <code>ConsistentRead</code> parameter to <code>true</code>.</p>
     fn scan(&self, input: &ScanInput) -> Result<ScanOutput, ScanError>;
 
@@ -3074,6 +4538,12 @@ pub trait DynamoDb {
 
     /// <p>Removes the association of tags from an Amazon DynamoDB resource. You can call UntagResource up to 5 times per second, per account. </p> <p>For an overview on tagging DynamoDB resources, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Tagging.html">Tagging for DynamoDB</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     fn untag_resource(&self, input: &UntagResourceInput) -> Result<(), UntagResourceError>;
+
+    /// <p>Adds or removes replicas to the specified global table. The global table should already exist to be able to use this operation. Currently, the replica to be added should be empty. </p>
+    fn update_global_table(
+        &self,
+        input: &UpdateGlobalTableInput,
+    ) -> Result<UpdateGlobalTableOutput, UpdateGlobalTableError>;
 
     /// <p>Edits an existing item's attributes, or adds a new item to the table if it does not already exist. You can put, delete, or add attribute values. You can also perform a conditional update on an existing item (insert a new attribute name-value pair if it doesn't exist, or replace an existing name-value pair if it has certain expected attribute values).</p> <p>You can also return the item's attribute values in the same <code>UpdateItem</code> operation using the <code>ReturnValues</code> parameter.</p>
     fn update_item(&self, input: &UpdateItemInput) -> Result<UpdateItemOutput, UpdateItemError>;
@@ -3186,6 +4656,74 @@ where
         }
     }
 
+    /// <p><p>Creates a backup for an existing table.</p> <p> Each time you create an On-Demand Backup, the entire table data is backed up. There is no limit to the number of on-demand backups that can be taken. </p> <p>You can call <code>CreateBackup</code> at a maximum rate of 50 times per second.</p> <p>All backups in DynamoDB work without consuming any provisioned throughput on the table. This results in a fast, low-cost, and scalable backup process. In general, the larger the table, the more time it takes to back up. The backup is stored in an S3 data store that is maintained and managed by DynamoDB.</p> <p>Backups incorporate all writes (delete, put, update) that were completed within the last minute before the backup request was initiated. Backups might include some writes (delete, put, update) that were completed before the backup request was finished.</p> <p> For example, if you submit the backup request on 2018-12-14 at 14:25:00, the backup is guaranteed to contain all data committed to the table up to 14:24:00, and data committed after 14:26:00 will not be. The backup may or may not contain data modifications made between 14:24:00 and 14:26:00. On-Demand Backup does not support causal consistency. </p> <p> Along with data, the following are also included on the backups: </p> <ul> <li> <p>Global secondary indexes (GSIs)</p> </li> <li> <p>Local secondary indexes (LSIs)</p> </li> <li> <p>Streams</p> </li> <li> <p>Provisioned read and write capacity</p> </li> </ul></p>
+    fn create_backup(
+        &self,
+        input: &CreateBackupInput,
+    ) -> Result<CreateBackupOutput, CreateBackupError> {
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        request.add_header("x-amz-target", "DynamoDB_20120810.CreateBackup");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateBackupOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateBackupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p><p>Creates a global table from an existing table. A global table creates a replication relationship between two or more DynamoDB tables with the same table name in the provided regions. </p> <p> Tables can only be added as the replicas of a global table group under the following conditions: </p> <ul> <li> <p> The tables must have the same name. </p> </li> <li> <p> The tables must contain no items. </p> </li> <li> <p> The tables must have the same hash key and sort key (if present). </p> </li> <li> <p> The tables must have DynamoDB Streams enabled (NEW<em>AND</em>OLD_IMAGES). </p> </li> </ul></p>
+    fn create_global_table(
+        &self,
+        input: &CreateGlobalTableInput,
+    ) -> Result<CreateGlobalTableOutput, CreateGlobalTableError> {
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        request.add_header("x-amz-target", "DynamoDB_20120810.CreateGlobalTable");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateGlobalTableOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateGlobalTableError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>The <code>CreateTable</code> operation adds a new table to your account. In an AWS account, table names must be unique within each region. That is, you can have two tables with same name if you create the tables in different regions.</p> <p> <code>CreateTable</code> is an asynchronous operation. Upon receiving a <code>CreateTable</code> request, DynamoDB immediately returns a response with a <code>TableStatus</code> of <code>CREATING</code>. After the table is created, DynamoDB sets the <code>TableStatus</code> to <code>ACTIVE</code>. You can perform read and write operations only on an <code>ACTIVE</code> table. </p> <p>You can optionally define secondary indexes on the new table, as part of the <code>CreateTable</code> operation. If you want to create multiple tables with secondary indexes on them, you must create the tables sequentially. Only one table with secondary indexes can be in the <code>CREATING</code> state at any given time.</p> <p>You can use the <code>DescribeTable</code> action to check the table status.</p>
     fn create_table(
         &self,
@@ -3214,6 +4752,40 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(CreateTableError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Deletes an existing backup of a table.</p> <p>You can call <code>DeleteBackup</code> at a maximum rate of 10 times per second.</p>
+    fn delete_backup(
+        &self,
+        input: &DeleteBackupInput,
+    ) -> Result<DeleteBackupOutput, DeleteBackupError> {
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        request.add_header("x-amz-target", "DynamoDB_20120810.DeleteBackup");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteBackupOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteBackupError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -3279,6 +4851,111 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(DeleteTableError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Describes an existing backup of a table.</p> <p>You can call <code>DescribeBackup</code> at a maximum rate of 10 times per second.</p>
+    fn describe_backup(
+        &self,
+        input: &DescribeBackupInput,
+    ) -> Result<DescribeBackupOutput, DescribeBackupError> {
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        request.add_header("x-amz-target", "DynamoDB_20120810.DescribeBackup");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeBackupOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeBackupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Checks the status of the backup restore settings on the specified table. If backups are enabled, <code>ContinuousBackupsStatus</code> will bet set to ENABLED.</p> <p>You can call <code>DescribeContinuousBackups</code> at a maximum rate of 10 times per second.</p>
+    fn describe_continuous_backups(
+        &self,
+        input: &DescribeContinuousBackupsInput,
+    ) -> Result<DescribeContinuousBackupsOutput, DescribeContinuousBackupsError> {
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "DynamoDB_20120810.DescribeContinuousBackups",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeContinuousBackupsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeContinuousBackupsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Returns information about the global table.</p>
+    fn describe_global_table(
+        &self,
+        input: &DescribeGlobalTableInput,
+    ) -> Result<DescribeGlobalTableOutput, DescribeGlobalTableError> {
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        request.add_header("x-amz-target", "DynamoDB_20120810.DescribeGlobalTable");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeGlobalTableOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeGlobalTableError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -3415,6 +5092,74 @@ where
         }
     }
 
+    /// <p>List backups associated with an AWS account. To list backups for a given table, specify <code>TableName</code>. <code>ListBackups</code> returns a paginated list of results with at most 1MB worth of items in a page. You can also specify a limit for the maximum number of entries to be returned in a page. </p> <p>In the request, start time is inclusive but end time is exclusive. Note that these limits are for the time at which the original backup was requested.</p> <p>You can call <code>ListBackups</code> a maximum of 5 times per second.</p>
+    fn list_backups(
+        &self,
+        input: &ListBackupsInput,
+    ) -> Result<ListBackupsOutput, ListBackupsError> {
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        request.add_header("x-amz-target", "DynamoDB_20120810.ListBackups");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListBackupsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListBackupsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Lists all the global tables. Only those global tables that have replicas in the region specified as input are returned.</p>
+    fn list_global_tables(
+        &self,
+        input: &ListGlobalTablesInput,
+    ) -> Result<ListGlobalTablesOutput, ListGlobalTablesError> {
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        request.add_header("x-amz-target", "DynamoDB_20120810.ListGlobalTables");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListGlobalTablesOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListGlobalTablesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Returns an array of table names associated with the current account and endpoint. The output from <code>ListTables</code> is paginated, with each page returning a maximum of 100 table names.</p>
     fn list_tables(&self, input: &ListTablesInput) -> Result<ListTablesOutput, ListTablesError> {
         let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
@@ -3544,6 +5289,40 @@ where
         }
     }
 
+    /// <p><p>Creates a new table from an existing backup. Any number of users can execute up to 10 concurrent restores in a given account. </p> <p>You can call <code>RestoreTableFromBackup</code> at a maximum rate of 10 times per second.</p> <p>You must manually set up the following on the restored table:</p> <ul> <li> <p>Auto scaling policies</p> </li> <li> <p>IAM policies</p> </li> <li> <p>Cloudwatch metrics and alarms</p> </li> <li> <p>Tags</p> </li> <li> <p>Time to Live (TTL) settings</p> </li> </ul></p>
+    fn restore_table_from_backup(
+        &self,
+        input: &RestoreTableFromBackupInput,
+    ) -> Result<RestoreTableFromBackupOutput, RestoreTableFromBackupError> {
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        request.add_header("x-amz-target", "DynamoDB_20120810.RestoreTableFromBackup");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<RestoreTableFromBackupOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RestoreTableFromBackupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>The <code>Scan</code> operation returns one or more items and item attributes by accessing every item in a table or a secondary index. To have DynamoDB return fewer items, you can provide a <code>FilterExpression</code> operation.</p> <p>If the total number of scanned items exceeds the maximum data set size limit of 1 MB, the scan stops and results are returned to the user as a <code>LastEvaluatedKey</code> value to continue the scan in a subsequent operation. The results also include the number of items exceeding the limit. A scan can result in no table data meeting the filter criteria. </p> <p>A single <code>Scan</code> operation will read up to the maximum number of items set (if using the <code>Limit</code> parameter) or a maximum of 1 MB of data and then apply any filtering to the results using <code>FilterExpression</code>. If <code>LastEvaluatedKey</code> is present in the response, you will need to paginate the result set. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Scan.html#Scan.Pagination">Paginating the Results</a> in the <i>Amazon DynamoDB Developer Guide</i>. </p> <p> <code>Scan</code> operations proceed sequentially; however, for faster performance on a large table or secondary index, applications can request a parallel <code>Scan</code> operation by providing the <code>Segment</code> and <code>TotalSegments</code> parameters. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Scan.html#Scan.ParallelScan">Parallel Scan</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p> <p> <code>Scan</code> uses eventually consistent reads when accessing the data in a table; therefore, the result set might not include the changes to data in the table immediately before the operation began. If you need a consistent copy of the data, as of the time that the <code>Scan</code> begins, you can set the <code>ConsistentRead</code> parameter to <code>true</code>.</p>
     fn scan(&self, input: &ScanInput) -> Result<ScanOutput, ScanError> {
         let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
@@ -3620,6 +5399,40 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(UntagResourceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Adds or removes replicas to the specified global table. The global table should already exist to be able to use this operation. Currently, the replica to be added should be empty. </p>
+    fn update_global_table(
+        &self,
+        input: &UpdateGlobalTableInput,
+    ) -> Result<UpdateGlobalTableOutput, UpdateGlobalTableError> {
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        request.add_header("x-amz-target", "DynamoDB_20120810.UpdateGlobalTable");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateGlobalTableOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateGlobalTableError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }

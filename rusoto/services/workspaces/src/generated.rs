@@ -27,159 +27,147 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-/// <p>Contains information about the compute type of a WorkSpace bundle.</p>
+/// <p>Information about the compute type.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ComputeType {
-    /// <p>The name of the compute type for the bundle.</p>
+    /// <p>The compute type.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-/// <p>The request of the <a>CreateTags</a> operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateTagsRequest {
-    /// <p>The resource ID of the request.</p>
+    /// <p>The ID of the resource.</p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
-    /// <p>The tags of the request.</p>
+    /// <p>The tags. Each resource can have a maximum of 50 tags.</p>
     #[serde(rename = "Tags")]
     pub tags: Vec<Tag>,
 }
 
-/// <p>The result of the <a>CreateTags</a> operation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateTagsResult;
 
-/// <p>Contains the inputs for the <a>CreateWorkspaces</a> operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateWorkspacesRequest {
-    /// <p>An array of structures that specify the WorkSpaces to create.</p>
+    /// <p>Information about the WorkSpaces to create.</p>
     #[serde(rename = "Workspaces")]
     pub workspaces: Vec<WorkspaceRequest>,
 }
 
-/// <p>Contains the result of the <a>CreateWorkspaces</a> operation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateWorkspacesResult {
-    /// <p>An array of structures that represent the WorkSpaces that could not be created.</p>
+    /// <p>Information about the WorkSpaces that could not be created.</p>
     #[serde(rename = "FailedRequests")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_requests: Option<Vec<FailedCreateWorkspaceRequest>>,
-    /// <p>An array of structures that represent the WorkSpaces that were created.</p> <p>Because this operation is asynchronous, the identifier in <code>WorkspaceId</code> is not immediately available. If you immediately call <a>DescribeWorkspaces</a> with this identifier, no information will be returned.</p>
+    /// <p>Information about the WorkSpaces that were created.</p> <p>Because this operation is asynchronous, the identifier returned is not immediately available for use with other operations. For example, if you call <a>DescribeWorkspaces</a> before the WorkSpace is created, the information returned can be incomplete.</p>
     #[serde(rename = "PendingRequests")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pending_requests: Option<Vec<Workspace>>,
 }
 
-/// <p>Contains default WorkSpace creation information.</p>
+/// <p>Information about defaults used to create a WorkSpace.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DefaultWorkspaceCreationProperties {
-    /// <p>The identifier of any custom security groups that are applied to the WorkSpaces when they are created.</p>
+    /// <p>The identifier of any security groups to apply to WorkSpaces when they are created.</p>
     #[serde(rename = "CustomSecurityGroupId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_security_group_id: Option<String>,
-    /// <p>The organizational unit (OU) in the directory that the WorkSpace machine accounts are placed in.</p>
+    /// <p>The organizational unit (OU) in the directory for the WorkSpace machine accounts.</p>
     #[serde(rename = "DefaultOu")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_ou: Option<String>,
-    /// <p>A public IP address will be attached to all WorkSpaces that are created or rebuilt.</p>
+    /// <p>The public IP address to attach to all WorkSpaces that are created or rebuilt.</p>
     #[serde(rename = "EnableInternetAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_internet_access: Option<bool>,
-    /// <p>Specifies if the directory is enabled for Amazon WorkDocs.</p>
+    /// <p>Indicates whether the directory is enabled for Amazon WorkDocs.</p>
     #[serde(rename = "EnableWorkDocs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_work_docs: Option<bool>,
-    /// <p>The WorkSpace user is an administrator on the WorkSpace.</p>
+    /// <p>Indicates whether the WorkSpace user is an administrator on the WorkSpace.</p>
     #[serde(rename = "UserEnabledAsLocalAdministrator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_enabled_as_local_administrator: Option<bool>,
 }
 
-/// <p>The request of the <a>DeleteTags</a> operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteTagsRequest {
-    /// <p>The resource ID of the request.</p>
+    /// <p>The ID of the resource.</p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
-    /// <p>The tag keys of the request.</p>
+    /// <p>The tag keys.</p>
     #[serde(rename = "TagKeys")]
     pub tag_keys: Vec<String>,
 }
 
-/// <p>The result of the <a>DeleteTags</a> operation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteTagsResult;
 
-/// <p>The request of the <a>DescribeTags</a> operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeTagsRequest {
-    /// <p>The resource ID of the request.</p>
+    /// <p>The ID of the resource.</p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
 }
 
-/// <p>The result of the <a>DescribeTags</a> operation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeTagsResult {
-    /// <p>The list of tags.</p>
+    /// <p>The tags.</p>
     #[serde(rename = "TagList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_list: Option<Vec<Tag>>,
 }
 
-/// <p>Contains the inputs for the <a>DescribeWorkspaceBundles</a> operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeWorkspaceBundlesRequest {
-    /// <p>An array of strings that contains the identifiers of the bundles to retrieve. This parameter cannot be combined with any other filter parameter.</p>
+    /// <p>The IDs of the bundles. This parameter cannot be combined with any other filter.</p>
     #[serde(rename = "BundleIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bundle_ids: Option<Vec<String>>,
-    /// <p>The <code>NextToken</code> value from a previous call to this operation. Pass null if this is the first call.</p>
+    /// <p>The token for the next set of results. (You received this token from a previous call.)</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p><p>The owner of the bundles to retrieve. This parameter cannot be combined with any other filter parameter.</p> <p>This contains one of the following values:</p> <ul> <li> <p>null- Retrieves the bundles that belong to the account making the call.</p> </li> <li> <p> <code>AMAZON</code>- Retrieves the bundles that are provided by AWS.</p> </li> </ul></p>
+    /// <p>The owner of the bundles. This parameter cannot be combined with any other filter.</p> <p>Specify <code>AMAZON</code> to describe the bundles provided by AWS or null to describe the bundles that belong to your account.</p>
     #[serde(rename = "Owner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
 }
 
-/// <p>Contains the results of the <a>DescribeWorkspaceBundles</a> operation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeWorkspaceBundlesResult {
-    /// <p>An array of structures that contain information about the bundles.</p>
+    /// <p>Information about the bundles.</p>
     #[serde(rename = "Bundles")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bundles: Option<Vec<WorkspaceBundle>>,
-    /// <p>If not null, more results are available. Pass this value for the <code>NextToken</code> parameter in a subsequent call to this operation to retrieve the next set of items. This token is valid for one day and must be used within that time frame.</p>
+    /// <p>The token to use to retrieve the next set of results, or null if there are no more results available. This token is valid for one day and must be used within that time frame.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-/// <p>Contains the inputs for the <a>DescribeWorkspaceDirectories</a> operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeWorkspaceDirectoriesRequest {
-    /// <p>An array of strings that contains the directory identifiers to retrieve information for. If this member is null, all directories are retrieved.</p>
+    /// <p>The identifiers of the directories. If the value is null, all directories are retrieved.</p>
     #[serde(rename = "DirectoryIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub directory_ids: Option<Vec<String>>,
-    /// <p>The <code>NextToken</code> value from a previous call to this operation. Pass null if this is the first call.</p>
+    /// <p>The token for the next set of results. (You received this token from a previous call.)</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-/// <p>Contains the results of the <a>DescribeWorkspaceDirectories</a> operation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeWorkspaceDirectoriesResult {
-    /// <p>An array of structures that contain information about the directories.</p>
+    /// <p>Information about the directories.</p>
     #[serde(rename = "Directories")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub directories: Option<Vec<WorkspaceDirectory>>,
-    /// <p>If not null, more results are available. Pass this value for the <code>NextToken</code> parameter in a subsequent call to this operation to retrieve the next set of items. This token is valid for one day and must be used within that time frame.</p>
+    /// <p>The token to use to retrieve the next set of results, or null if there are no more results available. This token is valid for one day and must be used within that time frame.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -187,11 +175,11 @@ pub struct DescribeWorkspaceDirectoriesResult {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeWorkspacesConnectionStatusRequest {
-    /// <p>The next token of the request.</p>
+    /// <p>The token for the next set of results. (You received this token from a previous call.)</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>An array of strings that contain the identifiers of the WorkSpaces.</p>
+    /// <p>The identifiers of the WorkSpaces.</p>
     #[serde(rename = "WorkspaceIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub workspace_ids: Option<Vec<String>>,
@@ -199,24 +187,23 @@ pub struct DescribeWorkspacesConnectionStatusRequest {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeWorkspacesConnectionStatusResult {
-    /// <p>The next token of the result.</p>
+    /// <p>The token to use to retrieve the next set of results, or null if there are no more results available.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The connection status of the WorkSpace.</p>
+    /// <p>Information about the connection status of the WorkSpace.</p>
     #[serde(rename = "WorkspacesConnectionStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub workspaces_connection_status: Option<Vec<WorkspaceConnectionStatus>>,
 }
 
-/// <p>Contains the inputs for the <a>DescribeWorkspaces</a> operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeWorkspacesRequest {
-    /// <p>The identifier of a bundle to obtain the WorkSpaces for. All WorkSpaces that are created from this bundle will be retrieved. This parameter cannot be combined with any other filter parameter.</p>
+    /// <p>The ID of the bundle. All WorkSpaces that are created from this bundle are retrieved. This parameter cannot be combined with any other filter.</p>
     #[serde(rename = "BundleId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bundle_id: Option<String>,
-    /// <p>Specifies the directory identifier to which to limit the WorkSpaces. Optionally, you can specify a specific directory user with the <code>UserName</code> parameter. This parameter cannot be combined with any other filter parameter.</p>
+    /// <p>The ID of the directory. In addition, you can optionally specify a specific directory user (see <code>UserName</code>). This parameter cannot be combined with any other filter.</p>
     #[serde(rename = "DirectoryId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub directory_id: Option<String>,
@@ -224,34 +211,33 @@ pub struct DescribeWorkspacesRequest {
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    /// <p>The <code>NextToken</code> value from a previous call to this operation. Pass null if this is the first call.</p>
+    /// <p>The token for the next set of results. (You received this token from a previous call.)</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Used with the <code>DirectoryId</code> parameter to specify the directory user for whom to obtain the WorkSpace.</p>
+    /// <p>The name of the directory user. You must specify this parameter with <code>DirectoryId</code>.</p>
     #[serde(rename = "UserName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_name: Option<String>,
-    /// <p>An array of strings that contain the identifiers of the WorkSpaces for which to retrieve information. This parameter cannot be combined with any other filter parameter.</p> <p>Because the <a>CreateWorkspaces</a> operation is asynchronous, the identifier it returns is not immediately available. If you immediately call <a>DescribeWorkspaces</a> with this identifier, no information is returned.</p>
+    /// <p>The IDs of the WorkSpaces. This parameter cannot be combined with any other filter.</p> <p>Because the <a>CreateWorkspaces</a> operation is asynchronous, the identifier it returns is not immediately available. If you immediately call <a>DescribeWorkspaces</a> with this identifier, no information is returned.</p>
     #[serde(rename = "WorkspaceIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub workspace_ids: Option<Vec<String>>,
 }
 
-/// <p>Contains the results for the <a>DescribeWorkspaces</a> operation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeWorkspacesResult {
-    /// <p>If not null, more results are available. Pass this value for the <code>NextToken</code> parameter in a subsequent call to this operation to retrieve the next set of items. This token is valid for one day and must be used within that time frame.</p>
+    /// <p>The token to use to retrieve the next set of results, or null if there are no more results available. This token is valid for one day and must be used within that time frame.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>An array of structures that contain the information about the WorkSpaces.</p> <p>Because the <a>CreateWorkspaces</a> operation is asynchronous, some of this information may be incomplete for a newly-created WorkSpace.</p>
+    /// <p>Information about the WorkSpaces.</p> <p>Because <a>CreateWorkspaces</a> is an asynchronous operation, some of the returned information could be incomplete.</p>
     #[serde(rename = "Workspaces")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub workspaces: Option<Vec<Workspace>>,
 }
 
-/// <p>Contains information about a WorkSpace that could not be created.</p>
+/// <p>Information about a WorkSpace that could not be created.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct FailedCreateWorkspaceRequest {
     /// <p>The error code.</p>
@@ -262,13 +248,13 @@ pub struct FailedCreateWorkspaceRequest {
     #[serde(rename = "ErrorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
-    /// <p>A <a>FailedCreateWorkspaceRequest$WorkspaceRequest</a> object that contains the information about the WorkSpace that could not be created.</p>
+    /// <p>Information about the WorkSpace.</p>
     #[serde(rename = "WorkspaceRequest")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub workspace_request: Option<WorkspaceRequest>,
 }
 
-/// <p>Contains information about a WorkSpace that could not be rebooted (<a>RebootWorkspaces</a>), rebuilt (<a>RebuildWorkspaces</a>), terminated (<a>TerminateWorkspaces</a>), started (<a>StartWorkspaces</a>), or stopped (<a>StopWorkspaces</a>).</p>
+/// <p>Information about a WorkSpace that could not be rebooted (<a>RebootWorkspaces</a>), rebuilt (<a>RebuildWorkspaces</a>), terminated (<a>TerminateWorkspaces</a>), started (<a>StartWorkspaces</a>), or stopped (<a>StopWorkspaces</a>).</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct FailedWorkspaceChangeRequest {
     /// <p>The error code.</p>
@@ -285,12 +271,25 @@ pub struct FailedWorkspaceChangeRequest {
     pub workspace_id: Option<String>,
 }
 
+/// <p>Information about a WorkSpace modification.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ModificationState {
+    /// <p>The resource.</p>
+    #[serde(rename = "Resource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource: Option<String>,
+    /// <p>The modification state.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ModifyWorkspacePropertiesRequest {
     /// <p>The ID of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
     pub workspace_id: String,
-    /// <p>The WorkSpace properties of the request.</p>
+    /// <p>The properties of the WorkSpace.</p>
     #[serde(rename = "WorkspaceProperties")]
     pub workspace_properties: WorkspaceProperties,
 }
@@ -298,57 +297,62 @@ pub struct ModifyWorkspacePropertiesRequest {
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ModifyWorkspacePropertiesResult;
 
-/// <p>Contains information used with the <a>RebootWorkspaces</a> operation to reboot a WorkSpace.</p>
+/// <p>Information used to reboot a WorkSpace.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct RebootRequest {
-    /// <p>The identifier of the WorkSpace to reboot.</p>
+    /// <p>The identifier of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
     pub workspace_id: String,
 }
 
-/// <p>Contains the inputs for the <a>RebootWorkspaces</a> operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct RebootWorkspacesRequest {
-    /// <p>An array of structures that specify the WorkSpaces to reboot.</p>
+    /// <p>The WorkSpaces to reboot.</p>
     #[serde(rename = "RebootWorkspaceRequests")]
     pub reboot_workspace_requests: Vec<RebootRequest>,
 }
 
-/// <p>Contains the results of the <a>RebootWorkspaces</a> operation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct RebootWorkspacesResult {
-    /// <p>An array of structures representing any WorkSpaces that could not be rebooted.</p>
+    /// <p>Information about the WorkSpaces that could not be rebooted.</p>
     #[serde(rename = "FailedRequests")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_requests: Option<Vec<FailedWorkspaceChangeRequest>>,
 }
 
-/// <p>Contains information used with the <a>RebuildWorkspaces</a> operation to rebuild a WorkSpace.</p>
+/// <p>Information used to rebuild a WorkSpace.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct RebuildRequest {
-    /// <p>The identifier of the WorkSpace to rebuild.</p>
+    /// <p>The identifier of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
     pub workspace_id: String,
 }
 
-/// <p>Contains the inputs for the <a>RebuildWorkspaces</a> operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct RebuildWorkspacesRequest {
-    /// <p>An array of structures that specify the WorkSpaces to rebuild.</p>
+    /// <p>The WorkSpaces to rebuild.</p>
     #[serde(rename = "RebuildWorkspaceRequests")]
     pub rebuild_workspace_requests: Vec<RebuildRequest>,
 }
 
-/// <p>Contains the results of the <a>RebuildWorkspaces</a> operation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct RebuildWorkspacesResult {
-    /// <p>An array of structures representing any WorkSpaces that could not be rebuilt.</p>
+    /// <p>Information about the WorkSpaces that could not be rebuilt.</p>
     #[serde(rename = "FailedRequests")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_requests: Option<Vec<FailedWorkspaceChangeRequest>>,
 }
 
-/// <p>Describes the start request.</p>
+/// <p>Information about the root volume for a WorkSpace bundle.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct RootStorage {
+    /// <p>The size of the root volume.</p>
+    #[serde(rename = "Capacity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub capacity: Option<String>,
+}
+
+/// <p>Information used to start a WorkSpace.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct StartRequest {
     /// <p>The ID of the WorkSpace.</p>
@@ -359,20 +363,20 @@ pub struct StartRequest {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct StartWorkspacesRequest {
-    /// <p>The requests.</p>
+    /// <p>The WorkSpaces to start.</p>
     #[serde(rename = "StartWorkspaceRequests")]
     pub start_workspace_requests: Vec<StartRequest>,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct StartWorkspacesResult {
-    /// <p>The failed requests.</p>
+    /// <p>Information about the WorkSpaces that could not be started.</p>
     #[serde(rename = "FailedRequests")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_requests: Option<Vec<FailedWorkspaceChangeRequest>>,
 }
 
-/// <p>Describes the stop request.</p>
+/// <p>Information used to stop a WorkSpace.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct StopRequest {
     /// <p>The ID of the WorkSpace.</p>
@@ -383,20 +387,20 @@ pub struct StopRequest {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct StopWorkspacesRequest {
-    /// <p>The requests.</p>
+    /// <p>The WorkSpaces to stop.</p>
     #[serde(rename = "StopWorkspaceRequests")]
     pub stop_workspace_requests: Vec<StopRequest>,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct StopWorkspacesResult {
-    /// <p>The failed requests.</p>
+    /// <p>Information about the WorkSpaces that could not be stopped.</p>
     #[serde(rename = "FailedRequests")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_requests: Option<Vec<FailedWorkspaceChangeRequest>>,
 }
 
-/// <p>Describes the tag of the WorkSpace.</p>
+/// <p>Information about a tag.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Tag {
     /// <p>The key of the tag.</p>
@@ -408,60 +412,58 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
-/// <p>Contains information used with the <a>TerminateWorkspaces</a> operation to terminate a WorkSpace.</p>
+/// <p>Information used to terminate a WorkSpace.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct TerminateRequest {
-    /// <p>The identifier of the WorkSpace to terminate.</p>
+    /// <p>The identifier of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
     pub workspace_id: String,
 }
 
-/// <p>Contains the inputs for the <a>TerminateWorkspaces</a> operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct TerminateWorkspacesRequest {
-    /// <p>An array of structures that specify the WorkSpaces to terminate.</p>
+    /// <p>The WorkSpaces to terminate.</p>
     #[serde(rename = "TerminateWorkspaceRequests")]
     pub terminate_workspace_requests: Vec<TerminateRequest>,
 }
 
-/// <p>Contains the results of the <a>TerminateWorkspaces</a> operation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct TerminateWorkspacesResult {
-    /// <p>An array of structures representing any WorkSpaces that could not be terminated.</p>
+    /// <p>Information about the WorkSpaces that could not be terminated.</p>
     #[serde(rename = "FailedRequests")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_requests: Option<Vec<FailedWorkspaceChangeRequest>>,
 }
 
-/// <p>Contains information about the user storage for a WorkSpace bundle.</p>
+/// <p>Information about the user storage for a WorkSpace bundle.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UserStorage {
-    /// <p>The amount of user storage for the bundle.</p>
+    /// <p>The size of the user storage.</p>
     #[serde(rename = "Capacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub capacity: Option<String>,
 }
 
-/// <p>Contains information about a WorkSpace.</p>
+/// <p>Information about a WorkSpace.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Workspace {
-    /// <p>The identifier of the bundle that the WorkSpace was created from.</p>
+    /// <p>The identifier of the bundle used to create the WorkSpace.</p>
     #[serde(rename = "BundleId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bundle_id: Option<String>,
-    /// <p>The name of the WorkSpace as seen by the operating system.</p>
+    /// <p>The name of the WorkSpace, as seen by the operating system.</p>
     #[serde(rename = "ComputerName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub computer_name: Option<String>,
-    /// <p>The identifier of the AWS Directory Service directory that the WorkSpace belongs to.</p>
+    /// <p>The identifier of the AWS Directory Service directory for the WorkSpace.</p>
     #[serde(rename = "DirectoryId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub directory_id: Option<String>,
-    /// <p>If the WorkSpace could not be created, this contains the error code.</p>
+    /// <p>If the WorkSpace could not be created, contains the error code.</p>
     #[serde(rename = "ErrorCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_code: Option<String>,
-    /// <p>If the WorkSpace could not be created, this contains a textual error message that describes the failure.</p>
+    /// <p>If the WorkSpace could not be created, contains a textual error message that describes the failure.</p>
     #[serde(rename = "ErrorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
@@ -469,7 +471,11 @@ pub struct Workspace {
     #[serde(rename = "IpAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_address: Option<String>,
-    /// <p>Specifies whether the data stored on the root volume, or C: drive, is encrypted.</p>
+    /// <p>The modification states of the WorkSpace.</p>
+    #[serde(rename = "ModificationStates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub modification_states: Option<Vec<ModificationState>>,
+    /// <p>Indicates whether the data stored on the root volume is encrypted.</p>
     #[serde(rename = "RootVolumeEncryptionEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub root_volume_encryption_enabled: Option<bool>,
@@ -477,15 +483,15 @@ pub struct Workspace {
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
-    /// <p>The identifier of the subnet that the WorkSpace is in.</p>
+    /// <p>The identifier of the subnet for the WorkSpace.</p>
     #[serde(rename = "SubnetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_id: Option<String>,
-    /// <p>The user that the WorkSpace is assigned to.</p>
+    /// <p>The user for the WorkSpace.</p>
     #[serde(rename = "UserName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_name: Option<String>,
-    /// <p>Specifies whether the data stored on the user volume, or D: drive, is encrypted.</p>
+    /// <p>Indicates whether the data stored on the user volume is encrypted.</p>
     #[serde(rename = "UserVolumeEncryptionEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_volume_encryption_enabled: Option<bool>,
@@ -497,23 +503,24 @@ pub struct Workspace {
     #[serde(rename = "WorkspaceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub workspace_id: Option<String>,
+    /// <p>The properties of the WorkSpace.</p>
     #[serde(rename = "WorkspaceProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub workspace_properties: Option<WorkspaceProperties>,
 }
 
-/// <p>Contains information about a WorkSpace bundle.</p>
+/// <p>Information about a WorkSpace bundle.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct WorkspaceBundle {
     /// <p>The bundle identifier.</p>
     #[serde(rename = "BundleId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bundle_id: Option<String>,
-    /// <p>A <a>ComputeType</a> object that specifies the compute type for the bundle.</p>
+    /// <p>The compute type. For more information, see <a href="http://aws.amazon.com/workspaces/details/#Amazon_WorkSpaces_Bundles">Amazon WorkSpaces Bundles</a>.</p>
     #[serde(rename = "ComputeType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compute_type: Option<ComputeType>,
-    /// <p>The bundle description.</p>
+    /// <p>A description.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -521,11 +528,15 @@ pub struct WorkspaceBundle {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The owner of the bundle. This contains the owner's account identifier, or <code>AMAZON</code> if the bundle is provided by AWS.</p>
+    /// <p>The owner of the bundle. This is the account identifier of the owner, or <code>AMAZON</code> if the bundle is provided by AWS.</p>
     #[serde(rename = "Owner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
-    /// <p>A <a>UserStorage</a> object that specifies the amount of user storage that the bundle contains.</p>
+    /// <p>The size of the root volume.</p>
+    #[serde(rename = "RootStorage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub root_storage: Option<RootStorage>,
+    /// <p>The size of the user storage.</p>
     #[serde(rename = "UserStorage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_storage: Option<UserStorage>,
@@ -534,7 +545,7 @@ pub struct WorkspaceBundle {
 /// <p>Describes the connection status of a WorkSpace.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct WorkspaceConnectionStatus {
-    /// <p>The connection state of the WorkSpace. Returns UNKOWN if the WorkSpace is in a Stopped state.</p>
+    /// <p>The connection state of the WorkSpace. The connection state is unknown if the WorkSpace is stopped.</p>
     #[serde(rename = "ConnectionState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_state: Option<String>,
@@ -575,7 +586,7 @@ pub struct WorkspaceDirectory {
     #[serde(rename = "DirectoryType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub directory_type: Option<String>,
-    /// <p>An array of strings that contains the IP addresses of the DNS servers for the directory.</p>
+    /// <p>The IP addresses of the DNS servers for the directory.</p>
     #[serde(rename = "DnsIpAddresses")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dns_ip_addresses: Option<Vec<String>>,
@@ -591,11 +602,11 @@ pub struct WorkspaceDirectory {
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
-    /// <p>An array of strings that contains the identifiers of the subnets used with the directory.</p>
+    /// <p>The identifiers of the subnets used with the directory.</p>
     #[serde(rename = "SubnetIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_ids: Option<Vec<String>>,
-    /// <p>A structure that specifies the default creation properties for all WorkSpaces in the directory.</p>
+    /// <p>The default creation properties for all WorkSpaces in the directory.</p>
     #[serde(rename = "WorkspaceCreationProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub workspace_creation_properties: Option<DefaultWorkspaceCreationProperties>,
@@ -605,10 +616,18 @@ pub struct WorkspaceDirectory {
     pub workspace_security_group_id: Option<String>,
 }
 
-/// <p>Describes the properties of a WorkSpace.</p>
+/// <p>Information about a WorkSpace.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct WorkspaceProperties {
-    /// <p>The running mode of the WorkSpace. AlwaysOn WorkSpaces are billed monthly. AutoStop WorkSpaces are billed by the hour and stopped when no longer being used in order to save on costs.</p>
+    /// <p>The compute type. For more information, see <a href="http://aws.amazon.com/workspaces/details/#Amazon_WorkSpaces_Bundles">Amazon WorkSpaces Bundles</a>.</p>
+    #[serde(rename = "ComputeTypeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compute_type_name: Option<String>,
+    /// <p>The size of the root volume.</p>
+    #[serde(rename = "RootVolumeSizeGib")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub root_volume_size_gib: Option<i64>,
+    /// <p>The running mode. For more information, see <a href="http://docs.aws.amazon.com/workspaces/latest/adminguide/running-mode.html">Manage the WorkSpace Running Mode</a>.</p>
     #[serde(rename = "RunningMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub running_mode: Option<String>,
@@ -616,29 +635,33 @@ pub struct WorkspaceProperties {
     #[serde(rename = "RunningModeAutoStopTimeoutInMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub running_mode_auto_stop_timeout_in_minutes: Option<i64>,
+    /// <p>The size of the user storage.</p>
+    #[serde(rename = "UserVolumeSizeGib")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_volume_size_gib: Option<i64>,
 }
 
-/// <p>Contains information about a WorkSpace creation request.</p>
+/// <p>Information used to create a WorkSpace.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct WorkspaceRequest {
-    /// <p>The identifier of the bundle to create the WorkSpace from. You can use the <a>DescribeWorkspaceBundles</a> operation to obtain a list of the bundles that are available.</p>
+    /// <p>The identifier of the bundle for the WorkSpace. You can use <a>DescribeWorkspaceBundles</a> to list the available bundles.</p>
     #[serde(rename = "BundleId")]
     pub bundle_id: String,
-    /// <p>The identifier of the AWS Directory Service directory to create the WorkSpace in. You can use the <a>DescribeWorkspaceDirectories</a> operation to obtain a list of the directories that are available.</p>
+    /// <p>The identifier of the AWS Directory Service directory for the WorkSpace. You can use <a>DescribeWorkspaceDirectories</a> to list the available directories.</p>
     #[serde(rename = "DirectoryId")]
     pub directory_id: String,
-    /// <p>Specifies whether the data stored on the root volume, or C: drive, is encrypted.</p>
+    /// <p>Indicates whether the data stored on the root volume is encrypted.</p>
     #[serde(rename = "RootVolumeEncryptionEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub root_volume_encryption_enabled: Option<bool>,
-    /// <p>The tags of the WorkSpace request.</p>
+    /// <p>The tags for the WorkSpace.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>The username that the WorkSpace is assigned to. This username must exist in the AWS Directory Service directory specified by the <code>DirectoryId</code> member.</p>
+    /// <p>The username of the user for the WorkSpace. This username must exist in the AWS Directory Service directory for the WorkSpace.</p>
     #[serde(rename = "UserName")]
     pub user_name: String,
-    /// <p>Specifies whether the data stored on the user volume, or D: drive, is encrypted.</p>
+    /// <p>Indicates whether the data stored on the user volume is encrypted.</p>
     #[serde(rename = "UserVolumeEncryptionEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_volume_encryption_enabled: Option<bool>,
@@ -646,6 +669,7 @@ pub struct WorkspaceRequest {
     #[serde(rename = "VolumeEncryptionKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub volume_encryption_key: Option<String>,
+    /// <p>The WorkSpace properties.</p>
     #[serde(rename = "WorkspaceProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub workspace_properties: Option<WorkspaceProperties>,
@@ -1809,79 +1833,79 @@ impl Error for TerminateWorkspacesError {
 }
 /// Trait representing the capabilities of the Amazon WorkSpaces API. Amazon WorkSpaces clients implement this trait.
 pub trait Workspaces {
-    /// <p>Creates tags for a WorkSpace.</p>
+    /// <p>Creates tags for the specified WorkSpace.</p>
     fn create_tags(&self, input: &CreateTagsRequest) -> Result<CreateTagsResult, CreateTagsError>;
 
-    /// <p><p>Creates one or more WorkSpaces.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces are created.</p> </note></p>
+    /// <p>Creates one or more WorkSpaces.</p> <p>This operation is asynchronous and returns before the WorkSpaces are created.</p>
     fn create_workspaces(
         &self,
         input: &CreateWorkspacesRequest,
     ) -> Result<CreateWorkspacesResult, CreateWorkspacesError>;
 
-    /// <p>Deletes tags from a WorkSpace.</p>
+    /// <p>Deletes the specified tags from a WorkSpace.</p>
     fn delete_tags(&self, input: &DeleteTagsRequest) -> Result<DeleteTagsResult, DeleteTagsError>;
 
-    /// <p>Describes tags for a WorkSpace.</p>
+    /// <p>Describes the tags for the specified WorkSpace.</p>
     fn describe_tags(
         &self,
         input: &DescribeTagsRequest,
     ) -> Result<DescribeTagsResult, DescribeTagsError>;
 
-    /// <p>Obtains information about the WorkSpace bundles that are available to your account in the specified region.</p> <p>You can filter the results with either the <code>BundleIds</code> parameter, or the <code>Owner</code> parameter, but not both.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>
+    /// <p>Describes the available WorkSpace bundles.</p> <p>You can filter the results using either bundle ID or owner, but not both.</p>
     fn describe_workspace_bundles(
         &self,
         input: &DescribeWorkspaceBundlesRequest,
     ) -> Result<DescribeWorkspaceBundlesResult, DescribeWorkspaceBundlesError>;
 
-    /// <p>Retrieves information about the AWS Directory Service directories in the region that are registered with Amazon WorkSpaces and are available to your account.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>
+    /// <p>Describes the available AWS Directory Service directories that are registered with Amazon WorkSpaces.</p>
     fn describe_workspace_directories(
         &self,
         input: &DescribeWorkspaceDirectoriesRequest,
     ) -> Result<DescribeWorkspaceDirectoriesResult, DescribeWorkspaceDirectoriesError>;
 
-    /// <p>Obtains information about the specified WorkSpaces.</p> <p>Only one of the filter parameters, such as <code>BundleId</code>, <code>DirectoryId</code>, or <code>WorkspaceIds</code>, can be specified at a time.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>
+    /// <p>Describes the specified WorkSpaces.</p> <p>You can filter the results using bundle ID, directory ID, or owner, but you can specify only one filter at a time.</p>
     fn describe_workspaces(
         &self,
         input: &DescribeWorkspacesRequest,
     ) -> Result<DescribeWorkspacesResult, DescribeWorkspacesError>;
 
-    /// <p>Describes the connection status of a specified WorkSpace.</p>
+    /// <p>Describes the connection status of the specified WorkSpaces.</p>
     fn describe_workspaces_connection_status(
         &self,
         input: &DescribeWorkspacesConnectionStatusRequest,
     ) -> Result<DescribeWorkspacesConnectionStatusResult, DescribeWorkspacesConnectionStatusError>;
 
-    /// <p>Modifies the WorkSpace properties, including the running mode and AutoStop time.</p>
+    /// <p>Modifies the specified WorkSpace properties.</p>
     fn modify_workspace_properties(
         &self,
         input: &ModifyWorkspacePropertiesRequest,
     ) -> Result<ModifyWorkspacePropertiesResult, ModifyWorkspacePropertiesError>;
 
-    /// <p><p>Reboots the specified WorkSpaces.</p> <p>To be able to reboot a WorkSpace, the WorkSpace must have a <b>State</b> of <code>AVAILABLE</code>, <code>IMPAIRED</code>, or <code>INOPERABLE</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have rebooted.</p> </note></p>
+    /// <p>Reboots the specified WorkSpaces.</p> <p>You cannot reboot a WorkSpace unless its state is <code>AVAILABLE</code>, <code>IMPAIRED</code>, or <code>INOPERABLE</code>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have rebooted.</p>
     fn reboot_workspaces(
         &self,
         input: &RebootWorkspacesRequest,
     ) -> Result<RebootWorkspacesResult, RebootWorkspacesError>;
 
-    /// <p><p>Rebuilds the specified WorkSpaces.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. Rebuilding a WorkSpace causes the following to occur:</p> <ul> <li> <p>The system is restored to the image of the bundle that the WorkSpace is created from. Any applications that have been installed, or system settings that have been made since the WorkSpace was created will be lost.</p> </li> <li> <p>The data drive (D drive) is re-created from the last automatic snapshot taken of the data drive. The current contents of the data drive are overwritten. Automatic snapshots of the data drive are taken every 12 hours, so the snapshot can be as much as 12 hours old.</p> </li> </ul> <p>To be able to rebuild a WorkSpace, the WorkSpace must have a <b>State</b> of <code>AVAILABLE</code> or <code>ERROR</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p> </note></p>
+    /// <p>Rebuilds the specified WorkSpaces.</p> <p>You cannot rebuild a WorkSpace unless its state is <code>AVAILABLE</code> or <code>ERROR</code>.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. For more information, see <a href="http://docs.aws.amazon.com/workspaces/latest/adminguide/reset-workspace.html">Rebuild a WorkSpace</a>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p>
     fn rebuild_workspaces(
         &self,
         input: &RebuildWorkspacesRequest,
     ) -> Result<RebuildWorkspacesResult, RebuildWorkspacesError>;
 
-    /// <p>Starts the specified WorkSpaces. The WorkSpaces must have a running mode of AutoStop and a state of STOPPED.</p>
+    /// <p>Starts the specified WorkSpaces.</p> <p>You cannot start a WorkSpace unless it has a running mode of <code>AutoStop</code> and a state of <code>STOPPED</code>.</p>
     fn start_workspaces(
         &self,
         input: &StartWorkspacesRequest,
     ) -> Result<StartWorkspacesResult, StartWorkspacesError>;
 
-    /// <p> Stops the specified WorkSpaces. The WorkSpaces must have a running mode of AutoStop and a state of AVAILABLE, IMPAIRED, UNHEALTHY, or ERROR.</p>
+    /// <p> Stops the specified WorkSpaces.</p> <p>You cannot stop a WorkSpace unless it has a running mode of <code>AutoStop</code> and a state of <code>AVAILABLE</code>, <code>IMPAIRED</code>, <code>UNHEALTHY</code>, or <code>ERROR</code>.</p>
     fn stop_workspaces(
         &self,
         input: &StopWorkspacesRequest,
     ) -> Result<StopWorkspacesResult, StopWorkspacesError>;
 
-    /// <p><p>Terminates the specified WorkSpaces.</p> <p>Terminating a WorkSpace is a permanent action and cannot be undone. The user&#39;s data is not maintained and will be destroyed. If you need to archive any user data, contact Amazon Web Services before terminating the WorkSpace.</p> <p>You can terminate a WorkSpace that is in any state except <code>SUSPENDED</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have been completely terminated.</p> </note></p>
+    /// <p>Terminates the specified WorkSpaces.</p> <p>Terminating a WorkSpace is a permanent action and cannot be undone. The user's data is destroyed. If you need to archive any user data, contact Amazon Web Services before terminating the WorkSpace.</p> <p>You can terminate a WorkSpace that is in any state except <code>SUSPENDED</code>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely terminated.</p>
     fn terminate_workspaces(
         &self,
         input: &TerminateWorkspacesRequest,
@@ -1917,7 +1941,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    /// <p>Creates tags for a WorkSpace.</p>
+    /// <p>Creates tags for the specified WorkSpace.</p>
     fn create_tags(&self, input: &CreateTagsRequest) -> Result<CreateTagsResult, CreateTagsError> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
@@ -1948,7 +1972,7 @@ where
         }
     }
 
-    /// <p><p>Creates one or more WorkSpaces.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces are created.</p> </note></p>
+    /// <p>Creates one or more WorkSpaces.</p> <p>This operation is asynchronous and returns before the WorkSpaces are created.</p>
     fn create_workspaces(
         &self,
         input: &CreateWorkspacesRequest,
@@ -1982,7 +2006,7 @@ where
         }
     }
 
-    /// <p>Deletes tags from a WorkSpace.</p>
+    /// <p>Deletes the specified tags from a WorkSpace.</p>
     fn delete_tags(&self, input: &DeleteTagsRequest) -> Result<DeleteTagsResult, DeleteTagsError> {
         let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
 
@@ -2013,7 +2037,7 @@ where
         }
     }
 
-    /// <p>Describes tags for a WorkSpace.</p>
+    /// <p>Describes the tags for the specified WorkSpace.</p>
     fn describe_tags(
         &self,
         input: &DescribeTagsRequest,
@@ -2047,7 +2071,7 @@ where
         }
     }
 
-    /// <p>Obtains information about the WorkSpace bundles that are available to your account in the specified region.</p> <p>You can filter the results with either the <code>BundleIds</code> parameter, or the <code>Owner</code> parameter, but not both.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>
+    /// <p>Describes the available WorkSpace bundles.</p> <p>You can filter the results using either bundle ID or owner, but not both.</p>
     fn describe_workspace_bundles(
         &self,
         input: &DescribeWorkspaceBundlesRequest,
@@ -2081,7 +2105,7 @@ where
         }
     }
 
-    /// <p>Retrieves information about the AWS Directory Service directories in the region that are registered with Amazon WorkSpaces and are available to your account.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>
+    /// <p>Describes the available AWS Directory Service directories that are registered with Amazon WorkSpaces.</p>
     fn describe_workspace_directories(
         &self,
         input: &DescribeWorkspaceDirectoriesRequest,
@@ -2118,7 +2142,7 @@ where
         }
     }
 
-    /// <p>Obtains information about the specified WorkSpaces.</p> <p>Only one of the filter parameters, such as <code>BundleId</code>, <code>DirectoryId</code>, or <code>WorkspaceIds</code>, can be specified at a time.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>NextToken</code> response member contains a token that you pass in the next call to this operation to retrieve the next set of items.</p>
+    /// <p>Describes the specified WorkSpaces.</p> <p>You can filter the results using bundle ID, directory ID, or owner, but you can specify only one filter at a time.</p>
     fn describe_workspaces(
         &self,
         input: &DescribeWorkspacesRequest,
@@ -2152,7 +2176,7 @@ where
         }
     }
 
-    /// <p>Describes the connection status of a specified WorkSpace.</p>
+    /// <p>Describes the connection status of the specified WorkSpaces.</p>
     fn describe_workspaces_connection_status(
         &self,
         input: &DescribeWorkspacesConnectionStatusRequest,
@@ -2192,7 +2216,7 @@ where
         }
     }
 
-    /// <p>Modifies the WorkSpace properties, including the running mode and AutoStop time.</p>
+    /// <p>Modifies the specified WorkSpace properties.</p>
     fn modify_workspace_properties(
         &self,
         input: &ModifyWorkspacePropertiesRequest,
@@ -2229,7 +2253,7 @@ where
         }
     }
 
-    /// <p><p>Reboots the specified WorkSpaces.</p> <p>To be able to reboot a WorkSpace, the WorkSpace must have a <b>State</b> of <code>AVAILABLE</code>, <code>IMPAIRED</code>, or <code>INOPERABLE</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have rebooted.</p> </note></p>
+    /// <p>Reboots the specified WorkSpaces.</p> <p>You cannot reboot a WorkSpace unless its state is <code>AVAILABLE</code>, <code>IMPAIRED</code>, or <code>INOPERABLE</code>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have rebooted.</p>
     fn reboot_workspaces(
         &self,
         input: &RebootWorkspacesRequest,
@@ -2263,7 +2287,7 @@ where
         }
     }
 
-    /// <p><p>Rebuilds the specified WorkSpaces.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. Rebuilding a WorkSpace causes the following to occur:</p> <ul> <li> <p>The system is restored to the image of the bundle that the WorkSpace is created from. Any applications that have been installed, or system settings that have been made since the WorkSpace was created will be lost.</p> </li> <li> <p>The data drive (D drive) is re-created from the last automatic snapshot taken of the data drive. The current contents of the data drive are overwritten. Automatic snapshots of the data drive are taken every 12 hours, so the snapshot can be as much as 12 hours old.</p> </li> </ul> <p>To be able to rebuild a WorkSpace, the WorkSpace must have a <b>State</b> of <code>AVAILABLE</code> or <code>ERROR</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p> </note></p>
+    /// <p>Rebuilds the specified WorkSpaces.</p> <p>You cannot rebuild a WorkSpace unless its state is <code>AVAILABLE</code> or <code>ERROR</code>.</p> <p>Rebuilding a WorkSpace is a potentially destructive action that can result in the loss of data. For more information, see <a href="http://docs.aws.amazon.com/workspaces/latest/adminguide/reset-workspace.html">Rebuild a WorkSpace</a>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely rebuilt.</p>
     fn rebuild_workspaces(
         &self,
         input: &RebuildWorkspacesRequest,
@@ -2297,7 +2321,7 @@ where
         }
     }
 
-    /// <p>Starts the specified WorkSpaces. The WorkSpaces must have a running mode of AutoStop and a state of STOPPED.</p>
+    /// <p>Starts the specified WorkSpaces.</p> <p>You cannot start a WorkSpace unless it has a running mode of <code>AutoStop</code> and a state of <code>STOPPED</code>.</p>
     fn start_workspaces(
         &self,
         input: &StartWorkspacesRequest,
@@ -2331,7 +2355,7 @@ where
         }
     }
 
-    /// <p> Stops the specified WorkSpaces. The WorkSpaces must have a running mode of AutoStop and a state of AVAILABLE, IMPAIRED, UNHEALTHY, or ERROR.</p>
+    /// <p> Stops the specified WorkSpaces.</p> <p>You cannot stop a WorkSpace unless it has a running mode of <code>AutoStop</code> and a state of <code>AVAILABLE</code>, <code>IMPAIRED</code>, <code>UNHEALTHY</code>, or <code>ERROR</code>.</p>
     fn stop_workspaces(
         &self,
         input: &StopWorkspacesRequest,
@@ -2365,7 +2389,7 @@ where
         }
     }
 
-    /// <p><p>Terminates the specified WorkSpaces.</p> <p>Terminating a WorkSpace is a permanent action and cannot be undone. The user&#39;s data is not maintained and will be destroyed. If you need to archive any user data, contact Amazon Web Services before terminating the WorkSpace.</p> <p>You can terminate a WorkSpace that is in any state except <code>SUSPENDED</code>.</p> <note> <p>This operation is asynchronous and returns before the WorkSpaces have been completely terminated.</p> </note></p>
+    /// <p>Terminates the specified WorkSpaces.</p> <p>Terminating a WorkSpace is a permanent action and cannot be undone. The user's data is destroyed. If you need to archive any user data, contact Amazon Web Services before terminating the WorkSpace.</p> <p>You can terminate a WorkSpace that is in any state except <code>SUSPENDED</code>.</p> <p>This operation is asynchronous and returns before the WorkSpaces have been completely terminated.</p>
     fn terminate_workspaces(
         &self,
         input: &TerminateWorkspacesRequest,

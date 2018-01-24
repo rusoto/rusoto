@@ -28,7 +28,20 @@ use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::signature::SignedRequest;
 use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
-/// <p><p>Represents an AWS account that is associated with Amazon API Gateway.</p> <div class="remarks"> <p>To view the account info, call <code>GET</code> on this resource.</p> <h4>Error Codes</h4> <p>The following exception may be thrown when the request fails.</p> <ul> <li>UnauthorizedException</li> <li>NotFoundException</li> <li>TooManyRequestsException</li> </ul> <p>For detailed error code information, including the corresponding HTTP Status Codes, see <a href="http://docs.aws.amazon.com/apigateway/api-reference/handling-errors/#api-error-codes">API Gateway Error Codes</a></p> <h4>Example: Get the information about an account.</h4> <h5>Request</h5> <pre><code>GET /account HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160531T184618Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash} </code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;_links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/account-apigateway-{rel}.html&quot;, &quot;name&quot;: &quot;account&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/account&quot; }, &quot;account:update&quot;: { &quot;href&quot;: &quot;/account&quot; } }, &quot;cloudwatchRoleArn&quot;: &quot;arn:aws:iam::123456789012:role/apigAwsProxyRole&quot;, &quot;throttleSettings&quot;: { &quot;rateLimit&quot;: 500, &quot;burstLimit&quot;: 1000 } } </code></pre> <p>In addition to making the REST API call directly, you can use the AWS CLI and an AWS SDK to access this resource.</p> </div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-limits.html">API Gateway Limits</a> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html">Developer Guide</a>, <a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-account.html">AWS CLI</a> </div></p>
+/// <p>Access log settings, including the access log format and access log destination ARN.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct AccessLogSettings {
+    /// <p>The ARN of the CloudWatch Logs log group to receive access logs.</p>
+    #[serde(rename = "destinationArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_arn: Option<String>,
+    /// <p>A single line format of the access logs of data, as specified by selected <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-mapping-template-reference.html#context-variable-reference">$context variables</a>. The format must include at least <code>$context.requestId</code>.</p>
+    #[serde(rename = "format")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub format: Option<String>,
+}
+
+/// <p><p>Represents an AWS account that is associated with API Gateway.</p> <div class="remarks"> <p>To view the account info, call <code>GET</code> on this resource.</p> <h4>Error Codes</h4> <p>The following exception may be thrown when the request fails.</p> <ul> <li>UnauthorizedException</li> <li>NotFoundException</li> <li>TooManyRequestsException</li> </ul> <p>For detailed error code information, including the corresponding HTTP Status Codes, see <a href="http://docs.aws.amazon.com/apigateway/api-reference/handling-errors/#api-error-codes">API Gateway Error Codes</a></p> <h4>Example: Get the information about an account.</h4> <h5>Request</h5> <pre><code>GET /account HTTP/1.1 Content-Type: application/json Host: apigateway.us-east-1.amazonaws.com X-Amz-Date: 20160531T184618Z Authorization: AWS4-HMAC-SHA256 Credential={access<em>key</em>ID}/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature={sig4</em>hash} </code></pre> <h5>Response</h5> <p>The successful response returns a <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;_links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/account-apigateway-{rel}.html&quot;, &quot;name&quot;: &quot;account&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/account&quot; }, &quot;account:update&quot;: { &quot;href&quot;: &quot;/account&quot; } }, &quot;cloudwatchRoleArn&quot;: &quot;arn:aws:iam::123456789012:role/apigAwsProxyRole&quot;, &quot;throttleSettings&quot;: { &quot;rateLimit&quot;: 500, &quot;burstLimit&quot;: 1000 } } </code></pre> <p>In addition to making the REST API call directly, you can use the AWS CLI and an AWS SDK to access this resource.</p> </div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-limits.html">API Gateway Limits</a> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html">Developer Guide</a>, <a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-account.html">AWS CLI</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Account {
     /// <p>The version of the API keys used for the account.</p>
@@ -135,19 +148,19 @@ pub struct ApiStage {
 /// <p><p>Represents an authorization layer for methods. If enabled on a method, API Gateway will activate the authorizer when a client calls the method.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html">Enable custom authorization</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Authorizer {
-    /// <p>Optional customer-defined field, used in Swagger imports/exports. Has no functional impact.</p>
+    /// <p>Optional customer-defined field, used in Swagger imports and exports without functional impact.</p>
     #[serde(rename = "authType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_type: Option<String>,
-    /// <p>Specifies the credentials required for the authorizer, if any. Two options are available. To specify an IAM role for Amazon API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null.</p>
+    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null.</p>
     #[serde(rename = "authorizerCredentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_credentials: Option<String>,
-    /// <p>The TTL in seconds of cached authorizer results. If greater than 0, API Gateway will cache authorizer responses. If this field is not set, the default value is 300. The maximum value is 3600, or 1 hour.</p>
+    /// <p>The TTL in seconds of cached authorizer results. If it equals 0, authorization caching is disabled. If it is greater than 0, API Gateway will cache authorizer responses. If this field is not set, the default value is 300. The maximum value is 3600, or 1 hour.</p>
     #[serde(rename = "authorizerResultTtlInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_result_ttl_in_seconds: Option<i64>,
-    /// <p>[Required] Specifies the authorizer's Uniform Resource Identifier (URI). For <code>TOKEN</code> authorizers, this must be a well-formed Lambda function URI, for example, <code>arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:{account_id}:function:{lambda_function_name}/invocations</code>. In general, the URI has this form <code>arn:aws:apigateway:{region}:lambda:path/{service_api}</code>, where <code>{region}</code> is the same as the region hosting the Lambda function, <code>path</code> indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial <code>/</code>. For Lambda functions, this is usually of the form /2015-03-31/functions/[FunctionARN]/invocations.</p>
+    /// <p>Specifies the authorizer's Uniform Resource Identifier (URI). For <code>TOKEN</code> or <code>REQUEST</code> authorizers, this must be a well-formed Lambda function URI, for example, <code>arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:{account_id}:function:{lambda_function_name}/invocations</code>. In general, the URI has this form <code>arn:aws:apigateway:{region}:lambda:path/{service_api}</code>, where <code>{region}</code> is the same as the region hosting the Lambda function, <code>path</code> indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial <code>/</code>. For Lambda functions, this is usually of the form <code>/2015-03-31/functions/[FunctionARN]/invocations</code>.</p>
     #[serde(rename = "authorizerUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_uri: Option<String>,
@@ -155,11 +168,11 @@ pub struct Authorizer {
     #[serde(rename = "id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>[Required] The source of the identity in an incoming request. For a <code>TOKEN</code> authorizer, this value is a mapping expression with the same syntax as integration parameter mappings. The only valid source for tokens is 'header', so the expression should match 'method.request.header.[headerName]'. The value of the header '[headerName]' will be interpreted as the incoming token. For <code>COGNITO_USER_POOLS</code> authorizers, this property is used.</p>
+    /// <p>The identity source for which authorization is requested. <ul><li>For a <code>TOKEN</code> authorizer, this is required and specifies the request header mapping expression for the custom header holding the authorization token submitted by the client. For example, if the token header name is <code>Auth</code>, the header mapping expression is <code>method.request.header.Auth</code>.</li><li>For the <code>REQUEST</code> authorizer, this is required when authorization caching is enabled. The value is a comma-separated string of one or more mapping expressions of the specified request parameters. For example, if an <code>Auth</code> header, a <code>Name</code> query string parameter are defined as identity sources, this value is <code>method.request.header.Auth, method.request.querystring.Name</code>. These parameters will be used to derive the authorization caching key and to perform runtime validation of the <code>REQUEST</code> authorizer by verifying all of the identity-related request parameters are present, not null and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function, otherwise, it returns a 401 Unauthorized response without calling the Lambda function. The valid value is a string of comma-separated mapping expressions of the specified request parameters. When the authorization caching is not enabled, this property is optional.</li><li>For a <code>COGNITO_USER_POOLS</code> authorizer, this property is not used.</li></ul></p>
     #[serde(rename = "identitySource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_source: Option<String>,
-    /// <p>A validation expression for the incoming identity. For <code>TOKEN</code> authorizers, this value should be a regular expression. The incoming token from the client is matched against this expression, and will proceed if the token matches. If the token doesn't match, the client receives a 401 Unauthorized response.</p>
+    /// <p>A validation expression for the incoming identity token. For <code>TOKEN</code> authorizers, this value is a regular expression. API Gateway will match the incoming token from the client against the specified regular expression. It will invoke the authorizer's Lambda function there is a match. Otherwise, it will return a 401 Unauthorized response without calling the Lambda function. The validation expression does not apply to the <code>REQUEST</code> authorizer.</p>
     #[serde(rename = "identityValidationExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_validation_expression: Option<String>,
@@ -167,11 +180,11 @@ pub struct Authorizer {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>A list of the provider ARNs of the authorizer. For an <code>TOKEN</code> authorizer, this is not defined. For authorizers of the <code>COGNITO_USER_POOLS</code> type, each element corresponds to a user pool ARN of this format: <code>arn:aws:cognito-idp:{region}:{account_id}:userpool/{user_pool_id}</code>. </p>
+    /// <p>A list of the Amazon Cognito user pool ARNs for the <code>COGNITO_USER_POOLS</code> authorizer. Each element is of this format: <code>arn:aws:cognito-idp:{region}:{account_id}:userpool/{user_pool_id}</code>. For a <code>TOKEN</code> or <code>REQUEST</code> authorizer, this is not defined. </p>
     #[serde(rename = "providerARNs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_ar_ns: Option<Vec<String>>,
-    /// <p>[Required] The type of the authorizer. Currently, the valid type is <code>TOKEN</code> for a Lambda function or <code>COGNITO_USER_POOLS</code> for an Amazon Cognito user pool.</p>
+    /// <p>[Required] The authorizer type. Valid values are <code>TOKEN</code> for a Lambda function using a single authorization token submitted in a custom header, <code>REQUEST</code> for a Lambda function using incoming request parameters, and <code>COGNITO_USER_POOLS</code> for using an Amazon Cognito user pool.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -218,7 +231,28 @@ pub struct BasePathMappings {
     pub position: Option<String>,
 }
 
-/// <p><p>Represents a client certificate used to configure client-side SSL authentication while sending requests to the integration endpoint.</p> <div class="remarks">Client certificates are used authenticate an API by the back-end server. To authenticate an API client (or user), use a custom <a>Authorizer</a>.</div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/getting-started-client-side-ssl-authentication.html">Use Client-Side Certificate</a> </div></p>
+/// <p>Configuration settings of a canary deployment.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct CanarySettings {
+    /// <p>The ID of the canary deployment.</p>
+    #[serde(rename = "deploymentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_id: Option<String>,
+    /// <p>The percent (0-100) of traffic diverted to a canary deployment.</p>
+    #[serde(rename = "percentTraffic")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub percent_traffic: Option<f64>,
+    /// <p>Stage variables overridden for a canary release deployment, including new stage variables introduced in the canary. These stage variables are represented as a string-to-string map between stage variable names and their values.</p>
+    #[serde(rename = "stageVariableOverrides")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stage_variable_overrides: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A Boolean flag to indicate whether the canary deployment uses the stage cache or not.</p>
+    #[serde(rename = "useStageCache")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub use_stage_cache: Option<bool>,
+}
+
+/// <p><p>Represents a client certificate used to configure client-side SSL authentication while sending requests to the integration endpoint.</p> <div class="remarks">Client certificates are used to authenticate an API by the backend server. To authenticate an API client (or user), use IAM roles and policies, a custom <a>Authorizer</a> or an Amazon Cognito user pool.</div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/getting-started-client-side-ssl-authentication.html">Use Client-Side Certificate</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ClientCertificate {
     /// <p>The identifier of the client certificate.</p>
@@ -291,45 +325,46 @@ pub struct CreateApiKeyRequest {
 /// <p>Request to add a new <a>Authorizer</a> to an existing <a>RestApi</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateAuthorizerRequest {
-    /// <p>Optional customer-defined field, used in Swagger imports/exports. Has no functional impact.</p>
+    /// <p>Optional customer-defined field, used in Swagger imports and exports without functional impact.</p>
     #[serde(rename = "authType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_type: Option<String>,
-    /// <p>Specifies the credentials required for the authorizer, if any.</p>
+    /// <p>Specifies the required credentials as an IAM role for API Gateway to invoke the authorizer. To specify an IAM role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To use resource-based permissions on the Lambda function, specify null.</p>
     #[serde(rename = "authorizerCredentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_credentials: Option<String>,
-    /// <p>The TTL of cached authorizer results.</p>
+    /// <p>The TTL in seconds of cached authorizer results. If it equals 0, authorization caching is disabled. If it is greater than 0, API Gateway will cache authorizer responses. If this field is not set, the default value is 300. The maximum value is 3600, or 1 hour.</p>
     #[serde(rename = "authorizerResultTtlInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_result_ttl_in_seconds: Option<i64>,
-    /// <p>[Required] Specifies the authorizer's Uniform Resource Identifier (URI).</p>
+    /// <p>Specifies the authorizer's Uniform Resource Identifier (URI). For <code>TOKEN</code> or <code>REQUEST</code> authorizers, this must be a well-formed Lambda function URI, for example, <code>arn:aws:apigateway:us-west-2:lambda:path/2015-03-31/functions/arn:aws:lambda:us-west-2:{account_id}:function:{lambda_function_name}/invocations</code>. In general, the URI has this form <code>arn:aws:apigateway:{region}:lambda:path/{service_api}</code>, where <code>{region}</code> is the same as the region hosting the Lambda function, <code>path</code> indicates that the remaining substring in the URI should be treated as the path to the resource, including the initial <code>/</code>. For Lambda functions, this is usually of the form <code>/2015-03-31/functions/[FunctionARN]/invocations</code>.</p>
     #[serde(rename = "authorizerUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorizer_uri: Option<String>,
-    /// <p>[Required] The source of the identity in an incoming request.</p>
+    /// <p>The identity source for which authorization is requested. <ul><li>For a <code>TOKEN</code> authorizer, this is required and specifies the request header mapping expression for the custom header holding the authorization token submitted by the client. For example, if the token header name is <code>Auth</code>, the header mapping expression is <code>method.request.header.Auth</code>.</li><li>For the <code>REQUEST</code> authorizer, this is required when authorization caching is enabled. The value is a comma-separated string of one or more mapping expressions of the specified request parameters. For example, if an <code>Auth</code> header, a <code>Name</code> query string parameter are defined as identity sources, this value is <code>method.request.header.Auth, method.request.querystring.Name</code>. These parameters will be used to derive the authorization caching key and to perform runtime validation of the <code>REQUEST</code> authorizer by verifying all of the identity-related request parameters are present, not null and non-empty. Only when this is true does the authorizer invoke the authorizer Lambda function, otherwise, it returns a 401 Unauthorized response without calling the Lambda function. The valid value is a string of comma-separated mapping expressions of the specified request parameters. When the authorization caching is not enabled, this property is optional.</li><li>For a <code>COGNITO_USER_POOLS</code> authorizer, this property is not used.</li></ul></p>
     #[serde(rename = "identitySource")]
-    pub identity_source: String,
-    /// <p>A validation expression for the incoming identity.</p>
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_source: Option<String>,
+    /// <p>A validation expression for the incoming identity token. For <code>TOKEN</code> authorizers, this value is a regular expression. API Gateway will match the incoming token from the client against the specified regular expression. It will invoke the authorizer's Lambda function there is a match. Otherwise, it will return a 401 Unauthorized response without calling the Lambda function. The validation expression does not apply to the <code>REQUEST</code> authorizer.</p>
     #[serde(rename = "identityValidationExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_validation_expression: Option<String>,
     /// <p>[Required] The name of the authorizer.</p>
     #[serde(rename = "name")]
     pub name: String,
-    /// <p>A list of the Cognito Your User Pool authorizer's provider ARNs.</p>
+    /// <p>A list of the Amazon Cognito user pool ARNs for the <code>COGNITO_USER_POOLS</code> authorizer. Each element is of this format: <code>arn:aws:cognito-idp:{region}:{account_id}:userpool/{user_pool_id}</code>. For a <code>TOKEN</code> or <code>REQUEST</code> authorizer, this is not defined. </p>
     #[serde(rename = "providerARNs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_ar_ns: Option<Vec<String>>,
     /// <p>The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
-    /// <p>[Required] The type of the authorizer.</p>
+    /// <p>[Required] The authorizer type. Valid values are <code>TOKEN</code> for a Lambda function using a single authorization token submitted in a custom header, <code>REQUEST</code> for a Lambda function using incoming request parameters, and <code>COGNITO_USER_POOLS</code> for using an Amazon Cognito user pool.</p>
     #[serde(rename = "type")]
     pub type_: String,
 }
 
-/// <p>Requests Amazon API Gateway to create a new <a>BasePathMapping</a> resource.</p>
+/// <p>Requests API Gateway to create a new <a>BasePathMapping</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateBasePathMappingRequest {
     /// <p>The base path name that callers of the API must provide as part of the URL after the domain name. This value must be unique for all of the mappings across a single API. Leave this blank if you do not want callers to specify a base path name after the domain name.</p>
@@ -348,7 +383,7 @@ pub struct CreateBasePathMappingRequest {
     pub stage: Option<String>,
 }
 
-/// <p>Requests Amazon API Gateway to create a <a>Deployment</a> resource.</p>
+/// <p>Requests API Gateway to create a <a>Deployment</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateDeploymentRequest {
     /// <p>Enables a cache cluster for the <a>Stage</a> resource specified in the input.</p>
@@ -359,6 +394,10 @@ pub struct CreateDeploymentRequest {
     #[serde(rename = "cacheClusterSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cache_cluster_size: Option<String>,
+    /// <p>The input configuration for the canary deployment when the deployment is a canary release deployment. </p>
+    #[serde(rename = "canarySettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub canary_settings: Option<DeploymentCanarySettings>,
     /// <p>The description for the <a>Deployment</a> resource to create.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -416,29 +455,41 @@ pub struct CreateDocumentationVersionRequest {
 /// <p>A request to create a new domain name.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateDomainNameRequest {
-    /// <p>The reference to an AWS-managed certificate. AWS Certificate Manager is the only supported source.</p>
+    /// <p>The reference to an AWS-managed certificate that will be used by edge-optimized endpoint for this domain name. AWS Certificate Manager is the only supported source.</p>
     #[serde(rename = "certificateArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_arn: Option<String>,
-    /// <p>[Deprecated] The body of the server certificate provided by your certificate authority.</p>
+    /// <p>[Deprecated] The body of the server certificate that will be used by edge-optimized endpoint for this domain name provided by your certificate authority.</p>
     #[serde(rename = "certificateBody")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_body: Option<String>,
-    /// <p>[Deprecated] The intermediate certificates and optionally the root certificate, one after the other without any blank lines. If you include the root certificate, your certificate chain must start with intermediate certificates and end with the root certificate. Use the intermediate certificates that were provided by your certificate authority. Do not include any intermediaries that are not in the chain of trust path.</p>
+    /// <p>[Deprecated] The intermediate certificates and optionally the root certificate, one after the other without any blank lines, used by an edge-optimized endpoint for this domain name. If you include the root certificate, your certificate chain must start with intermediate certificates and end with the root certificate. Use the intermediate certificates that were provided by your certificate authority. Do not include any intermediaries that are not in the chain of trust path.</p>
     #[serde(rename = "certificateChain")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_chain: Option<String>,
-    /// <p>The user-friendly name of the certificate.</p>
+    /// <p>The user-friendly name of the certificate that will be used by edge-optimized endpoint for this domain name.</p>
     #[serde(rename = "certificateName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_name: Option<String>,
-    /// <p>[Deprecated] Your certificate's private key.</p>
+    /// <p>[Deprecated] Your edge-optimized endpoint's domain name certificate's private key.</p>
     #[serde(rename = "certificatePrivateKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_private_key: Option<String>,
     /// <p>(Required) The name of the <a>DomainName</a> resource.</p>
     #[serde(rename = "domainName")]
     pub domain_name: String,
+    /// <p>The endpoint configuration of this <a>DomainName</a> showing the endpoint types of the domain name. </p>
+    #[serde(rename = "endpointConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_configuration: Option<EndpointConfiguration>,
+    /// <p>The reference to an AWS-managed certificate that will be used by regional endpoint for this domain name. AWS Certificate Manager is the only supported source.</p>
+    #[serde(rename = "regionalCertificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regional_certificate_arn: Option<String>,
+    /// <p>The user-friendly name of the certificate that will be used by regional endpoint for this domain name.</p>
+    #[serde(rename = "regionalCertificateName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regional_certificate_name: Option<String>,
 }
 
 /// <p>Request to add a new <a>Model</a> to an existing <a>RestApi</a> resource.</p>
@@ -451,7 +502,7 @@ pub struct CreateModelRequest {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The name of the model.</p>
+    /// <p>The name of the model. Must be alphanumeric.</p>
     #[serde(rename = "name")]
     pub name: String,
     /// <p>The <a>RestApi</a> identifier under which the <a>Model</a> will be created.</p>
@@ -483,7 +534,7 @@ pub struct CreateRequestValidatorRequest {
     pub validate_request_parameters: Option<bool>,
 }
 
-/// <p>Requests Amazon API Gateway to create a <a>Resource</a> resource.</p>
+/// <p>Requests API Gateway to create a <a>Resource</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateResourceRequest {
     /// <p>The parent resource's identifier.</p>
@@ -500,6 +551,10 @@ pub struct CreateResourceRequest {
 /// <p>The POST Request to add a new <a>RestApi</a> resource to your collection.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateRestApiRequest {
+    /// <p>The source of the API key for metring requests according to a usage plan. Valid values are <ul><li><code>HEADER</code> to read the API key from the <code>X-API-Key</code> header of a request. </li><li><code>AUTHORIZER</code> to read the API key from the <code>UsageIdentifierKey</code> from a custom authorizer.</li></ul> </p>
+    #[serde(rename = "apiKeySource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_key_source: Option<String>,
     /// <p>The list of binary media types supported by the <a>RestApi</a>. By default, the <a>RestApi</a> supports only UTF-8-encoded text payloads.</p>
     #[serde(rename = "binaryMediaTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -512,6 +567,14 @@ pub struct CreateRestApiRequest {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>The endpoint configuration of this <a>RestApi</a> showing the endpoint types of the API. </p>
+    #[serde(rename = "endpointConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_configuration: Option<EndpointConfiguration>,
+    /// <p>A nullable integer used to enable (non-negative between 0 and 10485760 (10M) bytes, inclusive) or disable (null) compression on an API. When compression is enabled, compression or decompression are not applied on the payload if the payload size is smaller than this value. Setting it to zero allows compression for any payload size.</p>
+    #[serde(rename = "minimumCompressionSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub minimum_compression_size: Option<i64>,
     /// <p>The name of the <a>RestApi</a>.</p>
     #[serde(rename = "name")]
     pub name: String,
@@ -521,7 +584,7 @@ pub struct CreateRestApiRequest {
     pub version: Option<String>,
 }
 
-/// <p>Requests Amazon API Gateway to create a <a>Stage</a> resource.</p>
+/// <p>Requests API Gateway to create a <a>Stage</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateStageRequest {
     /// <p>Whether cache clustering is enabled for the stage.</p>
@@ -532,7 +595,11 @@ pub struct CreateStageRequest {
     #[serde(rename = "cacheClusterSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cache_cluster_size: Option<String>,
-    /// <p>The identifier of the <a>Deployment</a> resource for the <a>Stage</a> resource.</p>
+    /// <p>The canary deployment settings of this stage.</p>
+    #[serde(rename = "canarySettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub canary_settings: Option<CanarySettings>,
+    /// <p>[Required] The identifier of the <a>Deployment</a> resource for the <a>Stage</a> resource.</p>
     #[serde(rename = "deploymentId")]
     pub deployment_id: String,
     /// <p>The description of the <a>Stage</a> resource.</p>
@@ -546,9 +613,13 @@ pub struct CreateStageRequest {
     /// <p>The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
-    /// <p>The name for the <a>Stage</a> resource.</p>
+    /// <p>[Required] The name for the <a>Stage</a> resource.</p>
     #[serde(rename = "stageName")]
     pub stage_name: String,
+    /// <p>Key/Value map of strings. Valid character set is [a-zA-Z+-=._:/]. Tag key can be up to 128 characters and must not start with "aws:". Tag value can be up to 256 characters.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>A map that defines the stage variables for the new <a>Stage</a> resource. Variable names can have alphanumeric and underscore characters, and the values must match <code>[A-Za-z0-9-._~:/?#&amp;=,]+</code>.</p>
     #[serde(rename = "variables")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -593,6 +664,21 @@ pub struct CreateUsagePlanRequest {
     pub throttle: Option<ThrottleSettings>,
 }
 
+/// <p>Creates a VPC link, under the caller's account in a selected region, in an asynchronous operation that typically takes 2-4 minutes to complete and become operational. The caller must have permissions to create and update VPC Endpoint services.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateVpcLinkRequest {
+    /// <p>The description of the VPC link.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>[Required] The name used to label and identify the VPC link.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+    /// <p>[Required] The ARNs of network load balancers of the VPC targeted by the VPC link. The network load balancers must be owned by the same AWS account of the API owner.</p>
+    #[serde(rename = "targetArns")]
+    pub target_arns: Vec<String>,
+}
+
 /// <p>A request to delete the <a>ApiKey</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteApiKeyRequest {
@@ -631,7 +717,7 @@ pub struct DeleteClientCertificateRequest {
     pub client_certificate_id: String,
 }
 
-/// <p>Requests Amazon API Gateway to delete a <a>Deployment</a> resource.</p>
+/// <p>Requests API Gateway to delete a <a>Deployment</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteDeploymentRequest {
     /// <p>The identifier of the <a>Deployment</a> resource to delete.</p>
@@ -786,7 +872,7 @@ pub struct DeleteRestApiRequest {
     pub rest_api_id: String,
 }
 
-/// <p>Requests Amazon API Gateway to delete a <a>Stage</a> resource.</p>
+/// <p>Requests API Gateway to delete a <a>Stage</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteStageRequest {
     /// <p>The string identifier of the associated <a>RestApi</a>.</p>
@@ -816,6 +902,14 @@ pub struct DeleteUsagePlanRequest {
     pub usage_plan_id: String,
 }
 
+/// <p>Deletes an existing <a>VpcLink</a> of a specified identifier.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteVpcLinkRequest {
+    /// <p>[Required] The identifier of the <a>VpcLink</a>. It is used in an <a>Integration</a> to reference this <a>VpcLink</a>.</p>
+    #[serde(rename = "vpcLinkId")]
+    pub vpc_link_id: String,
+}
+
 /// <p><p>An immutable representation of a <a>RestApi</a> resource that can be called by users using <a>Stages</a>. A deployment must be associated with a <a>Stage</a> for it to be callable over the Internet.</p> <div class="remarks">To create a deployment, call <code>POST</code> on the <a>Deployments</a> resource of a <a>RestApi</a>. To view, update, or delete a deployment, call <code>GET</code>, <code>PATCH</code>, or <code>DELETE</code> on the specified deployment resource (<code>/restapis/{restapi<em>id}/deployments/{deployment</em>id}</code>).</div> <div class="seeAlso"><a>RestApi</a>, <a>Deployments</a>, <a>Stage</a>, <a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-deployment.html">AWS CLI</a>, <a href="https://aws.amazon.com/tools/">AWS SDKs</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Deployment {
@@ -839,6 +933,23 @@ pub struct Deployment {
     pub id: Option<String>,
 }
 
+/// <p>The input configuration for a canary deployment.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeploymentCanarySettings {
+    /// <p>The percentage (0.0-100.0) of traffic routed to the canary deployment.</p>
+    #[serde(rename = "percentTraffic")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub percent_traffic: Option<f64>,
+    /// <p>A stage variable overrides used for the canary release deployment. They can override existing stage variables or add new stage variables for the canary release deployment. These stage variables are represented as a string-to-string map between stage variable names and their values.</p>
+    #[serde(rename = "stageVariableOverrides")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stage_variable_overrides: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A Boolean flag to indicate whether the canary release deployment uses the stage cache or not.</p>
+    #[serde(rename = "useStageCache")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub use_stage_cache: Option<bool>,
+}
+
 /// <p><p>Represents a collection resource that contains zero or more references to your existing deployments, and links that guide you on how to interact with your collection. The collection offers a paginated view of the contained deployments.</p> <div class="remarks">To create a new deployment of a <a>RestApi</a>, make a <code>POST</code> request against this resource. To view, update, or delete an existing deployment, make a <code>GET</code>, <code>PATCH</code>, or <code>DELETE</code> request, respectively, on a specified <a>Deployment</a> resource.</div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-deploy-api.html">Deploying an API</a>, <a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-deployment.html">AWS CLI</a>, <a href="https://aws.amazon.com/tools/">AWS SDKs</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Deployments {
@@ -854,7 +965,7 @@ pub struct Deployments {
 /// <p><p>A documentation part for a targeted API entity.</p> <div class="remarks"> <p>A documentation part consists of a content map (<code>properties</code>) and a target (<code>location</code>). The target specifies an API entity to which the documentation content applies. The supported API entity types are <code>API</code>, <code>AUTHORIZER</code>, <code>MODEL</code>, <code>RESOURCE</code>, <code>METHOD</code>, <code>PATH<em>PARAMETER</code>, <code>QUERY</em>PARAMETER</code>, <code>REQUEST<em>HEADER</code>, <code>REQUEST</em>BODY</code>, <code>RESPONSE</code>, <code>RESPONSE<em>HEADER</code>, and <code>RESPONSE</em>BODY</code>. Valid <code>location</code> fields depend on the API entity type. All valid fields are not required.</p> <p>The content map is a JSON string of API-specific key-value pairs. Although an API can use any shape for the content map, only the Swagger-compliant documentation fields will be injected into the associated API entity definition in the exported Swagger definition file.</p></div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a>DocumentationParts</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DocumentationPart {
-    /// <p>The <a>DocumentationPart</a> identifier, generated by Amazon API Gateway when the <code>DocumentationPart</code> is created.</p>
+    /// <p>The <a>DocumentationPart</a> identifier, generated by API Gateway when the <code>DocumentationPart</code> is created.</p>
     #[serde(rename = "id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
@@ -868,7 +979,7 @@ pub struct DocumentationPart {
     pub properties: Option<String>,
 }
 
-/// <p><p>A collection of the imported <a>DocumentationPart</a> identifiers.</p> <div class="remarks">This is used to return the result when documentation parts in an external (e.g., Swagger) file are imported into Amazon API Gateway</div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a href="http://docs.aws.amazon.com/apigateway/api-reference/link-relation/documentationpart-import/">documentationpart:import</a>, <a>DocumentationPart</a> </div></p>
+/// <p><p>A collection of the imported <a>DocumentationPart</a> identifiers.</p> <div class="remarks">This is used to return the result when documentation parts in an external (e.g., Swagger) file are imported into API Gateway</div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-documenting-api.html">Documenting an API</a>, <a href="http://docs.aws.amazon.com/apigateway/api-reference/link-relation/documentationpart-import/">documentationpart:import</a>, <a>DocumentationPart</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DocumentationPartIds {
     /// <p>A list of the returned documentation part identifiers.</p>
@@ -900,7 +1011,7 @@ pub struct DocumentationPartLocation {
     #[serde(rename = "statusCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_code: Option<String>,
-    /// <p>The type of API entity to which the documentation content applies. It is a valid and required field for API entity types of <code>API</code>, <code>AUTHORIZER</code>, <code>MODEL</code>, <code>RESOURCE</code>, <code>METHOD</code>, <code>PATH_PARAMETER</code>, <code>QUERY_PARAMETER</code>, <code>REQUEST_HEADER</code>, <code>REQUEST_BODY</code>, <code>RESPONSE</code>, <code>RESPONSE_HEADER</code>, and <code>RESPONSE_BODY</code>. Content inheritance does not apply to any entity of the <code>API</code>, <code>AUTHROZER</code>, <code>METHOD</code>, <code>MODEL</code>, <code>REQUEST_BODY</code>, or <code>RESOURCE</code> type.</p>
+    /// <p>The type of API entity to which the documentation content applies. It is a valid and required field for API entity types of <code>API</code>, <code>AUTHORIZER</code>, <code>MODEL</code>, <code>RESOURCE</code>, <code>METHOD</code>, <code>PATH_PARAMETER</code>, <code>QUERY_PARAMETER</code>, <code>REQUEST_HEADER</code>, <code>REQUEST_BODY</code>, <code>RESPONSE</code>, <code>RESPONSE_HEADER</code>, and <code>RESPONSE_BODY</code>. Content inheritance does not apply to any entity of the <code>API</code>, <code>AUTHORIZER</code>, <code>METHOD</code>, <code>MODEL</code>, <code>REQUEST_BODY</code>, or <code>RESOURCE</code> type.</p>
     #[serde(rename = "type")]
     pub type_: String,
 }
@@ -946,29 +1057,53 @@ pub struct DocumentationVersions {
     pub position: Option<String>,
 }
 
-/// <p><p>Represents a domain name that is contained in a simpler, more intuitive URL that can be called.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Use Client-Side Certificate</a> </div></p>
+/// <p><p>Represents a custom domain name as a user-friendly host name of an API (<a>RestApi</a>).</p> <div class="Remarks"> <p>When you deploy an API, API Gateway creates a default host name for the API. This default API host name is of the <code>{restapi-id}.execute-api.{region}.amazonaws.com</code> format. With the default host name, you can access the API&#39;s root resource with the URL of <code>https://{restapi-id}.execute-api.{region}.amazonaws.com/{stage}/</code>. When you set up a custom domain name of <code>apis.example.com</code> for this API, you can then access the same resource using the URL of the <code>https://apis.examples.com/myApi</code>, where <code>myApi</code> is the base path mapping (<a>BasePathMapping</a>) of your API under the custom domain name. </p> </div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Set a Custom Host Name for an API</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DomainName {
-    /// <p>The reference to an AWS-managed certificate. AWS Certificate Manager is the only supported source.</p>
+    /// <p>The reference to an AWS-managed certificate that will be used by edge-optimized endpoint for this domain name. AWS Certificate Manager is the only supported source.</p>
     #[serde(rename = "certificateArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_arn: Option<String>,
-    /// <p>The name of the certificate.</p>
+    /// <p>The name of the certificate that will be used by edge-optimized endpoint for this domain name.</p>
     #[serde(rename = "certificateName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_name: Option<String>,
-    /// <p>The timestamp when the certificate was uploaded.</p>
+    /// <p>The timestamp when the certificate that was used by edge-optimized endpoint for this domain name was uploaded.</p>
     #[serde(rename = "certificateUploadDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_upload_date: Option<f64>,
-    /// <p>The domain name of the Amazon CloudFront distribution. For more information, see the <a href="http://aws.amazon.com/documentation/cloudfront/" target="_blank">Amazon CloudFront documentation</a>.</p>
+    /// <p>The domain name of the Amazon CloudFront distribution associated with this custom domain name for an edge-optimized endpoint. You set up this association when adding a DNS record pointing the custom domain name to this distribution name. For more information about CloudFront distributions, see the <a href="http://aws.amazon.com/documentation/cloudfront/" target="_blank">Amazon CloudFront documentation</a>.</p>
     #[serde(rename = "distributionDomainName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub distribution_domain_name: Option<String>,
+    /// <p>The region-agnostic Amazon Route 53 Hosted Zone ID of the edge-optimized endpoint. The valid value is <code>Z2FDTNDATAQYW2</code> for all the regions. For more information, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-regional-api-custom-domain-create.html">Set up a Regional Custom Domain Name</a> and <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html#apigateway_region">AWS Regions and Endpoints for API Gateway</a>. </p>
+    #[serde(rename = "distributionHostedZoneId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub distribution_hosted_zone_id: Option<String>,
     /// <p>The name of the <a>DomainName</a> resource.</p>
     #[serde(rename = "domainName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name: Option<String>,
+    /// <p>The endpoint configuration of this <a>DomainName</a> showing the endpoint types of the domain name. </p>
+    #[serde(rename = "endpointConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_configuration: Option<EndpointConfiguration>,
+    /// <p>The reference to an AWS-managed certificate that will be used for validating the regional domain name. AWS Certificate Manager is the only supported source.</p>
+    #[serde(rename = "regionalCertificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regional_certificate_arn: Option<String>,
+    /// <p>The name of the certificate that will be used for validating the regional domain name.</p>
+    #[serde(rename = "regionalCertificateName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regional_certificate_name: Option<String>,
+    /// <p>The domain name associated with the regional endpoint for this custom domain name. You set up this association by adding a DNS record that points the custom domain name to this regional domain name. The regional domain name is returned by API Gateway when you create a regional endpoint.</p>
+    #[serde(rename = "regionalDomainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regional_domain_name: Option<String>,
+    /// <p>The region-specific Amazon Route 53 Hosted Zone ID of the regional endpoint. For more information, see <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-regional-api-custom-domain-create.html">Set up a Regional Custom Domain Name</a> and <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html#apigateway_region">AWS Regions and Endpoints for API Gateway</a>. </p>
+    #[serde(rename = "regionalHostedZoneId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regional_hosted_zone_id: Option<String>,
 }
 
 /// <p><p>Represents a collection of <a>DomainName</a> resources.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-custom-domains.html">Use Client-Side Certificate</a> </div></p>
@@ -981,6 +1116,15 @@ pub struct DomainNames {
     #[serde(rename = "position")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub position: Option<String>,
+}
+
+/// <p>The endpoint configuration to indicate the types of endpoints an API (<a>RestApi</a>) or its custom domain name (<a>DomainName</a>) has. </p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct EndpointConfiguration {
+    /// <p>A list of endpoint types of an API (<a>RestApi</a>) or its custom domain name (<a>DomainName</a>). For an edge-optimized API and its custom domain name, the endpoint type is <code>"EDGE"</code>. For a regional API and its custom domain name, the endpoint type is <code>REGIONAL</code>.</p>
+    #[serde(rename = "types")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub types: Option<Vec<String>>,
 }
 
 /// <p>The binary blob response to <a>GetExport</a>, which contains the generated SDK.</p>
@@ -1005,7 +1149,7 @@ pub struct FlushStageAuthorizersCacheRequest {
     pub stage_name: String,
 }
 
-/// <p>Requests Amazon API Gateway to flush a stage's cache.</p>
+/// <p>Requests API Gateway to flush a stage's cache.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct FlushStageCacheRequest {
     /// <p>The string identifier of the associated <a>RestApi</a>.</p>
@@ -1016,10 +1160,10 @@ pub struct FlushStageCacheRequest {
     pub stage_name: String,
 }
 
-/// <p><p>A gateway response of a given response type and status code, with optional response parameters and mapping templates.</p> <div class="remarks"> For more information about valid gateway response types, see <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/supported-gateway-response-types.html">Gateway Response Types Supported by Amazon API Gateway</a> <div class="example"> <h4>Example: Get a Gateway Response of a given response type</h4> <h5>Request</h5> <p>This example shows how to get a gateway response of the <code>MISSING<em>AUTHNETICATION</em>TOKEN</code> type.</p> <pre><code>GET /restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN HTTP/1.1 Host: beta-apigateway.us-east-1.amazonaws.com Content-Type: application/json X-Amz-Date: 20170503T202516Z Authorization: AWS4-HMAC-SHA256 Credential={access-key-id}/20170503/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature=1b52460e3159c1a26cff29093855d50ea141c1c5b937528fecaf60f51129697a Cache-Control: no-cache Postman-Token: 3b2a1ce9-c848-2e26-2e2f-9c2caefbed45 </code></pre> <p>The response type is specified as a URL path.</p> <h5>Response</h5> <p>The successful operation returns the <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;</em>links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-gatewayresponse-{rel}.html&quot;, &quot;name&quot;: &quot;gatewayresponse&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; }, &quot;gatewayresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING</em>AUTHENTICATION<em>TOKEN&quot; } }, &quot;defaultResponse&quot;: false, &quot;responseParameters&quot;: { &quot;gatewayresponse.header.x-request-path&quot;: &quot;method.request.path.petId&quot;, &quot;gatewayresponse.header.Access-Control-Allow-Origin&quot;: &quot;&apos;a.b.c&apos;&quot;, &quot;gatewayresponse.header.x-request-query&quot;: &quot;method.request.querystring.q&quot;, &quot;gatewayresponse.header.x-request-header&quot;: &quot;method.request.header.Accept&quot; }, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{\n &quot;message&quot;: $context.error.messageString,\n &quot;type&quot;: &quot;$context.error.responseType&quot;,\n &quot;stage&quot;: &quot;$context.stage&quot;,\n &quot;resourcePath&quot;: &quot;$context.resourcePath&quot;,\n &quot;stageVariables.a&quot;: &quot;$stageVariables.a&quot;,\n &quot;statusCode&quot;: &quot;&apos;404&apos;&quot;\n}&quot; }, &quot;responseType&quot;: &quot;MISSING</em>AUTHENTICATION_TOKEN&quot;, &quot;statusCode&quot;: &quot;404&quot; }</code></pre> <p></p> </div> </div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/customize-gateway-responses.html">Customize Gateway Responses</a> </div></p>
+/// <p><p>A gateway response of a given response type and status code, with optional response parameters and mapping templates.</p> <div class="remarks"> For more information about valid gateway response types, see <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/supported-gateway-response-types.html">Gateway Response Types Supported by API Gateway</a> <div class="example"> <h4>Example: Get a Gateway Response of a given response type</h4> <h5>Request</h5> <p>This example shows how to get a gateway response of the <code>MISSING<em>AUTHENTICATION</em>TOKEN</code> type.</p> <pre><code>GET /restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN HTTP/1.1 Host: beta-apigateway.us-east-1.amazonaws.com Content-Type: application/json X-Amz-Date: 20170503T202516Z Authorization: AWS4-HMAC-SHA256 Credential={access-key-id}/20170503/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature=1b52460e3159c1a26cff29093855d50ea141c1c5b937528fecaf60f51129697a Cache-Control: no-cache Postman-Token: 3b2a1ce9-c848-2e26-2e2f-9c2caefbed45 </code></pre> <p>The response type is specified as a URL path.</p> <h5>Response</h5> <p>The successful operation returns the <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;</em>links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-gatewayresponse-{rel}.html&quot;, &quot;name&quot;: &quot;gatewayresponse&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; }, &quot;gatewayresponse:delete&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING</em>AUTHENTICATION<em>TOKEN&quot; } }, &quot;defaultResponse&quot;: false, &quot;responseParameters&quot;: { &quot;gatewayresponse.header.x-request-path&quot;: &quot;method.request.path.petId&quot;, &quot;gatewayresponse.header.Access-Control-Allow-Origin&quot;: &quot;&apos;a.b.c&apos;&quot;, &quot;gatewayresponse.header.x-request-query&quot;: &quot;method.request.querystring.q&quot;, &quot;gatewayresponse.header.x-request-header&quot;: &quot;method.request.header.Accept&quot; }, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{\n &quot;message&quot;: $context.error.messageString,\n &quot;type&quot;: &quot;$context.error.responseType&quot;,\n &quot;stage&quot;: &quot;$context.stage&quot;,\n &quot;resourcePath&quot;: &quot;$context.resourcePath&quot;,\n &quot;stageVariables.a&quot;: &quot;$stageVariables.a&quot;,\n &quot;statusCode&quot;: &quot;&apos;404&apos;&quot;\n}&quot; }, &quot;responseType&quot;: &quot;MISSING</em>AUTHENTICATION_TOKEN&quot;, &quot;statusCode&quot;: &quot;404&quot; }</code></pre> <p></p> </div> </div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/customize-gateway-responses.html">Customize Gateway Responses</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct GatewayResponse {
-    /// <p>A Boolean flag to indicate whether this <a>GatewayResponse</a> is the default gateway response (<code>true</code>) or not (<code>false</code>). A default gateway response is one generated by Amazon API Gateway without any customization by an API developer. </p>
+    /// <p>A Boolean flag to indicate whether this <a>GatewayResponse</a> is the default gateway response (<code>true</code>) or not (<code>false</code>). A default gateway response is one generated by API Gateway without any customization by an API developer. </p>
     #[serde(rename = "defaultResponse")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_response: Option<bool>,
@@ -1041,7 +1185,7 @@ pub struct GatewayResponse {
     pub status_code: Option<String>,
 }
 
-/// <p><p>The collection of the <a>GatewayResponse</a> instances of a <a>RestApi</a> as a <code>responseType</code>-to-<a>GatewayResponse</a> object map of key-value pairs. As such, pagination is not supported for querying this collection.</p> <div class="remarks"> For more information about valid gateway response types, see <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/supported-gateway-response-types.html">Gateway Response Types Supported by Amazon API Gateway</a> <div class="example"> <h4>Example: Get the collection of gateway responses of an API</h4> <h5>Request</h5> <p>This example request shows how to retrieve the <a>GatewayResponses</a> collection from an API.</p> <pre><code>GET /restapis/o81lxisefl/gatewayresponses HTTP/1.1 Host: beta-apigateway.us-east-1.amazonaws.com Content-Type: application/json X-Amz-Date: 20170503T220604Z Authorization: AWS4-HMAC-SHA256 Credential={access-key-id}/20170503/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature=59b42fe54a76a5de8adf2c67baa6d39206f8e9ad49a1d77ccc6a5da3103a398a Cache-Control: no-cache Postman-Token: 5637af27-dc29-fc5c-9dfe-0645d52cb515 </code></pre> <p></p> <h5>Response</h5> <p>The successful operation returns the <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;</em>links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-gatewayresponse-{rel}.html&quot;, &quot;name&quot;: &quot;gatewayresponse&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses&quot; }, &quot;first&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses&quot; }, &quot;gatewayresponse:by-type&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;item&quot;: [ { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION</em>FAILURE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/RESOURCE<em>NOT</em>FOUND&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/REQUEST<em>TOO</em>LARGE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/THROTTLED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED<em>MEDIA</em>TYPE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>CONFIGURATION</em>ERROR&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT<em>5XX&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT</em>4XX&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>PARAMETERS&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>BODY&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/EXPIRED<em>TOKEN&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/ACCESS</em>DENIED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID<em>API</em>KEY&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/API<em>CONFIGURATION</em>ERROR&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/QUOTA<em>EXCEEDED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION</em>TIMEOUT&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID<em>SIGNATURE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER</em>FAILURE&quot; } ] }, &quot;<em>embedded&quot;: { &quot;item&quot;: [ { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>FAILURE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>FAILURE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INTEGRATION</em>FAILURE&quot;, &quot;statusCode&quot;: &quot;504&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/RESOURCE</em>NOT<em>FOUND&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/RESOURCE<em>NOT</em>FOUND&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;RESOURCE<em>NOT</em>FOUND&quot;, &quot;statusCode&quot;: &quot;404&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/REQUEST</em>TOO<em>LARGE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/REQUEST<em>TOO</em>LARGE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;REQUEST<em>TOO</em>LARGE&quot;, &quot;statusCode&quot;: &quot;413&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/THROTTLED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/THROTTLED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;THROTTLED&quot;, &quot;statusCode&quot;: &quot;429&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED</em>MEDIA<em>TYPE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED<em>MEDIA</em>TYPE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;UNSUPPORTED<em>MEDIA</em>TYPE&quot;, &quot;statusCode&quot;: &quot;415&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER</em>CONFIGURATION<em>ERROR&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>CONFIGURATION</em>ERROR&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;AUTHORIZER<em>CONFIGURATION</em>ERROR&quot;, &quot;statusCode&quot;: &quot;500&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT</em>5XX&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT</em>5XX&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;DEFAULT<em>5XX&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT<em>4XX&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT<em>4XX&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;DEFAULT</em>4XX&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD</em>REQUEST<em>PARAMETERS&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>PARAMETERS&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;BAD<em>REQUEST</em>PARAMETERS&quot;, &quot;statusCode&quot;: &quot;400&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD</em>REQUEST<em>BODY&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>BODY&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;BAD<em>REQUEST</em>BODY&quot;, &quot;statusCode&quot;: &quot;400&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/EXPIRED</em>TOKEN&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/EXPIRED</em>TOKEN&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;EXPIRED<em>TOKEN&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/ACCESS<em>DENIED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/ACCESS<em>DENIED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;ACCESS</em>DENIED&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID</em>API<em>KEY&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID<em>API</em>KEY&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INVALID<em>API</em>KEY&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;UNAUTHORIZED&quot;, &quot;statusCode&quot;: &quot;401&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/API</em>CONFIGURATION<em>ERROR&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/API<em>CONFIGURATION</em>ERROR&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;API<em>CONFIGURATION</em>ERROR&quot;, &quot;statusCode&quot;: &quot;500&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/QUOTA</em>EXCEEDED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/QUOTA</em>EXCEEDED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;QUOTA<em>EXCEEDED&quot;, &quot;statusCode&quot;: &quot;429&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>TIMEOUT&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>TIMEOUT&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INTEGRATION</em>TIMEOUT&quot;, &quot;statusCode&quot;: &quot;504&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING</em>AUTHENTICATION<em>TOKEN&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;MISSING<em>AUTHENTICATION</em>TOKEN&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID</em>SIGNATURE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID</em>SIGNATURE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INVALID<em>SIGNATURE&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>FAILURE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>FAILURE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;AUTHORIZER</em>FAILURE&quot;, &quot;statusCode&quot;: &quot;500&quot; } ] } }</code></pre> <p></p> </div> </div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/customize-gateway-responses.html">Customize Gateway Responses</a> </div></p>
+/// <p><p>The collection of the <a>GatewayResponse</a> instances of a <a>RestApi</a> as a <code>responseType</code>-to-<a>GatewayResponse</a> object map of key-value pairs. As such, pagination is not supported for querying this collection.</p> <div class="remarks"> For more information about valid gateway response types, see <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/supported-gateway-response-types.html">Gateway Response Types Supported by API Gateway</a> <div class="example"> <h4>Example: Get the collection of gateway responses of an API</h4> <h5>Request</h5> <p>This example request shows how to retrieve the <a>GatewayResponses</a> collection from an API.</p> <pre><code>GET /restapis/o81lxisefl/gatewayresponses HTTP/1.1 Host: beta-apigateway.us-east-1.amazonaws.com Content-Type: application/json X-Amz-Date: 20170503T220604Z Authorization: AWS4-HMAC-SHA256 Credential={access-key-id}/20170503/us-east-1/apigateway/aws4<em>request, SignedHeaders=content-type;host;x-amz-date, Signature=59b42fe54a76a5de8adf2c67baa6d39206f8e9ad49a1d77ccc6a5da3103a398a Cache-Control: no-cache Postman-Token: 5637af27-dc29-fc5c-9dfe-0645d52cb515 </code></pre> <p></p> <h5>Response</h5> <p>The successful operation returns the <code>200 OK</code> status code and a payload similar to the following:</p> <pre><code>{ &quot;</em>links&quot;: { &quot;curies&quot;: { &quot;href&quot;: &quot;http://docs.aws.amazon.com/apigateway/latest/developerguide/restapi-gatewayresponse-{rel}.html&quot;, &quot;name&quot;: &quot;gatewayresponse&quot;, &quot;templated&quot;: true }, &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses&quot; }, &quot;first&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses&quot; }, &quot;gatewayresponse:by-type&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;item&quot;: [ { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION</em>FAILURE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/RESOURCE<em>NOT</em>FOUND&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/REQUEST<em>TOO</em>LARGE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/THROTTLED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED<em>MEDIA</em>TYPE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>CONFIGURATION</em>ERROR&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT<em>5XX&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT</em>4XX&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>PARAMETERS&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>BODY&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/EXPIRED<em>TOKEN&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/ACCESS</em>DENIED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID<em>API</em>KEY&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/API<em>CONFIGURATION</em>ERROR&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/QUOTA<em>EXCEEDED&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION</em>TIMEOUT&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID<em>SIGNATURE&quot; }, { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER</em>FAILURE&quot; } ] }, &quot;<em>embedded&quot;: { &quot;item&quot;: [ { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>FAILURE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>FAILURE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INTEGRATION</em>FAILURE&quot;, &quot;statusCode&quot;: &quot;504&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/RESOURCE</em>NOT<em>FOUND&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/RESOURCE<em>NOT</em>FOUND&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;RESOURCE<em>NOT</em>FOUND&quot;, &quot;statusCode&quot;: &quot;404&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/REQUEST</em>TOO<em>LARGE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/REQUEST<em>TOO</em>LARGE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;REQUEST<em>TOO</em>LARGE&quot;, &quot;statusCode&quot;: &quot;413&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/THROTTLED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/THROTTLED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;THROTTLED&quot;, &quot;statusCode&quot;: &quot;429&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED</em>MEDIA<em>TYPE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNSUPPORTED<em>MEDIA</em>TYPE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;UNSUPPORTED<em>MEDIA</em>TYPE&quot;, &quot;statusCode&quot;: &quot;415&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER</em>CONFIGURATION<em>ERROR&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>CONFIGURATION</em>ERROR&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;AUTHORIZER<em>CONFIGURATION</em>ERROR&quot;, &quot;statusCode&quot;: &quot;500&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT</em>5XX&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT</em>5XX&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;DEFAULT<em>5XX&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT<em>4XX&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/DEFAULT<em>4XX&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;DEFAULT</em>4XX&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD</em>REQUEST<em>PARAMETERS&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>PARAMETERS&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;BAD<em>REQUEST</em>PARAMETERS&quot;, &quot;statusCode&quot;: &quot;400&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD</em>REQUEST<em>BODY&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/BAD<em>REQUEST</em>BODY&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;BAD<em>REQUEST</em>BODY&quot;, &quot;statusCode&quot;: &quot;400&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/EXPIRED</em>TOKEN&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/EXPIRED</em>TOKEN&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;EXPIRED<em>TOKEN&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/ACCESS<em>DENIED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/ACCESS<em>DENIED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;ACCESS</em>DENIED&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID</em>API<em>KEY&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID<em>API</em>KEY&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INVALID<em>API</em>KEY&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/UNAUTHORIZED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;UNAUTHORIZED&quot;, &quot;statusCode&quot;: &quot;401&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/API</em>CONFIGURATION<em>ERROR&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/API<em>CONFIGURATION</em>ERROR&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;API<em>CONFIGURATION</em>ERROR&quot;, &quot;statusCode&quot;: &quot;500&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/QUOTA</em>EXCEEDED&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/QUOTA</em>EXCEEDED&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;QUOTA<em>EXCEEDED&quot;, &quot;statusCode&quot;: &quot;429&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>TIMEOUT&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INTEGRATION<em>TIMEOUT&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INTEGRATION</em>TIMEOUT&quot;, &quot;statusCode&quot;: &quot;504&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING</em>AUTHENTICATION<em>TOKEN&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/MISSING<em>AUTHENTICATION</em>TOKEN&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;MISSING<em>AUTHENTICATION</em>TOKEN&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;<em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID</em>SIGNATURE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response<em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/INVALID</em>SIGNATURE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;INVALID<em>SIGNATURE&quot;, &quot;statusCode&quot;: &quot;403&quot; }, { &quot;</em>links&quot;: { &quot;self&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>FAILURE&quot; }, &quot;gatewayresponse:put&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/{response</em>type}&quot;, &quot;templated&quot;: true }, &quot;gatewayresponse:update&quot;: { &quot;href&quot;: &quot;/restapis/o81lxisefl/gatewayresponses/AUTHORIZER<em>FAILURE&quot; } }, &quot;defaultResponse&quot;: true, &quot;responseParameters&quot;: {}, &quot;responseTemplates&quot;: { &quot;application/json&quot;: &quot;{&quot;message&quot;:$context.error.messageString}&quot; }, &quot;responseType&quot;: &quot;AUTHORIZER</em>FAILURE&quot;, &quot;statusCode&quot;: &quot;500&quot; } ] } }</code></pre> <p></p> </div> </div> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/customize-gateway-responses.html">Customize Gateway Responses</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct GatewayResponses {
     /// <p>Returns the entire collection, because of no pagination support.</p>
@@ -1062,7 +1206,7 @@ pub struct GenerateClientCertificateRequest {
     pub description: Option<String>,
 }
 
-/// <p>Requests Amazon API Gateway to get information about the current <a>Account</a> resource.</p>
+/// <p>Requests API Gateway to get information about the current <a>Account</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetAccountRequest;
 
@@ -1178,7 +1322,7 @@ pub struct GetClientCertificatesRequest {
     pub position: Option<String>,
 }
 
-/// <p>Requests Amazon API Gateway to get information about a <a>Deployment</a> resource.</p>
+/// <p>Requests API Gateway to get information about a <a>Deployment</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDeploymentRequest {
     /// <p>The identifier of the <a>Deployment</a> resource to get information about.</p>
@@ -1193,7 +1337,7 @@ pub struct GetDeploymentRequest {
     pub rest_api_id: String,
 }
 
-/// <p>Requests Amazon API Gateway to get information about a <a>Deployments</a> collection.</p>
+/// <p>Requests API Gateway to get information about a <a>Deployments</a> collection.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDeploymentsRequest {
     /// <p>The maximum number of returned results per page. The value is 25 by default and could be between 1 - 500.</p>
@@ -1227,6 +1371,10 @@ pub struct GetDocumentationPartsRequest {
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
+    /// <p>The status of the API documentation parts to retrieve. Valid values are <code>DOCUMENTED</code> for retrieving <a>DocumentationPart</a> resources with content and <code>UNDOCUMENTED</code> for <a>DocumentationPart</a> resources without content.</p>
+    #[serde(rename = "locationStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location_status: Option<String>,
     /// <p>The name of API entities of the to-be-retrieved documentation parts.</p>
     #[serde(rename = "nameQuery")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1329,7 +1477,7 @@ pub struct GetGatewayResponseRequest {
     pub rest_api_id: String,
 }
 
-/// <p>Gets the <a>GatewayResponses</a> collection on the given <a>RestApi</a>. If an API developer has not added any definitions for gateway responses, the result will be the Amazon API Gateway-generated default <a>GatewayResponses</a> collection for the supported response types.</p>
+/// <p>Gets the <a>GatewayResponses</a> collection on the given <a>RestApi</a>. If an API developer has not added any definitions for gateway responses, the result will be the API Gateway-generated default <a>GatewayResponses</a> collection for the supported response types.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetGatewayResponsesRequest {
     /// <p>The maximum number of returned results per page. The <a>GatewayResponses</a> collection does not support pagination and the limit does not apply here.</p>
@@ -1345,7 +1493,7 @@ pub struct GetGatewayResponsesRequest {
     pub rest_api_id: String,
 }
 
-/// <p>Represents a get integration request.</p>
+/// <p>Represents a request to get the integration configuration.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetIntegrationRequest {
     /// <p>Specifies a get integration request's HTTP method.</p>
@@ -1535,14 +1683,14 @@ pub struct GetRestApisRequest {
 /// <p>Request a new generated client SDK for a <a>RestApi</a> and <a>Stage</a>.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetSdkRequest {
-    /// <p>A key-value map of query string parameters that specify properties of the SDK, depending on the requested <code>sdkType</code>. For <code>sdkType</code> of <code>objectivec</code>, a parameter named <code>classPrefix</code> is required. For <code>sdkType</code> of <code>android</code>, parameters named <code>groupId</code>, <code>artifactId</code>, <code>artifactVersion</code>, and <code>invokerPackage</code> are required.</p>
+    /// <p>A string-to-string key-value map of query parameters <code>sdkType</code>-dependent properties of the SDK. For <code>sdkType</code> of <code>objectivec</code> or <code>swift</code>, a parameter named <code>classPrefix</code> is required. For <code>sdkType</code> of <code>android</code>, parameters named <code>groupId</code>, <code>artifactId</code>, <code>artifactVersion</code>, and <code>invokerPackage</code> are required. For <code>sdkType</code> of <code>java</code>, parameters named <code>serviceName</code> and <code>javaPackageName</code> are required. </p>
     #[serde(rename = "parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
     /// <p>The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
-    /// <p>The language for the generated SDK. Currently <code>javascript</code>, <code>android</code>, and <code>objectivec</code> (for iOS) are supported.</p>
+    /// <p>The language for the generated SDK. Currently <code>java</code>, <code>javascript</code>, <code>android</code>, <code>objectivec</code> (for iOS), <code>swift</code> (for iOS), and <code>ruby</code> are supported.</p>
     #[serde(rename = "sdkType")]
     pub sdk_type: String,
     /// <p>The name of the <a>Stage</a> that the SDK will use.</p>
@@ -1571,7 +1719,7 @@ pub struct GetSdkTypesRequest {
     pub position: Option<String>,
 }
 
-/// <p>Requests Amazon API Gateway to get information about a <a>Stage</a> resource.</p>
+/// <p>Requests API Gateway to get information about a <a>Stage</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetStageRequest {
     /// <p>The string identifier of the associated <a>RestApi</a>.</p>
@@ -1582,7 +1730,7 @@ pub struct GetStageRequest {
     pub stage_name: String,
 }
 
-/// <p>Requests Amazon API Gateway to get information about one or more <a>Stage</a> resources.</p>
+/// <p>Requests API Gateway to get information about one or more <a>Stage</a> resources.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetStagesRequest {
     /// <p>The stages' deployment identifiers.</p>
@@ -1592,6 +1740,22 @@ pub struct GetStagesRequest {
     /// <p>The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
+}
+
+/// <p>Gets the Tags collection for a given resource.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetTagsRequest {
+    /// <p>(Not currently supported) The maximum number of returned results per page.</p>
+    #[serde(rename = "limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>(Not currently supported) The current pagination position in the paged result set.</p>
+    #[serde(rename = "position")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub position: Option<String>,
+    /// <p>[Required] The ARN of a resource that can be tagged. At present, <a>Stage</a> is the only taggable resource.</p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
 }
 
 /// <p>The GET request to get a usage plan key of a given key identifier.</p>
@@ -1676,6 +1840,27 @@ pub struct GetUsageRequest {
     pub usage_plan_id: String,
 }
 
+/// <p>Gets a specified VPC link under the caller's account in a region.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetVpcLinkRequest {
+    /// <p>[Required] The identifier of the <a>VpcLink</a>. It is used in an <a>Integration</a> to reference this <a>VpcLink</a>.</p>
+    #[serde(rename = "vpcLinkId")]
+    pub vpc_link_id: String,
+}
+
+/// <p>Gets the <a>VpcLinks</a> collection under the caller's account in a selected region.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetVpcLinksRequest {
+    /// <p>The maximum number of returned results per page.</p>
+    #[serde(rename = "limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The current pagination position in the paged result set.</p>
+    #[serde(rename = "position")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub position: Option<String>,
+}
+
 /// <p>The POST request to import API keys from an external source, such as a CSV-formatted file.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ImportApiKeysRequest {
@@ -1714,7 +1899,7 @@ pub struct ImportDocumentationPartsRequest {
     pub rest_api_id: String,
 }
 
-/// <p>A POST request to import an API to Amazon API Gateway using an input of an API definition file.</p>
+/// <p>A POST request to import an API to API Gateway using an input of an API definition file.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ImportRestApiRequest {
     /// <p>The POST request body containing external API definitions. Currently, only Swagger definition JSON files are supported. The maximum size of the API definition file is 2MB.</p>
@@ -1726,7 +1911,7 @@ pub struct ImportRestApiRequest {
     #[serde(rename = "failOnWarnings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fail_on_warnings: Option<bool>,
-    /// <p>Custom header parameters as part of the request. For example, to exclude <a>DocumentationParts</a> from an imported API, set <code>ignore=documentation</code> as a <code>parameters</code> value, as in the AWS CLI command of <code>aws apigateway import-rest-api --parameters ignore=documentation --body 'file:///path/to/imported-api-body.json</code>.</p>
+    /// <p><p>A key-value map of context-specific query string parameters specifying the behavior of different API importing operations. The following shows operation-specific parameters and their supported values.</p> <p> To exclude <a>DocumentationParts</a> from the import, set <code>parameters</code> as <code>ignore=documentation</code>.</p> <p> To configure the endpoint type, set <code>parameters</code> as <code>endpointConfigurationTypes=EDGE</code> or<code>endpointConfigurationTypes=REGIONAL</code>. The default endpoint type is <code>EDGE</code>.</p> <p> To handle imported <code>basePath</code>, set <code>parameters</code> as <code>basePath=ignore</code>, <code>basePath=prepend</code> or <code>basePath=split</code>.</p> <p>For example, the AWS CLI command to exclude documentation from the imported API is:</p> <pre><code>aws apigateway import-rest-api --parameters ignore=documentation --body &#39;file:///path/to/imported-api-body.json</code></pre> <p>The AWS CLI command to set the regional endpoint on the imported API is:</p> <pre><code>aws apigateway import-rest-api --parameters endpointConfigurationTypes=REGIONAL --body &#39;file:///path/to/imported-api-body.json</code></pre></p>
     #[serde(rename = "parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
@@ -1743,11 +1928,19 @@ pub struct Integration {
     #[serde(rename = "cacheNamespace")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cache_namespace: Option<String>,
+    /// <p>The (<a href="http://docs.aws.amazon.com/apigateway/api-reference/resource/vpc-link/#id"><code>id</code></a>) of the <a>VpcLink</a> used for the integration when <code>connectionType=VPC_LINK</code> and undefined, otherwise.</p>
+    #[serde(rename = "connectionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_id: Option<String>,
+    /// <p>The type of the network connection to the integration endpoint. The valid value is <code>INTERNET</code> for connections through the public routable internet or <code>VPC_LINK</code> for private connections between API Gateway and a network load balancer in a VPC. The default value is <code>INTERNET</code>.</p>
+    #[serde(rename = "connectionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_type: Option<String>,
     /// <p>Specifies how to handle request payload content type conversions. Supported values are <code>CONVERT_TO_BINARY</code> and <code>CONVERT_TO_TEXT</code>, with the following behaviors:</p> <ul> <li><p><code>CONVERT_TO_BINARY</code>: Converts a request payload from a Base64-encoded string to the corresponding binary blob.</p></li> <li><p><code>CONVERT_TO_TEXT</code>: Converts a request payload from a binary blob to a Base64-encoded string.</p></li> </ul> <p>If this property is not defined, the request payload will be passed through from the method request to integration request without modification, provided that the <code>passthroughBehaviors</code> is configured to support payload pass-through.</p>
     #[serde(rename = "contentHandling")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content_handling: Option<String>,
-    /// <p>Specifies the credentials required for the integration, if any. For AWS integrations, three options are available. To specify an IAM Role for Amazon API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify the string <code>arn:aws:iam::\*:user/\*</code>. To use resource-based permissions on supported AWS services, specify null.</p>
+    /// <p>Specifies the credentials required for the integration, if any. For AWS integrations, three options are available. To specify an IAM Role for API Gateway to assume, use the role's Amazon Resource Name (ARN). To require that the caller's identity be passed through from the request, specify the string <code>arn:aws:iam::\*:user/\*</code>. To use resource-based permissions on supported AWS services, specify null.</p>
     #[serde(rename = "credentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub credentials: Option<String>,
@@ -1759,7 +1952,7 @@ pub struct Integration {
     #[serde(rename = "integrationResponses")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub integration_responses: Option<::std::collections::HashMap<String, IntegrationResponse>>,
-    /// <div> <p> Specifies how the method request body of an unmapped content type will be passed through the integration request to the back end without transformation. A content type is unmapped if no mapping template is defined in the integration or the content type does not match any of the mapped content types, as specified in <code>requestTemplates</code>. There are three valid values: <code>WHEN_NO_MATCH</code>, <code>WHEN_NO_TEMPLATES</code>, and <code>NEVER</code>. </p> <ul> <li> <code>WHEN_NO_MATCH</code> passes the method request body through the integration request to the back end without transformation when the method request content type does not match any content type associated with the mapping templates defined in the integration request. </li> <li> <code>WHEN_NO_TEMPLATES</code> passes the method request body through the integration request to the back end without transformation when no mapping template is defined in the integration request. If a template is defined when this option is selected, the method request of an unmapped content-type will be rejected with an HTTP <code>415 Unsupported Media Type</code> response. </li> <li> <code>NEVER</code> rejects the method request with an HTTP <code>415 Unsupported Media Type</code> response when either the method request content type does not match any content type associated with the mapping templates defined in the integration request or no mapping template is defined in the integration request. </li> </ul> </div>
+    /// <div> <p> Specifies how the method request body of an unmapped content type will be passed through the integration request to the back end without transformation. A content type is unmapped if no mapping template is defined in the integration or the content type does not match any of the mapped content types, as specified in <code>requestTemplates</code>. The valid value is one of the following: </p> <ul> <li> <code>WHEN_NO_MATCH</code>: passes the method request body through the integration request to the back end without transformation when the method request content type does not match any content type associated with the mapping templates defined in the integration request. </li> <li> <code>WHEN_NO_TEMPLATES</code>: passes the method request body through the integration request to the back end without transformation when no mapping template is defined in the integration request. If a template is defined when this option is selected, the method request of an unmapped content-type will be rejected with an HTTP <code>415 Unsupported Media Type</code> response. </li> <li> <code>NEVER</code>: rejects the method request with an HTTP <code>415 Unsupported Media Type</code> response when either the method request content type does not match any content type associated with the mapping templates defined in the integration request or no mapping template is defined in the integration request. </li> </ul> </div>
     #[serde(rename = "passthroughBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub passthrough_behavior: Option<String>,
@@ -1771,11 +1964,15 @@ pub struct Integration {
     #[serde(rename = "requestTemplates")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_templates: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Specifies the integration's type. The valid value is <code>HTTP</code> for integrating with an HTTP back end, <code>AWS</code> for any AWS service endpoints, <code>MOCK</code> for testing without actually invoking the back end, <code>HTTP_PROXY</code> for integrating with the HTTP proxy integration, or <code>AWS_PROXY</code> for integrating with the Lambda proxy integration type.</p>
+    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000 milliseconds or 29 seconds.</p>
+    #[serde(rename = "timeoutInMillis")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout_in_millis: Option<i64>,
+    /// <p>Specifies an API method integration type. The valid value is one of the following:</p> <ul> <li><code>AWS</code>: for integrating the API method request with an AWS service action, including the Lambda function-invoking action. With the Lambda function-invoking action, this is referred to as the Lambda custom integration. With any other AWS service action, this is known as AWS integration.</li> <li><code>AWS_PROXY</code>: for integrating the API method request with the Lambda function-invoking action with the client request passed through as-is. This integration is also referred to as the Lambda proxy integration.</li> <li><code>HTTP</code>: for integrating the API method request with an HTTP endpoint, including a private HTTP endpoint within a VPC. This integration is also referred to as the HTTP custom integration.</li> <li><code>HTTP_PROXY</code>: for integrating the API method request with an HTTP endpoint, including a private HTTP endpoint within a VPC, with the client request passed through as-is. This is also referred to as the HTTP proxy integration.</li> <li><code>MOCK</code>: for integrating the API method request with API Gateway as a "loop-back" endpoint without invoking any backend.</li> </ul> <p>For the HTTP and HTTP proxy integrations, each integration can specify a protocol (<code>http/https</code>), port and path. Standard 80 and 443 ports are supported as well as custom ports above 1024. An HTTP or HTTP proxy integration with a <code>connectionType</code> of <code>VPC_LINK</code> is referred to as a private integration and uses a <a>VpcLink</a> to connect API Gateway to a network load balancer of a VPC.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
-    /// <p>Specifies the integration's Uniform Resource Identifier (URI). For HTTP integrations, the URI must be a fully formed, encoded HTTP(S) URL according to the <a href="https://en.wikipedia.org/wiki/Uniform_Resource_Identifier" target="_blank">RFC-3986 specification</a>. For AWS integrations, the URI should be of the form <code>arn:aws:apigateway:{region}:{subdomain.service|service}:{path|action}/{service_api}</code>. <code>Region</code>, <code>subdomain</code> and <code>service</code> are used to determine the right endpoint. For AWS services that use the <code>Action=</code> query string parameter, <code>service_api</code> should be a valid action for the desired service. For RESTful AWS service APIs, <code>path</code> is used to indicate that the remaining substring in the URI should be treated as the path to the resource, including the initial <code>/</code>.</p>
+    /// <p><p>Specifies Uniform Resource Identifier (URI) of the integration endpoint.</p> <ul> <li><p> For <code>HTTP</code> or <code>HTTP<em>PROXY</code> integrations, the URI must be a fully formed, encoded HTTP(S) URL according to the &lt;a target=&quot;</em>blank&quot; href=&quot;https://en.wikipedia.org/wiki/Uniform<em>Resource</em>Identifier&quot;&gt;RFC-3986 specification</a>, for either standard integration, where <code>connectionType</code> is not <code>VPC<em>LINK</code>, or private integration, where <code>connectionType</code> is <code>VPC</em>LINK</code>. For a private HTTP integration, the URI is not used for routing. </p> </li> <li><p> For <code>AWS</code> or <code>AWS<em>PROXY</code> integrations, the URI is of the form <code>arn:aws:apigateway:{region}:{subdomain.service|service}:path|action/{service</em>api}</code>. Here, <code>{Region}</code> is the API Gateway region (e.g., <code>us-east-1</code>); <code>{service}</code> is the name of the integrated AWS service (e.g., <code>s3</code>); and <code>{subdomain}</code> is a designated subdomain supported by certain AWS service for fast host-name lookup. <code>action</code> can be used for an AWS service action-based API, using an <code>Action={name}&amp;{p1}={v1}&amp;p2={v2}...</code> query string. The ensuing <code>{service<em>api}</code> refers to a supported action <code>{name}</code> plus any required input parameters. Alternatively, <code>path</code> can be used for an AWS service path-based API. The ensuing <code>service</em>api</code> refers to the path to an AWS service resource, including the region of the integrated AWS service, if applicable. For example, for integration with the S3 API of <code><a href="http://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectGET.html">GetObject</a></code>, the <code>uri</code> can be either <code>arn:aws:apigateway:us-west-2:s3:action/GetObject&amp;Bucket={bucket}&amp;Key={key}</code> or <code>arn:aws:apigateway:us-west-2:s3:path/{bucket}/{key}</code></p> </li></ul></p>
     #[serde(rename = "uri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub uri: Option<String>,
@@ -1813,6 +2010,10 @@ pub struct Method {
     #[serde(rename = "apiKeyRequired")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_key_required: Option<bool>,
+    /// <p>A list of authorization scopes configured on the method. The scopes are used with a <code>COGNITO_USER_POOL</code> authorizer to authorize the method invocation. The authorization works by matching the method scopes against the scopes parsed from the access token in the incoming request. The method invocation is authorized if any method scopes matches a claimed scope in the access token. Otherwise, the invocation is not authorized. When the method scope is configured, the client must provide an access token instead of an identity token for authorization purposes.</p>
+    #[serde(rename = "authorizationScopes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization_scopes: Option<Vec<String>>,
     /// <p>The method's authorization type. Valid values are <code>NONE</code> for open access, <code>AWS_IAM</code> for using AWS IAM permissions, <code>CUSTOM</code> for using a custom authorizer, or <code>COGNITO_USER_POOLS</code> for using a Cognito user pool.</p>
     #[serde(rename = "authorizationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1841,7 +2042,7 @@ pub struct Method {
     #[serde(rename = "requestModels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_models: Option<::std::collections::HashMap<String, String>>,
-    /// <p>A key-value map defining required or optional method request parameters that can be accepted by Amazon API Gateway. A key is a method request parameter name matching the pattern of <code>method.request.{location}.{name}</code>, where <code>location</code> is <code>querystring</code>, <code>path</code>, or <code>header</code> and <code>name</code> is a valid and unique parameter name. The value associated with the key is a Boolean flag indicating whether the parameter is required (<code>true</code>) or optional (<code>false</code>). The method request parameter names defined here are available in <a>Integration</a> to be mapped to integration request parameters or templates.</p>
+    /// <p>A key-value map defining required or optional method request parameters that can be accepted by API Gateway. A key is a method request parameter name matching the pattern of <code>method.request.{location}.{name}</code>, where <code>location</code> is <code>querystring</code>, <code>path</code>, or <code>header</code> and <code>name</code> is a valid and unique parameter name. The value associated with the key is a Boolean flag indicating whether the parameter is required (<code>true</code>) or optional (<code>false</code>). The method request parameter names defined here are available in <a>Integration</a> to be mapped to integration request parameters or templates.</p>
     #[serde(rename = "requestParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_parameters: Option<::std::collections::HashMap<String, bool>>,
@@ -1858,7 +2059,7 @@ pub struct MethodResponse {
     #[serde(rename = "responseModels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_models: Option<::std::collections::HashMap<String, String>>,
-    /// <p>A key-value map specifying required or optional response parameters that Amazon API Gateway can send back to the caller. A key defines a method response header and the value specifies whether the associated method response header is required or not. The expression of the key must match the pattern <code>method.response.header.{name}</code>, where <code>name</code> is a valid and unique header name. Amazon API Gateway passes certain integration response data to the method response headers specified here according to the mapping you prescribe in the API's <a>IntegrationResponse</a>. The integration response data that can be mapped include an integration response header expressed in <code>integration.response.header.{name}</code>, a static value enclosed within a pair of single quotes (e.g., <code>'application/json'</code>), or a JSON expression from the back-end response payload in the form of <code>integration.response.body.{JSON-expression}</code>, where <code>JSON-expression</code> is a valid JSON expression without the <code>$</code> prefix.)</p>
+    /// <p>A key-value map specifying required or optional response parameters that API Gateway can send back to the caller. A key defines a method response header and the value specifies whether the associated method response header is required or not. The expression of the key must match the pattern <code>method.response.header.{name}</code>, where <code>name</code> is a valid and unique header name. API Gateway passes certain integration response data to the method response headers specified here according to the mapping you prescribe in the API's <a>IntegrationResponse</a>. The integration response data that can be mapped include an integration response header expressed in <code>integration.response.header.{name}</code>, a static value enclosed within a pair of single quotes (e.g., <code>'application/json'</code>), or a JSON expression from the back-end response payload in the form of <code>integration.response.body.{JSON-expression}</code>, where <code>JSON-expression</code> is a valid JSON expression without the <code>$</code> prefix.)</p>
     #[serde(rename = "responseParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_parameters: Option<::std::collections::HashMap<String, bool>>,
@@ -1941,7 +2142,7 @@ pub struct Model {
     #[serde(rename = "id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The name of the model.</p>
+    /// <p>The name of the model. Must be an alphanumeric string.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -1966,11 +2167,11 @@ pub struct Models {
 /// <p>A single patch operation to apply to the specified resource. Please refer to http://tools.ietf.org/html/rfc6902#section-4 for an explanation of how each operation is used.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct PatchOperation {
-    /// <p> Not supported.</p>
+    /// <p>The <code>copy</code> update operation's source as identified by a <code>JSON-Pointer</code> value referencing the location within the targeted resource to copy the value from. For example, to promote a canary deployment, you copy the canary deployment ID to the affiliated deployment ID by calling a PATCH request on a <a>Stage</a> resource with <code>"op":"copy"</code>, <code>"from":"/canarySettings/deploymentId"</code> and <code>"path":"/deploymentId"</code>.</p>
     #[serde(rename = "from")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub from: Option<String>,
-    /// <p>An update operation to be performed with this PATCH request. The valid value can be "add", "remove", or "replace". Not all valid operations are supported for a given resource. Support of the operations depends on specific operational contexts. Attempts to apply an unsupported operation on a resource will return an error message.</p>
+    /// <p> An update operation to be performed with this PATCH request. The valid value can be <code>add</code>, <code>remove</code>, <code>replace</code> or <code>copy</code>. Not all valid operations are supported for a given resource. Support of the operations depends on specific operational contexts. Attempts to apply an unsupported operation on a resource will return an error message.</p>
     #[serde(rename = "op")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub op: Option<String>,
@@ -1978,7 +2179,7 @@ pub struct PatchOperation {
     #[serde(rename = "path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub path: Option<String>,
-    /// <p>The new target value of the update operation. When using AWS CLI to update a property of a JSON value, enclose the JSON object with a pair of single quotes in a Linux shell, e.g., '{"a": ...}'. In a Windows shell, see <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#cli-using-param-json">Using JSON for Parameters</a>.</p>
+    /// <p>The new target value of the update operation. It is applicable for the <code>add</code> or <code>replace</code> operation. When using AWS CLI to update a property of a JSON value, enclose the JSON object with a pair of single quotes in a Linux shell, e.g., '{"a": ...}'. In a Windows shell, see <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#cli-using-param-json">Using JSON for Parameters</a>.</p>
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
@@ -2018,6 +2219,14 @@ pub struct PutIntegrationRequest {
     #[serde(rename = "cacheNamespace")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cache_namespace: Option<String>,
+    /// <p>The (<a href="http://docs.aws.amazon.com/apigateway/api-reference/resource/vpc-link/#id"><code>id</code></a>) of the <a>VpcLink</a> used for the integration when <code>connectionType=VPC_LINK</code> and undefined, otherwise.</p>
+    #[serde(rename = "connectionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_id: Option<String>,
+    /// <p>The type of the network connection to the integration endpoint. The valid value is <code>INTERNET</code> for connections through the public routable internet or <code>VPC_LINK</code> for private connections between API Gateway and a network load balancer in a VPC. The default value is <code>INTERNET</code>.</p>
+    #[serde(rename = "connectionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_type: Option<String>,
     /// <p>Specifies how to handle request payload content type conversions. Supported values are <code>CONVERT_TO_BINARY</code> and <code>CONVERT_TO_TEXT</code>, with the following behaviors:</p> <ul> <li><p><code>CONVERT_TO_BINARY</code>: Converts a request payload from a Base64-encoded string to the corresponding binary blob.</p></li> <li><p><code>CONVERT_TO_TEXT</code>: Converts a request payload from a binary blob to a Base64-encoded string.</p></li> </ul> <p>If this property is not defined, the request payload will be passed through from the method request to integration request without modification, provided that the <code>passthroughBehaviors</code> is configured to support payload pass-through.</p>
     #[serde(rename = "contentHandling")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2051,10 +2260,14 @@ pub struct PutIntegrationRequest {
     /// <p>The string identifier of the associated <a>RestApi</a>.</p>
     #[serde(rename = "restApiId")]
     pub rest_api_id: String,
+    /// <p>Custom timeout between 50 and 29,000 milliseconds. The default value is 29,000 milliseconds or 29 seconds.</p>
+    #[serde(rename = "timeoutInMillis")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout_in_millis: Option<i64>,
     /// <p>Specifies a put integration input's type.</p>
     #[serde(rename = "type")]
     pub type_: String,
-    /// <p>Specifies the integration's Uniform Resource Identifier (URI). For HTTP integrations, the URI must be a fully formed, encoded HTTP(S) URL according to the <a href="https://en.wikipedia.org/wiki/Uniform_Resource_Identifier" target="_blank">RFC-3986 specification</a>. For AWS integrations, the URI should be of the form <code>arn:aws:apigateway:{region}:{subdomain.service|service}:{path|action}/{service_api}</code>. <code>Region</code>, <code>subdomain</code> and <code>service</code> are used to determine the right endpoint. For AWS services that use the <code>Action=</code> query string parameter, <code>service_api</code> should be a valid action for the desired service. For RESTful AWS service APIs, <code>path</code> is used to indicate that the remaining substring in the URI should be treated as the path to the resource, including the initial <code>/</code>.</p>
+    /// <p><p>Specifies Uniform Resource Identifier (URI) of the integration endpoint.</p> <ul> <li><p> For <code>HTTP</code> or <code>HTTP<em>PROXY</code> integrations, the URI must be a fully formed, encoded HTTP(S) URL according to the &lt;a target=&quot;</em>blank&quot; href=&quot;https://en.wikipedia.org/wiki/Uniform<em>Resource</em>Identifier&quot;&gt;RFC-3986 specification</a>, for either standard integration, where <code>connectionType</code> is not <code>VPC<em>LINK</code>, or private integration, where <code>connectionType</code> is <code>VPC</em>LINK</code>. For a private HTTP integration, the URI is not used for routing. </p> </li> <li><p> For <code>AWS</code> or <code>AWS<em>PROXY</code> integrations, the URI is of the form <code>arn:aws:apigateway:{region}:{subdomain.service|service}:path|action/{service</em>api}</code>. Here, <code>{Region}</code> is the API Gateway region (e.g., <code>us-east-1</code>); <code>{service}</code> is the name of the integrated AWS service (e.g., <code>s3</code>); and <code>{subdomain}</code> is a designated subdomain supported by certain AWS service for fast host-name lookup. <code>action</code> can be used for an AWS service action-based API, using an <code>Action={name}&amp;{p1}={v1}&amp;p2={v2}...</code> query string. The ensuing <code>{service<em>api}</code> refers to a supported action <code>{name}</code> plus any required input parameters. Alternatively, <code>path</code> can be used for an AWS service path-based API. The ensuing <code>service</em>api</code> refers to the path to an AWS service resource, including the region of the integrated AWS service, if applicable. For example, for integration with the S3 API of <code><a href="http://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectGET.html">GetObject</a></code>, the <code>uri</code> can be either <code>arn:aws:apigateway:us-west-2:s3:action/GetObject&amp;Bucket={bucket}&amp;Key={key}</code> or <code>arn:aws:apigateway:us-west-2:s3:path/{bucket}/{key}</code></p> </li></ul></p>
     #[serde(rename = "uri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub uri: Option<String>,
@@ -2100,6 +2313,10 @@ pub struct PutMethodRequest {
     #[serde(rename = "apiKeyRequired")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_key_required: Option<bool>,
+    /// <p>A list of authorization scopes configured on the method. The scopes are used with a <code>COGNITO_USER_POOL</code> authorizer to authorize the method invocation. The authorization works by matching the method scopes against the scopes parsed from the access token in the incoming request. The method invocation is authorized if any method scopes matches a claimed scope in the access token. Otherwise, the invocation is not authorized. When the method scope is configured, the client must provide an access token instead of an identity token for authorization purposes.</p>
+    #[serde(rename = "authorizationScopes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization_scopes: Option<Vec<String>>,
     /// <p>The method's authorization type. Valid values are <code>NONE</code> for open access, <code>AWS_IAM</code> for using AWS IAM permissions, <code>CUSTOM</code> for using a custom authorizer, or <code>COGNITO_USER_POOLS</code> for using a Cognito user pool.</p>
     #[serde(rename = "authorizationType")]
     pub authorization_type: String,
@@ -2118,7 +2335,7 @@ pub struct PutMethodRequest {
     #[serde(rename = "requestModels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_models: Option<::std::collections::HashMap<String, String>>,
-    /// <p>A key-value map defining required or optional method request parameters that can be accepted by Amazon API Gateway. A key defines a method request parameter name matching the pattern of <code>method.request.{location}.{name}</code>, where <code>location</code> is <code>querystring</code>, <code>path</code>, or <code>header</code> and <code>name</code> is a valid and unique parameter name. The value associated with the key is a Boolean flag indicating whether the parameter is required (<code>true</code>) or optional (<code>false</code>). The method request parameter names defined here are available in <a>Integration</a> to be mapped to integration request parameters or body-mapping templates.</p>
+    /// <p>A key-value map defining required or optional method request parameters that can be accepted by API Gateway. A key defines a method request parameter name matching the pattern of <code>method.request.{location}.{name}</code>, where <code>location</code> is <code>querystring</code>, <code>path</code>, or <code>header</code> and <code>name</code> is a valid and unique parameter name. The value associated with the key is a Boolean flag indicating whether the parameter is required (<code>true</code>) or optional (<code>false</code>). The method request parameter names defined here are available in <a>Integration</a> to be mapped to integration request parameters or body-mapping templates.</p>
     #[serde(rename = "requestParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_parameters: Option<::std::collections::HashMap<String, bool>>,
@@ -2147,7 +2364,7 @@ pub struct PutMethodResponseRequest {
     #[serde(rename = "responseModels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_models: Option<::std::collections::HashMap<String, String>>,
-    /// <p>A key-value map specifying required or optional response parameters that Amazon API Gateway can send back to the caller. A key defines a method response header name and the associated value is a Boolean flag indicating whether the method response parameter is required or not. The method response header names must match the pattern of <code>method.response.header.{name}</code>, where <code>name</code> is a valid and unique header name. The response parameter names defined here are available in the integration response to be mapped from an integration response header expressed in <code>integration.response.header.{name}</code>, a static value enclosed within a pair of single quotes (e.g., <code>'application/json'</code>), or a JSON expression from the back-end response payload in the form of <code>integration.response.body.{JSON-expression}</code>, where <code>JSON-expression</code> is a valid JSON expression without the <code>$</code> prefix.)</p>
+    /// <p>A key-value map specifying required or optional response parameters that API Gateway can send back to the caller. A key defines a method response header name and the associated value is a Boolean flag indicating whether the method response parameter is required or not. The method response header names must match the pattern of <code>method.response.header.{name}</code>, where <code>name</code> is a valid and unique header name. The response parameter names defined here are available in the integration response to be mapped from an integration response header expressed in <code>integration.response.header.{name}</code>, a static value enclosed within a pair of single quotes (e.g., <code>'application/json'</code>), or a JSON expression from the back-end response payload in the form of <code>integration.response.body.{JSON-expression}</code>, where <code>JSON-expression</code> is a valid JSON expression without the <code>$</code> prefix.)</p>
     #[serde(rename = "responseParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_parameters: Option<::std::collections::HashMap<String, bool>>,
@@ -2274,6 +2491,10 @@ pub struct Resources {
 /// <p><p>Represents a REST API.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-create-api.html">Create an API</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct RestApi {
+    /// <p>The source of the API key for metring requests according to a usage plan. Valid values are <ul><li><code>HEADER</code> to read the API key from the <code>X-API-Key</code> header of a request. </li><li><code>AUTHORIZER</code> to read the API key from the <code>UsageIdentifierKey</code> from a custom authorizer.</li></ul> </p>
+    #[serde(rename = "apiKeySource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_key_source: Option<String>,
     /// <p>The list of binary media types supported by the <a>RestApi</a>. By default, the <a>RestApi</a> supports only UTF-8-encoded text payloads.</p>
     #[serde(rename = "binaryMediaTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2286,10 +2507,18 @@ pub struct RestApi {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The API's identifier. This identifier is unique across all of your APIs in Amazon API Gateway.</p>
+    /// <p>The endpoint configuration of this <a>RestApi</a> showing the endpoint types of the API. </p>
+    #[serde(rename = "endpointConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_configuration: Option<EndpointConfiguration>,
+    /// <p>The API's identifier. This identifier is unique across all of your APIs in API Gateway.</p>
     #[serde(rename = "id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// <p>A nullable integer used to enable (non-negative between 0 and 10485760 (10M) bytes, inclusive) or disable (null) compression on an API. When compression is enabled, compression or decompression are not applied on the payload if the payload size is smaller than this value. Setting it to zero allows compression for any payload size.</p>
+    #[serde(rename = "minimumCompressionSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub minimum_compression_size: Option<i64>,
     /// <p>The API's name.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2388,6 +2617,10 @@ pub struct SdkTypes {
 /// <p><p>Represents a unique identifier for a version of a deployed <a>RestApi</a> that is callable by users.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-deploy-api.html">Deploy an API</a> </div></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Stage {
+    /// <p>Settings for logging access in this stage.</p>
+    #[serde(rename = "accessLogSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_log_settings: Option<AccessLogSettings>,
     /// <p>Specifies whether a cache cluster is enabled for the stage.</p>
     #[serde(rename = "cacheClusterEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2400,6 +2633,10 @@ pub struct Stage {
     #[serde(rename = "cacheClusterStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cache_cluster_status: Option<String>,
+    /// <p>Settings for the canary deployment in this stage.</p>
+    #[serde(rename = "canarySettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub canary_settings: Option<CanarySettings>,
     /// <p>The identifier of a client certificate for an API stage.</p>
     #[serde(rename = "clientCertificateId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2428,10 +2665,14 @@ pub struct Stage {
     #[serde(rename = "methodSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub method_settings: Option<::std::collections::HashMap<String, MethodSetting>>,
-    /// <p>The name of the stage is the first path segment in the Uniform Resource Identifier (URI) of a call to Amazon API Gateway.</p>
+    /// <p>The name of the stage is the first path segment in the Uniform Resource Identifier (URI) of a call to API Gateway.</p>
     #[serde(rename = "stageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stage_name: Option<String>,
+    /// <p>A collection of Tags associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>A map that defines the stage variables for a <a>Stage</a> resource. Variable names can have alphanumeric and underscore characters, and the values must match <code>[A-Za-z0-9-._~:/?#&amp;=,]+</code>.</p>
     #[serde(rename = "variables")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2458,6 +2699,26 @@ pub struct Stages {
     #[serde(rename = "item")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub item: Option<Vec<Stage>>,
+}
+
+/// <p>Adds or updates Tags on a gievn resource.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct TagResourceRequest {
+    /// <p>[Required] The ARN of a resource that can be tagged. At present, <a>Stage</a> is the only taggable resource.</p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+    /// <p>[Required] Key/Value map of strings. Valid character set is [a-zA-Z+-=._:/]. Tag key can be up to 128 characters and must not start with "aws:". Tag value can be up to 256 characters.</p>
+    #[serde(rename = "tags")]
+    pub tags: ::std::collections::HashMap<String, String>,
+}
+
+/// <p>A collection of Tags associated with a given resource.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct Tags {
+    /// <p>A collection of Tags associated with a given resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p><p>Represents a mapping template used to transform a payload.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/models-mappings.html#models-mappings-mappings">Mapping Templates</a> </div></p>
@@ -2518,7 +2779,7 @@ pub struct TestInvokeAuthorizerResponse {
     #[serde(rename = "latency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latency: Option<i64>,
-    /// <p>The Amazon API Gateway execution log for the test authorizer request.</p>
+    /// <p>The API Gateway execution log for the test authorizer request.</p>
     #[serde(rename = "log")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log: Option<String>,
@@ -2581,7 +2842,7 @@ pub struct TestInvokeMethodResponse {
     #[serde(rename = "latency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latency: Option<i64>,
-    /// <p>The Amazon API Gateway execution log for the test invoke request.</p>
+    /// <p>The API Gateway execution log for the test invoke request.</p>
     #[serde(rename = "log")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log: Option<String>,
@@ -2604,7 +2865,18 @@ pub struct ThrottleSettings {
     pub rate_limit: Option<f64>,
 }
 
-/// <p>Requests Amazon API Gateway to change information about the current <a>Account</a> resource.</p>
+/// <p>Removes Tags from a given resource.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct UntagResourceRequest {
+    /// <p>[Required] The ARN of a resource that can be tagged. At present, <a>Stage</a> is the only taggable resource.</p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+    /// <p>The Tag keys to delete.</p>
+    #[serde(rename = "tagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+/// <p>Requests API Gateway to change information about the current <a>Account</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateAccountRequest {
     /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
@@ -2667,7 +2939,7 @@ pub struct UpdateClientCertificateRequest {
     pub patch_operations: Option<Vec<PatchOperation>>,
 }
 
-/// <p>Requests Amazon API Gateway to change information about a <a>Deployment</a> resource.</p>
+/// <p>Requests API Gateway to change information about a <a>Deployment</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateDeploymentRequest {
     /// <p>The replacement identifier for the <a>Deployment</a> resource to change information about.</p>
@@ -2874,7 +3146,7 @@ pub struct UpdateRestApiRequest {
     pub rest_api_id: String,
 }
 
-/// <p>Requests Amazon API Gateway to change information about a <a>Stage</a> resource.</p>
+/// <p>Requests API Gateway to change information about a <a>Stage</a> resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateStageRequest {
     /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
@@ -2914,6 +3186,18 @@ pub struct UpdateUsageRequest {
     /// <p>The Id of the usage plan associated with the usage data.</p>
     #[serde(rename = "usagePlanId")]
     pub usage_plan_id: String,
+}
+
+/// <p>Updates an existing <a>VpcLink</a> of a specified identifier.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct UpdateVpcLinkRequest {
+    /// <p>A list of update operations to be applied to the specified resource and in the order specified in this list.</p>
+    #[serde(rename = "patchOperations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub patch_operations: Option<Vec<PatchOperation>>,
+    /// <p>[Required] The identifier of the <a>VpcLink</a>. It is used in an <a>Integration</a> to reference this <a>VpcLink</a>.</p>
+    #[serde(rename = "vpcLinkId")]
+    pub vpc_link_id: String,
 }
 
 /// <p><p>Represents the usage data of a usage plan.</p> <div class="remarks"/> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html">Create and Use Usage Plans</a>, <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-create-usage-plans-with-console.html#api-gateway-usage-plan-manage-usage">Manage Usage in a Usage Plan</a> </div></p>
@@ -3018,19 +3302,61 @@ pub struct UsagePlans {
     pub position: Option<String>,
 }
 
+/// <p><p>A API Gateway VPC link for a <a>RestApi</a> to access resources in an Amazon Virtual Private Cloud (VPC).</p> <div class="remarks"> <p><p>To enable access to a resource in an Amazon Virtual Private Cloud through Amazon API Gateway, you, as an API developer, create a <a>VpcLink</a> resource targeted for one or more network load balancers of the VPC and then integrate an API method with a private integration that uses the <a>VpcLink</a>. The private integration has an integration type of <code>HTTP</code> or <code>HTTP<em>PROXY</code> and has a connection type of <code>VPC</em>LINK</code>. The integration uses the <code>connectionId</code> property to identify the <a>VpcLink</a> used.</p> </p> </div></p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct VpcLink {
+    /// <p>The description of the VPC link.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The identifier of the <a>VpcLink</a>. It is used in an <a>Integration</a> to reference this <a>VpcLink</a>.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The name used to label and identify the VPC link.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The status of the VPC link. The valid values are <code>AVAILABLE</code>, <code>PENDING</code>, <code>DELETING</code>, or <code>FAILED</code>. Deploying an API will wait if the status is <code>PENDING</code> and will fail if the status is <code>DELETING</code>. </p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>A description about the VPC link status.</p>
+    #[serde(rename = "statusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_message: Option<String>,
+    /// <p>The ARNs of network load balancers of the VPC targeted by the VPC link. The network load balancers must be owned by the same AWS account of the API owner.</p>
+    #[serde(rename = "targetArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_arns: Option<Vec<String>>,
+}
+
+/// <p><p>The collection of VPC links under the caller&#39;s account in a region.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/getting-started-with-private-integration.html">Getting Started with Private Integrations</a>, <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-private-integration.html">Set up Private Integrations</a> </div></p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct VpcLinks {
+    /// <p>The current page of elements from this collection.</p>
+    #[serde(rename = "items")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub items: Option<Vec<VpcLink>>,
+    #[serde(rename = "position")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub position: Option<String>,
+}
+
 /// Errors returned by CreateApiKey
 #[derive(Debug, PartialEq)]
 pub enum CreateApiKeyError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The request exceeded the rate limit. Retry after the specified time period.</p>
     LimitExceeded(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3124,14 +3450,15 @@ impl Error for CreateApiKeyError {
 /// Errors returned by CreateAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum CreateAuthorizerError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request exceeded the rate limit. Retry after the specified time period.</p>
     LimitExceeded(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3225,14 +3552,15 @@ impl Error for CreateAuthorizerError {
 /// Errors returned by CreateBasePathMapping
 #[derive(Debug, PartialEq)]
 pub enum CreateBasePathMappingError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3328,18 +3656,19 @@ impl Error for CreateBasePathMappingError {
 /// Errors returned by CreateDeployment
 #[derive(Debug, PartialEq)]
 pub enum CreateDeploymentError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The request exceeded the rate limit. Retry after the specified time period.</p>
     LimitExceeded(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The requested service is not available. For details see the accompanying error message. Retry after the specified time period.</p>
     ServiceUnavailable(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3441,16 +3770,17 @@ impl Error for CreateDeploymentError {
 /// Errors returned by CreateDocumentationPart
 #[derive(Debug, PartialEq)]
 pub enum CreateDocumentationPartError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The request exceeded the rate limit. Retry after the specified time period.</p>
     LimitExceeded(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3550,16 +3880,17 @@ impl Error for CreateDocumentationPartError {
 /// Errors returned by CreateDocumentationVersion
 #[derive(Debug, PartialEq)]
 pub enum CreateDocumentationVersionError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The request exceeded the rate limit. Retry after the specified time period.</p>
     LimitExceeded(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3661,12 +3992,13 @@ impl Error for CreateDocumentationVersionError {
 /// Errors returned by CreateDomainName
 #[derive(Debug, PartialEq)]
 pub enum CreateDomainNameError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3756,16 +4088,17 @@ impl Error for CreateDomainNameError {
 /// Errors returned by CreateModel
 #[derive(Debug, PartialEq)]
 pub enum CreateModelError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The request exceeded the rate limit. Retry after the specified time period.</p>
     LimitExceeded(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3859,14 +4192,15 @@ impl Error for CreateModelError {
 /// Errors returned by CreateRequestValidator
 #[derive(Debug, PartialEq)]
 pub enum CreateRequestValidatorError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request exceeded the rate limit. Retry after the specified time period.</p>
     LimitExceeded(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3962,16 +4296,17 @@ impl Error for CreateRequestValidatorError {
 /// Errors returned by CreateResource
 #[derive(Debug, PartialEq)]
 pub enum CreateResourceError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The request exceeded the rate limit. Retry after the specified time period.</p>
     LimitExceeded(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4069,12 +4404,13 @@ impl Error for CreateResourceError {
 /// Errors returned by CreateRestApi
 #[derive(Debug, PartialEq)]
 pub enum CreateRestApiError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request exceeded the rate limit. Retry after the specified time period.</p>
     LimitExceeded(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4164,16 +4500,17 @@ impl Error for CreateRestApiError {
 /// Errors returned by CreateStage
 #[derive(Debug, PartialEq)]
 pub enum CreateStageError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The request exceeded the rate limit. Retry after the specified time period.</p>
     LimitExceeded(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4267,16 +4604,17 @@ impl Error for CreateStageError {
 /// Errors returned by CreateUsagePlan
 #[derive(Debug, PartialEq)]
 pub enum CreateUsagePlanError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The request exceeded the rate limit. Retry after the specified time period.</p>
     LimitExceeded(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4374,14 +4712,15 @@ impl Error for CreateUsagePlanError {
 /// Errors returned by CreateUsagePlanKey
 #[derive(Debug, PartialEq)]
 pub enum CreateUsagePlanKeyError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4474,13 +4813,104 @@ impl Error for CreateUsagePlanKeyError {
         }
     }
 }
+/// Errors returned by CreateVpcLink
+#[derive(Debug, PartialEq)]
+pub enum CreateVpcLinkError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    BadRequest(String),
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
+    TooManyRequests(String),
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateVpcLinkError {
+    pub fn from_body(body: &str) -> CreateVpcLinkError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "BadRequestException" => {
+                        CreateVpcLinkError::BadRequest(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        CreateVpcLinkError::TooManyRequests(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        CreateVpcLinkError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CreateVpcLinkError::Validation(error_message.to_string())
+                    }
+                    _ => CreateVpcLinkError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateVpcLinkError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateVpcLinkError {
+    fn from(err: serde_json::error::Error) -> CreateVpcLinkError {
+        CreateVpcLinkError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateVpcLinkError {
+    fn from(err: CredentialsError) -> CreateVpcLinkError {
+        CreateVpcLinkError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateVpcLinkError {
+    fn from(err: HttpDispatchError) -> CreateVpcLinkError {
+        CreateVpcLinkError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateVpcLinkError {
+    fn from(err: io::Error) -> CreateVpcLinkError {
+        CreateVpcLinkError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateVpcLinkError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateVpcLinkError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateVpcLinkError::BadRequest(ref cause) => cause,
+            CreateVpcLinkError::TooManyRequests(ref cause) => cause,
+            CreateVpcLinkError::Unauthorized(ref cause) => cause,
+            CreateVpcLinkError::Validation(ref cause) => cause,
+            CreateVpcLinkError::Credentials(ref err) => err.description(),
+            CreateVpcLinkError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CreateVpcLinkError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteApiKey
 #[derive(Debug, PartialEq)]
 pub enum DeleteApiKeyError {
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4564,14 +4994,15 @@ impl Error for DeleteApiKeyError {
 /// Errors returned by DeleteAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum DeleteAuthorizerError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4665,10 +5096,15 @@ impl Error for DeleteAuthorizerError {
 /// Errors returned by DeleteBasePathMapping
 #[derive(Debug, PartialEq)]
 pub enum DeleteBasePathMappingError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    BadRequest(String),
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
+    Conflict(String),
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4693,6 +5129,12 @@ impl DeleteBasePathMappingError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "BadRequestException" => {
+                        DeleteBasePathMappingError::BadRequest(String::from(error_message))
+                    }
+                    "ConflictException" => {
+                        DeleteBasePathMappingError::Conflict(String::from(error_message))
+                    }
                     "NotFoundException" => {
                         DeleteBasePathMappingError::NotFound(String::from(error_message))
                     }
@@ -4741,6 +5183,8 @@ impl fmt::Display for DeleteBasePathMappingError {
 impl Error for DeleteBasePathMappingError {
     fn description(&self) -> &str {
         match *self {
+            DeleteBasePathMappingError::BadRequest(ref cause) => cause,
+            DeleteBasePathMappingError::Conflict(ref cause) => cause,
             DeleteBasePathMappingError::NotFound(ref cause) => cause,
             DeleteBasePathMappingError::TooManyRequests(ref cause) => cause,
             DeleteBasePathMappingError::Unauthorized(ref cause) => cause,
@@ -4756,12 +5200,13 @@ impl Error for DeleteBasePathMappingError {
 /// Errors returned by DeleteClientCertificate
 #[derive(Debug, PartialEq)]
 pub enum DeleteClientCertificateError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4853,12 +5298,13 @@ impl Error for DeleteClientCertificateError {
 /// Errors returned by DeleteDeployment
 #[derive(Debug, PartialEq)]
 pub enum DeleteDeploymentError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4948,14 +5394,15 @@ impl Error for DeleteDeploymentError {
 /// Errors returned by DeleteDocumentationPart
 #[derive(Debug, PartialEq)]
 pub enum DeleteDocumentationPartError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5051,14 +5498,15 @@ impl Error for DeleteDocumentationPartError {
 /// Errors returned by DeleteDocumentationVersion
 #[derive(Debug, PartialEq)]
 pub enum DeleteDocumentationVersionError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5156,10 +5604,11 @@ impl Error for DeleteDocumentationVersionError {
 /// Errors returned by DeleteDomainName
 #[derive(Debug, PartialEq)]
 pub enum DeleteDomainNameError {
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5245,14 +5694,15 @@ impl Error for DeleteDomainNameError {
 /// Errors returned by DeleteGatewayResponse
 #[derive(Debug, PartialEq)]
 pub enum DeleteGatewayResponseError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5348,12 +5798,13 @@ impl Error for DeleteGatewayResponseError {
 /// Errors returned by DeleteIntegration
 #[derive(Debug, PartialEq)]
 pub enum DeleteIntegrationError {
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5445,14 +5896,15 @@ impl Error for DeleteIntegrationError {
 /// Errors returned by DeleteIntegrationResponse
 #[derive(Debug, PartialEq)]
 pub enum DeleteIntegrationResponseError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5548,12 +6000,13 @@ impl Error for DeleteIntegrationResponseError {
 /// Errors returned by DeleteMethod
 #[derive(Debug, PartialEq)]
 pub enum DeleteMethodError {
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5639,14 +6092,15 @@ impl Error for DeleteMethodError {
 /// Errors returned by DeleteMethodResponse
 #[derive(Debug, PartialEq)]
 pub enum DeleteMethodResponseError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5742,14 +6196,15 @@ impl Error for DeleteMethodResponseError {
 /// Errors returned by DeleteModel
 #[derive(Debug, PartialEq)]
 pub enum DeleteModelError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5839,14 +6294,15 @@ impl Error for DeleteModelError {
 /// Errors returned by DeleteRequestValidator
 #[derive(Debug, PartialEq)]
 pub enum DeleteRequestValidatorError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5942,14 +6398,15 @@ impl Error for DeleteRequestValidatorError {
 /// Errors returned by DeleteResource
 #[derive(Debug, PartialEq)]
 pub enum DeleteResourceError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6043,12 +6500,13 @@ impl Error for DeleteResourceError {
 /// Errors returned by DeleteRestApi
 #[derive(Debug, PartialEq)]
 pub enum DeleteRestApiError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6138,12 +6596,13 @@ impl Error for DeleteRestApiError {
 /// Errors returned by DeleteStage
 #[derive(Debug, PartialEq)]
 pub enum DeleteStageError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6231,12 +6690,13 @@ impl Error for DeleteStageError {
 /// Errors returned by DeleteUsagePlan
 #[derive(Debug, PartialEq)]
 pub enum DeleteUsagePlanError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6326,14 +6786,15 @@ impl Error for DeleteUsagePlanError {
 /// Errors returned by DeleteUsagePlanKey
 #[derive(Debug, PartialEq)]
 pub enum DeleteUsagePlanKeyError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6426,15 +6887,112 @@ impl Error for DeleteUsagePlanKeyError {
         }
     }
 }
+/// Errors returned by DeleteVpcLink
+#[derive(Debug, PartialEq)]
+pub enum DeleteVpcLinkError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    BadRequest(String),
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
+    NotFound(String),
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
+    TooManyRequests(String),
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteVpcLinkError {
+    pub fn from_body(body: &str) -> DeleteVpcLinkError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "BadRequestException" => {
+                        DeleteVpcLinkError::BadRequest(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        DeleteVpcLinkError::NotFound(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        DeleteVpcLinkError::TooManyRequests(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        DeleteVpcLinkError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteVpcLinkError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteVpcLinkError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteVpcLinkError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteVpcLinkError {
+    fn from(err: serde_json::error::Error) -> DeleteVpcLinkError {
+        DeleteVpcLinkError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteVpcLinkError {
+    fn from(err: CredentialsError) -> DeleteVpcLinkError {
+        DeleteVpcLinkError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteVpcLinkError {
+    fn from(err: HttpDispatchError) -> DeleteVpcLinkError {
+        DeleteVpcLinkError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteVpcLinkError {
+    fn from(err: io::Error) -> DeleteVpcLinkError {
+        DeleteVpcLinkError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteVpcLinkError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteVpcLinkError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteVpcLinkError::BadRequest(ref cause) => cause,
+            DeleteVpcLinkError::NotFound(ref cause) => cause,
+            DeleteVpcLinkError::TooManyRequests(ref cause) => cause,
+            DeleteVpcLinkError::Unauthorized(ref cause) => cause,
+            DeleteVpcLinkError::Validation(ref cause) => cause,
+            DeleteVpcLinkError::Credentials(ref err) => err.description(),
+            DeleteVpcLinkError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteVpcLinkError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by FlushStageAuthorizersCache
 #[derive(Debug, PartialEq)]
 pub enum FlushStageAuthorizersCacheError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6528,12 +7086,13 @@ impl Error for FlushStageAuthorizersCacheError {
 /// Errors returned by FlushStageCache
 #[derive(Debug, PartialEq)]
 pub enum FlushStageCacheError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6623,10 +7182,11 @@ impl Error for FlushStageCacheError {
 /// Errors returned by GenerateClientCertificate
 #[derive(Debug, PartialEq)]
 pub enum GenerateClientCertificateError {
+    /// <p>The request exceeded the rate limit. Retry after the specified time period.</p>
     LimitExceeded(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6714,10 +7274,11 @@ impl Error for GenerateClientCertificateError {
 /// Errors returned by GetAccount
 #[derive(Debug, PartialEq)]
 pub enum GetAccountError {
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6799,10 +7360,11 @@ impl Error for GetAccountError {
 /// Errors returned by GetApiKey
 #[derive(Debug, PartialEq)]
 pub enum GetApiKeyError {
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6884,10 +7446,11 @@ impl Error for GetApiKeyError {
 /// Errors returned by GetApiKeys
 #[derive(Debug, PartialEq)]
 pub enum GetApiKeysError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -6971,10 +7534,11 @@ impl Error for GetApiKeysError {
 /// Errors returned by GetAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum GetAuthorizerError {
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7060,12 +7624,13 @@ impl Error for GetAuthorizerError {
 /// Errors returned by GetAuthorizers
 #[derive(Debug, PartialEq)]
 pub enum GetAuthorizersError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7155,10 +7720,11 @@ impl Error for GetAuthorizersError {
 /// Errors returned by GetBasePathMapping
 #[derive(Debug, PartialEq)]
 pub enum GetBasePathMappingError {
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7246,10 +7812,11 @@ impl Error for GetBasePathMappingError {
 /// Errors returned by GetBasePathMappings
 #[derive(Debug, PartialEq)]
 pub enum GetBasePathMappingsError {
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7337,10 +7904,11 @@ impl Error for GetBasePathMappingsError {
 /// Errors returned by GetClientCertificate
 #[derive(Debug, PartialEq)]
 pub enum GetClientCertificateError {
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7428,10 +7996,11 @@ impl Error for GetClientCertificateError {
 /// Errors returned by GetClientCertificates
 #[derive(Debug, PartialEq)]
 pub enum GetClientCertificatesError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7519,12 +8088,13 @@ impl Error for GetClientCertificatesError {
 /// Errors returned by GetDeployment
 #[derive(Debug, PartialEq)]
 pub enum GetDeploymentError {
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The requested service is not available. For details see the accompanying error message. Retry after the specified time period.</p>
     ServiceUnavailable(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7614,12 +8184,13 @@ impl Error for GetDeploymentError {
 /// Errors returned by GetDeployments
 #[derive(Debug, PartialEq)]
 pub enum GetDeploymentsError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The requested service is not available. For details see the accompanying error message. Retry after the specified time period.</p>
     ServiceUnavailable(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7709,10 +8280,11 @@ impl Error for GetDeploymentsError {
 /// Errors returned by GetDocumentationPart
 #[derive(Debug, PartialEq)]
 pub enum GetDocumentationPartError {
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7800,12 +8372,13 @@ impl Error for GetDocumentationPartError {
 /// Errors returned by GetDocumentationParts
 #[derive(Debug, PartialEq)]
 pub enum GetDocumentationPartsError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7897,10 +8470,11 @@ impl Error for GetDocumentationPartsError {
 /// Errors returned by GetDocumentationVersion
 #[derive(Debug, PartialEq)]
 pub enum GetDocumentationVersionError {
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -7988,12 +8562,13 @@ impl Error for GetDocumentationVersionError {
 /// Errors returned by GetDocumentationVersions
 #[derive(Debug, PartialEq)]
 pub enum GetDocumentationVersionsError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8085,12 +8660,13 @@ impl Error for GetDocumentationVersionsError {
 /// Errors returned by GetDomainName
 #[derive(Debug, PartialEq)]
 pub enum GetDomainNameError {
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The requested service is not available. For details see the accompanying error message. Retry after the specified time period.</p>
     ServiceUnavailable(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8180,10 +8756,11 @@ impl Error for GetDomainNameError {
 /// Errors returned by GetDomainNames
 #[derive(Debug, PartialEq)]
 pub enum GetDomainNamesError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8269,14 +8846,15 @@ impl Error for GetDomainNamesError {
 /// Errors returned by GetExport
 #[derive(Debug, PartialEq)]
 pub enum GetExportError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8364,10 +8942,11 @@ impl Error for GetExportError {
 /// Errors returned by GetGatewayResponse
 #[derive(Debug, PartialEq)]
 pub enum GetGatewayResponseError {
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8455,12 +9034,13 @@ impl Error for GetGatewayResponseError {
 /// Errors returned by GetGatewayResponses
 #[derive(Debug, PartialEq)]
 pub enum GetGatewayResponsesError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8552,10 +9132,11 @@ impl Error for GetGatewayResponsesError {
 /// Errors returned by GetIntegration
 #[derive(Debug, PartialEq)]
 pub enum GetIntegrationError {
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8641,10 +9222,11 @@ impl Error for GetIntegrationError {
 /// Errors returned by GetIntegrationResponse
 #[derive(Debug, PartialEq)]
 pub enum GetIntegrationResponseError {
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8732,10 +9314,11 @@ impl Error for GetIntegrationResponseError {
 /// Errors returned by GetMethod
 #[derive(Debug, PartialEq)]
 pub enum GetMethodError {
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8817,10 +9400,11 @@ impl Error for GetMethodError {
 /// Errors returned by GetMethodResponse
 #[derive(Debug, PartialEq)]
 pub enum GetMethodResponseError {
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8908,10 +9492,11 @@ impl Error for GetMethodResponseError {
 /// Errors returned by GetModel
 #[derive(Debug, PartialEq)]
 pub enum GetModelError {
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -8993,12 +9578,13 @@ impl Error for GetModelError {
 /// Errors returned by GetModelTemplate
 #[derive(Debug, PartialEq)]
 pub enum GetModelTemplateError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9088,12 +9674,13 @@ impl Error for GetModelTemplateError {
 /// Errors returned by GetModels
 #[derive(Debug, PartialEq)]
 pub enum GetModelsError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9179,10 +9766,11 @@ impl Error for GetModelsError {
 /// Errors returned by GetRequestValidator
 #[derive(Debug, PartialEq)]
 pub enum GetRequestValidatorError {
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9270,12 +9858,13 @@ impl Error for GetRequestValidatorError {
 /// Errors returned by GetRequestValidators
 #[derive(Debug, PartialEq)]
 pub enum GetRequestValidatorsError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9367,10 +9956,11 @@ impl Error for GetRequestValidatorsError {
 /// Errors returned by GetResource
 #[derive(Debug, PartialEq)]
 pub enum GetResourceError {
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9454,12 +10044,13 @@ impl Error for GetResourceError {
 /// Errors returned by GetResources
 #[derive(Debug, PartialEq)]
 pub enum GetResourcesError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9547,10 +10138,11 @@ impl Error for GetResourcesError {
 /// Errors returned by GetRestApi
 #[derive(Debug, PartialEq)]
 pub enum GetRestApiError {
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9632,10 +10224,11 @@ impl Error for GetRestApiError {
 /// Errors returned by GetRestApis
 #[derive(Debug, PartialEq)]
 pub enum GetRestApisError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9721,14 +10314,15 @@ impl Error for GetRestApisError {
 /// Errors returned by GetSdk
 #[derive(Debug, PartialEq)]
 pub enum GetSdkError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9814,10 +10408,11 @@ impl Error for GetSdkError {
 /// Errors returned by GetSdkType
 #[derive(Debug, PartialEq)]
 pub enum GetSdkTypeError {
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9899,8 +10494,9 @@ impl Error for GetSdkTypeError {
 /// Errors returned by GetSdkTypes
 #[derive(Debug, PartialEq)]
 pub enum GetSdkTypesError {
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9982,10 +10578,11 @@ impl Error for GetSdkTypesError {
 /// Errors returned by GetStage
 #[derive(Debug, PartialEq)]
 pub enum GetStageError {
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10067,10 +10664,11 @@ impl Error for GetStageError {
 /// Errors returned by GetStages
 #[derive(Debug, PartialEq)]
 pub enum GetStagesError {
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10149,15 +10747,112 @@ impl Error for GetStagesError {
         }
     }
 }
+/// Errors returned by GetTags
+#[derive(Debug, PartialEq)]
+pub enum GetTagsError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    BadRequest(String),
+    /// <p>The request exceeded the rate limit. Retry after the specified time period.</p>
+    LimitExceeded(String),
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
+    NotFound(String),
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
+    TooManyRequests(String),
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetTagsError {
+    pub fn from_body(body: &str) -> GetTagsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "BadRequestException" => GetTagsError::BadRequest(String::from(error_message)),
+                    "LimitExceededException" => {
+                        GetTagsError::LimitExceeded(String::from(error_message))
+                    }
+                    "NotFoundException" => GetTagsError::NotFound(String::from(error_message)),
+                    "TooManyRequestsException" => {
+                        GetTagsError::TooManyRequests(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        GetTagsError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => GetTagsError::Validation(error_message.to_string()),
+                    _ => GetTagsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetTagsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetTagsError {
+    fn from(err: serde_json::error::Error) -> GetTagsError {
+        GetTagsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetTagsError {
+    fn from(err: CredentialsError) -> GetTagsError {
+        GetTagsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetTagsError {
+    fn from(err: HttpDispatchError) -> GetTagsError {
+        GetTagsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetTagsError {
+    fn from(err: io::Error) -> GetTagsError {
+        GetTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetTagsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetTagsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetTagsError::BadRequest(ref cause) => cause,
+            GetTagsError::LimitExceeded(ref cause) => cause,
+            GetTagsError::NotFound(ref cause) => cause,
+            GetTagsError::TooManyRequests(ref cause) => cause,
+            GetTagsError::Unauthorized(ref cause) => cause,
+            GetTagsError::Validation(ref cause) => cause,
+            GetTagsError::Credentials(ref err) => err.description(),
+            GetTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetTagsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetUsage
 #[derive(Debug, PartialEq)]
 pub enum GetUsageError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10241,12 +10936,13 @@ impl Error for GetUsageError {
 /// Errors returned by GetUsagePlan
 #[derive(Debug, PartialEq)]
 pub enum GetUsagePlanError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10334,12 +11030,13 @@ impl Error for GetUsagePlanError {
 /// Errors returned by GetUsagePlanKey
 #[derive(Debug, PartialEq)]
 pub enum GetUsagePlanKeyError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10429,12 +11126,13 @@ impl Error for GetUsagePlanKeyError {
 /// Errors returned by GetUsagePlanKeys
 #[derive(Debug, PartialEq)]
 pub enum GetUsagePlanKeysError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10524,14 +11222,15 @@ impl Error for GetUsagePlanKeysError {
 /// Errors returned by GetUsagePlans
 #[derive(Debug, PartialEq)]
 pub enum GetUsagePlansError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10622,19 +11321,196 @@ impl Error for GetUsagePlansError {
         }
     }
 }
+/// Errors returned by GetVpcLink
+#[derive(Debug, PartialEq)]
+pub enum GetVpcLinkError {
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
+    NotFound(String),
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
+    TooManyRequests(String),
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetVpcLinkError {
+    pub fn from_body(body: &str) -> GetVpcLinkError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "NotFoundException" => GetVpcLinkError::NotFound(String::from(error_message)),
+                    "TooManyRequestsException" => {
+                        GetVpcLinkError::TooManyRequests(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        GetVpcLinkError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => GetVpcLinkError::Validation(error_message.to_string()),
+                    _ => GetVpcLinkError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetVpcLinkError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetVpcLinkError {
+    fn from(err: serde_json::error::Error) -> GetVpcLinkError {
+        GetVpcLinkError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetVpcLinkError {
+    fn from(err: CredentialsError) -> GetVpcLinkError {
+        GetVpcLinkError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetVpcLinkError {
+    fn from(err: HttpDispatchError) -> GetVpcLinkError {
+        GetVpcLinkError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetVpcLinkError {
+    fn from(err: io::Error) -> GetVpcLinkError {
+        GetVpcLinkError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetVpcLinkError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetVpcLinkError {
+    fn description(&self) -> &str {
+        match *self {
+            GetVpcLinkError::NotFound(ref cause) => cause,
+            GetVpcLinkError::TooManyRequests(ref cause) => cause,
+            GetVpcLinkError::Unauthorized(ref cause) => cause,
+            GetVpcLinkError::Validation(ref cause) => cause,
+            GetVpcLinkError::Credentials(ref err) => err.description(),
+            GetVpcLinkError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetVpcLinkError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetVpcLinks
+#[derive(Debug, PartialEq)]
+pub enum GetVpcLinksError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    BadRequest(String),
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
+    TooManyRequests(String),
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetVpcLinksError {
+    pub fn from_body(body: &str) -> GetVpcLinksError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "BadRequestException" => {
+                        GetVpcLinksError::BadRequest(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        GetVpcLinksError::TooManyRequests(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        GetVpcLinksError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetVpcLinksError::Validation(error_message.to_string())
+                    }
+                    _ => GetVpcLinksError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetVpcLinksError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetVpcLinksError {
+    fn from(err: serde_json::error::Error) -> GetVpcLinksError {
+        GetVpcLinksError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetVpcLinksError {
+    fn from(err: CredentialsError) -> GetVpcLinksError {
+        GetVpcLinksError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetVpcLinksError {
+    fn from(err: HttpDispatchError) -> GetVpcLinksError {
+        GetVpcLinksError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetVpcLinksError {
+    fn from(err: io::Error) -> GetVpcLinksError {
+        GetVpcLinksError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetVpcLinksError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetVpcLinksError {
+    fn description(&self) -> &str {
+        match *self {
+            GetVpcLinksError::BadRequest(ref cause) => cause,
+            GetVpcLinksError::TooManyRequests(ref cause) => cause,
+            GetVpcLinksError::Unauthorized(ref cause) => cause,
+            GetVpcLinksError::Validation(ref cause) => cause,
+            GetVpcLinksError::Credentials(ref err) => err.description(),
+            GetVpcLinksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetVpcLinksError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ImportApiKeys
 #[derive(Debug, PartialEq)]
 pub enum ImportApiKeysError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The request exceeded the rate limit. Retry after the specified time period.</p>
     LimitExceeded(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10732,14 +11608,15 @@ impl Error for ImportApiKeysError {
 /// Errors returned by ImportDocumentationParts
 #[derive(Debug, PartialEq)]
 pub enum ImportDocumentationPartsError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request exceeded the rate limit. Retry after the specified time period.</p>
     LimitExceeded(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10835,14 +11712,15 @@ impl Error for ImportDocumentationPartsError {
 /// Errors returned by ImportRestApi
 #[derive(Debug, PartialEq)]
 pub enum ImportRestApiError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The request exceeded the rate limit. Retry after the specified time period.</p>
     LimitExceeded(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -10936,14 +11814,15 @@ impl Error for ImportRestApiError {
 /// Errors returned by PutGatewayResponse
 #[derive(Debug, PartialEq)]
 pub enum PutGatewayResponseError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request exceeded the rate limit. Retry after the specified time period.</p>
     LimitExceeded(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11039,14 +11918,15 @@ impl Error for PutGatewayResponseError {
 /// Errors returned by PutIntegration
 #[derive(Debug, PartialEq)]
 pub enum PutIntegrationError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11140,16 +12020,17 @@ impl Error for PutIntegrationError {
 /// Errors returned by PutIntegrationResponse
 #[derive(Debug, PartialEq)]
 pub enum PutIntegrationResponseError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The request exceeded the rate limit. Retry after the specified time period.</p>
     LimitExceeded(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11249,16 +12130,17 @@ impl Error for PutIntegrationResponseError {
 /// Errors returned by PutMethod
 #[derive(Debug, PartialEq)]
 pub enum PutMethodError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The request exceeded the rate limit. Retry after the specified time period.</p>
     LimitExceeded(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11350,16 +12232,17 @@ impl Error for PutMethodError {
 /// Errors returned by PutMethodResponse
 #[derive(Debug, PartialEq)]
 pub enum PutMethodResponseError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The request exceeded the rate limit. Retry after the specified time period.</p>
     LimitExceeded(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11459,16 +12342,17 @@ impl Error for PutMethodResponseError {
 /// Errors returned by PutRestApi
 #[derive(Debug, PartialEq)]
 pub enum PutRestApiError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The request exceeded the rate limit. Retry after the specified time period.</p>
     LimitExceeded(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11557,15 +12441,120 @@ impl Error for PutRestApiError {
         }
     }
 }
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    BadRequest(String),
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
+    Conflict(String),
+    /// <p>The request exceeded the rate limit. Retry after the specified time period.</p>
+    LimitExceeded(String),
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
+    NotFound(String),
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
+    TooManyRequests(String),
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl TagResourceError {
+    pub fn from_body(body: &str) -> TagResourceError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "BadRequestException" => {
+                        TagResourceError::BadRequest(String::from(error_message))
+                    }
+                    "ConflictException" => TagResourceError::Conflict(String::from(error_message)),
+                    "LimitExceededException" => {
+                        TagResourceError::LimitExceeded(String::from(error_message))
+                    }
+                    "NotFoundException" => TagResourceError::NotFound(String::from(error_message)),
+                    "TooManyRequestsException" => {
+                        TagResourceError::TooManyRequests(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        TagResourceError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        TagResourceError::Validation(error_message.to_string())
+                    }
+                    _ => TagResourceError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => TagResourceError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for TagResourceError {
+    fn from(err: serde_json::error::Error) -> TagResourceError {
+        TagResourceError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for TagResourceError {
+    fn from(err: CredentialsError) -> TagResourceError {
+        TagResourceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for TagResourceError {
+    fn from(err: HttpDispatchError) -> TagResourceError {
+        TagResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for TagResourceError {
+    fn from(err: io::Error) -> TagResourceError {
+        TagResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for TagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            TagResourceError::BadRequest(ref cause) => cause,
+            TagResourceError::Conflict(ref cause) => cause,
+            TagResourceError::LimitExceeded(ref cause) => cause,
+            TagResourceError::NotFound(ref cause) => cause,
+            TagResourceError::TooManyRequests(ref cause) => cause,
+            TagResourceError::Unauthorized(ref cause) => cause,
+            TagResourceError::Validation(ref cause) => cause,
+            TagResourceError::Credentials(ref err) => err.description(),
+            TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            TagResourceError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by TestInvokeAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum TestInvokeAuthorizerError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11657,12 +12646,13 @@ impl Error for TestInvokeAuthorizerError {
 /// Errors returned by TestInvokeMethod
 #[derive(Debug, PartialEq)]
 pub enum TestInvokeMethodError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11749,15 +12739,118 @@ impl Error for TestInvokeMethodError {
         }
     }
 }
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    BadRequest(String),
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
+    Conflict(String),
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
+    NotFound(String),
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
+    TooManyRequests(String),
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UntagResourceError {
+    pub fn from_body(body: &str) -> UntagResourceError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "BadRequestException" => {
+                        UntagResourceError::BadRequest(String::from(error_message))
+                    }
+                    "ConflictException" => {
+                        UntagResourceError::Conflict(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        UntagResourceError::NotFound(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        UntagResourceError::TooManyRequests(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        UntagResourceError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UntagResourceError::Validation(error_message.to_string())
+                    }
+                    _ => UntagResourceError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UntagResourceError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UntagResourceError {
+    fn from(err: serde_json::error::Error) -> UntagResourceError {
+        UntagResourceError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UntagResourceError {
+    fn from(err: CredentialsError) -> UntagResourceError {
+        UntagResourceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UntagResourceError {
+    fn from(err: HttpDispatchError) -> UntagResourceError {
+        UntagResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UntagResourceError {
+    fn from(err: io::Error) -> UntagResourceError {
+        UntagResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UntagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UntagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            UntagResourceError::BadRequest(ref cause) => cause,
+            UntagResourceError::Conflict(ref cause) => cause,
+            UntagResourceError::NotFound(ref cause) => cause,
+            UntagResourceError::TooManyRequests(ref cause) => cause,
+            UntagResourceError::Unauthorized(ref cause) => cause,
+            UntagResourceError::Validation(ref cause) => cause,
+            UntagResourceError::Credentials(ref err) => err.description(),
+            UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UntagResourceError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateAccount
 #[derive(Debug, PartialEq)]
 pub enum UpdateAccountError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11847,14 +12940,15 @@ impl Error for UpdateAccountError {
 /// Errors returned by UpdateApiKey
 #[derive(Debug, PartialEq)]
 pub enum UpdateApiKeyError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -11944,12 +13038,13 @@ impl Error for UpdateApiKeyError {
 /// Errors returned by UpdateAuthorizer
 #[derive(Debug, PartialEq)]
 pub enum UpdateAuthorizerError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12039,14 +13134,15 @@ impl Error for UpdateAuthorizerError {
 /// Errors returned by UpdateBasePathMapping
 #[derive(Debug, PartialEq)]
 pub enum UpdateBasePathMappingError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12142,12 +13238,13 @@ impl Error for UpdateBasePathMappingError {
 /// Errors returned by UpdateClientCertificate
 #[derive(Debug, PartialEq)]
 pub enum UpdateClientCertificateError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12239,14 +13336,15 @@ impl Error for UpdateClientCertificateError {
 /// Errors returned by UpdateDeployment
 #[derive(Debug, PartialEq)]
 pub enum UpdateDeploymentError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The requested service is not available. For details see the accompanying error message. Retry after the specified time period.</p>
     ServiceUnavailable(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12340,16 +13438,17 @@ impl Error for UpdateDeploymentError {
 /// Errors returned by UpdateDocumentationPart
 #[derive(Debug, PartialEq)]
 pub enum UpdateDocumentationPartError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The request exceeded the rate limit. Retry after the specified time period.</p>
     LimitExceeded(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12449,14 +13548,15 @@ impl Error for UpdateDocumentationPartError {
 /// Errors returned by UpdateDocumentationVersion
 #[derive(Debug, PartialEq)]
 pub enum UpdateDocumentationVersionError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12554,14 +13654,15 @@ impl Error for UpdateDocumentationVersionError {
 /// Errors returned by UpdateDomainName
 #[derive(Debug, PartialEq)]
 pub enum UpdateDomainNameError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12655,12 +13756,13 @@ impl Error for UpdateDomainNameError {
 /// Errors returned by UpdateGatewayResponse
 #[derive(Debug, PartialEq)]
 pub enum UpdateGatewayResponseError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12752,14 +13854,15 @@ impl Error for UpdateGatewayResponseError {
 /// Errors returned by UpdateIntegration
 #[derive(Debug, PartialEq)]
 pub enum UpdateIntegrationError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12855,14 +13958,15 @@ impl Error for UpdateIntegrationError {
 /// Errors returned by UpdateIntegrationResponse
 #[derive(Debug, PartialEq)]
 pub enum UpdateIntegrationResponseError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12958,14 +14062,15 @@ impl Error for UpdateIntegrationResponseError {
 /// Errors returned by UpdateMethod
 #[derive(Debug, PartialEq)]
 pub enum UpdateMethodError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13055,16 +14160,17 @@ impl Error for UpdateMethodError {
 /// Errors returned by UpdateMethodResponse
 #[derive(Debug, PartialEq)]
 pub enum UpdateMethodResponseError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The request exceeded the rate limit. Retry after the specified time period.</p>
     LimitExceeded(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13164,14 +14270,15 @@ impl Error for UpdateMethodResponseError {
 /// Errors returned by UpdateModel
 #[derive(Debug, PartialEq)]
 pub enum UpdateModelError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13261,12 +14368,13 @@ impl Error for UpdateModelError {
 /// Errors returned by UpdateRequestValidator
 #[derive(Debug, PartialEq)]
 pub enum UpdateRequestValidatorError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13358,14 +14466,15 @@ impl Error for UpdateRequestValidatorError {
 /// Errors returned by UpdateResource
 #[derive(Debug, PartialEq)]
 pub enum UpdateResourceError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13459,14 +14568,15 @@ impl Error for UpdateResourceError {
 /// Errors returned by UpdateRestApi
 #[derive(Debug, PartialEq)]
 pub enum UpdateRestApiError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13560,14 +14670,15 @@ impl Error for UpdateRestApiError {
 /// Errors returned by UpdateStage
 #[derive(Debug, PartialEq)]
 pub enum UpdateStageError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13657,12 +14768,13 @@ impl Error for UpdateStageError {
 /// Errors returned by UpdateUsage
 #[derive(Debug, PartialEq)]
 pub enum UpdateUsageError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13750,14 +14862,15 @@ impl Error for UpdateUsageError {
 /// Errors returned by UpdateUsagePlan
 #[derive(Debug, PartialEq)]
 pub enum UpdateUsagePlanError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
     BadRequest(String),
-
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
     Conflict(String),
-
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
     NotFound(String),
-
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
     TooManyRequests(String),
-
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
     Unauthorized(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13848,6 +14961,108 @@ impl Error for UpdateUsagePlanError {
         }
     }
 }
+/// Errors returned by UpdateVpcLink
+#[derive(Debug, PartialEq)]
+pub enum UpdateVpcLinkError {
+    /// <p>The submitted request is not valid, for example, the input is incomplete or incorrect. See the accompanying error message for details.</p>
+    BadRequest(String),
+    /// <p>The request configuration has conflicts. For details, see the accompanying error message.</p>
+    Conflict(String),
+    /// <p>The requested resource is not found. Make sure that the request URI is correct.</p>
+    NotFound(String),
+    /// <p>The request has reached its throttling limit. Retry after the specified time period.</p>
+    TooManyRequests(String),
+    /// <p>The request is denied because the caller has insufficient permissions.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateVpcLinkError {
+    pub fn from_body(body: &str) -> UpdateVpcLinkError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "BadRequestException" => {
+                        UpdateVpcLinkError::BadRequest(String::from(error_message))
+                    }
+                    "ConflictException" => {
+                        UpdateVpcLinkError::Conflict(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        UpdateVpcLinkError::NotFound(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        UpdateVpcLinkError::TooManyRequests(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        UpdateVpcLinkError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateVpcLinkError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateVpcLinkError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateVpcLinkError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateVpcLinkError {
+    fn from(err: serde_json::error::Error) -> UpdateVpcLinkError {
+        UpdateVpcLinkError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateVpcLinkError {
+    fn from(err: CredentialsError) -> UpdateVpcLinkError {
+        UpdateVpcLinkError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateVpcLinkError {
+    fn from(err: HttpDispatchError) -> UpdateVpcLinkError {
+        UpdateVpcLinkError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateVpcLinkError {
+    fn from(err: io::Error) -> UpdateVpcLinkError {
+        UpdateVpcLinkError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateVpcLinkError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateVpcLinkError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateVpcLinkError::BadRequest(ref cause) => cause,
+            UpdateVpcLinkError::Conflict(ref cause) => cause,
+            UpdateVpcLinkError::NotFound(ref cause) => cause,
+            UpdateVpcLinkError::TooManyRequests(ref cause) => cause,
+            UpdateVpcLinkError::Unauthorized(ref cause) => cause,
+            UpdateVpcLinkError::Validation(ref cause) => cause,
+            UpdateVpcLinkError::Credentials(ref err) => err.description(),
+            UpdateVpcLinkError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UpdateVpcLinkError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the Amazon API Gateway API. Amazon API Gateway clients implement this trait.
 pub trait ApiGateway {
     /// <p><p>Create an <a>ApiKey</a> resource. </p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/create-api-key.html">AWS CLI</a></div></p>
@@ -13919,6 +15134,9 @@ pub trait ApiGateway {
         &self,
         input: &CreateUsagePlanKeyRequest,
     ) -> Result<UsagePlanKey, CreateUsagePlanKeyError>;
+
+    /// <p>Creates a VPC link, under the caller's account in a selected region, in an asynchronous operation that typically takes 2-4 minutes to complete and become operational. The caller must have permissions to create and update VPC Endpoint services.</p>
+    fn create_vpc_link(&self, input: &CreateVpcLinkRequest) -> Result<VpcLink, CreateVpcLinkError>;
 
     /// <p>Deletes the <a>ApiKey</a> resource.</p>
     fn delete_api_key(&self, input: &DeleteApiKeyRequest) -> Result<(), DeleteApiKeyError>;
@@ -14017,6 +15235,9 @@ pub trait ApiGateway {
         &self,
         input: &DeleteUsagePlanKeyRequest,
     ) -> Result<(), DeleteUsagePlanKeyError>;
+
+    /// <p>Deletes an existing <a>VpcLink</a> of a specified identifier.</p>
+    fn delete_vpc_link(&self, input: &DeleteVpcLinkRequest) -> Result<(), DeleteVpcLinkError>;
 
     /// <p>Flushes all authorizer cache entries on a stage.</p>
     fn flush_stage_authorizers_cache(
@@ -14132,13 +15353,13 @@ pub trait ApiGateway {
         input: &GetGatewayResponseRequest,
     ) -> Result<GatewayResponse, GetGatewayResponseError>;
 
-    /// <p>Gets the <a>GatewayResponses</a> collection on the given <a>RestApi</a>. If an API developer has not added any definitions for gateway responses, the result will be the Amazon API Gateway-generated default <a>GatewayResponses</a> collection for the supported response types.</p>
+    /// <p>Gets the <a>GatewayResponses</a> collection on the given <a>RestApi</a>. If an API developer has not added any definitions for gateway responses, the result will be the API Gateway-generated default <a>GatewayResponses</a> collection for the supported response types.</p>
     fn get_gateway_responses(
         &self,
         input: &GetGatewayResponsesRequest,
     ) -> Result<GatewayResponses, GetGatewayResponsesError>;
 
-    /// <p>Represents a get integration.</p>
+    /// <p>Get the integration settings.</p>
     fn get_integration(
         &self,
         input: &GetIntegrationRequest,
@@ -14208,6 +15429,9 @@ pub trait ApiGateway {
     /// <p>Gets information about one or more <a>Stage</a> resources.</p>
     fn get_stages(&self, input: &GetStagesRequest) -> Result<Stages, GetStagesError>;
 
+    /// <p>Gets the Tags collection for a given resource.</p>
+    fn get_tags(&self, input: &GetTagsRequest) -> Result<Tags, GetTagsError>;
+
     /// <p>Gets the usage data of a usage plan in a specified time interval.</p>
     fn get_usage(&self, input: &GetUsageRequest) -> Result<Usage, GetUsageError>;
 
@@ -14232,6 +15456,12 @@ pub trait ApiGateway {
         input: &GetUsagePlansRequest,
     ) -> Result<UsagePlans, GetUsagePlansError>;
 
+    /// <p>Gets a specified VPC link under the caller's account in a region.</p>
+    fn get_vpc_link(&self, input: &GetVpcLinkRequest) -> Result<VpcLink, GetVpcLinkError>;
+
+    /// <p>Gets the <a>VpcLinks</a> collection under the caller's account in a selected region.</p>
+    fn get_vpc_links(&self, input: &GetVpcLinksRequest) -> Result<VpcLinks, GetVpcLinksError>;
+
     /// <p>Import API keys from an external source, such as a CSV-formatted file.</p>
     fn import_api_keys(
         &self,
@@ -14243,7 +15473,7 @@ pub trait ApiGateway {
         input: &ImportDocumentationPartsRequest,
     ) -> Result<DocumentationPartIds, ImportDocumentationPartsError>;
 
-    /// <p>A feature of the Amazon API Gateway control service for creating a new API from an external API definition file.</p>
+    /// <p>A feature of the API Gateway control service for creating a new API from an external API definition file.</p>
     fn import_rest_api(&self, input: &ImportRestApiRequest) -> Result<RestApi, ImportRestApiError>;
 
     /// <p>Creates a customization of a <a>GatewayResponse</a> of a specified response type and status code on the given <a>RestApi</a>.</p>
@@ -14273,8 +15503,11 @@ pub trait ApiGateway {
         input: &PutMethodResponseRequest,
     ) -> Result<MethodResponse, PutMethodResponseError>;
 
-    /// <p>A feature of the Amazon API Gateway control service for updating an existing API with an input of external API definitions. The update can take the form of merging the supplied definition into the existing API or overwriting the existing API.</p>
+    /// <p>A feature of the API Gateway control service for updating an existing API with an input of external API definitions. The update can take the form of merging the supplied definition into the existing API or overwriting the existing API.</p>
     fn put_rest_api(&self, input: &PutRestApiRequest) -> Result<RestApi, PutRestApiError>;
+
+    /// <p>Adds or updates Tags on a gievn resource.</p>
+    fn tag_resource(&self, input: &TagResourceRequest) -> Result<(), TagResourceError>;
 
     /// <p><p>Simulate the execution of an <a>Authorizer</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html">Enable custom authorizers</a> </div></p>
     fn test_invoke_authorizer(
@@ -14287,6 +15520,9 @@ pub trait ApiGateway {
         &self,
         input: &TestInvokeMethodRequest,
     ) -> Result<TestInvokeMethodResponse, TestInvokeMethodError>;
+
+    /// <p>Removes Tags from a given resource.</p>
+    fn untag_resource(&self, input: &UntagResourceRequest) -> Result<(), UntagResourceError>;
 
     /// <p>Changes information about the current <a>Account</a> resource.</p>
     fn update_account(&self, input: &UpdateAccountRequest) -> Result<Account, UpdateAccountError>;
@@ -14390,6 +15626,9 @@ pub trait ApiGateway {
         &self,
         input: &UpdateUsagePlanRequest,
     ) -> Result<UsagePlan, UpdateUsagePlanError>;
+
+    /// <p>Updates an existing <a>VpcLink</a> of a specified identifier.</p>
+    fn update_vpc_link(&self, input: &UpdateVpcLinkRequest) -> Result<VpcLink, UpdateVpcLinkError>;
 }
 /// A client for the Amazon API Gateway API.
 pub struct ApiGatewayClient<P, D>
@@ -15006,6 +16245,44 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(CreateUsagePlanKeyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Creates a VPC link, under the caller's account in a selected region, in an asynchronous operation that typically takes 2-4 minutes to complete and become operational. The caller must have permissions to create and update VPC Endpoint services.</p>
+    fn create_vpc_link(&self, input: &CreateVpcLinkRequest) -> Result<VpcLink, CreateVpcLinkError> {
+        let request_uri = "/vpclinks";
+
+        let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Accepted => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<VpcLink>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateVpcLinkError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -15629,6 +16906,32 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(DeleteUsagePlanKeyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Deletes an existing <a>VpcLink</a> of a specified identifier.</p>
+    fn delete_vpc_link(&self, input: &DeleteVpcLinkRequest) -> Result<(), DeleteVpcLinkError> {
+        let request_uri = format!("/vpclinks/{vpclink_id}", vpclink_id = input.vpc_link_id);
+
+        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Accepted => {
+                let result = ();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteVpcLinkError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -16300,6 +17603,9 @@ where
         if let Some(ref x) = input.limit {
             params.put("limit", x);
         }
+        if let Some(ref x) = input.location_status {
+            params.put("locationStatus", x);
+        }
         if let Some(ref x) = input.name_query {
             params.put("name", x);
         }
@@ -16618,7 +17924,7 @@ where
         }
     }
 
-    /// <p>Gets the <a>GatewayResponses</a> collection on the given <a>RestApi</a>. If an API developer has not added any definitions for gateway responses, the result will be the Amazon API Gateway-generated default <a>GatewayResponses</a> collection for the supported response types.</p>
+    /// <p>Gets the <a>GatewayResponses</a> collection on the given <a>RestApi</a>. If an API developer has not added any definitions for gateway responses, the result will be the API Gateway-generated default <a>GatewayResponses</a> collection for the supported response types.</p>
     fn get_gateway_responses(
         &self,
         input: &GetGatewayResponsesRequest,
@@ -16668,7 +17974,7 @@ where
         }
     }
 
-    /// <p>Represents a get integration.</p>
+    /// <p>Get the integration settings.</p>
     fn get_integration(
         &self,
         input: &GetIntegrationRequest,
@@ -17444,6 +18750,50 @@ where
         }
     }
 
+    /// <p>Gets the Tags collection for a given resource.</p>
+    fn get_tags(&self, input: &GetTagsRequest) -> Result<Tags, GetTagsError> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.limit {
+            params.put("limit", x);
+        }
+        if let Some(ref x) = input.position {
+            params.put("position", x);
+        }
+        request.set_params(params);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<Tags>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetTagsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Gets the usage data of a usage plan in a specified time interval.</p>
     fn get_usage(&self, input: &GetUsageRequest) -> Result<Usage, GetUsageError> {
         let request_uri = format!(
@@ -17679,6 +19029,85 @@ where
         }
     }
 
+    /// <p>Gets a specified VPC link under the caller's account in a region.</p>
+    fn get_vpc_link(&self, input: &GetVpcLinkRequest) -> Result<VpcLink, GetVpcLinkError> {
+        let request_uri = format!("/vpclinks/{vpclink_id}", vpclink_id = input.vpc_link_id);
+
+        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<VpcLink>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetVpcLinkError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Gets the <a>VpcLinks</a> collection under the caller's account in a selected region.</p>
+    fn get_vpc_links(&self, input: &GetVpcLinksRequest) -> Result<VpcLinks, GetVpcLinksError> {
+        let request_uri = "/vpclinks";
+
+        let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.limit {
+            params.put("limit", x);
+        }
+        if let Some(ref x) = input.position {
+            params.put("position", x);
+        }
+        request.set_params(params);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<VpcLinks>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetVpcLinksError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Import API keys from an external source, such as a CSV-formatted file.</p>
     fn import_api_keys(
         &self,
@@ -17780,7 +19209,7 @@ where
         }
     }
 
-    /// <p>A feature of the Amazon API Gateway control service for creating a new API from an external API definition file.</p>
+    /// <p>A feature of the API Gateway control service for creating a new API from an external API definition file.</p>
     fn import_rest_api(&self, input: &ImportRestApiRequest) -> Result<RestApi, ImportRestApiError> {
         let request_uri = "/restapis";
 
@@ -18046,7 +19475,7 @@ where
         }
     }
 
-    /// <p>A feature of the Amazon API Gateway control service for updating an existing API with an input of external API definitions. The update can take the form of merging the supplied definition into the existing API or overwriting the existing API.</p>
+    /// <p>A feature of the API Gateway control service for updating an existing API with an input of external API definitions. The update can take the form of merging the supplied definition into the existing API or overwriting the existing API.</p>
     fn put_rest_api(&self, input: &PutRestApiRequest) -> Result<RestApi, PutRestApiError> {
         let request_uri = format!("/restapis/{restapi_id}", restapi_id = input.rest_api_id);
 
@@ -18092,6 +19521,35 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(PutRestApiError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Adds or updates Tags on a gievn resource.</p>
+    fn tag_resource(&self, input: &TagResourceRequest) -> Result<(), TagResourceError> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::NoContent => {
+                let result = ();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(TagResourceError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -18183,6 +19641,38 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(TestInvokeMethodError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Removes Tags from a given resource.</p>
+    fn untag_resource(&self, input: &UntagResourceRequest) -> Result<(), UntagResourceError> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        for item in input.tag_keys.iter() {
+            params.put("tagKeys", item);
+        }
+        request.set_params(params);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::NoContent => {
+                let result = ();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UntagResourceError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -19084,6 +20574,44 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(UpdateUsagePlanError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Updates an existing <a>VpcLink</a> of a specified identifier.</p>
+    fn update_vpc_link(&self, input: &UpdateVpcLinkRequest) -> Result<VpcLink, UpdateVpcLinkError> {
+        let request_uri = format!("/vpclinks/{vpclink_id}", vpclink_id = input.vpc_link_id);
+
+        let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<VpcLink>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateVpcLinkError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }

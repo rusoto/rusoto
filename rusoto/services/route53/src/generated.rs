@@ -41,6 +41,92 @@ enum DeserializerNext {
     Skip,
     Element(String),
 }
+/// <p>A complex type that contains the type of limit that you specified in the request and the current value for that limit.</p>
+#[derive(Default, Debug)]
+pub struct AccountLimit {
+    /// <p><p>The limit that you requested. Valid values include the following:</p> <ul> <li> <p> <b>MAX<em>HEALTH</em>CHECKS<em>BY</em>OWNER</b>: The maximum number of health checks that you can create using the current account.</p> </li> <li> <p> <b>MAX<em>HOSTED</em>ZONES<em>BY</em>OWNER</b>: The maximum number of hosted zones that you can create using the current account.</p> </li> <li> <p> <b>MAX<em>REUSABLE</em>DELEGATION<em>SETS</em>BY<em>OWNER</b>: The maximum number of reusable delegation sets that you can create using the current account.</p> </li> <li> <p> <b>MAX</em>TRAFFIC<em>POLICIES</em>BY<em>OWNER</b>: The maximum number of traffic policies that you can create using the current account.</p> </li> <li> <p> <b>MAX</em>TRAFFIC<em>POLICY</em>INSTANCES<em>BY</em>OWNER</b>: The maximum number of traffic policy instances that you can create using the current account. (Traffic policy instances are referred to as traffic flow policy records in the Amazon Route 53 console.)</p> </li> </ul></p>
+    pub type_: String,
+    /// <p>The current value for the limit that is specified by <a>AccountLimit$Type</a>.</p>
+    pub value: i64,
+}
+
+struct AccountLimitDeserializer;
+impl AccountLimitDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AccountLimit, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = AccountLimit::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Type" => {
+                        obj.type_ = try!(AccountLimitTypeDeserializer::deserialize("Type", stack));
+                    }
+                    "Value" => {
+                        obj.value = try!(LimitValueDeserializer::deserialize("Value", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct AccountLimitTypeDeserializer;
+impl AccountLimitTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+
+pub struct AccountLimitTypeSerializer;
+impl AccountLimitTypeSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
 /// <p>A complex type that identifies the CloudWatch alarm that you want Amazon Route 53 health checkers to use to determine whether this health check is healthy.</p>
 #[derive(Default, Debug)]
 pub struct AlarmIdentifier {
@@ -195,11 +281,11 @@ impl AliasHealthEnabledSerializer {
 /// <p><p> <i>Alias resource record sets only:</i> Information about the CloudFront distribution, Elastic Beanstalk environment, ELB load balancer, Amazon S3 bucket, or Amazon Route 53 resource record set that you&#39;re redirecting queries to. An Elastic Beanstalk environment must have a regionalized subdomain.</p> <p>When creating resource record sets for a private hosted zone, note the following:</p> <ul> <li> <p>Resource record sets can&#39;t be created for CloudFront distributions in a private hosted zone.</p> </li> <li> <p>Creating geolocation alias resource record sets or latency alias resource record sets in a private hosted zone is unsupported.</p> </li> <li> <p>For information about creating failover resource record sets in a private hosted zone, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-private-hosted-zones.html">Configuring Failover in a Private Hosted Zone</a>.</p> </li> </ul></p>
 #[derive(Default, Debug)]
 pub struct AliasTarget {
-    /// <p><p> <i>Alias resource record sets only:</i> The value that you specify depends on where you want to route queries:</p> <dl> <dt>CloudFront distribution</dt> <dd> <p>Specify the domain name that CloudFront assigned when you created your distribution.</p> <p>Your CloudFront distribution must include an alternate domain name that matches the name of the resource record set. For example, if the name of the resource record set is <i>acme.example.com</i>, your CloudFront distribution must include <i>acme.example.com</i> as one of the alternate domain names. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/CNAMEs.html">Using Alternate Domain Names (CNAMEs)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </dd> <dt>Elastic Beanstalk environment</dt> <dd> <p>Specify the <code>CNAME</code> attribute for the environment. (The environment must have a regionalized domain name.) You can use the following methods to get the value of the CNAME attribute:</p> <ul> <li> <p> <i>AWS Management Console</i>: For information about how to get the value by using the console, see <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/customdomains.html">Using Custom Domains with AWS Elastic Beanstalk</a> in the <i>AWS Elastic Beanstalk Developer Guide</i>.</p> </li> <li> <p> <i>Elastic Beanstalk API</i>: Use the <code>DescribeEnvironments</code> action to get the value of the <code>CNAME</code> attribute. For more information, see <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/api/API_DescribeEnvironments.html">DescribeEnvironments</a> in the <i>AWS Elastic Beanstalk API Reference</i>.</p> </li> <li> <p> <i>AWS CLI</i>: Use the <code>describe-environments</code> command to get the value of the <code>CNAME</code> attribute. For more information, see <a href="http://docs.aws.amazon.com/cli/latest/reference/elasticbeanstalk/describe-environments.html">describe-environments</a> in the <i>AWS Command Line Interface Reference</i>.</p> </li> </ul> </dd> <dt>ELB load balancer</dt> <dd> <p>Specify the DNS name that is associated with the load balancer. Get the DNS name by using the AWS Management Console, the ELB API, or the AWS CLI. </p> <ul> <li> <p> <b>AWS Management Console</b>: Go to the EC2 page, choose <b>Load Balancers</b> in the navigation pane, choose the load balancer, choose the <b>Description</b> tab, and get the value of the <b>DNS name</b> field. (If you&#39;re routing traffic to a Classic Load Balancer, get the value that begins with <b>dualstack</b>.) </p> </li> <li> <p> <b>Elastic Load Balancing API</b>: Use <code>DescribeLoadBalancers</code> to get the value of <code>DNSName</code>. For more information, see the applicable guide:</p> <ul> <li> <p>Classic Load Balancer: <a href="http://docs.aws.amazon.com/elasticloadbalancing/2012-06-01/APIReference/API_DescribeLoadBalancers.html">DescribeLoadBalancers</a> </p> </li> <li> <p>Application Load Balancer: <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeLoadBalancers.html">DescribeLoadBalancers</a> </p> </li> </ul> </li> <li> <p> <b>AWS CLI</b>: Use <code> <a href="http://docs.aws.amazon.com/cli/latest/reference/elb/describe-load-balancers.html">describe-load-balancers</a> </code> to get the value of <code>DNSName</code>.</p> </li> </ul> </dd> <dt>Amazon S3 bucket that is configured as a static website</dt> <dd> <p>Specify the domain name of the Amazon S3 website endpoint in which you created the bucket, for example, <code>s3-website-us-east-2.amazonaws.com</code>. For more information about valid values, see the table <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region">Amazon Simple Storage Service (S3) Website Endpoints</a> in the <i>Amazon Web Services General Reference</i>. For more information about using S3 buckets for websites, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/getting-started.html">Getting Started with Amazon Route 53</a> in the <i>Amazon Route 53 Developer Guide.</i> </p> </dd> <dt>Another Amazon Route 53 resource record set</dt> <dd> <p>Specify the value of the <code>Name</code> element for a resource record set in the current hosted zone.</p> </dd> </dl></p>
+    /// <p><p> <i>Alias resource record sets only:</i> The value that you specify depends on where you want to route queries:</p> <dl> <dt>CloudFront distribution</dt> <dd> <p>Specify the domain name that CloudFront assigned when you created your distribution.</p> <p>Your CloudFront distribution must include an alternate domain name that matches the name of the resource record set. For example, if the name of the resource record set is <i>acme.example.com</i>, your CloudFront distribution must include <i>acme.example.com</i> as one of the alternate domain names. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/CNAMEs.html">Using Alternate Domain Names (CNAMEs)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> </dd> <dt>Elastic Beanstalk environment</dt> <dd> <p>Specify the <code>CNAME</code> attribute for the environment. (The environment must have a regionalized domain name.) You can use the following methods to get the value of the CNAME attribute:</p> <ul> <li> <p> <i>AWS Management Console</i>: For information about how to get the value by using the console, see <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/customdomains.html">Using Custom Domains with AWS Elastic Beanstalk</a> in the <i>AWS Elastic Beanstalk Developer Guide</i>.</p> </li> <li> <p> <i>Elastic Beanstalk API</i>: Use the <code>DescribeEnvironments</code> action to get the value of the <code>CNAME</code> attribute. For more information, see <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/api/API_DescribeEnvironments.html">DescribeEnvironments</a> in the <i>AWS Elastic Beanstalk API Reference</i>.</p> </li> <li> <p> <i>AWS CLI</i>: Use the <code>describe-environments</code> command to get the value of the <code>CNAME</code> attribute. For more information, see <a href="http://docs.aws.amazon.com/cli/latest/reference/elasticbeanstalk/describe-environments.html">describe-environments</a> in the <i>AWS Command Line Interface Reference</i>.</p> </li> </ul> </dd> <dt>ELB load balancer</dt> <dd> <p>Specify the DNS name that is associated with the load balancer. Get the DNS name by using the AWS Management Console, the ELB API, or the AWS CLI. </p> <ul> <li> <p> <b>AWS Management Console</b>: Go to the EC2 page, choose <b>Load Balancers</b> in the navigation pane, choose the load balancer, choose the <b>Description</b> tab, and get the value of the <b>DNS name</b> field. (If you&#39;re routing traffic to a Classic Load Balancer, get the value that begins with <b>dualstack</b>.) </p> </li> <li> <p> <b>Elastic Load Balancing API</b>: Use <code>DescribeLoadBalancers</code> to get the value of <code>DNSName</code>. For more information, see the applicable guide:</p> <ul> <li> <p>Classic Load Balancers: <a href="http://docs.aws.amazon.com/elasticloadbalancing/2012-06-01/APIReference/API_DescribeLoadBalancers.html">DescribeLoadBalancers</a> </p> </li> <li> <p>Application and Network Load Balancers: <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeLoadBalancers.html">DescribeLoadBalancers</a> </p> </li> </ul> </li> <li> <p> <b>AWS CLI</b>: Use <code>describe-load-balancers</code> to get the value of <code>DNSName</code>. For more information, see the applicable guide:</p> <ul> <li> <p>Classic Load Balancers: <a href="http://docs.aws.amazon.com/cli/latest/reference/elb/describe-load-balancers.html">describe-load-balancers</a> </p> </li> <li> <p>Application and Network Load Balancers: <a href="http://docs.aws.amazon.com/cli/latest/reference/elbv2/describe-load-balancers.html">describe-load-balancers</a> </p> </li> </ul> </li> </ul> </dd> <dt>Amazon S3 bucket that is configured as a static website</dt> <dd> <p>Specify the domain name of the Amazon S3 website endpoint in which you created the bucket, for example, <code>s3-website-us-east-2.amazonaws.com</code>. For more information about valid values, see the table <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region">Amazon Simple Storage Service (S3) Website Endpoints</a> in the <i>Amazon Web Services General Reference</i>. For more information about using S3 buckets for websites, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/getting-started.html">Getting Started with Amazon Route 53</a> in the <i>Amazon Route 53 Developer Guide.</i> </p> </dd> <dt>Another Amazon Route 53 resource record set</dt> <dd> <p>Specify the value of the <code>Name</code> element for a resource record set in the current hosted zone.</p> </dd> </dl></p>
     pub dns_name: String,
     /// <p> <i>Applies only to alias, failover alias, geolocation alias, latency alias, and weighted alias resource record sets:</i> When <code>EvaluateTargetHealth</code> is <code>true</code>, an alias resource record set inherits the health of the referenced AWS resource, such as an ELB load balancer, or the referenced resource record set.</p> <p>Note the following:</p> <ul> <li> <p>You can't set <code>EvaluateTargetHealth</code> to <code>true</code> when the alias target is a CloudFront distribution.</p> </li> <li> <p>If the AWS resource that you specify in <code>AliasTarget</code> is a resource record set or a group of resource record sets (for example, a group of weighted resource record sets), but it is not another alias resource record set, we recommend that you associate a health check with all of the resource record sets in the alias target. For more information, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-complex-configs.html#dns-failover-complex-configs-hc-omitting">What Happens When You Omit Health Checks?</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </li> <li> <p>If you specify an Elastic Beanstalk environment in <code>HostedZoneId</code> and <code>DNSName</code>, and if the environment contains an ELB load balancer, Elastic Load Balancing routes queries only to the healthy Amazon EC2 instances that are registered with the load balancer. (An environment automatically contains an ELB load balancer if it includes more than one EC2 instance.) If you set <code>EvaluateTargetHealth</code> to <code>true</code> and either no EC2 instances are healthy or the load balancer itself is unhealthy, Amazon Route 53 routes queries to other available resources that are healthy, if any.</p> <p>If the environment contains a single EC2 instance, there are no special requirements.</p> </li> <li> <p>If you specify an ELB load balancer in <code> <a>AliasTarget</a> </code>, ELB routes queries only to the healthy EC2 instances that are registered with the load balancer. If no EC2 instances are healthy or if the load balancer itself is unhealthy, and if <code>EvaluateTargetHealth</code> is true for the corresponding alias resource record set, Amazon Route 53 routes queries to other resources. When you create a load balancer, you configure settings for ELB health checks; they're not Amazon Route 53 health checks, but they perform a similar function. Do not create Amazon Route 53 health checks for the EC2 instances that you register with an ELB load balancer.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-complex-configs.html">How Health Checks Work in More Complex Amazon Route 53 Configurations</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </li> <li> <p>We recommend that you set <code>EvaluateTargetHealth</code> to true only when you have enough idle capacity to handle the failure of one or more endpoints.</p> </li> </ul> <p>For more information and examples, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover.html">Amazon Route 53 Health Checks and DNS Failover</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>
     pub evaluate_target_health: bool,
-    /// <p><p> <i>Alias resource records sets only</i>: The value used depends on where you want to route traffic:</p> <dl> <dt>CloudFront distribution</dt> <dd> <p>Specify <code>Z2FDTNDATAQYW2</code>.</p> <note> <p>Alias resource record sets for CloudFront can&#39;t be created in a private zone.</p> </note> </dd> <dt>Elastic Beanstalk environment</dt> <dd> <p>Specify the hosted zone ID for the region in which you created the environment. The environment must have a regionalized subdomain. For a list of regions and the corresponding hosted zone IDs, see <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html#elasticbeanstalk_region">AWS Elastic Beanstalk</a> in the &quot;AWS Regions and Endpoints&quot; chapter of the <i>Amazon Web Services General Reference</i>.</p> </dd> <dt>ELB load balancer</dt> <dd> <p>Specify the value of the hosted zone ID for the load balancer. Use the following methods to get the hosted zone ID:</p> <ul> <li> <p> <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html#elb_region">Elastic Load Balancing</a> table in the &quot;AWS Regions and Endpoints&quot; chapter of the <i>Amazon Web Services General Reference</i>: Use the value in the &quot;Amazon Route 53 Hosted Zone ID&quot; column that corresponds with the region that you created your load balancer in.</p> </li> <li> <p> <b>AWS Management Console</b>: Go to the Amazon EC2 page, click <b>Load Balancers</b> in the navigation pane, select the load balancer, and get the value of the <b>Hosted zone</b> field on the <b>Description</b> tab.</p> </li> <li> <p> <b>Elastic Load Balancing API</b>: Use <code>DescribeLoadBalancers</code> to get the value of <code>CanonicalHostedZoneNameId</code>. For more information, see the applicable guide:</p> <ul> <li> <p>Classic Load Balancer: <a href="http://docs.aws.amazon.com/elasticloadbalancing/2012-06-01/APIReference/API_DescribeLoadBalancers.html">DescribeLoadBalancers</a> </p> </li> <li> <p>Application Load Balancer: <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeLoadBalancers.html">DescribeLoadBalancers</a> </p> </li> </ul> </li> <li> <p> <b>AWS CLI</b>: Use <code> <a href="http://docs.aws.amazon.com/cli/latest/reference/elb/describe-load-balancers.html">describe-load-balancers</a> </code> to get the value of <code>CanonicalHostedZoneNameID</code>.</p> </li> </ul> </dd> <dt>An Amazon S3 bucket configured as a static website</dt> <dd> <p>Specify the hosted zone ID for the region that you created the bucket in. For more information about valid values, see the <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region">Amazon Simple Storage Service Website Endpoints</a> table in the &quot;AWS Regions and Endpoints&quot; chapter of the <i>Amazon Web Services General Reference</i>.</p> </dd> <dt>Another Amazon Route 53 resource record set in your hosted zone</dt> <dd> <p>Specify the hosted zone ID of your hosted zone. (An alias resource record set can&#39;t reference a resource record set in a different hosted zone.)</p> </dd> </dl></p>
+    /// <p><p> <i>Alias resource records sets only</i>: The value used depends on where you want to route traffic:</p> <dl> <dt>CloudFront distribution</dt> <dd> <p>Specify <code>Z2FDTNDATAQYW2</code>.</p> <note> <p>Alias resource record sets for CloudFront can&#39;t be created in a private zone.</p> </note> </dd> <dt>Elastic Beanstalk environment</dt> <dd> <p>Specify the hosted zone ID for the region in which you created the environment. The environment must have a regionalized subdomain. For a list of regions and the corresponding hosted zone IDs, see <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html#elasticbeanstalk_region">AWS Elastic Beanstalk</a> in the &quot;AWS Regions and Endpoints&quot; chapter of the <i>Amazon Web Services General Reference</i>.</p> </dd> <dt>ELB load balancer</dt> <dd> <p>Specify the value of the hosted zone ID for the load balancer. Use the following methods to get the hosted zone ID:</p> <ul> <li> <p> <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html#elb_region">Elastic Load Balancing</a> table in the &quot;AWS Regions and Endpoints&quot; chapter of the <i>Amazon Web Services General Reference</i>: Use the value that corresponds with the region that you created your load balancer in. Note that there are separate columns for Application and Classic Load Balancers and for Network Load Balancers.</p> </li> <li> <p> <b>AWS Management Console</b>: Go to the Amazon EC2 page, choose <b>Load Balancers</b> in the navigation pane, select the load balancer, and get the value of the <b>Hosted zone</b> field on the <b>Description</b> tab.</p> </li> <li> <p> <b>Elastic Load Balancing API</b>: Use <code>DescribeLoadBalancers</code> to get the applicable value. For more information, see the applicable guide:</p> <ul> <li> <p>Classic Load Balancers: Use <a href="http://docs.aws.amazon.com/elasticloadbalancing/2012-06-01/APIReference/API_DescribeLoadBalancers.html">DescribeLoadBalancers</a> to get the value of <code>CanonicalHostedZoneNameId</code>.</p> </li> <li> <p>Application and Network Load Balancers: Use <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeLoadBalancers.html">DescribeLoadBalancers</a> to get the value of <code>CanonicalHostedZoneId</code>.</p> </li> </ul> </li> <li> <p> <b>AWS CLI</b>: Use <code>describe-load-balancers</code> to get the applicable value. For more information, see the applicable guide:</p> <ul> <li> <p>Classic Load Balancers: Use <a href="http://docs.aws.amazon.com/cli/latest/reference/elb/describe-load-balancers.html">describe-load-balancers</a> to get the value of <code>CanonicalHostedZoneNameId</code>.</p> </li> <li> <p>Application and Network Load Balancers: Use <a href="http://docs.aws.amazon.com/cli/latest/reference/elbv2/describe-load-balancers.html">describe-load-balancers</a> to get the value of <code>CanonicalHostedZoneId</code>.</p> </li> </ul> </li> </ul> </dd> <dt>An Amazon S3 bucket configured as a static website</dt> <dd> <p>Specify the hosted zone ID for the region that you created the bucket in. For more information about valid values, see the <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region">Amazon Simple Storage Service Website Endpoints</a> table in the &quot;AWS Regions and Endpoints&quot; chapter of the <i>Amazon Web Services General Reference</i>.</p> </dd> <dt>Another Amazon Route 53 resource record set in your hosted zone</dt> <dd> <p>Specify the hosted zone ID of your hosted zone. (An alias resource record set can&#39;t reference a resource record set in a different hosted zone.)</p> </dd> </dl></p>
     pub hosted_zone_id: String,
 }
 
@@ -389,7 +475,7 @@ impl AssociateVPCWithHostedZoneResponseDeserializer {
 /// <p>The information for each resource record set that you want to change.</p>
 #[derive(Default, Debug)]
 pub struct Change {
-    /// <p><p>The action to perform:</p> <ul> <li> <p> <code>CREATE</code>: Creates a resource record set that has the specified values.</p> </li> <li> <p> <code>DELETE</code>: Deletes a existing resource record set.</p> <important> <p>To delete the resource record set that is associated with a traffic policy instance, use <code> <a>DeleteTrafficPolicyInstance</a> </code>. Amazon Route 53 will delete the resource record set automatically. If you delete the resource record set by using <code>ChangeResourceRecordSets</code>, Amazon Route 53 doesn&#39;t automatically delete the traffic policy instance, and you&#39;ll continue to be charged for it even though it&#39;s no longer in use. </p> </important> </li> <li> <p> <code>UPSERT</code>: If a resource record set doesn&#39;t already exist, Amazon Route 53 creates it. If a resource record set does exist, Amazon Route 53 updates it with the values in the request.</p> </li> </ul> <p>The values that you need to include in the request depend on the type of resource record set that you&#39;re creating, deleting, or updating:</p> <p> <b>Basic resource record sets (excluding alias, failover, geolocation, latency, and weighted resource record sets)</b> </p> <ul> <li> <p> <code>Name</code> </p> </li> <li> <p> <code>Type</code> </p> </li> <li> <p> <code>TTL</code> </p> </li> </ul> <p> <b>Failover, geolocation, latency, or weighted resource record sets (excluding alias resource record sets)</b> </p> <ul> <li> <p> <code>Name</code> </p> </li> <li> <p> <code>Type</code> </p> </li> <li> <p> <code>TTL</code> </p> </li> <li> <p> <code>SetIdentifier</code> </p> </li> </ul> <p> <b>Alias resource record sets (including failover alias, geolocation alias, latency alias, and weighted alias resource record sets)</b> </p> <ul> <li> <p> <code>Name</code> </p> </li> <li> <p> <code>Type</code> </p> </li> <li> <p> <code>AliasTarget</code> (includes <code>DNSName</code>, <code>EvaluateTargetHealth</code>, and <code>HostedZoneId</code>)</p> </li> <li> <p> <code>SetIdentifier</code> (for failover, geolocation, latency, and weighted resource record sets)</p> </li> </ul></p>
+    /// <p><p>The action to perform:</p> <ul> <li> <p> <code>CREATE</code>: Creates a resource record set that has the specified values.</p> </li> <li> <p> <code>DELETE</code>: Deletes a existing resource record set.</p> <important> <p>To delete the resource record set that is associated with a traffic policy instance, use <code> <a>DeleteTrafficPolicyInstance</a> </code>. Amazon Route 53 will delete the resource record set automatically. If you delete the resource record set by using <code>ChangeResourceRecordSets</code>, Amazon Route 53 doesn&#39;t automatically delete the traffic policy instance, and you&#39;ll continue to be charged for it even though it&#39;s no longer in use. </p> </important> </li> <li> <p> <code>UPSERT</code>: If a resource record set doesn&#39;t already exist, Amazon Route 53 creates it. If a resource record set does exist, Amazon Route 53 updates it with the values in the request.</p> </li> </ul></p>
     pub action: String,
     /// <p>Information about the resource record set to create, delete, or update.</p>
     pub resource_record_set: ResourceRecordSet,
@@ -906,6 +992,41 @@ impl CloudWatchAlarmConfigurationDeserializer {
         Ok(obj)
     }
 }
+struct CloudWatchLogsLogGroupArnDeserializer;
+impl CloudWatchLogsLogGroupArnDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+
+pub struct CloudWatchLogsLogGroupArnSerializer;
+impl CloudWatchLogsLogGroupArnSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
 struct CloudWatchRegionDeserializer;
 impl CloudWatchRegionDeserializer {
     #[allow(unused_variables)]
@@ -1134,6 +1255,87 @@ impl CreateHostedZoneResponseDeserializer {
                     }
                     "VPC" => {
                         obj.vpc = Some(try!(VPCDeserializer::deserialize("VPC", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug)]
+pub struct CreateQueryLoggingConfigRequest {
+    /// <p>The Amazon Resource Name (ARN) for the log group that you want to Amazon Route 53 to send query logs to. This is the format of the ARN:</p> <p>arn:aws:logs:<i>region</i>:<i>account-id</i>:log-group:<i>log_group_name</i> </p> <p>To get the ARN for a log group, you can use the CloudWatch console, the <a href="http://docs.aws.amazon.com/AmazonCloudWatchLogs/latest/APIReference/API_DescribeLogGroups.html">DescribeLogGroups</a> API action, the <a href="http://docs.aws.amazon.com/cli/latest/reference/logs/describe-log-groups.html">describe-log-groups</a> command, or the applicable command in one of the AWS SDKs.</p>
+    pub cloud_watch_logs_log_group_arn: String,
+    /// <p>The ID of the hosted zone that you want to log queries for. You can log queries only for public hosted zones.</p>
+    pub hosted_zone_id: String,
+}
+
+pub struct CreateQueryLoggingConfigRequestSerializer;
+impl CreateQueryLoggingConfigRequestSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &CreateQueryLoggingConfigRequest,
+        xmlns: &str,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name).default_ns(xmlns))?;
+        CloudWatchLogsLogGroupArnSerializer::serialize(
+            &mut writer,
+            "CloudWatchLogsLogGroupArn",
+            &obj.cloud_watch_logs_log_group_arn,
+        )?;
+        ResourceIdSerializer::serialize(&mut writer, "HostedZoneId", &obj.hosted_zone_id)?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+#[derive(Default, Debug)]
+pub struct CreateQueryLoggingConfigResponse {
+    /// <p>The unique URL representing the new query logging configuration.</p>
+    pub location: String,
+    /// <p>A complex type that contains the ID for a query logging configuration, the ID of the hosted zone that you want to log queries for, and the ARN for the log group that you want Amazon Route 53 to send query logs to.</p>
+    pub query_logging_config: QueryLoggingConfig,
+}
+
+struct CreateQueryLoggingConfigResponseDeserializer;
+impl CreateQueryLoggingConfigResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateQueryLoggingConfigResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = CreateQueryLoggingConfigResponse::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "QueryLoggingConfig" => {
+                        obj.query_logging_config =
+                            try!(QueryLoggingConfigDeserializer::deserialize(
+                                "QueryLoggingConfig",
+                                stack
+                            ));
                     }
                     _ => skip_tree(stack),
                 },
@@ -1834,6 +2036,31 @@ impl DeleteHostedZoneResponseDeserializer {
                 }
             }
         }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug)]
+pub struct DeleteQueryLoggingConfigRequest {
+    /// <p>The ID of the configuration that you want to delete. </p>
+    pub id: String,
+}
+
+#[derive(Default, Debug)]
+pub struct DeleteQueryLoggingConfigResponse;
+
+struct DeleteQueryLoggingConfigResponseDeserializer;
+impl DeleteQueryLoggingConfigResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteQueryLoggingConfigResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let obj = DeleteQueryLoggingConfigResponse::default();
 
         try!(end_element(tag_name, stack));
 
@@ -2680,6 +2907,64 @@ impl GeoLocationSubdivisionNameDeserializer {
         Ok(obj)
     }
 }
+/// <p>A complex type that contains information about the request to create a hosted zone.</p>
+#[derive(Default, Debug)]
+pub struct GetAccountLimitRequest {
+    /// <p><p>The limit that you want to get. Valid values include the following:</p> <ul> <li> <p> <b>MAX<em>HEALTH</em>CHECKS<em>BY</em>OWNER</b>: The maximum number of health checks that you can create using the current account.</p> </li> <li> <p> <b>MAX<em>HOSTED</em>ZONES<em>BY</em>OWNER</b>: The maximum number of hosted zones that you can create using the current account.</p> </li> <li> <p> <b>MAX<em>REUSABLE</em>DELEGATION<em>SETS</em>BY<em>OWNER</b>: The maximum number of reusable delegation sets that you can create using the current account.</p> </li> <li> <p> <b>MAX</em>TRAFFIC<em>POLICIES</em>BY<em>OWNER</b>: The maximum number of traffic policies that you can create using the current account.</p> </li> <li> <p> <b>MAX</em>TRAFFIC<em>POLICY</em>INSTANCES<em>BY</em>OWNER</b>: The maximum number of traffic policy instances that you can create using the current account. (Traffic policy instances are referred to as traffic flow policy records in the Amazon Route 53 console.)</p> </li> </ul></p>
+    pub type_: String,
+}
+
+/// <p>A complex type that contains the requested limit. </p>
+#[derive(Default, Debug)]
+pub struct GetAccountLimitResponse {
+    /// <p>The current number of entities that you have created of the specified type. For example, if you specified <code>MAX_HEALTH_CHECKS_BY_OWNER</code> for the value of <code>Type</code> in the request, the value of <code>Count</code> is the current number of health checks that you have created using the current account.</p>
+    pub count: i64,
+    /// <p>The current setting for the specified limit. For example, if you specified <code>MAX_HEALTH_CHECKS_BY_OWNER</code> for the value of <code>Type</code> in the request, the value of <code>Limit</code> is the maximum number of health checks that you can create using the current account.</p>
+    pub limit: AccountLimit,
+}
+
+struct GetAccountLimitResponseDeserializer;
+impl GetAccountLimitResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetAccountLimitResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = GetAccountLimitResponse::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Count" => {
+                        obj.count = try!(UsageCountDeserializer::deserialize("Count", stack));
+                    }
+                    "Limit" => {
+                        obj.limit = try!(AccountLimitDeserializer::deserialize("Limit", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>The input for a GetChange request.</p>
 #[derive(Default, Debug)]
 pub struct GetChangeRequest {
@@ -2901,7 +3186,7 @@ impl GetHealthCheckCountResponseDeserializer {
 /// <p>A request for the reason that a health check failed most recently.</p>
 #[derive(Default, Debug)]
 pub struct GetHealthCheckLastFailureReasonRequest {
-    /// <p>The ID for the health check for which you want the last failure reason. When you created the health check, <code>CreateHealthCheck</code> returned the ID in the response, in the <code>HealthCheckId</code> element.</p>
+    /// <p><p>The ID for the health check for which you want the last failure reason. When you created the health check, <code>CreateHealthCheck</code> returned the ID in the response, in the <code>HealthCheckId</code> element.</p> <note> <p>If you want to get the last failure reason for a calculated health check, you must use the Amazon Route 53 console or the CloudWatch console. You can&#39;t use <code>GetHealthCheckLastFailureReason</code> for a calculated health check.</p> </note></p>
     pub health_check_id: String,
 }
 
@@ -3119,6 +3404,66 @@ impl GetHostedZoneCountResponseDeserializer {
         Ok(obj)
     }
 }
+/// <p>A complex type that contains information about the request to create a hosted zone.</p>
+#[derive(Default, Debug)]
+pub struct GetHostedZoneLimitRequest {
+    /// <p>The ID of the hosted zone that you want to get a limit for.</p>
+    pub hosted_zone_id: String,
+    /// <p><p>The limit that you want to get. Valid values include the following:</p> <ul> <li> <p> <b>MAX<em>RRSETS</em>BY<em>ZONE</b>: The maximum number of records that you can create in the specified hosted zone.</p> </li> <li> <p> <b>MAX</em>VPCS<em>ASSOCIATED</em>BY_ZONE</b>: The maximum number of Amazon VPCs that you can associate with the specified private hosted zone.</p> </li> </ul></p>
+    pub type_: String,
+}
+
+/// <p>A complex type that contains the requested limit. </p>
+#[derive(Default, Debug)]
+pub struct GetHostedZoneLimitResponse {
+    /// <p>The current number of entities that you have created of the specified type. For example, if you specified <code>MAX_RRSETS_BY_ZONE</code> for the value of <code>Type</code> in the request, the value of <code>Count</code> is the current number of records that you have created in the specified hosted zone.</p>
+    pub count: i64,
+    /// <p>The current setting for the specified limit. For example, if you specified <code>MAX_RRSETS_BY_ZONE</code> for the value of <code>Type</code> in the request, the value of <code>Limit</code> is the maximum number of records that you can create in the specified hosted zone.</p>
+    pub limit: HostedZoneLimit,
+}
+
+struct GetHostedZoneLimitResponseDeserializer;
+impl GetHostedZoneLimitResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetHostedZoneLimitResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = GetHostedZoneLimitResponse::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Count" => {
+                        obj.count = try!(UsageCountDeserializer::deserialize("Count", stack));
+                    }
+                    "Limit" => {
+                        obj.limit = try!(HostedZoneLimitDeserializer::deserialize("Limit", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>A request to get information about a specified hosted zone. </p>
 #[derive(Default, Debug)]
 pub struct GetHostedZoneRequest {
@@ -3171,6 +3516,124 @@ impl GetHostedZoneResponseDeserializer {
                     }
                     "VPCs" => {
                         obj.vp_cs = Some(try!(VPCsDeserializer::deserialize("VPCs", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug)]
+pub struct GetQueryLoggingConfigRequest {
+    /// <p>The ID of the configuration for DNS query logging that you want to get information about.</p>
+    pub id: String,
+}
+
+#[derive(Default, Debug)]
+pub struct GetQueryLoggingConfigResponse {
+    /// <p>A complex type that contains information about the query logging configuration that you specified in a <a>GetQueryLoggingConfig</a> request.</p>
+    pub query_logging_config: QueryLoggingConfig,
+}
+
+struct GetQueryLoggingConfigResponseDeserializer;
+impl GetQueryLoggingConfigResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetQueryLoggingConfigResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = GetQueryLoggingConfigResponse::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "QueryLoggingConfig" => {
+                        obj.query_logging_config =
+                            try!(QueryLoggingConfigDeserializer::deserialize(
+                                "QueryLoggingConfig",
+                                stack
+                            ));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>A complex type that contains information about the request to create a hosted zone.</p>
+#[derive(Default, Debug)]
+pub struct GetReusableDelegationSetLimitRequest {
+    /// <p>The ID of the delegation set that you want to get the limit for.</p>
+    pub delegation_set_id: String,
+    /// <p>Specify <code>MAX_ZONES_BY_REUSABLE_DELEGATION_SET</code> to get the maximum number of hosted zones that you can associate with the specified reusable delegation set.</p>
+    pub type_: String,
+}
+
+/// <p>A complex type that contains the requested limit. </p>
+#[derive(Default, Debug)]
+pub struct GetReusableDelegationSetLimitResponse {
+    /// <p>The current number of hosted zones that you can associate with the specified reusable delegation set.</p>
+    pub count: i64,
+    /// <p>The current setting for the limit on hosted zones that you can associate with the specified reusable delegation set.</p>
+    pub limit: ReusableDelegationSetLimit,
+}
+
+struct GetReusableDelegationSetLimitResponseDeserializer;
+impl GetReusableDelegationSetLimitResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetReusableDelegationSetLimitResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = GetReusableDelegationSetLimitResponse::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Count" => {
+                        obj.count = try!(UsageCountDeserializer::deserialize("Count", stack));
+                    }
+                    "Limit" => {
+                        obj.limit = try!(ReusableDelegationSetLimitDeserializer::deserialize(
+                            "Limit",
+                            stack
+                        ));
                     }
                     _ => skip_tree(stack),
                 },
@@ -3424,6 +3887,8 @@ pub struct HealthCheck {
     pub health_check_version: i64,
     /// <p>The identifier that Amazon Route 53assigned to the health check when you created it. When you add or update a resource record set, you use this value to specify which health check to use. The value can be up to 64 characters long. </p>
     pub id: String,
+    /// <p>If the health check was created by another service, the service that created the health check. When a health check is created by another service, you can't edit or delete it using Amazon Route 53. </p>
+    pub linked_service: Option<LinkedService>,
 }
 
 struct HealthCheckDeserializer;
@@ -3476,6 +3941,12 @@ impl HealthCheckDeserializer {
                     }
                     "Id" => {
                         obj.id = try!(HealthCheckIdDeserializer::deserialize("Id", stack));
+                    }
+                    "LinkedService" => {
+                        obj.linked_service = Some(try!(LinkedServiceDeserializer::deserialize(
+                            "LinkedService",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -4226,6 +4697,8 @@ pub struct HostedZone {
     pub config: Option<HostedZoneConfig>,
     /// <p>The ID that Amazon Route 53 assigned to the hosted zone when you created it.</p>
     pub id: String,
+    /// <p>If the hosted zone was created by another service, the service that created the hosted zone. When a hosted zone is created by another service, you can't edit or delete it using Amazon Route 53. </p>
+    pub linked_service: Option<LinkedService>,
     /// <p>The name of the domain. For public hosted zones, this is the name that you have registered with your DNS registrar.</p> <p>For information about how to specify characters other than <code>a-z</code>, <code>0-9</code>, and <code>-</code> (hyphen) and how to specify internationalized domain names, see <a>CreateHostedZone</a>.</p>
     pub name: String,
     /// <p>The number of resource record sets in the hosted zone.</p>
@@ -4266,6 +4739,12 @@ impl HostedZoneDeserializer {
                     }
                     "Id" => {
                         obj.id = try!(ResourceIdDeserializer::deserialize("Id", stack));
+                    }
+                    "LinkedService" => {
+                        obj.linked_service = Some(try!(LinkedServiceDeserializer::deserialize(
+                            "LinkedService",
+                            stack
+                        )));
                     }
                     "Name" => {
                         obj.name = try!(DNSNameDeserializer::deserialize("Name", stack));
@@ -4395,6 +4874,93 @@ impl HostedZoneCountDeserializer {
         Ok(obj)
     }
 }
+/// <p>A complex type that contains the type of limit that you specified in the request and the current value for that limit.</p>
+#[derive(Default, Debug)]
+pub struct HostedZoneLimit {
+    /// <p><p>The limit that you requested. Valid values include the following:</p> <ul> <li> <p> <b>MAX<em>RRSETS</em>BY<em>ZONE</b>: The maximum number of records that you can create in the specified hosted zone.</p> </li> <li> <p> <b>MAX</em>VPCS<em>ASSOCIATED</em>BY_ZONE</b>: The maximum number of Amazon VPCs that you can associate with the specified private hosted zone.</p> </li> </ul></p>
+    pub type_: String,
+    /// <p>The current value for the limit that is specified by <code>Type</code>.</p>
+    pub value: i64,
+}
+
+struct HostedZoneLimitDeserializer;
+impl HostedZoneLimitDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<HostedZoneLimit, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = HostedZoneLimit::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Type" => {
+                        obj.type_ =
+                            try!(HostedZoneLimitTypeDeserializer::deserialize("Type", stack));
+                    }
+                    "Value" => {
+                        obj.value = try!(LimitValueDeserializer::deserialize("Value", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct HostedZoneLimitTypeDeserializer;
+impl HostedZoneLimitTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+
+pub struct HostedZoneLimitTypeSerializer;
+impl HostedZoneLimitTypeSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
 struct HostedZoneRRSetCountDeserializer;
 impl HostedZoneRRSetCountDeserializer {
     #[allow(unused_variables)]
@@ -4606,6 +5172,75 @@ impl IsPrivateZoneSerializer {
     }
 }
 
+struct LimitValueDeserializer;
+impl LimitValueDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>If a health check or hosted zone was created by another service, <code>LinkedService</code> is a complex type that describes the service that created the resource. When a resource is created by another service, you can't edit or delete it using Amazon Route 53. </p>
+#[derive(Default, Debug)]
+pub struct LinkedService {
+    /// <p>If the health check or hosted zone was created by another service, an optional description that can be provided by the other service. When a resource is created by another service, you can't edit or delete it using Amazon Route 53. </p>
+    pub description: Option<String>,
+    /// <p>If the health check or hosted zone was created by another service, the service that created the resource. When a resource is created by another service, you can't edit or delete it using Amazon Route 53. </p>
+    pub service_principal: Option<String>,
+}
+
+struct LinkedServiceDeserializer;
+impl LinkedServiceDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LinkedService, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = LinkedService::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Description" => {
+                        obj.description = Some(try!(
+                            ResourceDescriptionDeserializer::deserialize("Description", stack)
+                        ));
+                    }
+                    "ServicePrincipal" => {
+                        obj.service_principal = Some(try!(
+                            ServicePrincipalDeserializer::deserialize("ServicePrincipal", stack)
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>A request to get a list of geographic locations that Amazon Route 53 supports for geolocation resource record sets. </p>
 #[derive(Default, Debug)]
 pub struct ListGeoLocationsRequest {
@@ -4954,6 +5589,73 @@ impl ListHostedZonesResponseDeserializer {
                             "NextMarker",
                             stack
                         )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug)]
+pub struct ListQueryLoggingConfigsRequest {
+    /// <p>(Optional) If you want to list the query logging configuration that is associated with a hosted zone, specify the ID in <code>HostedZoneId</code>. </p> <p>If you don't specify a hosted zone ID, <code>ListQueryLoggingConfigs</code> returns all of the configurations that are associated with the current AWS account.</p>
+    pub hosted_zone_id: Option<String>,
+    /// <p>(Optional) The maximum number of query logging configurations that you want Amazon Route 53 to return in response to the current request. If the current AWS account has more than <code>MaxResults</code> configurations, use the value of <a>ListQueryLoggingConfigsResponse$NextToken</a> in the response to get the next page of results.</p> <p>If you don't specify a value for <code>MaxResults</code>, Amazon Route 53 returns up to 100 configurations.</p>
+    pub max_results: Option<String>,
+    /// <p>(Optional) If the current AWS account has more than <code>MaxResults</code> query logging configurations, use <code>NextToken</code> to get the second and subsequent pages of results.</p> <p>For the first <code>ListQueryLoggingConfigs</code> request, omit this value.</p> <p>For the second and subsequent requests, get the value of <code>NextToken</code> from the previous response and specify that value for <code>NextToken</code> in the request.</p>
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug)]
+pub struct ListQueryLoggingConfigsResponse {
+    /// <p>If a response includes the last of the query logging configurations that are associated with the current AWS account, <code>NextToken</code> doesn't appear in the response.</p> <p>If a response doesn't include the last of the configurations, you can get more configurations by submitting another <a>ListQueryLoggingConfigs</a> request. Get the value of <code>NextToken</code> that Amazon Route 53 returned in the previous response and include it in <code>NextToken</code> in the next request.</p>
+    pub next_token: Option<String>,
+    /// <p>An array that contains one <a>QueryLoggingConfig</a> element for each configuration for DNS query logging that is associated with the current AWS account.</p>
+    pub query_logging_configs: Vec<QueryLoggingConfig>,
+}
+
+struct ListQueryLoggingConfigsResponseDeserializer;
+impl ListQueryLoggingConfigsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListQueryLoggingConfigsResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ListQueryLoggingConfigsResponse::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "NextToken" => {
+                        obj.next_token = Some(try!(PaginationTokenDeserializer::deserialize(
+                            "NextToken",
+                            stack
+                        )));
+                    }
+                    "QueryLoggingConfigs" => {
+                        obj.query_logging_configs =
+                            try!(QueryLoggingConfigsDeserializer::deserialize(
+                                "QueryLoggingConfigs",
+                                stack
+                            ));
                     }
                     _ => skip_tree(stack),
                 },
@@ -6131,6 +6833,145 @@ impl PortSerializer {
     }
 }
 
+/// <p>A complex type that contains information about a configuration for DNS query logging.</p>
+#[derive(Default, Debug)]
+pub struct QueryLoggingConfig {
+    /// <p>The Amazon Resource Name (ARN) of the CloudWatch Logs log group that Amazon Route 53 is publishing logs to.</p>
+    pub cloud_watch_logs_log_group_arn: String,
+    /// <p>The ID of the hosted zone that CloudWatch Logs is logging queries for. </p>
+    pub hosted_zone_id: String,
+    /// <p>The ID for a configuration for DNS query logging.</p>
+    pub id: String,
+}
+
+struct QueryLoggingConfigDeserializer;
+impl QueryLoggingConfigDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<QueryLoggingConfig, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = QueryLoggingConfig::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "CloudWatchLogsLogGroupArn" => {
+                        obj.cloud_watch_logs_log_group_arn =
+                            try!(CloudWatchLogsLogGroupArnDeserializer::deserialize(
+                                "CloudWatchLogsLogGroupArn",
+                                stack
+                            ));
+                    }
+                    "HostedZoneId" => {
+                        obj.hosted_zone_id =
+                            try!(ResourceIdDeserializer::deserialize("HostedZoneId", stack));
+                    }
+                    "Id" => {
+                        obj.id = try!(QueryLoggingConfigIdDeserializer::deserialize("Id", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct QueryLoggingConfigIdDeserializer;
+impl QueryLoggingConfigIdDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+
+pub struct QueryLoggingConfigIdSerializer;
+impl QueryLoggingConfigIdSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+struct QueryLoggingConfigsDeserializer;
+impl QueryLoggingConfigsDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<QueryLoggingConfig>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "QueryLoggingConfig" {
+                        obj.push(try!(QueryLoggingConfigDeserializer::deserialize(
+                            "QueryLoggingConfig",
+                            stack
+                        )));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
 struct RDataDeserializer;
 impl RDataDeserializer {
     #[allow(unused_variables)]
@@ -6290,6 +7131,46 @@ impl RequestIntervalSerializer {
             value = obj.to_string()
         )))?;
         writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+pub struct ResettableElementNameSerializer;
+impl ResettableElementNameSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+pub struct ResettableElementNameListSerializer;
+impl ResettableElementNameListSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &Vec<String>,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        for element in obj {
+            ResettableElementNameSerializer::serialize(writer, "ResettableElementName", element)?;
+        }
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        Ok(())
     }
 }
 
@@ -7096,6 +7977,95 @@ impl ResourceTagSetListDeserializer {
         Ok(obj)
     }
 }
+/// <p>A complex type that contains the type of limit that you specified in the request and the current value for that limit.</p>
+#[derive(Default, Debug)]
+pub struct ReusableDelegationSetLimit {
+    /// <p>The limit that you requested: <code>MAX_ZONES_BY_REUSABLE_DELEGATION_SET</code>, the maximum number of hosted zones that you can associate with the specified reusable delegation set.</p>
+    pub type_: String,
+    /// <p>The current value for the <code>MAX_ZONES_BY_REUSABLE_DELEGATION_SET</code> limit.</p>
+    pub value: i64,
+}
+
+struct ReusableDelegationSetLimitDeserializer;
+impl ReusableDelegationSetLimitDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ReusableDelegationSetLimit, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ReusableDelegationSetLimit::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Type" => {
+                        obj.type_ = try!(ReusableDelegationSetLimitTypeDeserializer::deserialize(
+                            "Type",
+                            stack
+                        ));
+                    }
+                    "Value" => {
+                        obj.value = try!(LimitValueDeserializer::deserialize("Value", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct ReusableDelegationSetLimitTypeDeserializer;
+impl ReusableDelegationSetLimitTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+
+pub struct ReusableDelegationSetLimitTypeSerializer;
+impl ReusableDelegationSetLimitTypeSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
 struct SearchStringDeserializer;
 impl SearchStringDeserializer {
     #[allow(unused_variables)]
@@ -7131,6 +8101,20 @@ impl SearchStringSerializer {
     }
 }
 
+struct ServicePrincipalDeserializer;
+impl ServicePrincipalDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 struct StatisticDeserializer;
 impl StatisticDeserializer {
     #[allow(unused_variables)]
@@ -8416,6 +9400,8 @@ pub struct UpdateHealthCheckRequest {
     pub port: Option<i64>,
     /// <p>A complex type that contains one <code>Region</code> element for each region that you want Amazon Route 53 health checkers to check the specified endpoint from.</p>
     pub regions: Option<Vec<String>>,
+    /// <p><p>A complex type that contains one <code>ResettableElementName</code> element for each element that you want to reset to the default value. Valid values for <code>ResettableElementName</code> include the following:</p> <ul> <li> <p> <code>ChildHealthChecks</code>: Amazon Route 53 resets <a>HealthCheckConfig$ChildHealthChecks</a> to null.</p> </li> <li> <p> <code>FullyQualifiedDomainName</code>: Amazon Route 53 resets <a>HealthCheckConfig$FullyQualifiedDomainName</a> to null.</p> </li> <li> <p> <code>Regions</code>: Amazon Route 53 resets the <a>HealthCheckConfig$Regions</a> list to the default set of regions. </p> </li> <li> <p> <code>ResourcePath</code>: Amazon Route 53 resets <a>HealthCheckConfig$ResourcePath</a> to null.</p> </li> </ul></p>
+    pub reset_elements: Option<Vec<String>>,
     /// <p>The path that you want Amazon Route 53 to request when performing health checks. The path can be any value for which your endpoint will return an HTTP status code of 2xx or 3xx when the endpoint is healthy, for example the file /docs/route53-health-check.html. </p> <p>Specify this value only if you want to change it.</p>
     pub resource_path: Option<String>,
     /// <p>If the value of <code>Type</code> is <code>HTTP_STR_MATCH</code> or <code>HTTP_STR_MATCH</code>, the string that you want Amazon Route 53 to search for in the response body from the specified resource. If the string appears in the response body, Amazon Route 53 considers the resource healthy. (You can't change the value of <code>Type</code> when you update a health check.)</p>
@@ -8478,6 +9464,9 @@ impl UpdateHealthCheckRequestSerializer {
         }
         if let Some(ref value) = obj.regions {
             &HealthCheckRegionListSerializer::serialize(&mut writer, "Regions", value)?;
+        }
+        if let Some(ref value) = obj.reset_elements {
+            &ResettableElementNameListSerializer::serialize(&mut writer, "ResetElements", value)?;
         }
         if let Some(ref value) = obj.resource_path {
             &ResourcePathSerializer::serialize(&mut writer, "ResourcePath", value)?;
@@ -8774,6 +9763,20 @@ impl UpdateTrafficPolicyInstanceResponseDeserializer {
         Ok(obj)
     }
 }
+struct UsageCountDeserializer;
+impl UsageCountDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>(Private hosted zones only) A complex type that contains information about an Amazon VPC.</p>
 #[derive(Default, Debug)]
 pub struct VPC {
@@ -8971,13 +9974,13 @@ impl VPCsDeserializer {
 /// Errors returned by AssociateVPCWithHostedZone
 #[derive(Debug, PartialEq)]
 pub enum AssociateVPCWithHostedZoneError {
-    /// <p><p>The cause of this error depends on whether you&#39;re trying to create a public or a private hosted zone:</p> <ul> <li> <p> <b>Public hosted zone:</b> Two hosted zones that have the same name or that have a parent/child relationship (example.com and test.example.com) can&#39;t have any common name servers. You tried to create a hosted zone that has the same name as an existing hosted zone or that&#39;s the parent or child of an existing hosted zone, and you specified a delegation set that shares one or more name servers with the existing hosted zone. </p> </li> <li> <p> <b>Private hosted zone:</b> You specified an Amazon VPC that you&#39;re already using for another hosted zone, and the domain that you specified for one of the hosted zones is a subdomain of the domain that you specified for the other hosted zone. For example, you can&#39;t use the same Amazon VPC for the hosted zones for example.com and test.example.com.</p> </li> </ul></p>
+    /// <p><p>The cause of this error depends on whether you&#39;re trying to create a public or a private hosted zone:</p> <ul> <li> <p> <b>Public hosted zone:</b> Two hosted zones that have the same name or that have a parent/child relationship (example.com and test.example.com) can&#39;t have any common name servers. You tried to create a hosted zone that has the same name as an existing hosted zone or that&#39;s the parent or child of an existing hosted zone, and you specified a delegation set that shares one or more name servers with the existing hosted zone. For more information, see <a>CreateReusableDelegationSet</a>.</p> </li> <li> <p> <b>Private hosted zone:</b> You specified an Amazon VPC that you&#39;re already using for another hosted zone, and the domain that you specified for one of the hosted zones is a subdomain of the domain that you specified for the other hosted zone. For example, you can&#39;t use the same Amazon VPC for the hosted zones for example.com and test.example.com.</p> </li> </ul></p>
     ConflictingDomainExists(String),
     /// <p>The input is not valid.</p>
     InvalidInput(String),
     /// <p>The VPC ID that you specified either isn't a valid ID or the current account is not authorized to access this VPC.</p>
     InvalidVPCId(String),
-    /// <p>The limits specified for a resource have been exceeded.</p>
+    /// <p>This operation can't be completed either because the current account has reached the limit on reusable delegation sets that it can create or because you've reached the limit on the number of Amazon VPCs that you can associate with a private hosted zone. To get the current limit on the number of reusable delegation sets, see <a>GetAccountLimit</a>. To get the current limit on the number of Amazon VPCs that you can associate with a private hosted zone, see <a>GetHostedZoneLimit</a>. To request a higher limit, <a href="http://aws.amazon.com/route53-request">create a case</a> with the AWS Support Center.</p>
     LimitsExceeded(String),
     /// <p>No hosted zone exists with the ID that you specified.</p>
     NoSuchHostedZone(String),
@@ -9278,7 +10281,7 @@ pub enum CreateHealthCheckError {
     HealthCheckAlreadyExists(String),
     /// <p>The input is not valid.</p>
     InvalidInput(String),
-    /// <p>You have reached the maximum number of active health checks for an AWS account. The default limit is 100. To request a higher limit, <a href="http://aws.amazon.com/route53-request">create a case</a> with the AWS Support Center.</p>
+    /// <p>This health check can't be created because the current account has reached the limit on the number of active health checks.</p> <p>For information about default limits, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>For information about how to get the current limit for an account, see <a>GetAccountLimit</a>. To request a higher limit, <a href="http://aws.amazon.com/route53-request">create a case</a> with the AWS Support Center.</p> <p>You have reached the maximum number of active health checks for an AWS account. To request a higher limit, <a href="http://aws.amazon.com/route53-request">create a case</a> with the AWS Support Center.</p>
     TooManyHealthChecks(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9357,7 +10360,7 @@ impl Error for CreateHealthCheckError {
 /// Errors returned by CreateHostedZone
 #[derive(Debug, PartialEq)]
 pub enum CreateHostedZoneError {
-    /// <p><p>The cause of this error depends on whether you&#39;re trying to create a public or a private hosted zone:</p> <ul> <li> <p> <b>Public hosted zone:</b> Two hosted zones that have the same name or that have a parent/child relationship (example.com and test.example.com) can&#39;t have any common name servers. You tried to create a hosted zone that has the same name as an existing hosted zone or that&#39;s the parent or child of an existing hosted zone, and you specified a delegation set that shares one or more name servers with the existing hosted zone. </p> </li> <li> <p> <b>Private hosted zone:</b> You specified an Amazon VPC that you&#39;re already using for another hosted zone, and the domain that you specified for one of the hosted zones is a subdomain of the domain that you specified for the other hosted zone. For example, you can&#39;t use the same Amazon VPC for the hosted zones for example.com and test.example.com.</p> </li> </ul></p>
+    /// <p><p>The cause of this error depends on whether you&#39;re trying to create a public or a private hosted zone:</p> <ul> <li> <p> <b>Public hosted zone:</b> Two hosted zones that have the same name or that have a parent/child relationship (example.com and test.example.com) can&#39;t have any common name servers. You tried to create a hosted zone that has the same name as an existing hosted zone or that&#39;s the parent or child of an existing hosted zone, and you specified a delegation set that shares one or more name servers with the existing hosted zone. For more information, see <a>CreateReusableDelegationSet</a>.</p> </li> <li> <p> <b>Private hosted zone:</b> You specified an Amazon VPC that you&#39;re already using for another hosted zone, and the domain that you specified for one of the hosted zones is a subdomain of the domain that you specified for the other hosted zone. For example, you can&#39;t use the same Amazon VPC for the hosted zones for example.com and test.example.com.</p> </li> </ul></p>
     ConflictingDomainExists(String),
     /// <p>You can create a hosted zone that has the same name as an existing hosted zone (example.com is common), but there is a limit to the number of hosted zones that have the same name. If you get this error, Amazon Route 53 has reached that limit. If you own the domain name and Amazon Route 53 generates this error, contact Customer Support.</p>
     DelegationSetNotAvailable(String),
@@ -9373,7 +10376,7 @@ pub enum CreateHostedZoneError {
     InvalidVPCId(String),
     /// <p>A reusable delegation set with the specified ID does not exist.</p>
     NoSuchDelegationSet(String),
-    /// <p>This hosted zone can't be created because the hosted zone limit is exceeded. To request a limit increase, go to the Amazon Route 53 <a href="http://aws.amazon.com/route53-request/">Contact Us</a> page.</p>
+    /// <p>This operation can't be completed either because the current account has reached the limit on the number of hosted zones or because you've reached the limit on the number of hosted zones that can be associated with a reusable delegation set.</p> <p>For information about default limits, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>To get the current limit on hosted zones that can be created by an account, see <a>GetAccountLimit</a>.</p> <p>To get the current limit on hosted zones that can be associated with a reusable delegation set, see <a>GetReusableDelegationSetLimit</a>.</p> <p>To request a higher limit, <a href="http://aws.amazon.com/route53-request">create a case</a> with the AWS Support Center.</p>
     TooManyHostedZones(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9471,6 +10474,115 @@ impl Error for CreateHostedZoneError {
         }
     }
 }
+/// Errors returned by CreateQueryLoggingConfig
+#[derive(Debug, PartialEq)]
+pub enum CreateQueryLoggingConfigError {
+    /// <p>Another user submitted a request to create, update, or delete the object at the same time that you did. Retry the request. </p>
+    ConcurrentModification(String),
+    /// <p><p>Amazon Route 53 doesn&#39;t have the permissions required to create log streams and send query logs to log streams. Possible causes include the following:</p> <ul> <li> <p>There is no resource policy that specifies the log group ARN in the value for <code>Resource</code>.</p> </li> <li> <p>The resource policy that includes the log group ARN in the value for <code>Resource</code> doesn&#39;t have the necessary permissions.</p> </li> <li> <p>The resource policy hasn&#39;t finished propagating yet.</p> </li> </ul></p>
+    InsufficientCloudWatchLogsResourcePolicy(String),
+    /// <p>The input is not valid.</p>
+    InvalidInput(String),
+    /// <p>There is no CloudWatch Logs log group with the specified ARN.</p>
+    NoSuchCloudWatchLogsLogGroup(String),
+    /// <p>No hosted zone exists with the ID that you specified.</p>
+    NoSuchHostedZone(String),
+    /// <p>You can create only one query logging configuration for a hosted zone, and a query logging configuration already exists for this hosted zone.</p>
+    QueryLoggingConfigAlreadyExists(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateQueryLoggingConfigError {
+    pub fn from_body(body: &str) -> CreateQueryLoggingConfigError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "ConcurrentModification" => CreateQueryLoggingConfigError::ConcurrentModification(
+                    String::from(parsed_error.message),
+                ),
+                "InsufficientCloudWatchLogsResourcePolicy" => {
+                    CreateQueryLoggingConfigError::InsufficientCloudWatchLogsResourcePolicy(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "InvalidInput" => {
+                    CreateQueryLoggingConfigError::InvalidInput(String::from(parsed_error.message))
+                }
+                "NoSuchCloudWatchLogsLogGroup" => {
+                    CreateQueryLoggingConfigError::NoSuchCloudWatchLogsLogGroup(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "NoSuchHostedZone" => CreateQueryLoggingConfigError::NoSuchHostedZone(
+                    String::from(parsed_error.message),
+                ),
+                "QueryLoggingConfigAlreadyExists" => {
+                    CreateQueryLoggingConfigError::QueryLoggingConfigAlreadyExists(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => CreateQueryLoggingConfigError::Unknown(String::from(body)),
+            },
+            Err(_) => CreateQueryLoggingConfigError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for CreateQueryLoggingConfigError {
+    fn from(err: XmlParseError) -> CreateQueryLoggingConfigError {
+        let XmlParseError(message) = err;
+        CreateQueryLoggingConfigError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for CreateQueryLoggingConfigError {
+    fn from(err: CredentialsError) -> CreateQueryLoggingConfigError {
+        CreateQueryLoggingConfigError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateQueryLoggingConfigError {
+    fn from(err: HttpDispatchError) -> CreateQueryLoggingConfigError {
+        CreateQueryLoggingConfigError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateQueryLoggingConfigError {
+    fn from(err: io::Error) -> CreateQueryLoggingConfigError {
+        CreateQueryLoggingConfigError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateQueryLoggingConfigError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateQueryLoggingConfigError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateQueryLoggingConfigError::ConcurrentModification(ref cause) => cause,
+            CreateQueryLoggingConfigError::InsufficientCloudWatchLogsResourcePolicy(ref cause) => {
+                cause
+            }
+            CreateQueryLoggingConfigError::InvalidInput(ref cause) => cause,
+            CreateQueryLoggingConfigError::NoSuchCloudWatchLogsLogGroup(ref cause) => cause,
+            CreateQueryLoggingConfigError::NoSuchHostedZone(ref cause) => cause,
+            CreateQueryLoggingConfigError::QueryLoggingConfigAlreadyExists(ref cause) => cause,
+            CreateQueryLoggingConfigError::Validation(ref cause) => cause,
+            CreateQueryLoggingConfigError::Credentials(ref err) => err.description(),
+            CreateQueryLoggingConfigError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateQueryLoggingConfigError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateReusableDelegationSet
 #[derive(Debug, PartialEq)]
 pub enum CreateReusableDelegationSetError {
@@ -9486,7 +10598,7 @@ pub enum CreateReusableDelegationSetError {
     InvalidArgument(String),
     /// <p>The input is not valid.</p>
     InvalidInput(String),
-    /// <p>The limits specified for a resource have been exceeded.</p>
+    /// <p>This operation can't be completed either because the current account has reached the limit on reusable delegation sets that it can create or because you've reached the limit on the number of Amazon VPCs that you can associate with a private hosted zone. To get the current limit on the number of reusable delegation sets, see <a>GetAccountLimit</a>. To get the current limit on the number of Amazon VPCs that you can associate with a private hosted zone, see <a>GetHostedZoneLimit</a>. To request a higher limit, <a href="http://aws.amazon.com/route53-request">create a case</a> with the AWS Support Center.</p>
     LimitsExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9591,7 +10703,7 @@ pub enum CreateTrafficPolicyError {
     InvalidInput(String),
     /// <p>The format of the traffic policy document that you specified in the <code>Document</code> element is invalid.</p>
     InvalidTrafficPolicyDocument(String),
-    /// <p>You've created the maximum number of traffic policies that can be created for the current AWS account. You can request an increase to the limit on the <a href="http://aws.amazon.com/route53-request/">Contact Us</a> page.</p>
+    /// <p>This traffic policy can't be created because the current account has reached the limit on the number of traffic policies.</p> <p>For information about default limits, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>To get the current limit for an account, see <a>GetAccountLimit</a>. </p> <p>To request a higher limit, <a href="http://aws.amazon.com/route53-request">create a case</a> with the AWS Support Center.</p>
     TooManyTrafficPolicies(String),
     /// <p>A traffic policy that has the same value for <code>Name</code> already exists.</p>
     TrafficPolicyAlreadyExists(String),
@@ -9686,9 +10798,9 @@ pub enum CreateTrafficPolicyInstanceError {
     NoSuchHostedZone(String),
     /// <p>No traffic policy exists with the specified ID.</p>
     NoSuchTrafficPolicy(String),
-    /// <p>You've created the maximum number of traffic policy instances that can be created for the current AWS account. You can request an increase to the limit on the <a href="http://aws.amazon.com/route53-request/">Contact Us</a> page.</p>
+    /// <p>This traffic policy instance can't be created because the current account has reached the limit on the number of traffic policy instances.</p> <p>For information about default limits, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> <p>For information about how to get the current limit for an account, see <a>GetAccountLimit</a>.</p> <p>To request a higher limit, <a href="http://aws.amazon.com/route53-request">create a case</a> with the AWS Support Center.</p>
     TooManyTrafficPolicyInstances(String),
-    /// <p>Traffic policy instance with given Id already exists.</p>
+    /// <p>There is already a traffic policy instance with the specified ID.</p>
     TrafficPolicyInstanceAlreadyExists(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -9781,7 +10893,7 @@ impl Error for CreateTrafficPolicyInstanceError {
 /// Errors returned by CreateTrafficPolicyVersion
 #[derive(Debug, PartialEq)]
 pub enum CreateTrafficPolicyVersionError {
-    /// <p>Another user submitted a request to update the object at the same time that you did. Retry the request. </p>
+    /// <p>Another user submitted a request to create, update, or delete the object at the same time that you did. Retry the request. </p>
     ConcurrentModification(String),
     /// <p>The input is not valid.</p>
     InvalidInput(String),
@@ -9874,7 +10986,7 @@ impl Error for CreateTrafficPolicyVersionError {
 /// Errors returned by CreateVPCAssociationAuthorization
 #[derive(Debug, PartialEq)]
 pub enum CreateVPCAssociationAuthorizationError {
-    /// <p>Another user submitted a request to update the object at the same time that you did. Retry the request. </p>
+    /// <p>Another user submitted a request to create, update, or delete the object at the same time that you did. Retry the request. </p>
     ConcurrentModification(String),
     /// <p>The input is not valid.</p>
     InvalidInput(String),
@@ -10148,6 +11260,91 @@ impl Error for DeleteHostedZoneError {
         }
     }
 }
+/// Errors returned by DeleteQueryLoggingConfig
+#[derive(Debug, PartialEq)]
+pub enum DeleteQueryLoggingConfigError {
+    /// <p>Another user submitted a request to create, update, or delete the object at the same time that you did. Retry the request. </p>
+    ConcurrentModification(String),
+    /// <p>The input is not valid.</p>
+    InvalidInput(String),
+    /// <p>There is no DNS query logging configuration with the specified ID.</p>
+    NoSuchQueryLoggingConfig(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteQueryLoggingConfigError {
+    pub fn from_body(body: &str) -> DeleteQueryLoggingConfigError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "ConcurrentModification" => DeleteQueryLoggingConfigError::ConcurrentModification(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidInput" => {
+                    DeleteQueryLoggingConfigError::InvalidInput(String::from(parsed_error.message))
+                }
+                "NoSuchQueryLoggingConfig" => {
+                    DeleteQueryLoggingConfigError::NoSuchQueryLoggingConfig(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => DeleteQueryLoggingConfigError::Unknown(String::from(body)),
+            },
+            Err(_) => DeleteQueryLoggingConfigError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DeleteQueryLoggingConfigError {
+    fn from(err: XmlParseError) -> DeleteQueryLoggingConfigError {
+        let XmlParseError(message) = err;
+        DeleteQueryLoggingConfigError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DeleteQueryLoggingConfigError {
+    fn from(err: CredentialsError) -> DeleteQueryLoggingConfigError {
+        DeleteQueryLoggingConfigError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteQueryLoggingConfigError {
+    fn from(err: HttpDispatchError) -> DeleteQueryLoggingConfigError {
+        DeleteQueryLoggingConfigError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteQueryLoggingConfigError {
+    fn from(err: io::Error) -> DeleteQueryLoggingConfigError {
+        DeleteQueryLoggingConfigError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteQueryLoggingConfigError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteQueryLoggingConfigError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteQueryLoggingConfigError::ConcurrentModification(ref cause) => cause,
+            DeleteQueryLoggingConfigError::InvalidInput(ref cause) => cause,
+            DeleteQueryLoggingConfigError::NoSuchQueryLoggingConfig(ref cause) => cause,
+            DeleteQueryLoggingConfigError::Validation(ref cause) => cause,
+            DeleteQueryLoggingConfigError::Credentials(ref err) => err.description(),
+            DeleteQueryLoggingConfigError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteQueryLoggingConfigError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteReusableDelegationSet
 #[derive(Debug, PartialEq)]
 pub enum DeleteReusableDelegationSetError {
@@ -10242,7 +11439,7 @@ impl Error for DeleteReusableDelegationSetError {
 /// Errors returned by DeleteTrafficPolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteTrafficPolicyError {
-    /// <p>Another user submitted a request to update the object at the same time that you did. Retry the request. </p>
+    /// <p>Another user submitted a request to create, update, or delete the object at the same time that you did. Retry the request. </p>
     ConcurrentModification(String),
     /// <p>The input is not valid.</p>
     InvalidInput(String),
@@ -10418,7 +11615,7 @@ impl Error for DeleteTrafficPolicyInstanceError {
 /// Errors returned by DeleteVPCAssociationAuthorization
 #[derive(Debug, PartialEq)]
 pub enum DeleteVPCAssociationAuthorizationError {
-    /// <p>Another user submitted a request to update the object at the same time that you did. Retry the request. </p>
+    /// <p>Another user submitted a request to create, update, or delete the object at the same time that you did. Retry the request. </p>
     ConcurrentModification(String),
     /// <p>The input is not valid.</p>
     InvalidInput(String),
@@ -10610,6 +11807,75 @@ impl Error for DisassociateVPCFromHostedZoneError {
                 dispatch_error.description()
             }
             DisassociateVPCFromHostedZoneError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetAccountLimit
+#[derive(Debug, PartialEq)]
+pub enum GetAccountLimitError {
+    /// <p>The input is not valid.</p>
+    InvalidInput(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetAccountLimitError {
+    pub fn from_body(body: &str) -> GetAccountLimitError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "InvalidInput" => {
+                    GetAccountLimitError::InvalidInput(String::from(parsed_error.message))
+                }
+                _ => GetAccountLimitError::Unknown(String::from(body)),
+            },
+            Err(_) => GetAccountLimitError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for GetAccountLimitError {
+    fn from(err: XmlParseError) -> GetAccountLimitError {
+        let XmlParseError(message) = err;
+        GetAccountLimitError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for GetAccountLimitError {
+    fn from(err: CredentialsError) -> GetAccountLimitError {
+        GetAccountLimitError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetAccountLimitError {
+    fn from(err: HttpDispatchError) -> GetAccountLimitError {
+        GetAccountLimitError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetAccountLimitError {
+    fn from(err: io::Error) -> GetAccountLimitError {
+        GetAccountLimitError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetAccountLimitError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetAccountLimitError {
+    fn description(&self) -> &str {
+        match *self {
+            GetAccountLimitError::InvalidInput(ref cause) => cause,
+            GetAccountLimitError::Validation(ref cause) => cause,
+            GetAccountLimitError::Credentials(ref err) => err.description(),
+            GetAccountLimitError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetAccountLimitError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -11270,6 +12536,168 @@ impl Error for GetHostedZoneCountError {
         }
     }
 }
+/// Errors returned by GetHostedZoneLimit
+#[derive(Debug, PartialEq)]
+pub enum GetHostedZoneLimitError {
+    /// <p>The specified hosted zone is a public hosted zone, not a private hosted zone.</p>
+    HostedZoneNotPrivate(String),
+    /// <p>The input is not valid.</p>
+    InvalidInput(String),
+    /// <p>No hosted zone exists with the ID that you specified.</p>
+    NoSuchHostedZone(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetHostedZoneLimitError {
+    pub fn from_body(body: &str) -> GetHostedZoneLimitError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "HostedZoneNotPrivate" => GetHostedZoneLimitError::HostedZoneNotPrivate(
+                    String::from(parsed_error.message),
+                ),
+                "InvalidInput" => {
+                    GetHostedZoneLimitError::InvalidInput(String::from(parsed_error.message))
+                }
+                "NoSuchHostedZone" => {
+                    GetHostedZoneLimitError::NoSuchHostedZone(String::from(parsed_error.message))
+                }
+                _ => GetHostedZoneLimitError::Unknown(String::from(body)),
+            },
+            Err(_) => GetHostedZoneLimitError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for GetHostedZoneLimitError {
+    fn from(err: XmlParseError) -> GetHostedZoneLimitError {
+        let XmlParseError(message) = err;
+        GetHostedZoneLimitError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for GetHostedZoneLimitError {
+    fn from(err: CredentialsError) -> GetHostedZoneLimitError {
+        GetHostedZoneLimitError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetHostedZoneLimitError {
+    fn from(err: HttpDispatchError) -> GetHostedZoneLimitError {
+        GetHostedZoneLimitError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetHostedZoneLimitError {
+    fn from(err: io::Error) -> GetHostedZoneLimitError {
+        GetHostedZoneLimitError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetHostedZoneLimitError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetHostedZoneLimitError {
+    fn description(&self) -> &str {
+        match *self {
+            GetHostedZoneLimitError::HostedZoneNotPrivate(ref cause) => cause,
+            GetHostedZoneLimitError::InvalidInput(ref cause) => cause,
+            GetHostedZoneLimitError::NoSuchHostedZone(ref cause) => cause,
+            GetHostedZoneLimitError::Validation(ref cause) => cause,
+            GetHostedZoneLimitError::Credentials(ref err) => err.description(),
+            GetHostedZoneLimitError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetHostedZoneLimitError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetQueryLoggingConfig
+#[derive(Debug, PartialEq)]
+pub enum GetQueryLoggingConfigError {
+    /// <p>The input is not valid.</p>
+    InvalidInput(String),
+    /// <p>There is no DNS query logging configuration with the specified ID.</p>
+    NoSuchQueryLoggingConfig(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetQueryLoggingConfigError {
+    pub fn from_body(body: &str) -> GetQueryLoggingConfigError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "InvalidInput" => {
+                    GetQueryLoggingConfigError::InvalidInput(String::from(parsed_error.message))
+                }
+                "NoSuchQueryLoggingConfig" => {
+                    GetQueryLoggingConfigError::NoSuchQueryLoggingConfig(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => GetQueryLoggingConfigError::Unknown(String::from(body)),
+            },
+            Err(_) => GetQueryLoggingConfigError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for GetQueryLoggingConfigError {
+    fn from(err: XmlParseError) -> GetQueryLoggingConfigError {
+        let XmlParseError(message) = err;
+        GetQueryLoggingConfigError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for GetQueryLoggingConfigError {
+    fn from(err: CredentialsError) -> GetQueryLoggingConfigError {
+        GetQueryLoggingConfigError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetQueryLoggingConfigError {
+    fn from(err: HttpDispatchError) -> GetQueryLoggingConfigError {
+        GetQueryLoggingConfigError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetQueryLoggingConfigError {
+    fn from(err: io::Error) -> GetQueryLoggingConfigError {
+        GetQueryLoggingConfigError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetQueryLoggingConfigError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetQueryLoggingConfigError {
+    fn description(&self) -> &str {
+        match *self {
+            GetQueryLoggingConfigError::InvalidInput(ref cause) => cause,
+            GetQueryLoggingConfigError::NoSuchQueryLoggingConfig(ref cause) => cause,
+            GetQueryLoggingConfigError::Validation(ref cause) => cause,
+            GetQueryLoggingConfigError::Credentials(ref err) => err.description(),
+            GetQueryLoggingConfigError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetQueryLoggingConfigError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetReusableDelegationSet
 #[derive(Debug, PartialEq)]
 pub enum GetReusableDelegationSetError {
@@ -11352,6 +12780,83 @@ impl Error for GetReusableDelegationSetError {
                 dispatch_error.description()
             }
             GetReusableDelegationSetError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetReusableDelegationSetLimit
+#[derive(Debug, PartialEq)]
+pub enum GetReusableDelegationSetLimitError {
+    /// <p>The input is not valid.</p>
+    InvalidInput(String),
+    /// <p>A reusable delegation set with the specified ID does not exist.</p>
+    NoSuchDelegationSet(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetReusableDelegationSetLimitError {
+    pub fn from_body(body: &str) -> GetReusableDelegationSetLimitError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "InvalidInput" => GetReusableDelegationSetLimitError::InvalidInput(String::from(
+                    parsed_error.message,
+                )),
+                "NoSuchDelegationSet" => GetReusableDelegationSetLimitError::NoSuchDelegationSet(
+                    String::from(parsed_error.message),
+                ),
+                _ => GetReusableDelegationSetLimitError::Unknown(String::from(body)),
+            },
+            Err(_) => GetReusableDelegationSetLimitError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for GetReusableDelegationSetLimitError {
+    fn from(err: XmlParseError) -> GetReusableDelegationSetLimitError {
+        let XmlParseError(message) = err;
+        GetReusableDelegationSetLimitError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for GetReusableDelegationSetLimitError {
+    fn from(err: CredentialsError) -> GetReusableDelegationSetLimitError {
+        GetReusableDelegationSetLimitError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetReusableDelegationSetLimitError {
+    fn from(err: HttpDispatchError) -> GetReusableDelegationSetLimitError {
+        GetReusableDelegationSetLimitError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetReusableDelegationSetLimitError {
+    fn from(err: io::Error) -> GetReusableDelegationSetLimitError {
+        GetReusableDelegationSetLimitError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetReusableDelegationSetLimitError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetReusableDelegationSetLimitError {
+    fn description(&self) -> &str {
+        match *self {
+            GetReusableDelegationSetLimitError::InvalidInput(ref cause) => cause,
+            GetReusableDelegationSetLimitError::NoSuchDelegationSet(ref cause) => cause,
+            GetReusableDelegationSetLimitError::Validation(ref cause) => cause,
+            GetReusableDelegationSetLimitError::Credentials(ref err) => err.description(),
+            GetReusableDelegationSetLimitError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetReusableDelegationSetLimitError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -11873,6 +13378,89 @@ impl Error for ListHostedZonesByNameError {
                 dispatch_error.description()
             }
             ListHostedZonesByNameError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListQueryLoggingConfigs
+#[derive(Debug, PartialEq)]
+pub enum ListQueryLoggingConfigsError {
+    /// <p>The input is not valid.</p>
+    InvalidInput(String),
+    /// <p>The value that you specified to get the second or subsequent page of results is invalid.</p>
+    InvalidPaginationToken(String),
+    /// <p>No hosted zone exists with the ID that you specified.</p>
+    NoSuchHostedZone(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListQueryLoggingConfigsError {
+    pub fn from_body(body: &str) -> ListQueryLoggingConfigsError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "InvalidInput" => {
+                    ListQueryLoggingConfigsError::InvalidInput(String::from(parsed_error.message))
+                }
+                "InvalidPaginationToken" => ListQueryLoggingConfigsError::InvalidPaginationToken(
+                    String::from(parsed_error.message),
+                ),
+                "NoSuchHostedZone" => ListQueryLoggingConfigsError::NoSuchHostedZone(
+                    String::from(parsed_error.message),
+                ),
+                _ => ListQueryLoggingConfigsError::Unknown(String::from(body)),
+            },
+            Err(_) => ListQueryLoggingConfigsError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for ListQueryLoggingConfigsError {
+    fn from(err: XmlParseError) -> ListQueryLoggingConfigsError {
+        let XmlParseError(message) = err;
+        ListQueryLoggingConfigsError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for ListQueryLoggingConfigsError {
+    fn from(err: CredentialsError) -> ListQueryLoggingConfigsError {
+        ListQueryLoggingConfigsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListQueryLoggingConfigsError {
+    fn from(err: HttpDispatchError) -> ListQueryLoggingConfigsError {
+        ListQueryLoggingConfigsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListQueryLoggingConfigsError {
+    fn from(err: io::Error) -> ListQueryLoggingConfigsError {
+        ListQueryLoggingConfigsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListQueryLoggingConfigsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListQueryLoggingConfigsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListQueryLoggingConfigsError::InvalidInput(ref cause) => cause,
+            ListQueryLoggingConfigsError::InvalidPaginationToken(ref cause) => cause,
+            ListQueryLoggingConfigsError::NoSuchHostedZone(ref cause) => cause,
+            ListQueryLoggingConfigsError::Validation(ref cause) => cause,
+            ListQueryLoggingConfigsError::Credentials(ref err) => err.description(),
+            ListQueryLoggingConfigsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListQueryLoggingConfigsError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -12624,7 +14212,7 @@ impl Error for ListTrafficPolicyVersionsError {
 pub enum ListVPCAssociationAuthorizationsError {
     /// <p>The input is not valid.</p>
     InvalidInput(String),
-
+    /// <p>The value that you specified to get the second or subsequent page of results is invalid.</p>
     InvalidPaginationToken(String),
     /// <p>No hosted zone exists with the ID that you specified.</p>
     NoSuchHostedZone(String),
@@ -12944,7 +14532,7 @@ impl Error for UpdateHostedZoneCommentError {
 /// Errors returned by UpdateTrafficPolicyComment
 #[derive(Debug, PartialEq)]
 pub enum UpdateTrafficPolicyCommentError {
-    /// <p>Another user submitted a request to update the object at the same time that you did. Retry the request. </p>
+    /// <p>Another user submitted a request to create, update, or delete the object at the same time that you did. Retry the request. </p>
     ConcurrentModification(String),
     /// <p>The input is not valid.</p>
     InvalidInput(String),
@@ -13157,7 +14745,13 @@ pub trait Route53 {
         input: &CreateHostedZoneRequest,
     ) -> Result<CreateHostedZoneResponse, CreateHostedZoneError>;
 
-    /// <p>Creates a delegation set (a group of four name servers) that can be reused by multiple hosted zones. If a hosted zoned ID is specified, <code>CreateReusableDelegationSet</code> marks the delegation set associated with that zone as reusable</p> <note> <p>A reusable delegation set can't be associated with a private hosted zone.</p> </note> <p>For information on how to use a reusable delegation set to configure white label name servers, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/white-label-name-servers.html">Configuring White Label Name Servers</a>.</p>
+    /// <p><p>Creates a configuration for DNS query logging. After you create a query logging configuration, Amazon Route 53 begins to publish log data to an Amazon CloudWatch Logs log group.</p> <p>DNS query logs contain information about the queries that Amazon Route 53 receives for a specified public hosted zone, such as the following:</p> <ul> <li> <p>Amazon Route 53 edge location that responded to the DNS query</p> </li> <li> <p>Domain or subdomain that was requested</p> </li> <li> <p>DNS record type, such as A or AAAA</p> </li> <li> <p>DNS response code, such as <code>NoError</code> or <code>ServFail</code> </p> </li> </ul> <dl> <dt>Log Group and Resource Policy</dt> <dd> <p>Before you create a query logging configuration, perform the following operations.</p> <note> <p>If you create a query logging configuration using the Amazon Route 53 console, Amazon Route 53 performs these operations automatically.</p> </note> <ol> <li> <p>Create a CloudWatch Logs log group, and make note of the ARN, which you specify when you create a query logging configuration. Note the following:</p> <ul> <li> <p>You must create the log group in the us-east-1 region.</p> </li> <li> <p>You must use the same AWS account to create the log group and the hosted zone that you want to configure query logging for.</p> </li> <li> <p>When you create log groups for query logging, we recommend that you use a consistent prefix, for example:</p> <p> <code>/aws/route53/<i>hosted zone name</i> </code> </p> <p>In the next step, you&#39;ll create a resource policy, which controls access to one or more log groups and the associated AWS resources, such as Amazon Route 53 hosted zones. There&#39;s a limit on the number of resource policies that you can create, so we recommend that you use a consistent prefix so you can use the same resource policy for all the log groups that you create for query logging.</p> </li> </ul> </li> <li> <p>Create a CloudWatch Logs resource policy, and give it the permissions that Amazon Route 53 needs to create log streams and to send query logs to log streams. For the value of <code>Resource</code>, specify the ARN for the log group that you created in the previous step. To use the same resource policy for all the CloudWatch Logs log groups that you created for query logging configurations, replace the hosted zone name with <code><em></code>, for example:</p> <p> <code>arn:aws:logs:us-east-1:123412341234:log-group:/aws/route53/</em></code> </p> <note> <p>You can&#39;t use the CloudWatch console to create or edit a resource policy. You must use the CloudWatch API, one of the AWS SDKs, or the AWS CLI.</p> </note> </li> </ol> </dd> <dt>Log Streams and Edge Locations</dt> <dd> <p>When Amazon Route 53 finishes creating the configuration for DNS query logging, it does the following:</p> <ul> <li> <p>Creates a log stream for an edge location the first time that the edge location responds to DNS queries for the specified hosted zone. That log stream is used to log all queries that Amazon Route 53 responds to for that edge location.</p> </li> <li> <p>Begins to send query logs to the applicable log stream.</p> </li> </ul> <p>The name of each log stream is in the following format:</p> <p> <code> <i>hosted zone ID</i>/<i>edge location code</i> </code> </p> <p>The edge location code is a three-letter code and an arbitrarily assigned number, for example, DFW3. The three-letter code typically corresponds with the International Air Transport Association airport code for an airport near the edge location. (These abbreviations might change in the future.) For a list of edge locations, see &quot;The Amazon Route 53 Global Network&quot; on the <a href="http://aws.amazon.com/route53/details/">Amazon Route 53 Product Details</a> page.</p> </dd> <dt>Queries That Are Logged</dt> <dd> <p>Query logs contain only the queries that DNS resolvers forward to Amazon Route 53. If a DNS resolver has already cached the response to a query (such as the IP address for a load balancer for example.com), the resolver will continue to return the cached response. It doesn&#39;t forward another query to Amazon Route 53 until the TTL for the corresponding resource record set expires. Depending on how many DNS queries are submitted for a resource record set, and depending on the TTL for that resource record set, query logs might contain information about only one query out of every several thousand queries that are submitted to DNS. For more information about how DNS works, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/welcome-dns-service.html">Routing Internet Traffic to Your Website or Web Application</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </dd> <dt>Log File Format</dt> <dd> <p>For a list of the values in each query log and the format of each value, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/query-logs.html">Logging DNS Queries</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </dd> <dt>Pricing</dt> <dd> <p>For information about charges for query logs, see <a href="http://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> </dd> <dt>How to Stop Logging</dt> <dd> <p>If you want Amazon Route 53 to stop sending query logs to CloudWatch Logs, delete the query logging configuration. For more information, see <a>DeleteQueryLoggingConfig</a>.</p> </dd> </dl></p>
+    fn create_query_logging_config(
+        &self,
+        input: &CreateQueryLoggingConfigRequest,
+    ) -> Result<CreateQueryLoggingConfigResponse, CreateQueryLoggingConfigError>;
+
+    /// <p><p>Creates a delegation set (a group of four name servers) that can be reused by multiple hosted zones. If a hosted zoned ID is specified, <code>CreateReusableDelegationSet</code> marks the delegation set associated with that zone as reusable.</p> <note> <p>You can&#39;t associate a reusable delegation set with a private hosted zone.</p> </note> <p>For information about using a reusable delegation set to configure white label name servers, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/white-label-name-servers.html">Configuring White Label Name Servers</a>.</p> <p>The process for migrating existing hosted zones to use a reusable delegation set is comparable to the process for configuring white label name servers. You need to perform the following steps:</p> <ol> <li> <p>Create a reusable delegation set.</p> </li> <li> <p>Recreate hosted zones, and reduce the TTL to 60 seconds or less.</p> </li> <li> <p>Recreate resource record sets in the new hosted zones.</p> </li> <li> <p>Change the registrar&#39;s name servers to use the name servers for the new hosted zones.</p> </li> <li> <p>Monitor traffic for the website or application.</p> </li> <li> <p>Change TTLs back to their original values.</p> </li> </ol> <p>If you want to migrate existing hosted zones to use a reusable delegation set, the existing hosted zones can&#39;t use any of the name servers that are assigned to the reusable delegation set. If one or more hosted zones do use one or more name servers that are assigned to the reusable delegation set, you can do one of the following:</p> <ul> <li> <p>For small numbers of hosted zones—up to a few hundred—it&#39;s relatively easy to create reusable delegation sets until you get one that has four name servers that don&#39;t overlap with any of the name servers in your hosted zones.</p> </li> <li> <p>For larger numbers of hosted zones, the easiest solution is to use more than one reusable delegation set.</p> </li> <li> <p>For larger numbers of hosted zones, you can also migrate hosted zones that have overlapping name servers to hosted zones that don&#39;t have overlapping name servers, then migrate the hosted zones again to use the reusable delegation set.</p> </li> </ul></p>
     fn create_reusable_delegation_set(
         &self,
         input: &CreateReusableDelegationSetRequest,
@@ -13199,6 +14793,12 @@ pub trait Route53 {
         input: &DeleteHostedZoneRequest,
     ) -> Result<DeleteHostedZoneResponse, DeleteHostedZoneError>;
 
+    /// <p>Deletes a configuration for DNS query logging. If you delete a configuration, Amazon Route 53 stops sending query logs to CloudWatch Logs. Amazon Route 53 doesn't delete any logs that are already in CloudWatch Logs.</p> <p>For more information about DNS query logs, see <a>CreateQueryLoggingConfig</a>.</p>
+    fn delete_query_logging_config(
+        &self,
+        input: &DeleteQueryLoggingConfigRequest,
+    ) -> Result<DeleteQueryLoggingConfigResponse, DeleteQueryLoggingConfigError>;
+
     /// <p>Deletes a reusable delegation set.</p> <important> <p>You can delete a reusable delegation set only if it isn't associated with any hosted zones.</p> </important> <p>To verify that the reusable delegation set is not associated with any hosted zones, submit a <a>GetReusableDelegationSet</a> request and specify the ID of the reusable delegation set that you want to delete.</p>
     fn delete_reusable_delegation_set(
         &self,
@@ -13228,6 +14828,12 @@ pub trait Route53 {
         &self,
         input: &DisassociateVPCFromHostedZoneRequest,
     ) -> Result<DisassociateVPCFromHostedZoneResponse, DisassociateVPCFromHostedZoneError>;
+
+    /// <p>Gets the specified limit for the current account, for example, the maximum number of health checks that you can create using the account.</p> <p>For the default limit, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>. To request a higher limit, <a href="https://console.aws.amazon.com/support/home#/case/create?issueType=service-limit-increase&amp;limitType=service-code-route53">open a case</a>.</p>
+    fn get_account_limit(
+        &self,
+        input: &GetAccountLimitRequest,
+    ) -> Result<GetAccountLimitResponse, GetAccountLimitError>;
 
     /// <p><p>Returns the current status of a change batch request. The status is one of the following values:</p> <ul> <li> <p> <code>PENDING</code> indicates that the changes in this request have not propagated to all Amazon Route 53 DNS servers. This is the initial status of all change batch requests.</p> </li> <li> <p> <code>INSYNC</code> indicates that the changes have propagated to all Amazon Route 53 DNS servers. </p> </li> </ul></p>
     fn get_change(&self, input: &GetChangeRequest) -> Result<GetChangeResponse, GetChangeError>;
@@ -13280,11 +14886,29 @@ pub trait Route53 {
         input: &GetHostedZoneCountRequest,
     ) -> Result<GetHostedZoneCountResponse, GetHostedZoneCountError>;
 
+    /// <p>Gets the specified limit for a specified hosted zone, for example, the maximum number of records that you can create in the hosted zone. </p> <p>For the default limit, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>. To request a higher limit, <a href="https://console.aws.amazon.com/support/home#/case/create?issueType=service-limit-increase&amp;limitType=service-code-route53">open a case</a>.</p>
+    fn get_hosted_zone_limit(
+        &self,
+        input: &GetHostedZoneLimitRequest,
+    ) -> Result<GetHostedZoneLimitResponse, GetHostedZoneLimitError>;
+
+    /// <p>Gets information about a specified configuration for DNS query logging.</p> <p>For more information about DNS query logs, see <a>CreateQueryLoggingConfig</a> and <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/query-logs.html">Logging DNS Queries</a>.</p>
+    fn get_query_logging_config(
+        &self,
+        input: &GetQueryLoggingConfigRequest,
+    ) -> Result<GetQueryLoggingConfigResponse, GetQueryLoggingConfigError>;
+
     /// <p>Retrieves information about a specified reusable delegation set, including the four name servers that are assigned to the delegation set.</p>
     fn get_reusable_delegation_set(
         &self,
         input: &GetReusableDelegationSetRequest,
     ) -> Result<GetReusableDelegationSetResponse, GetReusableDelegationSetError>;
+
+    /// <p>Gets the maximum number of hosted zones that you can associate with the specified reusable delegation set.</p> <p>For the default limit, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>. To request a higher limit, <a href="https://console.aws.amazon.com/support/home#/case/create?issueType=service-limit-increase&amp;limitType=service-code-route53">open a case</a>.</p>
+    fn get_reusable_delegation_set_limit(
+        &self,
+        input: &GetReusableDelegationSetLimitRequest,
+    ) -> Result<GetReusableDelegationSetLimitResponse, GetReusableDelegationSetLimitError>;
 
     /// <p>Gets information about a specific traffic policy version.</p>
     fn get_traffic_policy(
@@ -13327,6 +14951,12 @@ pub trait Route53 {
         &self,
         input: &ListHostedZonesByNameRequest,
     ) -> Result<ListHostedZonesByNameResponse, ListHostedZonesByNameError>;
+
+    /// <p>Lists the configurations for DNS query logging that are associated with the current AWS account or the configuration that is associated with a specified hosted zone.</p> <p>For more information about DNS query logs, see <a>CreateQueryLoggingConfig</a>. Additional information, including the format of DNS query logs, appears in <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/query-logs.html">Logging DNS Queries</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>
+    fn list_query_logging_configs(
+        &self,
+        input: &ListQueryLoggingConfigsRequest,
+    ) -> Result<ListQueryLoggingConfigsResponse, ListQueryLoggingConfigsError>;
 
     /// <p>Lists the resource record sets in a specified hosted zone.</p> <p> <code>ListResourceRecordSets</code> returns up to 100 resource record sets at a time in ASCII order, beginning at a position specified by the <code>name</code> and <code>type</code> elements. The action sorts results first by DNS name with the labels reversed, for example:</p> <p> <code>com.example.www.</code> </p> <p>Note the trailing dot, which can change the sort order in some circumstances.</p> <p>When multiple records have the same DNS name, the action sorts results by the record type.</p> <p>You can use the name and type elements to adjust the beginning position of the list of resource record sets returned:</p> <dl> <dt>If you do not specify Name or Type</dt> <dd> <p>The results begin with the first resource record set that the hosted zone contains.</p> </dd> <dt>If you specify Name but not Type</dt> <dd> <p>The results begin with the first resource record set in the list whose name is greater than or equal to <code>Name</code>.</p> </dd> <dt>If you specify Type but not Name</dt> <dd> <p>Amazon Route 53 returns the <code>InvalidInput</code> error.</p> </dd> <dt>If you specify both Name and Type</dt> <dd> <p>The results begin with the first resource record set in the list whose name is greater than or equal to <code>Name</code>, and whose type is greater than or equal to <code>Type</code>.</p> </dd> </dl> <p>This action returns the most current version of the records. This includes records that are <code>PENDING</code>, and that are not yet available on all Amazon Route 53 DNS servers.</p> <p>To ensure that you get an accurate listing of the resource record sets for a hosted zone at a point in time, do not submit a <code>ChangeResourceRecordSets</code> request while you're paging through the results of a <code>ListResourceRecordSets</code> request. If you do, some pages may display results without the latest changes while other pages display results with the latest changes.</p>
     fn list_resource_record_sets(
@@ -13755,7 +15385,66 @@ where
         }
     }
 
-    /// <p>Creates a delegation set (a group of four name servers) that can be reused by multiple hosted zones. If a hosted zoned ID is specified, <code>CreateReusableDelegationSet</code> marks the delegation set associated with that zone as reusable</p> <note> <p>A reusable delegation set can't be associated with a private hosted zone.</p> </note> <p>For information on how to use a reusable delegation set to configure white label name servers, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/white-label-name-servers.html">Configuring White Label Name Servers</a>.</p>
+    /// <p><p>Creates a configuration for DNS query logging. After you create a query logging configuration, Amazon Route 53 begins to publish log data to an Amazon CloudWatch Logs log group.</p> <p>DNS query logs contain information about the queries that Amazon Route 53 receives for a specified public hosted zone, such as the following:</p> <ul> <li> <p>Amazon Route 53 edge location that responded to the DNS query</p> </li> <li> <p>Domain or subdomain that was requested</p> </li> <li> <p>DNS record type, such as A or AAAA</p> </li> <li> <p>DNS response code, such as <code>NoError</code> or <code>ServFail</code> </p> </li> </ul> <dl> <dt>Log Group and Resource Policy</dt> <dd> <p>Before you create a query logging configuration, perform the following operations.</p> <note> <p>If you create a query logging configuration using the Amazon Route 53 console, Amazon Route 53 performs these operations automatically.</p> </note> <ol> <li> <p>Create a CloudWatch Logs log group, and make note of the ARN, which you specify when you create a query logging configuration. Note the following:</p> <ul> <li> <p>You must create the log group in the us-east-1 region.</p> </li> <li> <p>You must use the same AWS account to create the log group and the hosted zone that you want to configure query logging for.</p> </li> <li> <p>When you create log groups for query logging, we recommend that you use a consistent prefix, for example:</p> <p> <code>/aws/route53/<i>hosted zone name</i> </code> </p> <p>In the next step, you&#39;ll create a resource policy, which controls access to one or more log groups and the associated AWS resources, such as Amazon Route 53 hosted zones. There&#39;s a limit on the number of resource policies that you can create, so we recommend that you use a consistent prefix so you can use the same resource policy for all the log groups that you create for query logging.</p> </li> </ul> </li> <li> <p>Create a CloudWatch Logs resource policy, and give it the permissions that Amazon Route 53 needs to create log streams and to send query logs to log streams. For the value of <code>Resource</code>, specify the ARN for the log group that you created in the previous step. To use the same resource policy for all the CloudWatch Logs log groups that you created for query logging configurations, replace the hosted zone name with <code><em></code>, for example:</p> <p> <code>arn:aws:logs:us-east-1:123412341234:log-group:/aws/route53/</em></code> </p> <note> <p>You can&#39;t use the CloudWatch console to create or edit a resource policy. You must use the CloudWatch API, one of the AWS SDKs, or the AWS CLI.</p> </note> </li> </ol> </dd> <dt>Log Streams and Edge Locations</dt> <dd> <p>When Amazon Route 53 finishes creating the configuration for DNS query logging, it does the following:</p> <ul> <li> <p>Creates a log stream for an edge location the first time that the edge location responds to DNS queries for the specified hosted zone. That log stream is used to log all queries that Amazon Route 53 responds to for that edge location.</p> </li> <li> <p>Begins to send query logs to the applicable log stream.</p> </li> </ul> <p>The name of each log stream is in the following format:</p> <p> <code> <i>hosted zone ID</i>/<i>edge location code</i> </code> </p> <p>The edge location code is a three-letter code and an arbitrarily assigned number, for example, DFW3. The three-letter code typically corresponds with the International Air Transport Association airport code for an airport near the edge location. (These abbreviations might change in the future.) For a list of edge locations, see &quot;The Amazon Route 53 Global Network&quot; on the <a href="http://aws.amazon.com/route53/details/">Amazon Route 53 Product Details</a> page.</p> </dd> <dt>Queries That Are Logged</dt> <dd> <p>Query logs contain only the queries that DNS resolvers forward to Amazon Route 53. If a DNS resolver has already cached the response to a query (such as the IP address for a load balancer for example.com), the resolver will continue to return the cached response. It doesn&#39;t forward another query to Amazon Route 53 until the TTL for the corresponding resource record set expires. Depending on how many DNS queries are submitted for a resource record set, and depending on the TTL for that resource record set, query logs might contain information about only one query out of every several thousand queries that are submitted to DNS. For more information about how DNS works, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/welcome-dns-service.html">Routing Internet Traffic to Your Website or Web Application</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </dd> <dt>Log File Format</dt> <dd> <p>For a list of the values in each query log and the format of each value, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/query-logs.html">Logging DNS Queries</a> in the <i>Amazon Route 53 Developer Guide</i>.</p> </dd> <dt>Pricing</dt> <dd> <p>For information about charges for query logs, see <a href="http://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> </dd> <dt>How to Stop Logging</dt> <dd> <p>If you want Amazon Route 53 to stop sending query logs to CloudWatch Logs, delete the query logging configuration. For more information, see <a>DeleteQueryLoggingConfig</a>.</p> </dd> </dl></p>
+    #[allow(unused_variables, warnings)]
+    fn create_query_logging_config(
+        &self,
+        input: &CreateQueryLoggingConfigRequest,
+    ) -> Result<CreateQueryLoggingConfigResponse, CreateQueryLoggingConfigError> {
+        let request_uri = "/2013-04-01/queryloggingconfig";
+
+        let mut request = SignedRequest::new("POST", "route53", &self.region, &request_uri);
+
+        let mut writer = EventWriter::new(Vec::new());
+        CreateQueryLoggingConfigRequestSerializer::serialize(
+            &mut writer,
+            "CreateQueryLoggingConfigRequest",
+            &input,
+            "https://route53.amazonaws.com/doc/2013-04-01/",
+        );
+
+        request.set_payload(Some(writer.into_inner()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = CreateQueryLoggingConfigResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(CreateQueryLoggingConfigResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
+                }
+                let value = response.headers.get("Location").unwrap().to_owned();
+                result.location = value;
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateQueryLoggingConfigError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p><p>Creates a delegation set (a group of four name servers) that can be reused by multiple hosted zones. If a hosted zoned ID is specified, <code>CreateReusableDelegationSet</code> marks the delegation set associated with that zone as reusable.</p> <note> <p>You can&#39;t associate a reusable delegation set with a private hosted zone.</p> </note> <p>For information about using a reusable delegation set to configure white label name servers, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/white-label-name-servers.html">Configuring White Label Name Servers</a>.</p> <p>The process for migrating existing hosted zones to use a reusable delegation set is comparable to the process for configuring white label name servers. You need to perform the following steps:</p> <ol> <li> <p>Create a reusable delegation set.</p> </li> <li> <p>Recreate hosted zones, and reduce the TTL to 60 seconds or less.</p> </li> <li> <p>Recreate resource record sets in the new hosted zones.</p> </li> <li> <p>Change the registrar&#39;s name servers to use the name servers for the new hosted zones.</p> </li> <li> <p>Monitor traffic for the website or application.</p> </li> <li> <p>Change TTLs back to their original values.</p> </li> </ol> <p>If you want to migrate existing hosted zones to use a reusable delegation set, the existing hosted zones can&#39;t use any of the name servers that are assigned to the reusable delegation set. If one or more hosted zones do use one or more name servers that are assigned to the reusable delegation set, you can do one of the following:</p> <ul> <li> <p>For small numbers of hosted zones—up to a few hundred—it&#39;s relatively easy to create reusable delegation sets until you get one that has four name servers that don&#39;t overlap with any of the name servers in your hosted zones.</p> </li> <li> <p>For larger numbers of hosted zones, the easiest solution is to use more than one reusable delegation set.</p> </li> <li> <p>For larger numbers of hosted zones, you can also migrate hosted zones that have overlapping name servers to hosted zones that don&#39;t have overlapping name servers, then migrate the hosted zones again to use the reusable delegation set.</p> </li> </ul></p>
     #[allow(unused_variables, warnings)]
     fn create_reusable_delegation_set(
         &self,
@@ -14160,6 +15849,54 @@ where
         }
     }
 
+    /// <p>Deletes a configuration for DNS query logging. If you delete a configuration, Amazon Route 53 stops sending query logs to CloudWatch Logs. Amazon Route 53 doesn't delete any logs that are already in CloudWatch Logs.</p> <p>For more information about DNS query logs, see <a>CreateQueryLoggingConfig</a>.</p>
+    #[allow(unused_variables, warnings)]
+    fn delete_query_logging_config(
+        &self,
+        input: &DeleteQueryLoggingConfigRequest,
+    ) -> Result<DeleteQueryLoggingConfigResponse, DeleteQueryLoggingConfigError> {
+        let request_uri = format!("/2013-04-01/queryloggingconfig/{id}", id = input.id);
+
+        let mut request = SignedRequest::new("DELETE", "route53", &self.region, &request_uri);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = DeleteQueryLoggingConfigResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(DeleteQueryLoggingConfigResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
+                }
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteQueryLoggingConfigError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Deletes a reusable delegation set.</p> <important> <p>You can delete a reusable delegation set only if it isn't associated with any hosted zones.</p> </important> <p>To verify that the reusable delegation set is not associated with any hosted zones, submit a <a>GetReusableDelegationSet</a> request and specify the ID of the reusable delegation set that you want to delete.</p>
     #[allow(unused_variables, warnings)]
     fn delete_reusable_delegation_set(
@@ -14433,6 +16170,54 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(DisassociateVPCFromHostedZoneError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Gets the specified limit for the current account, for example, the maximum number of health checks that you can create using the account.</p> <p>For the default limit, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>. To request a higher limit, <a href="https://console.aws.amazon.com/support/home#/case/create?issueType=service-limit-increase&amp;limitType=service-code-route53">open a case</a>.</p>
+    #[allow(unused_variables, warnings)]
+    fn get_account_limit(
+        &self,
+        input: &GetAccountLimitRequest,
+    ) -> Result<GetAccountLimitResponse, GetAccountLimitError> {
+        let request_uri = format!("/2013-04-01/accountlimit/{type}", type = input.type_);
+
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = GetAccountLimitResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(GetAccountLimitResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
+                }
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetAccountLimitError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -14891,6 +16676,102 @@ where
         }
     }
 
+    /// <p>Gets the specified limit for a specified hosted zone, for example, the maximum number of records that you can create in the hosted zone. </p> <p>For the default limit, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>. To request a higher limit, <a href="https://console.aws.amazon.com/support/home#/case/create?issueType=service-limit-increase&amp;limitType=service-code-route53">open a case</a>.</p>
+    #[allow(unused_variables, warnings)]
+    fn get_hosted_zone_limit(
+        &self,
+        input: &GetHostedZoneLimitRequest,
+    ) -> Result<GetHostedZoneLimitResponse, GetHostedZoneLimitError> {
+        let request_uri = format!("/2013-04-01/hostedzonelimit/{id}/{type}", id = input.hosted_zone_id, type = input.type_);
+
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = GetHostedZoneLimitResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(GetHostedZoneLimitResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
+                }
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetHostedZoneLimitError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Gets information about a specified configuration for DNS query logging.</p> <p>For more information about DNS query logs, see <a>CreateQueryLoggingConfig</a> and <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/query-logs.html">Logging DNS Queries</a>.</p>
+    #[allow(unused_variables, warnings)]
+    fn get_query_logging_config(
+        &self,
+        input: &GetQueryLoggingConfigRequest,
+    ) -> Result<GetQueryLoggingConfigResponse, GetQueryLoggingConfigError> {
+        let request_uri = format!("/2013-04-01/queryloggingconfig/{id}", id = input.id);
+
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = GetQueryLoggingConfigResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(GetQueryLoggingConfigResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
+                }
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetQueryLoggingConfigError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Retrieves information about a specified reusable delegation set, including the four name servers that are assigned to the delegation set.</p>
     #[allow(unused_variables, warnings)]
     fn get_reusable_delegation_set(
@@ -14933,6 +16814,56 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(GetReusableDelegationSetError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Gets the maximum number of hosted zones that you can associate with the specified reusable delegation set.</p> <p>For the default limit, see <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/DNSLimitations.html">Limits</a> in the <i>Amazon Route 53 Developer Guide</i>. To request a higher limit, <a href="https://console.aws.amazon.com/support/home#/case/create?issueType=service-limit-increase&amp;limitType=service-code-route53">open a case</a>.</p>
+    #[allow(unused_variables, warnings)]
+    fn get_reusable_delegation_set_limit(
+        &self,
+        input: &GetReusableDelegationSetLimitRequest,
+    ) -> Result<GetReusableDelegationSetLimitResponse, GetReusableDelegationSetLimitError> {
+        let request_uri = format!("/2013-04-01/reusabledelegationsetlimit/{id}/{type}", id = input.delegation_set_id, type = input.type_);
+
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = GetReusableDelegationSetLimitResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(
+                        GetReusableDelegationSetLimitResponseDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack
+                        )
+                    );
+                }
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetReusableDelegationSetLimitError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -15323,6 +17254,66 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(ListHostedZonesByNameError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Lists the configurations for DNS query logging that are associated with the current AWS account or the configuration that is associated with a specified hosted zone.</p> <p>For more information about DNS query logs, see <a>CreateQueryLoggingConfig</a>. Additional information, including the format of DNS query logs, appears in <a href="http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/query-logs.html">Logging DNS Queries</a> in the <i>Amazon Route 53 Developer Guide</i>.</p>
+    #[allow(unused_variables, warnings)]
+    fn list_query_logging_configs(
+        &self,
+        input: &ListQueryLoggingConfigsRequest,
+    ) -> Result<ListQueryLoggingConfigsResponse, ListQueryLoggingConfigsError> {
+        let request_uri = "/2013-04-01/queryloggingconfig";
+
+        let mut request = SignedRequest::new("GET", "route53", &self.region, &request_uri);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.hosted_zone_id {
+            params.put("hostedzoneid", x);
+        }
+        if let Some(ref x) = input.max_results {
+            params.put("maxresults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nexttoken", x);
+        }
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok | StatusCode::NoContent | StatusCode::PartialContent => {
+                let mut result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = ListQueryLoggingConfigsResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(ListQueryLoggingConfigsResponseDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
+                }
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListQueryLoggingConfigsError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }

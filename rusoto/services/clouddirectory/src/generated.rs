@@ -39,7 +39,7 @@ pub struct AddFacetToObjectRequest {
     /// <p>A reference to the object you are adding the specified facet to.</p>
     #[serde(rename = "ObjectReference")]
     pub object_reference: ObjectReference,
-    /// <p>Identifiers for the facet that you are adding to the object.</p>
+    /// <p>Identifiers for the facet that you are adding to the object. See <a>SchemaFacet</a> for details.</p>
     #[serde(rename = "SchemaFacet")]
     pub schema_facet: SchemaFacet,
 }
@@ -412,7 +412,7 @@ pub struct BatchDetachObjectResponse {
     pub detached_object_identifier: Option<String>,
 }
 
-/// <p>Detaches the specified policy from the specified directory inside a <a>BatchRead</a> operation. For more information, see <a>DetachPolicy</a> and <a>BatchReadRequest$Operations</a>.</p>
+/// <p>Detaches the specified policy from the specified directory inside a <a>BatchWrite</a> operation. For more information, see <a>DetachPolicy</a> and <a>BatchWriteRequest$Operations</a>.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct BatchDetachPolicy {
     /// <p>Reference that identifies the object whose policy object will be detached.</p>
@@ -1187,7 +1187,7 @@ pub struct CreateObjectRequest {
     #[serde(rename = "ParentReference")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parent_reference: Option<ObjectReference>,
-    /// <p>A list of schema facets to be associated with the object that contains <code>SchemaArn</code> and facet name. For more information, see <a>arns</a>.</p>
+    /// <p>A list of schema facets to be associated with the object. Do not provide minor version components. See <a>SchemaFacet</a> for details.</p>
     #[serde(rename = "SchemaFacets")]
     pub schema_facets: Vec<SchemaFacet>,
 }
@@ -1491,6 +1491,21 @@ pub struct FacetAttributeUpdate {
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct GetAppliedSchemaVersionRequest {
+    /// <p>The ARN of the applied schema.</p>
+    #[serde(rename = "SchemaArn")]
+    pub schema_arn: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetAppliedSchemaVersionResponse {
+    /// <p>Current applied schema ARN, including the minor version in use if one was provided.</p>
+    #[serde(rename = "AppliedSchemaArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub applied_schema_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDirectoryRequest {
     /// <p>The ARN of the directory.</p>
     #[serde(rename = "DirectoryArn")]
@@ -1542,7 +1557,7 @@ pub struct GetObjectInformationResponse {
     #[serde(rename = "ObjectIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub object_identifier: Option<String>,
-    /// <p>The facets attached to the specified object.</p>
+    /// <p>The facets attached to the specified object. Although the response does not include minor version information, the most recently applied minor version of each Facet is in effect. See <a>GetAppliedSchemaVersion</a> for details.</p>
     #[serde(rename = "SchemaFacets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_facets: Option<Vec<SchemaFacet>>,
@@ -1592,7 +1607,7 @@ pub struct IndexAttachment {
     #[serde(rename = "IndexedAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub indexed_attributes: Option<Vec<AttributeKeyAndValue>>,
-    /// <p>The <code>ObjectIdentifier</code> of the object attached to the index.</p>
+    /// <p>In response to <a>ListIndex</a>, the <code>ObjectIdentifier</code> of the object attached to the index. In response to <a>ListAttachedIndices</a>, the <code>ObjectIdentifier</code> of the index attached to the object. This field will always contain the <code>ObjectIdentifier</code> of the object on the opposite side of the attachment specified in the query.</p>
     #[serde(rename = "ObjectIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub object_identifier: Option<String>,
@@ -1611,6 +1626,10 @@ pub struct ListAppliedSchemaArnsRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p>The response for <code>ListAppliedSchemaArns</code> when this parameter is used will list all minor version ARNs for a major version.</p>
+    #[serde(rename = "SchemaArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_arn: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -1821,7 +1840,7 @@ pub struct ListIndexRequest {
     /// <p>The reference to the index to list.</p>
     #[serde(rename = "IndexReference")]
     pub index_reference: ObjectReference,
-    /// <p>The maximum number of results to retrieve from the index.</p>
+    /// <p>The maximum number of objects in a single page to retrieve from the index during a request. For more information, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html#limits_cd">AWS Directory Service Limits</a>.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -2103,6 +2122,10 @@ pub struct ListPublishedSchemaArnsRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p>The response for <code>ListPublishedSchemaArns</code> when this parameter is used will list all minor version ARNs for a major version.</p>
+    #[serde(rename = "SchemaArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_arn: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -2327,11 +2350,15 @@ pub struct PublishSchemaRequest {
     /// <p>The Amazon Resource Name (ARN) that is associated with the development schema. For more information, see <a>arns</a>.</p>
     #[serde(rename = "DevelopmentSchemaArn")]
     pub development_schema_arn: String,
+    /// <p>The minor version under which the schema will be published. This parameter is recommended. Schemas have both a major and minor version associated with them.</p>
+    #[serde(rename = "MinorVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub minor_version: Option<String>,
     /// <p>The new name under which the schema will be published. If this is not provided, the development schema is considered.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The version under which the schema will be published.</p>
+    /// <p>The major version under which the schema will be published. Schemas have both a major and minor version associated with them.</p>
     #[serde(rename = "Version")]
     pub version: String,
 }
@@ -2370,7 +2397,7 @@ pub struct RemoveFacetFromObjectRequest {
     /// <p>A reference to the object to remove the facet from.</p>
     #[serde(rename = "ObjectReference")]
     pub object_reference: ObjectReference,
-    /// <p>The facet to remove.</p>
+    /// <p>The facet to remove. See <a>SchemaFacet</a> for details.</p>
     #[serde(rename = "SchemaFacet")]
     pub schema_facet: SchemaFacet,
 }
@@ -2398,7 +2425,7 @@ pub struct SchemaFacet {
     #[serde(rename = "FacetName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub facet_name: Option<String>,
-    /// <p>The ARN of the schema that contains the facet.</p>
+    /// <p>The ARN of the schema that contains the facet with no minor component. See <a>arns</a> and <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/inplaceschemaupgrade.html">In-Place Schema Upgrade</a> for a description of when to provide minor versions.</p>
     #[serde(rename = "SchemaArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_arn: Option<String>,
@@ -2657,6 +2684,57 @@ pub struct UpdateTypedLinkFacetRequest {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateTypedLinkFacetResponse;
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct UpgradeAppliedSchemaRequest {
+    /// <p>The ARN for the directory to which the upgraded schema will be applied.</p>
+    #[serde(rename = "DirectoryArn")]
+    pub directory_arn: String,
+    /// <p>Used for testing whether the major version schemas are backward compatible or not. If schema compatibility fails, an exception would be thrown else the call would succeed but no changes will be saved. This parameter is optional.</p>
+    #[serde(rename = "DryRun")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dry_run: Option<bool>,
+    /// <p>The revision of the published schema to upgrade the directory to.</p>
+    #[serde(rename = "PublishedSchemaArn")]
+    pub published_schema_arn: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct UpgradeAppliedSchemaResponse {
+    /// <p>The ARN of the directory that is returned as part of the response.</p>
+    #[serde(rename = "DirectoryArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub directory_arn: Option<String>,
+    /// <p>The ARN of the upgraded schema that is returned as part of the response.</p>
+    #[serde(rename = "UpgradedSchemaArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub upgraded_schema_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct UpgradePublishedSchemaRequest {
+    /// <p>The ARN of the development schema with the changes used for the upgrade.</p>
+    #[serde(rename = "DevelopmentSchemaArn")]
+    pub development_schema_arn: String,
+    /// <p>Used for testing whether the Development schema provided is backwards compatible, or not, with the publish schema provided by the user to be upgraded. If schema compatibility fails, an exception would be thrown else the call would succeed. This parameter is optional and defaults to false.</p>
+    #[serde(rename = "DryRun")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dry_run: Option<bool>,
+    /// <p>Identifies the minor version of the published schema that will be created. This parameter is NOT optional.</p>
+    #[serde(rename = "MinorVersion")]
+    pub minor_version: String,
+    /// <p>The ARN of the published schema to be upgraded.</p>
+    #[serde(rename = "PublishedSchemaArn")]
+    pub published_schema_arn: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct UpgradePublishedSchemaResponse {
+    /// <p>The ARN of the upgraded schema that is returned as part of the response.</p>
+    #[serde(rename = "UpgradedSchemaArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub upgraded_schema_arn: Option<String>,
+}
 
 /// Errors returned by AddFacetToObject
 #[derive(Debug, PartialEq)]
@@ -5655,6 +5733,116 @@ impl Error for EnableDirectoryError {
             EnableDirectoryError::Credentials(ref err) => err.description(),
             EnableDirectoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             EnableDirectoryError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetAppliedSchemaVersion
+#[derive(Debug, PartialEq)]
+pub enum GetAppliedSchemaVersionError {
+    /// <p>Access denied. Check your permissions.</p>
+    AccessDenied(String),
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    InternalService(String),
+    /// <p>Indicates that the provided ARN value is not valid.</p>
+    InvalidArn(String),
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource could not be found.</p>
+    ResourceNotFound(String),
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    RetryableConflict(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetAppliedSchemaVersionError {
+    pub fn from_body(body: &str) -> GetAppliedSchemaVersionError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        GetAppliedSchemaVersionError::AccessDenied(String::from(error_message))
+                    }
+                    "InternalServiceException" => {
+                        GetAppliedSchemaVersionError::InternalService(String::from(error_message))
+                    }
+                    "InvalidArnException" => {
+                        GetAppliedSchemaVersionError::InvalidArn(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        GetAppliedSchemaVersionError::LimitExceeded(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        GetAppliedSchemaVersionError::ResourceNotFound(String::from(error_message))
+                    }
+                    "RetryableConflictException" => {
+                        GetAppliedSchemaVersionError::RetryableConflict(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetAppliedSchemaVersionError::Validation(error_message.to_string())
+                    }
+                    _ => GetAppliedSchemaVersionError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetAppliedSchemaVersionError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetAppliedSchemaVersionError {
+    fn from(err: serde_json::error::Error) -> GetAppliedSchemaVersionError {
+        GetAppliedSchemaVersionError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetAppliedSchemaVersionError {
+    fn from(err: CredentialsError) -> GetAppliedSchemaVersionError {
+        GetAppliedSchemaVersionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetAppliedSchemaVersionError {
+    fn from(err: HttpDispatchError) -> GetAppliedSchemaVersionError {
+        GetAppliedSchemaVersionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetAppliedSchemaVersionError {
+    fn from(err: io::Error) -> GetAppliedSchemaVersionError {
+        GetAppliedSchemaVersionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetAppliedSchemaVersionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetAppliedSchemaVersionError {
+    fn description(&self) -> &str {
+        match *self {
+            GetAppliedSchemaVersionError::AccessDenied(ref cause) => cause,
+            GetAppliedSchemaVersionError::InternalService(ref cause) => cause,
+            GetAppliedSchemaVersionError::InvalidArn(ref cause) => cause,
+            GetAppliedSchemaVersionError::LimitExceeded(ref cause) => cause,
+            GetAppliedSchemaVersionError::ResourceNotFound(ref cause) => cause,
+            GetAppliedSchemaVersionError::RetryableConflict(ref cause) => cause,
+            GetAppliedSchemaVersionError::Validation(ref cause) => cause,
+            GetAppliedSchemaVersionError::Credentials(ref err) => err.description(),
+            GetAppliedSchemaVersionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetAppliedSchemaVersionError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -9724,6 +9912,244 @@ impl Error for UpdateTypedLinkFacetError {
         }
     }
 }
+/// Errors returned by UpgradeAppliedSchema
+#[derive(Debug, PartialEq)]
+pub enum UpgradeAppliedSchemaError {
+    /// <p>Access denied. Check your permissions.</p>
+    AccessDenied(String),
+    /// <p>Indicates a failure occurred while performing a check for backward compatibility between the specified schema and the schema that is currently applied to the directory.</p>
+    IncompatibleSchema(String),
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    InternalService(String),
+    /// <p>Indicates that the provided ARN value is not valid.</p>
+    InvalidArn(String),
+    /// <p>Indicates that an attempt to attach an object with the same link name or to apply a schema with the same name has occurred. Rename the link or the schema and then try again.</p>
+    InvalidAttachment(String),
+    /// <p>The specified resource could not be found.</p>
+    ResourceNotFound(String),
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    RetryableConflict(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpgradeAppliedSchemaError {
+    pub fn from_body(body: &str) -> UpgradeAppliedSchemaError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        UpgradeAppliedSchemaError::AccessDenied(String::from(error_message))
+                    }
+                    "IncompatibleSchemaException" => {
+                        UpgradeAppliedSchemaError::IncompatibleSchema(String::from(error_message))
+                    }
+                    "InternalServiceException" => {
+                        UpgradeAppliedSchemaError::InternalService(String::from(error_message))
+                    }
+                    "InvalidArnException" => {
+                        UpgradeAppliedSchemaError::InvalidArn(String::from(error_message))
+                    }
+                    "InvalidAttachmentException" => {
+                        UpgradeAppliedSchemaError::InvalidAttachment(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        UpgradeAppliedSchemaError::ResourceNotFound(String::from(error_message))
+                    }
+                    "RetryableConflictException" => {
+                        UpgradeAppliedSchemaError::RetryableConflict(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpgradeAppliedSchemaError::Validation(error_message.to_string())
+                    }
+                    _ => UpgradeAppliedSchemaError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpgradeAppliedSchemaError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpgradeAppliedSchemaError {
+    fn from(err: serde_json::error::Error) -> UpgradeAppliedSchemaError {
+        UpgradeAppliedSchemaError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpgradeAppliedSchemaError {
+    fn from(err: CredentialsError) -> UpgradeAppliedSchemaError {
+        UpgradeAppliedSchemaError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpgradeAppliedSchemaError {
+    fn from(err: HttpDispatchError) -> UpgradeAppliedSchemaError {
+        UpgradeAppliedSchemaError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpgradeAppliedSchemaError {
+    fn from(err: io::Error) -> UpgradeAppliedSchemaError {
+        UpgradeAppliedSchemaError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpgradeAppliedSchemaError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpgradeAppliedSchemaError {
+    fn description(&self) -> &str {
+        match *self {
+            UpgradeAppliedSchemaError::AccessDenied(ref cause) => cause,
+            UpgradeAppliedSchemaError::IncompatibleSchema(ref cause) => cause,
+            UpgradeAppliedSchemaError::InternalService(ref cause) => cause,
+            UpgradeAppliedSchemaError::InvalidArn(ref cause) => cause,
+            UpgradeAppliedSchemaError::InvalidAttachment(ref cause) => cause,
+            UpgradeAppliedSchemaError::ResourceNotFound(ref cause) => cause,
+            UpgradeAppliedSchemaError::RetryableConflict(ref cause) => cause,
+            UpgradeAppliedSchemaError::Validation(ref cause) => cause,
+            UpgradeAppliedSchemaError::Credentials(ref err) => err.description(),
+            UpgradeAppliedSchemaError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpgradeAppliedSchemaError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpgradePublishedSchema
+#[derive(Debug, PartialEq)]
+pub enum UpgradePublishedSchemaError {
+    /// <p>Access denied. Check your permissions.</p>
+    AccessDenied(String),
+    /// <p>Indicates a failure occurred while performing a check for backward compatibility between the specified schema and the schema that is currently applied to the directory.</p>
+    IncompatibleSchema(String),
+    /// <p>Indicates a problem that must be resolved by Amazon Web Services. This might be a transient error in which case you can retry your request until it succeeds. Otherwise, go to the <a href="http://status.aws.amazon.com/">AWS Service Health Dashboard</a> site to see if there are any operational issues with the service.</p>
+    InternalService(String),
+    /// <p>Indicates that the provided ARN value is not valid.</p>
+    InvalidArn(String),
+    /// <p>Indicates that an attempt to attach an object with the same link name or to apply a schema with the same name has occurred. Rename the link or the schema and then try again.</p>
+    InvalidAttachment(String),
+    /// <p>Indicates that limits are exceeded. See <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/limits.html">Limits</a> for more information.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource could not be found.</p>
+    ResourceNotFound(String),
+    /// <p>Occurs when a conflict with a previous successful write is detected. For example, if a write operation occurs on an object and then an attempt is made to read the object using “SERIALIZABLE” consistency, this exception may result. This generally occurs when the previous write did not have time to propagate to the host serving the current request. A retry (with appropriate backoff logic) is the recommended response to this exception.</p>
+    RetryableConflict(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpgradePublishedSchemaError {
+    pub fn from_body(body: &str) -> UpgradePublishedSchemaError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        UpgradePublishedSchemaError::AccessDenied(String::from(error_message))
+                    }
+                    "IncompatibleSchemaException" => {
+                        UpgradePublishedSchemaError::IncompatibleSchema(String::from(error_message))
+                    }
+                    "InternalServiceException" => {
+                        UpgradePublishedSchemaError::InternalService(String::from(error_message))
+                    }
+                    "InvalidArnException" => {
+                        UpgradePublishedSchemaError::InvalidArn(String::from(error_message))
+                    }
+                    "InvalidAttachmentException" => {
+                        UpgradePublishedSchemaError::InvalidAttachment(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        UpgradePublishedSchemaError::LimitExceeded(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        UpgradePublishedSchemaError::ResourceNotFound(String::from(error_message))
+                    }
+                    "RetryableConflictException" => {
+                        UpgradePublishedSchemaError::RetryableConflict(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpgradePublishedSchemaError::Validation(error_message.to_string())
+                    }
+                    _ => UpgradePublishedSchemaError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpgradePublishedSchemaError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpgradePublishedSchemaError {
+    fn from(err: serde_json::error::Error) -> UpgradePublishedSchemaError {
+        UpgradePublishedSchemaError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpgradePublishedSchemaError {
+    fn from(err: CredentialsError) -> UpgradePublishedSchemaError {
+        UpgradePublishedSchemaError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpgradePublishedSchemaError {
+    fn from(err: HttpDispatchError) -> UpgradePublishedSchemaError {
+        UpgradePublishedSchemaError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpgradePublishedSchemaError {
+    fn from(err: io::Error) -> UpgradePublishedSchemaError {
+        UpgradePublishedSchemaError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpgradePublishedSchemaError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpgradePublishedSchemaError {
+    fn description(&self) -> &str {
+        match *self {
+            UpgradePublishedSchemaError::AccessDenied(ref cause) => cause,
+            UpgradePublishedSchemaError::IncompatibleSchema(ref cause) => cause,
+            UpgradePublishedSchemaError::InternalService(ref cause) => cause,
+            UpgradePublishedSchemaError::InvalidArn(ref cause) => cause,
+            UpgradePublishedSchemaError::InvalidAttachment(ref cause) => cause,
+            UpgradePublishedSchemaError::LimitExceeded(ref cause) => cause,
+            UpgradePublishedSchemaError::ResourceNotFound(ref cause) => cause,
+            UpgradePublishedSchemaError::RetryableConflict(ref cause) => cause,
+            UpgradePublishedSchemaError::Validation(ref cause) => cause,
+            UpgradePublishedSchemaError::Credentials(ref err) => err.description(),
+            UpgradePublishedSchemaError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpgradePublishedSchemaError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the Amazon CloudDirectory API. Amazon CloudDirectory clients implement this trait.
 pub trait CloudDirectory {
     /// <p>Adds a new <a>Facet</a> to an object.</p>
@@ -9732,7 +10158,7 @@ pub trait CloudDirectory {
         input: &AddFacetToObjectRequest,
     ) -> Result<AddFacetToObjectResponse, AddFacetToObjectError>;
 
-    /// <p>Copies the input published schema into the <a>Directory</a> with the same name and version as that of the published schema .</p>
+    /// <p>Copies the input published schema, at the specified version, into the <a>Directory</a> with the same name and version as that of the published schema.</p>
     fn apply_schema(
         &self,
         input: &ApplySchemaRequest,
@@ -9765,7 +10191,7 @@ pub trait CloudDirectory {
     /// <p>Performs all the read operations in a batch. </p>
     fn batch_read(&self, input: &BatchReadRequest) -> Result<BatchReadResponse, BatchReadError>;
 
-    /// <p>Performs all the write operations in a batch. Either all the operations succeed or none. Batch writes supports only object-related operations.</p>
+    /// <p>Performs all the write operations in a batch. Either all the operations succeed or none.</p>
     fn batch_write(&self, input: &BatchWriteRequest)
         -> Result<BatchWriteResponse, BatchWriteError>;
 
@@ -9869,6 +10295,12 @@ pub trait CloudDirectory {
         input: &EnableDirectoryRequest,
     ) -> Result<EnableDirectoryResponse, EnableDirectoryError>;
 
+    /// <p>Returns current applied schema version ARN, including the minor version in use.</p>
+    fn get_applied_schema_version(
+        &self,
+        input: &GetAppliedSchemaVersionRequest,
+    ) -> Result<GetAppliedSchemaVersionResponse, GetAppliedSchemaVersionError>;
+
     /// <p>Retrieves metadata about a directory.</p>
     fn get_directory(
         &self,
@@ -9896,13 +10328,13 @@ pub trait CloudDirectory {
         input: &GetTypedLinkFacetInformationRequest,
     ) -> Result<GetTypedLinkFacetInformationResponse, GetTypedLinkFacetInformationError>;
 
-    /// <p>Lists schemas applied to a directory.</p>
+    /// <p>Lists schema major versions applied to a directory. If <code>SchemaArn</code> is provided, lists the minor version.</p>
     fn list_applied_schema_arns(
         &self,
         input: &ListAppliedSchemaArnsRequest,
     ) -> Result<ListAppliedSchemaArnsResponse, ListAppliedSchemaArnsError>;
 
-    /// <p>Lists indices attached to an object.</p>
+    /// <p>Lists indices attached to the specified object.</p>
     fn list_attached_indices(
         &self,
         input: &ListAttachedIndicesRequest,
@@ -9938,7 +10370,7 @@ pub trait CloudDirectory {
         input: &ListIncomingTypedLinksRequest,
     ) -> Result<ListIncomingTypedLinksResponse, ListIncomingTypedLinksError>;
 
-    /// <p>Lists objects attached to the specified index.</p>
+    /// <p>Lists objects and indexed values attached to the index.</p>
     fn list_index(&self, input: &ListIndexRequest) -> Result<ListIndexResponse, ListIndexError>;
 
     /// <p>Lists all attributes that are associated with an object. </p>
@@ -9983,7 +10415,7 @@ pub trait CloudDirectory {
         input: &ListPolicyAttachmentsRequest,
     ) -> Result<ListPolicyAttachmentsResponse, ListPolicyAttachmentsError>;
 
-    /// <p>Retrieves each published schema Amazon Resource Name (ARN).</p>
+    /// <p>Lists schema major versions for a published schema. If <code>SchemaArn</code> is provided, lists the minor version.</p>
     fn list_published_schema_arns(
         &self,
         input: &ListPublishedSchemaArnsRequest,
@@ -10013,7 +10445,7 @@ pub trait CloudDirectory {
         input: &LookupPolicyRequest,
     ) -> Result<LookupPolicyResponse, LookupPolicyError>;
 
-    /// <p>Publishes a development schema with a version. If description and attributes are specified, <code>PublishSchema</code> overrides the development schema description and attributes. If not, the development schema description and attributes are used.</p>
+    /// <p>Publishes a development schema with a major version and a recommended minor version.</p>
     fn publish_schema(
         &self,
         input: &PublishSchemaRequest,
@@ -10066,6 +10498,18 @@ pub trait CloudDirectory {
         &self,
         input: &UpdateTypedLinkFacetRequest,
     ) -> Result<UpdateTypedLinkFacetResponse, UpdateTypedLinkFacetError>;
+
+    /// <p>Upgrades a single directory in-place using the <code>PublishedSchemaArn</code> with schema updates found in <code>MinorVersion</code>. Backwards-compatible minor version upgrades are instantaneously available for readers on all objects in the directory. Note: This is a synchronous API call and upgrades only one schema on a given directory per call. To upgrade multiple directories from one schema, you would need to call this API on each directory.</p>
+    fn upgrade_applied_schema(
+        &self,
+        input: &UpgradeAppliedSchemaRequest,
+    ) -> Result<UpgradeAppliedSchemaResponse, UpgradeAppliedSchemaError>;
+
+    /// <p>Upgrades a published schema under a new minor version revision using the current contents of <code>DevelopmentSchemaArn</code>.</p>
+    fn upgrade_published_schema(
+        &self,
+        input: &UpgradePublishedSchemaRequest,
+    ) -> Result<UpgradePublishedSchemaResponse, UpgradePublishedSchemaError>;
 }
 /// A client for the Amazon CloudDirectory API.
 pub struct CloudDirectoryClient<P, D>
@@ -10139,7 +10583,7 @@ where
         }
     }
 
-    /// <p>Copies the input published schema into the <a>Directory</a> with the same name and version as that of the published schema .</p>
+    /// <p>Copies the input published schema, at the specified version, into the <a>Directory</a> with the same name and version as that of the published schema.</p>
     fn apply_schema(
         &self,
         input: &ApplySchemaRequest,
@@ -10395,7 +10839,7 @@ where
         }
     }
 
-    /// <p>Performs all the write operations in a batch. Either all the operations succeed or none. Batch writes supports only object-related operations.</p>
+    /// <p>Performs all the write operations in a batch. Either all the operations succeed or none.</p>
     fn batch_write(
         &self,
         input: &BatchWriteRequest,
@@ -11133,6 +11577,48 @@ where
         }
     }
 
+    /// <p>Returns current applied schema version ARN, including the minor version in use.</p>
+    fn get_applied_schema_version(
+        &self,
+        input: &GetAppliedSchemaVersionRequest,
+    ) -> Result<GetAppliedSchemaVersionResponse, GetAppliedSchemaVersionError> {
+        let request_uri = "/amazonclouddirectory/2017-01-11/schema/getappliedschema";
+
+        let mut request = SignedRequest::new("POST", "clouddirectory", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_slice::<GetAppliedSchemaVersionResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetAppliedSchemaVersionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Retrieves metadata about a directory.</p>
     fn get_directory(
         &self,
@@ -11341,7 +11827,7 @@ where
         }
     }
 
-    /// <p>Lists schemas applied to a directory.</p>
+    /// <p>Lists schema major versions applied to a directory. If <code>SchemaArn</code> is provided, lists the minor version.</p>
     fn list_applied_schema_arns(
         &self,
         input: &ListAppliedSchemaArnsRequest,
@@ -11383,7 +11869,7 @@ where
         }
     }
 
-    /// <p>Lists indices attached to an object.</p>
+    /// <p>Lists indices attached to the specified object.</p>
     fn list_attached_indices(
         &self,
         input: &ListAttachedIndicesRequest,
@@ -11639,7 +12125,7 @@ where
         }
     }
 
-    /// <p>Lists objects attached to the specified index.</p>
+    /// <p>Lists objects and indexed values attached to the index.</p>
     fn list_index(&self, input: &ListIndexRequest) -> Result<ListIndexResponse, ListIndexError> {
         let request_uri = "/amazonclouddirectory/2017-01-11/index/targets";
 
@@ -11999,7 +12485,7 @@ where
         }
     }
 
-    /// <p>Retrieves each published schema Amazon Resource Name (ARN).</p>
+    /// <p>Lists schema major versions for a published schema. If <code>SchemaArn</code> is provided, lists the minor version.</p>
     fn list_published_schema_arns(
         &self,
         input: &ListPublishedSchemaArnsRequest,
@@ -12210,7 +12696,7 @@ where
         }
     }
 
-    /// <p>Publishes a development schema with a version. If description and attributes are specified, <code>PublishSchema</code> overrides the development schema description and attributes. If not, the development schema description and attributes are used.</p>
+    /// <p>Publishes a development schema with a major version and a recommended minor version.</p>
     fn publish_schema(
         &self,
         input: &PublishSchemaRequest,
@@ -12582,6 +13068,89 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(UpdateTypedLinkFacetError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Upgrades a single directory in-place using the <code>PublishedSchemaArn</code> with schema updates found in <code>MinorVersion</code>. Backwards-compatible minor version upgrades are instantaneously available for readers on all objects in the directory. Note: This is a synchronous API call and upgrades only one schema on a given directory per call. To upgrade multiple directories from one schema, you would need to call this API on each directory.</p>
+    fn upgrade_applied_schema(
+        &self,
+        input: &UpgradeAppliedSchemaRequest,
+    ) -> Result<UpgradeAppliedSchemaResponse, UpgradeAppliedSchemaError> {
+        let request_uri = "/amazonclouddirectory/2017-01-11/schema/upgradeapplied";
+
+        let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<UpgradeAppliedSchemaResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpgradeAppliedSchemaError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Upgrades a published schema under a new minor version revision using the current contents of <code>DevelopmentSchemaArn</code>.</p>
+    fn upgrade_published_schema(
+        &self,
+        input: &UpgradePublishedSchemaRequest,
+    ) -> Result<UpgradePublishedSchemaResponse, UpgradePublishedSchemaError> {
+        let request_uri = "/amazonclouddirectory/2017-01-11/schema/upgradepublished";
+
+        let mut request = SignedRequest::new("PUT", "clouddirectory", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_slice::<UpgradePublishedSchemaResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpgradePublishedSchemaError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }

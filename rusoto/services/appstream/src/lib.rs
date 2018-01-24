@@ -11,7 +11,7 @@
 //
 // =================================================================
 
-//! <p><fullname>Amazon AppStream 2.0</fullname> <p>API documentation for Amazon AppStream 2.0.</p></p>
+//! <p><fullname>Amazon AppStream 2.0</fullname> <p>You can use Amazon AppStream 2.0 to stream desktop applications to any device running a web browser, without rewriting them.</p></p>
 //!
 //! If you're using the service, you're probably looking for [AppStreamClient](struct.AppStreamClient.html) and [AppStream](trait.AppStream.html).
 

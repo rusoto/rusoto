@@ -75,6 +75,10 @@ pub struct ApplicationInfo {
     #[serde(rename = "applicationName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_name: Option<String>,
+    /// <p>The destination platform type for deployment of the application (<code>Lambda</code> or <code>Server</code>).</p>
+    #[serde(rename = "computePlatform")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compute_platform: Option<String>,
     /// <p>The time at which the application was created.</p>
     #[serde(rename = "createTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -148,8 +152,7 @@ pub struct BatchGetApplicationRevisionsOutput {
 pub struct BatchGetApplicationsInput {
     /// <p>A list of application names separated by spaces.</p>
     #[serde(rename = "applicationNames")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub application_names: Option<Vec<String>>,
+    pub application_names: Vec<String>,
 }
 
 /// <p>Represents the output of a BatchGetApplications operation.</p>
@@ -214,8 +217,7 @@ pub struct BatchGetDeploymentInstancesOutput {
 pub struct BatchGetDeploymentsInput {
     /// <p>A list of deployment IDs, separated by spaces.</p>
     #[serde(rename = "deploymentIds")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub deployment_ids: Option<Vec<String>>,
+    pub deployment_ids: Vec<String>,
 }
 
 /// <p>Represents the output of a BatchGetDeployments operation.</p>
@@ -232,8 +234,7 @@ pub struct BatchGetDeploymentsOutput {
 pub struct BatchGetOnPremisesInstancesInput {
     /// <p>The names of the on-premises instances about which to get information.</p>
     #[serde(rename = "instanceNames")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub instance_names: Option<Vec<String>>,
+    pub instance_names: Vec<String>,
 }
 
 /// <p>Represents the output of a BatchGetOnPremisesInstances operation.</p>
@@ -289,6 +290,10 @@ pub struct CreateApplicationInput {
     /// <p>The name of the application. This name must be unique with the applicable IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
     pub application_name: String,
+    /// <p> The destination platform type for the deployment (<code>Lambda</code> or <code>Server</code>).</p>
+    #[serde(rename = "computePlatform")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compute_platform: Option<String>,
 }
 
 /// <p>Represents the output of a CreateApplication operation.</p>
@@ -303,12 +308,20 @@ pub struct CreateApplicationOutput {
 /// <p>Represents the input of a CreateDeploymentConfig operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateDeploymentConfigInput {
+    /// <p>The destination platform type for the deployment (<code>Lambda</code> or <code>Server</code>&gt;).</p>
+    #[serde(rename = "computePlatform")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compute_platform: Option<String>,
     /// <p>The name of the deployment configuration to create.</p>
     #[serde(rename = "deploymentConfigName")]
     pub deployment_config_name: String,
     /// <p>The minimum number of healthy instances that should be available at any time during the deployment. There are two parameters expected in the input: type and value.</p> <p>The type parameter takes either of the following values:</p> <ul> <li> <p>HOST_COUNT: The value parameter represents the minimum number of healthy instances as an absolute value.</p> </li> <li> <p>FLEET_PERCENT: The value parameter represents the minimum number of healthy instances as a percentage of the total number of instances in the deployment. If you specify FLEET_PERCENT, at the start of the deployment, AWS CodeDeploy converts the percentage to the equivalent number of instance and rounds up fractional instances.</p> </li> </ul> <p>The value parameter takes an integer.</p> <p>For example, to set a minimum of 95% healthy instance, specify a type of FLEET_PERCENT and a value of 95.</p>
     #[serde(rename = "minimumHealthyHosts")]
     pub minimum_healthy_hosts: MinimumHealthyHosts,
+    /// <p>The configuration that specifies how the deployment traffic will be routed.</p>
+    #[serde(rename = "trafficRoutingConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub traffic_routing_config: Option<TrafficRoutingConfig>,
 }
 
 /// <p>Represents the output of a CreateDeploymentConfig operation.</p>
@@ -483,6 +496,10 @@ pub struct DeleteDeploymentGroupOutput {
 /// <p>Information about a deployment configuration.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeploymentConfigInfo {
+    /// <p>The destination platform type for the deployment (<code>Lambda</code> or <code>Server</code>).</p>
+    #[serde(rename = "computePlatform")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compute_platform: Option<String>,
     /// <p>The time at which the deployment configuration was created.</p>
     #[serde(rename = "createTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -499,6 +516,10 @@ pub struct DeploymentConfigInfo {
     #[serde(rename = "minimumHealthyHosts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub minimum_healthy_hosts: Option<MinimumHealthyHosts>,
+    /// <p>The configuration specifying how the deployment traffic will be routed. Only deployments with a Lambda compute platform can specify this.</p>
+    #[serde(rename = "trafficRoutingConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub traffic_routing_config: Option<TrafficRoutingConfig>,
 }
 
 /// <p>Information about a deployment group.</p>
@@ -524,6 +545,10 @@ pub struct DeploymentGroupInfo {
     #[serde(rename = "blueGreenDeploymentConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub blue_green_deployment_configuration: Option<BlueGreenDeploymentConfiguration>,
+    /// <p>The destination platform type for the deployment group (<code>Lambda</code> or <code>Server</code>).</p>
+    #[serde(rename = "computePlatform")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compute_platform: Option<String>,
     /// <p>The deployment configuration name.</p>
     #[serde(rename = "deploymentConfigName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -605,6 +630,10 @@ pub struct DeploymentInfo {
     #[serde(rename = "completeTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub complete_time: Option<f64>,
+    /// <p>The destination platform type for the deployment (<code>Lambda</code> or <code>Server</code>).</p>
+    #[serde(rename = "computePlatform")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compute_platform: Option<String>,
     /// <p>A timestamp indicating when the deployment was created.</p>
     #[serde(rename = "createTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -629,6 +658,10 @@ pub struct DeploymentInfo {
     #[serde(rename = "deploymentOverview")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_overview: Option<DeploymentOverview>,
+    /// <p>Messages that contain information about the status of a deployment.</p>
+    #[serde(rename = "deploymentStatusMessages")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_status_messages: Option<Vec<String>>,
     /// <p>Information about the type of deployment, either in-place or blue/green, you want to run and whether to route deployment traffic behind a load balancer.</p>
     #[serde(rename = "deploymentStyle")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -800,7 +833,7 @@ pub struct EC2TagSet {
 /// <p>Information about a load balancer in Elastic Load Balancing to use in a deployment. Instances are registered directly with a load balancer, and traffic is routed to the load balancer.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ELBInfo {
-    /// <p>For blue/green deployments, the name of the load balancer that will be used to route traffic from original instances to replacement instances in a blue/green deployment. For in-place deployments, the name of the load balancer that instances are deregistered from, so they are not serving traffic during a deployment, and then re-registered with after the deployment completes.</p>
+    /// <p>For blue/green deployments, the name of the load balancer that will be used to route traffic from original instances to replacement instances in a blue/green deployment. For in-place deployments, the name of the load balancer that instances are deregistered from so they are not serving traffic during a deployment, and then re-registered with after the deployment completes.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -1386,6 +1419,43 @@ pub struct OnPremisesTagSet {
     pub on_premises_tag_set_list: Option<Vec<Vec<TagFilter>>>,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct PutLifecycleEventHookExecutionStatusInput {
+    /// <p>The ID of the deployment. Pass this ID to a Lambda function that validates a deployment lifecycle event.</p>
+    #[serde(rename = "deploymentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_id: Option<String>,
+    /// <p>The execution ID of a deployment's lifecycle hook. A deployment lifecycle hook is specified in the <code>hooks</code> section of the AppSpec file.</p>
+    #[serde(rename = "lifecycleEventHookExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lifecycle_event_hook_execution_id: Option<String>,
+    /// <p>The result of a Lambda function that validates a deployment lifecycle event (<code>Succeeded</code> or <code>Failed</code>).</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct PutLifecycleEventHookExecutionStatusOutput {
+    /// <p>The execution ID of the lifecycle event hook. A hook is specified in the <code>hooks</code> section of the deployment's AppSpec file.</p>
+    #[serde(rename = "lifecycleEventHookExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lifecycle_event_hook_execution_id: Option<String>,
+}
+
+/// <p>A revision for an AWS Lambda deployment that is a YAML-formatted or JSON-formatted string. For AWS Lambda deployments, the revision is the same as the AppSpec file.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct RawString {
+    /// <p>The YAML-formatted or JSON-formatted revision string. It includes information about which Lambda function to update and optional Lambda functions that validate deployment lifecycle events.</p>
+    #[serde(rename = "content")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content: Option<String>,
+    /// <p>The SHA256 hash value of the revision that is specified as a RawString.</p>
+    #[serde(rename = "sha256")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sha_256: Option<String>,
+}
+
 /// <p>Represents the input of a RegisterApplicationRevision operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct RegisterApplicationRevisionInput {
@@ -1448,14 +1518,18 @@ pub struct RevisionLocation {
     #[serde(rename = "gitHubLocation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub git_hub_location: Option<GitHubLocation>,
-    /// <p><p>The type of application revision:</p> <ul> <li> <p>S3: An application revision stored in Amazon S3.</p> </li> <li> <p>GitHub: An application revision stored in GitHub.</p> </li> </ul></p>
+    /// <p><p>The type of application revision:</p> <ul> <li> <p>S3: An application revision stored in Amazon S3.</p> </li> <li> <p>GitHub: An application revision stored in GitHub (EC2/On-premises deployments only)</p> </li> <li> <p>String: A YAML-formatted or JSON-formatted string (AWS Lambda deployments only)</p> </li> </ul></p>
     #[serde(rename = "revisionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub revision_type: Option<String>,
-    /// <p>Information about the location of application artifacts stored in Amazon S3. </p>
+    /// <p>Information about the location of a revision stored in Amazon S3. </p>
     #[serde(rename = "s3Location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s_3_location: Option<S3Location>,
+    /// <p>Information about the location of an AWS Lambda deployment revision stored as a RawString.</p>
+    #[serde(rename = "string")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub string: Option<RawString>,
 }
 
 /// <p>Information about a deployment rollback.</p>
@@ -1589,6 +1663,32 @@ pub struct TargetInstances {
     pub tag_filters: Option<Vec<EC2TagFilter>>,
 }
 
+/// <p>A configuration that shifts traffic from one version of a Lambda function to another in two increments. The original and target Lambda function versions are specified in the deployment's AppSpec file.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct TimeBasedCanary {
+    /// <p>The number of minutes between the first and second traffic shifts of a <code>TimeBasedCanary</code> deployment.</p>
+    #[serde(rename = "canaryInterval")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub canary_interval: Option<i64>,
+    /// <p>The percentage of traffic to shift in the first increment of a <code>TimeBasedCanary</code> deployment.</p>
+    #[serde(rename = "canaryPercentage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub canary_percentage: Option<i64>,
+}
+
+/// <p>A configuration that shifts traffic from one version of a Lambda function to another in equal increments, with an equal number of minutes between each increment. The original and target Lambda function versions are specified in the deployment's AppSpec file.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct TimeBasedLinear {
+    /// <p>The number of minutes between each incremental traffic shift of a <code>TimeBasedLinear</code> deployment.</p>
+    #[serde(rename = "linearInterval")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub linear_interval: Option<i64>,
+    /// <p>The percentage of traffic that is shifted at the start of each increment of a <code>TimeBasedLinear</code> deployment.</p>
+    #[serde(rename = "linearPercentage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub linear_percentage: Option<i64>,
+}
+
 /// <p>Information about a time range.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct TimeRange {
@@ -1600,6 +1700,23 @@ pub struct TimeRange {
     #[serde(rename = "start")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start: Option<f64>,
+}
+
+/// <p>The configuration that specifies how traffic is shifted from one version of a Lambda function to another version during an AWS Lambda deployment.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct TrafficRoutingConfig {
+    /// <p>A configuration that shifts traffic from one version of a Lambda function to another in two increments. The original and target Lambda function versions are specified in the deployment's AppSpec file.</p>
+    #[serde(rename = "timeBasedCanary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub time_based_canary: Option<TimeBasedCanary>,
+    /// <p>A configuration that shifts traffic from one version of a Lambda function to another in equal increments, with an equal number of minutes between each increment. The original and target Lambda function versions are specified in the deployment's AppSpec file.</p>
+    #[serde(rename = "timeBasedLinear")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub time_based_linear: Option<TimeBasedLinear>,
+    /// <p>The type of traffic shifting (<code>TimeBasedCanary</code> or <code>TimeBasedLinear</code>) used by a deployment configuration .</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
 }
 
 /// <p>Information about notification triggers for the deployment group.</p>
@@ -2613,6 +2730,8 @@ pub enum CreateApplicationError {
     ApplicationNameRequired(String),
     /// <p>The application name was specified in an invalid format.</p>
     InvalidApplicationName(String),
+    /// <p>The computePlatform is invalid. The computePlatform should be <code>Lambda</code> or <code>Server</code>.</p>
+    InvalidComputePlatform(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2651,6 +2770,9 @@ impl CreateApplicationError {
                     }
                     "InvalidApplicationNameException" => {
                         CreateApplicationError::InvalidApplicationName(String::from(error_message))
+                    }
+                    "InvalidComputePlatformException" => {
+                        CreateApplicationError::InvalidComputePlatform(String::from(error_message))
                     }
                     "ValidationException" => {
                         CreateApplicationError::Validation(error_message.to_string())
@@ -2695,6 +2817,7 @@ impl Error for CreateApplicationError {
             CreateApplicationError::ApplicationLimitExceeded(ref cause) => cause,
             CreateApplicationError::ApplicationNameRequired(ref cause) => cause,
             CreateApplicationError::InvalidApplicationName(ref cause) => cause,
+            CreateApplicationError::InvalidComputePlatform(ref cause) => cause,
             CreateApplicationError::Validation(ref cause) => cause,
             CreateApplicationError::Credentials(ref err) => err.description(),
             CreateApplicationError::HttpDispatch(ref dispatch_error) => {
@@ -2725,22 +2848,32 @@ pub enum CreateDeploymentError {
     InvalidApplicationName(String),
     /// <p>The automatic rollback configuration was specified in an invalid format. For example, automatic rollback is enabled but an invalid triggering event type or no event types were listed.</p>
     InvalidAutoRollbackConfig(String),
+    /// <p>The Auto Scaling group was specified in an invalid format or does not exist.</p>
+    InvalidAutoScalingGroup(String),
     /// <p>The deployment configuration name was specified in an invalid format.</p>
     InvalidDeploymentConfigName(String),
     /// <p>The deployment group name was specified in an invalid format.</p>
     InvalidDeploymentGroupName(String),
     /// <p>An invalid fileExistsBehavior option was specified to determine how AWS CodeDeploy handles files or directories that already exist in a deployment target location but weren't part of the previous successful deployment. Valid values include "DISALLOW", "OVERWRITE", and "RETAIN".</p>
     InvalidFileExistsBehavior(String),
+    /// <p>The IgnoreApplicationStopFailures value is invalid. For AWS Lambda deployments, <code>false</code> is expected. For EC2/On-premises deployments, <code>true</code> or <code>false</code> is expected.</p>
+    InvalidIgnoreApplicationStopFailuresValue(String),
     /// <p>An invalid load balancer name, or no load balancer name, was specified.</p>
     InvalidLoadBalancerInfo(String),
     /// <p>The revision was specified in an invalid format.</p>
     InvalidRevision(String),
+    /// <p>The service role ARN was specified in an invalid format. Or, if an Auto Scaling group was specified, the specified service role does not grant the appropriate permissions to Auto Scaling.</p>
+    InvalidRole(String),
     /// <p><p>The target instance configuration is invalid. Possible causes include:</p> <ul> <li> <p>Configuration data for target instances was entered for an in-place deployment.</p> </li> <li> <p>The limit of 10 tags for a tag type was exceeded.</p> </li> <li> <p>The combined length of the tag names exceeded the limit. </p> </li> <li> <p>A specified tag is not currently applied to any instances.</p> </li> </ul></p>
     InvalidTargetInstances(String),
+    /// <p>The UpdateOutdatedInstancesOnly value is invalid. For AWS Lambda deployments, <code>false</code> is expected. For EC2/On-premises deployments, <code>true</code> or <code>false</code> is expected.</p>
+    InvalidUpdateOutdatedInstancesOnlyValue(String),
     /// <p>The named revision does not exist with the applicable IAM user or AWS account.</p>
     RevisionDoesNotExist(String),
     /// <p>The revision ID was not specified.</p>
     RevisionRequired(String),
+    /// <p>An API function was called too frequently.</p>
+    Throttling(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2799,6 +2932,9 @@ impl CreateDeploymentError {
                             error_message,
                         ))
                     }
+                    "InvalidAutoScalingGroupException" => {
+                        CreateDeploymentError::InvalidAutoScalingGroup(String::from(error_message))
+                    }
                     "InvalidDeploymentConfigNameException" => {
                         CreateDeploymentError::InvalidDeploymentConfigName(String::from(
                             error_message,
@@ -2814,20 +2950,36 @@ impl CreateDeploymentError {
                             error_message,
                         ))
                     }
+                    "InvalidIgnoreApplicationStopFailuresValueException" => {
+                        CreateDeploymentError::InvalidIgnoreApplicationStopFailuresValue(
+                            String::from(error_message),
+                        )
+                    }
                     "InvalidLoadBalancerInfoException" => {
                         CreateDeploymentError::InvalidLoadBalancerInfo(String::from(error_message))
                     }
                     "InvalidRevisionException" => {
                         CreateDeploymentError::InvalidRevision(String::from(error_message))
                     }
+                    "InvalidRoleException" => {
+                        CreateDeploymentError::InvalidRole(String::from(error_message))
+                    }
                     "InvalidTargetInstancesException" => {
                         CreateDeploymentError::InvalidTargetInstances(String::from(error_message))
+                    }
+                    "InvalidUpdateOutdatedInstancesOnlyValueException" => {
+                        CreateDeploymentError::InvalidUpdateOutdatedInstancesOnlyValue(
+                            String::from(error_message),
+                        )
                     }
                     "RevisionDoesNotExistException" => {
                         CreateDeploymentError::RevisionDoesNotExist(String::from(error_message))
                     }
                     "RevisionRequiredException" => {
                         CreateDeploymentError::RevisionRequired(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        CreateDeploymentError::Throttling(String::from(error_message))
                     }
                     "ValidationException" => {
                         CreateDeploymentError::Validation(error_message.to_string())
@@ -2877,14 +3029,19 @@ impl Error for CreateDeploymentError {
             CreateDeploymentError::DescriptionTooLong(ref cause) => cause,
             CreateDeploymentError::InvalidApplicationName(ref cause) => cause,
             CreateDeploymentError::InvalidAutoRollbackConfig(ref cause) => cause,
+            CreateDeploymentError::InvalidAutoScalingGroup(ref cause) => cause,
             CreateDeploymentError::InvalidDeploymentConfigName(ref cause) => cause,
             CreateDeploymentError::InvalidDeploymentGroupName(ref cause) => cause,
             CreateDeploymentError::InvalidFileExistsBehavior(ref cause) => cause,
+            CreateDeploymentError::InvalidIgnoreApplicationStopFailuresValue(ref cause) => cause,
             CreateDeploymentError::InvalidLoadBalancerInfo(ref cause) => cause,
             CreateDeploymentError::InvalidRevision(ref cause) => cause,
+            CreateDeploymentError::InvalidRole(ref cause) => cause,
             CreateDeploymentError::InvalidTargetInstances(ref cause) => cause,
+            CreateDeploymentError::InvalidUpdateOutdatedInstancesOnlyValue(ref cause) => cause,
             CreateDeploymentError::RevisionDoesNotExist(ref cause) => cause,
             CreateDeploymentError::RevisionRequired(ref cause) => cause,
+            CreateDeploymentError::Throttling(ref cause) => cause,
             CreateDeploymentError::Validation(ref cause) => cause,
             CreateDeploymentError::Credentials(ref err) => err.description(),
             CreateDeploymentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -2901,10 +3058,14 @@ pub enum CreateDeploymentConfigError {
     DeploymentConfigLimitExceeded(String),
     /// <p>The deployment configuration name was not specified.</p>
     DeploymentConfigNameRequired(String),
+    /// <p>The computePlatform is invalid. The computePlatform should be <code>Lambda</code> or <code>Server</code>.</p>
+    InvalidComputePlatform(String),
     /// <p>The deployment configuration name was specified in an invalid format.</p>
     InvalidDeploymentConfigName(String),
     /// <p>The minimum healthy instance value was specified in an invalid format.</p>
     InvalidMinimumHealthyHostValue(String),
+    /// <p> The configuration that specifies how traffic is routed during a deployment is invalid.</p>
+    InvalidTrafficRoutingConfiguration(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2943,6 +3104,11 @@ impl CreateDeploymentConfigError {
                             error_message,
                         ))
                     }
+                    "InvalidComputePlatformException" => {
+                        CreateDeploymentConfigError::InvalidComputePlatform(String::from(
+                            error_message,
+                        ))
+                    }
                     "InvalidDeploymentConfigNameException" => {
                         CreateDeploymentConfigError::InvalidDeploymentConfigName(String::from(
                             error_message,
@@ -2952,6 +3118,11 @@ impl CreateDeploymentConfigError {
                         CreateDeploymentConfigError::InvalidMinimumHealthyHostValue(String::from(
                             error_message,
                         ))
+                    }
+                    "InvalidTrafficRoutingConfigurationException" => {
+                        CreateDeploymentConfigError::InvalidTrafficRoutingConfiguration(
+                            String::from(error_message),
+                        )
                     }
                     "ValidationException" => {
                         CreateDeploymentConfigError::Validation(error_message.to_string())
@@ -2995,8 +3166,10 @@ impl Error for CreateDeploymentConfigError {
             CreateDeploymentConfigError::DeploymentConfigAlreadyExists(ref cause) => cause,
             CreateDeploymentConfigError::DeploymentConfigLimitExceeded(ref cause) => cause,
             CreateDeploymentConfigError::DeploymentConfigNameRequired(ref cause) => cause,
+            CreateDeploymentConfigError::InvalidComputePlatform(ref cause) => cause,
             CreateDeploymentConfigError::InvalidDeploymentConfigName(ref cause) => cause,
             CreateDeploymentConfigError::InvalidMinimumHealthyHostValue(ref cause) => cause,
+            CreateDeploymentConfigError::InvalidTrafficRoutingConfiguration(ref cause) => cause,
             CreateDeploymentConfigError::Validation(ref cause) => cause,
             CreateDeploymentConfigError::Credentials(ref err) => err.description(),
             CreateDeploymentConfigError::HttpDispatch(ref dispatch_error) => {
@@ -3043,6 +3216,8 @@ pub enum CreateDeploymentGroupError {
     InvalidEC2TagCombination(String),
     /// <p>The tag was specified in an invalid format.</p>
     InvalidEC2Tag(String),
+    /// <p>The specified input was specified in an invalid format.</p>
+    InvalidInput(String),
     /// <p>An invalid load balancer name, or no load balancer name, was specified.</p>
     InvalidLoadBalancerInfo(String),
     /// <p>A call was submitted that specified both OnPremisesTagFilters and OnPremisesTagSet, but only one of these data types can be used in a single call.</p>
@@ -3163,6 +3338,9 @@ impl CreateDeploymentGroupError {
                     "InvalidEC2TagException" => {
                         CreateDeploymentGroupError::InvalidEC2Tag(String::from(error_message))
                     }
+                    "InvalidInputException" => {
+                        CreateDeploymentGroupError::InvalidInput(String::from(error_message))
+                    }
                     "InvalidLoadBalancerInfoException" => {
                         CreateDeploymentGroupError::InvalidLoadBalancerInfo(String::from(
                             error_message,
@@ -3258,6 +3436,7 @@ impl Error for CreateDeploymentGroupError {
             CreateDeploymentGroupError::InvalidDeploymentStyle(ref cause) => cause,
             CreateDeploymentGroupError::InvalidEC2TagCombination(ref cause) => cause,
             CreateDeploymentGroupError::InvalidEC2Tag(ref cause) => cause,
+            CreateDeploymentGroupError::InvalidInput(ref cause) => cause,
             CreateDeploymentGroupError::InvalidLoadBalancerInfo(ref cause) => cause,
             CreateDeploymentGroupError::InvalidOnPremisesTagCombination(ref cause) => cause,
             CreateDeploymentGroupError::InvalidRole(ref cause) => cause,
@@ -5079,6 +5258,8 @@ impl Error for ListDeploymentsError {
 pub enum ListGitHubAccountTokenNamesError {
     /// <p>The next token was specified in an invalid format.</p>
     InvalidNextToken(String),
+    /// <p>The API used does not support the deployment.</p>
+    OperationNotSupported(String),
     /// <p>The specified resource could not be validated.</p>
     ResourceValidation(String),
     /// An error occurred dispatching the HTTP request
@@ -5106,6 +5287,11 @@ impl ListGitHubAccountTokenNamesError {
                 match *error_type {
                     "InvalidNextTokenException" => {
                         ListGitHubAccountTokenNamesError::InvalidNextToken(String::from(
+                            error_message,
+                        ))
+                    }
+                    "OperationNotSupportedException" => {
+                        ListGitHubAccountTokenNamesError::OperationNotSupported(String::from(
                             error_message,
                         ))
                     }
@@ -5154,6 +5340,7 @@ impl Error for ListGitHubAccountTokenNamesError {
     fn description(&self) -> &str {
         match *self {
             ListGitHubAccountTokenNamesError::InvalidNextToken(ref cause) => cause,
+            ListGitHubAccountTokenNamesError::OperationNotSupported(ref cause) => cause,
             ListGitHubAccountTokenNamesError::ResourceValidation(ref cause) => cause,
             ListGitHubAccountTokenNamesError::Validation(ref cause) => cause,
             ListGitHubAccountTokenNamesError::Credentials(ref err) => err.description(),
@@ -5256,6 +5443,104 @@ impl Error for ListOnPremisesInstancesError {
             }
             ListOnPremisesInstancesError::Unknown(ref cause) => cause,
         }
+    }
+}
+/// Errors returned by PutLifecycleEventHookExecutionStatus
+#[derive(Debug, PartialEq)]
+pub enum PutLifecycleEventHookExecutionStatusError {
+    /// <p>The deployment does not exist with the applicable IAM user or AWS account.</p>
+    DeploymentDoesNotExist(String),
+    /// <p>At least one deployment ID must be specified.</p>
+    DeploymentIdRequired(String),
+    /// <p>At least one of the deployment IDs was specified in an invalid format.</p>
+    InvalidDeploymentId(String),
+    /// <p>A lifecycle event hook is invalid. Review the <code>hooks</code> section in your AppSpec file to ensure the lifecycle events and <code>hooks</code> functions are valid.</p>
+    InvalidLifecycleEventHookExecutionId(String),
+    /// <p>The result of a Lambda validation function that verifies a lifecycle event is invalid. It should return <code>Succeeded</code> or <code>Failed</code>.</p>
+    InvalidLifecycleEventHookExecutionStatus(String),
+    /// <p>An attempt to return the status of an already completed lifecycle event occurred.</p>
+    LifecycleEventAlreadyCompleted(String),
+    /// <p>A call was submitted that is not supported for the specified deployment type.</p>
+    UnsupportedActionForDeploymentType(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl PutLifecycleEventHookExecutionStatusError {
+    pub fn from_body(body: &str) -> PutLifecycleEventHookExecutionStatusError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                                    "DeploymentDoesNotExistException" => PutLifecycleEventHookExecutionStatusError::DeploymentDoesNotExist(String::from(error_message)),
+"DeploymentIdRequiredException" => PutLifecycleEventHookExecutionStatusError::DeploymentIdRequired(String::from(error_message)),
+"InvalidDeploymentIdException" => PutLifecycleEventHookExecutionStatusError::InvalidDeploymentId(String::from(error_message)),
+"InvalidLifecycleEventHookExecutionIdException" => PutLifecycleEventHookExecutionStatusError::InvalidLifecycleEventHookExecutionId(String::from(error_message)),
+"InvalidLifecycleEventHookExecutionStatusException" => PutLifecycleEventHookExecutionStatusError::InvalidLifecycleEventHookExecutionStatus(String::from(error_message)),
+"LifecycleEventAlreadyCompletedException" => PutLifecycleEventHookExecutionStatusError::LifecycleEventAlreadyCompleted(String::from(error_message)),
+"UnsupportedActionForDeploymentTypeException" => PutLifecycleEventHookExecutionStatusError::UnsupportedActionForDeploymentType(String::from(error_message)),
+"ValidationException" => PutLifecycleEventHookExecutionStatusError::Validation(error_message.to_string()),
+_ => PutLifecycleEventHookExecutionStatusError::Unknown(String::from(body))
+                                }
+            }
+            Err(_) => PutLifecycleEventHookExecutionStatusError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for PutLifecycleEventHookExecutionStatusError {
+    fn from(err: serde_json::error::Error) -> PutLifecycleEventHookExecutionStatusError {
+        PutLifecycleEventHookExecutionStatusError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for PutLifecycleEventHookExecutionStatusError {
+    fn from(err: CredentialsError) -> PutLifecycleEventHookExecutionStatusError {
+        PutLifecycleEventHookExecutionStatusError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for PutLifecycleEventHookExecutionStatusError {
+    fn from(err: HttpDispatchError) -> PutLifecycleEventHookExecutionStatusError {
+        PutLifecycleEventHookExecutionStatusError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutLifecycleEventHookExecutionStatusError {
+    fn from(err: io::Error) -> PutLifecycleEventHookExecutionStatusError {
+        PutLifecycleEventHookExecutionStatusError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for PutLifecycleEventHookExecutionStatusError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutLifecycleEventHookExecutionStatusError {
+    fn description(&self) -> &str {
+        match *self {
+                            PutLifecycleEventHookExecutionStatusError::DeploymentDoesNotExist(ref cause) => cause,
+PutLifecycleEventHookExecutionStatusError::DeploymentIdRequired(ref cause) => cause,
+PutLifecycleEventHookExecutionStatusError::InvalidDeploymentId(ref cause) => cause,
+PutLifecycleEventHookExecutionStatusError::InvalidLifecycleEventHookExecutionId(ref cause) => cause,
+PutLifecycleEventHookExecutionStatusError::InvalidLifecycleEventHookExecutionStatus(ref cause) => cause,
+PutLifecycleEventHookExecutionStatusError::LifecycleEventAlreadyCompleted(ref cause) => cause,
+PutLifecycleEventHookExecutionStatusError::UnsupportedActionForDeploymentType(ref cause) => cause,
+PutLifecycleEventHookExecutionStatusError::Validation(ref cause) => cause,
+PutLifecycleEventHookExecutionStatusError::Credentials(ref err) => err.description(),
+PutLifecycleEventHookExecutionStatusError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+PutLifecycleEventHookExecutionStatusError::Unknown(ref cause) => cause
+                        }
     }
 }
 /// Errors returned by RegisterApplicationRevision
@@ -5981,6 +6266,8 @@ pub enum UpdateDeploymentGroupError {
     InvalidEC2TagCombination(String),
     /// <p>The tag was specified in an invalid format.</p>
     InvalidEC2Tag(String),
+    /// <p>The specified input was specified in an invalid format.</p>
+    InvalidInput(String),
     /// <p>An invalid load balancer name, or no load balancer name, was specified.</p>
     InvalidLoadBalancerInfo(String),
     /// <p>A call was submitted that specified both OnPremisesTagFilters and OnPremisesTagSet, but only one of these data types can be used in a single call.</p>
@@ -6099,6 +6386,9 @@ impl UpdateDeploymentGroupError {
                     "InvalidEC2TagException" => {
                         UpdateDeploymentGroupError::InvalidEC2Tag(String::from(error_message))
                     }
+                    "InvalidInputException" => {
+                        UpdateDeploymentGroupError::InvalidInput(String::from(error_message))
+                    }
                     "InvalidLoadBalancerInfoException" => {
                         UpdateDeploymentGroupError::InvalidLoadBalancerInfo(String::from(
                             error_message,
@@ -6191,6 +6481,7 @@ impl Error for UpdateDeploymentGroupError {
             UpdateDeploymentGroupError::InvalidDeploymentStyle(ref cause) => cause,
             UpdateDeploymentGroupError::InvalidEC2TagCombination(ref cause) => cause,
             UpdateDeploymentGroupError::InvalidEC2Tag(ref cause) => cause,
+            UpdateDeploymentGroupError::InvalidInput(ref cause) => cause,
             UpdateDeploymentGroupError::InvalidLoadBalancerInfo(ref cause) => cause,
             UpdateDeploymentGroupError::InvalidOnPremisesTagCombination(ref cause) => cause,
             UpdateDeploymentGroupError::InvalidRole(ref cause) => cause,
@@ -6395,6 +6686,12 @@ pub trait CodeDeploy {
         &self,
         input: &ListOnPremisesInstancesInput,
     ) -> Result<ListOnPremisesInstancesOutput, ListOnPremisesInstancesError>;
+
+    /// <p>Sets the result of a Lambda validation function. The function validates one or both lifecycle events (<code>BeforeAllowTraffic</code> and <code>AfterAllowTraffic</code>) and returns <code>Succeeded</code> or <code>Failed</code>.</p>
+    fn put_lifecycle_event_hook_execution_status(
+        &self,
+        input: &PutLifecycleEventHookExecutionStatusInput,
+    ) -> Result<PutLifecycleEventHookExecutionStatusOutput, PutLifecycleEventHookExecutionStatusError>;
 
     /// <p>Registers with AWS CodeDeploy a revision for the specified application.</p>
     fn register_application_revision(
@@ -7516,6 +7813,46 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(ListOnPremisesInstancesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Sets the result of a Lambda validation function. The function validates one or both lifecycle events (<code>BeforeAllowTraffic</code> and <code>AfterAllowTraffic</code>) and returns <code>Succeeded</code> or <code>Failed</code>.</p>
+    fn put_lifecycle_event_hook_execution_status(
+        &self,
+        input: &PutLifecycleEventHookExecutionStatusInput,
+    ) -> Result<PutLifecycleEventHookExecutionStatusOutput, PutLifecycleEventHookExecutionStatusError>
+    {
+        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "CodeDeploy_20141006.PutLifecycleEventHookExecutionStatus",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(
+                    serde_json::from_str::<PutLifecycleEventHookExecutionStatusOutput>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutLifecycleEventHookExecutionStatusError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }

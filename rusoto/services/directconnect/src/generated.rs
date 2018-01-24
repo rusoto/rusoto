@@ -172,9 +172,14 @@ pub struct ConfirmConnectionResponse {
 /// <p>Container for the parameters to the ConfirmPrivateVirtualInterface operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ConfirmPrivateVirtualInterfaceRequest {
+    /// <p>ID of the direct connect gateway that will be attached to the virtual interface.</p> <p> A direct connect gateway can be managed via the AWS Direct Connect console or the <a>CreateDirectConnectGateway</a> action.</p> <p>Default: None</p>
+    #[serde(rename = "directConnectGatewayId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub direct_connect_gateway_id: Option<String>,
     /// <p>ID of the virtual private gateway that will be attached to the virtual interface.</p> <p> A virtual private gateway can be managed via the Amazon Virtual Private Cloud (VPC) console or the <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-CreateVpnGateway.html">EC2 CreateVpnGateway</a> action.</p> <p>Default: None</p>
     #[serde(rename = "virtualGatewayId")]
-    pub virtual_gateway_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub virtual_gateway_id: Option<String>,
     #[serde(rename = "virtualInterfaceId")]
     pub virtual_interface_id: String,
 }
@@ -292,6 +297,47 @@ pub struct CreateConnectionRequest {
     pub location: String,
 }
 
+/// <p>Container for the parameters to the CreateDirectConnectGatewayAssociation operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateDirectConnectGatewayAssociationRequest {
+    /// <p>The ID of the direct connect gateway.</p> <p>Example: "abcd1234-dcba-5678-be23-cdef9876ab45"</p> <p>Default: None</p>
+    #[serde(rename = "directConnectGatewayId")]
+    pub direct_connect_gateway_id: String,
+    /// <p>The ID of the virtual private gateway.</p> <p>Example: "vgw-abc123ef"</p> <p>Default: None</p>
+    #[serde(rename = "virtualGatewayId")]
+    pub virtual_gateway_id: String,
+}
+
+/// <p>Container for the response from the CreateDirectConnectGatewayAssociation API call</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CreateDirectConnectGatewayAssociationResult {
+    /// <p>The direct connect gateway association to be created.</p>
+    #[serde(rename = "directConnectGatewayAssociation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub direct_connect_gateway_association: Option<DirectConnectGatewayAssociation>,
+}
+
+/// <p>Container for the parameters to the CreateDirectConnectGateway operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateDirectConnectGatewayRequest {
+    /// <p>The autonomous system number (ASN) for Border Gateway Protocol (BGP) to be configured on the Amazon side of the connection. The ASN must be in the private range of 64,512 to 65,534 or 4,200,000,000 to 4,294,967,294 </p> <p>Example: 65200</p> <p>Default: 64512</p>
+    #[serde(rename = "amazonSideAsn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub amazon_side_asn: Option<i64>,
+    /// <p>The name of the direct connect gateway.</p> <p>Example: "My direct connect gateway"</p> <p>Default: None</p>
+    #[serde(rename = "directConnectGatewayName")]
+    pub direct_connect_gateway_name: String,
+}
+
+/// <p>Container for the response from the CreateDirectConnectGateway API call</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CreateDirectConnectGatewayResult {
+    /// <p>The direct connect gateway to be created.</p>
+    #[serde(rename = "directConnectGateway")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub direct_connect_gateway: Option<DirectConnectGateway>,
+}
+
 /// <p>Container for the parameters to the CreateInterconnect operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateInterconnectRequest {
@@ -380,6 +426,43 @@ pub struct DeleteConnectionRequest {
     pub connection_id: String,
 }
 
+/// <p>Container for the parameters to the DeleteDirectConnectGatewayAssociation operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteDirectConnectGatewayAssociationRequest {
+    /// <p>The ID of the direct connect gateway.</p> <p>Example: "abcd1234-dcba-5678-be23-cdef9876ab45"</p> <p>Default: None</p>
+    #[serde(rename = "directConnectGatewayId")]
+    pub direct_connect_gateway_id: String,
+    /// <p>The ID of the virtual private gateway.</p> <p>Example: "vgw-abc123ef"</p> <p>Default: None</p>
+    #[serde(rename = "virtualGatewayId")]
+    pub virtual_gateway_id: String,
+}
+
+/// <p>Container for the response from the DeleteDirectConnectGatewayAssociation API call</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteDirectConnectGatewayAssociationResult {
+    /// <p>The direct connect gateway association to be deleted.</p>
+    #[serde(rename = "directConnectGatewayAssociation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub direct_connect_gateway_association: Option<DirectConnectGatewayAssociation>,
+}
+
+/// <p>Container for the parameters to the DeleteDirectConnectGateway operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteDirectConnectGatewayRequest {
+    /// <p>The ID of the direct connect gateway.</p> <p>Example: "abcd1234-dcba-5678-be23-cdef9876ab45"</p> <p>Default: None</p>
+    #[serde(rename = "directConnectGatewayId")]
+    pub direct_connect_gateway_id: String,
+}
+
+/// <p>Container for the response from the DeleteDirectConnectGateway API call</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteDirectConnectGatewayResult {
+    /// <p>The direct connect gateway to be deleted.</p>
+    #[serde(rename = "directConnectGateway")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub direct_connect_gateway: Option<DirectConnectGateway>,
+}
+
 /// <p>Container for the parameters to the DeleteInterconnect operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteInterconnectRequest {
@@ -454,6 +537,101 @@ pub struct DescribeConnectionsRequest {
     #[serde(rename = "connectionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_id: Option<String>,
+}
+
+/// <p>Container for the parameters to the DescribeDirectConnectGatewayAssociations operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribeDirectConnectGatewayAssociationsRequest {
+    /// <p>The ID of the direct connect gateway.</p> <p>Example: "abcd1234-dcba-5678-be23-cdef9876ab45"</p> <p>Default: None</p>
+    #[serde(rename = "directConnectGatewayId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub direct_connect_gateway_id: Option<String>,
+    /// <p>The maximum number of direct connect gateway associations to return per page.</p> <p>Example: 15</p> <p>Default: None</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token provided in the previous describe result to retrieve the next page of the result.</p> <p>Default: None</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The ID of the virtual private gateway.</p> <p>Example: "vgw-abc123ef"</p> <p>Default: None</p>
+    #[serde(rename = "virtualGatewayId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub virtual_gateway_id: Option<String>,
+}
+
+/// <p>Container for the response from the DescribeDirectConnectGatewayAssociations API call</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeDirectConnectGatewayAssociationsResult {
+    /// <p>Information about the direct connect gateway associations.</p>
+    #[serde(rename = "directConnectGatewayAssociations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub direct_connect_gateway_associations: Option<Vec<DirectConnectGatewayAssociation>>,
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p>Container for the parameters to the DescribeDirectConnectGatewayAttachments operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribeDirectConnectGatewayAttachmentsRequest {
+    /// <p>The ID of the direct connect gateway.</p> <p>Example: "abcd1234-dcba-5678-be23-cdef9876ab45"</p> <p>Default: None</p>
+    #[serde(rename = "directConnectGatewayId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub direct_connect_gateway_id: Option<String>,
+    /// <p>The maximum number of direct connect gateway attachments to return per page.</p> <p>Example: 15</p> <p>Default: None</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token provided in the previous describe result to retrieve the next page of the result.</p> <p>Default: None</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The ID of the virtual interface.</p> <p>Example: "dxvif-abc123ef"</p> <p>Default: None</p>
+    #[serde(rename = "virtualInterfaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub virtual_interface_id: Option<String>,
+}
+
+/// <p>Container for the response from the DescribeDirectConnectGatewayAttachments API call</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeDirectConnectGatewayAttachmentsResult {
+    /// <p>Information about the direct connect gateway attachments.</p>
+    #[serde(rename = "directConnectGatewayAttachments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub direct_connect_gateway_attachments: Option<Vec<DirectConnectGatewayAttachment>>,
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p>Container for the parameters to the DescribeDirectConnectGateways operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribeDirectConnectGatewaysRequest {
+    /// <p>The ID of the direct connect gateway.</p> <p>Example: "abcd1234-dcba-5678-be23-cdef9876ab45"</p> <p>Default: None</p>
+    #[serde(rename = "directConnectGatewayId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub direct_connect_gateway_id: Option<String>,
+    /// <p>The maximum number of direct connect gateways to return per page.</p> <p>Example: 15</p> <p>Default: None</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token provided in the previous describe result to retrieve the next page of the result.</p> <p>Default: None</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p>Container for the response from the DescribeDirectConnectGateways API call</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeDirectConnectGatewaysResult {
+    /// <p>Information about the direct connect gateways.</p>
+    #[serde(rename = "directConnectGateways")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub direct_connect_gateways: Option<Vec<DirectConnectGateway>>,
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
 }
 
 /// <p>Container for the parameters to the DescribeHostedConnections operation.</p>
@@ -545,6 +723,79 @@ pub struct DescribeVirtualInterfacesRequest {
     #[serde(rename = "virtualInterfaceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface_id: Option<String>,
+}
+
+/// <p>A direct connect gateway is an intermediate object that enables you to connect virtual interfaces and virtual private gateways.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DirectConnectGateway {
+    /// <p>The autonomous system number (ASN) for the Amazon side of the connection.</p>
+    #[serde(rename = "amazonSideAsn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub amazon_side_asn: Option<i64>,
+    #[serde(rename = "directConnectGatewayId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub direct_connect_gateway_id: Option<String>,
+    #[serde(rename = "directConnectGatewayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub direct_connect_gateway_name: Option<String>,
+    #[serde(rename = "directConnectGatewayState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub direct_connect_gateway_state: Option<String>,
+    /// <p>The AWS account ID of the owner of the direct connect gateway.</p>
+    #[serde(rename = "ownerAccount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner_account: Option<String>,
+    #[serde(rename = "stateChangeError")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state_change_error: Option<String>,
+}
+
+/// <p>The association between a direct connect gateway and virtual private gateway.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DirectConnectGatewayAssociation {
+    #[serde(rename = "associationState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub association_state: Option<String>,
+    #[serde(rename = "directConnectGatewayId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub direct_connect_gateway_id: Option<String>,
+    #[serde(rename = "stateChangeError")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state_change_error: Option<String>,
+    #[serde(rename = "virtualGatewayId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub virtual_gateway_id: Option<String>,
+    /// <p>The AWS account ID of the owner of the virtual private gateway.</p>
+    #[serde(rename = "virtualGatewayOwnerAccount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub virtual_gateway_owner_account: Option<String>,
+    #[serde(rename = "virtualGatewayRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub virtual_gateway_region: Option<String>,
+}
+
+/// <p>The association between a direct connect gateway and virtual interface.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DirectConnectGatewayAttachment {
+    #[serde(rename = "attachmentState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attachment_state: Option<String>,
+    #[serde(rename = "directConnectGatewayId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub direct_connect_gateway_id: Option<String>,
+    #[serde(rename = "stateChangeError")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state_change_error: Option<String>,
+    #[serde(rename = "virtualInterfaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub virtual_interface_id: Option<String>,
+    /// <p>The AWS account ID of the owner of the virtual interface.</p>
+    #[serde(rename = "virtualInterfaceOwnerAccount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub virtual_interface_owner_account: Option<String>,
+    #[serde(rename = "virtualInterfaceRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub virtual_interface_region: Option<String>,
 }
 
 /// <p>Container for the parameters to the DisassociateConnectionFromLag operation.</p>
@@ -730,8 +981,12 @@ pub struct NewPrivateVirtualInterface {
     #[serde(rename = "customerAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_address: Option<String>,
+    #[serde(rename = "directConnectGatewayId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub direct_connect_gateway_id: Option<String>,
     #[serde(rename = "virtualGatewayId")]
-    pub virtual_gateway_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub virtual_gateway_id: Option<String>,
     #[serde(rename = "virtualInterfaceName")]
     pub virtual_interface_name: String,
     #[serde(rename = "vlan")]
@@ -922,6 +1177,10 @@ pub struct VirtualInterface {
     #[serde(rename = "amazonAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amazon_address: Option<String>,
+    /// <p>The autonomous system number (ASN) for the Amazon side of the connection.</p>
+    #[serde(rename = "amazonSideAsn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub amazon_side_asn: Option<i64>,
     #[serde(rename = "asn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub asn: Option<i64>,
@@ -941,6 +1200,9 @@ pub struct VirtualInterface {
     #[serde(rename = "customerRouterConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_router_config: Option<String>,
+    #[serde(rename = "directConnectGatewayId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub direct_connect_gateway_id: Option<String>,
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
@@ -2044,6 +2306,188 @@ impl Error for CreateConnectionError {
         }
     }
 }
+/// Errors returned by CreateDirectConnectGateway
+#[derive(Debug, PartialEq)]
+pub enum CreateDirectConnectGatewayError {
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    DirectConnectClient(String),
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    DirectConnectServer(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateDirectConnectGatewayError {
+    pub fn from_body(body: &str) -> CreateDirectConnectGatewayError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "DirectConnectClientException" => {
+                        CreateDirectConnectGatewayError::DirectConnectClient(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DirectConnectServerException" => {
+                        CreateDirectConnectGatewayError::DirectConnectServer(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        CreateDirectConnectGatewayError::Validation(error_message.to_string())
+                    }
+                    _ => CreateDirectConnectGatewayError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateDirectConnectGatewayError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateDirectConnectGatewayError {
+    fn from(err: serde_json::error::Error) -> CreateDirectConnectGatewayError {
+        CreateDirectConnectGatewayError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateDirectConnectGatewayError {
+    fn from(err: CredentialsError) -> CreateDirectConnectGatewayError {
+        CreateDirectConnectGatewayError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateDirectConnectGatewayError {
+    fn from(err: HttpDispatchError) -> CreateDirectConnectGatewayError {
+        CreateDirectConnectGatewayError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateDirectConnectGatewayError {
+    fn from(err: io::Error) -> CreateDirectConnectGatewayError {
+        CreateDirectConnectGatewayError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateDirectConnectGatewayError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateDirectConnectGatewayError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateDirectConnectGatewayError::DirectConnectClient(ref cause) => cause,
+            CreateDirectConnectGatewayError::DirectConnectServer(ref cause) => cause,
+            CreateDirectConnectGatewayError::Validation(ref cause) => cause,
+            CreateDirectConnectGatewayError::Credentials(ref err) => err.description(),
+            CreateDirectConnectGatewayError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateDirectConnectGatewayError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateDirectConnectGatewayAssociation
+#[derive(Debug, PartialEq)]
+pub enum CreateDirectConnectGatewayAssociationError {
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    DirectConnectClient(String),
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    DirectConnectServer(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateDirectConnectGatewayAssociationError {
+    pub fn from_body(body: &str) -> CreateDirectConnectGatewayAssociationError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "DirectConnectClientException" => {
+                        CreateDirectConnectGatewayAssociationError::DirectConnectClient(
+                            String::from(error_message),
+                        )
+                    }
+                    "DirectConnectServerException" => {
+                        CreateDirectConnectGatewayAssociationError::DirectConnectServer(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => {
+                        CreateDirectConnectGatewayAssociationError::Validation(
+                            error_message.to_string(),
+                        )
+                    }
+                    _ => CreateDirectConnectGatewayAssociationError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateDirectConnectGatewayAssociationError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateDirectConnectGatewayAssociationError {
+    fn from(err: serde_json::error::Error) -> CreateDirectConnectGatewayAssociationError {
+        CreateDirectConnectGatewayAssociationError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateDirectConnectGatewayAssociationError {
+    fn from(err: CredentialsError) -> CreateDirectConnectGatewayAssociationError {
+        CreateDirectConnectGatewayAssociationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateDirectConnectGatewayAssociationError {
+    fn from(err: HttpDispatchError) -> CreateDirectConnectGatewayAssociationError {
+        CreateDirectConnectGatewayAssociationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateDirectConnectGatewayAssociationError {
+    fn from(err: io::Error) -> CreateDirectConnectGatewayAssociationError {
+        CreateDirectConnectGatewayAssociationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateDirectConnectGatewayAssociationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateDirectConnectGatewayAssociationError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateDirectConnectGatewayAssociationError::DirectConnectClient(ref cause) => cause,
+            CreateDirectConnectGatewayAssociationError::DirectConnectServer(ref cause) => cause,
+            CreateDirectConnectGatewayAssociationError::Validation(ref cause) => cause,
+            CreateDirectConnectGatewayAssociationError::Credentials(ref err) => err.description(),
+            CreateDirectConnectGatewayAssociationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateDirectConnectGatewayAssociationError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateInterconnect
 #[derive(Debug, PartialEq)]
 pub enum CreateInterconnectError {
@@ -2557,6 +3001,188 @@ impl Error for DeleteConnectionError {
             DeleteConnectionError::Credentials(ref err) => err.description(),
             DeleteConnectionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             DeleteConnectionError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteDirectConnectGateway
+#[derive(Debug, PartialEq)]
+pub enum DeleteDirectConnectGatewayError {
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    DirectConnectClient(String),
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    DirectConnectServer(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteDirectConnectGatewayError {
+    pub fn from_body(body: &str) -> DeleteDirectConnectGatewayError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "DirectConnectClientException" => {
+                        DeleteDirectConnectGatewayError::DirectConnectClient(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DirectConnectServerException" => {
+                        DeleteDirectConnectGatewayError::DirectConnectServer(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        DeleteDirectConnectGatewayError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteDirectConnectGatewayError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteDirectConnectGatewayError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteDirectConnectGatewayError {
+    fn from(err: serde_json::error::Error) -> DeleteDirectConnectGatewayError {
+        DeleteDirectConnectGatewayError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteDirectConnectGatewayError {
+    fn from(err: CredentialsError) -> DeleteDirectConnectGatewayError {
+        DeleteDirectConnectGatewayError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteDirectConnectGatewayError {
+    fn from(err: HttpDispatchError) -> DeleteDirectConnectGatewayError {
+        DeleteDirectConnectGatewayError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteDirectConnectGatewayError {
+    fn from(err: io::Error) -> DeleteDirectConnectGatewayError {
+        DeleteDirectConnectGatewayError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteDirectConnectGatewayError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteDirectConnectGatewayError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteDirectConnectGatewayError::DirectConnectClient(ref cause) => cause,
+            DeleteDirectConnectGatewayError::DirectConnectServer(ref cause) => cause,
+            DeleteDirectConnectGatewayError::Validation(ref cause) => cause,
+            DeleteDirectConnectGatewayError::Credentials(ref err) => err.description(),
+            DeleteDirectConnectGatewayError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteDirectConnectGatewayError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteDirectConnectGatewayAssociation
+#[derive(Debug, PartialEq)]
+pub enum DeleteDirectConnectGatewayAssociationError {
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    DirectConnectClient(String),
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    DirectConnectServer(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteDirectConnectGatewayAssociationError {
+    pub fn from_body(body: &str) -> DeleteDirectConnectGatewayAssociationError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "DirectConnectClientException" => {
+                        DeleteDirectConnectGatewayAssociationError::DirectConnectClient(
+                            String::from(error_message),
+                        )
+                    }
+                    "DirectConnectServerException" => {
+                        DeleteDirectConnectGatewayAssociationError::DirectConnectServer(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => {
+                        DeleteDirectConnectGatewayAssociationError::Validation(
+                            error_message.to_string(),
+                        )
+                    }
+                    _ => DeleteDirectConnectGatewayAssociationError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteDirectConnectGatewayAssociationError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteDirectConnectGatewayAssociationError {
+    fn from(err: serde_json::error::Error) -> DeleteDirectConnectGatewayAssociationError {
+        DeleteDirectConnectGatewayAssociationError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteDirectConnectGatewayAssociationError {
+    fn from(err: CredentialsError) -> DeleteDirectConnectGatewayAssociationError {
+        DeleteDirectConnectGatewayAssociationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteDirectConnectGatewayAssociationError {
+    fn from(err: HttpDispatchError) -> DeleteDirectConnectGatewayAssociationError {
+        DeleteDirectConnectGatewayAssociationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteDirectConnectGatewayAssociationError {
+    fn from(err: io::Error) -> DeleteDirectConnectGatewayAssociationError {
+        DeleteDirectConnectGatewayAssociationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteDirectConnectGatewayAssociationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteDirectConnectGatewayAssociationError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteDirectConnectGatewayAssociationError::DirectConnectClient(ref cause) => cause,
+            DeleteDirectConnectGatewayAssociationError::DirectConnectServer(ref cause) => cause,
+            DeleteDirectConnectGatewayAssociationError::Validation(ref cause) => cause,
+            DeleteDirectConnectGatewayAssociationError::Credentials(ref err) => err.description(),
+            DeleteDirectConnectGatewayAssociationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteDirectConnectGatewayAssociationError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -3077,6 +3703,282 @@ impl Error for DescribeConnectionsOnInterconnectError {
                 dispatch_error.description()
             }
             DescribeConnectionsOnInterconnectError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeDirectConnectGatewayAssociations
+#[derive(Debug, PartialEq)]
+pub enum DescribeDirectConnectGatewayAssociationsError {
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    DirectConnectClient(String),
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    DirectConnectServer(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeDirectConnectGatewayAssociationsError {
+    pub fn from_body(body: &str) -> DescribeDirectConnectGatewayAssociationsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "DirectConnectClientException" => {
+                        DescribeDirectConnectGatewayAssociationsError::DirectConnectClient(
+                            String::from(error_message),
+                        )
+                    }
+                    "DirectConnectServerException" => {
+                        DescribeDirectConnectGatewayAssociationsError::DirectConnectServer(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => {
+                        DescribeDirectConnectGatewayAssociationsError::Validation(
+                            error_message.to_string(),
+                        )
+                    }
+                    _ => DescribeDirectConnectGatewayAssociationsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeDirectConnectGatewayAssociationsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeDirectConnectGatewayAssociationsError {
+    fn from(err: serde_json::error::Error) -> DescribeDirectConnectGatewayAssociationsError {
+        DescribeDirectConnectGatewayAssociationsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeDirectConnectGatewayAssociationsError {
+    fn from(err: CredentialsError) -> DescribeDirectConnectGatewayAssociationsError {
+        DescribeDirectConnectGatewayAssociationsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeDirectConnectGatewayAssociationsError {
+    fn from(err: HttpDispatchError) -> DescribeDirectConnectGatewayAssociationsError {
+        DescribeDirectConnectGatewayAssociationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeDirectConnectGatewayAssociationsError {
+    fn from(err: io::Error) -> DescribeDirectConnectGatewayAssociationsError {
+        DescribeDirectConnectGatewayAssociationsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeDirectConnectGatewayAssociationsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeDirectConnectGatewayAssociationsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeDirectConnectGatewayAssociationsError::DirectConnectClient(ref cause) => cause,
+            DescribeDirectConnectGatewayAssociationsError::DirectConnectServer(ref cause) => cause,
+            DescribeDirectConnectGatewayAssociationsError::Validation(ref cause) => cause,
+            DescribeDirectConnectGatewayAssociationsError::Credentials(ref err) => {
+                err.description()
+            }
+            DescribeDirectConnectGatewayAssociationsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeDirectConnectGatewayAssociationsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeDirectConnectGatewayAttachments
+#[derive(Debug, PartialEq)]
+pub enum DescribeDirectConnectGatewayAttachmentsError {
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    DirectConnectClient(String),
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    DirectConnectServer(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeDirectConnectGatewayAttachmentsError {
+    pub fn from_body(body: &str) -> DescribeDirectConnectGatewayAttachmentsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "DirectConnectClientException" => {
+                        DescribeDirectConnectGatewayAttachmentsError::DirectConnectClient(
+                            String::from(error_message),
+                        )
+                    }
+                    "DirectConnectServerException" => {
+                        DescribeDirectConnectGatewayAttachmentsError::DirectConnectServer(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => {
+                        DescribeDirectConnectGatewayAttachmentsError::Validation(
+                            error_message.to_string(),
+                        )
+                    }
+                    _ => DescribeDirectConnectGatewayAttachmentsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeDirectConnectGatewayAttachmentsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeDirectConnectGatewayAttachmentsError {
+    fn from(err: serde_json::error::Error) -> DescribeDirectConnectGatewayAttachmentsError {
+        DescribeDirectConnectGatewayAttachmentsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeDirectConnectGatewayAttachmentsError {
+    fn from(err: CredentialsError) -> DescribeDirectConnectGatewayAttachmentsError {
+        DescribeDirectConnectGatewayAttachmentsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeDirectConnectGatewayAttachmentsError {
+    fn from(err: HttpDispatchError) -> DescribeDirectConnectGatewayAttachmentsError {
+        DescribeDirectConnectGatewayAttachmentsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeDirectConnectGatewayAttachmentsError {
+    fn from(err: io::Error) -> DescribeDirectConnectGatewayAttachmentsError {
+        DescribeDirectConnectGatewayAttachmentsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeDirectConnectGatewayAttachmentsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeDirectConnectGatewayAttachmentsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeDirectConnectGatewayAttachmentsError::DirectConnectClient(ref cause) => cause,
+            DescribeDirectConnectGatewayAttachmentsError::DirectConnectServer(ref cause) => cause,
+            DescribeDirectConnectGatewayAttachmentsError::Validation(ref cause) => cause,
+            DescribeDirectConnectGatewayAttachmentsError::Credentials(ref err) => err.description(),
+            DescribeDirectConnectGatewayAttachmentsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeDirectConnectGatewayAttachmentsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeDirectConnectGateways
+#[derive(Debug, PartialEq)]
+pub enum DescribeDirectConnectGatewaysError {
+    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    DirectConnectClient(String),
+    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    DirectConnectServer(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeDirectConnectGatewaysError {
+    pub fn from_body(body: &str) -> DescribeDirectConnectGatewaysError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "DirectConnectClientException" => {
+                        DescribeDirectConnectGatewaysError::DirectConnectClient(String::from(
+                            error_message,
+                        ))
+                    }
+                    "DirectConnectServerException" => {
+                        DescribeDirectConnectGatewaysError::DirectConnectServer(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        DescribeDirectConnectGatewaysError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeDirectConnectGatewaysError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeDirectConnectGatewaysError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeDirectConnectGatewaysError {
+    fn from(err: serde_json::error::Error) -> DescribeDirectConnectGatewaysError {
+        DescribeDirectConnectGatewaysError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeDirectConnectGatewaysError {
+    fn from(err: CredentialsError) -> DescribeDirectConnectGatewaysError {
+        DescribeDirectConnectGatewaysError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeDirectConnectGatewaysError {
+    fn from(err: HttpDispatchError) -> DescribeDirectConnectGatewaysError {
+        DescribeDirectConnectGatewaysError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeDirectConnectGatewaysError {
+    fn from(err: io::Error) -> DescribeDirectConnectGatewaysError {
+        DescribeDirectConnectGatewaysError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeDirectConnectGatewaysError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeDirectConnectGatewaysError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeDirectConnectGatewaysError::DirectConnectClient(ref cause) => cause,
+            DescribeDirectConnectGatewaysError::DirectConnectServer(ref cause) => cause,
+            DescribeDirectConnectGatewaysError::Validation(ref cause) => cause,
+            DescribeDirectConnectGatewaysError::Credentials(ref err) => err.description(),
+            DescribeDirectConnectGatewaysError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeDirectConnectGatewaysError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -4254,7 +5156,7 @@ pub trait DirectConnect {
         input: &AssociateHostedConnectionRequest,
     ) -> Result<Connection, AssociateHostedConnectionError>;
 
-    /// <p>Associates a virtual interface with a specified link aggregation group (LAG) or connection. Connectivity to AWS is temporarily interrupted as the virtual interface is being migrated. If the target connection or LAG has an associated virtual interface with a conflicting VLAN number or a conflicting IP address, the operation fails. </p> <p>Virtual interfaces associated with a hosted connection cannot be associated with a LAG; hosted connections must be migrated along with their virtual interfaces using <a>AssociateHostedConnection</a>.</p> <p>Hosted virtual interfaces (an interface for which the owner of the connection is not the owner of physical connection) can only be reassociated by the owner of the physical connection.</p>
+    /// <p>Associates a virtual interface with a specified link aggregation group (LAG) or connection. Connectivity to AWS is temporarily interrupted as the virtual interface is being migrated. If the target connection or LAG has an associated virtual interface with a conflicting VLAN number or a conflicting IP address, the operation fails. </p> <p>Virtual interfaces associated with a hosted connection cannot be associated with a LAG; hosted connections must be migrated along with their virtual interfaces using <a>AssociateHostedConnection</a>.</p> <p>In order to reassociate a virtual interface to a new connection or LAG, the requester must own either the virtual interface itself or the connection to which the virtual interface is currently associated. Additionally, the requester must own the connection or LAG to which the virtual interface will be newly associated.</p>
     fn associate_virtual_interface(
         &self,
         input: &AssociateVirtualInterfaceRequest,
@@ -4266,7 +5168,7 @@ pub trait DirectConnect {
         input: &ConfirmConnectionRequest,
     ) -> Result<ConfirmConnectionResponse, ConfirmConnectionError>;
 
-    /// <p>Accept ownership of a private virtual interface created by another customer.</p> <p>After the virtual interface owner calls this function, the virtual interface will be created and attached to the given virtual private gateway, and will be available for handling traffic.</p>
+    /// <p>Accept ownership of a private virtual interface created by another customer.</p> <p>After the virtual interface owner calls this function, the virtual interface will be created and attached to the given virtual private gateway or direct connect gateway, and will be available for handling traffic.</p>
     fn confirm_private_virtual_interface(
         &self,
         input: &ConfirmPrivateVirtualInterfaceRequest,
@@ -4284,11 +5186,26 @@ pub trait DirectConnect {
         input: &CreateBGPPeerRequest,
     ) -> Result<CreateBGPPeerResponse, CreateBGPPeerError>;
 
-    /// <p>Creates a new connection between the customer network and a specific AWS Direct Connect location.</p> <p>A connection links your internal network to an AWS Direct Connect location over a standard 1 gigabit or 10 gigabit Ethernet fiber-optic cable. One end of the cable is connected to your router, the other to an AWS Direct Connect router. An AWS Direct Connect location provides access to Amazon Web Services in the region it is associated with. You can establish connections with AWS Direct Connect locations in multiple regions, but a connection in one region does not provide connectivity to other regions.</p> <p>You can automatically add the new connection to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new connection is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no connection will be created.</p>
+    /// <p>Creates a new connection between the customer network and a specific AWS Direct Connect location.</p> <p>A connection links your internal network to an AWS Direct Connect location over a standard 1 gigabit or 10 gigabit Ethernet fiber-optic cable. One end of the cable is connected to your router, the other to an AWS Direct Connect router. An AWS Direct Connect location provides access to Amazon Web Services in the region it is associated with. You can establish connections with AWS Direct Connect locations in multiple regions, but a connection in one region does not provide connectivity to other regions.</p> <p>To find the locations for your region, use <a>DescribeLocations</a>.</p> <p>You can automatically add the new connection to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new connection is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no connection will be created.</p>
     fn create_connection(
         &self,
         input: &CreateConnectionRequest,
     ) -> Result<Connection, CreateConnectionError>;
+
+    /// <p>Creates a new direct connect gateway. A direct connect gateway is an intermediate object that enables you to connect a set of virtual interfaces and virtual private gateways. direct connect gateways are global and visible in any AWS region after they are created. The virtual interfaces and virtual private gateways that are connected through a direct connect gateway can be in different regions. This enables you to connect to a VPC in any region, regardless of the region in which the virtual interfaces are located, and pass traffic between them.</p>
+    fn create_direct_connect_gateway(
+        &self,
+        input: &CreateDirectConnectGatewayRequest,
+    ) -> Result<CreateDirectConnectGatewayResult, CreateDirectConnectGatewayError>;
+
+    /// <p>Creates an association between a direct connect gateway and a virtual private gateway (VGW). The VGW must be attached to a VPC and must not be associated with another direct connect gateway.</p>
+    fn create_direct_connect_gateway_association(
+        &self,
+        input: &CreateDirectConnectGatewayAssociationRequest,
+    ) -> Result<
+        CreateDirectConnectGatewayAssociationResult,
+        CreateDirectConnectGatewayAssociationError,
+    >;
 
     /// <p><p>Creates a new interconnect between a AWS Direct Connect partner&#39;s network and a specific AWS Direct Connect location.</p> <p>An interconnect is a connection which is capable of hosting other connections. The AWS Direct Connect partner can use an interconnect to provide sub-1Gbps AWS Direct Connect service to tier 2 customers who do not have their own connections. Like a standard connection, an interconnect links the AWS Direct Connect partner&#39;s network to an AWS Direct Connect location over a standard 1 Gbps or 10 Gbps Ethernet fiber-optic cable. One end is connected to the partner&#39;s router, the other to an AWS Direct Connect router.</p> <p>You can automatically add the new interconnect to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new interconnect is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no interconnect will be created.</p> <p>For each end customer, the AWS Direct Connect partner provisions a connection on their interconnect by calling AllocateConnectionOnInterconnect. The end customer can then connect to AWS resources by creating a virtual interface on their connection, using the VLAN assigned to them by the AWS Direct Connect partner.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn create_interconnect(
@@ -4323,6 +5240,21 @@ pub trait DirectConnect {
         input: &DeleteConnectionRequest,
     ) -> Result<Connection, DeleteConnectionError>;
 
+    /// <p>Deletes a direct connect gateway. You must first delete all virtual interfaces that are attached to the direct connect gateway and disassociate all virtual private gateways that are associated with the direct connect gateway.</p>
+    fn delete_direct_connect_gateway(
+        &self,
+        input: &DeleteDirectConnectGatewayRequest,
+    ) -> Result<DeleteDirectConnectGatewayResult, DeleteDirectConnectGatewayError>;
+
+    /// <p>Deletes the association between a direct connect gateway and a virtual private gateway.</p>
+    fn delete_direct_connect_gateway_association(
+        &self,
+        input: &DeleteDirectConnectGatewayAssociationRequest,
+    ) -> Result<
+        DeleteDirectConnectGatewayAssociationResult,
+        DeleteDirectConnectGatewayAssociationError,
+    >;
+
     /// <p><p>Deletes the specified interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn delete_interconnect(
         &self,
@@ -4356,6 +5288,30 @@ pub trait DirectConnect {
         input: &DescribeConnectionsOnInterconnectRequest,
     ) -> Result<Connections, DescribeConnectionsOnInterconnectError>;
 
+    /// <p>Returns a list of all direct connect gateway and virtual private gateway (VGW) associations. Either a direct connect gateway ID or a VGW ID must be provided in the request. If a direct connect gateway ID is provided, the response returns all VGWs associated with the direct connect gateway. If a VGW ID is provided, the response returns all direct connect gateways associated with the VGW. If both are provided, the response only returns the association that matches both the direct connect gateway and the VGW.</p>
+    fn describe_direct_connect_gateway_associations(
+        &self,
+        input: &DescribeDirectConnectGatewayAssociationsRequest,
+    ) -> Result<
+        DescribeDirectConnectGatewayAssociationsResult,
+        DescribeDirectConnectGatewayAssociationsError,
+    >;
+
+    /// <p>Returns a list of all direct connect gateway and virtual interface (VIF) attachments. Either a direct connect gateway ID or a VIF ID must be provided in the request. If a direct connect gateway ID is provided, the response returns all VIFs attached to the direct connect gateway. If a VIF ID is provided, the response returns all direct connect gateways attached to the VIF. If both are provided, the response only returns the attachment that matches both the direct connect gateway and the VIF.</p>
+    fn describe_direct_connect_gateway_attachments(
+        &self,
+        input: &DescribeDirectConnectGatewayAttachmentsRequest,
+    ) -> Result<
+        DescribeDirectConnectGatewayAttachmentsResult,
+        DescribeDirectConnectGatewayAttachmentsError,
+    >;
+
+    /// <p>Returns a list of direct connect gateways in your account. Deleted direct connect gateways are not returned. You can provide a direct connect gateway ID in the request to return information about the specific direct connect gateway only. Otherwise, if a direct connect gateway ID is not provided, information about all of your direct connect gateways is returned. </p>
+    fn describe_direct_connect_gateways(
+        &self,
+        input: &DescribeDirectConnectGatewaysRequest,
+    ) -> Result<DescribeDirectConnectGatewaysResult, DescribeDirectConnectGatewaysError>;
+
     /// <p><p>Returns a list of hosted connections that have been provisioned on the given interconnect or link aggregation group (LAG).</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn describe_hosted_connections(
         &self,
@@ -4380,7 +5336,7 @@ pub trait DirectConnect {
     /// <p>Returns the LOA-CFA for a connection, interconnect, or link aggregation group (LAG).</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href="http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>
     fn describe_loa(&self, input: &DescribeLoaRequest) -> Result<Loa, DescribeLoaError>;
 
-    /// <p>Returns the list of AWS Direct Connect locations in the current AWS region. These are the locations that may be selected when calling CreateConnection or CreateInterconnect.</p>
+    /// <p>Returns the list of AWS Direct Connect locations in the current AWS region. These are the locations that may be selected when calling <a>CreateConnection</a> or <a>CreateInterconnect</a>.</p>
     fn describe_locations(&self) -> Result<Locations, DescribeLocationsError>;
 
     /// <p>Describes the tags associated with the specified Direct Connect resources.</p>
@@ -4666,7 +5622,7 @@ where
         }
     }
 
-    /// <p>Associates a virtual interface with a specified link aggregation group (LAG) or connection. Connectivity to AWS is temporarily interrupted as the virtual interface is being migrated. If the target connection or LAG has an associated virtual interface with a conflicting VLAN number or a conflicting IP address, the operation fails. </p> <p>Virtual interfaces associated with a hosted connection cannot be associated with a LAG; hosted connections must be migrated along with their virtual interfaces using <a>AssociateHostedConnection</a>.</p> <p>Hosted virtual interfaces (an interface for which the owner of the connection is not the owner of physical connection) can only be reassociated by the owner of the physical connection.</p>
+    /// <p>Associates a virtual interface with a specified link aggregation group (LAG) or connection. Connectivity to AWS is temporarily interrupted as the virtual interface is being migrated. If the target connection or LAG has an associated virtual interface with a conflicting VLAN number or a conflicting IP address, the operation fails. </p> <p>Virtual interfaces associated with a hosted connection cannot be associated with a LAG; hosted connections must be migrated along with their virtual interfaces using <a>AssociateHostedConnection</a>.</p> <p>In order to reassociate a virtual interface to a new connection or LAG, the requester must own either the virtual interface itself or the connection to which the virtual interface is currently associated. Additionally, the requester must own the connection or LAG to which the virtual interface will be newly associated.</p>
     fn associate_virtual_interface(
         &self,
         input: &AssociateVirtualInterfaceRequest,
@@ -4734,7 +5690,7 @@ where
         }
     }
 
-    /// <p>Accept ownership of a private virtual interface created by another customer.</p> <p>After the virtual interface owner calls this function, the virtual interface will be created and attached to the given virtual private gateway, and will be available for handling traffic.</p>
+    /// <p>Accept ownership of a private virtual interface created by another customer.</p> <p>After the virtual interface owner calls this function, the virtual interface will be created and attached to the given virtual private gateway or direct connect gateway, and will be available for handling traffic.</p>
     fn confirm_private_virtual_interface(
         &self,
         input: &ConfirmPrivateVirtualInterfaceRequest,
@@ -4846,7 +5802,7 @@ where
         }
     }
 
-    /// <p>Creates a new connection between the customer network and a specific AWS Direct Connect location.</p> <p>A connection links your internal network to an AWS Direct Connect location over a standard 1 gigabit or 10 gigabit Ethernet fiber-optic cable. One end of the cable is connected to your router, the other to an AWS Direct Connect router. An AWS Direct Connect location provides access to Amazon Web Services in the region it is associated with. You can establish connections with AWS Direct Connect locations in multiple regions, but a connection in one region does not provide connectivity to other regions.</p> <p>You can automatically add the new connection to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new connection is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no connection will be created.</p>
+    /// <p>Creates a new connection between the customer network and a specific AWS Direct Connect location.</p> <p>A connection links your internal network to an AWS Direct Connect location over a standard 1 gigabit or 10 gigabit Ethernet fiber-optic cable. One end of the cable is connected to your router, the other to an AWS Direct Connect router. An AWS Direct Connect location provides access to Amazon Web Services in the region it is associated with. You can establish connections with AWS Direct Connect locations in multiple regions, but a connection in one region does not provide connectivity to other regions.</p> <p>To find the locations for your region, use <a>DescribeLocations</a>.</p> <p>You can automatically add the new connection to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new connection is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no connection will be created.</p>
     fn create_connection(
         &self,
         input: &CreateConnectionRequest,
@@ -4875,6 +5831,82 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(CreateConnectionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Creates a new direct connect gateway. A direct connect gateway is an intermediate object that enables you to connect a set of virtual interfaces and virtual private gateways. direct connect gateways are global and visible in any AWS region after they are created. The virtual interfaces and virtual private gateways that are connected through a direct connect gateway can be in different regions. This enables you to connect to a VPC in any region, regardless of the region in which the virtual interfaces are located, and pass traffic between them.</p>
+    fn create_direct_connect_gateway(
+        &self,
+        input: &CreateDirectConnectGatewayRequest,
+    ) -> Result<CreateDirectConnectGatewayResult, CreateDirectConnectGatewayError> {
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "OvertureService.CreateDirectConnectGateway");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateDirectConnectGatewayResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDirectConnectGatewayError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Creates an association between a direct connect gateway and a virtual private gateway (VGW). The VGW must be attached to a VPC and must not be associated with another direct connect gateway.</p>
+    fn create_direct_connect_gateway_association(
+        &self,
+        input: &CreateDirectConnectGatewayAssociationRequest,
+    ) -> Result<
+        CreateDirectConnectGatewayAssociationResult,
+        CreateDirectConnectGatewayAssociationError,
+    > {
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "OvertureService.CreateDirectConnectGatewayAssociation",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(
+                    serde_json::from_str::<CreateDirectConnectGatewayAssociationResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDirectConnectGatewayAssociationError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -5088,6 +6120,82 @@ where
         }
     }
 
+    /// <p>Deletes a direct connect gateway. You must first delete all virtual interfaces that are attached to the direct connect gateway and disassociate all virtual private gateways that are associated with the direct connect gateway.</p>
+    fn delete_direct_connect_gateway(
+        &self,
+        input: &DeleteDirectConnectGatewayRequest,
+    ) -> Result<DeleteDirectConnectGatewayResult, DeleteDirectConnectGatewayError> {
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "OvertureService.DeleteDirectConnectGateway");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteDirectConnectGatewayResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDirectConnectGatewayError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Deletes the association between a direct connect gateway and a virtual private gateway.</p>
+    fn delete_direct_connect_gateway_association(
+        &self,
+        input: &DeleteDirectConnectGatewayAssociationRequest,
+    ) -> Result<
+        DeleteDirectConnectGatewayAssociationResult,
+        DeleteDirectConnectGatewayAssociationError,
+    > {
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "OvertureService.DeleteDirectConnectGatewayAssociation",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(
+                    serde_json::from_str::<DeleteDirectConnectGatewayAssociationResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDirectConnectGatewayAssociationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p><p>Deletes the specified interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn delete_interconnect(
         &self,
@@ -5292,6 +6400,127 @@ where
         }
     }
 
+    /// <p>Returns a list of all direct connect gateway and virtual private gateway (VGW) associations. Either a direct connect gateway ID or a VGW ID must be provided in the request. If a direct connect gateway ID is provided, the response returns all VGWs associated with the direct connect gateway. If a VGW ID is provided, the response returns all direct connect gateways associated with the VGW. If both are provided, the response only returns the association that matches both the direct connect gateway and the VGW.</p>
+    fn describe_direct_connect_gateway_associations(
+        &self,
+        input: &DescribeDirectConnectGatewayAssociationsRequest,
+    ) -> Result<
+        DescribeDirectConnectGatewayAssociationsResult,
+        DescribeDirectConnectGatewayAssociationsError,
+    > {
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "OvertureService.DescribeDirectConnectGatewayAssociations",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(
+                    serde_json::from_str::<DescribeDirectConnectGatewayAssociationsResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDirectConnectGatewayAssociationsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Returns a list of all direct connect gateway and virtual interface (VIF) attachments. Either a direct connect gateway ID or a VIF ID must be provided in the request. If a direct connect gateway ID is provided, the response returns all VIFs attached to the direct connect gateway. If a VIF ID is provided, the response returns all direct connect gateways attached to the VIF. If both are provided, the response only returns the attachment that matches both the direct connect gateway and the VIF.</p>
+    fn describe_direct_connect_gateway_attachments(
+        &self,
+        input: &DescribeDirectConnectGatewayAttachmentsRequest,
+    ) -> Result<
+        DescribeDirectConnectGatewayAttachmentsResult,
+        DescribeDirectConnectGatewayAttachmentsError,
+    > {
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "OvertureService.DescribeDirectConnectGatewayAttachments",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(
+                    serde_json::from_str::<DescribeDirectConnectGatewayAttachmentsResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDirectConnectGatewayAttachmentsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Returns a list of direct connect gateways in your account. Deleted direct connect gateways are not returned. You can provide a direct connect gateway ID in the request to return information about the specific direct connect gateway only. Otherwise, if a direct connect gateway ID is not provided, information about all of your direct connect gateways is returned. </p>
+    fn describe_direct_connect_gateways(
+        &self,
+        input: &DescribeDirectConnectGatewaysRequest,
+    ) -> Result<DescribeDirectConnectGatewaysResult, DescribeDirectConnectGatewaysError> {
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "OvertureService.DescribeDirectConnectGateways",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeDirectConnectGatewaysResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDirectConnectGatewaysError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p><p>Returns a list of hosted connections that have been provisioned on the given interconnect or link aggregation group (LAG).</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn describe_hosted_connections(
         &self,
@@ -5454,7 +6683,7 @@ where
         }
     }
 
-    /// <p>Returns the list of AWS Direct Connect locations in the current AWS region. These are the locations that may be selected when calling CreateConnection or CreateInterconnect.</p>
+    /// <p>Returns the list of AWS Direct Connect locations in the current AWS region. These are the locations that may be selected when calling <a>CreateConnection</a> or <a>CreateInterconnect</a>.</p>
     fn describe_locations(&self) -> Result<Locations, DescribeLocationsError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 

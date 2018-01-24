@@ -180,6 +180,37 @@ pub struct CreateRepositoryResponse {
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteLifecyclePolicyRequest {
+    /// <p>The AWS account ID associated with the registry that contains the repository. If you do not specify a registry, the default registry is assumed.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_id: Option<String>,
+    /// <p>The name of the repository that is associated with the repository policy to&#8232; delete.</p>
+    #[serde(rename = "repositoryName")]
+    pub repository_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteLifecyclePolicyResponse {
+    /// <p>The time stamp of the last time that the lifecycle policy was run.</p>
+    #[serde(rename = "lastEvaluatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_evaluated_at: Option<f64>,
+    /// <p>The JSON repository policy text.</p>
+    #[serde(rename = "lifecyclePolicyText")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lifecycle_policy_text: Option<String>,
+    /// <p>The registry ID associated with the request.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_id: Option<String>,
+    /// <p>The repository name associated with the request.</p>
+    #[serde(rename = "repositoryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub repository_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteRepositoryPolicyRequest {
     /// <p>The AWS account ID associated with the registry that contains the repository policy to delete. If you do not specify a registry, the default registry is assumed.</p>
     #[serde(rename = "registryId")]
@@ -208,7 +239,7 @@ pub struct DeleteRepositoryPolicyResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteRepositoryRequest {
-    /// <p>Force the deletion of the repository if it contains images.</p>
+    /// <p> If a repository contains images, forces the deletion.</p>
     #[serde(rename = "force")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub force: Option<bool>,
@@ -352,12 +383,102 @@ pub struct GetDownloadUrlForLayerResponse {
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct GetLifecyclePolicyPreviewRequest {
+    /// <p>An optional parameter that filters results based on image tag status and all tags, if tagged.</p>
+    #[serde(rename = "filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<LifecyclePolicyPreviewFilter>,
+    /// <p>The list of imageIDs to be included.</p>
+    #[serde(rename = "imageIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_ids: Option<Vec<ImageIdentifier>>,
+    /// <p>The maximum number of repository results returned by <code>GetLifecyclePolicyPreviewRequest</code> in&#8232; paginated output. When this parameter is used, <code>GetLifecyclePolicyPreviewRequest</code> only returns&#8232; <code>maxResults</code> results in a single page along with a <code>nextToken</code>&#8232; response element. The remaining results of the initial request can be seen by sending&#8232; another <code>GetLifecyclePolicyPreviewRequest</code> request with the returned <code>nextToken</code>&#8232; value. This value can be between 1 and 100. If this&#8232; parameter is not used, then <code>GetLifecyclePolicyPreviewRequest</code> returns up to&#8232; 100 results and a <code>nextToken</code> value, if&#8232; applicable.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The <code>nextToken</code> value returned from a previous paginated&#8232; <code>GetLifecyclePolicyPreviewRequest</code> request where <code>maxResults</code> was used and the&#8232; results exceeded the value of that parameter. Pagination continues from the end of the&#8232; previous results that returned the <code>nextToken</code> value. This value is&#8232; <code>null</code> when there are no more results to return.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The AWS account ID associated with the registry that contains the repository. If you do not specify a registry, the default registry is assumed.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_id: Option<String>,
+    /// <p>The name of the repository with the policy to retrieve.</p>
+    #[serde(rename = "repositoryName")]
+    pub repository_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetLifecyclePolicyPreviewResponse {
+    /// <p>The JSON repository policy text.</p>
+    #[serde(rename = "lifecyclePolicyText")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lifecycle_policy_text: Option<String>,
+    /// <p>The <code>nextToken</code> value to include in a future <code>GetLifecyclePolicyPreview</code> request. When the results of a <code>GetLifecyclePolicyPreview</code> request exceed <code>maxResults</code>, this value can be used to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The results of the lifecycle policy preview request.</p>
+    #[serde(rename = "previewResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preview_results: Option<Vec<LifecyclePolicyPreviewResult>>,
+    /// <p>The registry ID associated with the request.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_id: Option<String>,
+    /// <p>The repository name associated with the request.</p>
+    #[serde(rename = "repositoryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub repository_name: Option<String>,
+    /// <p>The status of the lifecycle policy preview request.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The list of images that is returned as a result of the action.</p>
+    #[serde(rename = "summary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub summary: Option<LifecyclePolicyPreviewSummary>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetLifecyclePolicyRequest {
+    /// <p>The AWS account ID associated with the registry that contains the repository. If you do not specify a registry, the default registry is assumed.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_id: Option<String>,
+    /// <p>The name of the repository with the policy to retrieve.</p>
+    #[serde(rename = "repositoryName")]
+    pub repository_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetLifecyclePolicyResponse {
+    /// <p>The time stamp of the last time that the lifecycle policy was run.</p>
+    #[serde(rename = "lastEvaluatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_evaluated_at: Option<f64>,
+    /// <p>The JSON repository policy text.</p>
+    #[serde(rename = "lifecyclePolicyText")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lifecycle_policy_text: Option<String>,
+    /// <p>The registry ID associated with the request.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_id: Option<String>,
+    /// <p>The repository name associated with the request.</p>
+    #[serde(rename = "repositoryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub repository_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetRepositoryPolicyRequest {
     /// <p>The AWS account ID associated with the registry that contains the repository. If you do not specify a registry, the default registry is assumed.</p>
     #[serde(rename = "registryId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    /// <p>The name of the repository whose policy you want to retrieve.</p>
+    /// <p>The name of the repository with the policy to retrieve.</p>
     #[serde(rename = "repositoryName")]
     pub repository_name: String,
 }
@@ -460,11 +581,11 @@ pub struct ImageIdentifier {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct InitiateLayerUploadRequest {
-    /// <p>The AWS account ID associated with the registry that you intend to upload layers to. If you do not specify a registry, the default registry is assumed.</p>
+    /// <p>The AWS account ID associated with the registry to which you intend to upload layers. If you do not specify a registry, the default registry is assumed.</p>
     #[serde(rename = "registryId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    /// <p>The name of the repository that you intend to upload layers to.</p>
+    /// <p>The name of the repository to which you intend to upload layers.</p>
     #[serde(rename = "repositoryName")]
     pub repository_name: String,
 }
@@ -519,6 +640,58 @@ pub struct LayerFailure {
     pub layer_digest: Option<String>,
 }
 
+/// <p>The filter for the lifecycle policy preview.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct LifecyclePolicyPreviewFilter {
+    /// <p>The tag status of the image.</p>
+    #[serde(rename = "tagStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tag_status: Option<String>,
+}
+
+/// <p>The result of the lifecycle policy preview.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct LifecyclePolicyPreviewResult {
+    /// <p>The type of action to be taken.</p>
+    #[serde(rename = "action")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action: Option<LifecyclePolicyRuleAction>,
+    /// <p>The priority of the applied rule.</p>
+    #[serde(rename = "appliedRulePriority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub applied_rule_priority: Option<i64>,
+    /// <p>The <code>sha256</code> digest of the image manifest.</p>
+    #[serde(rename = "imageDigest")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_digest: Option<String>,
+    /// <p>The date and time, expressed in standard JavaScript date format, at which the current image was pushed to the repository.</p>
+    #[serde(rename = "imagePushedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_pushed_at: Option<f64>,
+    /// <p>The list of tags associated with this image.</p>
+    #[serde(rename = "imageTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_tags: Option<Vec<String>>,
+}
+
+/// <p>The summary of the lifecycle policy preview request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct LifecyclePolicyPreviewSummary {
+    /// <p>The number of expiring images.</p>
+    #[serde(rename = "expiringImageTotalCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expiring_image_total_count: Option<i64>,
+}
+
+/// <p>The type of action to be taken.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct LifecyclePolicyRuleAction {
+    /// <p>The type of action to be taken.</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
 /// <p>An object representing a filter on a <a>ListImages</a> operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListImagesFilter {
@@ -542,11 +715,11 @@ pub struct ListImagesRequest {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The AWS account ID associated with the registry that contains the repository to list images in. If you do not specify a registry, the default registry is assumed.</p>
+    /// <p>The AWS account ID associated with the registry that contains the repository in which to list images. If you do not specify a registry, the default registry is assumed.</p>
     #[serde(rename = "registryId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    /// <p>The repository whose image IDs are to be listed.</p>
+    /// <p>The repository with image IDs to be listed.</p>
     #[serde(rename = "repositoryName")]
     pub repository_name: String,
 }
@@ -589,10 +762,40 @@ pub struct PutImageResponse {
     pub image: Option<Image>,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct PutLifecyclePolicyRequest {
+    /// <p>The JSON repository policy text to apply to the repository.</p>
+    #[serde(rename = "lifecyclePolicyText")]
+    pub lifecycle_policy_text: String,
+    /// <p>The AWS account ID associated with the registry that contains the repository. If you do&#8232; not specify a registry, the default registry is assumed.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_id: Option<String>,
+    /// <p>The name of the repository to receive the policy.</p>
+    #[serde(rename = "repositoryName")]
+    pub repository_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct PutLifecyclePolicyResponse {
+    /// <p>The JSON repository policy text.</p>
+    #[serde(rename = "lifecyclePolicyText")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lifecycle_policy_text: Option<String>,
+    /// <p>The registry ID associated with the request.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_id: Option<String>,
+    /// <p>The repository name associated with the request.</p>
+    #[serde(rename = "repositoryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub repository_name: Option<String>,
+}
+
 /// <p>An object representing a repository.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Repository {
-    /// <p>The date and time, in JavaScript date/time format, when the repository was created.</p>
+    /// <p>The date and time, in JavaScript date format, when the repository was created.</p>
     #[serde(rename = "createdAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<f64>,
@@ -600,7 +803,7 @@ pub struct Repository {
     #[serde(rename = "registryId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) that identifies the repository. The ARN contains the <code>arn:aws:ecr</code> namespace, followed by the region of the repository, the AWS account ID of the repository owner, the repository namespace, and then the repository name. For example, <code>arn:aws:ecr:region:012345678910:repository/test</code>.</p>
+    /// <p>The Amazon Resource Name (ARN) that identifies the repository. The ARN contains the <code>arn:aws:ecr</code> namespace, followed by the region of the repository, AWS account ID of the repository owner, repository namespace, and repository name. For example, <code>arn:aws:ecr:region:012345678910:repository/test</code>.</p>
     #[serde(rename = "repositoryArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub repository_arn: Option<String>,
@@ -608,7 +811,7 @@ pub struct Repository {
     #[serde(rename = "repositoryName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub repository_name: Option<String>,
-    /// <p>The URI for the repository. You can use this URI for Docker <code>push</code> and <code>pull</code> operations.</p>
+    /// <p>The URI for the repository. You can use this URI for Docker <code>push</code> or <code>pull</code> operations.</p>
     #[serde(rename = "repositoryUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub repository_uri: Option<String>,
@@ -649,6 +852,41 @@ pub struct SetRepositoryPolicyResponse {
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct StartLifecyclePolicyPreviewRequest {
+    /// <p>The policy to be evaluated against. If you do not specify a policy, the current policy for the repository is used.</p>
+    #[serde(rename = "lifecyclePolicyText")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lifecycle_policy_text: Option<String>,
+    /// <p>The AWS account ID associated with the registry that contains the repository. If you do not specify a registry, the default registry is assumed.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_id: Option<String>,
+    /// <p>The name of the repository to be evaluated.</p>
+    #[serde(rename = "repositoryName")]
+    pub repository_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct StartLifecyclePolicyPreviewResponse {
+    /// <p>The JSON repository policy text.</p>
+    #[serde(rename = "lifecyclePolicyText")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lifecycle_policy_text: Option<String>,
+    /// <p>The registry ID associated with the request.</p>
+    #[serde(rename = "registryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registry_id: Option<String>,
+    /// <p>The repository name associated with the request.</p>
+    #[serde(rename = "repositoryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub repository_name: Option<String>,
+    /// <p>The status of the lifecycle policy preview request.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UploadLayerPartRequest {
     /// <p>The base64-encoded layer part payload.</p>
     #[serde(rename = "layerPartBlob")]
@@ -661,11 +899,11 @@ pub struct UploadLayerPartRequest {
     /// <p>The integer value of the last byte of the layer part.</p>
     #[serde(rename = "partLastByte")]
     pub part_last_byte: i64,
-    /// <p>The AWS account ID associated with the registry that you are uploading layer parts to. If you do not specify a registry, the default registry is assumed.</p>
+    /// <p>The AWS account ID associated with the registry to which you are uploading layer parts. If you do not specify a registry, the default registry is assumed.</p>
     #[serde(rename = "registryId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    /// <p>The name of the repository that you are uploading layer parts to.</p>
+    /// <p>The name of the repository to which you are uploading layer parts.</p>
     #[serde(rename = "repositoryName")]
     pub repository_name: String,
     /// <p>The upload ID from a previous <a>InitiateLayerUpload</a> operation to associate with the layer part upload.</p>
@@ -1178,6 +1416,106 @@ impl Error for CreateRepositoryError {
             CreateRepositoryError::Credentials(ref err) => err.description(),
             CreateRepositoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             CreateRepositoryError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteLifecyclePolicy
+#[derive(Debug, PartialEq)]
+pub enum DeleteLifecyclePolicyError {
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>The lifecycle policy could not be found, and no policy is set to the repository.</p>
+    LifecyclePolicyNotFound(String),
+    /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
+    RepositoryNotFound(String),
+    /// <p>These errors are usually caused by a server-side issue.</p>
+    Server(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteLifecyclePolicyError {
+    pub fn from_body(body: &str) -> DeleteLifecyclePolicyError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidParameterException" => {
+                        DeleteLifecyclePolicyError::InvalidParameter(String::from(error_message))
+                    }
+                    "LifecyclePolicyNotFoundException" => {
+                        DeleteLifecyclePolicyError::LifecyclePolicyNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "RepositoryNotFoundException" => {
+                        DeleteLifecyclePolicyError::RepositoryNotFound(String::from(error_message))
+                    }
+                    "ServerException" => {
+                        DeleteLifecyclePolicyError::Server(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteLifecyclePolicyError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteLifecyclePolicyError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteLifecyclePolicyError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteLifecyclePolicyError {
+    fn from(err: serde_json::error::Error) -> DeleteLifecyclePolicyError {
+        DeleteLifecyclePolicyError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteLifecyclePolicyError {
+    fn from(err: CredentialsError) -> DeleteLifecyclePolicyError {
+        DeleteLifecyclePolicyError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteLifecyclePolicyError {
+    fn from(err: HttpDispatchError) -> DeleteLifecyclePolicyError {
+        DeleteLifecyclePolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteLifecyclePolicyError {
+    fn from(err: io::Error) -> DeleteLifecyclePolicyError {
+        DeleteLifecyclePolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteLifecyclePolicyError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteLifecyclePolicyError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteLifecyclePolicyError::InvalidParameter(ref cause) => cause,
+            DeleteLifecyclePolicyError::LifecyclePolicyNotFound(ref cause) => cause,
+            DeleteLifecyclePolicyError::RepositoryNotFound(ref cause) => cause,
+            DeleteLifecyclePolicyError::Server(ref cause) => cause,
+            DeleteLifecyclePolicyError::Validation(ref cause) => cause,
+            DeleteLifecyclePolicyError::Credentials(ref err) => err.description(),
+            DeleteLifecyclePolicyError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteLifecyclePolicyError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -1751,6 +2089,210 @@ impl Error for GetDownloadUrlForLayerError {
         }
     }
 }
+/// Errors returned by GetLifecyclePolicy
+#[derive(Debug, PartialEq)]
+pub enum GetLifecyclePolicyError {
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>The lifecycle policy could not be found, and no policy is set to the repository.</p>
+    LifecyclePolicyNotFound(String),
+    /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
+    RepositoryNotFound(String),
+    /// <p>These errors are usually caused by a server-side issue.</p>
+    Server(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetLifecyclePolicyError {
+    pub fn from_body(body: &str) -> GetLifecyclePolicyError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidParameterException" => {
+                        GetLifecyclePolicyError::InvalidParameter(String::from(error_message))
+                    }
+                    "LifecyclePolicyNotFoundException" => {
+                        GetLifecyclePolicyError::LifecyclePolicyNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "RepositoryNotFoundException" => {
+                        GetLifecyclePolicyError::RepositoryNotFound(String::from(error_message))
+                    }
+                    "ServerException" => {
+                        GetLifecyclePolicyError::Server(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetLifecyclePolicyError::Validation(error_message.to_string())
+                    }
+                    _ => GetLifecyclePolicyError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetLifecyclePolicyError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetLifecyclePolicyError {
+    fn from(err: serde_json::error::Error) -> GetLifecyclePolicyError {
+        GetLifecyclePolicyError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetLifecyclePolicyError {
+    fn from(err: CredentialsError) -> GetLifecyclePolicyError {
+        GetLifecyclePolicyError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetLifecyclePolicyError {
+    fn from(err: HttpDispatchError) -> GetLifecyclePolicyError {
+        GetLifecyclePolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetLifecyclePolicyError {
+    fn from(err: io::Error) -> GetLifecyclePolicyError {
+        GetLifecyclePolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetLifecyclePolicyError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetLifecyclePolicyError {
+    fn description(&self) -> &str {
+        match *self {
+            GetLifecyclePolicyError::InvalidParameter(ref cause) => cause,
+            GetLifecyclePolicyError::LifecyclePolicyNotFound(ref cause) => cause,
+            GetLifecyclePolicyError::RepositoryNotFound(ref cause) => cause,
+            GetLifecyclePolicyError::Server(ref cause) => cause,
+            GetLifecyclePolicyError::Validation(ref cause) => cause,
+            GetLifecyclePolicyError::Credentials(ref err) => err.description(),
+            GetLifecyclePolicyError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetLifecyclePolicyError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetLifecyclePolicyPreview
+#[derive(Debug, PartialEq)]
+pub enum GetLifecyclePolicyPreviewError {
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>There is no dry run for this repository.</p>
+    LifecyclePolicyPreviewNotFound(String),
+    /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
+    RepositoryNotFound(String),
+    /// <p>These errors are usually caused by a server-side issue.</p>
+    Server(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetLifecyclePolicyPreviewError {
+    pub fn from_body(body: &str) -> GetLifecyclePolicyPreviewError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidParameterException" => {
+                        GetLifecyclePolicyPreviewError::InvalidParameter(String::from(
+                            error_message,
+                        ))
+                    }
+                    "LifecyclePolicyPreviewNotFoundException" => {
+                        GetLifecyclePolicyPreviewError::LifecyclePolicyPreviewNotFound(
+                            String::from(error_message),
+                        )
+                    }
+                    "RepositoryNotFoundException" => {
+                        GetLifecyclePolicyPreviewError::RepositoryNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServerException" => {
+                        GetLifecyclePolicyPreviewError::Server(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetLifecyclePolicyPreviewError::Validation(error_message.to_string())
+                    }
+                    _ => GetLifecyclePolicyPreviewError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetLifecyclePolicyPreviewError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetLifecyclePolicyPreviewError {
+    fn from(err: serde_json::error::Error) -> GetLifecyclePolicyPreviewError {
+        GetLifecyclePolicyPreviewError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetLifecyclePolicyPreviewError {
+    fn from(err: CredentialsError) -> GetLifecyclePolicyPreviewError {
+        GetLifecyclePolicyPreviewError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetLifecyclePolicyPreviewError {
+    fn from(err: HttpDispatchError) -> GetLifecyclePolicyPreviewError {
+        GetLifecyclePolicyPreviewError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetLifecyclePolicyPreviewError {
+    fn from(err: io::Error) -> GetLifecyclePolicyPreviewError {
+        GetLifecyclePolicyPreviewError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetLifecyclePolicyPreviewError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetLifecyclePolicyPreviewError {
+    fn description(&self) -> &str {
+        match *self {
+            GetLifecyclePolicyPreviewError::InvalidParameter(ref cause) => cause,
+            GetLifecyclePolicyPreviewError::LifecyclePolicyPreviewNotFound(ref cause) => cause,
+            GetLifecyclePolicyPreviewError::RepositoryNotFound(ref cause) => cause,
+            GetLifecyclePolicyPreviewError::Server(ref cause) => cause,
+            GetLifecyclePolicyPreviewError::Validation(ref cause) => cause,
+            GetLifecyclePolicyPreviewError::Credentials(ref err) => err.description(),
+            GetLifecyclePolicyPreviewError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetLifecyclePolicyPreviewError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetRepositoryPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetRepositoryPolicyError {
@@ -2032,7 +2574,7 @@ impl Error for ListImagesError {
 /// Errors returned by PutImage
 #[derive(Debug, PartialEq)]
 pub enum PutImageError {
-    /// <p>The specified image has already been pushed, and there are no changes to the manifest or image tag since the last push.</p>
+    /// <p>The specified image has already been pushed, and there were no changes to the manifest or image tag after the last push.</p>
     ImageAlreadyExists(String),
     /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
@@ -2133,6 +2675,98 @@ impl Error for PutImageError {
         }
     }
 }
+/// Errors returned by PutLifecyclePolicy
+#[derive(Debug, PartialEq)]
+pub enum PutLifecyclePolicyError {
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
+    RepositoryNotFound(String),
+    /// <p>These errors are usually caused by a server-side issue.</p>
+    Server(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl PutLifecyclePolicyError {
+    pub fn from_body(body: &str) -> PutLifecyclePolicyError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidParameterException" => {
+                        PutLifecyclePolicyError::InvalidParameter(String::from(error_message))
+                    }
+                    "RepositoryNotFoundException" => {
+                        PutLifecyclePolicyError::RepositoryNotFound(String::from(error_message))
+                    }
+                    "ServerException" => {
+                        PutLifecyclePolicyError::Server(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        PutLifecyclePolicyError::Validation(error_message.to_string())
+                    }
+                    _ => PutLifecyclePolicyError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => PutLifecyclePolicyError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for PutLifecyclePolicyError {
+    fn from(err: serde_json::error::Error) -> PutLifecyclePolicyError {
+        PutLifecyclePolicyError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for PutLifecyclePolicyError {
+    fn from(err: CredentialsError) -> PutLifecyclePolicyError {
+        PutLifecyclePolicyError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for PutLifecyclePolicyError {
+    fn from(err: HttpDispatchError) -> PutLifecyclePolicyError {
+        PutLifecyclePolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutLifecyclePolicyError {
+    fn from(err: io::Error) -> PutLifecyclePolicyError {
+        PutLifecyclePolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for PutLifecyclePolicyError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutLifecyclePolicyError {
+    fn description(&self) -> &str {
+        match *self {
+            PutLifecyclePolicyError::InvalidParameter(ref cause) => cause,
+            PutLifecyclePolicyError::RepositoryNotFound(ref cause) => cause,
+            PutLifecyclePolicyError::Server(ref cause) => cause,
+            PutLifecyclePolicyError::Validation(ref cause) => cause,
+            PutLifecyclePolicyError::Credentials(ref err) => err.description(),
+            PutLifecyclePolicyError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            PutLifecyclePolicyError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by SetRepositoryPolicy
 #[derive(Debug, PartialEq)]
 pub enum SetRepositoryPolicyError {
@@ -2222,6 +2856,118 @@ impl Error for SetRepositoryPolicyError {
                 dispatch_error.description()
             }
             SetRepositoryPolicyError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by StartLifecyclePolicyPreview
+#[derive(Debug, PartialEq)]
+pub enum StartLifecyclePolicyPreviewError {
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>The lifecycle policy could not be found, and no policy is set to the repository.</p>
+    LifecyclePolicyNotFound(String),
+    /// <p>The previous lifecycle policy preview request has not completed. Please try again later.</p>
+    LifecyclePolicyPreviewInProgress(String),
+    /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
+    RepositoryNotFound(String),
+    /// <p>These errors are usually caused by a server-side issue.</p>
+    Server(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl StartLifecyclePolicyPreviewError {
+    pub fn from_body(body: &str) -> StartLifecyclePolicyPreviewError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidParameterException" => {
+                        StartLifecyclePolicyPreviewError::InvalidParameter(String::from(
+                            error_message,
+                        ))
+                    }
+                    "LifecyclePolicyNotFoundException" => {
+                        StartLifecyclePolicyPreviewError::LifecyclePolicyNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "LifecyclePolicyPreviewInProgressException" => {
+                        StartLifecyclePolicyPreviewError::LifecyclePolicyPreviewInProgress(
+                            String::from(error_message),
+                        )
+                    }
+                    "RepositoryNotFoundException" => {
+                        StartLifecyclePolicyPreviewError::RepositoryNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServerException" => {
+                        StartLifecyclePolicyPreviewError::Server(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        StartLifecyclePolicyPreviewError::Validation(error_message.to_string())
+                    }
+                    _ => StartLifecyclePolicyPreviewError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => StartLifecyclePolicyPreviewError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for StartLifecyclePolicyPreviewError {
+    fn from(err: serde_json::error::Error) -> StartLifecyclePolicyPreviewError {
+        StartLifecyclePolicyPreviewError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for StartLifecyclePolicyPreviewError {
+    fn from(err: CredentialsError) -> StartLifecyclePolicyPreviewError {
+        StartLifecyclePolicyPreviewError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for StartLifecyclePolicyPreviewError {
+    fn from(err: HttpDispatchError) -> StartLifecyclePolicyPreviewError {
+        StartLifecyclePolicyPreviewError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StartLifecyclePolicyPreviewError {
+    fn from(err: io::Error) -> StartLifecyclePolicyPreviewError {
+        StartLifecyclePolicyPreviewError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for StartLifecyclePolicyPreviewError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartLifecyclePolicyPreviewError {
+    fn description(&self) -> &str {
+        match *self {
+            StartLifecyclePolicyPreviewError::InvalidParameter(ref cause) => cause,
+            StartLifecyclePolicyPreviewError::LifecyclePolicyNotFound(ref cause) => cause,
+            StartLifecyclePolicyPreviewError::LifecyclePolicyPreviewInProgress(ref cause) => cause,
+            StartLifecyclePolicyPreviewError::RepositoryNotFound(ref cause) => cause,
+            StartLifecyclePolicyPreviewError::Server(ref cause) => cause,
+            StartLifecyclePolicyPreviewError::Validation(ref cause) => cause,
+            StartLifecyclePolicyPreviewError::Credentials(ref err) => err.description(),
+            StartLifecyclePolicyPreviewError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            StartLifecyclePolicyPreviewError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -2351,7 +3097,7 @@ pub trait Ecr {
         input: &BatchGetImageRequest,
     ) -> Result<BatchGetImageResponse, BatchGetImageError>;
 
-    /// <p><p>Inform Amazon ECR that the image layer upload for a specified registry, repository name, and upload ID, has completed. You can optionally provide a <code>sha256</code> digest of the image layer for data validation purposes.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
+    /// <p><p>Informs Amazon ECR that the image layer upload has completed for a specified registry, repository name, and upload ID. You can optionally provide a <code>sha256</code> digest of the image layer for data validation purposes.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn complete_layer_upload(
         &self,
         input: &CompleteLayerUploadRequest,
@@ -2362,6 +3108,12 @@ pub trait Ecr {
         &self,
         input: &CreateRepositoryRequest,
     ) -> Result<CreateRepositoryResponse, CreateRepositoryError>;
+
+    /// <p>Deletes the specified lifecycle policy.</p>
+    fn delete_lifecycle_policy(
+        &self,
+        input: &DeleteLifecyclePolicyRequest,
+    ) -> Result<DeleteLifecyclePolicyResponse, DeleteLifecyclePolicyError>;
 
     /// <p>Deletes an existing image repository. If a repository contains images, you must use the <code>force</code> option to delete it.</p>
     fn delete_repository(
@@ -2399,6 +3151,18 @@ pub trait Ecr {
         input: &GetDownloadUrlForLayerRequest,
     ) -> Result<GetDownloadUrlForLayerResponse, GetDownloadUrlForLayerError>;
 
+    /// <p>Retrieves the specified lifecycle policy.</p>
+    fn get_lifecycle_policy(
+        &self,
+        input: &GetLifecyclePolicyRequest,
+    ) -> Result<GetLifecyclePolicyResponse, GetLifecyclePolicyError>;
+
+    /// <p>Retrieves the results of the specified lifecycle policy preview request.</p>
+    fn get_lifecycle_policy_preview(
+        &self,
+        input: &GetLifecyclePolicyPreviewRequest,
+    ) -> Result<GetLifecyclePolicyPreviewResponse, GetLifecyclePolicyPreviewError>;
+
     /// <p>Retrieves the repository policy for a specified repository.</p>
     fn get_repository_policy(
         &self,
@@ -2418,11 +3182,23 @@ pub trait Ecr {
     /// <p><p>Creates or updates the image manifest and tags associated with an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn put_image(&self, input: &PutImageRequest) -> Result<PutImageResponse, PutImageError>;
 
+    /// <p>Creates or updates a lifecycle policy.</p>
+    fn put_lifecycle_policy(
+        &self,
+        input: &PutLifecyclePolicyRequest,
+    ) -> Result<PutLifecyclePolicyResponse, PutLifecyclePolicyError>;
+
     /// <p>Applies a repository policy on a specified repository to control access permissions.</p>
     fn set_repository_policy(
         &self,
         input: &SetRepositoryPolicyRequest,
     ) -> Result<SetRepositoryPolicyResponse, SetRepositoryPolicyError>;
+
+    /// <p>Starts a preview of the specified lifecycle policy. This allows you to see the results before creating the lifecycle policy.</p>
+    fn start_lifecycle_policy_preview(
+        &self,
+        input: &StartLifecyclePolicyPreviewRequest,
+    ) -> Result<StartLifecyclePolicyPreviewResponse, StartLifecyclePolicyPreviewError>;
 
     /// <p><p>Uploads an image layer part to Amazon ECR.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn upload_layer_part(
@@ -2571,7 +3347,7 @@ where
         }
     }
 
-    /// <p><p>Inform Amazon ECR that the image layer upload for a specified registry, repository name, and upload ID, has completed. You can optionally provide a <code>sha256</code> digest of the image layer for data validation purposes.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
+    /// <p><p>Informs Amazon ECR that the image layer upload has completed for a specified registry, repository name, and upload ID. You can optionally provide a <code>sha256</code> digest of the image layer for data validation purposes.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn complete_layer_upload(
         &self,
         input: &CompleteLayerUploadRequest,
@@ -2639,6 +3415,43 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(CreateRepositoryError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Deletes the specified lifecycle policy.</p>
+    fn delete_lifecycle_policy(
+        &self,
+        input: &DeleteLifecyclePolicyRequest,
+    ) -> Result<DeleteLifecyclePolicyResponse, DeleteLifecyclePolicyError> {
+        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.DeleteLifecyclePolicy",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteLifecyclePolicyResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteLifecyclePolicyError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -2867,6 +3680,80 @@ where
         }
     }
 
+    /// <p>Retrieves the specified lifecycle policy.</p>
+    fn get_lifecycle_policy(
+        &self,
+        input: &GetLifecyclePolicyRequest,
+    ) -> Result<GetLifecyclePolicyResponse, GetLifecyclePolicyError> {
+        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.GetLifecyclePolicy",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetLifecyclePolicyResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetLifecyclePolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Retrieves the results of the specified lifecycle policy preview request.</p>
+    fn get_lifecycle_policy_preview(
+        &self,
+        input: &GetLifecyclePolicyPreviewRequest,
+    ) -> Result<GetLifecyclePolicyPreviewResponse, GetLifecyclePolicyPreviewError> {
+        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.GetLifecyclePolicyPreview",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetLifecyclePolicyPreviewResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetLifecyclePolicyPreviewError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Retrieves the repository policy for a specified repository.</p>
     fn get_repository_policy(
         &self,
@@ -3012,6 +3899,43 @@ where
         }
     }
 
+    /// <p>Creates or updates a lifecycle policy.</p>
+    fn put_lifecycle_policy(
+        &self,
+        input: &PutLifecyclePolicyRequest,
+    ) -> Result<PutLifecyclePolicyResponse, PutLifecyclePolicyError> {
+        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.PutLifecyclePolicy",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PutLifecyclePolicyResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutLifecyclePolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Applies a repository policy on a specified repository to control access permissions.</p>
     fn set_repository_policy(
         &self,
@@ -3043,6 +3967,43 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(SetRepositoryPolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Starts a preview of the specified lifecycle policy. This allows you to see the results before creating the lifecycle policy.</p>
+    fn start_lifecycle_policy_preview(
+        &self,
+        input: &StartLifecyclePolicyPreviewRequest,
+    ) -> Result<StartLifecyclePolicyPreviewResponse, StartLifecyclePolicyPreviewError> {
+        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.StartLifecyclePolicyPreview",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StartLifecyclePolicyPreviewResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StartLifecyclePolicyPreviewError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }

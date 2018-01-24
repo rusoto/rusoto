@@ -67,9 +67,29 @@ pub struct CheckDomainAvailabilityRequest {
 /// <p>The CheckDomainAvailability response includes the following elements.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct CheckDomainAvailabilityResponse {
-    /// <p><p>Whether the domain name is available for registering.</p> <note> <p>You can only register domains designated as <code>AVAILABLE</code>.</p> </note> <p>Valid values:</p> <dl> <dt>AVAILABLE</dt> <dd> <p>The domain name is available.</p> </dd> <dt>AVAILABLE<em>RESERVED</dt> <dd> <p>The domain name is reserved under specific conditions.</p> </dd> <dt>AVAILABLE</em>PREORDER</dt> <dd> <p>The domain name is available and can be preordered.</p> </dd> <dt>DONT<em>KNOW</dt> <dd> <p>The TLD registry didn&#39;t reply with a definitive answer about whether the domain name is available. Amazon Route 53 can return this response for a variety of reasons, for example, the registry is performing maintenance. Try again later.</p> </dd> <dt>PENDING</dt> <dd> <p>The TLD registry didn&#39;t return a response in the expected amount of time. When the response is delayed, it usually takes just a few extra seconds. You can resubmit the request immediately.</p> </dd> <dt>RESERVED</dt> <dd> <p>The domain name has been reserved for another person or organization.</p> </dd> <dt>UNAVAILABLE</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE</em>PREMIUM</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE_RESTRICTED</dt> <dd> <p>The domain name is forbidden.</p> </dd> </dl></p>
+    /// <p><p>Whether the domain name is available for registering.</p> <note> <p>You can register only domains designated as <code>AVAILABLE</code>.</p> </note> <p>Valid values:</p> <dl> <dt>AVAILABLE</dt> <dd> <p>The domain name is available.</p> </dd> <dt>AVAILABLE<em>RESERVED</dt> <dd> <p>The domain name is reserved under specific conditions.</p> </dd> <dt>AVAILABLE</em>PREORDER</dt> <dd> <p>The domain name is available and can be preordered.</p> </dd> <dt>DONT<em>KNOW</dt> <dd> <p>The TLD registry didn&#39;t reply with a definitive answer about whether the domain name is available. Amazon Route 53 can return this response for a variety of reasons, for example, the registry is performing maintenance. Try again later.</p> </dd> <dt>PENDING</dt> <dd> <p>The TLD registry didn&#39;t return a response in the expected amount of time. When the response is delayed, it usually takes just a few extra seconds. You can resubmit the request immediately.</p> </dd> <dt>RESERVED</dt> <dd> <p>The domain name has been reserved for another person or organization.</p> </dd> <dt>UNAVAILABLE</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE</em>PREMIUM</dt> <dd> <p>The domain name is not available.</p> </dd> <dt>UNAVAILABLE_RESTRICTED</dt> <dd> <p>The domain name is forbidden.</p> </dd> </dl></p>
     #[serde(rename = "Availability")]
     pub availability: String,
+}
+
+/// <p>The CheckDomainTransferability request contains the following elements.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CheckDomainTransferabilityRequest {
+    /// <p>If the registrar for the top-level domain (TLD) requires an authorization code to transfer the domain, the code that you got from the current registrar for the domain.</p>
+    #[serde(rename = "AuthCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auth_code: Option<String>,
+    /// <p>The name of the domain that you want to transfer to Amazon Route 53.</p> <p>Constraints: The domain name can contain only the letters a through z, the numbers 0 through 9, and hyphen (-). Internationalized Domain Names are not supported.</p>
+    #[serde(rename = "DomainName")]
+    pub domain_name: String,
+}
+
+/// <p>The CheckDomainTransferability response includes the following elements.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CheckDomainTransferabilityResponse {
+    /// <p>A complex type that contains information about whether the specified domain can be transferred to Amazon Route 53.</p>
+    #[serde(rename = "Transferability")]
+    pub transferability: DomainTransferability,
 }
 
 /// <p>ContactDetail includes the following elements.</p>
@@ -204,6 +224,13 @@ pub struct DomainSummary {
     #[serde(rename = "TransferLock")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transfer_lock: Option<bool>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DomainTransferability {
+    #[serde(rename = "Transferable")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transferable: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
@@ -749,10 +776,6 @@ pub struct UpdateDomainNameserversRequest {
     /// <p>The name of the domain that you want to change name servers for.</p>
     #[serde(rename = "DomainName")]
     pub domain_name: String,
-    /// <p>The authorization key for .fi domains</p>
-    #[serde(rename = "FIAuthKey")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub fi_auth_key: Option<String>,
     /// <p>A list of new name servers for the domain.</p>
     #[serde(rename = "Nameservers")]
     pub nameservers: Vec<Nameserver>,
@@ -818,9 +841,9 @@ pub struct ViewBillingResponse {
 /// Errors returned by CheckDomainAvailability
 #[derive(Debug, PartialEq)]
 pub enum CheckDomainAvailabilityError {
-    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it might refer to the ID of an operation that is already completed. For a domain name, it might not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
-    /// <p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -901,14 +924,100 @@ impl Error for CheckDomainAvailabilityError {
         }
     }
 }
+/// Errors returned by CheckDomainTransferability
+#[derive(Debug, PartialEq)]
+pub enum CheckDomainTransferabilityError {
+    /// <p>The requested item is not acceptable. For example, for an OperationId it might refer to the ID of an operation that is already completed. For a domain name, it might not be a valid domain name or belong to the requester account.</p>
+    InvalidInput(String),
+    /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
+    UnsupportedTLD(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CheckDomainTransferabilityError {
+    pub fn from_body(body: &str) -> CheckDomainTransferabilityError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidInput" => {
+                        CheckDomainTransferabilityError::InvalidInput(String::from(error_message))
+                    }
+                    "UnsupportedTLD" => {
+                        CheckDomainTransferabilityError::UnsupportedTLD(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CheckDomainTransferabilityError::Validation(error_message.to_string())
+                    }
+                    _ => CheckDomainTransferabilityError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CheckDomainTransferabilityError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CheckDomainTransferabilityError {
+    fn from(err: serde_json::error::Error) -> CheckDomainTransferabilityError {
+        CheckDomainTransferabilityError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CheckDomainTransferabilityError {
+    fn from(err: CredentialsError) -> CheckDomainTransferabilityError {
+        CheckDomainTransferabilityError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CheckDomainTransferabilityError {
+    fn from(err: HttpDispatchError) -> CheckDomainTransferabilityError {
+        CheckDomainTransferabilityError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CheckDomainTransferabilityError {
+    fn from(err: io::Error) -> CheckDomainTransferabilityError {
+        CheckDomainTransferabilityError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CheckDomainTransferabilityError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CheckDomainTransferabilityError {
+    fn description(&self) -> &str {
+        match *self {
+            CheckDomainTransferabilityError::InvalidInput(ref cause) => cause,
+            CheckDomainTransferabilityError::UnsupportedTLD(ref cause) => cause,
+            CheckDomainTransferabilityError::Validation(ref cause) => cause,
+            CheckDomainTransferabilityError::Credentials(ref err) => err.description(),
+            CheckDomainTransferabilityError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CheckDomainTransferabilityError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteTagsForDomain
 #[derive(Debug, PartialEq)]
 pub enum DeleteTagsForDomainError {
-    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it might refer to the ID of an operation that is already completed. For a domain name, it might not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
     /// <p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
     OperationLimitExceeded(String),
-    /// <p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -996,9 +1105,9 @@ impl Error for DeleteTagsForDomainError {
 /// Errors returned by DisableDomainAutoRenew
 #[derive(Debug, PartialEq)]
 pub enum DisableDomainAutoRenewError {
-    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it might refer to the ID of an operation that is already completed. For a domain name, it might not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
-    /// <p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1084,13 +1193,13 @@ impl Error for DisableDomainAutoRenewError {
 pub enum DisableDomainTransferLockError {
     /// <p>The request is already in progress for the domain.</p>
     DuplicateRequest(String),
-    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it might refer to the ID of an operation that is already completed. For a domain name, it might not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
     /// <p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
     OperationLimitExceeded(String),
     /// <p>The top-level domain does not support this operation.</p>
     TLDRulesViolation(String),
-    /// <p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1188,11 +1297,11 @@ impl Error for DisableDomainTransferLockError {
 /// Errors returned by EnableDomainAutoRenew
 #[derive(Debug, PartialEq)]
 pub enum EnableDomainAutoRenewError {
-    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it might refer to the ID of an operation that is already completed. For a domain name, it might not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
     /// <p>The top-level domain does not support this operation.</p>
     TLDRulesViolation(String),
-    /// <p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1282,13 +1391,13 @@ impl Error for EnableDomainAutoRenewError {
 pub enum EnableDomainTransferLockError {
     /// <p>The request is already in progress for the domain.</p>
     DuplicateRequest(String),
-    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it might refer to the ID of an operation that is already completed. For a domain name, it might not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
     /// <p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
     OperationLimitExceeded(String),
     /// <p>The top-level domain does not support this operation.</p>
     TLDRulesViolation(String),
-    /// <p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1386,11 +1495,11 @@ impl Error for EnableDomainTransferLockError {
 /// Errors returned by GetContactReachabilityStatus
 #[derive(Debug, PartialEq)]
 pub enum GetContactReachabilityStatusError {
-    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it might refer to the ID of an operation that is already completed. For a domain name, it might not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
     /// <p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
     OperationLimitExceeded(String),
-    /// <p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1480,9 +1589,9 @@ impl Error for GetContactReachabilityStatusError {
 /// Errors returned by GetDomainDetail
 #[derive(Debug, PartialEq)]
 pub enum GetDomainDetailError {
-    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it might refer to the ID of an operation that is already completed. For a domain name, it might not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
-    /// <p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1564,9 +1673,9 @@ impl Error for GetDomainDetailError {
 /// Errors returned by GetDomainSuggestions
 #[derive(Debug, PartialEq)]
 pub enum GetDomainSuggestionsError {
-    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it might refer to the ID of an operation that is already completed. For a domain name, it might not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
-    /// <p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1650,7 +1759,7 @@ impl Error for GetDomainSuggestionsError {
 /// Errors returned by GetOperationDetail
 #[derive(Debug, PartialEq)]
 pub enum GetOperationDetailError {
-    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it might refer to the ID of an operation that is already completed. For a domain name, it might not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1730,7 +1839,7 @@ impl Error for GetOperationDetailError {
 /// Errors returned by ListDomains
 #[derive(Debug, PartialEq)]
 pub enum ListDomainsError {
-    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it might refer to the ID of an operation that is already completed. For a domain name, it might not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1806,7 +1915,7 @@ impl Error for ListDomainsError {
 /// Errors returned by ListOperations
 #[derive(Debug, PartialEq)]
 pub enum ListOperationsError {
-    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it might refer to the ID of an operation that is already completed. For a domain name, it might not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1884,11 +1993,11 @@ impl Error for ListOperationsError {
 /// Errors returned by ListTagsForDomain
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForDomainError {
-    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it might refer to the ID of an operation that is already completed. For a domain name, it might not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
     /// <p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
     OperationLimitExceeded(String),
-    /// <p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1980,13 +2089,13 @@ pub enum RegisterDomainError {
     DomainLimitExceeded(String),
     /// <p>The request is already in progress for the domain.</p>
     DuplicateRequest(String),
-    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it might refer to the ID of an operation that is already completed. For a domain name, it might not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
     /// <p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
     OperationLimitExceeded(String),
     /// <p>The top-level domain does not support this operation.</p>
     TLDRulesViolation(String),
-    /// <p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2086,13 +2195,13 @@ impl Error for RegisterDomainError {
 pub enum RenewDomainError {
     /// <p>The request is already in progress for the domain.</p>
     DuplicateRequest(String),
-    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it might refer to the ID of an operation that is already completed. For a domain name, it might not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
     /// <p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
     OperationLimitExceeded(String),
     /// <p>The top-level domain does not support this operation.</p>
     TLDRulesViolation(String),
-    /// <p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2184,11 +2293,11 @@ impl Error for RenewDomainError {
 /// Errors returned by ResendContactReachabilityEmail
 #[derive(Debug, PartialEq)]
 pub enum ResendContactReachabilityEmailError {
-    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it might refer to the ID of an operation that is already completed. For a domain name, it might not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
     /// <p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
     OperationLimitExceeded(String),
-    /// <p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2278,9 +2387,9 @@ impl Error for ResendContactReachabilityEmailError {
 /// Errors returned by RetrieveDomainAuthCode
 #[derive(Debug, PartialEq)]
 pub enum RetrieveDomainAuthCodeError {
-    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it might refer to the ID of an operation that is already completed. For a domain name, it might not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
-    /// <p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2368,13 +2477,13 @@ pub enum TransferDomainError {
     DomainLimitExceeded(String),
     /// <p>The request is already in progress for the domain.</p>
     DuplicateRequest(String),
-    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it might refer to the ID of an operation that is already completed. For a domain name, it might not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
     /// <p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
     OperationLimitExceeded(String),
     /// <p>The top-level domain does not support this operation.</p>
     TLDRulesViolation(String),
-    /// <p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2474,13 +2583,13 @@ impl Error for TransferDomainError {
 pub enum UpdateDomainContactError {
     /// <p>The request is already in progress for the domain.</p>
     DuplicateRequest(String),
-    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it might refer to the ID of an operation that is already completed. For a domain name, it might not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
     /// <p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
     OperationLimitExceeded(String),
     /// <p>The top-level domain does not support this operation.</p>
     TLDRulesViolation(String),
-    /// <p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2578,13 +2687,13 @@ impl Error for UpdateDomainContactError {
 pub enum UpdateDomainContactPrivacyError {
     /// <p>The request is already in progress for the domain.</p>
     DuplicateRequest(String),
-    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it might refer to the ID of an operation that is already completed. For a domain name, it might not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
     /// <p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
     OperationLimitExceeded(String),
     /// <p>The top-level domain does not support this operation.</p>
     TLDRulesViolation(String),
-    /// <p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2684,13 +2793,13 @@ impl Error for UpdateDomainContactPrivacyError {
 pub enum UpdateDomainNameserversError {
     /// <p>The request is already in progress for the domain.</p>
     DuplicateRequest(String),
-    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it might refer to the ID of an operation that is already completed. For a domain name, it might not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
     /// <p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
     OperationLimitExceeded(String),
     /// <p>The top-level domain does not support this operation.</p>
     TLDRulesViolation(String),
-    /// <p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2788,11 +2897,11 @@ impl Error for UpdateDomainNameserversError {
 /// Errors returned by UpdateTagsForDomain
 #[derive(Debug, PartialEq)]
 pub enum UpdateTagsForDomainError {
-    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it might refer to the ID of an operation that is already completed. For a domain name, it might not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
     /// <p>The number of operations or jobs running exceeded the allowed threshold for the account.</p>
     OperationLimitExceeded(String),
-    /// <p>Amazon Route 53 does not support this top-level domain.</p>
+    /// <p>Amazon Route 53 does not support this top-level domain (TLD).</p>
     UnsupportedTLD(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2880,7 +2989,7 @@ impl Error for UpdateTagsForDomainError {
 /// Errors returned by ViewBilling
 #[derive(Debug, PartialEq)]
 pub enum ViewBillingError {
-    /// <p>The requested item is not acceptable. For example, for an OperationId it may refer to the ID of an operation that is already completed. For a domain name, it may not be a valid domain name or belong to the requester account.</p>
+    /// <p>The requested item is not acceptable. For example, for an OperationId it might refer to the ID of an operation that is already completed. For a domain name, it might not be a valid domain name or belong to the requester account.</p>
     InvalidInput(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2961,7 +3070,13 @@ pub trait Route53Domains {
         input: &CheckDomainAvailabilityRequest,
     ) -> Result<CheckDomainAvailabilityResponse, CheckDomainAvailabilityError>;
 
-    /// <p>This operation deletes the specified tags for a domain.</p> <p>All tag operations are eventually consistent; subsequent operations may not immediately represent all issued operations.</p>
+    /// <p>Checks whether a domain name can be transferred to Amazon Route 53. </p>
+    fn check_domain_transferability(
+        &self,
+        input: &CheckDomainTransferabilityRequest,
+    ) -> Result<CheckDomainTransferabilityResponse, CheckDomainTransferabilityError>;
+
+    /// <p>This operation deletes the specified tags for a domain.</p> <p>All tag operations are eventually consistent; subsequent operations might not immediately represent all issued operations.</p>
     fn delete_tags_for_domain(
         &self,
         input: &DeleteTagsForDomainRequest,
@@ -3027,7 +3142,7 @@ pub trait Route53Domains {
         input: &ListOperationsRequest,
     ) -> Result<ListOperationsResponse, ListOperationsError>;
 
-    /// <p>This operation returns all of the tags that are associated with the specified domain.</p> <p>All tag operations are eventually consistent; subsequent operations may not immediately represent all issued operations.</p>
+    /// <p>This operation returns all of the tags that are associated with the specified domain.</p> <p>All tag operations are eventually consistent; subsequent operations might not immediately represent all issued operations.</p>
     fn list_tags_for_domain(
         &self,
         input: &ListTagsForDomainRequest,
@@ -3081,7 +3196,7 @@ pub trait Route53Domains {
         input: &UpdateDomainNameserversRequest,
     ) -> Result<UpdateDomainNameserversResponse, UpdateDomainNameserversError>;
 
-    /// <p>This operation adds or updates tags for a specified domain.</p> <p>All tag operations are eventually consistent; subsequent operations may not immediately represent all issued operations.</p>
+    /// <p>This operation adds or updates tags for a specified domain.</p> <p>All tag operations are eventually consistent; subsequent operations might not immediately represent all issued operations.</p>
     fn update_tags_for_domain(
         &self,
         input: &UpdateTagsForDomainRequest,
@@ -3160,7 +3275,44 @@ where
         }
     }
 
-    /// <p>This operation deletes the specified tags for a domain.</p> <p>All tag operations are eventually consistent; subsequent operations may not immediately represent all issued operations.</p>
+    /// <p>Checks whether a domain name can be transferred to Amazon Route 53. </p>
+    fn check_domain_transferability(
+        &self,
+        input: &CheckDomainTransferabilityRequest,
+    ) -> Result<CheckDomainTransferabilityResponse, CheckDomainTransferabilityError> {
+        let mut request = SignedRequest::new("POST", "route53domains", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Route53Domains_v20140515.CheckDomainTransferability",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CheckDomainTransferabilityResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CheckDomainTransferabilityError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>This operation deletes the specified tags for a domain.</p> <p>All tag operations are eventually consistent; subsequent operations might not immediately represent all issued operations.</p>
     fn delete_tags_for_domain(
         &self,
         input: &DeleteTagsForDomainRequest,
@@ -3560,7 +3712,7 @@ where
         }
     }
 
-    /// <p>This operation returns all of the tags that are associated with the specified domain.</p> <p>All tag operations are eventually consistent; subsequent operations may not immediately represent all issued operations.</p>
+    /// <p>This operation returns all of the tags that are associated with the specified domain.</p> <p>All tag operations are eventually consistent; subsequent operations might not immediately represent all issued operations.</p>
     fn list_tags_for_domain(
         &self,
         input: &ListTagsForDomainRequest,
@@ -3883,7 +4035,7 @@ where
         }
     }
 
-    /// <p>This operation adds or updates tags for a specified domain.</p> <p>All tag operations are eventually consistent; subsequent operations may not immediately represent all issued operations.</p>
+    /// <p>This operation adds or updates tags for a specified domain.</p> <p>All tag operations are eventually consistent; subsequent operations might not immediately represent all issued operations.</p>
     fn update_tags_for_domain(
         &self,
         input: &UpdateTagsForDomainRequest,

@@ -28,6 +28,16 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct AssociateKmsKeyRequest {
+    /// <p>The Amazon Resource Name (ARN) of the CMK to use when encrypting log data. For more information, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-kms">Amazon Resource Names - AWS Key Management Service (AWS KMS)</a>.</p>
+    #[serde(rename = "kmsKeyId")]
+    pub kms_key_id: String,
+    /// <p>The name of the log group.</p>
+    #[serde(rename = "logGroupName")]
+    pub log_group_name: String,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CancelExportTaskRequest {
     /// <p>The ID of the export task.</p>
     #[serde(rename = "taskId")]
@@ -43,7 +53,7 @@ pub struct CreateExportTaskRequest {
     #[serde(rename = "destinationPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_prefix: Option<String>,
-    /// <p>The start time of the range for the request, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp earlier than this time are not exported.</p>
+    /// <p>The start time of the range for the request, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a time stamp earlier than this time are not exported.</p>
     #[serde(rename = "from")]
     pub from: i64,
     /// <p>The name of the log group.</p>
@@ -57,7 +67,7 @@ pub struct CreateExportTaskRequest {
     #[serde(rename = "taskName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_name: Option<String>,
-    /// <p>The end time of the range for the request, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp later than this time are not exported.</p>
+    /// <p>The end time of the range for the request, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a time stamp later than this time are not exported.</p>
     #[serde(rename = "to")]
     pub to: i64,
 }
@@ -72,6 +82,10 @@ pub struct CreateExportTaskResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateLogGroupRequest {
+    /// <p>The Amazon Resource Name (ARN) of the CMK to use when encrypting log data. For more information, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-kms">Amazon Resource Names - AWS Key Management Service (AWS KMS)</a>.</p>
+    #[serde(rename = "kmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
     /// <p>The name of the log group.</p>
     #[serde(rename = "logGroupName")]
     pub log_group_name: String,
@@ -123,6 +137,14 @@ pub struct DeleteMetricFilterRequest {
     /// <p>The name of the log group.</p>
     #[serde(rename = "logGroupName")]
     pub log_group_name: String,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteResourcePolicyRequest {
+    /// <p>The name of the policy to be revoked. This parameter is required.</p>
+    #[serde(rename = "policyName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_name: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
@@ -240,7 +262,7 @@ pub struct DescribeLogStreamsRequest {
     /// <p>The name of the log group.</p>
     #[serde(rename = "logGroupName")]
     pub log_group_name: String,
-    /// <p>The prefix to match.</p> <p>You cannot specify this parameter if <code>orderBy</code> is <code>LastEventTime</code>.</p>
+    /// <p>The prefix to match.</p> <p>iIf <code>orderBy</code> is <code>LastEventTime</code>,you cannot specify this parameter.</p>
     #[serde(rename = "logStreamNamePrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_stream_name_prefix: Option<String>,
@@ -248,7 +270,7 @@ pub struct DescribeLogStreamsRequest {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>If the value is <code>LogStreamName</code>, the results are ordered by log stream name. If the value is <code>LastEventTime</code>, the results are ordered by the event time. The default value is <code>LogStreamName</code>.</p> <p>If you order the results by event time, you cannot specify the <code>logStreamNamePrefix</code> parameter.</p> <p>lastEventTimestamp represents the time of the most recent log event in the log stream in CloudWatch Logs. This number is expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. lastEventTimeStamp updates on an eventual consistency basis. It typically updates in less than an hour from ingestion, but may take longer in some rare situations.</p>
+    /// <p>If the value is <code>LogStreamName</code>, the results are ordered by log stream name. If the value is <code>LastEventTime</code>, the results are ordered by the event time. The default value is <code>LogStreamName</code>.</p> <p>If you order the results by event time, you cannot specify the <code>logStreamNamePrefix</code> parameter.</p> <p>lastEventTimestamp represents the time of the most recent log event in the log stream in CloudWatch Logs. This number is expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. lastEventTimeStamp updates on an eventual consistency basis. It typically updates in less than an hour from ingestion, but may take longer in some rare situations.</p>
     #[serde(rename = "orderBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub order_by: Option<String>,
@@ -279,7 +301,6 @@ pub struct DescribeMetricFiltersRequest {
     #[serde(rename = "logGroupName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_group_name: Option<String>,
-    /// <p>The name of the CloudWatch metric.</p>
     #[serde(rename = "metricName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metric_name: Option<String>,
@@ -302,6 +323,28 @@ pub struct DescribeMetricFiltersResponse {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribeResourcePoliciesRequest {
+    /// <p>The maximum number of resource policies to be displayed with one call of this API.</p>
+    #[serde(rename = "limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeResourcePoliciesResponse {
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The resource policies that exist in this account.</p>
+    #[serde(rename = "resourcePolicies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_policies: Option<Vec<ResourcePolicy>>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
@@ -345,7 +388,7 @@ pub struct Destination {
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    /// <p>The creation time of the destination, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>
+    /// <p>The creation time of the destination, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC.</p>
     #[serde(rename = "creationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<i64>,
@@ -357,10 +400,17 @@ pub struct Destination {
     #[serde(rename = "roleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the physical target where the log events will be delivered (for example, a Kinesis stream).</p>
+    /// <p>The Amazon Resource Name (ARN) of the physical target to where the log events are delivered (for example, a Kinesis stream).</p>
     #[serde(rename = "targetArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DisassociateKmsKeyRequest {
+    /// <p>The name of the log group.</p>
+    #[serde(rename = "logGroupName")]
+    pub log_group_name: String,
 }
 
 /// <p>Represents an export task.</p>
@@ -378,7 +428,7 @@ pub struct ExportTask {
     #[serde(rename = "executionInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_info: Option<ExportTaskExecutionInfo>,
-    /// <p>The start time, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp prior to this time are not exported.</p>
+    /// <p>The start time, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a time stamp before this time are not exported.</p>
     #[serde(rename = "from")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub from: Option<i64>,
@@ -398,7 +448,7 @@ pub struct ExportTask {
     #[serde(rename = "taskName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_name: Option<String>,
-    /// <p>The end time, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp later than this time are not exported.</p>
+    /// <p>The end time, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a time stamp later than this time are not exported.</p>
     #[serde(rename = "to")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub to: Option<i64>,
@@ -407,11 +457,11 @@ pub struct ExportTask {
 /// <p>Represents the status of an export task.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ExportTaskExecutionInfo {
-    /// <p>The completion time of the export task, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>
+    /// <p>The completion time of the export task, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC.</p>
     #[serde(rename = "completionTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub completion_time: Option<i64>,
-    /// <p>The creation time of the export task, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>
+    /// <p>The creation time of the export task, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC.</p>
     #[serde(rename = "creationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<i64>,
@@ -432,7 +482,7 @@ pub struct ExportTaskStatus {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct FilterLogEventsRequest {
-    /// <p>The end of the time range, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp later than this time are not returned.</p>
+    /// <p>The end of the time range, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a time stamp later than this time are not returned.</p>
     #[serde(rename = "endTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<i64>,
@@ -440,7 +490,7 @@ pub struct FilterLogEventsRequest {
     #[serde(rename = "filterPattern")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_pattern: Option<String>,
-    /// <p>If the value is true, the operation makes a best effort to provide responses that contain events from multiple log streams within the log group interleaved in a single response. If the value is false all the matched log events in the first log stream are searched first, then those in the next log stream, and so on. The default is false.</p>
+    /// <p>If the value is true, the operation makes a best effort to provide responses that contain events from multiple log streams within the log group, interleaved in a single response. If the value is false, all the matched log events in the first log stream are searched first, then those in the next log stream, and so on. The default is false.</p>
     #[serde(rename = "interleaved")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub interleaved: Option<bool>,
@@ -459,7 +509,7 @@ pub struct FilterLogEventsRequest {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The start of the time range, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp prior to this time are not returned.</p>
+    /// <p>The start of the time range, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a time stamp before this time are not returned.</p>
     #[serde(rename = "startTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<i64>,
@@ -488,7 +538,7 @@ pub struct FilteredLogEvent {
     #[serde(rename = "eventId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_id: Option<String>,
-    /// <p>The time the event was ingested, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>
+    /// <p>The time the event was ingested, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC.</p>
     #[serde(rename = "ingestionTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ingestion_time: Option<i64>,
@@ -500,7 +550,7 @@ pub struct FilteredLogEvent {
     #[serde(rename = "message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    /// <p>The time the event occurred, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>
+    /// <p>The time the event occurred, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC.</p>
     #[serde(rename = "timestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timestamp: Option<i64>,
@@ -508,11 +558,11 @@ pub struct FilteredLogEvent {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetLogEventsRequest {
-    /// <p>The end of the time range, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp later than this time are not included.</p>
+    /// <p>The end of the time range, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a time stamp later than this time are not included.</p>
     #[serde(rename = "endTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<i64>,
-    /// <p>The maximum number of log events returned. If you don't specify a value, the maximum is as many log events as can fit in a response size of 1MB, up to 10,000 log events.</p>
+    /// <p>The maximum number of log events returned. If you don't specify a value, the maximum is as many log events as can fit in a response size of 1 MB, up to 10,000 log events.</p>
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
@@ -530,7 +580,7 @@ pub struct GetLogEventsRequest {
     #[serde(rename = "startFromHead")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_from_head: Option<bool>,
-    /// <p>The start of the time range, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. Events with a timestamp earlier than this time are not included.</p>
+    /// <p>The start of the time range, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a time stamp earlier than this time are not included.</p>
     #[serde(rename = "startTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<i64>,
@@ -558,7 +608,7 @@ pub struct InputLogEvent {
     /// <p>The raw event message.</p>
     #[serde(rename = "message")]
     pub message: String,
-    /// <p>The time the event occurred, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>
+    /// <p>The time the event occurred, expressed as the number of milliseconds fter Jan 1, 1970 00:00:00 UTC.</p>
     #[serde(rename = "timestamp")]
     pub timestamp: i64,
 }
@@ -572,7 +622,7 @@ pub struct ListTagsLogGroupRequest {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListTagsLogGroupResponse {
-    /// <p>The tags.</p>
+    /// <p>The tags for the log group.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -585,10 +635,14 @@ pub struct LogGroup {
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    /// <p>The creation time of the log group, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>
+    /// <p>The creation time of the log group, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC.</p>
     #[serde(rename = "creationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<i64>,
+    /// <p>The Amazon Resource Name (ARN) of the CMK to use when encrypting log data.</p>
+    #[serde(rename = "kmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
     /// <p>The name of the log group.</p>
     #[serde(rename = "logGroupName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -613,19 +667,19 @@ pub struct LogStream {
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    /// <p>The creation time of the stream, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>
+    /// <p>The creation time of the stream, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC.</p>
     #[serde(rename = "creationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<i64>,
-    /// <p>The time of the first event, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>
+    /// <p>The time of the first event, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC.</p>
     #[serde(rename = "firstEventTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub first_event_timestamp: Option<i64>,
-    /// <p> the time of the most recent log event in the log stream in CloudWatch Logs. This number is expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC. lastEventTime updates on an eventual consistency basis. It typically updates in less than an hour from ingestion, but may take longer in some rare situations.</p>
+    /// <p> the time of the most recent log event in the log stream in CloudWatch Logs. This number is expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. lastEventTime updates on an eventual consistency basis. It typically updates in less than an hour from ingestion, but may take longer in some rare situations.</p>
     #[serde(rename = "lastEventTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_event_timestamp: Option<i64>,
-    /// <p>The ingestion time, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>
+    /// <p>The ingestion time, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC.</p>
     #[serde(rename = "lastIngestionTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_ingestion_time: Option<i64>,
@@ -646,7 +700,7 @@ pub struct LogStream {
 /// <p>Metric filters express how CloudWatch Logs would extract metric observations from ingested log events and transform them into metric data in a CloudWatch metric.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct MetricFilter {
-    /// <p>The creation time of the metric filter, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>
+    /// <p>The creation time of the metric filter, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC.</p>
     #[serde(rename = "creationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<i64>,
@@ -684,7 +738,7 @@ pub struct MetricFilterMatchRecord {
     pub extracted_values: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p>Indicates how to transform ingested log events into metric data in a CloudWatch metric.</p>
+/// <p>Indicates how to transform ingested log events in to metric data in a CloudWatch metric.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct MetricTransformation {
     /// <p>(Optional) The value to emit when a filter pattern does not match a log event. This value can be null.</p>
@@ -705,7 +759,7 @@ pub struct MetricTransformation {
 /// <p>Represents a log event.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct OutputLogEvent {
-    /// <p>The time the event was ingested, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>
+    /// <p>The time the event was ingested, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC.</p>
     #[serde(rename = "ingestionTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ingestion_time: Option<i64>,
@@ -713,7 +767,7 @@ pub struct OutputLogEvent {
     #[serde(rename = "message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    /// <p>The time the event occurred, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>
+    /// <p>The time the event occurred, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC.</p>
     #[serde(rename = "timestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timestamp: Option<i64>,
@@ -734,10 +788,10 @@ pub struct PutDestinationRequest {
     /// <p>A name for the destination.</p>
     #[serde(rename = "destinationName")]
     pub destination_name: String,
-    /// <p>The ARN of an IAM role that grants CloudWatch Logs permissions to call Amazon Kinesis PutRecord on the destination stream.</p>
+    /// <p>The ARN of an IAM role that grants CloudWatch Logs permissions to call the Amazon Kinesis PutRecord operation on the destination stream.</p>
     #[serde(rename = "roleArn")]
     pub role_arn: String,
-    /// <p>The ARN of an Amazon Kinesis stream to deliver matching log events to.</p>
+    /// <p>The ARN of an Amazon Kinesis stream to which to deliver matching log events.</p>
     #[serde(rename = "targetArn")]
     pub target_arn: String,
 }
@@ -761,7 +815,7 @@ pub struct PutLogEventsRequest {
     /// <p>The name of the log stream.</p>
     #[serde(rename = "logStreamName")]
     pub log_stream_name: String,
-    /// <p>The sequence token.</p>
+    /// <p>The sequence token obtained from the response of the previous <code>PutLogEvents</code> call. An upload in a newly created log stream does not require a sequence token. You can also get the sequence token using <a>DescribeLogStreams</a>. If you call <code>PutLogEvents</code> twice within a narrow time period using the same value for <code>sequenceToken</code>, both calls may be successful, or one may be rejected.</p>
     #[serde(rename = "sequenceToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sequence_token: Option<String>,
@@ -790,9 +844,29 @@ pub struct PutMetricFilterRequest {
     /// <p>The name of the log group.</p>
     #[serde(rename = "logGroupName")]
     pub log_group_name: String,
-    /// <p>A collection of information needed to define how metric data gets emitted.</p>
+    /// <p>A collection of information that defines how metric data gets emitted.</p>
     #[serde(rename = "metricTransformations")]
     pub metric_transformations: Vec<MetricTransformation>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct PutResourcePolicyRequest {
+    /// <p>Details of the new policy, including the identity of the principal that is enabled to put logs to this account. This is formatted as a JSON string.</p> <p>The following example creates a resource policy enabling the Route 53 service to put DNS query logs in to the specified log group. Replace "logArn" with the ARN of your CloudWatch Logs resource, such as a log group or log stream.</p> <p> { "Version": "2012-10-17" "Statement": [ { "Sid": "Route53LogsToCloudWatchLogs", "Effect": "Allow", "Principal": { "Service": [ "route53.amazonaws.com" ] }, "Action":"logs:PutLogEvents", "Resource": logArn } ] } </p>
+    #[serde(rename = "policyDocument")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_document: Option<String>,
+    /// <p>Name of the new policy. This parameter is required.</p>
+    #[serde(rename = "policyName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct PutResourcePolicyResponse {
+    /// <p>The new policy.</p>
+    #[serde(rename = "resourcePolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_policy: Option<ResourcePolicy>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
@@ -806,14 +880,14 @@ pub struct PutRetentionPolicyRequest {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct PutSubscriptionFilterRequest {
-    /// <p><p>The ARN of the destination to deliver matching log events to. Currently, the supported destinations are:</p> <ul> <li> <p>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>A logical destination (specified using an ARN) belonging to a different account, for cross-account delivery.</p> </li> <li> <p>An Amazon Kinesis Firehose stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>An AWS Lambda function belonging to the same account as the subscription filter, for same-account delivery.</p> </li> </ul></p>
+    /// <p><p>The ARN of the destination to deliver matching log events to. Currently, the supported destinations are:</p> <ul> <li> <p>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>A logical destination (specified using an ARN) belonging to a different account, for cross-account delivery.</p> </li> <li> <p>An Amazon Kinesis Firehose delivery stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>An AWS Lambda function belonging to the same account as the subscription filter, for same-account delivery.</p> </li> </ul></p>
     #[serde(rename = "destinationArn")]
     pub destination_arn: String,
-    /// <p>The method used to distribute log data to the destination, when the destination is an Amazon Kinesis stream. By default, log data is grouped by log stream. For a more even distribution, you can group log data randomly.</p>
+    /// <p>The method used to distribute log data to the destination. By default log data is grouped by log stream, but the grouping can be set to random for a more even distribution. This property is only applicable when the destination is an Amazon Kinesis stream. </p>
     #[serde(rename = "distribution")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub distribution: Option<String>,
-    /// <p>A name for the subscription filter. If you are updating an existing filter, you must specify the correct name in <code>filterName</code>. Otherwise, the call will fail because you cannot associate a second filter with a log group. To find the name of the filter currently associated with a log group, use <a>DescribeSubscriptionFilters</a>.</p>
+    /// <p>A name for the subscription filter. If you are updating an existing filter, you must specify the correct name in <code>filterName</code>. Otherwise, the call fails because you cannot associate a second filter with a log group. To find the name of the filter currently associated with a log group, use <a>DescribeSubscriptionFilters</a>.</p>
     #[serde(rename = "filterName")]
     pub filter_name: String,
     /// <p>A filter pattern for subscribing to a filtered stream of log events.</p>
@@ -845,6 +919,23 @@ pub struct RejectedLogEventsInfo {
     pub too_old_log_event_end_index: Option<i64>,
 }
 
+/// <p>A policy enabling one or more entities to put logs to a log group in this account.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ResourcePolicy {
+    /// <p>Time stamp showing when this policy was last updated, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC.</p>
+    #[serde(rename = "lastUpdatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_time: Option<i64>,
+    /// <p>The details of the policy.</p>
+    #[serde(rename = "policyDocument")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_document: Option<String>,
+    /// <p>The name of the resource policy.</p>
+    #[serde(rename = "policyName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_name: Option<String>,
+}
+
 /// <p>Represents the search status of a log stream.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct SearchedLogStream {
@@ -861,7 +952,7 @@ pub struct SearchedLogStream {
 /// <p>Represents a subscription filter.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct SubscriptionFilter {
-    /// <p>The creation time of the subscription filter, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>
+    /// <p>The creation time of the subscription filter, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC.</p>
     #[serde(rename = "creationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<i64>,
@@ -869,7 +960,6 @@ pub struct SubscriptionFilter {
     #[serde(rename = "destinationArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_arn: Option<String>,
-    /// <p>The method used to distribute log data to the destination, when the destination is an Amazon Kinesis stream.</p>
     #[serde(rename = "distribution")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub distribution: Option<String>,
@@ -927,6 +1017,102 @@ pub struct UntagLogGroupRequest {
     pub tags: Vec<String>,
 }
 
+/// Errors returned by AssociateKmsKey
+#[derive(Debug, PartialEq)]
+pub enum AssociateKmsKeyError {
+    /// <p>A parameter is specified incorrectly.</p>
+    InvalidParameter(String),
+    /// <p>Multiple requests to update the same resource were in conflict.</p>
+    OperationAborted(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service cannot complete the request.</p>
+    ServiceUnavailable(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl AssociateKmsKeyError {
+    pub fn from_body(body: &str) -> AssociateKmsKeyError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidParameterException" => {
+                        AssociateKmsKeyError::InvalidParameter(String::from(error_message))
+                    }
+                    "OperationAbortedException" => {
+                        AssociateKmsKeyError::OperationAborted(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        AssociateKmsKeyError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        AssociateKmsKeyError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        AssociateKmsKeyError::Validation(error_message.to_string())
+                    }
+                    _ => AssociateKmsKeyError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => AssociateKmsKeyError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for AssociateKmsKeyError {
+    fn from(err: serde_json::error::Error) -> AssociateKmsKeyError {
+        AssociateKmsKeyError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for AssociateKmsKeyError {
+    fn from(err: CredentialsError) -> AssociateKmsKeyError {
+        AssociateKmsKeyError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AssociateKmsKeyError {
+    fn from(err: HttpDispatchError) -> AssociateKmsKeyError {
+        AssociateKmsKeyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AssociateKmsKeyError {
+    fn from(err: io::Error) -> AssociateKmsKeyError {
+        AssociateKmsKeyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for AssociateKmsKeyError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AssociateKmsKeyError {
+    fn description(&self) -> &str {
+        match *self {
+            AssociateKmsKeyError::InvalidParameter(ref cause) => cause,
+            AssociateKmsKeyError::OperationAborted(ref cause) => cause,
+            AssociateKmsKeyError::ResourceNotFound(ref cause) => cause,
+            AssociateKmsKeyError::ServiceUnavailable(ref cause) => cause,
+            AssociateKmsKeyError::Validation(ref cause) => cause,
+            AssociateKmsKeyError::Credentials(ref err) => err.description(),
+            AssociateKmsKeyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            AssociateKmsKeyError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CancelExportTask
 #[derive(Debug, PartialEq)]
 pub enum CancelExportTaskError {
@@ -1717,6 +1903,98 @@ impl Error for DeleteMetricFilterError {
         }
     }
 }
+/// Errors returned by DeleteResourcePolicy
+#[derive(Debug, PartialEq)]
+pub enum DeleteResourcePolicyError {
+    /// <p>A parameter is specified incorrectly.</p>
+    InvalidParameter(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service cannot complete the request.</p>
+    ServiceUnavailable(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteResourcePolicyError {
+    pub fn from_body(body: &str) -> DeleteResourcePolicyError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidParameterException" => {
+                        DeleteResourcePolicyError::InvalidParameter(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DeleteResourcePolicyError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        DeleteResourcePolicyError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteResourcePolicyError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteResourcePolicyError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteResourcePolicyError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteResourcePolicyError {
+    fn from(err: serde_json::error::Error) -> DeleteResourcePolicyError {
+        DeleteResourcePolicyError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteResourcePolicyError {
+    fn from(err: CredentialsError) -> DeleteResourcePolicyError {
+        DeleteResourcePolicyError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteResourcePolicyError {
+    fn from(err: HttpDispatchError) -> DeleteResourcePolicyError {
+        DeleteResourcePolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteResourcePolicyError {
+    fn from(err: io::Error) -> DeleteResourcePolicyError {
+        DeleteResourcePolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteResourcePolicyError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteResourcePolicyError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteResourcePolicyError::InvalidParameter(ref cause) => cause,
+            DeleteResourcePolicyError::ResourceNotFound(ref cause) => cause,
+            DeleteResourcePolicyError::ServiceUnavailable(ref cause) => cause,
+            DeleteResourcePolicyError::Validation(ref cause) => cause,
+            DeleteResourcePolicyError::Credentials(ref err) => err.description(),
+            DeleteResourcePolicyError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteResourcePolicyError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteRetentionPolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteRetentionPolicyError {
@@ -2357,6 +2635,94 @@ impl Error for DescribeMetricFiltersError {
         }
     }
 }
+/// Errors returned by DescribeResourcePolicies
+#[derive(Debug, PartialEq)]
+pub enum DescribeResourcePoliciesError {
+    /// <p>A parameter is specified incorrectly.</p>
+    InvalidParameter(String),
+    /// <p>The service cannot complete the request.</p>
+    ServiceUnavailable(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeResourcePoliciesError {
+    pub fn from_body(body: &str) -> DescribeResourcePoliciesError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidParameterException" => {
+                        DescribeResourcePoliciesError::InvalidParameter(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        DescribeResourcePoliciesError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        DescribeResourcePoliciesError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeResourcePoliciesError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeResourcePoliciesError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeResourcePoliciesError {
+    fn from(err: serde_json::error::Error) -> DescribeResourcePoliciesError {
+        DescribeResourcePoliciesError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeResourcePoliciesError {
+    fn from(err: CredentialsError) -> DescribeResourcePoliciesError {
+        DescribeResourcePoliciesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeResourcePoliciesError {
+    fn from(err: HttpDispatchError) -> DescribeResourcePoliciesError {
+        DescribeResourcePoliciesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeResourcePoliciesError {
+    fn from(err: io::Error) -> DescribeResourcePoliciesError {
+        DescribeResourcePoliciesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeResourcePoliciesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeResourcePoliciesError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeResourcePoliciesError::InvalidParameter(ref cause) => cause,
+            DescribeResourcePoliciesError::ServiceUnavailable(ref cause) => cause,
+            DescribeResourcePoliciesError::Validation(ref cause) => cause,
+            DescribeResourcePoliciesError::Credentials(ref err) => err.description(),
+            DescribeResourcePoliciesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeResourcePoliciesError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeSubscriptionFilters
 #[derive(Debug, PartialEq)]
 pub enum DescribeSubscriptionFiltersError {
@@ -2452,6 +2818,104 @@ impl Error for DescribeSubscriptionFiltersError {
                 dispatch_error.description()
             }
             DescribeSubscriptionFiltersError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DisassociateKmsKey
+#[derive(Debug, PartialEq)]
+pub enum DisassociateKmsKeyError {
+    /// <p>A parameter is specified incorrectly.</p>
+    InvalidParameter(String),
+    /// <p>Multiple requests to update the same resource were in conflict.</p>
+    OperationAborted(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service cannot complete the request.</p>
+    ServiceUnavailable(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DisassociateKmsKeyError {
+    pub fn from_body(body: &str) -> DisassociateKmsKeyError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidParameterException" => {
+                        DisassociateKmsKeyError::InvalidParameter(String::from(error_message))
+                    }
+                    "OperationAbortedException" => {
+                        DisassociateKmsKeyError::OperationAborted(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DisassociateKmsKeyError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        DisassociateKmsKeyError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DisassociateKmsKeyError::Validation(error_message.to_string())
+                    }
+                    _ => DisassociateKmsKeyError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DisassociateKmsKeyError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DisassociateKmsKeyError {
+    fn from(err: serde_json::error::Error) -> DisassociateKmsKeyError {
+        DisassociateKmsKeyError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DisassociateKmsKeyError {
+    fn from(err: CredentialsError) -> DisassociateKmsKeyError {
+        DisassociateKmsKeyError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DisassociateKmsKeyError {
+    fn from(err: HttpDispatchError) -> DisassociateKmsKeyError {
+        DisassociateKmsKeyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DisassociateKmsKeyError {
+    fn from(err: io::Error) -> DisassociateKmsKeyError {
+        DisassociateKmsKeyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DisassociateKmsKeyError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DisassociateKmsKeyError {
+    fn description(&self) -> &str {
+        match *self {
+            DisassociateKmsKeyError::InvalidParameter(ref cause) => cause,
+            DisassociateKmsKeyError::OperationAborted(ref cause) => cause,
+            DisassociateKmsKeyError::ResourceNotFound(ref cause) => cause,
+            DisassociateKmsKeyError::ServiceUnavailable(ref cause) => cause,
+            DisassociateKmsKeyError::Validation(ref cause) => cause,
+            DisassociateKmsKeyError::Credentials(ref err) => err.description(),
+            DisassociateKmsKeyError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DisassociateKmsKeyError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -3105,6 +3569,98 @@ impl Error for PutMetricFilterError {
         }
     }
 }
+/// Errors returned by PutResourcePolicy
+#[derive(Debug, PartialEq)]
+pub enum PutResourcePolicyError {
+    /// <p>A parameter is specified incorrectly.</p>
+    InvalidParameter(String),
+    /// <p>You have reached the maximum number of resources that can be created.</p>
+    LimitExceeded(String),
+    /// <p>The service cannot complete the request.</p>
+    ServiceUnavailable(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl PutResourcePolicyError {
+    pub fn from_body(body: &str) -> PutResourcePolicyError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidParameterException" => {
+                        PutResourcePolicyError::InvalidParameter(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        PutResourcePolicyError::LimitExceeded(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        PutResourcePolicyError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        PutResourcePolicyError::Validation(error_message.to_string())
+                    }
+                    _ => PutResourcePolicyError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => PutResourcePolicyError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for PutResourcePolicyError {
+    fn from(err: serde_json::error::Error) -> PutResourcePolicyError {
+        PutResourcePolicyError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for PutResourcePolicyError {
+    fn from(err: CredentialsError) -> PutResourcePolicyError {
+        PutResourcePolicyError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for PutResourcePolicyError {
+    fn from(err: HttpDispatchError) -> PutResourcePolicyError {
+        PutResourcePolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutResourcePolicyError {
+    fn from(err: io::Error) -> PutResourcePolicyError {
+        PutResourcePolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for PutResourcePolicyError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutResourcePolicyError {
+    fn description(&self) -> &str {
+        match *self {
+            PutResourcePolicyError::InvalidParameter(ref cause) => cause,
+            PutResourcePolicyError::LimitExceeded(ref cause) => cause,
+            PutResourcePolicyError::ServiceUnavailable(ref cause) => cause,
+            PutResourcePolicyError::Validation(ref cause) => cause,
+            PutResourcePolicyError::Credentials(ref err) => err.description(),
+            PutResourcePolicyError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            PutResourcePolicyError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by PutRetentionPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutRetentionPolicyError {
@@ -3555,19 +4111,23 @@ impl Error for UntagLogGroupError {
 }
 /// Trait representing the capabilities of the Amazon CloudWatch Logs API. Amazon CloudWatch Logs clients implement this trait.
 pub trait CloudWatchLogs {
+    /// <p>Associates the specified AWS Key Management Service (AWS KMS) customer master key (CMK) with the specified log group.</p> <p>Associating an AWS KMS CMK with a log group overrides any existing associations between the log group and a CMK. After a CMK is associated with a log group, all newly ingested data for the log group is encrypted using the CMK. This association is stored as long as the data encrypted with the CMK is still within Amazon CloudWatch Logs. This enables Amazon CloudWatch Logs to decrypt this data whenever it is requested.</p> <p>Note that it can take up to 5 minutes for this operation to take effect.</p> <p>If you attempt to associate a CMK with a log group but the CMK does not exist or the CMK is disabled, you will receive an <code>InvalidParameterException</code> error. </p>
+    fn associate_kms_key(&self, input: &AssociateKmsKeyRequest)
+        -> Result<(), AssociateKmsKeyError>;
+
     /// <p>Cancels the specified export task.</p> <p>The task must be in the <code>PENDING</code> or <code>RUNNING</code> state.</p>
     fn cancel_export_task(
         &self,
         input: &CancelExportTaskRequest,
     ) -> Result<(), CancelExportTaskError>;
 
-    /// <p>Creates an export task, which allows you to efficiently export data from a log group to an Amazon S3 bucket.</p> <p>This is an asynchronous call. If all the required information is provided, this operation initiates an export task and responds with the ID of the task. After the task has started, you can use <a>DescribeExportTasks</a> to get the status of the export task. Each account can only have one active (<code>RUNNING</code> or <code>PENDING</code>) export task at a time. To cancel an export task, use <a>CancelExportTask</a>.</p> <p>You can export logs from multiple log groups or multiple time ranges to the same S3 bucket. To separate out log data for each export task, you can specify a prefix that will be used as the Amazon S3 key prefix for all exported objects.</p>
+    /// <p>Creates an export task, which allows you to efficiently export data from a log group to an Amazon S3 bucket.</p> <p>This is an asynchronous call. If all the required information is provided, this operation initiates an export task and responds with the ID of the task. After the task has started, you can use <a>DescribeExportTasks</a> to get the status of the export task. Each account can only have one active (<code>RUNNING</code> or <code>PENDING</code>) export task at a time. To cancel an export task, use <a>CancelExportTask</a>.</p> <p>You can export logs from multiple log groups or multiple time ranges to the same S3 bucket. To separate out log data for each export task, you can specify a prefix to be used as the Amazon S3 key prefix for all exported objects.</p>
     fn create_export_task(
         &self,
         input: &CreateExportTaskRequest,
     ) -> Result<CreateExportTaskResponse, CreateExportTaskError>;
 
-    /// <p><p>Creates a log group with the specified name.</p> <p>You can create up to 5000 log groups per account.</p> <p>You must use the following guidelines when naming a log group:</p> <ul> <li> <p>Log group names must be unique within a region for an AWS account.</p> </li> <li> <p>Log group names can be between 1 and 512 characters long.</p> </li> <li> <p>Log group names consist of the following characters: a-z, A-Z, 0-9, &#39;_&#39; (underscore), &#39;-&#39; (hyphen), &#39;/&#39; (forward slash), and &#39;.&#39; (period).</p> </li> </ul></p>
+    /// <p>Creates a log group with the specified name.</p> <p>You can create up to 5000 log groups per account.</p> <p>You must use the following guidelines when naming a log group:</p> <ul> <li> <p>Log group names must be unique within a region for an AWS account.</p> </li> <li> <p>Log group names can be between 1 and 512 characters long.</p> </li> <li> <p>Log group names consist of the following characters: a-z, A-Z, 0-9, '_' (underscore), '-' (hyphen), '/' (forward slash), and '.' (period).</p> </li> </ul> <p>If you associate a AWS Key Management Service (AWS KMS) customer master key (CMK) with the log group, ingested data is encrypted using the CMK. This association is stored as long as the data encrypted with the CMK is still within Amazon CloudWatch Logs. This enables Amazon CloudWatch Logs to decrypt this data whenever it is requested.</p> <p>If you attempt to associate a CMK with the log group but the CMK does not exist or the CMK is disabled, you will receive an <code>InvalidParameterException</code> error. </p>
     fn create_log_group(&self, input: &CreateLogGroupRequest) -> Result<(), CreateLogGroupError>;
 
     /// <p><p>Creates a log stream for the specified log group.</p> <p>There is no limit on the number of log streams that you can create for a log group.</p> <p>You must use the following guidelines when naming a log stream:</p> <ul> <li> <p>Log stream names must be unique within the log group.</p> </li> <li> <p>Log stream names can be between 1 and 512 characters long.</p> </li> <li> <p>The &#39;:&#39; (colon) and &#39;*&#39; (asterisk) characters are not allowed.</p> </li> </ul></p>
@@ -3592,6 +4152,12 @@ pub trait CloudWatchLogs {
         &self,
         input: &DeleteMetricFilterRequest,
     ) -> Result<(), DeleteMetricFilterError>;
+
+    /// <p>Deletes a resource policy from this account. This revokes the access of the identities in that policy to put log events to this account.</p>
+    fn delete_resource_policy(
+        &self,
+        input: &DeleteResourcePolicyRequest,
+    ) -> Result<(), DeleteResourcePolicyError>;
 
     /// <p>Deletes the specified retention policy.</p> <p>Log events do not expire if they belong to log groups without a retention policy.</p>
     fn delete_retention_policy(
@@ -3629,11 +4195,17 @@ pub trait CloudWatchLogs {
         input: &DescribeLogStreamsRequest,
     ) -> Result<DescribeLogStreamsResponse, DescribeLogStreamsError>;
 
-    /// <p>Lists the specified metric filters. You can list all the metric filters or filter the results by log name, prefix, metric name, and metric namespace. The results are ASCII-sorted by filter name.</p>
+    /// <p>Lists the specified metric filters. You can list all the metric filters or filter the results by log name, prefix, metric name, or metric namespace. The results are ASCII-sorted by filter name.</p>
     fn describe_metric_filters(
         &self,
         input: &DescribeMetricFiltersRequest,
     ) -> Result<DescribeMetricFiltersResponse, DescribeMetricFiltersError>;
+
+    /// <p>Lists the resource policies in this account.</p>
+    fn describe_resource_policies(
+        &self,
+        input: &DescribeResourcePoliciesRequest,
+    ) -> Result<DescribeResourcePoliciesResponse, DescribeResourcePoliciesError>;
 
     /// <p>Lists the subscription filters for the specified log group. You can list all the subscription filters or filter the results by prefix. The results are ASCII-sorted by filter name.</p>
     fn describe_subscription_filters(
@@ -3641,25 +4213,31 @@ pub trait CloudWatchLogs {
         input: &DescribeSubscriptionFiltersRequest,
     ) -> Result<DescribeSubscriptionFiltersResponse, DescribeSubscriptionFiltersError>;
 
-    /// <p>Lists log events from the specified log group. You can list all the log events or filter the results using a filter pattern, a time range, and the name of the log stream.</p> <p>By default, this operation returns as many log events as can fit in 1MB (up to 10,000 log events), or all the events found within the time range that you specify. If the results include a token, then there are more log events available, and you can get additional results by specifying the token in a subsequent call.</p>
+    /// <p>Disassociates the associated AWS Key Management Service (AWS KMS) customer master key (CMK) from the specified log group.</p> <p>After the AWS KMS CMK is disassociated from the log group, AWS CloudWatch Logs stops encrypting newly ingested data for the log group. All previously ingested data remains encrypted, and AWS CloudWatch Logs requires permissions for the CMK whenever the encrypted data is requested.</p> <p>Note that it can take up to 5 minutes for this operation to take effect.</p>
+    fn disassociate_kms_key(
+        &self,
+        input: &DisassociateKmsKeyRequest,
+    ) -> Result<(), DisassociateKmsKeyError>;
+
+    /// <p>Lists log events from the specified log group. You can list all the log events or filter the results using a filter pattern, a time range, and the name of the log stream.</p> <p>By default, this operation returns as many log events as can fit in 1 MB (up to 10,000 log events), or all the events found within the time range that you specify. If the results include a token, then there are more log events available, and you can get additional results by specifying the token in a subsequent call.</p>
     fn filter_log_events(
         &self,
         input: &FilterLogEventsRequest,
     ) -> Result<FilterLogEventsResponse, FilterLogEventsError>;
 
-    /// <p>Lists log events from the specified log stream. You can list all the log events or filter using a time range.</p> <p>By default, this operation returns as many log events as can fit in a response size of 1MB (up to 10,000 log events). If the results include tokens, there are more log events available. You can get additional log events by specifying one of the tokens in a subsequent call.</p>
+    /// <p>Lists log events from the specified log stream. You can list all the log events or filter using a time range.</p> <p>By default, this operation returns as many log events as can fit in a response size of 1MB (up to 10,000 log events). You can get additional log events by specifying one of the tokens in a subsequent call.</p>
     fn get_log_events(
         &self,
         input: &GetLogEventsRequest,
     ) -> Result<GetLogEventsResponse, GetLogEventsError>;
 
-    /// <p>Lists the tags for the specified log group.</p> <p>To add tags, use <a>TagLogGroup</a>. To remove tags, use <a>UntagLogGroup</a>.</p>
+    /// <p>Lists the tags for the specified log group.</p>
     fn list_tags_log_group(
         &self,
         input: &ListTagsLogGroupRequest,
     ) -> Result<ListTagsLogGroupResponse, ListTagsLogGroupError>;
 
-    /// <p>Creates or updates a destination. A destination encapsulates a physical resource (such as a Kinesis stream) and enables you to subscribe to a real-time stream of log events of a different account, ingested using <a>PutLogEvents</a>. Currently, the only supported physical resource is a Amazon Kinesis stream belonging to the same account as the destination.</p> <p>A destination controls what is written to its Amazon Kinesis stream through an access policy. By default, <code>PutDestination</code> does not set any access policy with the destination, which means a cross-account user cannot call <a>PutSubscriptionFilter</a> against this destination. To enable this, the destination owner must call <a>PutDestinationPolicy</a> after <code>PutDestination</code>.</p>
+    /// <p>Creates or updates a destination. A destination encapsulates a physical resource (such as an Amazon Kinesis stream) and enables you to subscribe to a real-time stream of log events for a different account, ingested using <a>PutLogEvents</a>. Currently, the only supported physical resource is a Kinesis stream belonging to the same account as the destination.</p> <p>Through an access policy, a destination controls what is written to its Kinesis stream. By default, <code>PutDestination</code> does not set any access policy with the destination, which means a cross-account user cannot call <a>PutSubscriptionFilter</a> against this destination. To enable this, the destination owner must call <a>PutDestinationPolicy</a> after <code>PutDestination</code>.</p>
     fn put_destination(
         &self,
         input: &PutDestinationRequest,
@@ -3671,7 +4249,7 @@ pub trait CloudWatchLogs {
         input: &PutDestinationPolicyRequest,
     ) -> Result<(), PutDestinationPolicyError>;
 
-    /// <p><p>Uploads a batch of log events to the specified log stream.</p> <p>You must include the sequence token obtained from the response of the previous call. An upload in a newly created log stream does not require a sequence token. You can also get the sequence token using <a>DescribeLogStreams</a>.</p> <p>The batch of events must satisfy the following constraints:</p> <ul> <li> <p>The maximum batch size is 1,048,576 bytes, and this size is calculated as the sum of all event messages in UTF-8, plus 26 bytes for each log event.</p> </li> <li> <p>None of the log events in the batch can be more than 2 hours in the future.</p> </li> <li> <p>None of the log events in the batch can be older than 14 days or the retention period of the log group.</p> </li> <li> <p>The log events in the batch must be in chronological ordered by their timestamp (the time the event occurred, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC).</p> </li> <li> <p>The maximum number of log events in a batch is 10,000.</p> </li> <li> <p>A batch of log events in a single request cannot span more than 24 hours. Otherwise, the operation fails.</p> </li> </ul></p>
+    /// <p><p>Uploads a batch of log events to the specified log stream.</p> <p>You must include the sequence token obtained from the response of the previous call. An upload in a newly created log stream does not require a sequence token. You can also get the sequence token using <a>DescribeLogStreams</a>. If you call <code>PutLogEvents</code> twice within a narrow time period using the same value for <code>sequenceToken</code>, both calls may be successful, or one may be rejected.</p> <p>The batch of events must satisfy the following constraints:</p> <ul> <li> <p>The maximum batch size is 1,048,576 bytes, and this size is calculated as the sum of all event messages in UTF-8, plus 26 bytes for each log event.</p> </li> <li> <p>None of the log events in the batch can be more than 2 hours in the future.</p> </li> <li> <p>None of the log events in the batch can be older than 14 days or the retention period of the log group.</p> </li> <li> <p>The log events in the batch must be in chronological ordered by their time stamp (the time the event occurred, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC).</p> </li> <li> <p>The maximum number of log events in a batch is 10,000.</p> </li> <li> <p>A batch of log events in a single request cannot span more than 24 hours. Otherwise, the operation fails.</p> </li> </ul></p>
     fn put_log_events(
         &self,
         input: &PutLogEventsRequest,
@@ -3681,13 +4259,19 @@ pub trait CloudWatchLogs {
     fn put_metric_filter(&self, input: &PutMetricFilterRequest)
         -> Result<(), PutMetricFilterError>;
 
-    /// <p>Sets the retention of the specified log group. A retention policy allows you to configure the number of days you want to retain log events in the specified log group.</p>
+    /// <p>Creates or updates a resource policy allowing other AWS services to put log events to this account, such as Amazon Route 53. An account can have up to 50 resource policies per region.</p>
+    fn put_resource_policy(
+        &self,
+        input: &PutResourcePolicyRequest,
+    ) -> Result<PutResourcePolicyResponse, PutResourcePolicyError>;
+
+    /// <p>Sets the retention of the specified log group. A retention policy allows you to configure the number of days for which to retain log events in the specified log group.</p>
     fn put_retention_policy(
         &self,
         input: &PutRetentionPolicyRequest,
     ) -> Result<(), PutRetentionPolicyError>;
 
-    /// <p>Creates or updates a subscription filter and associates it with the specified log group. Subscription filters allow you to subscribe to a real-time stream of log events ingested through <a>PutLogEvents</a> and have them delivered to a specific destination. Currently, the supported destinations are:</p> <ul> <li> <p>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>A logical destination that belongs to a different account, for cross-account delivery.</p> </li> <li> <p>An Amazon Kinesis Firehose stream that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>An AWS Lambda function that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> </ul> <p>There can only be one subscription filter associated with a log group. If you are updating an existing filter, you must specify the correct name in <code>filterName</code>. Otherwise, the call will fail because you cannot associate a second filter with a log group.</p>
+    /// <p>Creates or updates a subscription filter and associates it with the specified log group. Subscription filters allow you to subscribe to a real-time stream of log events ingested through <a>PutLogEvents</a> and have them delivered to a specific destination. Currently, the supported destinations are:</p> <ul> <li> <p>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>A logical destination that belongs to a different account, for cross-account delivery.</p> </li> <li> <p>An Amazon Kinesis Firehose delivery stream that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>An AWS Lambda function that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> </ul> <p>There can only be one subscription filter associated with a log group. If you are updating an existing filter, you must specify the correct name in <code>filterName</code>. Otherwise, the call fails because you cannot associate a second filter with a log group.</p>
     fn put_subscription_filter(
         &self,
         input: &PutSubscriptionFilterRequest,
@@ -3735,6 +4319,34 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
+    /// <p>Associates the specified AWS Key Management Service (AWS KMS) customer master key (CMK) with the specified log group.</p> <p>Associating an AWS KMS CMK with a log group overrides any existing associations between the log group and a CMK. After a CMK is associated with a log group, all newly ingested data for the log group is encrypted using the CMK. This association is stored as long as the data encrypted with the CMK is still within Amazon CloudWatch Logs. This enables Amazon CloudWatch Logs to decrypt this data whenever it is requested.</p> <p>Note that it can take up to 5 minutes for this operation to take effect.</p> <p>If you attempt to associate a CMK with a log group but the CMK does not exist or the CMK is disabled, you will receive an <code>InvalidParameterException</code> error. </p>
+    fn associate_kms_key(
+        &self,
+        input: &AssociateKmsKeyRequest,
+    ) -> Result<(), AssociateKmsKeyError> {
+        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Logs_20140328.AssociateKmsKey");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => Ok(()),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AssociateKmsKeyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Cancels the specified export task.</p> <p>The task must be in the <code>PENDING</code> or <code>RUNNING</code> state.</p>
     fn cancel_export_task(
         &self,
@@ -3763,7 +4375,7 @@ where
         }
     }
 
-    /// <p>Creates an export task, which allows you to efficiently export data from a log group to an Amazon S3 bucket.</p> <p>This is an asynchronous call. If all the required information is provided, this operation initiates an export task and responds with the ID of the task. After the task has started, you can use <a>DescribeExportTasks</a> to get the status of the export task. Each account can only have one active (<code>RUNNING</code> or <code>PENDING</code>) export task at a time. To cancel an export task, use <a>CancelExportTask</a>.</p> <p>You can export logs from multiple log groups or multiple time ranges to the same S3 bucket. To separate out log data for each export task, you can specify a prefix that will be used as the Amazon S3 key prefix for all exported objects.</p>
+    /// <p>Creates an export task, which allows you to efficiently export data from a log group to an Amazon S3 bucket.</p> <p>This is an asynchronous call. If all the required information is provided, this operation initiates an export task and responds with the ID of the task. After the task has started, you can use <a>DescribeExportTasks</a> to get the status of the export task. Each account can only have one active (<code>RUNNING</code> or <code>PENDING</code>) export task at a time. To cancel an export task, use <a>CancelExportTask</a>.</p> <p>You can export logs from multiple log groups or multiple time ranges to the same S3 bucket. To separate out log data for each export task, you can specify a prefix to be used as the Amazon S3 key prefix for all exported objects.</p>
     fn create_export_task(
         &self,
         input: &CreateExportTaskRequest,
@@ -3797,7 +4409,7 @@ where
         }
     }
 
-    /// <p><p>Creates a log group with the specified name.</p> <p>You can create up to 5000 log groups per account.</p> <p>You must use the following guidelines when naming a log group:</p> <ul> <li> <p>Log group names must be unique within a region for an AWS account.</p> </li> <li> <p>Log group names can be between 1 and 512 characters long.</p> </li> <li> <p>Log group names consist of the following characters: a-z, A-Z, 0-9, &#39;_&#39; (underscore), &#39;-&#39; (hyphen), &#39;/&#39; (forward slash), and &#39;.&#39; (period).</p> </li> </ul></p>
+    /// <p>Creates a log group with the specified name.</p> <p>You can create up to 5000 log groups per account.</p> <p>You must use the following guidelines when naming a log group:</p> <ul> <li> <p>Log group names must be unique within a region for an AWS account.</p> </li> <li> <p>Log group names can be between 1 and 512 characters long.</p> </li> <li> <p>Log group names consist of the following characters: a-z, A-Z, 0-9, '_' (underscore), '-' (hyphen), '/' (forward slash), and '.' (period).</p> </li> </ul> <p>If you associate a AWS Key Management Service (AWS KMS) customer master key (CMK) with the log group, ingested data is encrypted using the CMK. This association is stored as long as the data encrypted with the CMK is still within Amazon CloudWatch Logs. This enables Amazon CloudWatch Logs to decrypt this data whenever it is requested.</p> <p>If you attempt to associate a CMK with the log group but the CMK does not exist or the CMK is disabled, you will receive an <code>InvalidParameterException</code> error. </p>
     fn create_log_group(&self, input: &CreateLogGroupRequest) -> Result<(), CreateLogGroupError> {
         let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
 
@@ -3953,6 +4565,34 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(DeleteMetricFilterError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Deletes a resource policy from this account. This revokes the access of the identities in that policy to put log events to this account.</p>
+    fn delete_resource_policy(
+        &self,
+        input: &DeleteResourcePolicyRequest,
+    ) -> Result<(), DeleteResourcePolicyError> {
+        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Logs_20140328.DeleteResourcePolicy");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => Ok(()),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteResourcePolicyError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -4151,7 +4791,7 @@ where
         }
     }
 
-    /// <p>Lists the specified metric filters. You can list all the metric filters or filter the results by log name, prefix, metric name, and metric namespace. The results are ASCII-sorted by filter name.</p>
+    /// <p>Lists the specified metric filters. You can list all the metric filters or filter the results by log name, prefix, metric name, or metric namespace. The results are ASCII-sorted by filter name.</p>
     fn describe_metric_filters(
         &self,
         input: &DescribeMetricFiltersRequest,
@@ -4179,6 +4819,40 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(DescribeMetricFiltersError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Lists the resource policies in this account.</p>
+    fn describe_resource_policies(
+        &self,
+        input: &DescribeResourcePoliciesRequest,
+    ) -> Result<DescribeResourcePoliciesResponse, DescribeResourcePoliciesError> {
+        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Logs_20140328.DescribeResourcePolicies");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeResourcePoliciesResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeResourcePoliciesError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -4219,7 +4893,35 @@ where
         }
     }
 
-    /// <p>Lists log events from the specified log group. You can list all the log events or filter the results using a filter pattern, a time range, and the name of the log stream.</p> <p>By default, this operation returns as many log events as can fit in 1MB (up to 10,000 log events), or all the events found within the time range that you specify. If the results include a token, then there are more log events available, and you can get additional results by specifying the token in a subsequent call.</p>
+    /// <p>Disassociates the associated AWS Key Management Service (AWS KMS) customer master key (CMK) from the specified log group.</p> <p>After the AWS KMS CMK is disassociated from the log group, AWS CloudWatch Logs stops encrypting newly ingested data for the log group. All previously ingested data remains encrypted, and AWS CloudWatch Logs requires permissions for the CMK whenever the encrypted data is requested.</p> <p>Note that it can take up to 5 minutes for this operation to take effect.</p>
+    fn disassociate_kms_key(
+        &self,
+        input: &DisassociateKmsKeyRequest,
+    ) -> Result<(), DisassociateKmsKeyError> {
+        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Logs_20140328.DisassociateKmsKey");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => Ok(()),
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DisassociateKmsKeyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Lists log events from the specified log group. You can list all the log events or filter the results using a filter pattern, a time range, and the name of the log stream.</p> <p>By default, this operation returns as many log events as can fit in 1 MB (up to 10,000 log events), or all the events found within the time range that you specify. If the results include a token, then there are more log events available, and you can get additional results by specifying the token in a subsequent call.</p>
     fn filter_log_events(
         &self,
         input: &FilterLogEventsRequest,
@@ -4253,7 +4955,7 @@ where
         }
     }
 
-    /// <p>Lists log events from the specified log stream. You can list all the log events or filter using a time range.</p> <p>By default, this operation returns as many log events as can fit in a response size of 1MB (up to 10,000 log events). If the results include tokens, there are more log events available. You can get additional log events by specifying one of the tokens in a subsequent call.</p>
+    /// <p>Lists log events from the specified log stream. You can list all the log events or filter using a time range.</p> <p>By default, this operation returns as many log events as can fit in a response size of 1MB (up to 10,000 log events). You can get additional log events by specifying one of the tokens in a subsequent call.</p>
     fn get_log_events(
         &self,
         input: &GetLogEventsRequest,
@@ -4287,7 +4989,7 @@ where
         }
     }
 
-    /// <p>Lists the tags for the specified log group.</p> <p>To add tags, use <a>TagLogGroup</a>. To remove tags, use <a>UntagLogGroup</a>.</p>
+    /// <p>Lists the tags for the specified log group.</p>
     fn list_tags_log_group(
         &self,
         input: &ListTagsLogGroupRequest,
@@ -4321,7 +5023,7 @@ where
         }
     }
 
-    /// <p>Creates or updates a destination. A destination encapsulates a physical resource (such as a Kinesis stream) and enables you to subscribe to a real-time stream of log events of a different account, ingested using <a>PutLogEvents</a>. Currently, the only supported physical resource is a Amazon Kinesis stream belonging to the same account as the destination.</p> <p>A destination controls what is written to its Amazon Kinesis stream through an access policy. By default, <code>PutDestination</code> does not set any access policy with the destination, which means a cross-account user cannot call <a>PutSubscriptionFilter</a> against this destination. To enable this, the destination owner must call <a>PutDestinationPolicy</a> after <code>PutDestination</code>.</p>
+    /// <p>Creates or updates a destination. A destination encapsulates a physical resource (such as an Amazon Kinesis stream) and enables you to subscribe to a real-time stream of log events for a different account, ingested using <a>PutLogEvents</a>. Currently, the only supported physical resource is a Kinesis stream belonging to the same account as the destination.</p> <p>Through an access policy, a destination controls what is written to its Kinesis stream. By default, <code>PutDestination</code> does not set any access policy with the destination, which means a cross-account user cannot call <a>PutSubscriptionFilter</a> against this destination. To enable this, the destination owner must call <a>PutDestinationPolicy</a> after <code>PutDestination</code>.</p>
     fn put_destination(
         &self,
         input: &PutDestinationRequest,
@@ -4383,7 +5085,7 @@ where
         }
     }
 
-    /// <p><p>Uploads a batch of log events to the specified log stream.</p> <p>You must include the sequence token obtained from the response of the previous call. An upload in a newly created log stream does not require a sequence token. You can also get the sequence token using <a>DescribeLogStreams</a>.</p> <p>The batch of events must satisfy the following constraints:</p> <ul> <li> <p>The maximum batch size is 1,048,576 bytes, and this size is calculated as the sum of all event messages in UTF-8, plus 26 bytes for each log event.</p> </li> <li> <p>None of the log events in the batch can be more than 2 hours in the future.</p> </li> <li> <p>None of the log events in the batch can be older than 14 days or the retention period of the log group.</p> </li> <li> <p>The log events in the batch must be in chronological ordered by their timestamp (the time the event occurred, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC).</p> </li> <li> <p>The maximum number of log events in a batch is 10,000.</p> </li> <li> <p>A batch of log events in a single request cannot span more than 24 hours. Otherwise, the operation fails.</p> </li> </ul></p>
+    /// <p><p>Uploads a batch of log events to the specified log stream.</p> <p>You must include the sequence token obtained from the response of the previous call. An upload in a newly created log stream does not require a sequence token. You can also get the sequence token using <a>DescribeLogStreams</a>. If you call <code>PutLogEvents</code> twice within a narrow time period using the same value for <code>sequenceToken</code>, both calls may be successful, or one may be rejected.</p> <p>The batch of events must satisfy the following constraints:</p> <ul> <li> <p>The maximum batch size is 1,048,576 bytes, and this size is calculated as the sum of all event messages in UTF-8, plus 26 bytes for each log event.</p> </li> <li> <p>None of the log events in the batch can be more than 2 hours in the future.</p> </li> <li> <p>None of the log events in the batch can be older than 14 days or the retention period of the log group.</p> </li> <li> <p>The log events in the batch must be in chronological ordered by their time stamp (the time the event occurred, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC).</p> </li> <li> <p>The maximum number of log events in a batch is 10,000.</p> </li> <li> <p>A batch of log events in a single request cannot span more than 24 hours. Otherwise, the operation fails.</p> </li> </ul></p>
     fn put_log_events(
         &self,
         input: &PutLogEventsRequest,
@@ -4445,7 +5147,41 @@ where
         }
     }
 
-    /// <p>Sets the retention of the specified log group. A retention policy allows you to configure the number of days you want to retain log events in the specified log group.</p>
+    /// <p>Creates or updates a resource policy allowing other AWS services to put log events to this account, such as Amazon Route 53. An account can have up to 50 resource policies per region.</p>
+    fn put_resource_policy(
+        &self,
+        input: &PutResourcePolicyRequest,
+    ) -> Result<PutResourcePolicyResponse, PutResourcePolicyError> {
+        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Logs_20140328.PutResourcePolicy");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PutResourcePolicyResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PutResourcePolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Sets the retention of the specified log group. A retention policy allows you to configure the number of days for which to retain log events in the specified log group.</p>
     fn put_retention_policy(
         &self,
         input: &PutRetentionPolicyRequest,
@@ -4473,7 +5209,7 @@ where
         }
     }
 
-    /// <p>Creates or updates a subscription filter and associates it with the specified log group. Subscription filters allow you to subscribe to a real-time stream of log events ingested through <a>PutLogEvents</a> and have them delivered to a specific destination. Currently, the supported destinations are:</p> <ul> <li> <p>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>A logical destination that belongs to a different account, for cross-account delivery.</p> </li> <li> <p>An Amazon Kinesis Firehose stream that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>An AWS Lambda function that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> </ul> <p>There can only be one subscription filter associated with a log group. If you are updating an existing filter, you must specify the correct name in <code>filterName</code>. Otherwise, the call will fail because you cannot associate a second filter with a log group.</p>
+    /// <p>Creates or updates a subscription filter and associates it with the specified log group. Subscription filters allow you to subscribe to a real-time stream of log events ingested through <a>PutLogEvents</a> and have them delivered to a specific destination. Currently, the supported destinations are:</p> <ul> <li> <p>An Amazon Kinesis stream belonging to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>A logical destination that belongs to a different account, for cross-account delivery.</p> </li> <li> <p>An Amazon Kinesis Firehose delivery stream that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> <li> <p>An AWS Lambda function that belongs to the same account as the subscription filter, for same-account delivery.</p> </li> </ul> <p>There can only be one subscription filter associated with a log group. If you are updating an existing filter, you must specify the correct name in <code>filterName</code>. Otherwise, the call fails because you cannot associate a second filter with a log group.</p>
     fn put_subscription_filter(
         &self,
         input: &PutSubscriptionFilterRequest,

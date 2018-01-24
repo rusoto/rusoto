@@ -92,7 +92,7 @@ pub struct AttributeValue {
     #[serde(rename = "SDM")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sdm: Option<::std::collections::HashMap<String, f64>>,
-    /// <p>For a list of up to 10 strings. Maximum length for each string is 100 characters. Duplicate values are not recognized; all occurances of the the repeated value after the first of a repeated value are ignored.</p>
+    /// <p>For a list of up to 10 strings. Maximum length for each string is 100 characters. Duplicate values are not recognized; all occurrences of the repeated value after the first of a repeated value are ignored.</p>
     #[serde(rename = "SL")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sl: Option<Vec<String>>,
@@ -138,7 +138,7 @@ pub struct Build {
     #[serde(rename = "SizeOnDisk")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub size_on_disk: Option<i64>,
-    /// <p><p>Current status of the build.</p> <p>Possible build statuses include the following:</p> <ul> <li> <p> <b>INITIALIZED</b> – A new build has been defined, but no files have been uploaded. You cannot create fleets for builds that are in this status. When a build is successfully created, the build status is set to this value. </p> </li> <li> <p> <b>READY</b> – The game build has been successfully uploaded. You can now create new fleets for this build.</p> </li> <li> <p> <b>FAILED</b> – The game build upload failed. You cannot create new fleets for this build. </p> </li> </ul></p>
+    /// <p><p>Current status of the build.</p> <p>Possible build statuses include the following:</p> <ul> <li> <p> <b>INITIALIZED</b> -- A new build has been defined, but no files have been uploaded. You cannot create fleets for builds that are in this status. When a build is successfully created, the build status is set to this value. </p> </li> <li> <p> <b>READY</b> -- The game build has been successfully uploaded. You can now create new fleets for this build.</p> </li> <li> <p> <b>FAILED</b> -- The game build upload failed. You cannot create new fleets for this build. </p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -238,10 +238,18 @@ pub struct CreateFleetInput {
     /// <p>Descriptive label that is associated with a fleet. Fleet names do not need to be unique.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p><p>Game session protection policy to apply to all instances in this fleet. If this parameter is not set, instances in this fleet default to no protection. You can change a fleet&#39;s protection policy using UpdateFleetAttributes, but this change will only affect sessions created after the policy change. You can also set protection for individual instances using <a>UpdateGameSession</a>.</p> <ul> <li> <p> <b>NoProtection</b> – The game session can be terminated during a scale-down event.</p> </li> <li> <p> <b>FullProtection</b> – If the game session is in an <code>ACTIVE</code> status, it cannot be terminated during a scale-down event.</p> </li> </ul></p>
+    /// <p><p>Game session protection policy to apply to all instances in this fleet. If this parameter is not set, instances in this fleet default to no protection. You can change a fleet&#39;s protection policy using UpdateFleetAttributes, but this change will only affect sessions created after the policy change. You can also set protection for individual instances using <a>UpdateGameSession</a>.</p> <ul> <li> <p> <b>NoProtection</b> -- The game session can be terminated during a scale-down event.</p> </li> <li> <p> <b>FullProtection</b> -- If the game session is in an <code>ACTIVE</code> status, it cannot be terminated during a scale-down event.</p> </li> </ul></p>
     #[serde(rename = "NewGameSessionProtectionPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub new_game_session_protection_policy: Option<String>,
+    /// <p>Unique identifier for the AWS account with the VPC that you want to peer your Amazon GameLift fleet with. You can find your Account ID in the AWS Management Console under account settings.</p>
+    #[serde(rename = "PeerVpcAwsAccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub peer_vpc_aws_account_id: Option<String>,
+    /// <p>Unique identifier for a VPC with resources to be accessed by your Amazon GameLift fleet. The VPC must be in the same region where your fleet is deployed. To get VPC information, including IDs, use the Virtual Private Cloud service tools, including the VPC Dashboard in the AWS Management Console.</p>
+    #[serde(rename = "PeerVpcId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub peer_vpc_id: Option<String>,
     /// <p>Policy that limits the number of game sessions an individual player can create over a span of time for this fleet.</p>
     #[serde(rename = "ResourceCreationLimitPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -292,11 +300,11 @@ pub struct CreateGameSessionInput {
     #[serde(rename = "GameSessionData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_data: Option<String>,
-    /// <p> <i>This parameter is no longer preferred. Please use <code>IdempotencyToken</code> instead.</i> Custom string that uniquely identifies a request for a new game session. Maximum token length is 48 characters. If provided, this string is included in the new game session's ID. (A game session ID has the following format: <code>arn:aws:gamelift:&lt;region&gt;::gamesession/&lt;fleet ID&gt;/&lt;custom ID string or idempotency token&gt;</code>.) </p>
+    /// <p> <i>This parameter is no longer preferred. Please use <code>IdempotencyToken</code> instead.</i> Custom string that uniquely identifies a request for a new game session. Maximum token length is 48 characters. If provided, this string is included in the new game session's ID. (A game session ARN has the following format: <code>arn:aws:gamelift:&lt;region&gt;::gamesession/&lt;fleet ID&gt;/&lt;custom ID string or idempotency token&gt;</code>.) </p>
     #[serde(rename = "GameSessionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_id: Option<String>,
-    /// <p>Custom string that uniquely identifies a request for a new game session. Maximum token length is 48 characters. If provided, this string is included in the new game session's ID. (A game session ID has the following format: <code>arn:aws:gamelift:&lt;region&gt;::gamesession/&lt;fleet ID&gt;/&lt;custom ID string or idempotency token&gt;</code>.) Idempotency tokens remain in use for 30 days after a game session has ended; game session objects are retained for this time period and then deleted.</p>
+    /// <p>Custom string that uniquely identifies a request for a new game session. Maximum token length is 48 characters. If provided, this string is included in the new game session's ID. (A game session ARN has the following format: <code>arn:aws:gamelift:&lt;region&gt;::gamesession/&lt;fleet ID&gt;/&lt;custom ID string or idempotency token&gt;</code>.) Idempotency tokens remain in use for 30 days after a game session has ended; game session objects are retained for this time period and then deleted.</p>
     #[serde(rename = "IdempotencyToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub idempotency_token: Option<String>,
@@ -473,6 +481,43 @@ pub struct CreatePlayerSessionsOutput {
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateVpcPeeringAuthorizationInput {
+    /// <p>Unique identifier for the AWS account that you use to manage your Amazon GameLift fleet. You can find your Account ID in the AWS Management Console under account settings.</p>
+    #[serde(rename = "GameLiftAwsAccountId")]
+    pub game_lift_aws_account_id: String,
+    /// <p>Unique identifier for a VPC with resources to be accessed by your Amazon GameLift fleet. The VPC must be in the same region where your fleet is deployed. To get VPC information, including IDs, use the Virtual Private Cloud service tools, including the VPC Dashboard in the AWS Management Console.</p>
+    #[serde(rename = "PeerVpcId")]
+    pub peer_vpc_id: String,
+}
+
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CreateVpcPeeringAuthorizationOutput {
+    /// <p>Details on the requested VPC peering authorization, including expiration.</p>
+    #[serde(rename = "VpcPeeringAuthorization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_peering_authorization: Option<VpcPeeringAuthorization>,
+}
+
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateVpcPeeringConnectionInput {
+    /// <p>Unique identifier for a fleet. This tells Amazon GameLift which GameLift VPC to peer with. </p>
+    #[serde(rename = "FleetId")]
+    pub fleet_id: String,
+    /// <p>Unique identifier for the AWS account with the VPC that you want to peer your Amazon GameLift fleet with. You can find your Account ID in the AWS Management Console under account settings.</p>
+    #[serde(rename = "PeerVpcAwsAccountId")]
+    pub peer_vpc_aws_account_id: String,
+    /// <p>Unique identifier for a VPC with resources to be accessed by your Amazon GameLift fleet. The VPC must be in the same region where your fleet is deployed. To get VPC information, including IDs, use the Virtual Private Cloud service tools, including the VPC Dashboard in the AWS Management Console.</p>
+    #[serde(rename = "PeerVpcId")]
+    pub peer_vpc_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CreateVpcPeeringConnectionOutput;
+
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteAliasInput {
     /// <p>Unique identifier for a fleet alias. Specify the alias you want to delete.</p>
     #[serde(rename = "AliasId")]
@@ -527,6 +572,34 @@ pub struct DeleteScalingPolicyInput {
     #[serde(rename = "Name")]
     pub name: String,
 }
+
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteVpcPeeringAuthorizationInput {
+    /// <p>Unique identifier for the AWS account that you use to manage your Amazon GameLift fleet. You can find your Account ID in the AWS Management Console under account settings.</p>
+    #[serde(rename = "GameLiftAwsAccountId")]
+    pub game_lift_aws_account_id: String,
+    /// <p>Unique identifier for a VPC with resources to be accessed by your Amazon GameLift fleet. The VPC must be in the same region where your fleet is deployed. To get VPC information, including IDs, use the Virtual Private Cloud service tools, including the VPC Dashboard in the AWS Management Console.</p>
+    #[serde(rename = "PeerVpcId")]
+    pub peer_vpc_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteVpcPeeringAuthorizationOutput;
+
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteVpcPeeringConnectionInput {
+    /// <p>Unique identifier for a fleet. This value must match the fleet ID referenced in the VPC peering connection record.</p>
+    #[serde(rename = "FleetId")]
+    pub fleet_id: String,
+    /// <p>Unique identifier for a VPC peering connection. This value is included in the <a>VpcPeeringConnection</a> object, which can be retrieved by calling <a>DescribeVpcPeeringConnections</a>.</p>
+    #[serde(rename = "VpcPeeringConnectionId")]
+    pub vpc_peering_connection_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteVpcPeeringConnectionOutput;
 
 /// <p>Represents the input for a request action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
@@ -991,7 +1064,7 @@ pub struct DescribePlayerSessionsInput {
     #[serde(rename = "PlayerSessionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub player_session_id: Option<String>,
-    /// <p><p>Player session status to filter results on.</p> <p>Possible player session statuses include the following:</p> <ul> <li> <p> <b>RESERVED</b> – The player session request has been received, but the player has not yet connected to the server process and/or been validated. </p> </li> <li> <p> <b>ACTIVE</b> – The player has been validated by the server process and is currently connected.</p> </li> <li> <p> <b>COMPLETED</b> – The player connection has been dropped.</p> </li> <li> <p> <b>TIMEDOUT</b> – A player session request was received, but the player did not connect and/or was not validated within the time-out limit (60 seconds).</p> </li> </ul></p>
+    /// <p><p>Player session status to filter results on.</p> <p>Possible player session statuses include the following:</p> <ul> <li> <p> <b>RESERVED</b> -- The player session request has been received, but the player has not yet connected to the server process and/or been validated. </p> </li> <li> <p> <b>ACTIVE</b> -- The player has been validated by the server process and is currently connected.</p> </li> <li> <p> <b>COMPLETED</b> -- The player connection has been dropped.</p> </li> <li> <p> <b>TIMEDOUT</b> -- A player session request was received, but the player did not connect and/or was not validated within the timeout limit (60 seconds).</p> </li> </ul></p>
     #[serde(rename = "PlayerSessionStatusFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub player_session_status_filter: Option<String>,
@@ -1041,7 +1114,7 @@ pub struct DescribeScalingPoliciesInput {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p><p>Scaling policy status to filter results on. A scaling policy is only in force when in an <code>ACTIVE</code> status.</p> <ul> <li> <p> <b>ACTIVE</b> – The scaling policy is currently in force.</p> </li> <li> <p> <b>UPDATEREQUESTED</b> – A request to update the scaling policy has been received.</p> </li> <li> <p> <b>UPDATING</b> – A change is being made to the scaling policy.</p> </li> <li> <p> <b>DELETEREQUESTED</b> – A request to delete the scaling policy has been received.</p> </li> <li> <p> <b>DELETING</b> – The scaling policy is being deleted.</p> </li> <li> <p> <b>DELETED</b> – The scaling policy has been deleted.</p> </li> <li> <p> <b>ERROR</b> – An error occurred in creating the policy. It should be removed and recreated.</p> </li> </ul></p>
+    /// <p><p>Scaling policy status to filter results on. A scaling policy is only in force when in an <code>ACTIVE</code> status.</p> <ul> <li> <p> <b>ACTIVE</b> -- The scaling policy is currently in force.</p> </li> <li> <p> <b>UPDATEREQUESTED</b> -- A request to update the scaling policy has been received.</p> </li> <li> <p> <b>UPDATING</b> -- A change is being made to the scaling policy.</p> </li> <li> <p> <b>DELETEREQUESTED</b> -- A request to delete the scaling policy has been received.</p> </li> <li> <p> <b>DELETING</b> -- The scaling policy is being deleted.</p> </li> <li> <p> <b>DELETED</b> -- The scaling policy has been deleted.</p> </li> <li> <p> <b>ERROR</b> -- An error occurred in creating the policy. It should be removed and recreated.</p> </li> </ul></p>
     #[serde(rename = "StatusFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_filter: Option<String>,
@@ -1058,6 +1131,35 @@ pub struct DescribeScalingPoliciesOutput {
     #[serde(rename = "ScalingPolicies")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scaling_policies: Option<Vec<ScalingPolicy>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribeVpcPeeringAuthorizationsInput;
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeVpcPeeringAuthorizationsOutput {
+    /// <p>Collection of objects that describe all valid VPC peering operations for the current AWS account.</p>
+    #[serde(rename = "VpcPeeringAuthorizations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_peering_authorizations: Option<Vec<VpcPeeringAuthorization>>,
+}
+
+/// <p>Represents the input for a request action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribeVpcPeeringConnectionsInput {
+    /// <p>Unique identifier for a fleet.</p>
+    #[serde(rename = "FleetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fleet_id: Option<String>,
+}
+
+/// <p>Represents the returned data in response to a request action.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeVpcPeeringConnectionsOutput {
+    /// <p>Collection of VPC peering connection records that match the request.</p>
+    #[serde(rename = "VpcPeeringConnections")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_peering_connections: Option<Vec<VpcPeeringConnection>>,
 }
 
 /// <p>Player information for use when creating player sessions using a game session placement request with <a>StartGameSessionPlacement</a>.</p>
@@ -1126,7 +1228,7 @@ pub struct EC2InstanceLimit {
 /// <p>Log entry describing an event that involves Amazon GameLift resources (such as a fleet). In addition to tracking activity, event codes and messages can provide additional information for troubleshooting and debugging problems.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Event {
-    /// <p><p>Type of event being logged. The following events are currently in use:</p> <ul> <li> <p>General events:</p> <ul> <li> <p> <b>GENERIC<em>EVENT</b> – An unspecified event has occurred.</p> </li> </ul> </li> <li> <p>Fleet creation events:</p> <ul> <li> <p> <b>FLEET</em>CREATED</b> – A fleet record was successfully created with a status of <code>NEW</code>. Event messaging includes the fleet ID.</p> </li> <li> <p> <b>FLEET<em>STATE</em>DOWNLOADING</b> – Fleet status changed from <code>NEW</code> to <code>DOWNLOADING</code>. The compressed build has started downloading to a fleet instance for installation.</p> </li> <li> <p> <b>FLEET<em>BINARY</em>DOWNLOAD<em>FAILED</b> – The build failed to download to the fleet instance.</p> </li> <li> <p> <b>FLEET</em>CREATION<em>EXTRACTING</em>BUILD</b> – The game server build was successfully downloaded to an instance, and the build files are now being extracted from the uploaded build and saved to an instance. Failure at this stage prevents a fleet from moving to <code>ACTIVE</code> status. Logs for this stage display a list of the files that are extracted and saved on the instance. Access the logs by using the URL in <i>PreSignedLogUrl</i>.</p> </li> <li> <p> <b>FLEET<em>CREATION</em>RUNNING<em>INSTALLER</b> – The game server build files were successfully extracted, and the Amazon GameLift is now running the build&#39;s install script (if one is included). Failure in this stage prevents a fleet from moving to <code>ACTIVE</code> status. Logs for this stage list the installation steps and whether or not the install completed successfully. Access the logs by using the URL in <i>PreSignedLogUrl</i>. </p> </li> <li> <p> <b>FLEET</em>CREATION<em>VALIDATING</em>RUNTIME<em>CONFIG</b> – The build process was successful, and the Amazon GameLift is now verifying that the game server launch paths, which are specified in the fleet&#39;s run-time configuration, exist. If any listed launch path exists, Amazon GameLift tries to launch a game server process and waits for the process to report ready. Failures in this stage prevent a fleet from moving to <code>ACTIVE</code> status. Logs for this stage list the launch paths in the run-time configuration and indicate whether each is found. Access the logs by using the URL in <i>PreSignedLogUrl</i>. </p> </li> <li> <p> <b>FLEET</em>STATE<em>VALIDATING</b> – Fleet status changed from <code>DOWNLOADING</code> to <code>VALIDATING</code>.</p> </li> <li> <p> <b>FLEET</em>VALIDATION<em>LAUNCH</em>PATH<em>NOT</em>FOUND</b> – Validation of the run-time configuration failed because the executable specified in a launch path does not exist on the instance.</p> </li> <li> <p> <b>FLEET<em>STATE</em>BUILDING</b> – Fleet status changed from <code>VALIDATING</code> to <code>BUILDING</code>.</p> </li> <li> <p> <b>FLEET<em>VALIDATION</em>EXECUTABLE<em>RUNTIME</em>FAILURE</b> – Validation of the run-time configuration failed because the executable specified in a launch path failed to run on the fleet instance.</p> </li> <li> <p> <b>FLEET<em>STATE</em>ACTIVATING</b> – Fleet status changed from <code>BUILDING</code> to <code>ACTIVATING</code>. </p> </li> <li> <p> <b>FLEET<em>ACTIVATION</em>FAILED</b> - The fleet failed to successfully complete one of the steps in the fleet activation process. This event code indicates that the game build was successfully downloaded to a fleet instance, built, and validated, but was not able to start a server process. A possible reason for failure is that the game server is not reporting &quot;process ready&quot; to the Amazon GameLift service.</p> </li> <li> <p> <b>FLEET<em>STATE</em>ACTIVE</b> – The fleet&#39;s status changed from <code>ACTIVATING</code> to <code>ACTIVE</code>. The fleet is now ready to host game sessions.</p> </li> </ul> </li> <li> <p>Other fleet events:</p> <ul> <li> <p> <b>FLEET<em>SCALING</em>EVENT</b> – A change was made to the fleet&#39;s capacity settings (desired instances, minimum/maximum scaling limits). Event messaging includes the new capacity settings.</p> </li> <li> <p> <b>FLEET<em>NEW</em>GAME<em>SESSION</em>PROTECTION<em>POLICY</em>UPDATED</b> – A change was made to the fleet&#39;s game session protection policy setting. Event messaging includes both the old and new policy setting. </p> </li> <li> <p> <b>FLEET_DELETED</b> – A request to delete a fleet was initiated.</p> </li> </ul> </li> </ul></p>
+    /// <p><p>Type of event being logged. The following events are currently in use:</p> <p> <b>General events:</b> </p> <ul> <li> <p> GENERIC<em>EVENT -- An unspecified event has occurred.</p> </li> </ul> <p> <b>Fleet creation events:</b> </p> <ul> <li> <p>FLEET</em>CREATED -- A fleet record was successfully created with a status of <code>NEW</code>. Event messaging includes the fleet ID.</p> </li> <li> <p>FLEET<em>STATE</em>DOWNLOADING -- Fleet status changed from <code>NEW</code> to <code>DOWNLOADING</code>. The compressed build has started downloading to a fleet instance for installation.</p> </li> <li> <p> FLEET<em>BINARY</em>DOWNLOAD<em>FAILED -- The build failed to download to the fleet instance.</p> </li> <li> <p>FLEET</em>CREATION<em>EXTRACTING</em>BUILD – The game server build was successfully downloaded to an instance, and the build files are now being extracted from the uploaded build and saved to an instance. Failure at this stage prevents a fleet from moving to <code>ACTIVE</code> status. Logs for this stage display a list of the files that are extracted and saved on the instance. Access the logs by using the URL in <i>PreSignedLogUrl</i>.</p> </li> <li> <p>FLEET<em>CREATION</em>RUNNING<em>INSTALLER – The game server build files were successfully extracted, and the Amazon GameLift is now running the build&#39;s install script (if one is included). Failure in this stage prevents a fleet from moving to <code>ACTIVE</code> status. Logs for this stage list the installation steps and whether or not the install completed successfully. Access the logs by using the URL in <i>PreSignedLogUrl</i>. </p> </li> <li> <p>FLEET</em>CREATION<em>VALIDATING</em>RUNTIME<em>CONFIG -- The build process was successful, and the Amazon GameLift is now verifying that the game server launch paths, which are specified in the fleet&#39;s run-time configuration, exist. If any listed launch path exists, Amazon GameLift tries to launch a game server process and waits for the process to report ready. Failures in this stage prevent a fleet from moving to <code>ACTIVE</code> status. Logs for this stage list the launch paths in the run-time configuration and indicate whether each is found. Access the logs by using the URL in <i>PreSignedLogUrl</i>. </p> </li> <li> <p>FLEET</em>STATE<em>VALIDATING -- Fleet status changed from <code>DOWNLOADING</code> to <code>VALIDATING</code>.</p> </li> <li> <p> FLEET</em>VALIDATION<em>LAUNCH</em>PATH<em>NOT</em>FOUND -- Validation of the run-time configuration failed because the executable specified in a launch path does not exist on the instance.</p> </li> <li> <p>FLEET<em>STATE</em>BUILDING -- Fleet status changed from <code>VALIDATING</code> to <code>BUILDING</code>.</p> </li> <li> <p>FLEET<em>VALIDATION</em>EXECUTABLE<em>RUNTIME</em>FAILURE -- Validation of the run-time configuration failed because the executable specified in a launch path failed to run on the fleet instance.</p> </li> <li> <p>FLEET<em>STATE</em>ACTIVATING -- Fleet status changed from <code>BUILDING</code> to <code>ACTIVATING</code>. </p> </li> <li> <p> FLEET<em>ACTIVATION</em>FAILED - The fleet failed to successfully complete one of the steps in the fleet activation process. This event code indicates that the game build was successfully downloaded to a fleet instance, built, and validated, but was not able to start a server process. A possible reason for failure is that the game server is not reporting &quot;process ready&quot; to the Amazon GameLift service.</p> </li> <li> <p>FLEET<em>STATE</em>ACTIVE -- The fleet&#39;s status changed from <code>ACTIVATING</code> to <code>ACTIVE</code>. The fleet is now ready to host game sessions.</p> </li> </ul> <p> <b>VPC peering events:</b> </p> <ul> <li> <p>FLEET<em>VPC</em>PEERING<em>SUCCEEDED -- A VPC peering connection has been established between the VPC for an Amazon GameLift fleet and a VPC in your AWS account.</p> </li> <li> <p>FLEET</em>VPC<em>PEERING</em>FAILED -- A requested VPC peering connection has failed. Event details and status information (see <a>DescribeVpcPeeringConnections</a>) provide additional detail. A common reason for peering failure is that the two VPCs have overlapping CIDR blocks of IPv4 addresses. To resolve this, change the CIDR block for the VPC in your AWS account. For more information on VPC peering failures, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/PeeringGuide/invalid-peering-configurations.html">http://docs.aws.amazon.com/AmazonVPC/latest/PeeringGuide/invalid-peering-configurations.html</a> </p> </li> <li> <p>FLEET<em>VPC</em>PEERING<em>DELETED -- A VPC peering connection has been successfully deleted.</p> </li> </ul> <p> <b>Other fleet events:</b> </p> <ul> <li> <p>FLEET</em>SCALING<em>EVENT -- A change was made to the fleet&#39;s capacity settings (desired instances, minimum/maximum scaling limits). Event messaging includes the new capacity settings.</p> </li> <li> <p>FLEET</em>NEW<em>GAME</em>SESSION<em>PROTECTION</em>POLICY<em>UPDATED -- A change was made to the fleet&#39;s game session protection policy setting. Event messaging includes both the old and new policy setting. </p> </li> <li> <p>FLEET</em>DELETED -- A request to delete a fleet was initiated.</p> </li> </ul></p>
     #[serde(rename = "EventCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_code: Option<String>,
@@ -1187,7 +1289,7 @@ pub struct FleetAttributes {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p><p>Type of game session protection to set for all new instances started in the fleet.</p> <ul> <li> <p> <b>NoProtection</b> – The game session can be terminated during a scale-down event.</p> </li> <li> <p> <b>FullProtection</b> – If the game session is in an <code>ACTIVE</code> status, it cannot be terminated during a scale-down event.</p> </li> </ul></p>
+    /// <p><p>Type of game session protection to set for all new instances started in the fleet.</p> <ul> <li> <p> <b>NoProtection</b> -- The game session can be terminated during a scale-down event.</p> </li> <li> <p> <b>FullProtection</b> -- If the game session is in an <code>ACTIVE</code> status, it cannot be terminated during a scale-down event.</p> </li> </ul></p>
     #[serde(rename = "NewGameSessionProtectionPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub new_game_session_protection_policy: Option<String>,
@@ -1207,7 +1309,7 @@ pub struct FleetAttributes {
     #[serde(rename = "ServerLaunchPath")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_launch_path: Option<String>,
-    /// <p><p>Current status of the fleet.</p> <p>Possible fleet statuses include the following:</p> <ul> <li> <p> <b>NEW</b> – A new fleet has been defined and desired instances is set to 1. </p> </li> <li> <p> <b>DOWNLOADING/VALIDATING/BUILDING/ACTIVATING</b> – Amazon GameLift is setting up the new fleet, creating new instances with the game build and starting server processes.</p> </li> <li> <p> <b>ACTIVE</b> – Hosts can now accept game sessions.</p> </li> <li> <p> <b>ERROR</b> – An error occurred when downloading, validating, building, or activating the fleet.</p> </li> <li> <p> <b>DELETING</b> – Hosts are responding to a delete fleet request.</p> </li> <li> <p> <b>TERMINATED</b> – The fleet no longer exists.</p> </li> </ul></p>
+    /// <p><p>Current status of the fleet.</p> <p>Possible fleet statuses include the following:</p> <ul> <li> <p> <b>NEW</b> -- A new fleet has been defined and desired instances is set to 1. </p> </li> <li> <p> <b>DOWNLOADING/VALIDATING/BUILDING/ACTIVATING</b> -- Amazon GameLift is setting up the new fleet, creating new instances with the game build and starting server processes.</p> </li> <li> <p> <b>ACTIVE</b> -- Hosts can now accept game sessions.</p> </li> <li> <p> <b>ERROR</b> -- An error occurred when downloading, validating, building, or activating the fleet.</p> </li> <li> <p> <b>DELETING</b> -- Hosts are responding to a delete fleet request.</p> </li> <li> <p> <b>TERMINATED</b> -- The fleet no longer exists.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1285,7 +1387,7 @@ pub struct GameSession {
     #[serde(rename = "CurrentPlayerSessionCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub current_player_session_count: Option<i64>,
-    /// <p>Unique identifier for a fleet the game session is running on.</p>
+    /// <p>Unique identifier for a fleet that the game session is running on.</p>
     #[serde(rename = "FleetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_id: Option<String>,
@@ -1297,7 +1399,7 @@ pub struct GameSession {
     #[serde(rename = "GameSessionData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_data: Option<String>,
-    /// <p>Unique identifier for the game session. A game session ID has the following format: <code>arn:aws:gamelift:&lt;region&gt;::gamesession/&lt;fleet ID&gt;/&lt;custom ID string or idempotency token&gt;</code>.</p>
+    /// <p>Unique identifier for the game session. A game session ARN has the following format: <code>arn:aws:gamelift:&lt;region&gt;::gamesession/&lt;fleet ID&gt;/&lt;custom ID string or idempotency token&gt;</code>.</p>
     #[serde(rename = "GameSessionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session_id: Option<String>,
@@ -1359,7 +1461,7 @@ pub struct GameSessionDetail {
     #[serde(rename = "GameSession")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub game_session: Option<GameSession>,
-    /// <p><p>Current status of protection for the game session.</p> <ul> <li> <p> <b>NoProtection</b> – The game session can be terminated during a scale-down event.</p> </li> <li> <p> <b>FullProtection</b> – If the game session is in an <code>ACTIVE</code> status, it cannot be terminated during a scale-down event.</p> </li> </ul></p>
+    /// <p><p>Current status of protection for the game session.</p> <ul> <li> <p> <b>NoProtection</b> -- The game session can be terminated during a scale-down event.</p> </li> <li> <p> <b>FullProtection</b> -- If the game session is in an <code>ACTIVE</code> status, it cannot be terminated during a scale-down event.</p> </li> </ul></p>
     #[serde(rename = "ProtectionPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub protection_policy: Option<String>,
@@ -1428,7 +1530,7 @@ pub struct GameSessionPlacement {
     #[serde(rename = "StartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
-    /// <p><p>Current status of the game session placement request.</p> <ul> <li> <p> <b>PENDING</b> – The placement request is currently in the queue waiting to be processed.</p> </li> <li> <p> <b>FULFILLED</b> – A new game session and player sessions (if requested) have been successfully created. Values for <i>GameSessionArn</i> and <i>GameSessionRegion</i> are available. </p> </li> <li> <p> <b>CANCELLED</b> – The placement request was canceled with a call to <a>StopGameSessionPlacement</a>.</p> </li> <li> <p> <b>TIMED_OUT</b> – A new game session was not successfully created before the time limit expired. You can resubmit the placement request as needed.</p> </li> </ul></p>
+    /// <p><p>Current status of the game session placement request.</p> <ul> <li> <p> <b>PENDING</b> -- The placement request is currently in the queue waiting to be processed.</p> </li> <li> <p> <b>FULFILLED</b> -- A new game session and player sessions (if requested) have been successfully created. Values for <i>GameSessionArn</i> and <i>GameSessionRegion</i> are available. </p> </li> <li> <p> <b>CANCELLED</b> -- The placement request was canceled with a call to <a>StopGameSessionPlacement</a>.</p> </li> <li> <p> <b>TIMED_OUT</b> -- A new game session was not successfully created before the time limit expired. You can resubmit the placement request as needed.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1528,7 +1630,7 @@ pub struct Instance {
     #[serde(rename = "OperatingSystem")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operating_system: Option<String>,
-    /// <p><p>Current status of the instance. Possible statuses include the following:</p> <ul> <li> <p> <b>PENDING</b> – The instance is in the process of being created and launching server processes as defined in the fleet&#39;s run-time configuration. </p> </li> <li> <p> <b>ACTIVE</b> – The instance has been successfully created and at least one server process has successfully launched and reported back to Amazon GameLift that it is ready to host a game session. The instance is now considered ready to host game sessions. </p> </li> <li> <p> <b>TERMINATING</b> – The instance is in the process of shutting down. This may happen to reduce capacity during a scaling down event or to recycle resources in the event of a problem.</p> </li> </ul></p>
+    /// <p><p>Current status of the instance. Possible statuses include the following:</p> <ul> <li> <p> <b>PENDING</b> -- The instance is in the process of being created and launching server processes as defined in the fleet&#39;s run-time configuration. </p> </li> <li> <p> <b>ACTIVE</b> -- The instance has been successfully created and at least one server process has successfully launched and reported back to Amazon GameLift that it is ready to host a game session. The instance is now considered ready to host game sessions. </p> </li> <li> <p> <b>TERMINATING</b> -- The instance is in the process of shutting down. This may happen to reduce capacity during a scaling down event or to recycle resources in the event of a problem.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1608,7 +1710,7 @@ pub struct ListAliasesInput {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p><p>Type of routing to filter results on. Use this parameter to retrieve only aliases of a certain type. To retrieve all aliases, leave this parameter empty.</p> <p>Possible routing types include the following:</p> <ul> <li> <p> <b>SIMPLE</b> – The alias resolves to one specific fleet. Use this type when routing to active fleets.</p> </li> <li> <p> <b>TERMINAL</b> – The alias does not resolve to a fleet but instead can be used to display a message to the user. A terminal alias throws a TerminalRoutingStrategyException with the <a>RoutingStrategy</a> message embedded.</p> </li> </ul></p>
+    /// <p><p>Type of routing to filter results on. Use this parameter to retrieve only aliases of a certain type. To retrieve all aliases, leave this parameter empty.</p> <p>Possible routing types include the following:</p> <ul> <li> <p> <b>SIMPLE</b> -- The alias resolves to one specific fleet. Use this type when routing to active fleets.</p> </li> <li> <p> <b>TERMINAL</b> -- The alias does not resolve to a fleet but instead can be used to display a message to the user. A terminal alias throws a TerminalRoutingStrategyException with the <a>RoutingStrategy</a> message embedded.</p> </li> </ul></p>
     #[serde(rename = "RoutingStrategyType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub routing_strategy_type: Option<String>,
@@ -1638,7 +1740,7 @@ pub struct ListBuildsInput {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p><p>Build status to filter results by. To retrieve all builds, leave this parameter empty.</p> <p>Possible build statuses include the following:</p> <ul> <li> <p> <b>INITIALIZED</b> – A new build has been defined, but no files have been uploaded. You cannot create fleets for builds that are in this status. When a build is successfully created, the build status is set to this value. </p> </li> <li> <p> <b>READY</b> – The game build has been successfully uploaded. You can now create new fleets for this build.</p> </li> <li> <p> <b>FAILED</b> – The game build upload failed. You cannot create new fleets for this build. </p> </li> </ul></p>
+    /// <p><p>Build status to filter results by. To retrieve all builds, leave this parameter empty.</p> <p>Possible build statuses include the following:</p> <ul> <li> <p> <b>INITIALIZED</b> -- A new build has been defined, but no files have been uploaded. You cannot create fleets for builds that are in this status. When a build is successfully created, the build status is set to this value. </p> </li> <li> <p> <b>READY</b> -- The game build has been successfully uploaded. You can now create new fleets for this build.</p> </li> <li> <p> <b>FAILED</b> -- The game build upload failed. You cannot create new fleets for this build. </p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1687,7 +1789,7 @@ pub struct ListFleetsOutput {
     pub next_token: Option<String>,
 }
 
-/// <p>New player session created as a result of a successful FlexMatch match. A successful match automatically creates new player sessions for every player ID in the original matchmaking request. </p> <p>When players connect to the match's game session, they must include both player ID and player session ID in order to claim their assigned player slot.</p>
+/// <p>Represents a new player session that is created as a result of a successful FlexMatch match. A successful match automatically creates new player sessions for every player ID in the original matchmaking request. </p> <p>When players connect to the match's game session, they must include both player ID and player session ID in order to claim their assigned player slot.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct MatchedPlayerSession {
     /// <p>Unique identifier for a player </p>
@@ -1780,6 +1882,14 @@ pub struct MatchmakingTicket {
     #[serde(rename = "ConfigurationName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration_name: Option<String>,
+    /// <p>Time stamp indicating when the matchmaking request stopped being processed due to successful completion, timeout, or cancellation. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>Average amount of time (in seconds) that players are currently waiting for a match. If there is not enough recent data, this property may be empty.</p>
+    #[serde(rename = "EstimatedWaitTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub estimated_wait_time: Option<i64>,
     /// <p>Identifier and connection information of the game session created for the match. This information is added to the ticket only after the matchmaking request has been successfully completed.</p>
     #[serde(rename = "GameSessionConnectionInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1792,7 +1902,7 @@ pub struct MatchmakingTicket {
     #[serde(rename = "StartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
-    /// <p><p>Current status of the matchmaking request.</p> <ul> <li> <p> <b>QUEUED</b> – The matchmaking request has been received and is currently waiting to be processed.</p> </li> <li> <p> <b>SEARCHING</b> – The matchmaking request is currently being processed. </p> </li> <li> <p> <b>REQUIRES<em>ACCEPTANCE</b> – A match has been proposed and the players must accept the match (see <a>AcceptMatch</a>). This status is used only with requests that use a matchmaking configuration with a player acceptance requirement.</p> </li> <li> <p> <b>PLACING</b> – The FlexMatch engine has matched players and is in the process of placing a new game session for the match.</p> </li> <li> <p> <b>COMPLETED</b> – Players have been matched and a game session is ready to host the players. A ticket in this state contains the necessary connection information for players.</p> </li> <li> <p> <b>FAILED</b> – The matchmaking request was not completed. Tickets with players who fail to accept a proposed match are placed in <code>FAILED</code> status; new matchmaking requests can be submitted for these players.</p> </li> <li> <p> <b>CANCELLED</b> – The matchmaking request was canceled with a call to <a>StopMatchmaking</a>.</p> </li> <li> <p> <b>TIMED</em>OUT</b> – The matchmaking request was not completed within the duration specified in the matchmaking configuration. Matchmaking requests that time out can be resubmitted.</p> </li> </ul></p>
+    /// <p><p>Current status of the matchmaking request.</p> <ul> <li> <p> <b>QUEUED</b> -- The matchmaking request has been received and is currently waiting to be processed.</p> </li> <li> <p> <b>SEARCHING</b> -- The matchmaking request is currently being processed. </p> </li> <li> <p> <b>REQUIRES<em>ACCEPTANCE</b> -- A match has been proposed and the players must accept the match (see <a>AcceptMatch</a>). This status is used only with requests that use a matchmaking configuration with a player acceptance requirement.</p> </li> <li> <p> <b>PLACING</b> -- The FlexMatch engine has matched players and is in the process of placing a new game session for the match.</p> </li> <li> <p> <b>COMPLETED</b> -- Players have been matched and a game session is ready to host the players. A ticket in this state contains the necessary connection information for players.</p> </li> <li> <p> <b>FAILED</b> -- The matchmaking request was not completed. Tickets with players who fail to accept a proposed match are placed in <code>FAILED</code> status; new matchmaking requests can be submitted for these players.</p> </li> <li> <p> <b>CANCELLED</b> -- The matchmaking request was canceled with a call to <a>StopMatchmaking</a>.</p> </li> <li> <p> <b>TIMED</em>OUT</b> -- The matchmaking request was not completed within the duration specified in the matchmaking configuration. Matchmaking requests that time out can be resubmitted.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1823,10 +1933,10 @@ pub struct PlacedPlayerSession {
     pub player_session_id: Option<String>,
 }
 
-/// <p>Object used in matchmaking to represent a player. When starting a matchmaking request, a player has a player ID and may have latency data. Team information is added after a match has been successfully completed.</p>
+/// <p>Represents a player in matchmaking. When starting a matchmaking request, a player has a player ID, attributes, and may have latency data. Team information is added after a match has been successfully completed.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Player {
-    /// <p><p>Set of values, expressed in milliseconds, indicating the amount of latency that a player experiences when connected to AWS regions. If this property is present, FlexMatch considers placing the match only in regions that are included in the object map. If not present (that is, null), FlexMatch ignores latency issues and may place the match in any region in the queue.</p> <note> <p>If this property contains an empty map, FlexMatch assumes that no regions are available to the player. In this scenario, the ticket is not matchable and always times out unless canceled. </p> </note></p>
+    /// <p>Set of values, expressed in milliseconds, indicating the amount of latency that a player experiences when connected to AWS regions. If this property is present, FlexMatch considers placing the match only in regions for which latency is reported. </p> <p>If a matchmaker has a rule that evaluates player latency, players must report latency in order to be matched. If no latency is reported in this scenario, FlexMatch assumes that no regions are available to the player and the ticket is not matchable. </p>
     #[serde(rename = "LatencyInMs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub latency_in_ms: Option<::std::collections::HashMap<String, i64>>,
@@ -1909,7 +2019,7 @@ pub struct PlayerSession {
     #[serde(rename = "Port")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub port: Option<i64>,
-    /// <p><p>Current status of the player session.</p> <p>Possible player session statuses include the following:</p> <ul> <li> <p> <b>RESERVED</b> – The player session request has been received, but the player has not yet connected to the server process and/or been validated. </p> </li> <li> <p> <b>ACTIVE</b> – The player has been validated by the server process and is currently connected.</p> </li> <li> <p> <b>COMPLETED</b> – The player connection has been dropped.</p> </li> <li> <p> <b>TIMEDOUT</b> – A player session request was received, but the player did not connect and/or was not validated within the time-out limit (60 seconds).</p> </li> </ul></p>
+    /// <p><p>Current status of the player session.</p> <p>Possible player session statuses include the following:</p> <ul> <li> <p> <b>RESERVED</b> -- The player session request has been received, but the player has not yet connected to the server process and/or been validated. </p> </li> <li> <p> <b>ACTIVE</b> -- The player has been validated by the server process and is currently connected.</p> </li> <li> <p> <b>COMPLETED</b> -- The player connection has been dropped.</p> </li> <li> <p> <b>TIMEDOUT</b> -- A player session request was received, but the player did not connect and/or was not validated within the timeout limit (60 seconds).</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1931,7 +2041,7 @@ pub struct PutScalingPolicyInput {
     /// <p>Unique identifier for a fleet to apply this policy to.</p>
     #[serde(rename = "FleetId")]
     pub fleet_id: String,
-    /// <p><p>Name of the Amazon GameLift-defined metric that is used to trigger an adjustment.</p> <ul> <li> <p> <b>ActivatingGameSessions</b> – number of game sessions in the process of being created (game session status = <code>ACTIVATING</code>).</p> </li> <li> <p> <b>ActiveGameSessions</b> – number of game sessions currently running (game session status = <code>ACTIVE</code>).</p> </li> <li> <p> <b>CurrentPlayerSessions</b> – number of active or reserved player sessions (player session status = <code>ACTIVE</code> or <code>RESERVED</code>). </p> </li> <li> <p> <b>AvailablePlayerSessions</b> – number of player session slots currently available in active game sessions across the fleet, calculated by subtracting a game session&#39;s current player session count from its maximum player session count. This number includes game sessions that are not currently accepting players (game session <code>PlayerSessionCreationPolicy</code> = <code>DENY_ALL</code>).</p> </li> <li> <p> <b>ActiveInstances</b> – number of instances currently running a game session.</p> </li> <li> <p> <b>IdleInstances</b> – number of instances not currently running a game session.</p> </li> </ul></p>
+    /// <p><p>Name of the Amazon GameLift-defined metric that is used to trigger an adjustment.</p> <ul> <li> <p> <b>ActivatingGameSessions</b> -- number of game sessions in the process of being created (game session status = <code>ACTIVATING</code>).</p> </li> <li> <p> <b>ActiveGameSessions</b> -- number of game sessions currently running (game session status = <code>ACTIVE</code>).</p> </li> <li> <p> <b>CurrentPlayerSessions</b> -- number of active or reserved player sessions (player session status = <code>ACTIVE</code> or <code>RESERVED</code>). </p> </li> <li> <p> <b>AvailablePlayerSessions</b> -- number of player session slots currently available in active game sessions across the fleet, calculated by subtracting a game session&#39;s current player session count from its maximum player session count. This number includes game sessions that are not currently accepting players (game session <code>PlayerSessionCreationPolicy</code> = <code>DENY_ALL</code>).</p> </li> <li> <p> <b>ActiveInstances</b> -- number of instances currently running a game session.</p> </li> <li> <p> <b>IdleInstances</b> -- number of instances not currently running a game session.</p> </li> </ul></p>
     #[serde(rename = "MetricName")]
     pub metric_name: String,
     /// <p>Descriptive label that is associated with a scaling policy. Policy names do not need to be unique. A fleet can have only one scaling policy with the same name.</p>
@@ -1940,7 +2050,7 @@ pub struct PutScalingPolicyInput {
     /// <p>Amount of adjustment to make, based on the scaling adjustment type.</p>
     #[serde(rename = "ScalingAdjustment")]
     pub scaling_adjustment: i64,
-    /// <p><p>Type of adjustment to make to a fleet&#39;s instance count (see <a>FleetCapacity</a>):</p> <ul> <li> <p> <b>ChangeInCapacity</b> – add (or subtract) the scaling adjustment value from the current instance count. Positive values scale up while negative values scale down.</p> </li> <li> <p> <b>ExactCapacity</b> – set the instance count to the scaling adjustment value.</p> </li> <li> <p> <b>PercentChangeInCapacity</b> – increase or reduce the current instance count by the scaling adjustment, read as a percentage. Positive values scale up while negative values scale down; for example, a value of &quot;-10&quot; scales the fleet down by 10%.</p> </li> </ul></p>
+    /// <p><p>Type of adjustment to make to a fleet&#39;s instance count (see <a>FleetCapacity</a>):</p> <ul> <li> <p> <b>ChangeInCapacity</b> -- add (or subtract) the scaling adjustment value from the current instance count. Positive values scale up while negative values scale down.</p> </li> <li> <p> <b>ExactCapacity</b> -- set the instance count to the scaling adjustment value.</p> </li> <li> <p> <b>PercentChangeInCapacity</b> -- increase or reduce the current instance count by the scaling adjustment, read as a percentage. Positive values scale up while negative values scale down; for example, a value of &quot;-10&quot; scales the fleet down by 10%.</p> </li> </ul></p>
     #[serde(rename = "ScalingAdjustmentType")]
     pub scaling_adjustment_type: String,
     /// <p>Metric value used to trigger a scaling event.</p>
@@ -2019,7 +2129,7 @@ pub struct RoutingStrategy {
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    /// <p><p>Type of routing strategy.</p> <p>Possible routing types include the following:</p> <ul> <li> <p> <b>SIMPLE</b> – The alias resolves to one specific fleet. Use this type when routing to active fleets.</p> </li> <li> <p> <b>TERMINAL</b> – The alias does not resolve to a fleet but instead can be used to display a message to the user. A terminal alias throws a TerminalRoutingStrategyException with the <a>RoutingStrategy</a> message embedded.</p> </li> </ul></p>
+    /// <p><p>Type of routing strategy.</p> <p>Possible routing types include the following:</p> <ul> <li> <p> <b>SIMPLE</b> -- The alias resolves to one specific fleet. Use this type when routing to active fleets.</p> </li> <li> <p> <b>TERMINAL</b> -- The alias does not resolve to a fleet but instead can be used to display a message to the user. A terminal alias throws a TerminalRoutingStrategyException with the <a>RoutingStrategy</a> message embedded.</p> </li> </ul></p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -2074,7 +2184,7 @@ pub struct ScalingPolicy {
     #[serde(rename = "FleetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_id: Option<String>,
-    /// <p><p>Name of the Amazon GameLift-defined metric that is used to trigger an adjustment.</p> <ul> <li> <p> <b>ActivatingGameSessions</b> – number of game sessions in the process of being created (game session status = <code>ACTIVATING</code>).</p> </li> <li> <p> <b>ActiveGameSessions</b> – number of game sessions currently running (game session status = <code>ACTIVE</code>).</p> </li> <li> <p> <b>CurrentPlayerSessions</b> – number of active or reserved player sessions (player session status = <code>ACTIVE</code> or <code>RESERVED</code>). </p> </li> <li> <p> <b>AvailablePlayerSessions</b> – number of player session slots currently available in active game sessions across the fleet, calculated by subtracting a game session&#39;s current player session count from its maximum player session count. This number does include game sessions that are not currently accepting players (game session <code>PlayerSessionCreationPolicy</code> = <code>DENY_ALL</code>).</p> </li> <li> <p> <b>ActiveInstances</b> – number of instances currently running a game session.</p> </li> <li> <p> <b>IdleInstances</b> – number of instances not currently running a game session.</p> </li> </ul></p>
+    /// <p><p>Name of the Amazon GameLift-defined metric that is used to trigger an adjustment.</p> <ul> <li> <p> <b>ActivatingGameSessions</b> -- number of game sessions in the process of being created (game session status = <code>ACTIVATING</code>).</p> </li> <li> <p> <b>ActiveGameSessions</b> -- number of game sessions currently running (game session status = <code>ACTIVE</code>).</p> </li> <li> <p> <b>CurrentPlayerSessions</b> -- number of active or reserved player sessions (player session status = <code>ACTIVE</code> or <code>RESERVED</code>). </p> </li> <li> <p> <b>AvailablePlayerSessions</b> -- number of player session slots currently available in active game sessions across the fleet, calculated by subtracting a game session&#39;s current player session count from its maximum player session count. This number does include game sessions that are not currently accepting players (game session <code>PlayerSessionCreationPolicy</code> = <code>DENY_ALL</code>).</p> </li> <li> <p> <b>ActiveInstances</b> -- number of instances currently running a game session.</p> </li> <li> <p> <b>IdleInstances</b> -- number of instances not currently running a game session.</p> </li> </ul></p>
     #[serde(rename = "MetricName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metric_name: Option<String>,
@@ -2086,11 +2196,11 @@ pub struct ScalingPolicy {
     #[serde(rename = "ScalingAdjustment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scaling_adjustment: Option<i64>,
-    /// <p><p>Type of adjustment to make to a fleet&#39;s instance count (see <a>FleetCapacity</a>):</p> <ul> <li> <p> <b>ChangeInCapacity</b> – add (or subtract) the scaling adjustment value from the current instance count. Positive values scale up while negative values scale down.</p> </li> <li> <p> <b>ExactCapacity</b> – set the instance count to the scaling adjustment value.</p> </li> <li> <p> <b>PercentChangeInCapacity</b> – increase or reduce the current instance count by the scaling adjustment, read as a percentage. Positive values scale up while negative values scale down.</p> </li> </ul></p>
+    /// <p><p>Type of adjustment to make to a fleet&#39;s instance count (see <a>FleetCapacity</a>):</p> <ul> <li> <p> <b>ChangeInCapacity</b> -- add (or subtract) the scaling adjustment value from the current instance count. Positive values scale up while negative values scale down.</p> </li> <li> <p> <b>ExactCapacity</b> -- set the instance count to the scaling adjustment value.</p> </li> <li> <p> <b>PercentChangeInCapacity</b> -- increase or reduce the current instance count by the scaling adjustment, read as a percentage. Positive values scale up while negative values scale down.</p> </li> </ul></p>
     #[serde(rename = "ScalingAdjustmentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scaling_adjustment_type: Option<String>,
-    /// <p><p>Current status of the scaling policy. The scaling policy is only in force when in an <code>ACTIVE</code> status.</p> <ul> <li> <p> <b>ACTIVE</b> – The scaling policy is currently in force.</p> </li> <li> <p> <b>UPDATE<em>REQUESTED</b> – A request to update the scaling policy has been received.</p> </li> <li> <p> <b>UPDATING</b> – A change is being made to the scaling policy.</p> </li> <li> <p> <b>DELETE</em>REQUESTED</b> – A request to delete the scaling policy has been received.</p> </li> <li> <p> <b>DELETING</b> – The scaling policy is being deleted.</p> </li> <li> <p> <b>DELETED</b> – The scaling policy has been deleted.</p> </li> <li> <p> <b>ERROR</b> – An error occurred in creating the policy. It should be removed and recreated.</p> </li> </ul></p>
+    /// <p><p>Current status of the scaling policy. The scaling policy is only in force when in an <code>ACTIVE</code> status.</p> <ul> <li> <p> <b>ACTIVE</b> -- The scaling policy is currently in force.</p> </li> <li> <p> <b>UPDATE<em>REQUESTED</b> -- A request to update the scaling policy has been received.</p> </li> <li> <p> <b>UPDATING</b> -- A change is being made to the scaling policy.</p> </li> <li> <p> <b>DELETE</em>REQUESTED</b> -- A request to delete the scaling policy has been received.</p> </li> <li> <p> <b>DELETING</b> -- The scaling policy is being deleted.</p> </li> <li> <p> <b>DELETED</b> -- The scaling policy has been deleted.</p> </li> <li> <p> <b>ERROR</b> -- An error occurred in creating the policy. It should be removed and recreated.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -2324,7 +2434,7 @@ pub struct UpdateFleetAttributesInput {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p><p>Game session protection policy to apply to all new instances created in this fleet. Instances that already exist are not affected. You can set protection for individual instances using <a>UpdateGameSession</a>.</p> <ul> <li> <p> <b>NoProtection</b> – The game session can be terminated during a scale-down event.</p> </li> <li> <p> <b>FullProtection</b> – If the game session is in an <code>ACTIVE</code> status, it cannot be terminated during a scale-down event.</p> </li> </ul></p>
+    /// <p><p>Game session protection policy to apply to all new instances created in this fleet. Instances that already exist are not affected. You can set protection for individual instances using <a>UpdateGameSession</a>.</p> <ul> <li> <p> <b>NoProtection</b> -- The game session can be terminated during a scale-down event.</p> </li> <li> <p> <b>FullProtection</b> -- If the game session is in an <code>ACTIVE</code> status, it cannot be terminated during a scale-down event.</p> </li> </ul></p>
     #[serde(rename = "NewGameSessionProtectionPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub new_game_session_protection_policy: Option<String>,
@@ -2415,7 +2525,7 @@ pub struct UpdateGameSessionInput {
     #[serde(rename = "PlayerSessionCreationPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub player_session_creation_policy: Option<String>,
-    /// <p><p>Game session protection policy to apply to this game session only.</p> <ul> <li> <p> <b>NoProtection</b> – The game session can be terminated during a scale-down event.</p> </li> <li> <p> <b>FullProtection</b> – If the game session is in an <code>ACTIVE</code> status, it cannot be terminated during a scale-down event.</p> </li> </ul></p>
+    /// <p><p>Game session protection policy to apply to this game session only.</p> <ul> <li> <p> <b>NoProtection</b> -- The game session can be terminated during a scale-down event.</p> </li> <li> <p> <b>FullProtection</b> -- If the game session is in an <code>ACTIVE</code> status, it cannot be terminated during a scale-down event.</p> </li> </ul></p>
     #[serde(rename = "ProtectionPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub protection_policy: Option<String>,
@@ -2555,6 +2665,73 @@ pub struct ValidateMatchmakingRuleSetOutput {
     #[serde(rename = "Valid")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub valid: Option<bool>,
+}
+
+/// <p><p>Represents an authorization for a VPC peering connection between the VPC for an Amazon GameLift fleet and another VPC on an account you have access to. This authorization must exist and be valid for the peering connection to be established. Authorizations are valid for 24 hours after they are issued.</p> <p>VPC peering connection operations include:</p> <ul> <li> <p> <a>CreateVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>DescribeVpcPeeringAuthorizations</a> </p> </li> <li> <p> <a>DeleteVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>CreateVpcPeeringConnection</a> </p> </li> <li> <p> <a>DescribeVpcPeeringConnections</a> </p> </li> <li> <p> <a>DeleteVpcPeeringConnection</a> </p> </li> </ul></p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct VpcPeeringAuthorization {
+    /// <p>Time stamp indicating when this authorization was issued. Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>Time stamp indicating when this authorization expires (24 hours after issuance). Format is a number expressed in Unix time as milliseconds (for example "1469498468.057").</p>
+    #[serde(rename = "ExpirationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expiration_time: Option<f64>,
+    /// <p>Unique identifier for the AWS account that you use to manage your Amazon GameLift fleet. You can find your Account ID in the AWS Management Console under account settings.</p>
+    #[serde(rename = "GameLiftAwsAccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub game_lift_aws_account_id: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "PeerVpcAwsAccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub peer_vpc_aws_account_id: Option<String>,
+    /// <p>Unique identifier for a VPC with resources to be accessed by your Amazon GameLift fleet. The VPC must be in the same region where your fleet is deployed. To get VPC information, including IDs, use the Virtual Private Cloud service tools, including the VPC Dashboard in the AWS Management Console.</p>
+    #[serde(rename = "PeerVpcId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub peer_vpc_id: Option<String>,
+}
+
+/// <p><p>Represents a peering connection between a VPC on one of your AWS accounts and the VPC for your Amazon GameLift fleets. This record may be for an active peering connection or a pending connection that has not yet been established.</p> <p>VPC peering connection operations include:</p> <ul> <li> <p> <a>CreateVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>DescribeVpcPeeringAuthorizations</a> </p> </li> <li> <p> <a>DeleteVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>CreateVpcPeeringConnection</a> </p> </li> <li> <p> <a>DescribeVpcPeeringConnections</a> </p> </li> <li> <p> <a>DeleteVpcPeeringConnection</a> </p> </li> </ul></p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct VpcPeeringConnection {
+    /// <p>Unique identifier for a fleet. This ID determines the ID of the Amazon GameLift VPC for your fleet.</p>
+    #[serde(rename = "FleetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fleet_id: Option<String>,
+    /// <p>Unique identifier for the VPC that contains the Amazon GameLift fleet for this connection. This VPC is managed by Amazon GameLift and does not appear in your AWS account. </p>
+    #[serde(rename = "GameLiftVpcId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub game_lift_vpc_id: Option<String>,
+    /// <p>CIDR block of IPv4 addresses assigned to the VPC peering connection for the GameLift VPC. The peered VPC also has an IPv4 CIDR block associated with it; these blocks cannot overlap or the peering connection cannot be created. </p>
+    #[serde(rename = "IpV4CidrBlock")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ip_v4_cidr_block: Option<String>,
+    /// <p>Unique identifier for a VPC with resources to be accessed by your Amazon GameLift fleet. The VPC must be in the same region where your fleet is deployed. To get VPC information, including IDs, use the Virtual Private Cloud service tools, including the VPC Dashboard in the AWS Management Console.</p>
+    #[serde(rename = "PeerVpcId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub peer_vpc_id: Option<String>,
+    /// <p>Object that contains status information about the connection. Status indicates if a connection is pending, successful, or failed.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<VpcPeeringConnectionStatus>,
+    /// <p>Unique identifier that is automatically assigned to the connection record. This ID is referenced in VPC peering connection events, and is used when deleting a connection with <a>DeleteVpcPeeringConnection</a>. </p>
+    #[serde(rename = "VpcPeeringConnectionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_peering_connection_id: Option<String>,
+}
+
+/// <p>Represents status information for a VPC peering connection. Status is associated with a <a>VpcPeeringConnection</a> object. Status codes and messages are provided from EC2 (<a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_VpcPeeringConnectionStateReason.html">).</a> Connection status information is also communicated as a fleet <a>Event</a>.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct VpcPeeringConnectionStatus {
+    /// <p>Code indicating the status of a VPC peering connection.</p>
+    #[serde(rename = "Code")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code: Option<String>,
+    /// <p>Additional messaging associated with the connection status. </p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
 }
 
 /// Errors returned by AcceptMatch
@@ -3629,6 +3806,208 @@ impl Error for CreatePlayerSessionsError {
         }
     }
 }
+/// Errors returned by CreateVpcPeeringAuthorization
+#[derive(Debug, PartialEq)]
+pub enum CreateVpcPeeringAuthorizationError {
+    /// <p>The service encountered an unrecoverable internal failure while processing the request. Clients can retry such requests immediately or after a waiting period.</p>
+    InternalService(String),
+    /// <p>One or more parameter values in the request are invalid. Correct the invalid parameter values before retrying.</p>
+    InvalidRequest(String),
+    /// <p>A service resource associated with the request could not be found. Clients should not retry such requests.</p>
+    NotFound(String),
+    /// <p>The client failed authentication. Clients should not retry such requests.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateVpcPeeringAuthorizationError {
+    pub fn from_body(body: &str) -> CreateVpcPeeringAuthorizationError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalServiceException" => {
+                        CreateVpcPeeringAuthorizationError::InternalService(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidRequestException" => {
+                        CreateVpcPeeringAuthorizationError::InvalidRequest(String::from(
+                            error_message,
+                        ))
+                    }
+                    "NotFoundException" => {
+                        CreateVpcPeeringAuthorizationError::NotFound(String::from(error_message))
+                    }
+                    "UnauthorizedException" => CreateVpcPeeringAuthorizationError::Unauthorized(
+                        String::from(error_message),
+                    ),
+                    "ValidationException" => {
+                        CreateVpcPeeringAuthorizationError::Validation(error_message.to_string())
+                    }
+                    _ => CreateVpcPeeringAuthorizationError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateVpcPeeringAuthorizationError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateVpcPeeringAuthorizationError {
+    fn from(err: serde_json::error::Error) -> CreateVpcPeeringAuthorizationError {
+        CreateVpcPeeringAuthorizationError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateVpcPeeringAuthorizationError {
+    fn from(err: CredentialsError) -> CreateVpcPeeringAuthorizationError {
+        CreateVpcPeeringAuthorizationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateVpcPeeringAuthorizationError {
+    fn from(err: HttpDispatchError) -> CreateVpcPeeringAuthorizationError {
+        CreateVpcPeeringAuthorizationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateVpcPeeringAuthorizationError {
+    fn from(err: io::Error) -> CreateVpcPeeringAuthorizationError {
+        CreateVpcPeeringAuthorizationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateVpcPeeringAuthorizationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateVpcPeeringAuthorizationError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateVpcPeeringAuthorizationError::InternalService(ref cause) => cause,
+            CreateVpcPeeringAuthorizationError::InvalidRequest(ref cause) => cause,
+            CreateVpcPeeringAuthorizationError::NotFound(ref cause) => cause,
+            CreateVpcPeeringAuthorizationError::Unauthorized(ref cause) => cause,
+            CreateVpcPeeringAuthorizationError::Validation(ref cause) => cause,
+            CreateVpcPeeringAuthorizationError::Credentials(ref err) => err.description(),
+            CreateVpcPeeringAuthorizationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateVpcPeeringAuthorizationError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateVpcPeeringConnection
+#[derive(Debug, PartialEq)]
+pub enum CreateVpcPeeringConnectionError {
+    /// <p>The service encountered an unrecoverable internal failure while processing the request. Clients can retry such requests immediately or after a waiting period.</p>
+    InternalService(String),
+    /// <p>One or more parameter values in the request are invalid. Correct the invalid parameter values before retrying.</p>
+    InvalidRequest(String),
+    /// <p>A service resource associated with the request could not be found. Clients should not retry such requests.</p>
+    NotFound(String),
+    /// <p>The client failed authentication. Clients should not retry such requests.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateVpcPeeringConnectionError {
+    pub fn from_body(body: &str) -> CreateVpcPeeringConnectionError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalServiceException" => {
+                        CreateVpcPeeringConnectionError::InternalService(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidRequestException" => {
+                        CreateVpcPeeringConnectionError::InvalidRequest(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        CreateVpcPeeringConnectionError::NotFound(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        CreateVpcPeeringConnectionError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CreateVpcPeeringConnectionError::Validation(error_message.to_string())
+                    }
+                    _ => CreateVpcPeeringConnectionError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateVpcPeeringConnectionError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateVpcPeeringConnectionError {
+    fn from(err: serde_json::error::Error) -> CreateVpcPeeringConnectionError {
+        CreateVpcPeeringConnectionError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateVpcPeeringConnectionError {
+    fn from(err: CredentialsError) -> CreateVpcPeeringConnectionError {
+        CreateVpcPeeringConnectionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateVpcPeeringConnectionError {
+    fn from(err: HttpDispatchError) -> CreateVpcPeeringConnectionError {
+        CreateVpcPeeringConnectionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateVpcPeeringConnectionError {
+    fn from(err: io::Error) -> CreateVpcPeeringConnectionError {
+        CreateVpcPeeringConnectionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateVpcPeeringConnectionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateVpcPeeringConnectionError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateVpcPeeringConnectionError::InternalService(ref cause) => cause,
+            CreateVpcPeeringConnectionError::InvalidRequest(ref cause) => cause,
+            CreateVpcPeeringConnectionError::NotFound(ref cause) => cause,
+            CreateVpcPeeringConnectionError::Unauthorized(ref cause) => cause,
+            CreateVpcPeeringConnectionError::Validation(ref cause) => cause,
+            CreateVpcPeeringConnectionError::Credentials(ref err) => err.description(),
+            CreateVpcPeeringConnectionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateVpcPeeringConnectionError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteAlias
 #[derive(Debug, PartialEq)]
 pub enum DeleteAliasError {
@@ -4214,6 +4593,208 @@ impl Error for DeleteScalingPolicyError {
                 dispatch_error.description()
             }
             DeleteScalingPolicyError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteVpcPeeringAuthorization
+#[derive(Debug, PartialEq)]
+pub enum DeleteVpcPeeringAuthorizationError {
+    /// <p>The service encountered an unrecoverable internal failure while processing the request. Clients can retry such requests immediately or after a waiting period.</p>
+    InternalService(String),
+    /// <p>One or more parameter values in the request are invalid. Correct the invalid parameter values before retrying.</p>
+    InvalidRequest(String),
+    /// <p>A service resource associated with the request could not be found. Clients should not retry such requests.</p>
+    NotFound(String),
+    /// <p>The client failed authentication. Clients should not retry such requests.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteVpcPeeringAuthorizationError {
+    pub fn from_body(body: &str) -> DeleteVpcPeeringAuthorizationError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalServiceException" => {
+                        DeleteVpcPeeringAuthorizationError::InternalService(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidRequestException" => {
+                        DeleteVpcPeeringAuthorizationError::InvalidRequest(String::from(
+                            error_message,
+                        ))
+                    }
+                    "NotFoundException" => {
+                        DeleteVpcPeeringAuthorizationError::NotFound(String::from(error_message))
+                    }
+                    "UnauthorizedException" => DeleteVpcPeeringAuthorizationError::Unauthorized(
+                        String::from(error_message),
+                    ),
+                    "ValidationException" => {
+                        DeleteVpcPeeringAuthorizationError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteVpcPeeringAuthorizationError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteVpcPeeringAuthorizationError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteVpcPeeringAuthorizationError {
+    fn from(err: serde_json::error::Error) -> DeleteVpcPeeringAuthorizationError {
+        DeleteVpcPeeringAuthorizationError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteVpcPeeringAuthorizationError {
+    fn from(err: CredentialsError) -> DeleteVpcPeeringAuthorizationError {
+        DeleteVpcPeeringAuthorizationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteVpcPeeringAuthorizationError {
+    fn from(err: HttpDispatchError) -> DeleteVpcPeeringAuthorizationError {
+        DeleteVpcPeeringAuthorizationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteVpcPeeringAuthorizationError {
+    fn from(err: io::Error) -> DeleteVpcPeeringAuthorizationError {
+        DeleteVpcPeeringAuthorizationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteVpcPeeringAuthorizationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteVpcPeeringAuthorizationError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteVpcPeeringAuthorizationError::InternalService(ref cause) => cause,
+            DeleteVpcPeeringAuthorizationError::InvalidRequest(ref cause) => cause,
+            DeleteVpcPeeringAuthorizationError::NotFound(ref cause) => cause,
+            DeleteVpcPeeringAuthorizationError::Unauthorized(ref cause) => cause,
+            DeleteVpcPeeringAuthorizationError::Validation(ref cause) => cause,
+            DeleteVpcPeeringAuthorizationError::Credentials(ref err) => err.description(),
+            DeleteVpcPeeringAuthorizationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteVpcPeeringAuthorizationError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteVpcPeeringConnection
+#[derive(Debug, PartialEq)]
+pub enum DeleteVpcPeeringConnectionError {
+    /// <p>The service encountered an unrecoverable internal failure while processing the request. Clients can retry such requests immediately or after a waiting period.</p>
+    InternalService(String),
+    /// <p>One or more parameter values in the request are invalid. Correct the invalid parameter values before retrying.</p>
+    InvalidRequest(String),
+    /// <p>A service resource associated with the request could not be found. Clients should not retry such requests.</p>
+    NotFound(String),
+    /// <p>The client failed authentication. Clients should not retry such requests.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteVpcPeeringConnectionError {
+    pub fn from_body(body: &str) -> DeleteVpcPeeringConnectionError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalServiceException" => {
+                        DeleteVpcPeeringConnectionError::InternalService(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidRequestException" => {
+                        DeleteVpcPeeringConnectionError::InvalidRequest(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        DeleteVpcPeeringConnectionError::NotFound(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        DeleteVpcPeeringConnectionError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteVpcPeeringConnectionError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteVpcPeeringConnectionError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteVpcPeeringConnectionError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteVpcPeeringConnectionError {
+    fn from(err: serde_json::error::Error) -> DeleteVpcPeeringConnectionError {
+        DeleteVpcPeeringConnectionError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteVpcPeeringConnectionError {
+    fn from(err: CredentialsError) -> DeleteVpcPeeringConnectionError {
+        DeleteVpcPeeringConnectionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteVpcPeeringConnectionError {
+    fn from(err: HttpDispatchError) -> DeleteVpcPeeringConnectionError {
+        DeleteVpcPeeringConnectionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteVpcPeeringConnectionError {
+    fn from(err: io::Error) -> DeleteVpcPeeringConnectionError {
+        DeleteVpcPeeringConnectionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteVpcPeeringConnectionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteVpcPeeringConnectionError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteVpcPeeringConnectionError::InternalService(ref cause) => cause,
+            DeleteVpcPeeringConnectionError::InvalidRequest(ref cause) => cause,
+            DeleteVpcPeeringConnectionError::NotFound(ref cause) => cause,
+            DeleteVpcPeeringConnectionError::Unauthorized(ref cause) => cause,
+            DeleteVpcPeeringConnectionError::Validation(ref cause) => cause,
+            DeleteVpcPeeringConnectionError::Credentials(ref err) => err.description(),
+            DeleteVpcPeeringConnectionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteVpcPeeringConnectionError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -6090,6 +6671,206 @@ impl Error for DescribeScalingPoliciesError {
                 dispatch_error.description()
             }
             DescribeScalingPoliciesError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeVpcPeeringAuthorizations
+#[derive(Debug, PartialEq)]
+pub enum DescribeVpcPeeringAuthorizationsError {
+    /// <p>The service encountered an unrecoverable internal failure while processing the request. Clients can retry such requests immediately or after a waiting period.</p>
+    InternalService(String),
+    /// <p>One or more parameter values in the request are invalid. Correct the invalid parameter values before retrying.</p>
+    InvalidRequest(String),
+    /// <p>The client failed authentication. Clients should not retry such requests.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeVpcPeeringAuthorizationsError {
+    pub fn from_body(body: &str) -> DescribeVpcPeeringAuthorizationsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalServiceException" => {
+                        DescribeVpcPeeringAuthorizationsError::InternalService(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidRequestException" => {
+                        DescribeVpcPeeringAuthorizationsError::InvalidRequest(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UnauthorizedException" => {
+                        DescribeVpcPeeringAuthorizationsError::Unauthorized(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        DescribeVpcPeeringAuthorizationsError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeVpcPeeringAuthorizationsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeVpcPeeringAuthorizationsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeVpcPeeringAuthorizationsError {
+    fn from(err: serde_json::error::Error) -> DescribeVpcPeeringAuthorizationsError {
+        DescribeVpcPeeringAuthorizationsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeVpcPeeringAuthorizationsError {
+    fn from(err: CredentialsError) -> DescribeVpcPeeringAuthorizationsError {
+        DescribeVpcPeeringAuthorizationsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeVpcPeeringAuthorizationsError {
+    fn from(err: HttpDispatchError) -> DescribeVpcPeeringAuthorizationsError {
+        DescribeVpcPeeringAuthorizationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeVpcPeeringAuthorizationsError {
+    fn from(err: io::Error) -> DescribeVpcPeeringAuthorizationsError {
+        DescribeVpcPeeringAuthorizationsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeVpcPeeringAuthorizationsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeVpcPeeringAuthorizationsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeVpcPeeringAuthorizationsError::InternalService(ref cause) => cause,
+            DescribeVpcPeeringAuthorizationsError::InvalidRequest(ref cause) => cause,
+            DescribeVpcPeeringAuthorizationsError::Unauthorized(ref cause) => cause,
+            DescribeVpcPeeringAuthorizationsError::Validation(ref cause) => cause,
+            DescribeVpcPeeringAuthorizationsError::Credentials(ref err) => err.description(),
+            DescribeVpcPeeringAuthorizationsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeVpcPeeringAuthorizationsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeVpcPeeringConnections
+#[derive(Debug, PartialEq)]
+pub enum DescribeVpcPeeringConnectionsError {
+    /// <p>The service encountered an unrecoverable internal failure while processing the request. Clients can retry such requests immediately or after a waiting period.</p>
+    InternalService(String),
+    /// <p>One or more parameter values in the request are invalid. Correct the invalid parameter values before retrying.</p>
+    InvalidRequest(String),
+    /// <p>A service resource associated with the request could not be found. Clients should not retry such requests.</p>
+    NotFound(String),
+    /// <p>The client failed authentication. Clients should not retry such requests.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeVpcPeeringConnectionsError {
+    pub fn from_body(body: &str) -> DescribeVpcPeeringConnectionsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalServiceException" => {
+                        DescribeVpcPeeringConnectionsError::InternalService(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidRequestException" => {
+                        DescribeVpcPeeringConnectionsError::InvalidRequest(String::from(
+                            error_message,
+                        ))
+                    }
+                    "NotFoundException" => {
+                        DescribeVpcPeeringConnectionsError::NotFound(String::from(error_message))
+                    }
+                    "UnauthorizedException" => DescribeVpcPeeringConnectionsError::Unauthorized(
+                        String::from(error_message),
+                    ),
+                    "ValidationException" => {
+                        DescribeVpcPeeringConnectionsError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeVpcPeeringConnectionsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeVpcPeeringConnectionsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeVpcPeeringConnectionsError {
+    fn from(err: serde_json::error::Error) -> DescribeVpcPeeringConnectionsError {
+        DescribeVpcPeeringConnectionsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeVpcPeeringConnectionsError {
+    fn from(err: CredentialsError) -> DescribeVpcPeeringConnectionsError {
+        DescribeVpcPeeringConnectionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeVpcPeeringConnectionsError {
+    fn from(err: HttpDispatchError) -> DescribeVpcPeeringConnectionsError {
+        DescribeVpcPeeringConnectionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeVpcPeeringConnectionsError {
+    fn from(err: io::Error) -> DescribeVpcPeeringConnectionsError {
+        DescribeVpcPeeringConnectionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeVpcPeeringConnectionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeVpcPeeringConnectionsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeVpcPeeringConnectionsError::InternalService(ref cause) => cause,
+            DescribeVpcPeeringConnectionsError::InvalidRequest(ref cause) => cause,
+            DescribeVpcPeeringConnectionsError::NotFound(ref cause) => cause,
+            DescribeVpcPeeringConnectionsError::Unauthorized(ref cause) => cause,
+            DescribeVpcPeeringConnectionsError::Validation(ref cause) => cause,
+            DescribeVpcPeeringConnectionsError::Credentials(ref err) => err.description(),
+            DescribeVpcPeeringConnectionsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeVpcPeeringConnectionsError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -8417,7 +9198,7 @@ pub trait GameLift {
     fn create_build(&self, input: &CreateBuildInput)
         -> Result<CreateBuildOutput, CreateBuildError>;
 
-    /// <p><p>Creates a new fleet to run your game servers. A fleet is a set of Amazon Elastic Compute Cloud (Amazon EC2) instances, each of which can run multiple server processes to host game sessions. You configure a fleet to create instances with certain hardware specifications (see <a href="http://aws.amazon.com/ec2/instance-types/">Amazon EC2 Instance Types</a> for more information), and deploy a specified game build to each instance. A newly created fleet passes through several statuses; once it reaches the <code>ACTIVE</code> status, it can begin hosting game sessions.</p> <p>To create a new fleet, you must specify the following: (1) fleet name, (2) build ID of an uploaded game build, (3) an EC2 instance type, and (4) a run-time configuration that describes which server processes to run on each instance in the fleet. (Although the run-time configuration is not a required parameter, the fleet cannot be successfully activated without it.)</p> <p>You can also configure the new fleet with the following settings:</p> <ul> <li> <p>Fleet description</p> </li> <li> <p>Access permissions for inbound traffic</p> </li> <li> <p>Fleet-wide game session protection</p> </li> <li> <p>Resource creation limit</p> </li> </ul> <p>If you use Amazon CloudWatch for metrics, you can add the new fleet to a metric group. This allows you to view aggregated metrics for a set of fleets. Once you specify a metric group, the new fleet&#39;s metrics are included in the metric group&#39;s data.</p> <p>If the CreateFleet call is successful, Amazon GameLift performs the following tasks:</p> <ul> <li> <p>Creates a fleet record and sets the status to <code>NEW</code> (followed by other statuses as the fleet is activated).</p> </li> <li> <p>Sets the fleet&#39;s target capacity to 1 (desired instances), which causes Amazon GameLift to start one new EC2 instance.</p> </li> <li> <p>Starts launching server processes on the instance. If the fleet is configured to run multiple server processes per instance, Amazon GameLift staggers each launch by a few seconds.</p> </li> <li> <p>Begins writing events to the fleet event log, which can be accessed in the Amazon GameLift console.</p> </li> <li> <p>Sets the fleet&#39;s status to <code>ACTIVE</code> as soon as one server process in the fleet is ready to host a game session.</p> </li> </ul> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul></p>
+    /// <p><p>Creates a new fleet to run your game servers. A fleet is a set of Amazon Elastic Compute Cloud (Amazon EC2) instances, each of which can run multiple server processes to host game sessions. You configure a fleet to create instances with certain hardware specifications (see <a href="http://aws.amazon.com/ec2/instance-types/">Amazon EC2 Instance Types</a> for more information), and deploy a specified game build to each instance. A newly created fleet passes through several statuses; once it reaches the <code>ACTIVE</code> status, it can begin hosting game sessions.</p> <p>To create a new fleet, you must specify the following: (1) fleet name, (2) build ID of an uploaded game build, (3) an EC2 instance type, and (4) a run-time configuration that describes which server processes to run on each instance in the fleet. (Although the run-time configuration is not a required parameter, the fleet cannot be successfully activated without it.)</p> <p>You can also configure the new fleet with the following settings:</p> <ul> <li> <p>Fleet description</p> </li> <li> <p>Access permissions for inbound traffic</p> </li> <li> <p>Fleet-wide game session protection</p> </li> <li> <p>Resource creation limit</p> </li> </ul> <p>If you use Amazon CloudWatch for metrics, you can add the new fleet to a metric group. This allows you to view aggregated metrics for a set of fleets. Once you specify a metric group, the new fleet&#39;s metrics are included in the metric group&#39;s data.</p> <p>You have the option of creating a VPC peering connection with the new fleet. For more information, see <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/vpc-peering.html">VPC Peering with Amazon GameLift Fleets</a>.</p> <p>If the CreateFleet call is successful, Amazon GameLift performs the following tasks:</p> <ul> <li> <p>Creates a fleet record and sets the status to <code>NEW</code> (followed by other statuses as the fleet is activated).</p> </li> <li> <p>Sets the fleet&#39;s target capacity to 1 (desired instances), which causes Amazon GameLift to start one new EC2 instance.</p> </li> <li> <p>Starts launching server processes on the instance. If the fleet is configured to run multiple server processes per instance, Amazon GameLift staggers each launch by a few seconds.</p> </li> <li> <p>Begins writing events to the fleet event log, which can be accessed in the Amazon GameLift console.</p> </li> <li> <p>Sets the fleet&#39;s status to <code>ACTIVE</code> as soon as one server process in the fleet is ready to host a game session.</p> </li> </ul> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul></p>
     fn create_fleet(&self, input: &CreateFleetInput)
         -> Result<CreateFleetOutput, CreateFleetError>;
 
@@ -8457,6 +9238,18 @@ pub trait GameLift {
         input: &CreatePlayerSessionsInput,
     ) -> Result<CreatePlayerSessionsOutput, CreatePlayerSessionsError>;
 
+    /// <p><p>Requests authorization to create or delete a peer connection between the VPC for your Amazon GameLift fleet and a virtual private cloud (VPC) in your AWS account. VPC peering enables the game servers on your fleet to communicate directly with other AWS resources. Once you&#39;ve received authorization, call <a>CreateVpcPeeringConnection</a> to establish the peering connection. For more information, see <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/vpc-peering.html">VPC Peering with Amazon GameLift Fleets</a>.</p> <p>You can peer with VPCs that are owned by any AWS account you have access to, including the account that you use to manage your Amazon GameLift fleets. You cannot peer with VPCs that are in different regions.</p> <p>To request authorization to create a connection, call this operation from the AWS account with the VPC that you want to peer to your Amazon GameLift fleet. For example, to enable your game servers to retrieve data from a DynamoDB table, use the account that manages that DynamoDB resource. Identify the following values: (1) The ID of the VPC that you want to peer with, and (2) the ID of the AWS account that you use to manage Amazon GameLift. If successful, VPC peering is authorized for the specified VPC. </p> <p>To request authorization to delete a connection, call this operation from the AWS account with the VPC that is peered with your Amazon GameLift fleet. Identify the following values: (1) VPC ID that you want to delete the peering connection for, and (2) ID of the AWS account that you use to manage Amazon GameLift. </p> <p>The authorization remains valid for 24 hours unless it is canceled by a call to <a>DeleteVpcPeeringAuthorization</a>. You must create or delete the peering connection while the authorization is valid. </p> <p>VPC peering connection operations include:</p> <ul> <li> <p> <a>CreateVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>DescribeVpcPeeringAuthorizations</a> </p> </li> <li> <p> <a>DeleteVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>CreateVpcPeeringConnection</a> </p> </li> <li> <p> <a>DescribeVpcPeeringConnections</a> </p> </li> <li> <p> <a>DeleteVpcPeeringConnection</a> </p> </li> </ul></p>
+    fn create_vpc_peering_authorization(
+        &self,
+        input: &CreateVpcPeeringAuthorizationInput,
+    ) -> Result<CreateVpcPeeringAuthorizationOutput, CreateVpcPeeringAuthorizationError>;
+
+    /// <p><p>Establishes a VPC peering connection between a virtual private cloud (VPC) in an AWS account with the VPC for your Amazon GameLift fleet. VPC peering enables the game servers on your fleet to communicate directly with other AWS resources. You can peer with VPCs in any AWS account that you have access to, including the account that you use to manage your Amazon GameLift fleets. You cannot peer with VPCs that are in different regions. For more information, see <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/vpc-peering.html">VPC Peering with Amazon GameLift Fleets</a>.</p> <p>Before calling this operation to establish the peering connection, you first need to call <a>CreateVpcPeeringAuthorization</a> and identify the VPC you want to peer with. Once the authorization for the specified VPC is issued, you have 24 hours to establish the connection. These two operations handle all tasks necessary to peer the two VPCs, including acceptance, updating routing tables, etc. </p> <p>To establish the connection, call this operation from the AWS account that is used to manage the Amazon GameLift fleets. Identify the following values: (1) The ID of the fleet you want to be enable a VPC peering connection for; (2) The AWS account with the VPC that you want to peer with; and (3) The ID of the VPC you want to peer with. This operation is asynchronous. If successful, a <a>VpcPeeringConnection</a> request is created. You can use continuous polling to track the request&#39;s status using <a>DescribeVpcPeeringConnections</a>, or by monitoring fleet events for success or failure using <a>DescribeFleetEvents</a>. </p> <p>VPC peering connection operations include:</p> <ul> <li> <p> <a>CreateVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>DescribeVpcPeeringAuthorizations</a> </p> </li> <li> <p> <a>DeleteVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>CreateVpcPeeringConnection</a> </p> </li> <li> <p> <a>DescribeVpcPeeringConnections</a> </p> </li> <li> <p> <a>DeleteVpcPeeringConnection</a> </p> </li> </ul></p>
+    fn create_vpc_peering_connection(
+        &self,
+        input: &CreateVpcPeeringConnectionInput,
+    ) -> Result<CreateVpcPeeringConnectionOutput, CreateVpcPeeringConnectionError>;
+
     /// <p><p>Deletes an alias. This action removes all record of the alias. Game clients attempting to access a server process using the deleted alias receive an error. To delete an alias, specify the alias ID to be deleted.</p> <p>Alias-related operations include:</p> <ul> <li> <p> <a>CreateAlias</a> </p> </li> <li> <p> <a>ListAliases</a> </p> </li> <li> <p> <a>DescribeAlias</a> </p> </li> <li> <p> <a>UpdateAlias</a> </p> </li> <li> <p> <a>DeleteAlias</a> </p> </li> <li> <p> <a>ResolveAlias</a> </p> </li> </ul></p>
     fn delete_alias(&self, input: &DeleteAliasInput) -> Result<(), DeleteAliasError>;
 
@@ -8483,6 +9276,18 @@ pub trait GameLift {
         &self,
         input: &DeleteScalingPolicyInput,
     ) -> Result<(), DeleteScalingPolicyError>;
+
+    /// <p><p>Cancels a pending VPC peering authorization for the specified VPC. If the authorization has already been used to create a peering connection, call <a>DeleteVpcPeeringConnection</a> to remove the connection. </p> <p>VPC peering connection operations include:</p> <ul> <li> <p> <a>CreateVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>DescribeVpcPeeringAuthorizations</a> </p> </li> <li> <p> <a>DeleteVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>CreateVpcPeeringConnection</a> </p> </li> <li> <p> <a>DescribeVpcPeeringConnections</a> </p> </li> <li> <p> <a>DeleteVpcPeeringConnection</a> </p> </li> </ul></p>
+    fn delete_vpc_peering_authorization(
+        &self,
+        input: &DeleteVpcPeeringAuthorizationInput,
+    ) -> Result<DeleteVpcPeeringAuthorizationOutput, DeleteVpcPeeringAuthorizationError>;
+
+    /// <p><p>Removes a VPC peering connection. To delete the connection, you must have a valid authorization for the VPC peering connection that you want to delete. You can check for an authorization by calling <a>DescribeVpcPeeringAuthorizations</a> or request a new one using <a>CreateVpcPeeringAuthorization</a>. </p> <p>Once a valid authorization exists, call this operation from the AWS account that is used to manage the Amazon GameLift fleets. Identify the connection to delete by the connection ID and fleet ID. If successful, the connection is removed. </p> <p>VPC peering connection operations include:</p> <ul> <li> <p> <a>CreateVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>DescribeVpcPeeringAuthorizations</a> </p> </li> <li> <p> <a>DeleteVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>CreateVpcPeeringConnection</a> </p> </li> <li> <p> <a>DescribeVpcPeeringConnections</a> </p> </li> <li> <p> <a>DeleteVpcPeeringConnection</a> </p> </li> </ul></p>
+    fn delete_vpc_peering_connection(
+        &self,
+        input: &DeleteVpcPeeringConnectionInput,
+    ) -> Result<DeleteVpcPeeringConnectionOutput, DeleteVpcPeeringConnectionError>;
 
     /// <p><p>Retrieves properties for an alias. This operation returns all alias metadata and settings. To get an alias&#39;s target fleet ID only, use <code>ResolveAlias</code>. </p> <p>To get alias properties, specify the alias ID. If successful, the requested alias record is returned.</p> <p>Alias-related operations include:</p> <ul> <li> <p> <a>CreateAlias</a> </p> </li> <li> <p> <a>ListAliases</a> </p> </li> <li> <p> <a>DescribeAlias</a> </p> </li> <li> <p> <a>UpdateAlias</a> </p> </li> <li> <p> <a>DeleteAlias</a> </p> </li> <li> <p> <a>ResolveAlias</a> </p> </li> </ul></p>
     fn describe_alias(
@@ -8598,6 +9403,17 @@ pub trait GameLift {
         input: &DescribeScalingPoliciesInput,
     ) -> Result<DescribeScalingPoliciesOutput, DescribeScalingPoliciesError>;
 
+    /// <p><p>Retrieves valid VPC peering authorizations that are pending for the AWS account. This operation returns all VPC peering authorizations and requests for peering. This includes those initiated and received by this account. </p> <p>VPC peering connection operations include:</p> <ul> <li> <p> <a>CreateVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>DescribeVpcPeeringAuthorizations</a> </p> </li> <li> <p> <a>DeleteVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>CreateVpcPeeringConnection</a> </p> </li> <li> <p> <a>DescribeVpcPeeringConnections</a> </p> </li> <li> <p> <a>DeleteVpcPeeringConnection</a> </p> </li> </ul></p>
+    fn describe_vpc_peering_authorizations(
+        &self,
+    ) -> Result<DescribeVpcPeeringAuthorizationsOutput, DescribeVpcPeeringAuthorizationsError>;
+
+    /// <p><p>Retrieves information on VPC peering connections. Use this operation to get peering information for all fleets or for one specific fleet ID. </p> <p>To retrieve connection information, call this operation from the AWS account that is used to manage the Amazon GameLift fleets. Specify a fleet ID or leave the parameter empty to retrieve all connection records. If successful, the retrieved information includes both active and pending connections. Active connections identify the IpV4 CIDR block that the VPC uses to connect. </p> <p>VPC peering connection operations include:</p> <ul> <li> <p> <a>CreateVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>DescribeVpcPeeringAuthorizations</a> </p> </li> <li> <p> <a>DeleteVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>CreateVpcPeeringConnection</a> </p> </li> <li> <p> <a>DescribeVpcPeeringConnections</a> </p> </li> <li> <p> <a>DeleteVpcPeeringConnection</a> </p> </li> </ul></p>
+    fn describe_vpc_peering_connections(
+        &self,
+        input: &DescribeVpcPeeringConnectionsInput,
+    ) -> Result<DescribeVpcPeeringConnectionsOutput, DescribeVpcPeeringConnectionsError>;
+
     /// <p><p>Retrieves the location of stored game session logs for a specified game session. When a game session is terminated, Amazon GameLift automatically stores the logs in Amazon S3 and retains them for 14 days. Use this URL to download the logs.</p> <note> <p>See the <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_gamelift">AWS Service Limits</a> page for maximum log file sizes. Log files that exceed this limit are not saved.</p> </note> <p>Game-session-related operations include:</p> <ul> <li> <p> <a>CreateGameSession</a> </p> </li> <li> <p> <a>DescribeGameSessions</a> </p> </li> <li> <p> <a>DescribeGameSessionDetails</a> </p> </li> <li> <p> <a>SearchGameSessions</a> </p> </li> <li> <p> <a>UpdateGameSession</a> </p> </li> <li> <p> <a>GetGameSessionLogUrl</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul></p>
     fn get_game_session_log_url(
         &self,
@@ -8650,7 +9466,7 @@ pub trait GameLift {
         input: &StartGameSessionPlacementInput,
     ) -> Result<StartGameSessionPlacementOutput, StartGameSessionPlacementError>;
 
-    /// <p><p>Uses FlexMatch to create a game match for a group of players based on custom matchmaking rules, and starts a new game for the matched players. Each matchmaking request specifies the type of match to build (team configuration, rules for an acceptable match, etc.). The request also specifies the players to find a match for and where to host the new game session for optimal performance. A matchmaking request might start with a single player or a group of players who want to play together. FlexMatch finds additional players as needed to fill the match. Match type, rules, and the queue used to place a new game session are defined in a <code>MatchmakingConfiguration</code>. For complete information on setting up and using FlexMatch, see the topic <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/match-intro.html"> Adding FlexMatch to Your Game</a>.</p> <p>To start matchmaking, provide a unique ticket ID, specify a matchmaking configuration, and include the players to be matched. You must also include a set of player attributes relevant for the matchmaking configuration. If successful, a matchmaking ticket is returned with status set to <code>QUEUED</code>. Track the status of the ticket to respond as needed and acquire game session connection information for sucessfully completed matches.</p> <p> <b>Tracking ticket status</b> -- A couple of options are available for tracking the status of matchmaking requests: </p> <ul> <li> <p>Polling -- Call <code>DescribeMatchmaking</code>. This operation returns the full ticket object, including current status and (for completed tickets) game session connection info. We recommend polling no more than once every 10 seconds.</p> </li> <li> <p>Notifications -- Get event notifications for changes in ticket status using Amazon Simple Notification Service (SNS). Notifications are easy to set up (see <a>CreateMatchmakingConfiguration</a>) and typically deliver match status changes faster and more efficiently than polling. We recommend that you use polling to back up to notifications (since delivery is not guaranteed) and call <code>DescribeMatchmaking</code> only when notifications are not received within 30 seconds.</p> </li> </ul> <p> <b>Processing a matchmaking request</b> -- FlexMatch handles a matchmaking request as follows: </p> <ol> <li> <p>Your client code submits a <code>StartMatchmaking</code> request for one or more players and tracks the status of the request ticket. </p> </li> <li> <p>FlexMatch uses this ticket and others in process to build an acceptable match. When a potential match is identified, all tickets in the proposed match are advanced to the next status. </p> </li> <li> <p>If the match requires player acceptance (set in the matchmaking configuration), the tickets move into status <code>REQUIRES_ACCEPTANCE</code>. This status triggers your client code to solicit acceptance from all players in every ticket involved in the match, and then call <a>AcceptMatch</a> for each player. If any player rejects or fails to accept the match before a specified timeout, the proposed match is dropped (see <code>AcceptMatch</code> for more details).</p> </li> <li> <p>Once a match is proposed and accepted, the matchmaking tickets move into status <code>PLACING</code>. FlexMatch locates resources for a new game session using the game session queue (set in the matchmaking configuration) and creates the game session based on the match data. </p> </li> <li> <p>When the match is successfully placed, the matchmaking tickets move into <code>COMPLETED</code> status. Connection information (including game session endpoint and player session) is added to the matchmaking tickets. Matched players can use the connection information to join the game. </p> </li> </ol> <p>Matchmaking-related operations include:</p> <ul> <li> <p> <a>StartMatchmaking</a> </p> </li> <li> <p> <a>DescribeMatchmaking</a> </p> </li> <li> <p> <a>StopMatchmaking</a> </p> </li> <li> <p> <a>AcceptMatch</a> </p> </li> </ul></p>
+    /// <p><p>Uses FlexMatch to create a game match for a group of players based on custom matchmaking rules, and starts a new game for the matched players. Each matchmaking request specifies the type of match to build (team configuration, rules for an acceptable match, etc.). The request also specifies the players to find a match for and where to host the new game session for optimal performance. A matchmaking request might start with a single player or a group of players who want to play together. FlexMatch finds additional players as needed to fill the match. Match type, rules, and the queue used to place a new game session are defined in a <code>MatchmakingConfiguration</code>. For complete information on setting up and using FlexMatch, see the topic <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/match-intro.html"> Adding FlexMatch to Your Game</a>.</p> <p>To start matchmaking, provide a unique ticket ID, specify a matchmaking configuration, and include the players to be matched. You must also include a set of player attributes relevant for the matchmaking configuration. If successful, a matchmaking ticket is returned with status set to <code>QUEUED</code>. Track the status of the ticket to respond as needed and acquire game session connection information for successfully completed matches.</p> <p> <b>Tracking ticket status</b> -- A couple of options are available for tracking the status of matchmaking requests: </p> <ul> <li> <p>Polling -- Call <code>DescribeMatchmaking</code>. This operation returns the full ticket object, including current status and (for completed tickets) game session connection info. We recommend polling no more than once every 10 seconds.</p> </li> <li> <p>Notifications -- Get event notifications for changes in ticket status using Amazon Simple Notification Service (SNS). Notifications are easy to set up (see <a>CreateMatchmakingConfiguration</a>) and typically deliver match status changes faster and more efficiently than polling. We recommend that you use polling to back up to notifications (since delivery is not guaranteed) and call <code>DescribeMatchmaking</code> only when notifications are not received within 30 seconds.</p> </li> </ul> <p> <b>Processing a matchmaking request</b> -- FlexMatch handles a matchmaking request as follows: </p> <ol> <li> <p>Your client code submits a <code>StartMatchmaking</code> request for one or more players and tracks the status of the request ticket. </p> </li> <li> <p>FlexMatch uses this ticket and others in process to build an acceptable match. When a potential match is identified, all tickets in the proposed match are advanced to the next status. </p> </li> <li> <p>If the match requires player acceptance (set in the matchmaking configuration), the tickets move into status <code>REQUIRES_ACCEPTANCE</code>. This status triggers your client code to solicit acceptance from all players in every ticket involved in the match, and then call <a>AcceptMatch</a> for each player. If any player rejects or fails to accept the match before a specified timeout, the proposed match is dropped (see <code>AcceptMatch</code> for more details).</p> </li> <li> <p>Once a match is proposed and accepted, the matchmaking tickets move into status <code>PLACING</code>. FlexMatch locates resources for a new game session using the game session queue (set in the matchmaking configuration) and creates the game session based on the match data. </p> </li> <li> <p>When the match is successfully placed, the matchmaking tickets move into <code>COMPLETED</code> status. Connection information (including game session endpoint and player session) is added to the matchmaking tickets. Matched players can use the connection information to join the game. </p> </li> </ol> <p>Matchmaking-related operations include:</p> <ul> <li> <p> <a>StartMatchmaking</a> </p> </li> <li> <p> <a>DescribeMatchmaking</a> </p> </li> <li> <p> <a>StopMatchmaking</a> </p> </li> <li> <p> <a>AcceptMatch</a> </p> </li> </ul></p>
     fn start_matchmaking(
         &self,
         input: &StartMatchmakingInput,
@@ -8856,7 +9672,7 @@ where
         }
     }
 
-    /// <p><p>Creates a new fleet to run your game servers. A fleet is a set of Amazon Elastic Compute Cloud (Amazon EC2) instances, each of which can run multiple server processes to host game sessions. You configure a fleet to create instances with certain hardware specifications (see <a href="http://aws.amazon.com/ec2/instance-types/">Amazon EC2 Instance Types</a> for more information), and deploy a specified game build to each instance. A newly created fleet passes through several statuses; once it reaches the <code>ACTIVE</code> status, it can begin hosting game sessions.</p> <p>To create a new fleet, you must specify the following: (1) fleet name, (2) build ID of an uploaded game build, (3) an EC2 instance type, and (4) a run-time configuration that describes which server processes to run on each instance in the fleet. (Although the run-time configuration is not a required parameter, the fleet cannot be successfully activated without it.)</p> <p>You can also configure the new fleet with the following settings:</p> <ul> <li> <p>Fleet description</p> </li> <li> <p>Access permissions for inbound traffic</p> </li> <li> <p>Fleet-wide game session protection</p> </li> <li> <p>Resource creation limit</p> </li> </ul> <p>If you use Amazon CloudWatch for metrics, you can add the new fleet to a metric group. This allows you to view aggregated metrics for a set of fleets. Once you specify a metric group, the new fleet&#39;s metrics are included in the metric group&#39;s data.</p> <p>If the CreateFleet call is successful, Amazon GameLift performs the following tasks:</p> <ul> <li> <p>Creates a fleet record and sets the status to <code>NEW</code> (followed by other statuses as the fleet is activated).</p> </li> <li> <p>Sets the fleet&#39;s target capacity to 1 (desired instances), which causes Amazon GameLift to start one new EC2 instance.</p> </li> <li> <p>Starts launching server processes on the instance. If the fleet is configured to run multiple server processes per instance, Amazon GameLift staggers each launch by a few seconds.</p> </li> <li> <p>Begins writing events to the fleet event log, which can be accessed in the Amazon GameLift console.</p> </li> <li> <p>Sets the fleet&#39;s status to <code>ACTIVE</code> as soon as one server process in the fleet is ready to host a game session.</p> </li> </ul> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul></p>
+    /// <p><p>Creates a new fleet to run your game servers. A fleet is a set of Amazon Elastic Compute Cloud (Amazon EC2) instances, each of which can run multiple server processes to host game sessions. You configure a fleet to create instances with certain hardware specifications (see <a href="http://aws.amazon.com/ec2/instance-types/">Amazon EC2 Instance Types</a> for more information), and deploy a specified game build to each instance. A newly created fleet passes through several statuses; once it reaches the <code>ACTIVE</code> status, it can begin hosting game sessions.</p> <p>To create a new fleet, you must specify the following: (1) fleet name, (2) build ID of an uploaded game build, (3) an EC2 instance type, and (4) a run-time configuration that describes which server processes to run on each instance in the fleet. (Although the run-time configuration is not a required parameter, the fleet cannot be successfully activated without it.)</p> <p>You can also configure the new fleet with the following settings:</p> <ul> <li> <p>Fleet description</p> </li> <li> <p>Access permissions for inbound traffic</p> </li> <li> <p>Fleet-wide game session protection</p> </li> <li> <p>Resource creation limit</p> </li> </ul> <p>If you use Amazon CloudWatch for metrics, you can add the new fleet to a metric group. This allows you to view aggregated metrics for a set of fleets. Once you specify a metric group, the new fleet&#39;s metrics are included in the metric group&#39;s data.</p> <p>You have the option of creating a VPC peering connection with the new fleet. For more information, see <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/vpc-peering.html">VPC Peering with Amazon GameLift Fleets</a>.</p> <p>If the CreateFleet call is successful, Amazon GameLift performs the following tasks:</p> <ul> <li> <p>Creates a fleet record and sets the status to <code>NEW</code> (followed by other statuses as the fleet is activated).</p> </li> <li> <p>Sets the fleet&#39;s target capacity to 1 (desired instances), which causes Amazon GameLift to start one new EC2 instance.</p> </li> <li> <p>Starts launching server processes on the instance. If the fleet is configured to run multiple server processes per instance, Amazon GameLift staggers each launch by a few seconds.</p> </li> <li> <p>Begins writing events to the fleet event log, which can be accessed in the Amazon GameLift console.</p> </li> <li> <p>Sets the fleet&#39;s status to <code>ACTIVE</code> as soon as one server process in the fleet is ready to host a game session.</p> </li> </ul> <p>Fleet-related operations include:</p> <ul> <li> <p> <a>CreateFleet</a> </p> </li> <li> <p> <a>ListFleets</a> </p> </li> <li> <p>Describe fleets:</p> <ul> <li> <p> <a>DescribeFleetAttributes</a> </p> </li> <li> <p> <a>DescribeFleetPortSettings</a> </p> </li> <li> <p> <a>DescribeFleetUtilization</a> </p> </li> <li> <p> <a>DescribeRuntimeConfiguration</a> </p> </li> <li> <p> <a>DescribeFleetEvents</a> </p> </li> </ul> </li> <li> <p>Update fleets:</p> <ul> <li> <p> <a>UpdateFleetAttributes</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetPortSettings</a> </p> </li> <li> <p> <a>UpdateRuntimeConfiguration</a> </p> </li> </ul> </li> <li> <p>Manage fleet capacity:</p> <ul> <li> <p> <a>DescribeFleetCapacity</a> </p> </li> <li> <p> <a>UpdateFleetCapacity</a> </p> </li> <li> <p> <a>PutScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeScalingPolicies</a> (automatic scaling)</p> </li> <li> <p> <a>DeleteScalingPolicy</a> (automatic scaling)</p> </li> <li> <p> <a>DescribeEC2InstanceLimits</a> </p> </li> </ul> </li> <li> <p> <a>DeleteFleet</a> </p> </li> </ul></p>
     fn create_fleet(
         &self,
         input: &CreateFleetInput,
@@ -9096,6 +9912,74 @@ where
         }
     }
 
+    /// <p><p>Requests authorization to create or delete a peer connection between the VPC for your Amazon GameLift fleet and a virtual private cloud (VPC) in your AWS account. VPC peering enables the game servers on your fleet to communicate directly with other AWS resources. Once you&#39;ve received authorization, call <a>CreateVpcPeeringConnection</a> to establish the peering connection. For more information, see <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/vpc-peering.html">VPC Peering with Amazon GameLift Fleets</a>.</p> <p>You can peer with VPCs that are owned by any AWS account you have access to, including the account that you use to manage your Amazon GameLift fleets. You cannot peer with VPCs that are in different regions.</p> <p>To request authorization to create a connection, call this operation from the AWS account with the VPC that you want to peer to your Amazon GameLift fleet. For example, to enable your game servers to retrieve data from a DynamoDB table, use the account that manages that DynamoDB resource. Identify the following values: (1) The ID of the VPC that you want to peer with, and (2) the ID of the AWS account that you use to manage Amazon GameLift. If successful, VPC peering is authorized for the specified VPC. </p> <p>To request authorization to delete a connection, call this operation from the AWS account with the VPC that is peered with your Amazon GameLift fleet. Identify the following values: (1) VPC ID that you want to delete the peering connection for, and (2) ID of the AWS account that you use to manage Amazon GameLift. </p> <p>The authorization remains valid for 24 hours unless it is canceled by a call to <a>DeleteVpcPeeringAuthorization</a>. You must create or delete the peering connection while the authorization is valid. </p> <p>VPC peering connection operations include:</p> <ul> <li> <p> <a>CreateVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>DescribeVpcPeeringAuthorizations</a> </p> </li> <li> <p> <a>DeleteVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>CreateVpcPeeringConnection</a> </p> </li> <li> <p> <a>DescribeVpcPeeringConnections</a> </p> </li> <li> <p> <a>DeleteVpcPeeringConnection</a> </p> </li> </ul></p>
+    fn create_vpc_peering_authorization(
+        &self,
+        input: &CreateVpcPeeringAuthorizationInput,
+    ) -> Result<CreateVpcPeeringAuthorizationOutput, CreateVpcPeeringAuthorizationError> {
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "GameLift.CreateVpcPeeringAuthorization");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateVpcPeeringAuthorizationOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateVpcPeeringAuthorizationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p><p>Establishes a VPC peering connection between a virtual private cloud (VPC) in an AWS account with the VPC for your Amazon GameLift fleet. VPC peering enables the game servers on your fleet to communicate directly with other AWS resources. You can peer with VPCs in any AWS account that you have access to, including the account that you use to manage your Amazon GameLift fleets. You cannot peer with VPCs that are in different regions. For more information, see <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/vpc-peering.html">VPC Peering with Amazon GameLift Fleets</a>.</p> <p>Before calling this operation to establish the peering connection, you first need to call <a>CreateVpcPeeringAuthorization</a> and identify the VPC you want to peer with. Once the authorization for the specified VPC is issued, you have 24 hours to establish the connection. These two operations handle all tasks necessary to peer the two VPCs, including acceptance, updating routing tables, etc. </p> <p>To establish the connection, call this operation from the AWS account that is used to manage the Amazon GameLift fleets. Identify the following values: (1) The ID of the fleet you want to be enable a VPC peering connection for; (2) The AWS account with the VPC that you want to peer with; and (3) The ID of the VPC you want to peer with. This operation is asynchronous. If successful, a <a>VpcPeeringConnection</a> request is created. You can use continuous polling to track the request&#39;s status using <a>DescribeVpcPeeringConnections</a>, or by monitoring fleet events for success or failure using <a>DescribeFleetEvents</a>. </p> <p>VPC peering connection operations include:</p> <ul> <li> <p> <a>CreateVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>DescribeVpcPeeringAuthorizations</a> </p> </li> <li> <p> <a>DeleteVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>CreateVpcPeeringConnection</a> </p> </li> <li> <p> <a>DescribeVpcPeeringConnections</a> </p> </li> <li> <p> <a>DeleteVpcPeeringConnection</a> </p> </li> </ul></p>
+    fn create_vpc_peering_connection(
+        &self,
+        input: &CreateVpcPeeringConnectionInput,
+    ) -> Result<CreateVpcPeeringConnectionOutput, CreateVpcPeeringConnectionError> {
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "GameLift.CreateVpcPeeringConnection");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateVpcPeeringConnectionOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateVpcPeeringConnectionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p><p>Deletes an alias. This action removes all record of the alias. Game clients attempting to access a server process using the deleted alias receive an error. To delete an alias, specify the alias ID to be deleted.</p> <p>Alias-related operations include:</p> <ul> <li> <p> <a>CreateAlias</a> </p> </li> <li> <p> <a>ListAliases</a> </p> </li> <li> <p> <a>DescribeAlias</a> </p> </li> <li> <p> <a>UpdateAlias</a> </p> </li> <li> <p> <a>DeleteAlias</a> </p> </li> <li> <p> <a>ResolveAlias</a> </p> </li> </ul></p>
     fn delete_alias(&self, input: &DeleteAliasInput) -> Result<(), DeleteAliasError> {
         let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
@@ -9263,6 +10147,74 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(DeleteScalingPolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p><p>Cancels a pending VPC peering authorization for the specified VPC. If the authorization has already been used to create a peering connection, call <a>DeleteVpcPeeringConnection</a> to remove the connection. </p> <p>VPC peering connection operations include:</p> <ul> <li> <p> <a>CreateVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>DescribeVpcPeeringAuthorizations</a> </p> </li> <li> <p> <a>DeleteVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>CreateVpcPeeringConnection</a> </p> </li> <li> <p> <a>DescribeVpcPeeringConnections</a> </p> </li> <li> <p> <a>DeleteVpcPeeringConnection</a> </p> </li> </ul></p>
+    fn delete_vpc_peering_authorization(
+        &self,
+        input: &DeleteVpcPeeringAuthorizationInput,
+    ) -> Result<DeleteVpcPeeringAuthorizationOutput, DeleteVpcPeeringAuthorizationError> {
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "GameLift.DeleteVpcPeeringAuthorization");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteVpcPeeringAuthorizationOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteVpcPeeringAuthorizationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p><p>Removes a VPC peering connection. To delete the connection, you must have a valid authorization for the VPC peering connection that you want to delete. You can check for an authorization by calling <a>DescribeVpcPeeringAuthorizations</a> or request a new one using <a>CreateVpcPeeringAuthorization</a>. </p> <p>Once a valid authorization exists, call this operation from the AWS account that is used to manage the Amazon GameLift fleets. Identify the connection to delete by the connection ID and fleet ID. If successful, the connection is removed. </p> <p>VPC peering connection operations include:</p> <ul> <li> <p> <a>CreateVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>DescribeVpcPeeringAuthorizations</a> </p> </li> <li> <p> <a>DeleteVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>CreateVpcPeeringConnection</a> </p> </li> <li> <p> <a>DescribeVpcPeeringConnections</a> </p> </li> <li> <p> <a>DeleteVpcPeeringConnection</a> </p> </li> </ul></p>
+    fn delete_vpc_peering_connection(
+        &self,
+        input: &DeleteVpcPeeringConnectionInput,
+    ) -> Result<DeleteVpcPeeringConnectionOutput, DeleteVpcPeeringConnectionError> {
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "GameLift.DeleteVpcPeeringConnection");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteVpcPeeringConnectionOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteVpcPeeringConnectionError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -9918,6 +10870,74 @@ where
         }
     }
 
+    /// <p><p>Retrieves valid VPC peering authorizations that are pending for the AWS account. This operation returns all VPC peering authorizations and requests for peering. This includes those initiated and received by this account. </p> <p>VPC peering connection operations include:</p> <ul> <li> <p> <a>CreateVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>DescribeVpcPeeringAuthorizations</a> </p> </li> <li> <p> <a>DeleteVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>CreateVpcPeeringConnection</a> </p> </li> <li> <p> <a>DescribeVpcPeeringConnections</a> </p> </li> <li> <p> <a>DeleteVpcPeeringConnection</a> </p> </li> </ul></p>
+    fn describe_vpc_peering_authorizations(
+        &self,
+    ) -> Result<DescribeVpcPeeringAuthorizationsOutput, DescribeVpcPeeringAuthorizationsError> {
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "GameLift.DescribeVpcPeeringAuthorizations");
+        request.set_payload(Some(b"{}".to_vec()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(
+                    serde_json::from_str::<DescribeVpcPeeringAuthorizationsOutput>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeVpcPeeringAuthorizationsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p><p>Retrieves information on VPC peering connections. Use this operation to get peering information for all fleets or for one specific fleet ID. </p> <p>To retrieve connection information, call this operation from the AWS account that is used to manage the Amazon GameLift fleets. Specify a fleet ID or leave the parameter empty to retrieve all connection records. If successful, the retrieved information includes both active and pending connections. Active connections identify the IpV4 CIDR block that the VPC uses to connect. </p> <p>VPC peering connection operations include:</p> <ul> <li> <p> <a>CreateVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>DescribeVpcPeeringAuthorizations</a> </p> </li> <li> <p> <a>DeleteVpcPeeringAuthorization</a> </p> </li> <li> <p> <a>CreateVpcPeeringConnection</a> </p> </li> <li> <p> <a>DescribeVpcPeeringConnections</a> </p> </li> <li> <p> <a>DeleteVpcPeeringConnection</a> </p> </li> </ul></p>
+    fn describe_vpc_peering_connections(
+        &self,
+        input: &DescribeVpcPeeringConnectionsInput,
+    ) -> Result<DescribeVpcPeeringConnectionsOutput, DescribeVpcPeeringConnectionsError> {
+        let mut request = SignedRequest::new("POST", "gamelift", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "GameLift.DescribeVpcPeeringConnections");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeVpcPeeringConnectionsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeVpcPeeringConnectionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p><p>Retrieves the location of stored game session logs for a specified game session. When a game session is terminated, Amazon GameLift automatically stores the logs in Amazon S3 and retains them for 14 days. Use this URL to download the logs.</p> <note> <p>See the <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_gamelift">AWS Service Limits</a> page for maximum log file sizes. Log files that exceed this limit are not saved.</p> </note> <p>Game-session-related operations include:</p> <ul> <li> <p> <a>CreateGameSession</a> </p> </li> <li> <p> <a>DescribeGameSessions</a> </p> </li> <li> <p> <a>DescribeGameSessionDetails</a> </p> </li> <li> <p> <a>SearchGameSessions</a> </p> </li> <li> <p> <a>UpdateGameSession</a> </p> </li> <li> <p> <a>GetGameSessionLogUrl</a> </p> </li> <li> <p>Game session placements</p> <ul> <li> <p> <a>StartGameSessionPlacement</a> </p> </li> <li> <p> <a>DescribeGameSessionPlacement</a> </p> </li> <li> <p> <a>StopGameSessionPlacement</a> </p> </li> </ul> </li> </ul></p>
     fn get_game_session_log_url(
         &self,
@@ -10252,7 +11272,7 @@ where
         }
     }
 
-    /// <p><p>Uses FlexMatch to create a game match for a group of players based on custom matchmaking rules, and starts a new game for the matched players. Each matchmaking request specifies the type of match to build (team configuration, rules for an acceptable match, etc.). The request also specifies the players to find a match for and where to host the new game session for optimal performance. A matchmaking request might start with a single player or a group of players who want to play together. FlexMatch finds additional players as needed to fill the match. Match type, rules, and the queue used to place a new game session are defined in a <code>MatchmakingConfiguration</code>. For complete information on setting up and using FlexMatch, see the topic <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/match-intro.html"> Adding FlexMatch to Your Game</a>.</p> <p>To start matchmaking, provide a unique ticket ID, specify a matchmaking configuration, and include the players to be matched. You must also include a set of player attributes relevant for the matchmaking configuration. If successful, a matchmaking ticket is returned with status set to <code>QUEUED</code>. Track the status of the ticket to respond as needed and acquire game session connection information for sucessfully completed matches.</p> <p> <b>Tracking ticket status</b> -- A couple of options are available for tracking the status of matchmaking requests: </p> <ul> <li> <p>Polling -- Call <code>DescribeMatchmaking</code>. This operation returns the full ticket object, including current status and (for completed tickets) game session connection info. We recommend polling no more than once every 10 seconds.</p> </li> <li> <p>Notifications -- Get event notifications for changes in ticket status using Amazon Simple Notification Service (SNS). Notifications are easy to set up (see <a>CreateMatchmakingConfiguration</a>) and typically deliver match status changes faster and more efficiently than polling. We recommend that you use polling to back up to notifications (since delivery is not guaranteed) and call <code>DescribeMatchmaking</code> only when notifications are not received within 30 seconds.</p> </li> </ul> <p> <b>Processing a matchmaking request</b> -- FlexMatch handles a matchmaking request as follows: </p> <ol> <li> <p>Your client code submits a <code>StartMatchmaking</code> request for one or more players and tracks the status of the request ticket. </p> </li> <li> <p>FlexMatch uses this ticket and others in process to build an acceptable match. When a potential match is identified, all tickets in the proposed match are advanced to the next status. </p> </li> <li> <p>If the match requires player acceptance (set in the matchmaking configuration), the tickets move into status <code>REQUIRES_ACCEPTANCE</code>. This status triggers your client code to solicit acceptance from all players in every ticket involved in the match, and then call <a>AcceptMatch</a> for each player. If any player rejects or fails to accept the match before a specified timeout, the proposed match is dropped (see <code>AcceptMatch</code> for more details).</p> </li> <li> <p>Once a match is proposed and accepted, the matchmaking tickets move into status <code>PLACING</code>. FlexMatch locates resources for a new game session using the game session queue (set in the matchmaking configuration) and creates the game session based on the match data. </p> </li> <li> <p>When the match is successfully placed, the matchmaking tickets move into <code>COMPLETED</code> status. Connection information (including game session endpoint and player session) is added to the matchmaking tickets. Matched players can use the connection information to join the game. </p> </li> </ol> <p>Matchmaking-related operations include:</p> <ul> <li> <p> <a>StartMatchmaking</a> </p> </li> <li> <p> <a>DescribeMatchmaking</a> </p> </li> <li> <p> <a>StopMatchmaking</a> </p> </li> <li> <p> <a>AcceptMatch</a> </p> </li> </ul></p>
+    /// <p><p>Uses FlexMatch to create a game match for a group of players based on custom matchmaking rules, and starts a new game for the matched players. Each matchmaking request specifies the type of match to build (team configuration, rules for an acceptable match, etc.). The request also specifies the players to find a match for and where to host the new game session for optimal performance. A matchmaking request might start with a single player or a group of players who want to play together. FlexMatch finds additional players as needed to fill the match. Match type, rules, and the queue used to place a new game session are defined in a <code>MatchmakingConfiguration</code>. For complete information on setting up and using FlexMatch, see the topic <a href="http://docs.aws.amazon.com/gamelift/latest/developerguide/match-intro.html"> Adding FlexMatch to Your Game</a>.</p> <p>To start matchmaking, provide a unique ticket ID, specify a matchmaking configuration, and include the players to be matched. You must also include a set of player attributes relevant for the matchmaking configuration. If successful, a matchmaking ticket is returned with status set to <code>QUEUED</code>. Track the status of the ticket to respond as needed and acquire game session connection information for successfully completed matches.</p> <p> <b>Tracking ticket status</b> -- A couple of options are available for tracking the status of matchmaking requests: </p> <ul> <li> <p>Polling -- Call <code>DescribeMatchmaking</code>. This operation returns the full ticket object, including current status and (for completed tickets) game session connection info. We recommend polling no more than once every 10 seconds.</p> </li> <li> <p>Notifications -- Get event notifications for changes in ticket status using Amazon Simple Notification Service (SNS). Notifications are easy to set up (see <a>CreateMatchmakingConfiguration</a>) and typically deliver match status changes faster and more efficiently than polling. We recommend that you use polling to back up to notifications (since delivery is not guaranteed) and call <code>DescribeMatchmaking</code> only when notifications are not received within 30 seconds.</p> </li> </ul> <p> <b>Processing a matchmaking request</b> -- FlexMatch handles a matchmaking request as follows: </p> <ol> <li> <p>Your client code submits a <code>StartMatchmaking</code> request for one or more players and tracks the status of the request ticket. </p> </li> <li> <p>FlexMatch uses this ticket and others in process to build an acceptable match. When a potential match is identified, all tickets in the proposed match are advanced to the next status. </p> </li> <li> <p>If the match requires player acceptance (set in the matchmaking configuration), the tickets move into status <code>REQUIRES_ACCEPTANCE</code>. This status triggers your client code to solicit acceptance from all players in every ticket involved in the match, and then call <a>AcceptMatch</a> for each player. If any player rejects or fails to accept the match before a specified timeout, the proposed match is dropped (see <code>AcceptMatch</code> for more details).</p> </li> <li> <p>Once a match is proposed and accepted, the matchmaking tickets move into status <code>PLACING</code>. FlexMatch locates resources for a new game session using the game session queue (set in the matchmaking configuration) and creates the game session based on the match data. </p> </li> <li> <p>When the match is successfully placed, the matchmaking tickets move into <code>COMPLETED</code> status. Connection information (including game session endpoint and player session) is added to the matchmaking tickets. Matched players can use the connection information to join the game. </p> </li> </ol> <p>Matchmaking-related operations include:</p> <ul> <li> <p> <a>StartMatchmaking</a> </p> </li> <li> <p> <a>DescribeMatchmaking</a> </p> </li> <li> <p> <a>StopMatchmaking</a> </p> </li> <li> <p> <a>AcceptMatch</a> </p> </li> </ul></p>
     fn start_matchmaking(
         &self,
         input: &StartMatchmakingInput,

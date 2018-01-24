@@ -28,6 +28,25 @@ use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct BatchDeleteBuildsInput {
+    /// <p>The IDs of the builds to delete.</p>
+    #[serde(rename = "ids")]
+    pub ids: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct BatchDeleteBuildsOutput {
+    /// <p>The IDs of the builds that were successfully deleted.</p>
+    #[serde(rename = "buildsDeleted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub builds_deleted: Option<Vec<String>>,
+    /// <p>Information about any builds that could not be successfully deleted.</p>
+    #[serde(rename = "buildsNotDeleted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub builds_not_deleted: Option<Vec<BuildNotDeleted>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct BatchGetBuildsInput {
     /// <p>The IDs of the builds.</p>
     #[serde(rename = "ids")]
@@ -84,6 +103,10 @@ pub struct Build {
     #[serde(rename = "buildStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub build_status: Option<String>,
+    /// <p>Information about the cache for the build.</p>
+    #[serde(rename = "cache")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache: Option<ProjectCache>,
     /// <p>The current build phase.</p>
     #[serde(rename = "currentPhase")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -108,6 +131,10 @@ pub struct Build {
     #[serde(rename = "logs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logs: Option<LogsLocation>,
+    /// <p>Describes a network interface.</p>
+    #[serde(rename = "networkInterface")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_interface: Option<NetworkInterface>,
     /// <p>Information about all previous build phases that are completed and information about any current build phase that is not yet complete.</p>
     #[serde(rename = "phases")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -132,6 +159,10 @@ pub struct Build {
     #[serde(rename = "timeoutInMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_in_minutes: Option<i64>,
+    /// <p>If your AWS CodeBuild project accesses resources in an Amazon VPC, you provide this parameter that identifies the VPC ID and the list of security group IDs and subnet IDs. The security groups and subnets must belong to the same VPC. You must provide at least one security group and one subnet ID.</p>
+    #[serde(rename = "vpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfig>,
 }
 
 /// <p>Information about build output artifacts.</p>
@@ -149,6 +180,19 @@ pub struct BuildArtifacts {
     #[serde(rename = "sha256sum")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sha_25_6sum: Option<String>,
+}
+
+/// <p>Information about a build that could not be successfully deleted.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct BuildNotDeleted {
+    /// <p>The ID of the build that could not be successfully deleted.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>Additional information about the build that could not be successfully deleted.</p>
+    #[serde(rename = "statusCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_code: Option<String>,
 }
 
 /// <p>Information about a stage for a build.</p>
@@ -185,6 +229,14 @@ pub struct CreateProjectInput {
     /// <p>Information about the build output artifacts for the build project.</p>
     #[serde(rename = "artifacts")]
     pub artifacts: ProjectArtifacts,
+    /// <p>Set this to true to generate a publicly-accessible URL for your project's build badge.</p>
+    #[serde(rename = "badgeEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub badge_enabled: Option<bool>,
+    /// <p>Stores recently used information so that it can be quickly accessed at a later time.</p>
+    #[serde(rename = "cache")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache: Option<ProjectCache>,
     /// <p>A description that makes the build project easy to identify.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -214,6 +266,10 @@ pub struct CreateProjectInput {
     #[serde(rename = "timeoutInMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_in_minutes: Option<i64>,
+    /// <p>VpcConfig enables AWS CodeBuild to access resources in an Amazon VPC.</p>
+    #[serde(rename = "vpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfig>,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -222,6 +278,21 @@ pub struct CreateProjectOutput {
     #[serde(rename = "project")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub project: Option<Project>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateWebhookInput {
+    /// <p>The name of the build project.</p>
+    #[serde(rename = "projectName")]
+    pub project_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CreateWebhookOutput {
+    /// <p>Information about a webhook in GitHub that connects repository events to a build project in AWS CodeBuild.</p>
+    #[serde(rename = "webhook")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub webhook: Option<Webhook>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
@@ -234,6 +305,16 @@ pub struct DeleteProjectInput {
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteProjectOutput;
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteWebhookInput {
+    /// <p>The name of the build project.</p>
+    #[serde(rename = "projectName")]
+    pub project_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteWebhookOutput;
+
 /// <p>Information about a Docker image that is managed by AWS CodeBuild.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct EnvironmentImage {
@@ -245,6 +326,10 @@ pub struct EnvironmentImage {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>A list of environment image versions.</p>
+    #[serde(rename = "versions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub versions: Option<Vec<String>>,
 }
 
 /// <p>A set of Docker images that are related by programming language and are managed by AWS CodeBuild.</p>
@@ -279,10 +364,24 @@ pub struct EnvironmentVariable {
     /// <p>The name or key of the environment variable.</p>
     #[serde(rename = "name")]
     pub name: String,
+    /// <p><p>The type of environment variable. Valid values include:</p> <ul> <li> <p> <code>PARAMETER_STORE</code>: An environment variable stored in Amazon EC2 Systems Manager Parameter Store.</p> </li> <li> <p> <code>PLAINTEXT</code>: An environment variable in plaintext format.</p> </li> </ul></p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
     /// <p><p>The value of the environment variable.</p> <important> <p>We strongly discourage using environment variables to store sensitive values, especially AWS secret key IDs and secret access keys. Environment variables can be displayed in plain text using tools such as the AWS CodeBuild console and the AWS Command Line Interface (AWS CLI).</p> </important></p>
     #[serde(rename = "value")]
     pub value: String,
 }
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct InvalidateProjectCacheInput {
+    /// <p>The name of the build project that the cache will be reset for.</p>
+    #[serde(rename = "projectName")]
+    pub project_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct InvalidateProjectCacheOutput;
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListBuildsForProjectInput {
@@ -391,6 +490,19 @@ pub struct LogsLocation {
     pub stream_name: Option<String>,
 }
 
+/// <p>Describes a network interface.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct NetworkInterface {
+    /// <p>The ID of the network interface.</p>
+    #[serde(rename = "networkInterfaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_interface_id: Option<String>,
+    /// <p>The ID of the subnet.</p>
+    #[serde(rename = "subnetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subnet_id: Option<String>,
+}
+
 /// <p>Additional information about a build phase that has an error. You can use this information to help troubleshoot a failed build.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct PhaseContext {
@@ -415,6 +527,14 @@ pub struct Project {
     #[serde(rename = "artifacts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub artifacts: Option<ProjectArtifacts>,
+    /// <p>Information about the build badge for the build project.</p>
+    #[serde(rename = "badge")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub badge: Option<ProjectBadge>,
+    /// <p>Information about the cache for the build project.</p>
+    #[serde(rename = "cache")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache: Option<ProjectCache>,
     /// <p>When the build project was created, expressed in Unix time format.</p>
     #[serde(rename = "created")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -455,6 +575,14 @@ pub struct Project {
     #[serde(rename = "timeoutInMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_in_minutes: Option<i64>,
+    /// <p>Information about the VPC configuration that AWS CodeBuild will access.</p>
+    #[serde(rename = "vpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfig>,
+    /// <p>Information about a webhook in GitHub that connects repository events to a build project in AWS CodeBuild.</p>
+    #[serde(rename = "webhook")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub webhook: Option<Webhook>,
 }
 
 /// <p>Information about the build output artifacts for the build project.</p>
@@ -485,6 +613,31 @@ pub struct ProjectArtifacts {
     pub type_: String,
 }
 
+/// <p>Information about the build badge for the build project.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ProjectBadge {
+    /// <p>Set this to true to generate a publicly-accessible URL for your project's build badge.</p>
+    #[serde(rename = "badgeEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub badge_enabled: Option<bool>,
+    /// <p>The publicly-accessible URL through which you can access the build badge for your project. </p>
+    #[serde(rename = "badgeRequestUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub badge_request_url: Option<String>,
+}
+
+/// <p>Information about the cache for the build project.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct ProjectCache {
+    /// <p><p>Information about the cache location, as follows: </p> <ul> <li> <p> <code>NO_CACHE</code>: This value will be ignored.</p> </li> <li> <p> <code>S3</code>: This is the S3 bucket name/prefix.</p> </li> </ul></p>
+    #[serde(rename = "location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location: Option<String>,
+    /// <p><p>The type of cache used by the build project. Valid values include:</p> <ul> <li> <p> <code>NO_CACHE</code>: The build project will not use any cache.</p> </li> <li> <p> <code>S3</code>: The build project will read and write from/to S3.</p> </li> </ul></p>
+    #[serde(rename = "type")]
+    pub type_: String,
+}
+
 /// <p>Information about the build environment of the build project.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ProjectEnvironment {
@@ -498,7 +651,7 @@ pub struct ProjectEnvironment {
     /// <p>The ID of the Docker image to use for this build project.</p>
     #[serde(rename = "image")]
     pub image: String,
-    /// <p>If set to true, enables running the Docker daemon inside a Docker container; otherwise, false or not specified (the default). This value must be set to true only if this build project will be used to build Docker images, and the specified build environment image is not one provided by AWS CodeBuild with Docker support. Otherwise, all associated builds that attempt to interact with the Docker daemon will fail. Note that you must also start the Docker daemon so that your builds can interact with it as needed. One way to do this is to initialize the Docker daemon in the install phase of your build spec by running the following build commands. (Do not run the following build commands if the specified build environment image is provided by AWS CodeBuild with Docker support.)</p> <p> <code>- nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --storage-driver=vfs&amp; - timeout -t 15 sh -c "until docker info; do echo .; sleep 1; done"</code> </p>
+    /// <p>If set to true, enables running the Docker daemon inside a Docker container; otherwise, false or not specified (the default). This value must be set to true only if this build project will be used to build Docker images, and the specified build environment image is not one provided by AWS CodeBuild with Docker support. Otherwise, all associated builds that attempt to interact with the Docker daemon will fail. Note that you must also start the Docker daemon so that your builds can interact with it as needed. One way to do this is to initialize the Docker daemon in the install phase of your build spec by running the following build commands. (Do not run the following build commands if the specified build environment image is provided by AWS CodeBuild with Docker support.)</p> <p> <code>- nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --storage-driver=overlay&amp; - timeout -t 15 sh -c "until docker info; do echo .; sleep 1; done"</code> </p>
     #[serde(rename = "privilegedMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub privileged_mode: Option<bool>,
@@ -510,7 +663,7 @@ pub struct ProjectEnvironment {
 /// <p>Information about the build input source code for the build project.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ProjectSource {
-    /// <p>Information about the authorization settings for AWS CodeBuild to access the source code to be built.</p> <p>This information is for the AWS CodeBuild console's use only. Your code should not get or set this information directly (unless the build project's source <code>type</code> value is <code>GITHUB</code>).</p>
+    /// <p>Information about the authorization settings for AWS CodeBuild to access the source code to be built.</p> <p>This information is for the AWS CodeBuild console's use only. Your code should not get or set this information directly (unless the build project's source <code>type</code> value is <code>BITBUCKET</code> or <code>GITHUB</code>).</p>
     #[serde(rename = "auth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth: Option<SourceAuth>,
@@ -518,16 +671,16 @@ pub struct ProjectSource {
     #[serde(rename = "buildspec")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub buildspec: Option<String>,
-    /// <p><p>Information about the location of the source code to be built. Valid values include:</p> <ul> <li> <p>For source code settings that are specified in the source action of a pipeline in AWS CodePipeline, <code>location</code> should not be specified. If it is specified, AWS CodePipeline will ignore it. This is because AWS CodePipeline uses the settings in a pipeline&#39;s source action instead of this value.</p> </li> <li> <p>For source code in an AWS CodeCommit repository, the HTTPS clone URL to the repository that contains the source code and the build spec (for example, <code>https://git-codecommit.<i>region-ID</i>.amazonaws.com/v1/repos/<i>repo-name</i> </code>).</p> </li> <li> <p>For source code in an Amazon Simple Storage Service (Amazon S3) input bucket, the path to the ZIP file that contains the source code (for example, <code> <i>bucket-name</i>/<i>path</i>/<i>to</i>/<i>object-name</i>.zip</code>)</p> </li> <li> <p>For source code in a GitHub repository, the HTTPS clone URL to the repository that contains the source and the build spec. Also, you must connect your AWS account to your GitHub account. To do this, use the AWS CodeBuild console to begin creating a build project. When you use the console to connect (or reconnect) with GitHub, on the GitHub <b>Authorize application</b> page that displays, for <b>Organization access</b>, choose <b>Request access</b> next to each repository you want to allow AWS CodeBuild to have access to. Then choose <b>Authorize application</b>. (After you have connected to your GitHub account, you do not need to finish creating the build project, and you may then leave the AWS CodeBuild console.) To instruct AWS CodeBuild to then use this connection, in the <code>source</code> object, set the <code>auth</code> object&#39;s <code>type</code> value to <code>OAUTH</code>.</p> </li> </ul></p>
+    /// <p><p>Information about the location of the source code to be built. Valid values include:</p> <ul> <li> <p>For source code settings that are specified in the source action of a pipeline in AWS CodePipeline, <code>location</code> should not be specified. If it is specified, AWS CodePipeline will ignore it. This is because AWS CodePipeline uses the settings in a pipeline&#39;s source action instead of this value.</p> </li> <li> <p>For source code in an AWS CodeCommit repository, the HTTPS clone URL to the repository that contains the source code and the build spec (for example, <code>https://git-codecommit.<i>region-ID</i>.amazonaws.com/v1/repos/<i>repo-name</i> </code>).</p> </li> <li> <p>For source code in an Amazon Simple Storage Service (Amazon S3) input bucket, the path to the ZIP file that contains the source code (for example, <code> <i>bucket-name</i>/<i>path</i>/<i>to</i>/<i>object-name</i>.zip</code>)</p> </li> <li> <p>For source code in a GitHub repository, the HTTPS clone URL to the repository that contains the source and the build spec. Also, you must connect your AWS account to your GitHub account. To do this, use the AWS CodeBuild console to begin creating a build project. When you use the console to connect (or reconnect) with GitHub, on the GitHub <b>Authorize application</b> page that displays, for <b>Organization access</b>, choose <b>Request access</b> next to each repository you want to allow AWS CodeBuild to have access to. Then choose <b>Authorize application</b>. (After you have connected to your GitHub account, you do not need to finish creating the build project, and you may then leave the AWS CodeBuild console.) To instruct AWS CodeBuild to then use this connection, in the <code>source</code> object, set the <code>auth</code> object&#39;s <code>type</code> value to <code>OAUTH</code>.</p> </li> <li> <p>For source code in a Bitbucket repository, the HTTPS clone URL to the repository that contains the source and the build spec. Also, you must connect your AWS account to your Bitbucket account. To do this, use the AWS CodeBuild console to begin creating a build project. When you use the console to connect (or reconnect) with Bitbucket, on the Bitbucket <b>Confirm access to your account</b> page that displays, choose <b>Grant access</b>. (After you have connected to your Bitbucket account, you do not need to finish creating the build project, and you may then leave the AWS CodeBuild console.) To instruct AWS CodeBuild to then use this connection, in the <code>source</code> object, set the <code>auth</code> object&#39;s <code>type</code> value to <code>OAUTH</code>.</p> </li> </ul></p>
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
-    /// <p><p>The type of repository that contains the source code to be built. Valid values include:</p> <ul> <li> <p> <code>CODECOMMIT</code>: The source code is in an AWS CodeCommit repository.</p> </li> <li> <p> <code>CODEPIPELINE</code>: The source code settings are specified in the source action of a pipeline in AWS CodePipeline.</p> </li> <li> <p> <code>GITHUB</code>: The source code is in a GitHub repository.</p> </li> <li> <p> <code>S3</code>: The source code is in an Amazon Simple Storage Service (Amazon S3) input bucket.</p> </li> </ul></p>
+    /// <p><p>The type of repository that contains the source code to be built. Valid values include:</p> <ul> <li> <p> <code>BITBUCKET</code>: The source code is in a Bitbucket repository.</p> </li> <li> <p> <code>CODECOMMIT</code>: The source code is in an AWS CodeCommit repository.</p> </li> <li> <p> <code>CODEPIPELINE</code>: The source code settings are specified in the source action of a pipeline in AWS CodePipeline.</p> </li> <li> <p> <code>GITHUB</code>: The source code is in a GitHub repository.</p> </li> <li> <p> <code>S3</code>: The source code is in an Amazon Simple Storage Service (Amazon S3) input bucket.</p> </li> </ul></p>
     #[serde(rename = "type")]
     pub type_: String,
 }
 
-/// <p>Information about the authorization settings for AWS CodeBuild to access the source code to be built.</p> <p>This information is for the AWS CodeBuild console's use only. Your code should not get or set this information directly (unless the build project's source <code>type</code> value is <code>GITHUB</code>).</p>
+/// <p>Information about the authorization settings for AWS CodeBuild to access the source code to be built.</p> <p>This information is for the AWS CodeBuild console's use only. Your code should not get or set this information directly (unless the build project's source <code>type</code> value is <code>BITBUCKET</code> or <code>GITHUB</code>).</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct SourceAuth {
     /// <p>The resource value that applies to the specified authorization type.</p>
@@ -556,7 +709,7 @@ pub struct StartBuildInput {
     /// <p>The name of the build project to start running a build.</p>
     #[serde(rename = "projectName")]
     pub project_name: String,
-    /// <p><p>A version of the build input to be built, for this build only. If not specified, the latest version will be used. If specified, must be one of:</p> <ul> <li> <p>For AWS CodeCommit or GitHub: the commit ID to use.</p> </li> <li> <p>For Amazon Simple Storage Service (Amazon S3): the version ID of the object representing the build input ZIP file to use.</p> </li> </ul></p>
+    /// <p><p>A version of the build input to be built, for this build only. If not specified, the latest version will be used. If specified, must be one of:</p> <ul> <li> <p>For AWS CodeCommit: the commit ID to use.</p> </li> <li> <p>For GitHub: the commit ID, pull request ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a pull request ID is specified, it must use the format <code>pr/pull-request-ID</code> (for example <code>pr/25</code>). If a branch name is specified, the branch&#39;s HEAD commit ID will be used. If not specified, the default branch&#39;s HEAD commit ID will be used.</p> </li> <li> <p>For Bitbucket: the commit ID, branch name, or tag name that corresponds to the version of the source code you want to build. If a branch name is specified, the branch&#39;s HEAD commit ID will be used. If not specified, the default branch&#39;s HEAD commit ID will be used.</p> </li> <li> <p>For Amazon Simple Storage Service (Amazon S3): the version ID of the object representing the build input ZIP file to use.</p> </li> </ul></p>
     #[serde(rename = "sourceVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_version: Option<String>,
@@ -608,6 +761,14 @@ pub struct UpdateProjectInput {
     #[serde(rename = "artifacts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub artifacts: Option<ProjectArtifacts>,
+    /// <p>Set this to true to generate a publicly-accessible URL for your project's build badge.</p>
+    #[serde(rename = "badgeEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub badge_enabled: Option<bool>,
+    /// <p>Stores recently used information so that it can be quickly accessed at a later time.</p>
+    #[serde(rename = "cache")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache: Option<ProjectCache>,
     /// <p>A new or replacement description of the build project.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -639,6 +800,10 @@ pub struct UpdateProjectInput {
     #[serde(rename = "timeoutInMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_in_minutes: Option<i64>,
+    /// <p>VpcConfig enables AWS CodeBuild to access resources in an Amazon VPC.</p>
+    #[serde(rename = "vpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfig>,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -649,6 +814,112 @@ pub struct UpdateProjectOutput {
     pub project: Option<Project>,
 }
 
+/// <p>Information about the VPC configuration that AWS CodeBuild will access.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct VpcConfig {
+    /// <p>A list of one or more security groups IDs in your Amazon VPC.</p>
+    #[serde(rename = "securityGroupIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_group_ids: Option<Vec<String>>,
+    /// <p>A list of one or more subnet IDs in your Amazon VPC.</p>
+    #[serde(rename = "subnets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subnets: Option<Vec<String>>,
+    /// <p>The ID of the Amazon VPC.</p>
+    #[serde(rename = "vpcId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_id: Option<String>,
+}
+
+/// <p>Information about a webhook in GitHub that connects repository events to a build project in AWS CodeBuild.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct Webhook {
+    /// <p>The URL to the webhook.</p>
+    #[serde(rename = "url")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+}
+
+/// Errors returned by BatchDeleteBuilds
+#[derive(Debug, PartialEq)]
+pub enum BatchDeleteBuildsError {
+    /// <p>The input value that was provided is not valid.</p>
+    InvalidInput(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl BatchDeleteBuildsError {
+    pub fn from_body(body: &str) -> BatchDeleteBuildsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidInputException" => {
+                        BatchDeleteBuildsError::InvalidInput(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        BatchDeleteBuildsError::Validation(error_message.to_string())
+                    }
+                    _ => BatchDeleteBuildsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => BatchDeleteBuildsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for BatchDeleteBuildsError {
+    fn from(err: serde_json::error::Error) -> BatchDeleteBuildsError {
+        BatchDeleteBuildsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for BatchDeleteBuildsError {
+    fn from(err: CredentialsError) -> BatchDeleteBuildsError {
+        BatchDeleteBuildsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for BatchDeleteBuildsError {
+    fn from(err: HttpDispatchError) -> BatchDeleteBuildsError {
+        BatchDeleteBuildsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for BatchDeleteBuildsError {
+    fn from(err: io::Error) -> BatchDeleteBuildsError {
+        BatchDeleteBuildsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for BatchDeleteBuildsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for BatchDeleteBuildsError {
+    fn description(&self) -> &str {
+        match *self {
+            BatchDeleteBuildsError::InvalidInput(ref cause) => cause,
+            BatchDeleteBuildsError::Validation(ref cause) => cause,
+            BatchDeleteBuildsError::Credentials(ref err) => err.description(),
+            BatchDeleteBuildsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            BatchDeleteBuildsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by BatchGetBuilds
 #[derive(Debug, PartialEq)]
 pub enum BatchGetBuildsError {
@@ -895,6 +1166,102 @@ impl Error for CreateProjectError {
         }
     }
 }
+/// Errors returned by CreateWebhook
+#[derive(Debug, PartialEq)]
+pub enum CreateWebhookError {
+    /// <p>The input value that was provided is not valid.</p>
+    InvalidInput(String),
+    /// <p>There was a problem with the underlying OAuth provider.</p>
+    OAuthProvider(String),
+    /// <p>The specified AWS resource cannot be created, because an AWS resource with the same settings already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>The specified AWS resource cannot be found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateWebhookError {
+    pub fn from_body(body: &str) -> CreateWebhookError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidInputException" => {
+                        CreateWebhookError::InvalidInput(String::from(error_message))
+                    }
+                    "OAuthProviderException" => {
+                        CreateWebhookError::OAuthProvider(String::from(error_message))
+                    }
+                    "ResourceAlreadyExistsException" => {
+                        CreateWebhookError::ResourceAlreadyExists(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        CreateWebhookError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CreateWebhookError::Validation(error_message.to_string())
+                    }
+                    _ => CreateWebhookError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateWebhookError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateWebhookError {
+    fn from(err: serde_json::error::Error) -> CreateWebhookError {
+        CreateWebhookError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateWebhookError {
+    fn from(err: CredentialsError) -> CreateWebhookError {
+        CreateWebhookError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateWebhookError {
+    fn from(err: HttpDispatchError) -> CreateWebhookError {
+        CreateWebhookError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateWebhookError {
+    fn from(err: io::Error) -> CreateWebhookError {
+        CreateWebhookError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateWebhookError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateWebhookError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateWebhookError::InvalidInput(ref cause) => cause,
+            CreateWebhookError::OAuthProvider(ref cause) => cause,
+            CreateWebhookError::ResourceAlreadyExists(ref cause) => cause,
+            CreateWebhookError::ResourceNotFound(ref cause) => cause,
+            CreateWebhookError::Validation(ref cause) => cause,
+            CreateWebhookError::Credentials(ref err) => err.description(),
+            CreateWebhookError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CreateWebhookError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteProject
 #[derive(Debug, PartialEq)]
 pub enum DeleteProjectError {
@@ -970,6 +1337,182 @@ impl Error for DeleteProjectError {
             DeleteProjectError::Credentials(ref err) => err.description(),
             DeleteProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             DeleteProjectError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteWebhook
+#[derive(Debug, PartialEq)]
+pub enum DeleteWebhookError {
+    /// <p>The input value that was provided is not valid.</p>
+    InvalidInput(String),
+    /// <p>There was a problem with the underlying OAuth provider.</p>
+    OAuthProvider(String),
+    /// <p>The specified AWS resource cannot be found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteWebhookError {
+    pub fn from_body(body: &str) -> DeleteWebhookError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidInputException" => {
+                        DeleteWebhookError::InvalidInput(String::from(error_message))
+                    }
+                    "OAuthProviderException" => {
+                        DeleteWebhookError::OAuthProvider(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DeleteWebhookError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteWebhookError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteWebhookError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteWebhookError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteWebhookError {
+    fn from(err: serde_json::error::Error) -> DeleteWebhookError {
+        DeleteWebhookError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteWebhookError {
+    fn from(err: CredentialsError) -> DeleteWebhookError {
+        DeleteWebhookError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteWebhookError {
+    fn from(err: HttpDispatchError) -> DeleteWebhookError {
+        DeleteWebhookError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteWebhookError {
+    fn from(err: io::Error) -> DeleteWebhookError {
+        DeleteWebhookError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteWebhookError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteWebhookError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteWebhookError::InvalidInput(ref cause) => cause,
+            DeleteWebhookError::OAuthProvider(ref cause) => cause,
+            DeleteWebhookError::ResourceNotFound(ref cause) => cause,
+            DeleteWebhookError::Validation(ref cause) => cause,
+            DeleteWebhookError::Credentials(ref err) => err.description(),
+            DeleteWebhookError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteWebhookError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by InvalidateProjectCache
+#[derive(Debug, PartialEq)]
+pub enum InvalidateProjectCacheError {
+    /// <p>The input value that was provided is not valid.</p>
+    InvalidInput(String),
+    /// <p>The specified AWS resource cannot be found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl InvalidateProjectCacheError {
+    pub fn from_body(body: &str) -> InvalidateProjectCacheError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidInputException" => {
+                        InvalidateProjectCacheError::InvalidInput(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        InvalidateProjectCacheError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        InvalidateProjectCacheError::Validation(error_message.to_string())
+                    }
+                    _ => InvalidateProjectCacheError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => InvalidateProjectCacheError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for InvalidateProjectCacheError {
+    fn from(err: serde_json::error::Error) -> InvalidateProjectCacheError {
+        InvalidateProjectCacheError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for InvalidateProjectCacheError {
+    fn from(err: CredentialsError) -> InvalidateProjectCacheError {
+        InvalidateProjectCacheError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for InvalidateProjectCacheError {
+    fn from(err: HttpDispatchError) -> InvalidateProjectCacheError {
+        InvalidateProjectCacheError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for InvalidateProjectCacheError {
+    fn from(err: io::Error) -> InvalidateProjectCacheError {
+        InvalidateProjectCacheError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for InvalidateProjectCacheError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for InvalidateProjectCacheError {
+    fn description(&self) -> &str {
+        match *self {
+            InvalidateProjectCacheError::InvalidInput(ref cause) => cause,
+            InvalidateProjectCacheError::ResourceNotFound(ref cause) => cause,
+            InvalidateProjectCacheError::Validation(ref cause) => cause,
+            InvalidateProjectCacheError::Credentials(ref err) => err.description(),
+            InvalidateProjectCacheError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            InvalidateProjectCacheError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -1543,6 +2086,12 @@ impl Error for UpdateProjectError {
 }
 /// Trait representing the capabilities of the AWS CodeBuild API. AWS CodeBuild clients implement this trait.
 pub trait CodeBuild {
+    /// <p>Deletes one or more builds.</p>
+    fn batch_delete_builds(
+        &self,
+        input: &BatchDeleteBuildsInput,
+    ) -> Result<BatchDeleteBuildsOutput, BatchDeleteBuildsError>;
+
     /// <p>Gets information about builds.</p>
     fn batch_get_builds(
         &self,
@@ -1561,11 +2110,29 @@ pub trait CodeBuild {
         input: &CreateProjectInput,
     ) -> Result<CreateProjectOutput, CreateProjectError>;
 
+    /// <p><p>For an existing AWS CodeBuild build project that has its source code stored in a GitHub repository, enables AWS CodeBuild to begin automatically rebuilding the source code every time a code change is pushed to the repository.</p> <important> <p>If you enable webhooks for an AWS CodeBuild project, and the project is used as a build step in AWS CodePipeline, then two identical builds will be created for each commit. One build is triggered through webhooks, and one through AWS CodePipeline. Because billing is on a per-build basis, you will be billed for both builds. Therefore, if you are using AWS CodePipeline, we recommend that you disable webhooks in CodeBuild. In the AWS CodeBuild console, clear the Webhook box. For more information, see step 9 in <a href="http://docs.aws.amazon.com/codebuild/latest/userguide/change-project.html#change-project-console">Change a Build Project’s Settings</a>.</p> </important></p>
+    fn create_webhook(
+        &self,
+        input: &CreateWebhookInput,
+    ) -> Result<CreateWebhookOutput, CreateWebhookError>;
+
     /// <p>Deletes a build project.</p>
     fn delete_project(
         &self,
         input: &DeleteProjectInput,
     ) -> Result<DeleteProjectOutput, DeleteProjectError>;
+
+    /// <p>For an existing AWS CodeBuild build project that has its source code stored in a GitHub repository, stops AWS CodeBuild from automatically rebuilding the source code every time a code change is pushed to the repository.</p>
+    fn delete_webhook(
+        &self,
+        input: &DeleteWebhookInput,
+    ) -> Result<DeleteWebhookOutput, DeleteWebhookError>;
+
+    /// <p>Resets the cache for a project.</p>
+    fn invalidate_project_cache(
+        &self,
+        input: &InvalidateProjectCacheInput,
+    ) -> Result<InvalidateProjectCacheOutput, InvalidateProjectCacheError>;
 
     /// <p>Gets a list of build IDs, with each build ID representing a single build.</p>
     fn list_builds(&self, input: &ListBuildsInput) -> Result<ListBuildsOutput, ListBuildsError>;
@@ -1629,6 +2196,40 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
+    /// <p>Deletes one or more builds.</p>
+    fn batch_delete_builds(
+        &self,
+        input: &BatchDeleteBuildsInput,
+    ) -> Result<BatchDeleteBuildsOutput, BatchDeleteBuildsError> {
+        let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeBuild_20161006.BatchDeleteBuilds");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<BatchDeleteBuildsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(BatchDeleteBuildsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Gets information about builds.</p>
     fn batch_get_builds(
         &self,
@@ -1731,6 +2332,40 @@ where
         }
     }
 
+    /// <p><p>For an existing AWS CodeBuild build project that has its source code stored in a GitHub repository, enables AWS CodeBuild to begin automatically rebuilding the source code every time a code change is pushed to the repository.</p> <important> <p>If you enable webhooks for an AWS CodeBuild project, and the project is used as a build step in AWS CodePipeline, then two identical builds will be created for each commit. One build is triggered through webhooks, and one through AWS CodePipeline. Because billing is on a per-build basis, you will be billed for both builds. Therefore, if you are using AWS CodePipeline, we recommend that you disable webhooks in CodeBuild. In the AWS CodeBuild console, clear the Webhook box. For more information, see step 9 in <a href="http://docs.aws.amazon.com/codebuild/latest/userguide/change-project.html#change-project-console">Change a Build Project’s Settings</a>.</p> </important></p>
+    fn create_webhook(
+        &self,
+        input: &CreateWebhookInput,
+    ) -> Result<CreateWebhookOutput, CreateWebhookError> {
+        let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeBuild_20161006.CreateWebhook");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateWebhookOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateWebhookError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Deletes a build project.</p>
     fn delete_project(
         &self,
@@ -1759,6 +2394,74 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(DeleteProjectError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>For an existing AWS CodeBuild build project that has its source code stored in a GitHub repository, stops AWS CodeBuild from automatically rebuilding the source code every time a code change is pushed to the repository.</p>
+    fn delete_webhook(
+        &self,
+        input: &DeleteWebhookInput,
+    ) -> Result<DeleteWebhookOutput, DeleteWebhookError> {
+        let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeBuild_20161006.DeleteWebhook");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteWebhookOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteWebhookError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Resets the cache for a project.</p>
+    fn invalidate_project_cache(
+        &self,
+        input: &InvalidateProjectCacheInput,
+    ) -> Result<InvalidateProjectCacheOutput, InvalidateProjectCacheError> {
+        let mut request = SignedRequest::new("POST", "codebuild", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeBuild_20161006.InvalidateProjectCache");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<InvalidateProjectCacheOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(InvalidateProjectCacheError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }

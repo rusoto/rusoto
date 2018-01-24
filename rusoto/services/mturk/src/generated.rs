@@ -164,8 +164,7 @@ pub struct CreateAdditionalAssignmentsForHITRequest {
     pub hit_id: String,
     /// <p>The number of additional assignments to request for this HIT.</p>
     #[serde(rename = "NumberOfAdditionalAssignments")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub number_of_additional_assignments: Option<i64>,
+    pub number_of_additional_assignments: i64,
     /// <p> A unique identifier for this request, which allows you to retry the call on error without extending the HIT multiple times. This is useful in cases such as network timeouts where it is unclear whether or not the call succeeded on the server. If the extend HIT already exists in the system from a previous call using the same <code>UniqueRequestToken</code>, subsequent calls will return an error with a message containing the request ID. </p>
     #[serde(rename = "UniqueRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -636,12 +635,10 @@ pub struct HIT {
 pub struct HITLayoutParameter {
     /// <p> The name of the parameter in the HITLayout. </p>
     #[serde(rename = "Name")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: String,
     /// <p>The value substituted for the parameter referenced in the HITLayout. </p>
     #[serde(rename = "Value")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub value: Option<String>,
+    pub value: String,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
@@ -998,20 +995,18 @@ pub struct Locale {
 /// <p>The NotificationSpecification data structure describes a HIT event notification for a HIT type.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct NotificationSpecification {
-    /// <p> The destination for notification messages. or email notifications (if Transport is Email), this is an email address. For Amazon Simple Queue Service (Amazon SQS) notifications (if Transport is SQS), this is the URL for your Amazon SQS queue. </p>
+    /// <p><p> The target for notification messages. The Destination’s format is determined by the specified Transport: </p> <ul> <li> <p>When Transport is Email, the Destination is your email address.</p> </li> <li> <p>When Transport is SQS, the Destination is your queue URL.</p> </li> <li> <p>When Transport is SNS, the Destination is the ARN of your topic.</p> </li> </ul></p>
     #[serde(rename = "Destination")]
     pub destination: String,
     /// <p> The list of events that should cause notifications to be sent. Valid Values: AssignmentAccepted | AssignmentAbandoned | AssignmentReturned | AssignmentSubmitted | AssignmentRejected | AssignmentApproved | HITCreated | HITExtended | HITDisposed | HITReviewable | HITExpired | Ping. The Ping event is only valid for the SendTestEventNotification operation. </p>
     #[serde(rename = "EventTypes")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub event_types: Option<Vec<String>>,
-    /// <p> The method Amazon Mechanical Turk uses to send the notification. Valid Values: Email | SQS. </p>
+    pub event_types: Vec<String>,
+    /// <p> The method Amazon Mechanical Turk uses to send the notification. Valid Values: Email | SQS | SNS. </p>
     #[serde(rename = "Transport")]
     pub transport: String,
     /// <p>The version of the Notification API to use. Valid value is 2006-05-05.</p>
     #[serde(rename = "Version")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub version: Option<String>,
+    pub version: String,
 }
 
 /// <p> When MTurk encounters an issue with notifying the Workers you specified, it returns back this object with failure details. </p>
@@ -1226,8 +1221,7 @@ pub struct RejectAssignmentRequest {
     pub assignment_id: String,
     /// <p> A message for the Worker, which the Worker can see in the Status section of the web site. </p>
     #[serde(rename = "RequesterFeedback")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub requester_feedback: Option<String>,
+    pub requester_feedback: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -1293,8 +1287,7 @@ pub struct ReviewPolicy {
     pub parameters: Option<Vec<PolicyParameter>>,
     /// <p> Name of a Review Policy: SimplePlurality/2011-09-01 or ScoreMyKnownAnswers/2011-09-01 </p>
     #[serde(rename = "PolicyName")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub policy_name: Option<String>,
+    pub policy_name: String,
 }
 
 /// <p> Contains both ReviewResult and ReviewAction elements for a particular HIT. </p>
@@ -1349,8 +1342,7 @@ pub struct SendBonusRequest {
     pub bonus_amount: String,
     /// <p>A message that explains the reason for the bonus payment. The Worker receiving the bonus can see this message.</p>
     #[serde(rename = "Reason")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub reason: Option<String>,
+    pub reason: String,
     /// <p>A unique identifier for this request, which allows you to retry the call on error without granting multiple bonuses. This is useful in cases such as network timeouts where it is unclear whether or not the call succeeded on the server. If the bonus already exists in the system from a previous call using the same UniqueRequestToken, subsequent calls will return an error with a message containing the request ID.</p>
     #[serde(rename = "UniqueRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1380,8 +1372,7 @@ pub struct SendTestEventNotificationResponse;
 pub struct UpdateExpirationForHITRequest {
     /// <p> The date and time at which you want the HIT to expire </p>
     #[serde(rename = "ExpireAt")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub expire_at: Option<f64>,
+    pub expire_at: f64,
     /// <p> The HIT to update. </p>
     #[serde(rename = "HITId")]
     pub hit_id: String,

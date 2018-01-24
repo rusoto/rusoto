@@ -97,6 +97,78 @@ pub struct Action {
     pub sqs: Option<SqsAction>,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct AddThingToThingGroupRequest {
+    /// <p>The ARN of the thing to add to a group.</p>
+    #[serde(rename = "thingArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_arn: Option<String>,
+    /// <p>The ARN of the group to which you are adding a thing.</p>
+    #[serde(rename = "thingGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_group_arn: Option<String>,
+    /// <p>The name of the group to which you are adding a thing.</p>
+    #[serde(rename = "thingGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_group_name: Option<String>,
+    /// <p>The name of the thing to add to a group.</p>
+    #[serde(rename = "thingName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct AddThingToThingGroupResponse;
+
+/// <p>Contains information that allowed the authorization.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct Allowed {
+    /// <p>A list of policies that allowed the authentication.</p>
+    #[serde(rename = "policies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policies: Option<Vec<Policy>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct AssociateTargetsWithJobRequest {
+    /// <p>An optional comment string describing why the job was associated with the targets.</p>
+    #[serde(rename = "comment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub comment: Option<String>,
+    /// <p>The unique identifier you assigned to this job when it was created.</p>
+    #[serde(rename = "jobId")]
+    pub job_id: String,
+    /// <p>A list of thing group ARNs that define the targets of the job.</p>
+    #[serde(rename = "targets")]
+    pub targets: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct AssociateTargetsWithJobResponse {
+    /// <p>A short text description of the job.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>An ARN identifying the job.</p>
+    #[serde(rename = "jobArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_arn: Option<String>,
+    /// <p>The unique identifier you assigned to this job when it was created.</p>
+    #[serde(rename = "jobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct AttachPolicyRequest {
+    /// <p>The name of the policy to attach.</p>
+    #[serde(rename = "policyName")]
+    pub policy_name: String,
+    /// <p>The identity to which the policy is attached.</p>
+    #[serde(rename = "target")]
+    pub target: String,
+}
+
 /// <p>The input for the AttachPrincipalPolicy operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AttachPrincipalPolicyRequest {
@@ -124,7 +196,7 @@ pub struct AttachThingPrincipalRequest {
 pub struct AttachThingPrincipalResponse;
 
 /// <p>The attribute payload.</p>
-#[derive(Default, Debug, Clone, Serialize)]
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct AttributePayload {
     /// <p>A JSON string containing up to three key-value pair in JSON format. For example:</p> <p> <code>{\"attributes\":{\"string1\":\"string2\"}}</code> </p>
     #[serde(rename = "attributes")]
@@ -134,6 +206,94 @@ pub struct AttributePayload {
     #[serde(rename = "merge")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub merge: Option<bool>,
+}
+
+/// <p>A collection of authorization information.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct AuthInfo {
+    /// <p>The type of action for which the principal is being authorized.</p>
+    #[serde(rename = "actionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_type: Option<String>,
+    /// <p>The resources for which the principal is being authorized to perform the specified action.</p>
+    #[serde(rename = "resources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resources: Option<Vec<String>>,
+}
+
+/// <p>The authorizer result.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct AuthResult {
+    /// <p>The policies and statements that allowed the specified action.</p>
+    #[serde(rename = "allowed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allowed: Option<Allowed>,
+    /// <p>The final authorization decision of this scenario. Multiple statements are taken into account when determining the authorization decision. An explicit deny statement can override multiple allow statements.</p>
+    #[serde(rename = "authDecision")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auth_decision: Option<String>,
+    /// <p>Authorization information.</p>
+    #[serde(rename = "authInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auth_info: Option<AuthInfo>,
+    /// <p>The policies and statements that denied the specified action.</p>
+    #[serde(rename = "denied")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub denied: Option<Denied>,
+    /// <p>Contains any missing context values found while evaluating policy.</p>
+    #[serde(rename = "missingContextValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub missing_context_values: Option<Vec<String>>,
+}
+
+/// <p>The authorizer description.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct AuthorizerDescription {
+    /// <p>The authorizer ARN.</p>
+    #[serde(rename = "authorizerArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_arn: Option<String>,
+    /// <p>The authorizer's Lambda function ARN.</p>
+    #[serde(rename = "authorizerFunctionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_function_arn: Option<String>,
+    /// <p>The authorizer name.</p>
+    #[serde(rename = "authorizerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_name: Option<String>,
+    /// <p>The UNIX timestamp of when the authorizer was created.</p>
+    #[serde(rename = "creationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<f64>,
+    /// <p>The UNIX timestamp of when the authorizer was last updated.</p>
+    #[serde(rename = "lastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_date: Option<f64>,
+    /// <p>The status of the authorizer.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The key used to extract the token from the HTTP headers.</p>
+    #[serde(rename = "tokenKeyName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub token_key_name: Option<String>,
+    /// <p>The public keys used to validate the token signature returned by your custom authentication service.</p>
+    #[serde(rename = "tokenSigningPublicKeys")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub token_signing_public_keys: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>The authorizer summary.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct AuthorizerSummary {
+    /// <p>The authorizer ARN.</p>
+    #[serde(rename = "authorizerArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_arn: Option<String>,
+    /// <p>The authorizer name.</p>
+    #[serde(rename = "authorizerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_name: Option<String>,
 }
 
 /// <p>A CA certificate.</p>
@@ -196,6 +356,33 @@ pub struct CancelCertificateTransferRequest {
     /// <p>The ID of the certificate.</p>
     #[serde(rename = "certificateId")]
     pub certificate_id: String,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CancelJobRequest {
+    /// <p>An optional comment string describing why the job was canceled.</p>
+    #[serde(rename = "comment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub comment: Option<String>,
+    /// <p>The unique identifier you assigned to this job when it was created.</p>
+    #[serde(rename = "jobId")]
+    pub job_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CancelJobResponse {
+    /// <p>A short text description of the job.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The job ARN.</p>
+    #[serde(rename = "jobArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_arn: Option<String>,
+    /// <p>The unique identifier you assigned to this job when it was created.</p>
+    #[serde(rename = "jobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
 }
 
 /// <p>Information about a certificate.</p>
@@ -264,6 +451,12 @@ pub struct CertificateDescription {
     pub transfer_data: Option<TransferData>,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ClearDefaultAuthorizerRequest;
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ClearDefaultAuthorizerResponse;
+
 /// <p>Describes an action that updates a CloudWatch alarm.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct CloudwatchAlarmAction {
@@ -305,6 +498,91 @@ pub struct CloudwatchMetricAction {
     pub role_arn: String,
 }
 
+/// <p>Describes the method to use when code signing a file.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct CodeSigning {
+    /// <p>The ID of the AWSSignerJob which was created to sign the file.</p>
+    #[serde(rename = "awsSignerJobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_signer_job_id: Option<String>,
+    /// <p>A custom method for code signing a file.</p>
+    #[serde(rename = "customCodeSigning")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_code_signing: Option<CustomCodeSigning>,
+}
+
+/// <p>Describes the certificate chain being used when code signing a file.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct CodeSigningCertificateChain {
+    /// <p>The name of the certificate.</p>
+    #[serde(rename = "certificateName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_name: Option<String>,
+    /// <p>A base64 encoded binary representation of the code signing certificate chain.</p>
+    #[serde(rename = "inlineDocument")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub inline_document: Option<String>,
+    /// <p>A stream of the certificate chain files.</p>
+    #[serde(rename = "stream")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream: Option<Stream>,
+}
+
+/// <p>Describes the signature for a file.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct CodeSigningSignature {
+    /// <p>A base64 encoded binary representation of the code signing signature.</p>
+    #[serde(rename = "inlineDocument")]
+    #[serde(deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+            serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob", default)]
+    pub inline_document: Option<Vec<u8>>,
+    /// <p>A stream of the code signing signature.</p>
+    #[serde(rename = "stream")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream: Option<Stream>,
+}
+
+/// <p>Configuration.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct Configuration {
+    /// <p>True to enable the configuration.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateAuthorizerRequest {
+    /// <p>The ARN of the authorizer's Lambda function.</p>
+    #[serde(rename = "authorizerFunctionArn")]
+    pub authorizer_function_arn: String,
+    /// <p>The authorizer name.</p>
+    #[serde(rename = "authorizerName")]
+    pub authorizer_name: String,
+    /// <p>The status of the create authorizer request.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The name of the token key used to extract the token from the HTTP headers.</p>
+    #[serde(rename = "tokenKeyName")]
+    pub token_key_name: String,
+    /// <p>The public keys used to verify the digital signature returned by your custom authentication service.</p>
+    #[serde(rename = "tokenSigningPublicKeys")]
+    pub token_signing_public_keys: ::std::collections::HashMap<String, String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CreateAuthorizerResponse {
+    /// <p>The authorizer ARN.</p>
+    #[serde(rename = "authorizerArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_arn: Option<String>,
+    /// <p>The authorizer's name.</p>
+    #[serde(rename = "authorizerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_name: Option<String>,
+}
+
 /// <p>The input for the CreateCertificateFromCsr operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateCertificateFromCsrRequest {
@@ -332,6 +610,60 @@ pub struct CreateCertificateFromCsrResponse {
     #[serde(rename = "certificatePem")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_pem: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateJobRequest {
+    /// <p>A short text description of the job.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The job document.</p>
+    #[serde(rename = "document")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document: Option<String>,
+    /// <p>Parameters for the job document.</p>
+    #[serde(rename = "documentParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>An S3 link to the job document.</p>
+    #[serde(rename = "documentSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_source: Option<String>,
+    /// <p>Allows you to create a staged rollout of the job.</p>
+    #[serde(rename = "jobExecutionsRolloutConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_executions_rollout_config: Option<JobExecutionsRolloutConfig>,
+    /// <p>A job identifier which must be unique for your AWS account. We recommend using a UUID. Alpha-numeric characters, "-" and "_" are valid for use here.</p>
+    #[serde(rename = "jobId")]
+    pub job_id: String,
+    /// <p>Configuration information for pre-signed S3 URLs.</p>
+    #[serde(rename = "presignedUrlConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub presigned_url_config: Option<PresignedUrlConfig>,
+    /// <p>Specifies whether the job will continue to run (CONTINUOUS), or will be complete after all those things specified as targets have completed the job (SNAPSHOT). If continuous, the job may also be run on a thing when a change is detected in a target. For example, a job will run on a thing when the thing is added to a target group, even after the job was completed by all things originally in the group.</p>
+    #[serde(rename = "targetSelection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_selection: Option<String>,
+    /// <p>A list of things and thing groups to which the job should be sent.</p>
+    #[serde(rename = "targets")]
+    pub targets: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CreateJobResponse {
+    /// <p>The job description.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The job ARN.</p>
+    #[serde(rename = "jobArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_arn: Option<String>,
+    /// <p>The unique identifier you assigned to this job.</p>
+    #[serde(rename = "jobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
 }
 
 /// <p>The input for the CreateKeysAndCertificate operation.</p>
@@ -362,6 +694,58 @@ pub struct CreateKeysAndCertificateResponse {
     #[serde(rename = "keyPair")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_pair: Option<KeyPair>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateOTAUpdateRequest {
+    /// <p>A list of additional OTA update parameters which are name-value pairs.</p>
+    #[serde(rename = "additionalParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub additional_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The description of the OTA update.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The files to be streamed by the OTA update.</p>
+    #[serde(rename = "files")]
+    pub files: Vec<OTAUpdateFile>,
+    /// <p>The ID of the OTA update to be created.</p>
+    #[serde(rename = "otaUpdateId")]
+    pub ota_update_id: String,
+    /// <p>The IAM role that allows access to the AWS IoT Jobs service.</p>
+    #[serde(rename = "roleArn")]
+    pub role_arn: String,
+    /// <p>Specifies whether the update will continue to run (CONTINUOUS), or will be complete after all the things specified as targets have completed the update (SNAPSHOT). If continuous, the update may also be run on a thing when a change is detected in a target. For example, an update will run on a thing when the thing is added to a target group, even after the update was completed by all things originally in the group. Valid values: CONTINUOUS | SNAPSHOT.</p>
+    #[serde(rename = "targetSelection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_selection: Option<String>,
+    /// <p>The targeted devices to receive OTA updates.</p>
+    #[serde(rename = "targets")]
+    pub targets: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CreateOTAUpdateResponse {
+    /// <p>The AWS IoT job ARN associated with the OTA update.</p>
+    #[serde(rename = "awsIotJobArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_iot_job_arn: Option<String>,
+    /// <p>The AWS IoT job ID associated with the OTA update.</p>
+    #[serde(rename = "awsIotJobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_iot_job_id: Option<String>,
+    /// <p>The OTA update ARN.</p>
+    #[serde(rename = "otaUpdateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ota_update_arn: Option<String>,
+    /// <p>The OTA update ID.</p>
+    #[serde(rename = "otaUpdateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ota_update_id: Option<String>,
+    /// <p>The OTA update status.</p>
+    #[serde(rename = "otaUpdateStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ota_update_status: Option<String>,
 }
 
 /// <p>The input for the CreatePolicy operation.</p>
@@ -399,7 +783,7 @@ pub struct CreatePolicyResponse {
 /// <p>The input for the CreatePolicyVersion operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreatePolicyVersionRequest {
-    /// <p>The JSON document that describes the policy. Minimum length of 1. Maximum length of 2048, excluding whitespaces</p>
+    /// <p>The JSON document that describes the policy. Minimum length of 1. Maximum length of 2048, excluding whitespace.</p>
     #[serde(rename = "policyDocument")]
     pub policy_document: String,
     /// <p>The policy name.</p>
@@ -432,6 +816,100 @@ pub struct CreatePolicyVersionResponse {
     pub policy_version_id: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateRoleAliasRequest {
+    /// <p>How long (in seconds) the credentials will be valid.</p>
+    #[serde(rename = "credentialDurationSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub credential_duration_seconds: Option<i64>,
+    /// <p>The role alias that points to a role ARN. This allows you to change the role without having to update the device.</p>
+    #[serde(rename = "roleAlias")]
+    pub role_alias: String,
+    /// <p>The role ARN.</p>
+    #[serde(rename = "roleArn")]
+    pub role_arn: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CreateRoleAliasResponse {
+    /// <p>The role alias.</p>
+    #[serde(rename = "roleAlias")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_alias: Option<String>,
+    /// <p>The role alias ARN.</p>
+    #[serde(rename = "roleAliasArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_alias_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateStreamRequest {
+    /// <p>A description of the stream.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The files to stream.</p>
+    #[serde(rename = "files")]
+    pub files: Vec<StreamFile>,
+    /// <p>An IAM role that allows the IoT service principal assumes to access your S3 files.</p>
+    #[serde(rename = "roleArn")]
+    pub role_arn: String,
+    /// <p>The stream ID.</p>
+    #[serde(rename = "streamId")]
+    pub stream_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CreateStreamResponse {
+    /// <p>A description of the stream.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The stream ARN.</p>
+    #[serde(rename = "streamArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_arn: Option<String>,
+    /// <p>The stream ID.</p>
+    #[serde(rename = "streamId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_id: Option<String>,
+    /// <p>The version of the stream.</p>
+    #[serde(rename = "streamVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_version: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateThingGroupRequest {
+    /// <p>The name of the parent thing group.</p>
+    #[serde(rename = "parentGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parent_group_name: Option<String>,
+    /// <p>The thing group name to create.</p>
+    #[serde(rename = "thingGroupName")]
+    pub thing_group_name: String,
+    /// <p>The thing group properties.</p>
+    #[serde(rename = "thingGroupProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_group_properties: Option<ThingGroupProperties>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CreateThingGroupResponse {
+    /// <p>The thing group ARN.</p>
+    #[serde(rename = "thingGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_group_arn: Option<String>,
+    /// <p>The thing group ID.</p>
+    #[serde(rename = "thingGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_group_id: Option<String>,
+    /// <p>The thing group name.</p>
+    #[serde(rename = "thingGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_group_name: Option<String>,
+}
+
 /// <p>The input for the CreateThing operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateThingRequest {
@@ -455,6 +933,10 @@ pub struct CreateThingResponse {
     #[serde(rename = "thingArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_arn: Option<String>,
+    /// <p>The thing ID.</p>
+    #[serde(rename = "thingId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_id: Option<String>,
     /// <p>The name of the new thing.</p>
     #[serde(rename = "thingName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -480,6 +962,10 @@ pub struct CreateThingTypeResponse {
     #[serde(rename = "thingTypeArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_type_arn: Option<String>,
+    /// <p>The thing type ID.</p>
+    #[serde(rename = "thingTypeId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_type_id: Option<String>,
     /// <p>The name of the thing type.</p>
     #[serde(rename = "thingTypeName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -496,6 +982,37 @@ pub struct CreateTopicRuleRequest {
     #[serde(rename = "topicRulePayload")]
     pub topic_rule_payload: TopicRulePayload,
 }
+
+/// <p>Describes a custom method used to code sign a file.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct CustomCodeSigning {
+    /// <p>The certificate chain.</p>
+    #[serde(rename = "certificateChain")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_chain: Option<CodeSigningCertificateChain>,
+    /// <p>The hash algorithm used to code sign the file.</p>
+    #[serde(rename = "hashAlgorithm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hash_algorithm: Option<String>,
+    /// <p>The signature for the file.</p>
+    #[serde(rename = "signature")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub signature: Option<CodeSigningSignature>,
+    /// <p>The signature algorithm used to code sign the file.</p>
+    #[serde(rename = "signatureAlgorithm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub signature_algorithm: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteAuthorizerRequest {
+    /// <p>The name of the authorizer to delete.</p>
+    #[serde(rename = "authorizerName")]
+    pub authorizer_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteAuthorizerResponse;
 
 /// <p>Input for the DeleteCACertificate operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
@@ -515,7 +1032,21 @@ pub struct DeleteCertificateRequest {
     /// <p>The ID of the certificate.</p>
     #[serde(rename = "certificateId")]
     pub certificate_id: String,
+    /// <p>Forces a certificate request to be deleted.</p>
+    #[serde(rename = "forceDelete")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub force_delete: Option<bool>,
 }
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteOTAUpdateRequest {
+    /// <p>The OTA update ID to delete.</p>
+    #[serde(rename = "otaUpdateId")]
+    pub ota_update_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteOTAUpdateResponse;
 
 /// <p>The input for the DeletePolicy operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
@@ -543,6 +1074,40 @@ pub struct DeleteRegistrationCodeRequest;
 /// <p>The output for the DeleteRegistrationCode operation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteRegistrationCodeResponse;
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteRoleAliasRequest {
+    /// <p>The role alias to delete.</p>
+    #[serde(rename = "roleAlias")]
+    pub role_alias: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteRoleAliasResponse;
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteStreamRequest {
+    /// <p>The stream ID.</p>
+    #[serde(rename = "streamId")]
+    pub stream_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteStreamResponse;
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteThingGroupRequest {
+    /// <p>The expected version of the thing group to delete.</p>
+    #[serde(rename = "expectedVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expected_version: Option<i64>,
+    /// <p>The name of the thing group to delete.</p>
+    #[serde(rename = "thingGroupName")]
+    pub thing_group_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteThingGroupResponse;
 
 /// <p>The input for the DeleteThing operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
@@ -580,6 +1145,29 @@ pub struct DeleteTopicRuleRequest {
     pub rule_name: String,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteV2LoggingLevelRequest {
+    /// <p>The name of the resource for which you are configuring logging.</p>
+    #[serde(rename = "targetName")]
+    pub target_name: String,
+    /// <p>The type of resource for which you are configuring logging. Must be <code>THING_Group</code>.</p>
+    #[serde(rename = "targetType")]
+    pub target_type: String,
+}
+
+/// <p>Contains information that denied the authorization.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct Denied {
+    /// <p>Information that explicitly denies the authorization. </p>
+    #[serde(rename = "explicitDeny")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub explicit_deny: Option<ExplicitDeny>,
+    /// <p>Information that implicitly denies the authorization. When a policy doesn't explicitly deny or allow an action on a resource it is considered an implicit deny.</p>
+    #[serde(rename = "implicitDeny")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub implicit_deny: Option<ImplicitDeny>,
+}
+
 /// <p>The input for the DeprecateThingType operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeprecateThingTypeRequest {
@@ -596,6 +1184,21 @@ pub struct DeprecateThingTypeRequest {
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeprecateThingTypeResponse;
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribeAuthorizerRequest {
+    /// <p>The name of the authorizer to describe.</p>
+    #[serde(rename = "authorizerName")]
+    pub authorizer_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeAuthorizerResponse {
+    /// <p>The authorizer description.</p>
+    #[serde(rename = "authorizerDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_description: Option<AuthorizerDescription>,
+}
+
 /// <p>The input for the DescribeCACertificate operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeCACertificateRequest {
@@ -611,6 +1214,10 @@ pub struct DescribeCACertificateResponse {
     #[serde(rename = "certificateDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_description: Option<CACertificateDescription>,
+    /// <p>Information about the registration configuration.</p>
+    #[serde(rename = "registrationConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registration_config: Option<RegistrationConfig>,
 }
 
 /// <p>The input for the DescribeCertificate operation.</p>
@@ -630,9 +1237,25 @@ pub struct DescribeCertificateResponse {
     pub certificate_description: Option<CertificateDescription>,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribeDefaultAuthorizerRequest;
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeDefaultAuthorizerResponse {
+    /// <p>The default authorizer's description.</p>
+    #[serde(rename = "authorizerDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_description: Option<AuthorizerDescription>,
+}
+
 /// <p>The input for the DescribeEndpoint operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
-pub struct DescribeEndpointRequest;
+pub struct DescribeEndpointRequest {
+    /// <p>The endpoint type.</p>
+    #[serde(rename = "endpointType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_type: Option<String>,
+}
 
 /// <p>The output from the DescribeEndpoint operation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -641,6 +1264,213 @@ pub struct DescribeEndpointResponse {
     #[serde(rename = "endpointAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_address: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribeEventConfigurationsRequest;
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeEventConfigurationsResponse {
+    /// <p>The creation date of the event configuration.</p>
+    #[serde(rename = "creationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<f64>,
+    /// <p>The event configurations.</p>
+    #[serde(rename = "eventConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_configurations: Option<::std::collections::HashMap<String, Configuration>>,
+    /// <p>The date the event configurations were last modified.</p>
+    #[serde(rename = "lastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_date: Option<f64>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribeIndexRequest {
+    /// <p>The index name.</p>
+    #[serde(rename = "indexName")]
+    pub index_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeIndexResponse {
+    /// <p>The index name.</p>
+    #[serde(rename = "indexName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_name: Option<String>,
+    /// <p>The index status.</p>
+    #[serde(rename = "indexStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_status: Option<String>,
+    /// <p><p>Contains a value that specifies the type of indexing performed. Valid values are:</p> <ol> <li> <p>REGISTRY – Your thing index will contain only registry data.</p> </li> <li> <p>REGISTRY<em>AND</em>SHADOW - Your thing index will contain registry and shadow data.</p> </li> </ol></p>
+    #[serde(rename = "schema")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribeJobExecutionRequest {
+    /// <p>A string (consisting of the digits "0" through "9" which is used to specify a particular job execution on a particular device.</p>
+    #[serde(rename = "executionNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub execution_number: Option<i64>,
+    /// <p>The unique identifier you assigned to this job when it was created.</p>
+    #[serde(rename = "jobId")]
+    pub job_id: String,
+    /// <p>The name of the thing on which the job execution is running.</p>
+    #[serde(rename = "thingName")]
+    pub thing_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeJobExecutionResponse {
+    /// <p>Information about the job execution.</p>
+    #[serde(rename = "execution")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub execution: Option<JobExecution>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribeJobRequest {
+    /// <p>The unique identifier you assigned to this job when it was created.</p>
+    #[serde(rename = "jobId")]
+    pub job_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeJobResponse {
+    /// <p>An S3 link to the job document.</p>
+    #[serde(rename = "documentSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_source: Option<String>,
+    /// <p>Information about the job.</p>
+    #[serde(rename = "job")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job: Option<Job>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribeRoleAliasRequest {
+    /// <p>The role alias to describe.</p>
+    #[serde(rename = "roleAlias")]
+    pub role_alias: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeRoleAliasResponse {
+    /// <p>The role alias description.</p>
+    #[serde(rename = "roleAliasDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_alias_description: Option<RoleAliasDescription>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribeStreamRequest {
+    /// <p>The stream ID.</p>
+    #[serde(rename = "streamId")]
+    pub stream_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeStreamResponse {
+    /// <p>Information about the stream.</p>
+    #[serde(rename = "streamInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_info: Option<StreamInfo>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribeThingGroupRequest {
+    /// <p>The name of the thing group.</p>
+    #[serde(rename = "thingGroupName")]
+    pub thing_group_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeThingGroupResponse {
+    /// <p>The thing group ARN.</p>
+    #[serde(rename = "thingGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_group_arn: Option<String>,
+    /// <p>The thing group ID.</p>
+    #[serde(rename = "thingGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_group_id: Option<String>,
+    /// <p>Thing group metadata.</p>
+    #[serde(rename = "thingGroupMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_group_metadata: Option<ThingGroupMetadata>,
+    /// <p>The name of the thing group.</p>
+    #[serde(rename = "thingGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_group_name: Option<String>,
+    /// <p>The thing group properties.</p>
+    #[serde(rename = "thingGroupProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_group_properties: Option<ThingGroupProperties>,
+    /// <p>The version of the thing group.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribeThingRegistrationTaskRequest {
+    /// <p>The task ID.</p>
+    #[serde(rename = "taskId")]
+    pub task_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeThingRegistrationTaskResponse {
+    /// <p>The task creation date.</p>
+    #[serde(rename = "creationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<f64>,
+    /// <p>The number of things that failed to be provisioned.</p>
+    #[serde(rename = "failureCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_count: Option<i64>,
+    /// <p>The S3 bucket that contains the input file.</p>
+    #[serde(rename = "inputFileBucket")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_file_bucket: Option<String>,
+    /// <p>The input file key.</p>
+    #[serde(rename = "inputFileKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_file_key: Option<String>,
+    /// <p>The date when the task was last modified.</p>
+    #[serde(rename = "lastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_date: Option<f64>,
+    /// <p>The message.</p>
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// <p>The progress of the bulk provisioning task expressed as a percentage.</p>
+    #[serde(rename = "percentageProgress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub percentage_progress: Option<i64>,
+    /// <p>The role ARN that grants access to the input file bucket.</p>
+    #[serde(rename = "roleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+    /// <p>The status of the bulk thing provisioning task.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The number of things successfully provisioned.</p>
+    #[serde(rename = "successCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub success_count: Option<i64>,
+    /// <p>The task ID.</p>
+    #[serde(rename = "taskId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_id: Option<String>,
+    /// <p>The task's template.</p>
+    #[serde(rename = "templateBody")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_body: Option<String>,
 }
 
 /// <p>The input for the DescribeThing operation.</p>
@@ -662,6 +1492,14 @@ pub struct DescribeThingResponse {
     #[serde(rename = "defaultClientId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_client_id: Option<String>,
+    /// <p>The ARN of the thing to describe.</p>
+    #[serde(rename = "thingArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_arn: Option<String>,
+    /// <p>The ID of the thing to describe.</p>
+    #[serde(rename = "thingId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_id: Option<String>,
     /// <p>The name of the thing.</p>
     #[serde(rename = "thingName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -687,6 +1525,14 @@ pub struct DescribeThingTypeRequest {
 /// <p>The output for the DescribeThingType operation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeThingTypeResponse {
+    /// <p>The thing type ARN.</p>
+    #[serde(rename = "thingTypeArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_type_arn: Option<String>,
+    /// <p>The thing type ID.</p>
+    #[serde(rename = "thingTypeId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_type_id: Option<String>,
     /// <p>The ThingTypeMetadata contains additional information about the thing type including: creation date and time, a value indicating whether the thing type is deprecated, and a date and time when it was deprecated.</p>
     #[serde(rename = "thingTypeMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -699,6 +1545,16 @@ pub struct DescribeThingTypeResponse {
     #[serde(rename = "thingTypeProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_type_properties: Option<ThingTypeProperties>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DetachPolicyRequest {
+    /// <p>The policy to detach.</p>
+    #[serde(rename = "policyName")]
+    pub policy_name: String,
+    /// <p>The target from which the policy will be detached.</p>
+    #[serde(rename = "target")]
+    pub target: String,
 }
 
 /// <p>The input for the DetachPrincipalPolicy operation.</p>
@@ -789,6 +1645,23 @@ pub struct DynamoDBv2Action {
     pub role_arn: Option<String>,
 }
 
+/// <p>The policy that has the effect on the authorization results.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct EffectivePolicy {
+    /// <p>The policy ARN.</p>
+    #[serde(rename = "policyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_arn: Option<String>,
+    /// <p>The IAM policy document.</p>
+    #[serde(rename = "policyDocument")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_document: Option<String>,
+    /// <p>The policy name.</p>
+    #[serde(rename = "policyName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_name: Option<String>,
+}
+
 /// <p>Describes an action that writes data to an Amazon Elasticsearch Service domain.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ElasticsearchAction {
@@ -817,19 +1690,91 @@ pub struct EnableTopicRuleRequest {
     pub rule_name: String,
 }
 
+/// <p>Error information.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ErrorInfo {
+    /// <p>The error code.</p>
+    #[serde(rename = "code")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code: Option<String>,
+    /// <p>The error message.</p>
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+}
+
+/// <p>Information that explicitly denies authorization.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ExplicitDeny {
+    /// <p>The policies that denied the authorization.</p>
+    #[serde(rename = "policies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policies: Option<Vec<Policy>>,
+}
+
 /// <p>Describes an action that writes data to an Amazon Kinesis Firehose stream.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct FirehoseAction {
     /// <p>The delivery stream name.</p>
     #[serde(rename = "deliveryStreamName")]
     pub delivery_stream_name: String,
-    /// <p>The IAM role that grants access to the Amazon Kinesis Firehost stream.</p>
+    /// <p>The IAM role that grants access to the Amazon Kinesis Firehose stream.</p>
     #[serde(rename = "roleArn")]
     pub role_arn: String,
     /// <p>A character separator that will be used to separate records written to the Firehose stream. Valid values are: '\n' (newline), '\t' (tab), '\r\n' (Windows newline), ',' (comma).</p>
     #[serde(rename = "separator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub separator: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetEffectivePoliciesRequest {
+    /// <p>The Cognito identity pool ID.</p>
+    #[serde(rename = "cognitoIdentityPoolId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cognito_identity_pool_id: Option<String>,
+    /// <p>The principal.</p>
+    #[serde(rename = "principal")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub principal: Option<String>,
+    /// <p>The thing name.</p>
+    #[serde(rename = "thingName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetEffectivePoliciesResponse {
+    /// <p>The effective policies.</p>
+    #[serde(rename = "effectivePolicies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub effective_policies: Option<Vec<EffectivePolicy>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetIndexingConfigurationRequest;
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetIndexingConfigurationResponse {
+    /// <p>Thing indexing configuration.</p>
+    #[serde(rename = "thingIndexingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_indexing_configuration: Option<ThingIndexingConfiguration>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetJobDocumentRequest {
+    /// <p>The unique identifier you assigned to this job when it was created.</p>
+    #[serde(rename = "jobId")]
+    pub job_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetJobDocumentResponse {
+    /// <p>The job document content.</p>
+    #[serde(rename = "document")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document: Option<String>,
 }
 
 /// <p>The input for the GetLoggingOptions operation.</p>
@@ -847,6 +1792,21 @@ pub struct GetLoggingOptionsResponse {
     #[serde(rename = "roleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetOTAUpdateRequest {
+    /// <p>The OTA update ID.</p>
+    #[serde(rename = "otaUpdateId")]
+    pub ota_update_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetOTAUpdateResponse {
+    /// <p>The OTA update info.</p>
+    #[serde(rename = "otaUpdateInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ota_update_info: Option<OTAUpdateInfo>,
 }
 
 /// <p>The input for the GetPolicy operation.</p>
@@ -948,6 +1908,288 @@ pub struct GetTopicRuleResponse {
     pub rule_arn: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetV2LoggingOptionsRequest;
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetV2LoggingOptionsResponse {
+    /// <p>The default log level.</p>
+    #[serde(rename = "defaultLogLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_log_level: Option<String>,
+    /// <p>Disables all logs.</p>
+    #[serde(rename = "disableAllLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disable_all_logs: Option<bool>,
+    /// <p>The IAM role ARN AWS IoT uses to write to your CloudWatch logs.</p>
+    #[serde(rename = "roleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+}
+
+/// <p>The name and ARN of a group.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GroupNameAndArn {
+    /// <p>The group ARN.</p>
+    #[serde(rename = "groupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_arn: Option<String>,
+    /// <p>The group name.</p>
+    #[serde(rename = "groupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_name: Option<String>,
+}
+
+/// <p>Information that implicitly denies authorization. When policy doesn't explicitly deny or allow an action on a resource it is considered an implicit deny.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ImplicitDeny {
+    /// <p>Policies that don't contain a matching allow or deny statement for the specified action on the specified resource. </p>
+    #[serde(rename = "policies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policies: Option<Vec<Policy>>,
+}
+
+/// <p>The <code>Job</code> object contains details about a job.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct Job {
+    /// <p>If the job was updated, describes the reason for the update.</p>
+    #[serde(rename = "comment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub comment: Option<String>,
+    /// <p>The time, in milliseconds since the epoch, when the job was completed.</p>
+    #[serde(rename = "completedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub completed_at: Option<f64>,
+    /// <p>The time, in milliseconds since the epoch, when the job was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>A short text description of the job.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The parameters specified for the job document.</p>
+    #[serde(rename = "documentParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>An ARN identifying the job with format "arn:aws:iot:region:account:job/jobId".</p>
+    #[serde(rename = "jobArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_arn: Option<String>,
+    /// <p>Allows you to create a staged rollout of a job.</p>
+    #[serde(rename = "jobExecutionsRolloutConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_executions_rollout_config: Option<JobExecutionsRolloutConfig>,
+    /// <p>The unique identifier you assigned to this job when it was created.</p>
+    #[serde(rename = "jobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    /// <p>Details about the job process.</p>
+    #[serde(rename = "jobProcessDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_process_details: Option<JobProcessDetails>,
+    /// <p>The time, in milliseconds since the epoch, when the job was last updated.</p>
+    #[serde(rename = "lastUpdatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_at: Option<f64>,
+    /// <p>Configuration for pre-signed S3 URLs.</p>
+    #[serde(rename = "presignedUrlConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub presigned_url_config: Option<PresignedUrlConfig>,
+    /// <p>The status of the job, one of <code>IN_PROGRESS</code>, <code>CANCELED</code>, or <code>COMPLETED</code>. </p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>Specifies whether the job will continue to run (CONTINUOUS), or will be complete after all those things specified as targets have completed the job (SNAPSHOT). If continuous, the job may also be run on a thing when a change is detected in a target. For example, a job will run on a device when the thing representing the device is added to a target group, even after the job was completed by all things originally in the group. </p>
+    #[serde(rename = "targetSelection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_selection: Option<String>,
+    /// <p>A list of IoT things and thing groups to which the job should be sent.</p>
+    #[serde(rename = "targets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub targets: Option<Vec<String>>,
+}
+
+/// <p>The job execution object represents the execution of a job on a particular device.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct JobExecution {
+    /// <p>A string (consisting of the digits "0" through "9") which identifies this particular job execution on this particular device. It can be used in commands which return or update job execution information. </p>
+    #[serde(rename = "executionNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub execution_number: Option<i64>,
+    /// <p>The unique identifier you assigned to the job when it was created.</p>
+    #[serde(rename = "jobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    /// <p>The time, in milliseconds since the epoch, when the job execution was last updated.</p>
+    #[serde(rename = "lastUpdatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_at: Option<f64>,
+    /// <p>The time, in milliseconds since the epoch, when the job execution was queued.</p>
+    #[serde(rename = "queuedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub queued_at: Option<f64>,
+    /// <p>The time, in milliseconds since the epoch, when the job execution started.</p>
+    #[serde(rename = "startedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub started_at: Option<f64>,
+    /// <p>The status of the job execution (IN_PROGRESS, QUEUED, FAILED, SUCCESS, CANCELED, or REJECTED).</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>A collection of name/value pairs that describe the status of the job execution.</p>
+    #[serde(rename = "statusDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_details: Option<JobExecutionStatusDetails>,
+    /// <p>The ARN of the thing on which the job execution is running.</p>
+    #[serde(rename = "thingArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_arn: Option<String>,
+}
+
+/// <p>Details of the job execution status.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct JobExecutionStatusDetails {
+    /// <p>The job execution status.</p>
+    #[serde(rename = "detailsMap")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub details_map: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>The job execution summary.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct JobExecutionSummary {
+    /// <p>A string (consisting of the digits "0" through "9") which identifies this particular job execution on this particular device. It can be used later in commands which return or update job execution information.</p>
+    #[serde(rename = "executionNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub execution_number: Option<i64>,
+    /// <p>The time, in milliseconds since the epoch, when the job execution was last updated.</p>
+    #[serde(rename = "lastUpdatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_at: Option<f64>,
+    /// <p>The time, in milliseconds since the epoch, when the job execution was queued.</p>
+    #[serde(rename = "queuedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub queued_at: Option<f64>,
+    /// <p>The time, in milliseconds since the epoch, when the job execution started.</p>
+    #[serde(rename = "startedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub started_at: Option<f64>,
+    /// <p>The status of the job execution.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>Contains a summary of information about job executions for a specific job.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct JobExecutionSummaryForJob {
+    /// <p>Contains a subset of information about a job execution.</p>
+    #[serde(rename = "jobExecutionSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_execution_summary: Option<JobExecutionSummary>,
+    /// <p>The ARN of the thing on which the job execution is running.</p>
+    #[serde(rename = "thingArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_arn: Option<String>,
+}
+
+/// <p>The job execution summary for a thing.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct JobExecutionSummaryForThing {
+    /// <p>Contains a subset of information about a job execution.</p>
+    #[serde(rename = "jobExecutionSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_execution_summary: Option<JobExecutionSummary>,
+    /// <p>The unique identifier you assigned to this job when it was created.</p>
+    #[serde(rename = "jobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+}
+
+/// <p>Allows you to create a staged rollout of a job.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct JobExecutionsRolloutConfig {
+    /// <p>The maximum number of things that will be notified of a pending job, per minute. This parameter allows you to create a staged rollout.</p>
+    #[serde(rename = "maximumPerMinute")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_per_minute: Option<i64>,
+}
+
+/// <p>The job process details.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct JobProcessDetails {
+    /// <p>The number of things that cancelled the job.</p>
+    #[serde(rename = "numberOfCanceledThings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_canceled_things: Option<i64>,
+    /// <p>The number of things that failed executing the job.</p>
+    #[serde(rename = "numberOfFailedThings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_failed_things: Option<i64>,
+    /// <p>The number of things currently executing the job.</p>
+    #[serde(rename = "numberOfInProgressThings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_in_progress_things: Option<i64>,
+    /// <p>The number of things that are awaiting execution of the job.</p>
+    #[serde(rename = "numberOfQueuedThings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_queued_things: Option<i64>,
+    /// <p>The number of things that rejected the job.</p>
+    #[serde(rename = "numberOfRejectedThings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_rejected_things: Option<i64>,
+    /// <p>The number of things that are no longer scheduled to execute the job because they have been deleted or have been removed from the group that was a target of the job.</p>
+    #[serde(rename = "numberOfRemovedThings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_removed_things: Option<i64>,
+    /// <p>The number of things which successfully completed the job.</p>
+    #[serde(rename = "numberOfSucceededThings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_succeeded_things: Option<i64>,
+    /// <p>The devices on which the job is executing.</p>
+    #[serde(rename = "processingTargets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub processing_targets: Option<Vec<String>>,
+}
+
+/// <p>The job summary.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct JobSummary {
+    /// <p>The time, in milliseconds since the epoch, when the job completed.</p>
+    #[serde(rename = "completedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub completed_at: Option<f64>,
+    /// <p>The time, in milliseconds since the epoch, when the job was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>The job ARN.</p>
+    #[serde(rename = "jobArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_arn: Option<String>,
+    /// <p>The unique identifier you assigned to this job when it was created.</p>
+    #[serde(rename = "jobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    /// <p>The time, in milliseconds since the epoch, when the job was last updated.</p>
+    #[serde(rename = "lastUpdatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_at: Option<f64>,
+    /// <p>The job summary status.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>Specifies whether the job will continue to run (CONTINUOUS), or will be complete after all those things specified as targets have completed the job (SNAPSHOT). If continuous, the job may also be run on a thing when a change is detected in a target. For example, a job will run on a thing when the thing is added to a target group, even after the job was completed by all things originally in the group.</p>
+    #[serde(rename = "targetSelection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_selection: Option<String>,
+    /// <p>The ID of the thing group.</p>
+    #[serde(rename = "thingGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_group_id: Option<String>,
+}
+
 /// <p>Describes a key pair.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct KeyPair {
@@ -982,6 +2224,69 @@ pub struct LambdaAction {
     /// <p>The ARN of the Lambda function.</p>
     #[serde(rename = "functionArn")]
     pub function_arn: String,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ListAttachedPoliciesRequest {
+    /// <p>The token to retrieve the next set of results.</p>
+    #[serde(rename = "marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+    /// <p>The maximum number of results to be returned per request.</p>
+    #[serde(rename = "pageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_size: Option<i64>,
+    /// <p>When true, recursively list attached policies.</p>
+    #[serde(rename = "recursive")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recursive: Option<bool>,
+    /// <p>The group for which the policies will be listed.</p>
+    #[serde(rename = "target")]
+    pub target: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ListAttachedPoliciesResponse {
+    /// <p>The token to retrieve the next set of results, or ``null`` if there are no more results.</p>
+    #[serde(rename = "nextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_marker: Option<String>,
+    /// <p>The policies.</p>
+    #[serde(rename = "policies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policies: Option<Vec<Policy>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ListAuthorizersRequest {
+    /// <p>Return the list of authorizers in ascending alphabetical order.</p>
+    #[serde(rename = "ascendingOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ascending_order: Option<bool>,
+    /// <p>A marker used to get the next set of results.</p>
+    #[serde(rename = "marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+    /// <p>The maximum number of results to return at one time.</p>
+    #[serde(rename = "pageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_size: Option<i64>,
+    /// <p>The status of the list authorizers request.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ListAuthorizersResponse {
+    /// <p>The authorizers.</p>
+    #[serde(rename = "authorizers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizers: Option<Vec<AuthorizerSummary>>,
+    /// <p>A marker used to get the next set of results.</p>
+    #[serde(rename = "nextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_marker: Option<String>,
 }
 
 /// <p>Input for the ListCACertificates operation.</p>
@@ -1077,6 +2382,160 @@ pub struct ListCertificatesResponse {
     pub next_marker: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ListIndicesRequest {
+    /// <p>The maximum number of results to return at one time.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ListIndicesResponse {
+    /// <p>The index names.</p>
+    #[serde(rename = "indexNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_names: Option<Vec<String>>,
+    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ListJobExecutionsForJobRequest {
+    /// <p>The unique identifier you assigned to this job when it was created.</p>
+    #[serde(rename = "jobId")]
+    pub job_id: String,
+    /// <p>The maximum number of results to be returned per request.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token to retrieve the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The status of the job.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ListJobExecutionsForJobResponse {
+    /// <p>A list of job execution summaries.</p>
+    #[serde(rename = "executionSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub execution_summaries: Option<Vec<JobExecutionSummaryForJob>>,
+    /// <p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ListJobExecutionsForThingRequest {
+    /// <p>The maximum number of results to be returned per request.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token to retrieve the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>An optional filter that lets you search for jobs that have the specified status.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The thing name.</p>
+    #[serde(rename = "thingName")]
+    pub thing_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ListJobExecutionsForThingResponse {
+    /// <p>A list of job execution summaries.</p>
+    #[serde(rename = "executionSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub execution_summaries: Option<Vec<JobExecutionSummaryForThing>>,
+    /// <p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ListJobsRequest {
+    /// <p>The maximum number of results to return per request.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token to retrieve the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>An optional filter that lets you search for jobs that have the specified status.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>Specifies whether the job will continue to run (CONTINUOUS), or will be complete after all those things specified as targets have completed the job (SNAPSHOT). If continuous, the job may also be run on a thing when a change is detected in a target. For example, a job will run on a thing when the thing is added to a target group, even after the job was completed by all things originally in the group. </p>
+    #[serde(rename = "targetSelection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_selection: Option<String>,
+    /// <p>A filter that limits the returned jobs to those for the specified group.</p>
+    #[serde(rename = "thingGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_group_id: Option<String>,
+    /// <p>A filter that limits the returned jobs to those for the specified group.</p>
+    #[serde(rename = "thingGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_group_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ListJobsResponse {
+    /// <p>A list of jobs.</p>
+    #[serde(rename = "jobs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub jobs: Option<Vec<JobSummary>>,
+    /// <p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ListOTAUpdatesRequest {
+    /// <p>The maximum number of results to return at one time.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A token used to retreive the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The OTA update job status.</p>
+    #[serde(rename = "otaUpdateStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ota_update_status: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ListOTAUpdatesResponse {
+    /// <p>A token to use to get the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of OTA update jobs.</p>
+    #[serde(rename = "otaUpdates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ota_updates: Option<Vec<OTAUpdateSummary>>,
+}
+
 /// <p>The input to the ListOutgoingCertificates operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListOutgoingCertificatesRequest {
@@ -1101,7 +2560,7 @@ pub struct ListOutgoingCertificatesResponse {
     #[serde(rename = "nextMarker")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_marker: Option<String>,
-    /// <p>The certificates that are being transfered but not yet accepted.</p>
+    /// <p>The certificates that are being transferred but not yet accepted.</p>
     #[serde(rename = "outgoingCertificates")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub outgoing_certificates: Option<Vec<OutgoingCertificate>>,
@@ -1227,7 +2686,7 @@ pub struct ListPrincipalThingsRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1239,7 +2698,7 @@ pub struct ListPrincipalThingsRequest {
 /// <p>The output from the ListPrincipalThings operation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListPrincipalThingsResponse {
-    /// <p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1247,6 +2706,152 @@ pub struct ListPrincipalThingsResponse {
     #[serde(rename = "things")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub things: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ListRoleAliasesRequest {
+    /// <p>Return the list of role aliases in ascending alphabetical order.</p>
+    #[serde(rename = "ascendingOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ascending_order: Option<bool>,
+    /// <p>A marker used to get the next set of results.</p>
+    #[serde(rename = "marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+    /// <p>The maximum number of results to return at one time.</p>
+    #[serde(rename = "pageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_size: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ListRoleAliasesResponse {
+    /// <p>A marker used to get the next set of results.</p>
+    #[serde(rename = "nextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_marker: Option<String>,
+    /// <p>The role aliases.</p>
+    #[serde(rename = "roleAliases")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_aliases: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ListStreamsRequest {
+    /// <p>Set to true to return the list of streams in ascending order.</p>
+    #[serde(rename = "ascendingOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ascending_order: Option<bool>,
+    /// <p>The maximum number of results to return at a time.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A token used to get the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ListStreamsResponse {
+    /// <p>A token used to get the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of streams.</p>
+    #[serde(rename = "streams")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub streams: Option<Vec<StreamSummary>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ListTargetsForPolicyRequest {
+    /// <p>A marker used to get the next set of results.</p>
+    #[serde(rename = "marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+    /// <p>The maximum number of results to return at one time.</p>
+    #[serde(rename = "pageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_size: Option<i64>,
+    /// <p>The policy name.</p>
+    #[serde(rename = "policyName")]
+    pub policy_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ListTargetsForPolicyResponse {
+    /// <p>A marker used to get the next set of results.</p>
+    #[serde(rename = "nextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_marker: Option<String>,
+    /// <p>The policy targets.</p>
+    #[serde(rename = "targets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub targets: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ListThingGroupsForThingRequest {
+    /// <p>The maximum number of results to return at one time.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The thing name.</p>
+    #[serde(rename = "thingName")]
+    pub thing_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ListThingGroupsForThingResponse {
+    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The thing groups.</p>
+    #[serde(rename = "thingGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_groups: Option<Vec<GroupNameAndArn>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ListThingGroupsRequest {
+    /// <p>The maximum number of results to return at one time.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A filter that limits the results to those with the specified name prefix.</p>
+    #[serde(rename = "namePrefixFilter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name_prefix_filter: Option<String>,
+    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A filter that limits the results to those with the specified parent group.</p>
+    #[serde(rename = "parentGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parent_group: Option<String>,
+    /// <p>If true, return child groups as well.</p>
+    #[serde(rename = "recursive")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recursive: Option<bool>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ListThingGroupsResponse {
+    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The thing groups.</p>
+    #[serde(rename = "thingGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_groups: Option<Vec<GroupNameAndArn>>,
 }
 
 /// <p>The input for the ListThingPrincipal operation.</p>
@@ -1264,6 +2869,68 @@ pub struct ListThingPrincipalsResponse {
     #[serde(rename = "principals")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub principals: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ListThingRegistrationTaskReportsRequest {
+    /// <p>The maximum number of results to return per request.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token to retrieve the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The type of task report.</p>
+    #[serde(rename = "reportType")]
+    pub report_type: String,
+    /// <p>The id of the task.</p>
+    #[serde(rename = "taskId")]
+    pub task_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ListThingRegistrationTaskReportsResponse {
+    /// <p>The token to retrieve the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The type of task report.</p>
+    #[serde(rename = "reportType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub report_type: Option<String>,
+    /// <p>Links to the task resources.</p>
+    #[serde(rename = "resourceLinks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_links: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ListThingRegistrationTasksRequest {
+    /// <p>The maximum number of results to return at one time.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The status of the bulk thing provisioning task.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ListThingRegistrationTasksResponse {
+    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of bulk thing provisioning task IDs.</p>
+    #[serde(rename = "taskIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_ids: Option<Vec<String>>,
 }
 
 /// <p>The input for the ListThingTypes operation.</p>
@@ -1296,6 +2963,37 @@ pub struct ListThingTypesResponse {
     pub thing_types: Option<Vec<ThingTypeDefinition>>,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ListThingsInThingGroupRequest {
+    /// <p>The maximum number of results to return at one time.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>When true, list things in this thing group and in all child groups as well.</p>
+    #[serde(rename = "recursive")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recursive: Option<bool>,
+    /// <p>The thing group name.</p>
+    #[serde(rename = "thingGroupName")]
+    pub thing_group_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ListThingsInThingGroupResponse {
+    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The things in the specified thing group.</p>
+    #[serde(rename = "things")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub things: Option<Vec<String>>,
+}
+
 /// <p>The input for the ListThings operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListThingsRequest {
@@ -1311,7 +3009,7 @@ pub struct ListThingsRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1324,7 +3022,7 @@ pub struct ListThingsRequest {
 /// <p>The output from the ListThings operation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListThingsResponse {
-    /// <p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>
+    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1368,10 +3066,63 @@ pub struct ListTopicRulesResponse {
     pub rules: Option<Vec<TopicRuleListItem>>,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ListV2LoggingLevelsRequest {
+    /// <p>The maximum number of results to return at one time.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The type of resource for which you are configuring logging. Must be <code>THING_Group</code>.</p>
+    #[serde(rename = "targetType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_type: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ListV2LoggingLevelsResponse {
+    /// <p>The logging configuration for a target.</p>
+    #[serde(rename = "logTargetConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_target_configurations: Option<Vec<LogTargetConfiguration>>,
+    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p>A log target.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct LogTarget {
+    /// <p>The target name.</p>
+    #[serde(rename = "targetName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_name: Option<String>,
+    /// <p>The target type.</p>
+    #[serde(rename = "targetType")]
+    pub target_type: String,
+}
+
+/// <p>The target configuration.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct LogTargetConfiguration {
+    /// <p>The logging level.</p>
+    #[serde(rename = "logLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_level: Option<String>,
+    /// <p>A log target</p>
+    #[serde(rename = "logTarget")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_target: Option<LogTarget>,
+}
+
 /// <p>Describes the logging options payload.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct LoggingOptionsPayload {
-    /// <p>The logging level.</p>
+    /// <p>The log level.</p>
     #[serde(rename = "logLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_level: Option<String>,
@@ -1380,7 +3131,106 @@ pub struct LoggingOptionsPayload {
     pub role_arn: String,
 }
 
-/// <p>A certificate that has been transfered but not yet accepted.</p>
+/// <p>Describes a file to be associated with an OTA update.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct OTAUpdateFile {
+    /// <p>A list of name/attribute pairs.</p>
+    #[serde(rename = "attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The code signing method of the file.</p>
+    #[serde(rename = "codeSigning")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code_signing: Option<CodeSigning>,
+    /// <p>The name of the file.</p>
+    #[serde(rename = "fileName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_name: Option<String>,
+    /// <p>The source of the file.</p>
+    #[serde(rename = "fileSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_source: Option<Stream>,
+    /// <p>The file version.</p>
+    #[serde(rename = "fileVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_version: Option<String>,
+}
+
+/// <p>Information about an OTA update.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct OTAUpdateInfo {
+    /// <p>A collection of name/value pairs</p>
+    #[serde(rename = "additionalParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub additional_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The AWS IoT job ARN associated with the OTA update.</p>
+    #[serde(rename = "awsIotJobArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_iot_job_arn: Option<String>,
+    /// <p>The AWS IoT job ID associated with the OTA update.</p>
+    #[serde(rename = "awsIotJobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_iot_job_id: Option<String>,
+    /// <p>The date when the OTA update was created.</p>
+    #[serde(rename = "creationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<f64>,
+    /// <p>A description of the OTA update.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>Error information associated with the OTA update.</p>
+    #[serde(rename = "errorInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_info: Option<ErrorInfo>,
+    /// <p>The date when the OTA update was last updated.</p>
+    #[serde(rename = "lastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_date: Option<f64>,
+    /// <p>The OTA update ARN.</p>
+    #[serde(rename = "otaUpdateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ota_update_arn: Option<String>,
+    /// <p>A list of files associated with the OTA update.</p>
+    #[serde(rename = "otaUpdateFiles")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ota_update_files: Option<Vec<OTAUpdateFile>>,
+    /// <p>The OTA update ID.</p>
+    #[serde(rename = "otaUpdateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ota_update_id: Option<String>,
+    /// <p>The status of the OTA update.</p>
+    #[serde(rename = "otaUpdateStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ota_update_status: Option<String>,
+    /// <p>Specifies whether the OTA update will continue to run (CONTINUOUS), or will be complete after all those things specified as targets have completed the OTA update (SNAPSHOT). If continuous, the OTA update may also be run on a thing when a change is detected in a target. For example, an OTA update will run on a thing when the thing is added to a target group, even after the OTA update was completed by all things originally in the group. </p>
+    #[serde(rename = "targetSelection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_selection: Option<String>,
+    /// <p>The targets of the OTA update.</p>
+    #[serde(rename = "targets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub targets: Option<Vec<String>>,
+}
+
+/// <p>An OTA update summary.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct OTAUpdateSummary {
+    /// <p>The date when the OTA update was created.</p>
+    #[serde(rename = "creationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<f64>,
+    /// <p>The OTA update ARN.</p>
+    #[serde(rename = "otaUpdateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ota_update_arn: Option<String>,
+    /// <p>The OTA update ID.</p>
+    #[serde(rename = "otaUpdateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ota_update_id: Option<String>,
+}
+
+/// <p>A certificate that has been transferred but not yet accepted.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct OutgoingCertificate {
     /// <p>The certificate ARN.</p>
@@ -1439,6 +3289,19 @@ pub struct PolicyVersion {
     pub version_id: Option<String>,
 }
 
+/// <p>Configuration for pre-signed S3 URLs.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct PresignedUrlConfig {
+    /// <p>How long (in seconds) pre-signed URLs are valid. Valid values are 60 - 3600, the default value is 3600 seconds. Pre-signed URLs are generated when Jobs receives an MQTT request for the job document.</p>
+    #[serde(rename = "expiresInSec")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expires_in_sec: Option<i64>,
+    /// <p>The ARN of an IAM role that grants grants permission to download files from the S3 bucket where the job data/updates are stored. The role must also grant permission for IoT to download the files.</p>
+    #[serde(rename = "roleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+}
+
 /// <p>The input for the DynamoActionVS action that specifies the DynamoDB table to which the message data will be written.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct PutItemInput {
@@ -1457,6 +3320,10 @@ pub struct RegisterCACertificateRequest {
     /// <p>The CA certificate.</p>
     #[serde(rename = "caCertificate")]
     pub ca_certificate: String,
+    /// <p>Information about the registration configuration.</p>
+    #[serde(rename = "registrationConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registration_config: Option<RegistrationConfig>,
     /// <p>A boolean value that specifies if the CA certificate is set to active.</p>
     #[serde(rename = "setAsActive")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1508,6 +3375,41 @@ pub struct RegisterCertificateResponse {
     pub certificate_id: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct RegisterThingRequest {
+    /// <p>The parameters for provisioning a thing.</p>
+    #[serde(rename = "parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The provisioning template. </p>
+    #[serde(rename = "templateBody")]
+    pub template_body: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct RegisterThingResponse {
+    #[serde(rename = "certificatePem")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_pem: Option<String>,
+    /// <p>ARNs for the generated resources.</p>
+    #[serde(rename = "resourceArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_arns: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>The registration configuration.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct RegistrationConfig {
+    /// <p>The ARN of the role.</p>
+    #[serde(rename = "roleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+    /// <p>The template body.</p>
+    #[serde(rename = "templateBody")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_body: Option<String>,
+}
+
 /// <p>The input for the RejectCertificateTransfer operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct RejectCertificateTransferRequest {
@@ -1519,6 +3421,29 @@ pub struct RejectCertificateTransferRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reject_reason: Option<String>,
 }
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct RemoveThingFromThingGroupRequest {
+    /// <p>The ARN of the thing to remove from the group.</p>
+    #[serde(rename = "thingArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_arn: Option<String>,
+    /// <p>The group ARN.</p>
+    #[serde(rename = "thingGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_group_arn: Option<String>,
+    /// <p>The group name.</p>
+    #[serde(rename = "thingGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_group_name: Option<String>,
+    /// <p>The name of the thing to remove from the group.</p>
+    #[serde(rename = "thingName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct RemoveThingFromThingGroupResponse;
 
 /// <p>The input for the ReplaceTopicRule operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
@@ -1542,6 +3467,35 @@ pub struct RepublishAction {
     pub topic: String,
 }
 
+/// <p>Role alias description.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct RoleAliasDescription {
+    /// <p>The UNIX timestamp of when the role alias was created.</p>
+    #[serde(rename = "creationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<f64>,
+    /// <p>The number of seconds for which the credential is valid.</p>
+    #[serde(rename = "credentialDurationSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub credential_duration_seconds: Option<i64>,
+    /// <p>The UNIX timestamp of when the role alias was last modified.</p>
+    #[serde(rename = "lastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_date: Option<f64>,
+    /// <p>The role alias owner.</p>
+    #[serde(rename = "owner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner: Option<String>,
+    /// <p>The role alias.</p>
+    #[serde(rename = "roleAlias")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_alias: Option<String>,
+    /// <p>The role ARN.</p>
+    #[serde(rename = "roleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+}
+
 /// <p>Describes an action to write data to an Amazon S3 bucket.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct S3Action {
@@ -1560,6 +3514,21 @@ pub struct S3Action {
     pub role_arn: String,
 }
 
+/// <p>The location in S3 the contains the files to stream.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct S3Location {
+    /// <p>The S3 bucket that contains the file to stream.</p>
+    #[serde(rename = "bucket")]
+    pub bucket: String,
+    /// <p>The name of the file within the S3 bucket to stream.</p>
+    #[serde(rename = "key")]
+    pub key: String,
+    /// <p>The file version.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
+}
+
 /// <p>Describes an action to write a message to a Salesforce IoT Cloud Input Stream.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct SalesforceAction {
@@ -1569,6 +3538,60 @@ pub struct SalesforceAction {
     /// <p>The URL exposed by the Salesforce IoT Cloud Input Stream. The URL is available from the Salesforce IoT Cloud platform after creation of the Input Stream.</p>
     #[serde(rename = "url")]
     pub url: String,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct SearchIndexRequest {
+    /// <p>The search index name.</p>
+    #[serde(rename = "indexName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_name: Option<String>,
+    /// <p>The maximum number of results to return at one time.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The search query string.</p>
+    #[serde(rename = "queryString")]
+    pub query_string: String,
+    /// <p>The query version.</p>
+    #[serde(rename = "queryVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_version: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct SearchIndexResponse {
+    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The things that match the search query.</p>
+    #[serde(rename = "things")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub things: Option<Vec<ThingDocument>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct SetDefaultAuthorizerRequest {
+    /// <p>The authorizer name.</p>
+    #[serde(rename = "authorizerName")]
+    pub authorizer_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct SetDefaultAuthorizerResponse {
+    /// <p>The authorizer ARN.</p>
+    #[serde(rename = "authorizerArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_arn: Option<String>,
+    /// <p>The authorizer name.</p>
+    #[serde(rename = "authorizerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_name: Option<String>,
 }
 
 /// <p>The input for the SetDefaultPolicyVersion operation.</p>
@@ -1588,6 +3611,32 @@ pub struct SetLoggingOptionsRequest {
     /// <p>The logging options payload.</p>
     #[serde(rename = "loggingOptionsPayload")]
     pub logging_options_payload: LoggingOptionsPayload,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct SetV2LoggingLevelRequest {
+    /// <p>The log level.</p>
+    #[serde(rename = "logLevel")]
+    pub log_level: String,
+    /// <p>The log target.</p>
+    #[serde(rename = "logTarget")]
+    pub log_target: LogTarget,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct SetV2LoggingOptionsRequest {
+    /// <p>The default logging level.</p>
+    #[serde(rename = "defaultLogLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_log_level: Option<String>,
+    /// <p>Set to true to disable all logs, otherwise set to false.</p>
+    #[serde(rename = "disableAllLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disable_all_logs: Option<bool>,
+    /// <p>The role ARN that allows IoT to write to Cloudwatch logs.</p>
+    #[serde(rename = "roleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
 }
 
 /// <p>Describes an action to publish to an Amazon SNS topic.</p>
@@ -1620,6 +3669,196 @@ pub struct SqsAction {
     pub use_base_64: Option<bool>,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct StartThingRegistrationTaskRequest {
+    /// <p>The S3 bucket that contains the input file.</p>
+    #[serde(rename = "inputFileBucket")]
+    pub input_file_bucket: String,
+    /// <p>The name of input file within the S3 bucket. This file contains a newline delimited JSON file. Each line contains the parameter values to provision one device (thing).</p>
+    #[serde(rename = "inputFileKey")]
+    pub input_file_key: String,
+    /// <p>The IAM role ARN that grants permission the input file.</p>
+    #[serde(rename = "roleArn")]
+    pub role_arn: String,
+    /// <p>The provisioning template.</p>
+    #[serde(rename = "templateBody")]
+    pub template_body: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct StartThingRegistrationTaskResponse {
+    /// <p>The bulk thing provisioning task ID.</p>
+    #[serde(rename = "taskId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct StopThingRegistrationTaskRequest {
+    /// <p>The bulk thing provisioning task ID.</p>
+    #[serde(rename = "taskId")]
+    pub task_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct StopThingRegistrationTaskResponse;
+
+/// <p>Describes a group of files that can be streamed.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct Stream {
+    /// <p>The ID of a file associated with a stream.</p>
+    #[serde(rename = "fileId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_id: Option<i64>,
+    /// <p>The stream ID.</p>
+    #[serde(rename = "streamId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_id: Option<String>,
+}
+
+/// <p>Represents a file to stream.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct StreamFile {
+    /// <p>The file ID.</p>
+    #[serde(rename = "fileId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_id: Option<i64>,
+    /// <p>The location of the file in S3.</p>
+    #[serde(rename = "s3Location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s_3_location: Option<S3Location>,
+}
+
+/// <p>Information about a stream.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct StreamInfo {
+    /// <p>The date when the stream was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>The description of the stream.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The files to stream.</p>
+    #[serde(rename = "files")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub files: Option<Vec<StreamFile>>,
+    /// <p>The date when the stream was last updated.</p>
+    #[serde(rename = "lastUpdatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_at: Option<f64>,
+    /// <p>An IAM role AWS IoT assumes to access your S3 files.</p>
+    #[serde(rename = "roleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+    /// <p>The stream ARN.</p>
+    #[serde(rename = "streamArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_arn: Option<String>,
+    /// <p>The stream ID.</p>
+    #[serde(rename = "streamId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_id: Option<String>,
+    /// <p>The stream version.</p>
+    #[serde(rename = "streamVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_version: Option<i64>,
+}
+
+/// <p>A summary of a stream.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct StreamSummary {
+    /// <p>A description of the stream.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The stream ARN.</p>
+    #[serde(rename = "streamArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_arn: Option<String>,
+    /// <p>The stream ID.</p>
+    #[serde(rename = "streamId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_id: Option<String>,
+    /// <p>The stream version.</p>
+    #[serde(rename = "streamVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_version: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct TestAuthorizationRequest {
+    /// <p>A list of authorization info objects. Simulating authorization will create a response for each <code>authInfo</code> object in the list.</p>
+    #[serde(rename = "authInfos")]
+    pub auth_infos: Vec<AuthInfo>,
+    /// <p>The MQTT client ID.</p>
+    #[serde(rename = "clientId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_id: Option<String>,
+    /// <p>The Cognito identity pool ID.</p>
+    #[serde(rename = "cognitoIdentityPoolId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cognito_identity_pool_id: Option<String>,
+    /// <p>When testing custom authorization, the policies specified here are treated as if they are attached to the principal being authorized.</p>
+    #[serde(rename = "policyNamesToAdd")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_names_to_add: Option<Vec<String>>,
+    /// <p>When testing custom authorization, the policies specified here are treated as if they are not attached to the principal being authorized.</p>
+    #[serde(rename = "policyNamesToSkip")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_names_to_skip: Option<Vec<String>>,
+    /// <p>The principal.</p>
+    #[serde(rename = "principal")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub principal: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct TestAuthorizationResponse {
+    /// <p>The authentication results.</p>
+    #[serde(rename = "authResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auth_results: Option<Vec<AuthResult>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct TestInvokeAuthorizerRequest {
+    /// <p>The custom authorizer name.</p>
+    #[serde(rename = "authorizerName")]
+    pub authorizer_name: String,
+    /// <p>The token returned by your custom authentication service.</p>
+    #[serde(rename = "token")]
+    pub token: String,
+    /// <p>The signature made with the token and your custom authentication service's private key.</p>
+    #[serde(rename = "tokenSignature")]
+    pub token_signature: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct TestInvokeAuthorizerResponse {
+    /// <p>The number of seconds after which the connection is terminated.</p>
+    #[serde(rename = "disconnectAfterInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disconnect_after_in_seconds: Option<i64>,
+    /// <p>True if the token is authenticated, otherwise false.</p>
+    #[serde(rename = "isAuthenticated")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_authenticated: Option<bool>,
+    /// <p>IAM policy documents.</p>
+    #[serde(rename = "policyDocuments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_documents: Option<Vec<String>>,
+    /// <p>The principal ID.</p>
+    #[serde(rename = "principalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub principal_id: Option<String>,
+    /// <p>The number of seconds after which the temporary credentials are refreshed.</p>
+    #[serde(rename = "refreshAfterInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub refresh_after_in_seconds: Option<i64>,
+}
+
 /// <p>The properties of the thing, including thing name, thing type name, and a list of thing attributes.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ThingAttribute {
@@ -1627,6 +3866,10 @@ pub struct ThingAttribute {
     #[serde(rename = "attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attributes: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The thing ARN.</p>
+    #[serde(rename = "thingArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_arn: Option<String>,
     /// <p>The name of the thing.</p>
     #[serde(rename = "thingName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1641,9 +3884,81 @@ pub struct ThingAttribute {
     pub version: Option<i64>,
 }
 
+/// <p>The thing search index document.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ThingDocument {
+    /// <p>The attributes.</p>
+    #[serde(rename = "attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The thing shadow.</p>
+    #[serde(rename = "shadow")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub shadow: Option<String>,
+    /// <p>Thing group names.</p>
+    #[serde(rename = "thingGroupNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_group_names: Option<Vec<String>>,
+    /// <p>The thing ID.</p>
+    #[serde(rename = "thingId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_id: Option<String>,
+    /// <p>The thing name.</p>
+    #[serde(rename = "thingName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_name: Option<String>,
+    /// <p>The thing type name.</p>
+    #[serde(rename = "thingTypeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_type_name: Option<String>,
+}
+
+/// <p>Thing group metadata.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ThingGroupMetadata {
+    /// <p>The UNIX timestamp of when the thing group was created.</p>
+    #[serde(rename = "creationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<f64>,
+    /// <p>The parent thing group name.</p>
+    #[serde(rename = "parentGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parent_group_name: Option<String>,
+    /// <p>The root parent thing group.</p>
+    #[serde(rename = "rootToParentThingGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub root_to_parent_thing_groups: Option<Vec<GroupNameAndArn>>,
+}
+
+/// <p>Thing group properties.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct ThingGroupProperties {
+    /// <p>The thing group attributes in JSON format.</p>
+    #[serde(rename = "attributePayload")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attribute_payload: Option<AttributePayload>,
+    /// <p>The thing group description.</p>
+    #[serde(rename = "thingGroupDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_group_description: Option<String>,
+}
+
+/// <p>Thing indexing configuration.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct ThingIndexingConfiguration {
+    /// <p><p>Thing indexing mode. Valid values are: </p> <ul> <li> <p>REGISTRY – Your thing index will contain only registry data.</p> </li> <li> <p>REGISTRY<em>AND</em>SHADOW - Your thing index will contain registry and shadow data.</p> </li> <li> <p>OFF - Thing indexing is disabled.</p> </li> </ul></p>
+    #[serde(rename = "thingIndexingMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_indexing_mode: Option<String>,
+}
+
 /// <p>The definition of the thing type, including thing type name and description.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ThingTypeDefinition {
+    /// <p>The thing type ARN.</p>
+    #[serde(rename = "thingTypeArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_type_arn: Option<String>,
     /// <p>The ThingTypeMetadata contains additional information about the thing type including: creation date and time, a value indicating whether the thing type is deprecated, and a date and time when it was deprecated.</p>
     #[serde(rename = "thingTypeMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1707,6 +4022,10 @@ pub struct TopicRule {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>The action to perform when an error occurs.</p>
+    #[serde(rename = "errorAction")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_action: Option<Action>,
     /// <p>Specifies whether the rule is disabled.</p>
     #[serde(rename = "ruleDisabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1760,6 +4079,10 @@ pub struct TopicRulePayload {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>The action to take when an error occurs.</p>
+    #[serde(rename = "errorAction")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_action: Option<Action>,
     /// <p>Specifies whether the rule is disabled.</p>
     #[serde(rename = "ruleDisabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1818,6 +4141,41 @@ pub struct TransferData {
     pub transfer_message: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct UpdateAuthorizerRequest {
+    /// <p>The ARN of the authorizer's Lambda function.</p>
+    #[serde(rename = "authorizerFunctionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_function_arn: Option<String>,
+    /// <p>The authorizer name.</p>
+    #[serde(rename = "authorizerName")]
+    pub authorizer_name: String,
+    /// <p>The status of the update authorizer request.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The key used to extract the token from the HTTP headers. </p>
+    #[serde(rename = "tokenKeyName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub token_key_name: Option<String>,
+    /// <p>The public keys used to verify the token signature.</p>
+    #[serde(rename = "tokenSigningPublicKeys")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub token_signing_public_keys: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct UpdateAuthorizerResponse {
+    /// <p>The authorizer ARN.</p>
+    #[serde(rename = "authorizerArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_arn: Option<String>,
+    /// <p>The authorizer name.</p>
+    #[serde(rename = "authorizerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorizer_name: Option<String>,
+}
+
 /// <p>The input to the UpdateCACertificate operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateCACertificateRequest {
@@ -1832,6 +4190,14 @@ pub struct UpdateCACertificateRequest {
     #[serde(rename = "newStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub new_status: Option<String>,
+    /// <p>Information about the registration configuration.</p>
+    #[serde(rename = "registrationConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registration_config: Option<RegistrationConfig>,
+    /// <p>If true, remove auto registration.</p>
+    #[serde(rename = "removeAutoRegistration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub remove_auto_registration: Option<bool>,
 }
 
 /// <p>The input for the UpdateCertificate operation.</p>
@@ -1845,6 +4211,135 @@ pub struct UpdateCertificateRequest {
     pub new_status: String,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct UpdateEventConfigurationsRequest {
+    /// <p>The new event configuration values.</p>
+    #[serde(rename = "eventConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_configurations: Option<::std::collections::HashMap<String, Configuration>>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct UpdateEventConfigurationsResponse;
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct UpdateIndexingConfigurationRequest {
+    /// <p>Thing indexing configuration.</p>
+    #[serde(rename = "thingIndexingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_indexing_configuration: Option<ThingIndexingConfiguration>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct UpdateIndexingConfigurationResponse;
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct UpdateRoleAliasRequest {
+    /// <p>The number of seconds the credential will be valid.</p>
+    #[serde(rename = "credentialDurationSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub credential_duration_seconds: Option<i64>,
+    /// <p>The role alias to update.</p>
+    #[serde(rename = "roleAlias")]
+    pub role_alias: String,
+    /// <p>The role ARN.</p>
+    #[serde(rename = "roleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct UpdateRoleAliasResponse {
+    /// <p>The role alias.</p>
+    #[serde(rename = "roleAlias")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_alias: Option<String>,
+    /// <p>The role alias ARN.</p>
+    #[serde(rename = "roleAliasArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_alias_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct UpdateStreamRequest {
+    /// <p>The description of the stream.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The files associated with the stream.</p>
+    #[serde(rename = "files")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub files: Option<Vec<StreamFile>>,
+    /// <p>An IAM role that allows the IoT service principal assumes to access your S3 files.</p>
+    #[serde(rename = "roleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+    /// <p>The stream ID.</p>
+    #[serde(rename = "streamId")]
+    pub stream_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct UpdateStreamResponse {
+    /// <p>A description of the stream.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The stream ARN.</p>
+    #[serde(rename = "streamArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_arn: Option<String>,
+    /// <p>The stream ID.</p>
+    #[serde(rename = "streamId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_id: Option<String>,
+    /// <p>The stream version.</p>
+    #[serde(rename = "streamVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_version: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct UpdateThingGroupRequest {
+    /// <p>The expected version of the thing group. If this does not match the version of the thing group being updated, the update will fail.</p>
+    #[serde(rename = "expectedVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expected_version: Option<i64>,
+    /// <p>The thing group to update.</p>
+    #[serde(rename = "thingGroupName")]
+    pub thing_group_name: String,
+    /// <p>The thing group properties.</p>
+    #[serde(rename = "thingGroupProperties")]
+    pub thing_group_properties: ThingGroupProperties,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct UpdateThingGroupResponse {
+    /// <p>The version of the updated thing group.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct UpdateThingGroupsForThingRequest {
+    /// <p>The groups to which the thing will be added.</p>
+    #[serde(rename = "thingGroupsToAdd")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_groups_to_add: Option<Vec<String>>,
+    /// <p>The groups from which the thing will be removed.</p>
+    #[serde(rename = "thingGroupsToRemove")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_groups_to_remove: Option<Vec<String>>,
+    /// <p>The thing whose group memberships will be updated.</p>
+    #[serde(rename = "thingName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct UpdateThingGroupsForThingResponse;
+
 /// <p>The input for the UpdateThing operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateThingRequest {
@@ -1856,7 +4351,7 @@ pub struct UpdateThingRequest {
     #[serde(rename = "expectedVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expected_version: Option<i64>,
-    /// <p>Remove a thing type association. If <b>true</b>, the assocation is removed.</p>
+    /// <p>Remove a thing type association. If <b>true</b>, the association is removed.</p>
     #[serde(rename = "removeThingType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remove_thing_type: Option<bool>,
@@ -1992,6 +4487,324 @@ impl Error for AcceptCertificateTransferError {
                 dispatch_error.description()
             }
             AcceptCertificateTransferError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by AddThingToThingGroup
+#[derive(Debug, PartialEq)]
+pub enum AddThingToThingGroupError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl AddThingToThingGroupError {
+    pub fn from_body(body: &str) -> AddThingToThingGroupError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        AddThingToThingGroupError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        AddThingToThingGroupError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        AddThingToThingGroupError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        AddThingToThingGroupError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        AddThingToThingGroupError::Validation(error_message.to_string())
+                    }
+                    _ => AddThingToThingGroupError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => AddThingToThingGroupError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for AddThingToThingGroupError {
+    fn from(err: serde_json::error::Error) -> AddThingToThingGroupError {
+        AddThingToThingGroupError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for AddThingToThingGroupError {
+    fn from(err: CredentialsError) -> AddThingToThingGroupError {
+        AddThingToThingGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AddThingToThingGroupError {
+    fn from(err: HttpDispatchError) -> AddThingToThingGroupError {
+        AddThingToThingGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AddThingToThingGroupError {
+    fn from(err: io::Error) -> AddThingToThingGroupError {
+        AddThingToThingGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for AddThingToThingGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AddThingToThingGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            AddThingToThingGroupError::InternalFailure(ref cause) => cause,
+            AddThingToThingGroupError::InvalidRequest(ref cause) => cause,
+            AddThingToThingGroupError::ResourceNotFound(ref cause) => cause,
+            AddThingToThingGroupError::Throttling(ref cause) => cause,
+            AddThingToThingGroupError::Validation(ref cause) => cause,
+            AddThingToThingGroupError::Credentials(ref err) => err.description(),
+            AddThingToThingGroupError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            AddThingToThingGroupError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by AssociateTargetsWithJob
+#[derive(Debug, PartialEq)]
+pub enum AssociateTargetsWithJobError {
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The number of attached entities exceeds the limit.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl AssociateTargetsWithJobError {
+    pub fn from_body(body: &str) -> AssociateTargetsWithJobError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidRequestException" => {
+                        AssociateTargetsWithJobError::InvalidRequest(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        AssociateTargetsWithJobError::LimitExceeded(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        AssociateTargetsWithJobError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        AssociateTargetsWithJobError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ThrottlingException" => {
+                        AssociateTargetsWithJobError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        AssociateTargetsWithJobError::Validation(error_message.to_string())
+                    }
+                    _ => AssociateTargetsWithJobError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => AssociateTargetsWithJobError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for AssociateTargetsWithJobError {
+    fn from(err: serde_json::error::Error) -> AssociateTargetsWithJobError {
+        AssociateTargetsWithJobError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for AssociateTargetsWithJobError {
+    fn from(err: CredentialsError) -> AssociateTargetsWithJobError {
+        AssociateTargetsWithJobError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AssociateTargetsWithJobError {
+    fn from(err: HttpDispatchError) -> AssociateTargetsWithJobError {
+        AssociateTargetsWithJobError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AssociateTargetsWithJobError {
+    fn from(err: io::Error) -> AssociateTargetsWithJobError {
+        AssociateTargetsWithJobError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for AssociateTargetsWithJobError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AssociateTargetsWithJobError {
+    fn description(&self) -> &str {
+        match *self {
+            AssociateTargetsWithJobError::InvalidRequest(ref cause) => cause,
+            AssociateTargetsWithJobError::LimitExceeded(ref cause) => cause,
+            AssociateTargetsWithJobError::ResourceNotFound(ref cause) => cause,
+            AssociateTargetsWithJobError::ServiceUnavailable(ref cause) => cause,
+            AssociateTargetsWithJobError::Throttling(ref cause) => cause,
+            AssociateTargetsWithJobError::Validation(ref cause) => cause,
+            AssociateTargetsWithJobError::Credentials(ref err) => err.description(),
+            AssociateTargetsWithJobError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            AssociateTargetsWithJobError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by AttachPolicy
+#[derive(Debug, PartialEq)]
+pub enum AttachPolicyError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The number of attached entities exceeds the limit.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl AttachPolicyError {
+    pub fn from_body(body: &str) -> AttachPolicyError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        AttachPolicyError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        AttachPolicyError::InvalidRequest(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        AttachPolicyError::LimitExceeded(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        AttachPolicyError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        AttachPolicyError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        AttachPolicyError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        AttachPolicyError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        AttachPolicyError::Validation(error_message.to_string())
+                    }
+                    _ => AttachPolicyError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => AttachPolicyError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for AttachPolicyError {
+    fn from(err: serde_json::error::Error) -> AttachPolicyError {
+        AttachPolicyError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for AttachPolicyError {
+    fn from(err: CredentialsError) -> AttachPolicyError {
+        AttachPolicyError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AttachPolicyError {
+    fn from(err: HttpDispatchError) -> AttachPolicyError {
+        AttachPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AttachPolicyError {
+    fn from(err: io::Error) -> AttachPolicyError {
+        AttachPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for AttachPolicyError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AttachPolicyError {
+    fn description(&self) -> &str {
+        match *self {
+            AttachPolicyError::InternalFailure(ref cause) => cause,
+            AttachPolicyError::InvalidRequest(ref cause) => cause,
+            AttachPolicyError::LimitExceeded(ref cause) => cause,
+            AttachPolicyError::ResourceNotFound(ref cause) => cause,
+            AttachPolicyError::ServiceUnavailable(ref cause) => cause,
+            AttachPolicyError::Throttling(ref cause) => cause,
+            AttachPolicyError::Unauthorized(ref cause) => cause,
+            AttachPolicyError::Validation(ref cause) => cause,
+            AttachPolicyError::Credentials(ref err) => err.description(),
+            AttachPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            AttachPolicyError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -2343,6 +5156,324 @@ impl Error for CancelCertificateTransferError {
         }
     }
 }
+/// Errors returned by CancelJob
+#[derive(Debug, PartialEq)]
+pub enum CancelJobError {
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CancelJobError {
+    pub fn from_body(body: &str) -> CancelJobError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidRequestException" => {
+                        CancelJobError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        CancelJobError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        CancelJobError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        CancelJobError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => CancelJobError::Validation(error_message.to_string()),
+                    _ => CancelJobError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CancelJobError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CancelJobError {
+    fn from(err: serde_json::error::Error) -> CancelJobError {
+        CancelJobError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CancelJobError {
+    fn from(err: CredentialsError) -> CancelJobError {
+        CancelJobError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CancelJobError {
+    fn from(err: HttpDispatchError) -> CancelJobError {
+        CancelJobError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CancelJobError {
+    fn from(err: io::Error) -> CancelJobError {
+        CancelJobError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CancelJobError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CancelJobError {
+    fn description(&self) -> &str {
+        match *self {
+            CancelJobError::InvalidRequest(ref cause) => cause,
+            CancelJobError::ResourceNotFound(ref cause) => cause,
+            CancelJobError::ServiceUnavailable(ref cause) => cause,
+            CancelJobError::Throttling(ref cause) => cause,
+            CancelJobError::Validation(ref cause) => cause,
+            CancelJobError::Credentials(ref err) => err.description(),
+            CancelJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CancelJobError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ClearDefaultAuthorizer
+#[derive(Debug, PartialEq)]
+pub enum ClearDefaultAuthorizerError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ClearDefaultAuthorizerError {
+    pub fn from_body(body: &str) -> ClearDefaultAuthorizerError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        ClearDefaultAuthorizerError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        ClearDefaultAuthorizerError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        ClearDefaultAuthorizerError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        ClearDefaultAuthorizerError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        ClearDefaultAuthorizerError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        ClearDefaultAuthorizerError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ClearDefaultAuthorizerError::Validation(error_message.to_string())
+                    }
+                    _ => ClearDefaultAuthorizerError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ClearDefaultAuthorizerError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ClearDefaultAuthorizerError {
+    fn from(err: serde_json::error::Error) -> ClearDefaultAuthorizerError {
+        ClearDefaultAuthorizerError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ClearDefaultAuthorizerError {
+    fn from(err: CredentialsError) -> ClearDefaultAuthorizerError {
+        ClearDefaultAuthorizerError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ClearDefaultAuthorizerError {
+    fn from(err: HttpDispatchError) -> ClearDefaultAuthorizerError {
+        ClearDefaultAuthorizerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ClearDefaultAuthorizerError {
+    fn from(err: io::Error) -> ClearDefaultAuthorizerError {
+        ClearDefaultAuthorizerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ClearDefaultAuthorizerError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ClearDefaultAuthorizerError {
+    fn description(&self) -> &str {
+        match *self {
+            ClearDefaultAuthorizerError::InternalFailure(ref cause) => cause,
+            ClearDefaultAuthorizerError::InvalidRequest(ref cause) => cause,
+            ClearDefaultAuthorizerError::ResourceNotFound(ref cause) => cause,
+            ClearDefaultAuthorizerError::ServiceUnavailable(ref cause) => cause,
+            ClearDefaultAuthorizerError::Throttling(ref cause) => cause,
+            ClearDefaultAuthorizerError::Unauthorized(ref cause) => cause,
+            ClearDefaultAuthorizerError::Validation(ref cause) => cause,
+            ClearDefaultAuthorizerError::Credentials(ref err) => err.description(),
+            ClearDefaultAuthorizerError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ClearDefaultAuthorizerError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateAuthorizer
+#[derive(Debug, PartialEq)]
+pub enum CreateAuthorizerError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The number of attached entities exceeds the limit.</p>
+    LimitExceeded(String),
+    /// <p>The resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateAuthorizerError {
+    pub fn from_body(body: &str) -> CreateAuthorizerError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        CreateAuthorizerError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        CreateAuthorizerError::InvalidRequest(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        CreateAuthorizerError::LimitExceeded(String::from(error_message))
+                    }
+                    "ResourceAlreadyExistsException" => {
+                        CreateAuthorizerError::ResourceAlreadyExists(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        CreateAuthorizerError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        CreateAuthorizerError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        CreateAuthorizerError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CreateAuthorizerError::Validation(error_message.to_string())
+                    }
+                    _ => CreateAuthorizerError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateAuthorizerError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateAuthorizerError {
+    fn from(err: serde_json::error::Error) -> CreateAuthorizerError {
+        CreateAuthorizerError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateAuthorizerError {
+    fn from(err: CredentialsError) -> CreateAuthorizerError {
+        CreateAuthorizerError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateAuthorizerError {
+    fn from(err: HttpDispatchError) -> CreateAuthorizerError {
+        CreateAuthorizerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateAuthorizerError {
+    fn from(err: io::Error) -> CreateAuthorizerError {
+        CreateAuthorizerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateAuthorizerError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateAuthorizerError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateAuthorizerError::InternalFailure(ref cause) => cause,
+            CreateAuthorizerError::InvalidRequest(ref cause) => cause,
+            CreateAuthorizerError::LimitExceeded(ref cause) => cause,
+            CreateAuthorizerError::ResourceAlreadyExists(ref cause) => cause,
+            CreateAuthorizerError::ServiceUnavailable(ref cause) => cause,
+            CreateAuthorizerError::Throttling(ref cause) => cause,
+            CreateAuthorizerError::Unauthorized(ref cause) => cause,
+            CreateAuthorizerError::Validation(ref cause) => cause,
+            CreateAuthorizerError::Credentials(ref err) => err.description(),
+            CreateAuthorizerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CreateAuthorizerError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateCertificateFromCsr
 #[derive(Debug, PartialEq)]
 pub enum CreateCertificateFromCsrError {
@@ -2449,6 +5580,112 @@ impl Error for CreateCertificateFromCsrError {
         }
     }
 }
+/// Errors returned by CreateJob
+#[derive(Debug, PartialEq)]
+pub enum CreateJobError {
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The number of attached entities exceeds the limit.</p>
+    LimitExceeded(String),
+    /// <p>The resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateJobError {
+    pub fn from_body(body: &str) -> CreateJobError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidRequestException" => {
+                        CreateJobError::InvalidRequest(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        CreateJobError::LimitExceeded(String::from(error_message))
+                    }
+                    "ResourceAlreadyExistsException" => {
+                        CreateJobError::ResourceAlreadyExists(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        CreateJobError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        CreateJobError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        CreateJobError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => CreateJobError::Validation(error_message.to_string()),
+                    _ => CreateJobError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateJobError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateJobError {
+    fn from(err: serde_json::error::Error) -> CreateJobError {
+        CreateJobError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateJobError {
+    fn from(err: CredentialsError) -> CreateJobError {
+        CreateJobError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateJobError {
+    fn from(err: HttpDispatchError) -> CreateJobError {
+        CreateJobError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateJobError {
+    fn from(err: io::Error) -> CreateJobError {
+        CreateJobError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateJobError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateJobError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateJobError::InvalidRequest(ref cause) => cause,
+            CreateJobError::LimitExceeded(ref cause) => cause,
+            CreateJobError::ResourceAlreadyExists(ref cause) => cause,
+            CreateJobError::ResourceNotFound(ref cause) => cause,
+            CreateJobError::ServiceUnavailable(ref cause) => cause,
+            CreateJobError::Throttling(ref cause) => cause,
+            CreateJobError::Validation(ref cause) => cause,
+            CreateJobError::Credentials(ref err) => err.description(),
+            CreateJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CreateJobError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateKeysAndCertificate
 #[derive(Debug, PartialEq)]
 pub enum CreateKeysAndCertificateError {
@@ -2552,6 +5789,120 @@ impl Error for CreateKeysAndCertificateError {
                 dispatch_error.description()
             }
             CreateKeysAndCertificateError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateOTAUpdate
+#[derive(Debug, PartialEq)]
+pub enum CreateOTAUpdateError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateOTAUpdateError {
+    pub fn from_body(body: &str) -> CreateOTAUpdateError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        CreateOTAUpdateError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        CreateOTAUpdateError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceAlreadyExistsException" => {
+                        CreateOTAUpdateError::ResourceAlreadyExists(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        CreateOTAUpdateError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        CreateOTAUpdateError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        CreateOTAUpdateError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        CreateOTAUpdateError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CreateOTAUpdateError::Validation(error_message.to_string())
+                    }
+                    _ => CreateOTAUpdateError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateOTAUpdateError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateOTAUpdateError {
+    fn from(err: serde_json::error::Error) -> CreateOTAUpdateError {
+        CreateOTAUpdateError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateOTAUpdateError {
+    fn from(err: CredentialsError) -> CreateOTAUpdateError {
+        CreateOTAUpdateError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateOTAUpdateError {
+    fn from(err: HttpDispatchError) -> CreateOTAUpdateError {
+        CreateOTAUpdateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateOTAUpdateError {
+    fn from(err: io::Error) -> CreateOTAUpdateError {
+        CreateOTAUpdateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateOTAUpdateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateOTAUpdateError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateOTAUpdateError::InternalFailure(ref cause) => cause,
+            CreateOTAUpdateError::InvalidRequest(ref cause) => cause,
+            CreateOTAUpdateError::ResourceAlreadyExists(ref cause) => cause,
+            CreateOTAUpdateError::ResourceNotFound(ref cause) => cause,
+            CreateOTAUpdateError::ServiceUnavailable(ref cause) => cause,
+            CreateOTAUpdateError::Throttling(ref cause) => cause,
+            CreateOTAUpdateError::Unauthorized(ref cause) => cause,
+            CreateOTAUpdateError::Validation(ref cause) => cause,
+            CreateOTAUpdateError::Credentials(ref err) => err.description(),
+            CreateOTAUpdateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CreateOTAUpdateError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -2791,6 +6142,234 @@ impl Error for CreatePolicyVersionError {
         }
     }
 }
+/// Errors returned by CreateRoleAlias
+#[derive(Debug, PartialEq)]
+pub enum CreateRoleAliasError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The number of attached entities exceeds the limit.</p>
+    LimitExceeded(String),
+    /// <p>The resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateRoleAliasError {
+    pub fn from_body(body: &str) -> CreateRoleAliasError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        CreateRoleAliasError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        CreateRoleAliasError::InvalidRequest(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        CreateRoleAliasError::LimitExceeded(String::from(error_message))
+                    }
+                    "ResourceAlreadyExistsException" => {
+                        CreateRoleAliasError::ResourceAlreadyExists(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        CreateRoleAliasError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        CreateRoleAliasError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        CreateRoleAliasError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CreateRoleAliasError::Validation(error_message.to_string())
+                    }
+                    _ => CreateRoleAliasError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateRoleAliasError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateRoleAliasError {
+    fn from(err: serde_json::error::Error) -> CreateRoleAliasError {
+        CreateRoleAliasError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateRoleAliasError {
+    fn from(err: CredentialsError) -> CreateRoleAliasError {
+        CreateRoleAliasError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateRoleAliasError {
+    fn from(err: HttpDispatchError) -> CreateRoleAliasError {
+        CreateRoleAliasError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateRoleAliasError {
+    fn from(err: io::Error) -> CreateRoleAliasError {
+        CreateRoleAliasError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateRoleAliasError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateRoleAliasError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateRoleAliasError::InternalFailure(ref cause) => cause,
+            CreateRoleAliasError::InvalidRequest(ref cause) => cause,
+            CreateRoleAliasError::LimitExceeded(ref cause) => cause,
+            CreateRoleAliasError::ResourceAlreadyExists(ref cause) => cause,
+            CreateRoleAliasError::ServiceUnavailable(ref cause) => cause,
+            CreateRoleAliasError::Throttling(ref cause) => cause,
+            CreateRoleAliasError::Unauthorized(ref cause) => cause,
+            CreateRoleAliasError::Validation(ref cause) => cause,
+            CreateRoleAliasError::Credentials(ref err) => err.description(),
+            CreateRoleAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CreateRoleAliasError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateStream
+#[derive(Debug, PartialEq)]
+pub enum CreateStreamError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateStreamError {
+    pub fn from_body(body: &str) -> CreateStreamError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        CreateStreamError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        CreateStreamError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceAlreadyExistsException" => {
+                        CreateStreamError::ResourceAlreadyExists(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        CreateStreamError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        CreateStreamError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        CreateStreamError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        CreateStreamError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CreateStreamError::Validation(error_message.to_string())
+                    }
+                    _ => CreateStreamError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateStreamError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateStreamError {
+    fn from(err: serde_json::error::Error) -> CreateStreamError {
+        CreateStreamError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateStreamError {
+    fn from(err: CredentialsError) -> CreateStreamError {
+        CreateStreamError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateStreamError {
+    fn from(err: HttpDispatchError) -> CreateStreamError {
+        CreateStreamError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateStreamError {
+    fn from(err: io::Error) -> CreateStreamError {
+        CreateStreamError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateStreamError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateStreamError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateStreamError::InternalFailure(ref cause) => cause,
+            CreateStreamError::InvalidRequest(ref cause) => cause,
+            CreateStreamError::ResourceAlreadyExists(ref cause) => cause,
+            CreateStreamError::ResourceNotFound(ref cause) => cause,
+            CreateStreamError::ServiceUnavailable(ref cause) => cause,
+            CreateStreamError::Throttling(ref cause) => cause,
+            CreateStreamError::Unauthorized(ref cause) => cause,
+            CreateStreamError::Validation(ref cause) => cause,
+            CreateStreamError::Credentials(ref err) => err.description(),
+            CreateStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CreateStreamError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateThing
 #[derive(Debug, PartialEq)]
 pub enum CreateThingError {
@@ -2902,6 +6481,102 @@ impl Error for CreateThingError {
             CreateThingError::Credentials(ref err) => err.description(),
             CreateThingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             CreateThingError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateThingGroup
+#[derive(Debug, PartialEq)]
+pub enum CreateThingGroupError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateThingGroupError {
+    pub fn from_body(body: &str) -> CreateThingGroupError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        CreateThingGroupError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        CreateThingGroupError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceAlreadyExistsException" => {
+                        CreateThingGroupError::ResourceAlreadyExists(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        CreateThingGroupError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CreateThingGroupError::Validation(error_message.to_string())
+                    }
+                    _ => CreateThingGroupError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateThingGroupError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateThingGroupError {
+    fn from(err: serde_json::error::Error) -> CreateThingGroupError {
+        CreateThingGroupError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateThingGroupError {
+    fn from(err: CredentialsError) -> CreateThingGroupError {
+        CreateThingGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateThingGroupError {
+    fn from(err: HttpDispatchError) -> CreateThingGroupError {
+        CreateThingGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateThingGroupError {
+    fn from(err: io::Error) -> CreateThingGroupError {
+        CreateThingGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateThingGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateThingGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateThingGroupError::InternalFailure(ref cause) => cause,
+            CreateThingGroupError::InvalidRequest(ref cause) => cause,
+            CreateThingGroupError::ResourceAlreadyExists(ref cause) => cause,
+            CreateThingGroupError::Throttling(ref cause) => cause,
+            CreateThingGroupError::Validation(ref cause) => cause,
+            CreateThingGroupError::Credentials(ref err) => err.description(),
+            CreateThingGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CreateThingGroupError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -3112,6 +6787,120 @@ impl Error for CreateTopicRuleError {
             CreateTopicRuleError::Credentials(ref err) => err.description(),
             CreateTopicRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             CreateTopicRuleError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteAuthorizer
+#[derive(Debug, PartialEq)]
+pub enum DeleteAuthorizerError {
+    /// <p>You can't delete the resource because it is attached to one or more resources.</p>
+    DeleteConflict(String),
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteAuthorizerError {
+    pub fn from_body(body: &str) -> DeleteAuthorizerError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "DeleteConflictException" => {
+                        DeleteAuthorizerError::DeleteConflict(String::from(error_message))
+                    }
+                    "InternalFailureException" => {
+                        DeleteAuthorizerError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        DeleteAuthorizerError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DeleteAuthorizerError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        DeleteAuthorizerError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        DeleteAuthorizerError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        DeleteAuthorizerError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteAuthorizerError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteAuthorizerError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteAuthorizerError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteAuthorizerError {
+    fn from(err: serde_json::error::Error) -> DeleteAuthorizerError {
+        DeleteAuthorizerError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteAuthorizerError {
+    fn from(err: CredentialsError) -> DeleteAuthorizerError {
+        DeleteAuthorizerError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteAuthorizerError {
+    fn from(err: HttpDispatchError) -> DeleteAuthorizerError {
+        DeleteAuthorizerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteAuthorizerError {
+    fn from(err: io::Error) -> DeleteAuthorizerError {
+        DeleteAuthorizerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteAuthorizerError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteAuthorizerError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteAuthorizerError::DeleteConflict(ref cause) => cause,
+            DeleteAuthorizerError::InternalFailure(ref cause) => cause,
+            DeleteAuthorizerError::InvalidRequest(ref cause) => cause,
+            DeleteAuthorizerError::ResourceNotFound(ref cause) => cause,
+            DeleteAuthorizerError::ServiceUnavailable(ref cause) => cause,
+            DeleteAuthorizerError::Throttling(ref cause) => cause,
+            DeleteAuthorizerError::Unauthorized(ref cause) => cause,
+            DeleteAuthorizerError::Validation(ref cause) => cause,
+            DeleteAuthorizerError::Credentials(ref err) => err.description(),
+            DeleteAuthorizerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteAuthorizerError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -3350,6 +7139,114 @@ impl Error for DeleteCertificateError {
                 dispatch_error.description()
             }
             DeleteCertificateError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteOTAUpdate
+#[derive(Debug, PartialEq)]
+pub enum DeleteOTAUpdateError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteOTAUpdateError {
+    pub fn from_body(body: &str) -> DeleteOTAUpdateError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        DeleteOTAUpdateError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        DeleteOTAUpdateError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DeleteOTAUpdateError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        DeleteOTAUpdateError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        DeleteOTAUpdateError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        DeleteOTAUpdateError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteOTAUpdateError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteOTAUpdateError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteOTAUpdateError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteOTAUpdateError {
+    fn from(err: serde_json::error::Error) -> DeleteOTAUpdateError {
+        DeleteOTAUpdateError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteOTAUpdateError {
+    fn from(err: CredentialsError) -> DeleteOTAUpdateError {
+        DeleteOTAUpdateError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteOTAUpdateError {
+    fn from(err: HttpDispatchError) -> DeleteOTAUpdateError {
+        DeleteOTAUpdateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteOTAUpdateError {
+    fn from(err: io::Error) -> DeleteOTAUpdateError {
+        DeleteOTAUpdateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteOTAUpdateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteOTAUpdateError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteOTAUpdateError::InternalFailure(ref cause) => cause,
+            DeleteOTAUpdateError::InvalidRequest(ref cause) => cause,
+            DeleteOTAUpdateError::ResourceNotFound(ref cause) => cause,
+            DeleteOTAUpdateError::ServiceUnavailable(ref cause) => cause,
+            DeleteOTAUpdateError::Throttling(ref cause) => cause,
+            DeleteOTAUpdateError::Unauthorized(ref cause) => cause,
+            DeleteOTAUpdateError::Validation(ref cause) => cause,
+            DeleteOTAUpdateError::Credentials(ref err) => err.description(),
+            DeleteOTAUpdateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteOTAUpdateError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -3687,6 +7584,234 @@ impl Error for DeleteRegistrationCodeError {
         }
     }
 }
+/// Errors returned by DeleteRoleAlias
+#[derive(Debug, PartialEq)]
+pub enum DeleteRoleAliasError {
+    /// <p>You can't delete the resource because it is attached to one or more resources.</p>
+    DeleteConflict(String),
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteRoleAliasError {
+    pub fn from_body(body: &str) -> DeleteRoleAliasError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "DeleteConflictException" => {
+                        DeleteRoleAliasError::DeleteConflict(String::from(error_message))
+                    }
+                    "InternalFailureException" => {
+                        DeleteRoleAliasError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        DeleteRoleAliasError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DeleteRoleAliasError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        DeleteRoleAliasError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        DeleteRoleAliasError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        DeleteRoleAliasError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteRoleAliasError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteRoleAliasError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteRoleAliasError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteRoleAliasError {
+    fn from(err: serde_json::error::Error) -> DeleteRoleAliasError {
+        DeleteRoleAliasError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteRoleAliasError {
+    fn from(err: CredentialsError) -> DeleteRoleAliasError {
+        DeleteRoleAliasError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteRoleAliasError {
+    fn from(err: HttpDispatchError) -> DeleteRoleAliasError {
+        DeleteRoleAliasError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteRoleAliasError {
+    fn from(err: io::Error) -> DeleteRoleAliasError {
+        DeleteRoleAliasError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteRoleAliasError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteRoleAliasError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteRoleAliasError::DeleteConflict(ref cause) => cause,
+            DeleteRoleAliasError::InternalFailure(ref cause) => cause,
+            DeleteRoleAliasError::InvalidRequest(ref cause) => cause,
+            DeleteRoleAliasError::ResourceNotFound(ref cause) => cause,
+            DeleteRoleAliasError::ServiceUnavailable(ref cause) => cause,
+            DeleteRoleAliasError::Throttling(ref cause) => cause,
+            DeleteRoleAliasError::Unauthorized(ref cause) => cause,
+            DeleteRoleAliasError::Validation(ref cause) => cause,
+            DeleteRoleAliasError::Credentials(ref err) => err.description(),
+            DeleteRoleAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteRoleAliasError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteStream
+#[derive(Debug, PartialEq)]
+pub enum DeleteStreamError {
+    /// <p>You can't delete the resource because it is attached to one or more resources.</p>
+    DeleteConflict(String),
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteStreamError {
+    pub fn from_body(body: &str) -> DeleteStreamError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "DeleteConflictException" => {
+                        DeleteStreamError::DeleteConflict(String::from(error_message))
+                    }
+                    "InternalFailureException" => {
+                        DeleteStreamError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        DeleteStreamError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DeleteStreamError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        DeleteStreamError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        DeleteStreamError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        DeleteStreamError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteStreamError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteStreamError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteStreamError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteStreamError {
+    fn from(err: serde_json::error::Error) -> DeleteStreamError {
+        DeleteStreamError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteStreamError {
+    fn from(err: CredentialsError) -> DeleteStreamError {
+        DeleteStreamError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteStreamError {
+    fn from(err: HttpDispatchError) -> DeleteStreamError {
+        DeleteStreamError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteStreamError {
+    fn from(err: io::Error) -> DeleteStreamError {
+        DeleteStreamError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteStreamError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteStreamError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteStreamError::DeleteConflict(ref cause) => cause,
+            DeleteStreamError::InternalFailure(ref cause) => cause,
+            DeleteStreamError::InvalidRequest(ref cause) => cause,
+            DeleteStreamError::ResourceNotFound(ref cause) => cause,
+            DeleteStreamError::ServiceUnavailable(ref cause) => cause,
+            DeleteStreamError::Throttling(ref cause) => cause,
+            DeleteStreamError::Unauthorized(ref cause) => cause,
+            DeleteStreamError::Validation(ref cause) => cause,
+            DeleteStreamError::Credentials(ref err) => err.description(),
+            DeleteStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteStreamError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteThing
 #[derive(Debug, PartialEq)]
 pub enum DeleteThingError {
@@ -3798,6 +7923,102 @@ impl Error for DeleteThingError {
             DeleteThingError::Credentials(ref err) => err.description(),
             DeleteThingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             DeleteThingError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteThingGroup
+#[derive(Debug, PartialEq)]
+pub enum DeleteThingGroupError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>An exception thrown when the version of a thing passed to a command is different than the version specified with the --version parameter.</p>
+    VersionConflict(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteThingGroupError {
+    pub fn from_body(body: &str) -> DeleteThingGroupError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        DeleteThingGroupError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        DeleteThingGroupError::InvalidRequest(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        DeleteThingGroupError::Throttling(String::from(error_message))
+                    }
+                    "VersionConflictException" => {
+                        DeleteThingGroupError::VersionConflict(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteThingGroupError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteThingGroupError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteThingGroupError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteThingGroupError {
+    fn from(err: serde_json::error::Error) -> DeleteThingGroupError {
+        DeleteThingGroupError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteThingGroupError {
+    fn from(err: CredentialsError) -> DeleteThingGroupError {
+        DeleteThingGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteThingGroupError {
+    fn from(err: HttpDispatchError) -> DeleteThingGroupError {
+        DeleteThingGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteThingGroupError {
+    fn from(err: io::Error) -> DeleteThingGroupError {
+        DeleteThingGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteThingGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteThingGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteThingGroupError::InternalFailure(ref cause) => cause,
+            DeleteThingGroupError::InvalidRequest(ref cause) => cause,
+            DeleteThingGroupError::Throttling(ref cause) => cause,
+            DeleteThingGroupError::VersionConflict(ref cause) => cause,
+            DeleteThingGroupError::Validation(ref cause) => cause,
+            DeleteThingGroupError::Credentials(ref err) => err.description(),
+            DeleteThingGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteThingGroupError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -4005,6 +8226,98 @@ impl Error for DeleteTopicRuleError {
         }
     }
 }
+/// Errors returned by DeleteV2LoggingLevel
+#[derive(Debug, PartialEq)]
+pub enum DeleteV2LoggingLevelError {
+    /// <p>An unexpected error has occurred.</p>
+    Internal(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteV2LoggingLevelError {
+    pub fn from_body(body: &str) -> DeleteV2LoggingLevelError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalException" => {
+                        DeleteV2LoggingLevelError::Internal(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        DeleteV2LoggingLevelError::InvalidRequest(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        DeleteV2LoggingLevelError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteV2LoggingLevelError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteV2LoggingLevelError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteV2LoggingLevelError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteV2LoggingLevelError {
+    fn from(err: serde_json::error::Error) -> DeleteV2LoggingLevelError {
+        DeleteV2LoggingLevelError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteV2LoggingLevelError {
+    fn from(err: CredentialsError) -> DeleteV2LoggingLevelError {
+        DeleteV2LoggingLevelError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteV2LoggingLevelError {
+    fn from(err: HttpDispatchError) -> DeleteV2LoggingLevelError {
+        DeleteV2LoggingLevelError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteV2LoggingLevelError {
+    fn from(err: io::Error) -> DeleteV2LoggingLevelError {
+        DeleteV2LoggingLevelError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteV2LoggingLevelError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteV2LoggingLevelError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteV2LoggingLevelError::Internal(ref cause) => cause,
+            DeleteV2LoggingLevelError::InvalidRequest(ref cause) => cause,
+            DeleteV2LoggingLevelError::ServiceUnavailable(ref cause) => cause,
+            DeleteV2LoggingLevelError::Validation(ref cause) => cause,
+            DeleteV2LoggingLevelError::Credentials(ref err) => err.description(),
+            DeleteV2LoggingLevelError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteV2LoggingLevelError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeprecateThingType
 #[derive(Debug, PartialEq)]
 pub enum DeprecateThingTypeError {
@@ -4112,6 +8425,116 @@ impl Error for DeprecateThingTypeError {
                 dispatch_error.description()
             }
             DeprecateThingTypeError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeAuthorizer
+#[derive(Debug, PartialEq)]
+pub enum DescribeAuthorizerError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeAuthorizerError {
+    pub fn from_body(body: &str) -> DescribeAuthorizerError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        DescribeAuthorizerError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        DescribeAuthorizerError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DescribeAuthorizerError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        DescribeAuthorizerError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        DescribeAuthorizerError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        DescribeAuthorizerError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DescribeAuthorizerError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeAuthorizerError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeAuthorizerError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeAuthorizerError {
+    fn from(err: serde_json::error::Error) -> DescribeAuthorizerError {
+        DescribeAuthorizerError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeAuthorizerError {
+    fn from(err: CredentialsError) -> DescribeAuthorizerError {
+        DescribeAuthorizerError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeAuthorizerError {
+    fn from(err: HttpDispatchError) -> DescribeAuthorizerError {
+        DescribeAuthorizerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeAuthorizerError {
+    fn from(err: io::Error) -> DescribeAuthorizerError {
+        DescribeAuthorizerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeAuthorizerError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeAuthorizerError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeAuthorizerError::InternalFailure(ref cause) => cause,
+            DescribeAuthorizerError::InvalidRequest(ref cause) => cause,
+            DescribeAuthorizerError::ResourceNotFound(ref cause) => cause,
+            DescribeAuthorizerError::ServiceUnavailable(ref cause) => cause,
+            DescribeAuthorizerError::Throttling(ref cause) => cause,
+            DescribeAuthorizerError::Unauthorized(ref cause) => cause,
+            DescribeAuthorizerError::Validation(ref cause) => cause,
+            DescribeAuthorizerError::Credentials(ref err) => err.description(),
+            DescribeAuthorizerError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeAuthorizerError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -4335,11 +8758,127 @@ impl Error for DescribeCertificateError {
         }
     }
 }
+/// Errors returned by DescribeDefaultAuthorizer
+#[derive(Debug, PartialEq)]
+pub enum DescribeDefaultAuthorizerError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeDefaultAuthorizerError {
+    pub fn from_body(body: &str) -> DescribeDefaultAuthorizerError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        DescribeDefaultAuthorizerError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        DescribeDefaultAuthorizerError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DescribeDefaultAuthorizerError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServiceUnavailableException" => {
+                        DescribeDefaultAuthorizerError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ThrottlingException" => {
+                        DescribeDefaultAuthorizerError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        DescribeDefaultAuthorizerError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DescribeDefaultAuthorizerError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeDefaultAuthorizerError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeDefaultAuthorizerError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeDefaultAuthorizerError {
+    fn from(err: serde_json::error::Error) -> DescribeDefaultAuthorizerError {
+        DescribeDefaultAuthorizerError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeDefaultAuthorizerError {
+    fn from(err: CredentialsError) -> DescribeDefaultAuthorizerError {
+        DescribeDefaultAuthorizerError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeDefaultAuthorizerError {
+    fn from(err: HttpDispatchError) -> DescribeDefaultAuthorizerError {
+        DescribeDefaultAuthorizerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeDefaultAuthorizerError {
+    fn from(err: io::Error) -> DescribeDefaultAuthorizerError {
+        DescribeDefaultAuthorizerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeDefaultAuthorizerError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeDefaultAuthorizerError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeDefaultAuthorizerError::InternalFailure(ref cause) => cause,
+            DescribeDefaultAuthorizerError::InvalidRequest(ref cause) => cause,
+            DescribeDefaultAuthorizerError::ResourceNotFound(ref cause) => cause,
+            DescribeDefaultAuthorizerError::ServiceUnavailable(ref cause) => cause,
+            DescribeDefaultAuthorizerError::Throttling(ref cause) => cause,
+            DescribeDefaultAuthorizerError::Unauthorized(ref cause) => cause,
+            DescribeDefaultAuthorizerError::Validation(ref cause) => cause,
+            DescribeDefaultAuthorizerError::Credentials(ref err) => err.description(),
+            DescribeDefaultAuthorizerError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeDefaultAuthorizerError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DescribeEndpointError {
     /// <p>An unexpected error has occurred.</p>
     InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
     /// <p>The rate exceeds the limit.</p>
     Throttling(String),
     /// <p>You are not authorized to perform this operation.</p>
@@ -4369,6 +8908,9 @@ impl DescribeEndpointError {
                 match *error_type {
                     "InternalFailureException" => {
                         DescribeEndpointError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        DescribeEndpointError::InvalidRequest(String::from(error_message))
                     }
                     "ThrottlingException" => {
                         DescribeEndpointError::Throttling(String::from(error_message))
@@ -4416,12 +8958,621 @@ impl Error for DescribeEndpointError {
     fn description(&self) -> &str {
         match *self {
             DescribeEndpointError::InternalFailure(ref cause) => cause,
+            DescribeEndpointError::InvalidRequest(ref cause) => cause,
             DescribeEndpointError::Throttling(ref cause) => cause,
             DescribeEndpointError::Unauthorized(ref cause) => cause,
             DescribeEndpointError::Validation(ref cause) => cause,
             DescribeEndpointError::Credentials(ref err) => err.description(),
             DescribeEndpointError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             DescribeEndpointError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeEventConfigurations
+#[derive(Debug, PartialEq)]
+pub enum DescribeEventConfigurationsError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeEventConfigurationsError {
+    pub fn from_body(body: &str) -> DescribeEventConfigurationsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        DescribeEventConfigurationsError::InternalFailure(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ThrottlingException" => {
+                        DescribeEventConfigurationsError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DescribeEventConfigurationsError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeEventConfigurationsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeEventConfigurationsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeEventConfigurationsError {
+    fn from(err: serde_json::error::Error) -> DescribeEventConfigurationsError {
+        DescribeEventConfigurationsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeEventConfigurationsError {
+    fn from(err: CredentialsError) -> DescribeEventConfigurationsError {
+        DescribeEventConfigurationsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeEventConfigurationsError {
+    fn from(err: HttpDispatchError) -> DescribeEventConfigurationsError {
+        DescribeEventConfigurationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeEventConfigurationsError {
+    fn from(err: io::Error) -> DescribeEventConfigurationsError {
+        DescribeEventConfigurationsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeEventConfigurationsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeEventConfigurationsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeEventConfigurationsError::InternalFailure(ref cause) => cause,
+            DescribeEventConfigurationsError::Throttling(ref cause) => cause,
+            DescribeEventConfigurationsError::Validation(ref cause) => cause,
+            DescribeEventConfigurationsError::Credentials(ref err) => err.description(),
+            DescribeEventConfigurationsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeEventConfigurationsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeIndex
+#[derive(Debug, PartialEq)]
+pub enum DescribeIndexError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeIndexError {
+    pub fn from_body(body: &str) -> DescribeIndexError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        DescribeIndexError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        DescribeIndexError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DescribeIndexError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        DescribeIndexError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        DescribeIndexError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        DescribeIndexError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DescribeIndexError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeIndexError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeIndexError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeIndexError {
+    fn from(err: serde_json::error::Error) -> DescribeIndexError {
+        DescribeIndexError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeIndexError {
+    fn from(err: CredentialsError) -> DescribeIndexError {
+        DescribeIndexError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeIndexError {
+    fn from(err: HttpDispatchError) -> DescribeIndexError {
+        DescribeIndexError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeIndexError {
+    fn from(err: io::Error) -> DescribeIndexError {
+        DescribeIndexError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeIndexError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeIndexError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeIndexError::InternalFailure(ref cause) => cause,
+            DescribeIndexError::InvalidRequest(ref cause) => cause,
+            DescribeIndexError::ResourceNotFound(ref cause) => cause,
+            DescribeIndexError::ServiceUnavailable(ref cause) => cause,
+            DescribeIndexError::Throttling(ref cause) => cause,
+            DescribeIndexError::Unauthorized(ref cause) => cause,
+            DescribeIndexError::Validation(ref cause) => cause,
+            DescribeIndexError::Credentials(ref err) => err.description(),
+            DescribeIndexError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DescribeIndexError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeJob
+#[derive(Debug, PartialEq)]
+pub enum DescribeJobError {
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeJobError {
+    pub fn from_body(body: &str) -> DescribeJobError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidRequestException" => {
+                        DescribeJobError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DescribeJobError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        DescribeJobError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        DescribeJobError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DescribeJobError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeJobError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeJobError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeJobError {
+    fn from(err: serde_json::error::Error) -> DescribeJobError {
+        DescribeJobError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeJobError {
+    fn from(err: CredentialsError) -> DescribeJobError {
+        DescribeJobError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeJobError {
+    fn from(err: HttpDispatchError) -> DescribeJobError {
+        DescribeJobError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeJobError {
+    fn from(err: io::Error) -> DescribeJobError {
+        DescribeJobError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeJobError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeJobError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeJobError::InvalidRequest(ref cause) => cause,
+            DescribeJobError::ResourceNotFound(ref cause) => cause,
+            DescribeJobError::ServiceUnavailable(ref cause) => cause,
+            DescribeJobError::Throttling(ref cause) => cause,
+            DescribeJobError::Validation(ref cause) => cause,
+            DescribeJobError::Credentials(ref err) => err.description(),
+            DescribeJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DescribeJobError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeJobExecution
+#[derive(Debug, PartialEq)]
+pub enum DescribeJobExecutionError {
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeJobExecutionError {
+    pub fn from_body(body: &str) -> DescribeJobExecutionError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidRequestException" => {
+                        DescribeJobExecutionError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DescribeJobExecutionError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        DescribeJobExecutionError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        DescribeJobExecutionError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DescribeJobExecutionError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeJobExecutionError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeJobExecutionError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeJobExecutionError {
+    fn from(err: serde_json::error::Error) -> DescribeJobExecutionError {
+        DescribeJobExecutionError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeJobExecutionError {
+    fn from(err: CredentialsError) -> DescribeJobExecutionError {
+        DescribeJobExecutionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeJobExecutionError {
+    fn from(err: HttpDispatchError) -> DescribeJobExecutionError {
+        DescribeJobExecutionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeJobExecutionError {
+    fn from(err: io::Error) -> DescribeJobExecutionError {
+        DescribeJobExecutionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeJobExecutionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeJobExecutionError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeJobExecutionError::InvalidRequest(ref cause) => cause,
+            DescribeJobExecutionError::ResourceNotFound(ref cause) => cause,
+            DescribeJobExecutionError::ServiceUnavailable(ref cause) => cause,
+            DescribeJobExecutionError::Throttling(ref cause) => cause,
+            DescribeJobExecutionError::Validation(ref cause) => cause,
+            DescribeJobExecutionError::Credentials(ref err) => err.description(),
+            DescribeJobExecutionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeJobExecutionError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeRoleAlias
+#[derive(Debug, PartialEq)]
+pub enum DescribeRoleAliasError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeRoleAliasError {
+    pub fn from_body(body: &str) -> DescribeRoleAliasError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        DescribeRoleAliasError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        DescribeRoleAliasError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DescribeRoleAliasError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        DescribeRoleAliasError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        DescribeRoleAliasError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        DescribeRoleAliasError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DescribeRoleAliasError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeRoleAliasError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeRoleAliasError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeRoleAliasError {
+    fn from(err: serde_json::error::Error) -> DescribeRoleAliasError {
+        DescribeRoleAliasError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeRoleAliasError {
+    fn from(err: CredentialsError) -> DescribeRoleAliasError {
+        DescribeRoleAliasError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeRoleAliasError {
+    fn from(err: HttpDispatchError) -> DescribeRoleAliasError {
+        DescribeRoleAliasError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeRoleAliasError {
+    fn from(err: io::Error) -> DescribeRoleAliasError {
+        DescribeRoleAliasError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeRoleAliasError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeRoleAliasError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeRoleAliasError::InternalFailure(ref cause) => cause,
+            DescribeRoleAliasError::InvalidRequest(ref cause) => cause,
+            DescribeRoleAliasError::ResourceNotFound(ref cause) => cause,
+            DescribeRoleAliasError::ServiceUnavailable(ref cause) => cause,
+            DescribeRoleAliasError::Throttling(ref cause) => cause,
+            DescribeRoleAliasError::Unauthorized(ref cause) => cause,
+            DescribeRoleAliasError::Validation(ref cause) => cause,
+            DescribeRoleAliasError::Credentials(ref err) => err.description(),
+            DescribeRoleAliasError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeRoleAliasError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeStream
+#[derive(Debug, PartialEq)]
+pub enum DescribeStreamError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeStreamError {
+    pub fn from_body(body: &str) -> DescribeStreamError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        DescribeStreamError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        DescribeStreamError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DescribeStreamError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        DescribeStreamError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        DescribeStreamError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        DescribeStreamError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DescribeStreamError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeStreamError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeStreamError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeStreamError {
+    fn from(err: serde_json::error::Error) -> DescribeStreamError {
+        DescribeStreamError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeStreamError {
+    fn from(err: CredentialsError) -> DescribeStreamError {
+        DescribeStreamError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeStreamError {
+    fn from(err: HttpDispatchError) -> DescribeStreamError {
+        DescribeStreamError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeStreamError {
+    fn from(err: io::Error) -> DescribeStreamError {
+        DescribeStreamError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeStreamError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeStreamError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeStreamError::InternalFailure(ref cause) => cause,
+            DescribeStreamError::InvalidRequest(ref cause) => cause,
+            DescribeStreamError::ResourceNotFound(ref cause) => cause,
+            DescribeStreamError::ServiceUnavailable(ref cause) => cause,
+            DescribeStreamError::Throttling(ref cause) => cause,
+            DescribeStreamError::Unauthorized(ref cause) => cause,
+            DescribeStreamError::Validation(ref cause) => cause,
+            DescribeStreamError::Credentials(ref err) => err.description(),
+            DescribeStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DescribeStreamError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -4533,6 +9684,214 @@ impl Error for DescribeThingError {
         }
     }
 }
+/// Errors returned by DescribeThingGroup
+#[derive(Debug, PartialEq)]
+pub enum DescribeThingGroupError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeThingGroupError {
+    pub fn from_body(body: &str) -> DescribeThingGroupError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        DescribeThingGroupError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        DescribeThingGroupError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DescribeThingGroupError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        DescribeThingGroupError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DescribeThingGroupError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeThingGroupError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeThingGroupError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeThingGroupError {
+    fn from(err: serde_json::error::Error) -> DescribeThingGroupError {
+        DescribeThingGroupError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeThingGroupError {
+    fn from(err: CredentialsError) -> DescribeThingGroupError {
+        DescribeThingGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeThingGroupError {
+    fn from(err: HttpDispatchError) -> DescribeThingGroupError {
+        DescribeThingGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeThingGroupError {
+    fn from(err: io::Error) -> DescribeThingGroupError {
+        DescribeThingGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeThingGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeThingGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeThingGroupError::InternalFailure(ref cause) => cause,
+            DescribeThingGroupError::InvalidRequest(ref cause) => cause,
+            DescribeThingGroupError::ResourceNotFound(ref cause) => cause,
+            DescribeThingGroupError::Throttling(ref cause) => cause,
+            DescribeThingGroupError::Validation(ref cause) => cause,
+            DescribeThingGroupError::Credentials(ref err) => err.description(),
+            DescribeThingGroupError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeThingGroupError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeThingRegistrationTask
+#[derive(Debug, PartialEq)]
+pub enum DescribeThingRegistrationTaskError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeThingRegistrationTaskError {
+    pub fn from_body(body: &str) -> DescribeThingRegistrationTaskError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        DescribeThingRegistrationTaskError::InternalFailure(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidRequestException" => {
+                        DescribeThingRegistrationTaskError::InvalidRequest(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        DescribeThingRegistrationTaskError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ThrottlingException" => {
+                        DescribeThingRegistrationTaskError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => DescribeThingRegistrationTaskError::Unauthorized(
+                        String::from(error_message),
+                    ),
+                    "ValidationException" => {
+                        DescribeThingRegistrationTaskError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeThingRegistrationTaskError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeThingRegistrationTaskError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeThingRegistrationTaskError {
+    fn from(err: serde_json::error::Error) -> DescribeThingRegistrationTaskError {
+        DescribeThingRegistrationTaskError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeThingRegistrationTaskError {
+    fn from(err: CredentialsError) -> DescribeThingRegistrationTaskError {
+        DescribeThingRegistrationTaskError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeThingRegistrationTaskError {
+    fn from(err: HttpDispatchError) -> DescribeThingRegistrationTaskError {
+        DescribeThingRegistrationTaskError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeThingRegistrationTaskError {
+    fn from(err: io::Error) -> DescribeThingRegistrationTaskError {
+        DescribeThingRegistrationTaskError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeThingRegistrationTaskError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeThingRegistrationTaskError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeThingRegistrationTaskError::InternalFailure(ref cause) => cause,
+            DescribeThingRegistrationTaskError::InvalidRequest(ref cause) => cause,
+            DescribeThingRegistrationTaskError::ResourceNotFound(ref cause) => cause,
+            DescribeThingRegistrationTaskError::Throttling(ref cause) => cause,
+            DescribeThingRegistrationTaskError::Unauthorized(ref cause) => cause,
+            DescribeThingRegistrationTaskError::Validation(ref cause) => cause,
+            DescribeThingRegistrationTaskError::Credentials(ref err) => err.description(),
+            DescribeThingRegistrationTaskError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeThingRegistrationTaskError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeThingType
 #[derive(Debug, PartialEq)]
 pub enum DescribeThingTypeError {
@@ -4640,6 +9999,114 @@ impl Error for DescribeThingTypeError {
                 dispatch_error.description()
             }
             DescribeThingTypeError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DetachPolicy
+#[derive(Debug, PartialEq)]
+pub enum DetachPolicyError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The number of attached entities exceeds the limit.</p>
+    LimitExceeded(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DetachPolicyError {
+    pub fn from_body(body: &str) -> DetachPolicyError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        DetachPolicyError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        DetachPolicyError::InvalidRequest(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        DetachPolicyError::LimitExceeded(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        DetachPolicyError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        DetachPolicyError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        DetachPolicyError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DetachPolicyError::Validation(error_message.to_string())
+                    }
+                    _ => DetachPolicyError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DetachPolicyError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DetachPolicyError {
+    fn from(err: serde_json::error::Error) -> DetachPolicyError {
+        DetachPolicyError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DetachPolicyError {
+    fn from(err: CredentialsError) -> DetachPolicyError {
+        DetachPolicyError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DetachPolicyError {
+    fn from(err: HttpDispatchError) -> DetachPolicyError {
+        DetachPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DetachPolicyError {
+    fn from(err: io::Error) -> DetachPolicyError {
+        DetachPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DetachPolicyError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DetachPolicyError {
+    fn description(&self) -> &str {
+        match *self {
+            DetachPolicyError::InternalFailure(ref cause) => cause,
+            DetachPolicyError::InvalidRequest(ref cause) => cause,
+            DetachPolicyError::LimitExceeded(ref cause) => cause,
+            DetachPolicyError::ServiceUnavailable(ref cause) => cause,
+            DetachPolicyError::Throttling(ref cause) => cause,
+            DetachPolicyError::Unauthorized(ref cause) => cause,
+            DetachPolicyError::Validation(ref cause) => cause,
+            DetachPolicyError::Credentials(ref err) => err.description(),
+            DetachPolicyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DetachPolicyError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -5055,6 +10522,324 @@ impl Error for EnableTopicRuleError {
         }
     }
 }
+/// Errors returned by GetEffectivePolicies
+#[derive(Debug, PartialEq)]
+pub enum GetEffectivePoliciesError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The number of attached entities exceeds the limit.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetEffectivePoliciesError {
+    pub fn from_body(body: &str) -> GetEffectivePoliciesError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        GetEffectivePoliciesError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        GetEffectivePoliciesError::InvalidRequest(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        GetEffectivePoliciesError::LimitExceeded(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        GetEffectivePoliciesError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        GetEffectivePoliciesError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        GetEffectivePoliciesError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        GetEffectivePoliciesError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetEffectivePoliciesError::Validation(error_message.to_string())
+                    }
+                    _ => GetEffectivePoliciesError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetEffectivePoliciesError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetEffectivePoliciesError {
+    fn from(err: serde_json::error::Error) -> GetEffectivePoliciesError {
+        GetEffectivePoliciesError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetEffectivePoliciesError {
+    fn from(err: CredentialsError) -> GetEffectivePoliciesError {
+        GetEffectivePoliciesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetEffectivePoliciesError {
+    fn from(err: HttpDispatchError) -> GetEffectivePoliciesError {
+        GetEffectivePoliciesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetEffectivePoliciesError {
+    fn from(err: io::Error) -> GetEffectivePoliciesError {
+        GetEffectivePoliciesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetEffectivePoliciesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetEffectivePoliciesError {
+    fn description(&self) -> &str {
+        match *self {
+            GetEffectivePoliciesError::InternalFailure(ref cause) => cause,
+            GetEffectivePoliciesError::InvalidRequest(ref cause) => cause,
+            GetEffectivePoliciesError::LimitExceeded(ref cause) => cause,
+            GetEffectivePoliciesError::ResourceNotFound(ref cause) => cause,
+            GetEffectivePoliciesError::ServiceUnavailable(ref cause) => cause,
+            GetEffectivePoliciesError::Throttling(ref cause) => cause,
+            GetEffectivePoliciesError::Unauthorized(ref cause) => cause,
+            GetEffectivePoliciesError::Validation(ref cause) => cause,
+            GetEffectivePoliciesError::Credentials(ref err) => err.description(),
+            GetEffectivePoliciesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetEffectivePoliciesError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetIndexingConfiguration
+#[derive(Debug, PartialEq)]
+pub enum GetIndexingConfigurationError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetIndexingConfigurationError {
+    pub fn from_body(body: &str) -> GetIndexingConfigurationError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        GetIndexingConfigurationError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        GetIndexingConfigurationError::InvalidRequest(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        GetIndexingConfigurationError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ThrottlingException" => {
+                        GetIndexingConfigurationError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        GetIndexingConfigurationError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetIndexingConfigurationError::Validation(error_message.to_string())
+                    }
+                    _ => GetIndexingConfigurationError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetIndexingConfigurationError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetIndexingConfigurationError {
+    fn from(err: serde_json::error::Error) -> GetIndexingConfigurationError {
+        GetIndexingConfigurationError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetIndexingConfigurationError {
+    fn from(err: CredentialsError) -> GetIndexingConfigurationError {
+        GetIndexingConfigurationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetIndexingConfigurationError {
+    fn from(err: HttpDispatchError) -> GetIndexingConfigurationError {
+        GetIndexingConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetIndexingConfigurationError {
+    fn from(err: io::Error) -> GetIndexingConfigurationError {
+        GetIndexingConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetIndexingConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetIndexingConfigurationError {
+    fn description(&self) -> &str {
+        match *self {
+            GetIndexingConfigurationError::InternalFailure(ref cause) => cause,
+            GetIndexingConfigurationError::InvalidRequest(ref cause) => cause,
+            GetIndexingConfigurationError::ServiceUnavailable(ref cause) => cause,
+            GetIndexingConfigurationError::Throttling(ref cause) => cause,
+            GetIndexingConfigurationError::Unauthorized(ref cause) => cause,
+            GetIndexingConfigurationError::Validation(ref cause) => cause,
+            GetIndexingConfigurationError::Credentials(ref err) => err.description(),
+            GetIndexingConfigurationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetIndexingConfigurationError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetJobDocument
+#[derive(Debug, PartialEq)]
+pub enum GetJobDocumentError {
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetJobDocumentError {
+    pub fn from_body(body: &str) -> GetJobDocumentError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidRequestException" => {
+                        GetJobDocumentError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        GetJobDocumentError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        GetJobDocumentError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        GetJobDocumentError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetJobDocumentError::Validation(error_message.to_string())
+                    }
+                    _ => GetJobDocumentError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetJobDocumentError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetJobDocumentError {
+    fn from(err: serde_json::error::Error) -> GetJobDocumentError {
+        GetJobDocumentError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetJobDocumentError {
+    fn from(err: CredentialsError) -> GetJobDocumentError {
+        GetJobDocumentError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetJobDocumentError {
+    fn from(err: HttpDispatchError) -> GetJobDocumentError {
+        GetJobDocumentError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetJobDocumentError {
+    fn from(err: io::Error) -> GetJobDocumentError {
+        GetJobDocumentError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetJobDocumentError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetJobDocumentError {
+    fn description(&self) -> &str {
+        match *self {
+            GetJobDocumentError::InvalidRequest(ref cause) => cause,
+            GetJobDocumentError::ResourceNotFound(ref cause) => cause,
+            GetJobDocumentError::ServiceUnavailable(ref cause) => cause,
+            GetJobDocumentError::Throttling(ref cause) => cause,
+            GetJobDocumentError::Validation(ref cause) => cause,
+            GetJobDocumentError::Credentials(ref err) => err.description(),
+            GetJobDocumentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetJobDocumentError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetLoggingOptions
 #[derive(Debug, PartialEq)]
 pub enum GetLoggingOptionsError {
@@ -5144,6 +10929,114 @@ impl Error for GetLoggingOptionsError {
                 dispatch_error.description()
             }
             GetLoggingOptionsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetOTAUpdate
+#[derive(Debug, PartialEq)]
+pub enum GetOTAUpdateError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetOTAUpdateError {
+    pub fn from_body(body: &str) -> GetOTAUpdateError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        GetOTAUpdateError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        GetOTAUpdateError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        GetOTAUpdateError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        GetOTAUpdateError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        GetOTAUpdateError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        GetOTAUpdateError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetOTAUpdateError::Validation(error_message.to_string())
+                    }
+                    _ => GetOTAUpdateError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetOTAUpdateError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetOTAUpdateError {
+    fn from(err: serde_json::error::Error) -> GetOTAUpdateError {
+        GetOTAUpdateError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetOTAUpdateError {
+    fn from(err: CredentialsError) -> GetOTAUpdateError {
+        GetOTAUpdateError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetOTAUpdateError {
+    fn from(err: HttpDispatchError) -> GetOTAUpdateError {
+        GetOTAUpdateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetOTAUpdateError {
+    fn from(err: io::Error) -> GetOTAUpdateError {
+        GetOTAUpdateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetOTAUpdateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetOTAUpdateError {
+    fn description(&self) -> &str {
+        match *self {
+            GetOTAUpdateError::InternalFailure(ref cause) => cause,
+            GetOTAUpdateError::InvalidRequest(ref cause) => cause,
+            GetOTAUpdateError::ResourceNotFound(ref cause) => cause,
+            GetOTAUpdateError::ServiceUnavailable(ref cause) => cause,
+            GetOTAUpdateError::Throttling(ref cause) => cause,
+            GetOTAUpdateError::Unauthorized(ref cause) => cause,
+            GetOTAUpdateError::Validation(ref cause) => cause,
+            GetOTAUpdateError::Credentials(ref err) => err.description(),
+            GetOTAUpdateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetOTAUpdateError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -5559,6 +11452,316 @@ impl Error for GetTopicRuleError {
         }
     }
 }
+/// Errors returned by GetV2LoggingOptions
+#[derive(Debug, PartialEq)]
+pub enum GetV2LoggingOptionsError {
+    /// <p>An unexpected error has occurred.</p>
+    Internal(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetV2LoggingOptionsError {
+    pub fn from_body(body: &str) -> GetV2LoggingOptionsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalException" => {
+                        GetV2LoggingOptionsError::Internal(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        GetV2LoggingOptionsError::InvalidRequest(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        GetV2LoggingOptionsError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetV2LoggingOptionsError::Validation(error_message.to_string())
+                    }
+                    _ => GetV2LoggingOptionsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetV2LoggingOptionsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetV2LoggingOptionsError {
+    fn from(err: serde_json::error::Error) -> GetV2LoggingOptionsError {
+        GetV2LoggingOptionsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetV2LoggingOptionsError {
+    fn from(err: CredentialsError) -> GetV2LoggingOptionsError {
+        GetV2LoggingOptionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetV2LoggingOptionsError {
+    fn from(err: HttpDispatchError) -> GetV2LoggingOptionsError {
+        GetV2LoggingOptionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetV2LoggingOptionsError {
+    fn from(err: io::Error) -> GetV2LoggingOptionsError {
+        GetV2LoggingOptionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetV2LoggingOptionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetV2LoggingOptionsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetV2LoggingOptionsError::Internal(ref cause) => cause,
+            GetV2LoggingOptionsError::InvalidRequest(ref cause) => cause,
+            GetV2LoggingOptionsError::ServiceUnavailable(ref cause) => cause,
+            GetV2LoggingOptionsError::Validation(ref cause) => cause,
+            GetV2LoggingOptionsError::Credentials(ref err) => err.description(),
+            GetV2LoggingOptionsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetV2LoggingOptionsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListAttachedPolicies
+#[derive(Debug, PartialEq)]
+pub enum ListAttachedPoliciesError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The number of attached entities exceeds the limit.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListAttachedPoliciesError {
+    pub fn from_body(body: &str) -> ListAttachedPoliciesError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        ListAttachedPoliciesError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        ListAttachedPoliciesError::InvalidRequest(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        ListAttachedPoliciesError::LimitExceeded(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        ListAttachedPoliciesError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        ListAttachedPoliciesError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        ListAttachedPoliciesError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        ListAttachedPoliciesError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListAttachedPoliciesError::Validation(error_message.to_string())
+                    }
+                    _ => ListAttachedPoliciesError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListAttachedPoliciesError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListAttachedPoliciesError {
+    fn from(err: serde_json::error::Error) -> ListAttachedPoliciesError {
+        ListAttachedPoliciesError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListAttachedPoliciesError {
+    fn from(err: CredentialsError) -> ListAttachedPoliciesError {
+        ListAttachedPoliciesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListAttachedPoliciesError {
+    fn from(err: HttpDispatchError) -> ListAttachedPoliciesError {
+        ListAttachedPoliciesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListAttachedPoliciesError {
+    fn from(err: io::Error) -> ListAttachedPoliciesError {
+        ListAttachedPoliciesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListAttachedPoliciesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListAttachedPoliciesError {
+    fn description(&self) -> &str {
+        match *self {
+            ListAttachedPoliciesError::InternalFailure(ref cause) => cause,
+            ListAttachedPoliciesError::InvalidRequest(ref cause) => cause,
+            ListAttachedPoliciesError::LimitExceeded(ref cause) => cause,
+            ListAttachedPoliciesError::ResourceNotFound(ref cause) => cause,
+            ListAttachedPoliciesError::ServiceUnavailable(ref cause) => cause,
+            ListAttachedPoliciesError::Throttling(ref cause) => cause,
+            ListAttachedPoliciesError::Unauthorized(ref cause) => cause,
+            ListAttachedPoliciesError::Validation(ref cause) => cause,
+            ListAttachedPoliciesError::Credentials(ref err) => err.description(),
+            ListAttachedPoliciesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListAttachedPoliciesError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListAuthorizers
+#[derive(Debug, PartialEq)]
+pub enum ListAuthorizersError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListAuthorizersError {
+    pub fn from_body(body: &str) -> ListAuthorizersError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        ListAuthorizersError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        ListAuthorizersError::InvalidRequest(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        ListAuthorizersError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        ListAuthorizersError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        ListAuthorizersError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListAuthorizersError::Validation(error_message.to_string())
+                    }
+                    _ => ListAuthorizersError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListAuthorizersError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListAuthorizersError {
+    fn from(err: serde_json::error::Error) -> ListAuthorizersError {
+        ListAuthorizersError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListAuthorizersError {
+    fn from(err: CredentialsError) -> ListAuthorizersError {
+        ListAuthorizersError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListAuthorizersError {
+    fn from(err: HttpDispatchError) -> ListAuthorizersError {
+        ListAuthorizersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListAuthorizersError {
+    fn from(err: io::Error) -> ListAuthorizersError {
+        ListAuthorizersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListAuthorizersError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListAuthorizersError {
+    fn description(&self) -> &str {
+        match *self {
+            ListAuthorizersError::InternalFailure(ref cause) => cause,
+            ListAuthorizersError::InvalidRequest(ref cause) => cause,
+            ListAuthorizersError::ServiceUnavailable(ref cause) => cause,
+            ListAuthorizersError::Throttling(ref cause) => cause,
+            ListAuthorizersError::Unauthorized(ref cause) => cause,
+            ListAuthorizersError::Validation(ref cause) => cause,
+            ListAuthorizersError::Credentials(ref err) => err.description(),
+            ListAuthorizersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ListAuthorizersError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListCACertificates
 #[derive(Debug, PartialEq)]
 pub enum ListCACertificatesError {
@@ -5866,6 +12069,504 @@ impl Error for ListCertificatesByCAError {
                 dispatch_error.description()
             }
             ListCertificatesByCAError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListIndices
+#[derive(Debug, PartialEq)]
+pub enum ListIndicesError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListIndicesError {
+    pub fn from_body(body: &str) -> ListIndicesError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        ListIndicesError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        ListIndicesError::InvalidRequest(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        ListIndicesError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        ListIndicesError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        ListIndicesError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListIndicesError::Validation(error_message.to_string())
+                    }
+                    _ => ListIndicesError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListIndicesError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListIndicesError {
+    fn from(err: serde_json::error::Error) -> ListIndicesError {
+        ListIndicesError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListIndicesError {
+    fn from(err: CredentialsError) -> ListIndicesError {
+        ListIndicesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListIndicesError {
+    fn from(err: HttpDispatchError) -> ListIndicesError {
+        ListIndicesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListIndicesError {
+    fn from(err: io::Error) -> ListIndicesError {
+        ListIndicesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListIndicesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListIndicesError {
+    fn description(&self) -> &str {
+        match *self {
+            ListIndicesError::InternalFailure(ref cause) => cause,
+            ListIndicesError::InvalidRequest(ref cause) => cause,
+            ListIndicesError::ServiceUnavailable(ref cause) => cause,
+            ListIndicesError::Throttling(ref cause) => cause,
+            ListIndicesError::Unauthorized(ref cause) => cause,
+            ListIndicesError::Validation(ref cause) => cause,
+            ListIndicesError::Credentials(ref err) => err.description(),
+            ListIndicesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ListIndicesError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListJobExecutionsForJob
+#[derive(Debug, PartialEq)]
+pub enum ListJobExecutionsForJobError {
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListJobExecutionsForJobError {
+    pub fn from_body(body: &str) -> ListJobExecutionsForJobError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidRequestException" => {
+                        ListJobExecutionsForJobError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        ListJobExecutionsForJobError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        ListJobExecutionsForJobError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ThrottlingException" => {
+                        ListJobExecutionsForJobError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListJobExecutionsForJobError::Validation(error_message.to_string())
+                    }
+                    _ => ListJobExecutionsForJobError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListJobExecutionsForJobError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListJobExecutionsForJobError {
+    fn from(err: serde_json::error::Error) -> ListJobExecutionsForJobError {
+        ListJobExecutionsForJobError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListJobExecutionsForJobError {
+    fn from(err: CredentialsError) -> ListJobExecutionsForJobError {
+        ListJobExecutionsForJobError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListJobExecutionsForJobError {
+    fn from(err: HttpDispatchError) -> ListJobExecutionsForJobError {
+        ListJobExecutionsForJobError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListJobExecutionsForJobError {
+    fn from(err: io::Error) -> ListJobExecutionsForJobError {
+        ListJobExecutionsForJobError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListJobExecutionsForJobError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListJobExecutionsForJobError {
+    fn description(&self) -> &str {
+        match *self {
+            ListJobExecutionsForJobError::InvalidRequest(ref cause) => cause,
+            ListJobExecutionsForJobError::ResourceNotFound(ref cause) => cause,
+            ListJobExecutionsForJobError::ServiceUnavailable(ref cause) => cause,
+            ListJobExecutionsForJobError::Throttling(ref cause) => cause,
+            ListJobExecutionsForJobError::Validation(ref cause) => cause,
+            ListJobExecutionsForJobError::Credentials(ref err) => err.description(),
+            ListJobExecutionsForJobError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListJobExecutionsForJobError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListJobExecutionsForThing
+#[derive(Debug, PartialEq)]
+pub enum ListJobExecutionsForThingError {
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListJobExecutionsForThingError {
+    pub fn from_body(body: &str) -> ListJobExecutionsForThingError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidRequestException" => {
+                        ListJobExecutionsForThingError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        ListJobExecutionsForThingError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServiceUnavailableException" => {
+                        ListJobExecutionsForThingError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ThrottlingException" => {
+                        ListJobExecutionsForThingError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListJobExecutionsForThingError::Validation(error_message.to_string())
+                    }
+                    _ => ListJobExecutionsForThingError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListJobExecutionsForThingError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListJobExecutionsForThingError {
+    fn from(err: serde_json::error::Error) -> ListJobExecutionsForThingError {
+        ListJobExecutionsForThingError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListJobExecutionsForThingError {
+    fn from(err: CredentialsError) -> ListJobExecutionsForThingError {
+        ListJobExecutionsForThingError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListJobExecutionsForThingError {
+    fn from(err: HttpDispatchError) -> ListJobExecutionsForThingError {
+        ListJobExecutionsForThingError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListJobExecutionsForThingError {
+    fn from(err: io::Error) -> ListJobExecutionsForThingError {
+        ListJobExecutionsForThingError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListJobExecutionsForThingError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListJobExecutionsForThingError {
+    fn description(&self) -> &str {
+        match *self {
+            ListJobExecutionsForThingError::InvalidRequest(ref cause) => cause,
+            ListJobExecutionsForThingError::ResourceNotFound(ref cause) => cause,
+            ListJobExecutionsForThingError::ServiceUnavailable(ref cause) => cause,
+            ListJobExecutionsForThingError::Throttling(ref cause) => cause,
+            ListJobExecutionsForThingError::Validation(ref cause) => cause,
+            ListJobExecutionsForThingError::Credentials(ref err) => err.description(),
+            ListJobExecutionsForThingError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListJobExecutionsForThingError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListJobs
+#[derive(Debug, PartialEq)]
+pub enum ListJobsError {
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListJobsError {
+    pub fn from_body(body: &str) -> ListJobsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidRequestException" => {
+                        ListJobsError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        ListJobsError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        ListJobsError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => ListJobsError::Throttling(String::from(error_message)),
+                    "ValidationException" => ListJobsError::Validation(error_message.to_string()),
+                    _ => ListJobsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListJobsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListJobsError {
+    fn from(err: serde_json::error::Error) -> ListJobsError {
+        ListJobsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListJobsError {
+    fn from(err: CredentialsError) -> ListJobsError {
+        ListJobsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListJobsError {
+    fn from(err: HttpDispatchError) -> ListJobsError {
+        ListJobsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListJobsError {
+    fn from(err: io::Error) -> ListJobsError {
+        ListJobsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListJobsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListJobsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListJobsError::InvalidRequest(ref cause) => cause,
+            ListJobsError::ResourceNotFound(ref cause) => cause,
+            ListJobsError::ServiceUnavailable(ref cause) => cause,
+            ListJobsError::Throttling(ref cause) => cause,
+            ListJobsError::Validation(ref cause) => cause,
+            ListJobsError::Credentials(ref err) => err.description(),
+            ListJobsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ListJobsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListOTAUpdates
+#[derive(Debug, PartialEq)]
+pub enum ListOTAUpdatesError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListOTAUpdatesError {
+    pub fn from_body(body: &str) -> ListOTAUpdatesError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        ListOTAUpdatesError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        ListOTAUpdatesError::InvalidRequest(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        ListOTAUpdatesError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        ListOTAUpdatesError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        ListOTAUpdatesError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListOTAUpdatesError::Validation(error_message.to_string())
+                    }
+                    _ => ListOTAUpdatesError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListOTAUpdatesError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListOTAUpdatesError {
+    fn from(err: serde_json::error::Error) -> ListOTAUpdatesError {
+        ListOTAUpdatesError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListOTAUpdatesError {
+    fn from(err: CredentialsError) -> ListOTAUpdatesError {
+        ListOTAUpdatesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListOTAUpdatesError {
+    fn from(err: HttpDispatchError) -> ListOTAUpdatesError {
+        ListOTAUpdatesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListOTAUpdatesError {
+    fn from(err: io::Error) -> ListOTAUpdatesError {
+        ListOTAUpdatesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListOTAUpdatesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListOTAUpdatesError {
+    fn description(&self) -> &str {
+        match *self {
+            ListOTAUpdatesError::InternalFailure(ref cause) => cause,
+            ListOTAUpdatesError::InvalidRequest(ref cause) => cause,
+            ListOTAUpdatesError::ServiceUnavailable(ref cause) => cause,
+            ListOTAUpdatesError::Throttling(ref cause) => cause,
+            ListOTAUpdatesError::Unauthorized(ref cause) => cause,
+            ListOTAUpdatesError::Validation(ref cause) => cause,
+            ListOTAUpdatesError::Credentials(ref err) => err.description(),
+            ListOTAUpdatesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ListOTAUpdatesError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -6517,6 +13218,508 @@ impl Error for ListPrincipalThingsError {
         }
     }
 }
+/// Errors returned by ListRoleAliases
+#[derive(Debug, PartialEq)]
+pub enum ListRoleAliasesError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListRoleAliasesError {
+    pub fn from_body(body: &str) -> ListRoleAliasesError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        ListRoleAliasesError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        ListRoleAliasesError::InvalidRequest(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        ListRoleAliasesError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        ListRoleAliasesError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        ListRoleAliasesError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListRoleAliasesError::Validation(error_message.to_string())
+                    }
+                    _ => ListRoleAliasesError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListRoleAliasesError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListRoleAliasesError {
+    fn from(err: serde_json::error::Error) -> ListRoleAliasesError {
+        ListRoleAliasesError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListRoleAliasesError {
+    fn from(err: CredentialsError) -> ListRoleAliasesError {
+        ListRoleAliasesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListRoleAliasesError {
+    fn from(err: HttpDispatchError) -> ListRoleAliasesError {
+        ListRoleAliasesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListRoleAliasesError {
+    fn from(err: io::Error) -> ListRoleAliasesError {
+        ListRoleAliasesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListRoleAliasesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListRoleAliasesError {
+    fn description(&self) -> &str {
+        match *self {
+            ListRoleAliasesError::InternalFailure(ref cause) => cause,
+            ListRoleAliasesError::InvalidRequest(ref cause) => cause,
+            ListRoleAliasesError::ServiceUnavailable(ref cause) => cause,
+            ListRoleAliasesError::Throttling(ref cause) => cause,
+            ListRoleAliasesError::Unauthorized(ref cause) => cause,
+            ListRoleAliasesError::Validation(ref cause) => cause,
+            ListRoleAliasesError::Credentials(ref err) => err.description(),
+            ListRoleAliasesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ListRoleAliasesError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListStreams
+#[derive(Debug, PartialEq)]
+pub enum ListStreamsError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListStreamsError {
+    pub fn from_body(body: &str) -> ListStreamsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        ListStreamsError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        ListStreamsError::InvalidRequest(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        ListStreamsError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        ListStreamsError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        ListStreamsError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListStreamsError::Validation(error_message.to_string())
+                    }
+                    _ => ListStreamsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListStreamsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListStreamsError {
+    fn from(err: serde_json::error::Error) -> ListStreamsError {
+        ListStreamsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListStreamsError {
+    fn from(err: CredentialsError) -> ListStreamsError {
+        ListStreamsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListStreamsError {
+    fn from(err: HttpDispatchError) -> ListStreamsError {
+        ListStreamsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListStreamsError {
+    fn from(err: io::Error) -> ListStreamsError {
+        ListStreamsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListStreamsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListStreamsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListStreamsError::InternalFailure(ref cause) => cause,
+            ListStreamsError::InvalidRequest(ref cause) => cause,
+            ListStreamsError::ServiceUnavailable(ref cause) => cause,
+            ListStreamsError::Throttling(ref cause) => cause,
+            ListStreamsError::Unauthorized(ref cause) => cause,
+            ListStreamsError::Validation(ref cause) => cause,
+            ListStreamsError::Credentials(ref err) => err.description(),
+            ListStreamsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ListStreamsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListTargetsForPolicy
+#[derive(Debug, PartialEq)]
+pub enum ListTargetsForPolicyError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The number of attached entities exceeds the limit.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListTargetsForPolicyError {
+    pub fn from_body(body: &str) -> ListTargetsForPolicyError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        ListTargetsForPolicyError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        ListTargetsForPolicyError::InvalidRequest(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        ListTargetsForPolicyError::LimitExceeded(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        ListTargetsForPolicyError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        ListTargetsForPolicyError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        ListTargetsForPolicyError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        ListTargetsForPolicyError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListTargetsForPolicyError::Validation(error_message.to_string())
+                    }
+                    _ => ListTargetsForPolicyError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListTargetsForPolicyError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListTargetsForPolicyError {
+    fn from(err: serde_json::error::Error) -> ListTargetsForPolicyError {
+        ListTargetsForPolicyError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListTargetsForPolicyError {
+    fn from(err: CredentialsError) -> ListTargetsForPolicyError {
+        ListTargetsForPolicyError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListTargetsForPolicyError {
+    fn from(err: HttpDispatchError) -> ListTargetsForPolicyError {
+        ListTargetsForPolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTargetsForPolicyError {
+    fn from(err: io::Error) -> ListTargetsForPolicyError {
+        ListTargetsForPolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListTargetsForPolicyError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTargetsForPolicyError {
+    fn description(&self) -> &str {
+        match *self {
+            ListTargetsForPolicyError::InternalFailure(ref cause) => cause,
+            ListTargetsForPolicyError::InvalidRequest(ref cause) => cause,
+            ListTargetsForPolicyError::LimitExceeded(ref cause) => cause,
+            ListTargetsForPolicyError::ResourceNotFound(ref cause) => cause,
+            ListTargetsForPolicyError::ServiceUnavailable(ref cause) => cause,
+            ListTargetsForPolicyError::Throttling(ref cause) => cause,
+            ListTargetsForPolicyError::Unauthorized(ref cause) => cause,
+            ListTargetsForPolicyError::Validation(ref cause) => cause,
+            ListTargetsForPolicyError::Credentials(ref err) => err.description(),
+            ListTargetsForPolicyError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListTargetsForPolicyError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListThingGroups
+#[derive(Debug, PartialEq)]
+pub enum ListThingGroupsError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListThingGroupsError {
+    pub fn from_body(body: &str) -> ListThingGroupsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        ListThingGroupsError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        ListThingGroupsError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        ListThingGroupsError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListThingGroupsError::Validation(error_message.to_string())
+                    }
+                    _ => ListThingGroupsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListThingGroupsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListThingGroupsError {
+    fn from(err: serde_json::error::Error) -> ListThingGroupsError {
+        ListThingGroupsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListThingGroupsError {
+    fn from(err: CredentialsError) -> ListThingGroupsError {
+        ListThingGroupsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListThingGroupsError {
+    fn from(err: HttpDispatchError) -> ListThingGroupsError {
+        ListThingGroupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListThingGroupsError {
+    fn from(err: io::Error) -> ListThingGroupsError {
+        ListThingGroupsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListThingGroupsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListThingGroupsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListThingGroupsError::InternalFailure(ref cause) => cause,
+            ListThingGroupsError::InvalidRequest(ref cause) => cause,
+            ListThingGroupsError::ResourceNotFound(ref cause) => cause,
+            ListThingGroupsError::Validation(ref cause) => cause,
+            ListThingGroupsError::Credentials(ref err) => err.description(),
+            ListThingGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ListThingGroupsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListThingGroupsForThing
+#[derive(Debug, PartialEq)]
+pub enum ListThingGroupsForThingError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListThingGroupsForThingError {
+    pub fn from_body(body: &str) -> ListThingGroupsForThingError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        ListThingGroupsForThingError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        ListThingGroupsForThingError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        ListThingGroupsForThingError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListThingGroupsForThingError::Validation(error_message.to_string())
+                    }
+                    _ => ListThingGroupsForThingError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListThingGroupsForThingError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListThingGroupsForThingError {
+    fn from(err: serde_json::error::Error) -> ListThingGroupsForThingError {
+        ListThingGroupsForThingError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListThingGroupsForThingError {
+    fn from(err: CredentialsError) -> ListThingGroupsForThingError {
+        ListThingGroupsForThingError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListThingGroupsForThingError {
+    fn from(err: HttpDispatchError) -> ListThingGroupsForThingError {
+        ListThingGroupsForThingError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListThingGroupsForThingError {
+    fn from(err: io::Error) -> ListThingGroupsForThingError {
+        ListThingGroupsForThingError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListThingGroupsForThingError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListThingGroupsForThingError {
+    fn description(&self) -> &str {
+        match *self {
+            ListThingGroupsForThingError::InternalFailure(ref cause) => cause,
+            ListThingGroupsForThingError::InvalidRequest(ref cause) => cause,
+            ListThingGroupsForThingError::ResourceNotFound(ref cause) => cause,
+            ListThingGroupsForThingError::Validation(ref cause) => cause,
+            ListThingGroupsForThingError::Credentials(ref err) => err.description(),
+            ListThingGroupsForThingError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListThingGroupsForThingError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListThingPrincipals
 #[derive(Debug, PartialEq)]
 pub enum ListThingPrincipalsError {
@@ -6624,6 +13827,210 @@ impl Error for ListThingPrincipalsError {
                 dispatch_error.description()
             }
             ListThingPrincipalsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListThingRegistrationTaskReports
+#[derive(Debug, PartialEq)]
+pub enum ListThingRegistrationTaskReportsError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListThingRegistrationTaskReportsError {
+    pub fn from_body(body: &str) -> ListThingRegistrationTaskReportsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        ListThingRegistrationTaskReportsError::InternalFailure(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidRequestException" => {
+                        ListThingRegistrationTaskReportsError::InvalidRequest(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ThrottlingException" => ListThingRegistrationTaskReportsError::Throttling(
+                        String::from(error_message),
+                    ),
+                    "UnauthorizedException" => {
+                        ListThingRegistrationTaskReportsError::Unauthorized(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        ListThingRegistrationTaskReportsError::Validation(error_message.to_string())
+                    }
+                    _ => ListThingRegistrationTaskReportsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListThingRegistrationTaskReportsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListThingRegistrationTaskReportsError {
+    fn from(err: serde_json::error::Error) -> ListThingRegistrationTaskReportsError {
+        ListThingRegistrationTaskReportsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListThingRegistrationTaskReportsError {
+    fn from(err: CredentialsError) -> ListThingRegistrationTaskReportsError {
+        ListThingRegistrationTaskReportsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListThingRegistrationTaskReportsError {
+    fn from(err: HttpDispatchError) -> ListThingRegistrationTaskReportsError {
+        ListThingRegistrationTaskReportsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListThingRegistrationTaskReportsError {
+    fn from(err: io::Error) -> ListThingRegistrationTaskReportsError {
+        ListThingRegistrationTaskReportsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListThingRegistrationTaskReportsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListThingRegistrationTaskReportsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListThingRegistrationTaskReportsError::InternalFailure(ref cause) => cause,
+            ListThingRegistrationTaskReportsError::InvalidRequest(ref cause) => cause,
+            ListThingRegistrationTaskReportsError::Throttling(ref cause) => cause,
+            ListThingRegistrationTaskReportsError::Unauthorized(ref cause) => cause,
+            ListThingRegistrationTaskReportsError::Validation(ref cause) => cause,
+            ListThingRegistrationTaskReportsError::Credentials(ref err) => err.description(),
+            ListThingRegistrationTaskReportsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListThingRegistrationTaskReportsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListThingRegistrationTasks
+#[derive(Debug, PartialEq)]
+pub enum ListThingRegistrationTasksError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListThingRegistrationTasksError {
+    pub fn from_body(body: &str) -> ListThingRegistrationTasksError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        ListThingRegistrationTasksError::InternalFailure(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidRequestException" => {
+                        ListThingRegistrationTasksError::InvalidRequest(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        ListThingRegistrationTasksError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        ListThingRegistrationTasksError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListThingRegistrationTasksError::Validation(error_message.to_string())
+                    }
+                    _ => ListThingRegistrationTasksError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListThingRegistrationTasksError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListThingRegistrationTasksError {
+    fn from(err: serde_json::error::Error) -> ListThingRegistrationTasksError {
+        ListThingRegistrationTasksError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListThingRegistrationTasksError {
+    fn from(err: CredentialsError) -> ListThingRegistrationTasksError {
+        ListThingRegistrationTasksError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListThingRegistrationTasksError {
+    fn from(err: HttpDispatchError) -> ListThingRegistrationTasksError {
+        ListThingRegistrationTasksError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListThingRegistrationTasksError {
+    fn from(err: io::Error) -> ListThingRegistrationTasksError {
+        ListThingRegistrationTasksError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListThingRegistrationTasksError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListThingRegistrationTasksError {
+    fn description(&self) -> &str {
+        match *self {
+            ListThingRegistrationTasksError::InternalFailure(ref cause) => cause,
+            ListThingRegistrationTasksError::InvalidRequest(ref cause) => cause,
+            ListThingRegistrationTasksError::Throttling(ref cause) => cause,
+            ListThingRegistrationTasksError::Unauthorized(ref cause) => cause,
+            ListThingRegistrationTasksError::Validation(ref cause) => cause,
+            ListThingRegistrationTasksError::Credentials(ref err) => err.description(),
+            ListThingRegistrationTasksError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListThingRegistrationTasksError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -6829,6 +14236,98 @@ impl Error for ListThingsError {
         }
     }
 }
+/// Errors returned by ListThingsInThingGroup
+#[derive(Debug, PartialEq)]
+pub enum ListThingsInThingGroupError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListThingsInThingGroupError {
+    pub fn from_body(body: &str) -> ListThingsInThingGroupError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        ListThingsInThingGroupError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        ListThingsInThingGroupError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        ListThingsInThingGroupError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListThingsInThingGroupError::Validation(error_message.to_string())
+                    }
+                    _ => ListThingsInThingGroupError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListThingsInThingGroupError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListThingsInThingGroupError {
+    fn from(err: serde_json::error::Error) -> ListThingsInThingGroupError {
+        ListThingsInThingGroupError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListThingsInThingGroupError {
+    fn from(err: CredentialsError) -> ListThingsInThingGroupError {
+        ListThingsInThingGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListThingsInThingGroupError {
+    fn from(err: HttpDispatchError) -> ListThingsInThingGroupError {
+        ListThingsInThingGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListThingsInThingGroupError {
+    fn from(err: io::Error) -> ListThingsInThingGroupError {
+        ListThingsInThingGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListThingsInThingGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListThingsInThingGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            ListThingsInThingGroupError::InternalFailure(ref cause) => cause,
+            ListThingsInThingGroupError::InvalidRequest(ref cause) => cause,
+            ListThingsInThingGroupError::ResourceNotFound(ref cause) => cause,
+            ListThingsInThingGroupError::Validation(ref cause) => cause,
+            ListThingsInThingGroupError::Credentials(ref err) => err.description(),
+            ListThingsInThingGroupError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListThingsInThingGroupError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListTopicRules
 #[derive(Debug, PartialEq)]
 pub enum ListTopicRulesError {
@@ -6916,6 +14415,104 @@ impl Error for ListTopicRulesError {
             ListTopicRulesError::Credentials(ref err) => err.description(),
             ListTopicRulesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             ListTopicRulesError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListV2LoggingLevels
+#[derive(Debug, PartialEq)]
+pub enum ListV2LoggingLevelsError {
+    /// <p>An unexpected error has occurred.</p>
+    Internal(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The resource is not configured.</p>
+    NotConfigured(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListV2LoggingLevelsError {
+    pub fn from_body(body: &str) -> ListV2LoggingLevelsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalException" => {
+                        ListV2LoggingLevelsError::Internal(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        ListV2LoggingLevelsError::InvalidRequest(String::from(error_message))
+                    }
+                    "NotConfiguredException" => {
+                        ListV2LoggingLevelsError::NotConfigured(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        ListV2LoggingLevelsError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListV2LoggingLevelsError::Validation(error_message.to_string())
+                    }
+                    _ => ListV2LoggingLevelsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListV2LoggingLevelsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListV2LoggingLevelsError {
+    fn from(err: serde_json::error::Error) -> ListV2LoggingLevelsError {
+        ListV2LoggingLevelsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListV2LoggingLevelsError {
+    fn from(err: CredentialsError) -> ListV2LoggingLevelsError {
+        ListV2LoggingLevelsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListV2LoggingLevelsError {
+    fn from(err: HttpDispatchError) -> ListV2LoggingLevelsError {
+        ListV2LoggingLevelsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListV2LoggingLevelsError {
+    fn from(err: io::Error) -> ListV2LoggingLevelsError {
+        ListV2LoggingLevelsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListV2LoggingLevelsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListV2LoggingLevelsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListV2LoggingLevelsError::Internal(ref cause) => cause,
+            ListV2LoggingLevelsError::InvalidRequest(ref cause) => cause,
+            ListV2LoggingLevelsError::NotConfigured(ref cause) => cause,
+            ListV2LoggingLevelsError::ServiceUnavailable(ref cause) => cause,
+            ListV2LoggingLevelsError::Validation(ref cause) => cause,
+            ListV2LoggingLevelsError::Credentials(ref err) => err.description(),
+            ListV2LoggingLevelsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListV2LoggingLevelsError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -7181,6 +14778,120 @@ impl Error for RegisterCertificateError {
         }
     }
 }
+/// Errors returned by RegisterThing
+#[derive(Debug, PartialEq)]
+pub enum RegisterThingError {
+    /// <p>A conflicting resource update exception. This exception is thrown when two pending updates cause a conflict.</p>
+    ConflictingResourceUpdate(String),
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The resource registration failed.</p>
+    ResourceRegistrationFailure(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl RegisterThingError {
+    pub fn from_body(body: &str) -> RegisterThingError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ConflictingResourceUpdateException" => {
+                        RegisterThingError::ConflictingResourceUpdate(String::from(error_message))
+                    }
+                    "InternalFailureException" => {
+                        RegisterThingError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        RegisterThingError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceRegistrationFailureException" => {
+                        RegisterThingError::ResourceRegistrationFailure(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        RegisterThingError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        RegisterThingError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        RegisterThingError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        RegisterThingError::Validation(error_message.to_string())
+                    }
+                    _ => RegisterThingError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => RegisterThingError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for RegisterThingError {
+    fn from(err: serde_json::error::Error) -> RegisterThingError {
+        RegisterThingError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for RegisterThingError {
+    fn from(err: CredentialsError) -> RegisterThingError {
+        RegisterThingError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for RegisterThingError {
+    fn from(err: HttpDispatchError) -> RegisterThingError {
+        RegisterThingError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RegisterThingError {
+    fn from(err: io::Error) -> RegisterThingError {
+        RegisterThingError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for RegisterThingError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for RegisterThingError {
+    fn description(&self) -> &str {
+        match *self {
+            RegisterThingError::ConflictingResourceUpdate(ref cause) => cause,
+            RegisterThingError::InternalFailure(ref cause) => cause,
+            RegisterThingError::InvalidRequest(ref cause) => cause,
+            RegisterThingError::ResourceRegistrationFailure(ref cause) => cause,
+            RegisterThingError::ServiceUnavailable(ref cause) => cause,
+            RegisterThingError::Throttling(ref cause) => cause,
+            RegisterThingError::Unauthorized(ref cause) => cause,
+            RegisterThingError::Validation(ref cause) => cause,
+            RegisterThingError::Credentials(ref err) => err.description(),
+            RegisterThingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            RegisterThingError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by RejectCertificateTransfer
 #[derive(Debug, PartialEq)]
 pub enum RejectCertificateTransferError {
@@ -7303,6 +15014,106 @@ impl Error for RejectCertificateTransferError {
         }
     }
 }
+/// Errors returned by RemoveThingFromThingGroup
+#[derive(Debug, PartialEq)]
+pub enum RemoveThingFromThingGroupError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl RemoveThingFromThingGroupError {
+    pub fn from_body(body: &str) -> RemoveThingFromThingGroupError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        RemoveThingFromThingGroupError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        RemoveThingFromThingGroupError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        RemoveThingFromThingGroupError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ThrottlingException" => {
+                        RemoveThingFromThingGroupError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        RemoveThingFromThingGroupError::Validation(error_message.to_string())
+                    }
+                    _ => RemoveThingFromThingGroupError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => RemoveThingFromThingGroupError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for RemoveThingFromThingGroupError {
+    fn from(err: serde_json::error::Error) -> RemoveThingFromThingGroupError {
+        RemoveThingFromThingGroupError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for RemoveThingFromThingGroupError {
+    fn from(err: CredentialsError) -> RemoveThingFromThingGroupError {
+        RemoveThingFromThingGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for RemoveThingFromThingGroupError {
+    fn from(err: HttpDispatchError) -> RemoveThingFromThingGroupError {
+        RemoveThingFromThingGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RemoveThingFromThingGroupError {
+    fn from(err: io::Error) -> RemoveThingFromThingGroupError {
+        RemoveThingFromThingGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for RemoveThingFromThingGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for RemoveThingFromThingGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            RemoveThingFromThingGroupError::InternalFailure(ref cause) => cause,
+            RemoveThingFromThingGroupError::InvalidRequest(ref cause) => cause,
+            RemoveThingFromThingGroupError::ResourceNotFound(ref cause) => cause,
+            RemoveThingFromThingGroupError::Throttling(ref cause) => cause,
+            RemoveThingFromThingGroupError::Validation(ref cause) => cause,
+            RemoveThingFromThingGroupError::Credentials(ref err) => err.description(),
+            RemoveThingFromThingGroupError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            RemoveThingFromThingGroupError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ReplaceTopicRule
 #[derive(Debug, PartialEq)]
 pub enum ReplaceTopicRuleError {
@@ -7402,6 +15213,236 @@ impl Error for ReplaceTopicRuleError {
             ReplaceTopicRuleError::Credentials(ref err) => err.description(),
             ReplaceTopicRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             ReplaceTopicRuleError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by SearchIndex
+#[derive(Debug, PartialEq)]
+pub enum SearchIndexError {
+    /// <p>The index is not ready.</p>
+    IndexNotReady(String),
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The query is invalid.</p>
+    InvalidQuery(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl SearchIndexError {
+    pub fn from_body(body: &str) -> SearchIndexError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "IndexNotReadyException" => {
+                        SearchIndexError::IndexNotReady(String::from(error_message))
+                    }
+                    "InternalFailureException" => {
+                        SearchIndexError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidQueryException" => {
+                        SearchIndexError::InvalidQuery(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        SearchIndexError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        SearchIndexError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        SearchIndexError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        SearchIndexError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        SearchIndexError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        SearchIndexError::Validation(error_message.to_string())
+                    }
+                    _ => SearchIndexError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => SearchIndexError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for SearchIndexError {
+    fn from(err: serde_json::error::Error) -> SearchIndexError {
+        SearchIndexError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for SearchIndexError {
+    fn from(err: CredentialsError) -> SearchIndexError {
+        SearchIndexError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for SearchIndexError {
+    fn from(err: HttpDispatchError) -> SearchIndexError {
+        SearchIndexError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SearchIndexError {
+    fn from(err: io::Error) -> SearchIndexError {
+        SearchIndexError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for SearchIndexError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SearchIndexError {
+    fn description(&self) -> &str {
+        match *self {
+            SearchIndexError::IndexNotReady(ref cause) => cause,
+            SearchIndexError::InternalFailure(ref cause) => cause,
+            SearchIndexError::InvalidQuery(ref cause) => cause,
+            SearchIndexError::InvalidRequest(ref cause) => cause,
+            SearchIndexError::ResourceNotFound(ref cause) => cause,
+            SearchIndexError::ServiceUnavailable(ref cause) => cause,
+            SearchIndexError::Throttling(ref cause) => cause,
+            SearchIndexError::Unauthorized(ref cause) => cause,
+            SearchIndexError::Validation(ref cause) => cause,
+            SearchIndexError::Credentials(ref err) => err.description(),
+            SearchIndexError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            SearchIndexError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by SetDefaultAuthorizer
+#[derive(Debug, PartialEq)]
+pub enum SetDefaultAuthorizerError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl SetDefaultAuthorizerError {
+    pub fn from_body(body: &str) -> SetDefaultAuthorizerError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        SetDefaultAuthorizerError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        SetDefaultAuthorizerError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        SetDefaultAuthorizerError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        SetDefaultAuthorizerError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        SetDefaultAuthorizerError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        SetDefaultAuthorizerError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        SetDefaultAuthorizerError::Validation(error_message.to_string())
+                    }
+                    _ => SetDefaultAuthorizerError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => SetDefaultAuthorizerError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for SetDefaultAuthorizerError {
+    fn from(err: serde_json::error::Error) -> SetDefaultAuthorizerError {
+        SetDefaultAuthorizerError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for SetDefaultAuthorizerError {
+    fn from(err: CredentialsError) -> SetDefaultAuthorizerError {
+        SetDefaultAuthorizerError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for SetDefaultAuthorizerError {
+    fn from(err: HttpDispatchError) -> SetDefaultAuthorizerError {
+        SetDefaultAuthorizerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetDefaultAuthorizerError {
+    fn from(err: io::Error) -> SetDefaultAuthorizerError {
+        SetDefaultAuthorizerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for SetDefaultAuthorizerError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SetDefaultAuthorizerError {
+    fn description(&self) -> &str {
+        match *self {
+            SetDefaultAuthorizerError::InternalFailure(ref cause) => cause,
+            SetDefaultAuthorizerError::InvalidRequest(ref cause) => cause,
+            SetDefaultAuthorizerError::ResourceNotFound(ref cause) => cause,
+            SetDefaultAuthorizerError::ServiceUnavailable(ref cause) => cause,
+            SetDefaultAuthorizerError::Throttling(ref cause) => cause,
+            SetDefaultAuthorizerError::Unauthorized(ref cause) => cause,
+            SetDefaultAuthorizerError::Validation(ref cause) => cause,
+            SetDefaultAuthorizerError::Credentials(ref err) => err.description(),
+            SetDefaultAuthorizerError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            SetDefaultAuthorizerError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -7609,6 +15650,634 @@ impl Error for SetLoggingOptionsError {
         }
     }
 }
+/// Errors returned by SetV2LoggingLevel
+#[derive(Debug, PartialEq)]
+pub enum SetV2LoggingLevelError {
+    /// <p>An unexpected error has occurred.</p>
+    Internal(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The resource is not configured.</p>
+    NotConfigured(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl SetV2LoggingLevelError {
+    pub fn from_body(body: &str) -> SetV2LoggingLevelError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalException" => {
+                        SetV2LoggingLevelError::Internal(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        SetV2LoggingLevelError::InvalidRequest(String::from(error_message))
+                    }
+                    "NotConfiguredException" => {
+                        SetV2LoggingLevelError::NotConfigured(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        SetV2LoggingLevelError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        SetV2LoggingLevelError::Validation(error_message.to_string())
+                    }
+                    _ => SetV2LoggingLevelError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => SetV2LoggingLevelError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for SetV2LoggingLevelError {
+    fn from(err: serde_json::error::Error) -> SetV2LoggingLevelError {
+        SetV2LoggingLevelError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for SetV2LoggingLevelError {
+    fn from(err: CredentialsError) -> SetV2LoggingLevelError {
+        SetV2LoggingLevelError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for SetV2LoggingLevelError {
+    fn from(err: HttpDispatchError) -> SetV2LoggingLevelError {
+        SetV2LoggingLevelError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetV2LoggingLevelError {
+    fn from(err: io::Error) -> SetV2LoggingLevelError {
+        SetV2LoggingLevelError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for SetV2LoggingLevelError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SetV2LoggingLevelError {
+    fn description(&self) -> &str {
+        match *self {
+            SetV2LoggingLevelError::Internal(ref cause) => cause,
+            SetV2LoggingLevelError::InvalidRequest(ref cause) => cause,
+            SetV2LoggingLevelError::NotConfigured(ref cause) => cause,
+            SetV2LoggingLevelError::ServiceUnavailable(ref cause) => cause,
+            SetV2LoggingLevelError::Validation(ref cause) => cause,
+            SetV2LoggingLevelError::Credentials(ref err) => err.description(),
+            SetV2LoggingLevelError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            SetV2LoggingLevelError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by SetV2LoggingOptions
+#[derive(Debug, PartialEq)]
+pub enum SetV2LoggingOptionsError {
+    /// <p>An unexpected error has occurred.</p>
+    Internal(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl SetV2LoggingOptionsError {
+    pub fn from_body(body: &str) -> SetV2LoggingOptionsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalException" => {
+                        SetV2LoggingOptionsError::Internal(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        SetV2LoggingOptionsError::InvalidRequest(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        SetV2LoggingOptionsError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        SetV2LoggingOptionsError::Validation(error_message.to_string())
+                    }
+                    _ => SetV2LoggingOptionsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => SetV2LoggingOptionsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for SetV2LoggingOptionsError {
+    fn from(err: serde_json::error::Error) -> SetV2LoggingOptionsError {
+        SetV2LoggingOptionsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for SetV2LoggingOptionsError {
+    fn from(err: CredentialsError) -> SetV2LoggingOptionsError {
+        SetV2LoggingOptionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for SetV2LoggingOptionsError {
+    fn from(err: HttpDispatchError) -> SetV2LoggingOptionsError {
+        SetV2LoggingOptionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetV2LoggingOptionsError {
+    fn from(err: io::Error) -> SetV2LoggingOptionsError {
+        SetV2LoggingOptionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for SetV2LoggingOptionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SetV2LoggingOptionsError {
+    fn description(&self) -> &str {
+        match *self {
+            SetV2LoggingOptionsError::Internal(ref cause) => cause,
+            SetV2LoggingOptionsError::InvalidRequest(ref cause) => cause,
+            SetV2LoggingOptionsError::ServiceUnavailable(ref cause) => cause,
+            SetV2LoggingOptionsError::Validation(ref cause) => cause,
+            SetV2LoggingOptionsError::Credentials(ref err) => err.description(),
+            SetV2LoggingOptionsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            SetV2LoggingOptionsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by StartThingRegistrationTask
+#[derive(Debug, PartialEq)]
+pub enum StartThingRegistrationTaskError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl StartThingRegistrationTaskError {
+    pub fn from_body(body: &str) -> StartThingRegistrationTaskError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        StartThingRegistrationTaskError::InternalFailure(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidRequestException" => {
+                        StartThingRegistrationTaskError::InvalidRequest(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        StartThingRegistrationTaskError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        StartThingRegistrationTaskError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        StartThingRegistrationTaskError::Validation(error_message.to_string())
+                    }
+                    _ => StartThingRegistrationTaskError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => StartThingRegistrationTaskError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for StartThingRegistrationTaskError {
+    fn from(err: serde_json::error::Error) -> StartThingRegistrationTaskError {
+        StartThingRegistrationTaskError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for StartThingRegistrationTaskError {
+    fn from(err: CredentialsError) -> StartThingRegistrationTaskError {
+        StartThingRegistrationTaskError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for StartThingRegistrationTaskError {
+    fn from(err: HttpDispatchError) -> StartThingRegistrationTaskError {
+        StartThingRegistrationTaskError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StartThingRegistrationTaskError {
+    fn from(err: io::Error) -> StartThingRegistrationTaskError {
+        StartThingRegistrationTaskError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for StartThingRegistrationTaskError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartThingRegistrationTaskError {
+    fn description(&self) -> &str {
+        match *self {
+            StartThingRegistrationTaskError::InternalFailure(ref cause) => cause,
+            StartThingRegistrationTaskError::InvalidRequest(ref cause) => cause,
+            StartThingRegistrationTaskError::Throttling(ref cause) => cause,
+            StartThingRegistrationTaskError::Unauthorized(ref cause) => cause,
+            StartThingRegistrationTaskError::Validation(ref cause) => cause,
+            StartThingRegistrationTaskError::Credentials(ref err) => err.description(),
+            StartThingRegistrationTaskError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            StartThingRegistrationTaskError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by StopThingRegistrationTask
+#[derive(Debug, PartialEq)]
+pub enum StopThingRegistrationTaskError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl StopThingRegistrationTaskError {
+    pub fn from_body(body: &str) -> StopThingRegistrationTaskError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        StopThingRegistrationTaskError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        StopThingRegistrationTaskError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        StopThingRegistrationTaskError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ThrottlingException" => {
+                        StopThingRegistrationTaskError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        StopThingRegistrationTaskError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        StopThingRegistrationTaskError::Validation(error_message.to_string())
+                    }
+                    _ => StopThingRegistrationTaskError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => StopThingRegistrationTaskError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for StopThingRegistrationTaskError {
+    fn from(err: serde_json::error::Error) -> StopThingRegistrationTaskError {
+        StopThingRegistrationTaskError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for StopThingRegistrationTaskError {
+    fn from(err: CredentialsError) -> StopThingRegistrationTaskError {
+        StopThingRegistrationTaskError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for StopThingRegistrationTaskError {
+    fn from(err: HttpDispatchError) -> StopThingRegistrationTaskError {
+        StopThingRegistrationTaskError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StopThingRegistrationTaskError {
+    fn from(err: io::Error) -> StopThingRegistrationTaskError {
+        StopThingRegistrationTaskError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for StopThingRegistrationTaskError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StopThingRegistrationTaskError {
+    fn description(&self) -> &str {
+        match *self {
+            StopThingRegistrationTaskError::InternalFailure(ref cause) => cause,
+            StopThingRegistrationTaskError::InvalidRequest(ref cause) => cause,
+            StopThingRegistrationTaskError::ResourceNotFound(ref cause) => cause,
+            StopThingRegistrationTaskError::Throttling(ref cause) => cause,
+            StopThingRegistrationTaskError::Unauthorized(ref cause) => cause,
+            StopThingRegistrationTaskError::Validation(ref cause) => cause,
+            StopThingRegistrationTaskError::Credentials(ref err) => err.description(),
+            StopThingRegistrationTaskError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            StopThingRegistrationTaskError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by TestAuthorization
+#[derive(Debug, PartialEq)]
+pub enum TestAuthorizationError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The number of attached entities exceeds the limit.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl TestAuthorizationError {
+    pub fn from_body(body: &str) -> TestAuthorizationError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        TestAuthorizationError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        TestAuthorizationError::InvalidRequest(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        TestAuthorizationError::LimitExceeded(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        TestAuthorizationError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        TestAuthorizationError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        TestAuthorizationError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        TestAuthorizationError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        TestAuthorizationError::Validation(error_message.to_string())
+                    }
+                    _ => TestAuthorizationError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => TestAuthorizationError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for TestAuthorizationError {
+    fn from(err: serde_json::error::Error) -> TestAuthorizationError {
+        TestAuthorizationError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for TestAuthorizationError {
+    fn from(err: CredentialsError) -> TestAuthorizationError {
+        TestAuthorizationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for TestAuthorizationError {
+    fn from(err: HttpDispatchError) -> TestAuthorizationError {
+        TestAuthorizationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for TestAuthorizationError {
+    fn from(err: io::Error) -> TestAuthorizationError {
+        TestAuthorizationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for TestAuthorizationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TestAuthorizationError {
+    fn description(&self) -> &str {
+        match *self {
+            TestAuthorizationError::InternalFailure(ref cause) => cause,
+            TestAuthorizationError::InvalidRequest(ref cause) => cause,
+            TestAuthorizationError::LimitExceeded(ref cause) => cause,
+            TestAuthorizationError::ResourceNotFound(ref cause) => cause,
+            TestAuthorizationError::ServiceUnavailable(ref cause) => cause,
+            TestAuthorizationError::Throttling(ref cause) => cause,
+            TestAuthorizationError::Unauthorized(ref cause) => cause,
+            TestAuthorizationError::Validation(ref cause) => cause,
+            TestAuthorizationError::Credentials(ref err) => err.description(),
+            TestAuthorizationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            TestAuthorizationError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by TestInvokeAuthorizer
+#[derive(Debug, PartialEq)]
+pub enum TestInvokeAuthorizerError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The response is invalid.</p>
+    InvalidResponse(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl TestInvokeAuthorizerError {
+    pub fn from_body(body: &str) -> TestInvokeAuthorizerError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        TestInvokeAuthorizerError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        TestInvokeAuthorizerError::InvalidRequest(String::from(error_message))
+                    }
+                    "InvalidResponseException" => {
+                        TestInvokeAuthorizerError::InvalidResponse(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        TestInvokeAuthorizerError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        TestInvokeAuthorizerError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        TestInvokeAuthorizerError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        TestInvokeAuthorizerError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        TestInvokeAuthorizerError::Validation(error_message.to_string())
+                    }
+                    _ => TestInvokeAuthorizerError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => TestInvokeAuthorizerError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for TestInvokeAuthorizerError {
+    fn from(err: serde_json::error::Error) -> TestInvokeAuthorizerError {
+        TestInvokeAuthorizerError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for TestInvokeAuthorizerError {
+    fn from(err: CredentialsError) -> TestInvokeAuthorizerError {
+        TestInvokeAuthorizerError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for TestInvokeAuthorizerError {
+    fn from(err: HttpDispatchError) -> TestInvokeAuthorizerError {
+        TestInvokeAuthorizerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for TestInvokeAuthorizerError {
+    fn from(err: io::Error) -> TestInvokeAuthorizerError {
+        TestInvokeAuthorizerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for TestInvokeAuthorizerError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TestInvokeAuthorizerError {
+    fn description(&self) -> &str {
+        match *self {
+            TestInvokeAuthorizerError::InternalFailure(ref cause) => cause,
+            TestInvokeAuthorizerError::InvalidRequest(ref cause) => cause,
+            TestInvokeAuthorizerError::InvalidResponse(ref cause) => cause,
+            TestInvokeAuthorizerError::ResourceNotFound(ref cause) => cause,
+            TestInvokeAuthorizerError::ServiceUnavailable(ref cause) => cause,
+            TestInvokeAuthorizerError::Throttling(ref cause) => cause,
+            TestInvokeAuthorizerError::Unauthorized(ref cause) => cause,
+            TestInvokeAuthorizerError::Validation(ref cause) => cause,
+            TestInvokeAuthorizerError::Credentials(ref err) => err.description(),
+            TestInvokeAuthorizerError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            TestInvokeAuthorizerError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by TransferCertificate
 #[derive(Debug, PartialEq)]
 pub enum TransferCertificateError {
@@ -7728,6 +16397,120 @@ impl Error for TransferCertificateError {
                 dispatch_error.description()
             }
             TransferCertificateError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdateAuthorizer
+#[derive(Debug, PartialEq)]
+pub enum UpdateAuthorizerError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The number of attached entities exceeds the limit.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateAuthorizerError {
+    pub fn from_body(body: &str) -> UpdateAuthorizerError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        UpdateAuthorizerError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        UpdateAuthorizerError::InvalidRequest(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        UpdateAuthorizerError::LimitExceeded(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        UpdateAuthorizerError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        UpdateAuthorizerError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        UpdateAuthorizerError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        UpdateAuthorizerError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateAuthorizerError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateAuthorizerError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateAuthorizerError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateAuthorizerError {
+    fn from(err: serde_json::error::Error) -> UpdateAuthorizerError {
+        UpdateAuthorizerError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateAuthorizerError {
+    fn from(err: CredentialsError) -> UpdateAuthorizerError {
+        UpdateAuthorizerError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateAuthorizerError {
+    fn from(err: HttpDispatchError) -> UpdateAuthorizerError {
+        UpdateAuthorizerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateAuthorizerError {
+    fn from(err: io::Error) -> UpdateAuthorizerError {
+        UpdateAuthorizerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateAuthorizerError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateAuthorizerError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateAuthorizerError::InternalFailure(ref cause) => cause,
+            UpdateAuthorizerError::InvalidRequest(ref cause) => cause,
+            UpdateAuthorizerError::LimitExceeded(ref cause) => cause,
+            UpdateAuthorizerError::ResourceNotFound(ref cause) => cause,
+            UpdateAuthorizerError::ServiceUnavailable(ref cause) => cause,
+            UpdateAuthorizerError::Throttling(ref cause) => cause,
+            UpdateAuthorizerError::Unauthorized(ref cause) => cause,
+            UpdateAuthorizerError::Validation(ref cause) => cause,
+            UpdateAuthorizerError::Credentials(ref err) => err.description(),
+            UpdateAuthorizerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UpdateAuthorizerError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -7957,6 +16740,422 @@ impl Error for UpdateCertificateError {
         }
     }
 }
+/// Errors returned by UpdateEventConfigurations
+#[derive(Debug, PartialEq)]
+pub enum UpdateEventConfigurationsError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateEventConfigurationsError {
+    pub fn from_body(body: &str) -> UpdateEventConfigurationsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        UpdateEventConfigurationsError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        UpdateEventConfigurationsError::InvalidRequest(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        UpdateEventConfigurationsError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateEventConfigurationsError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateEventConfigurationsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateEventConfigurationsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateEventConfigurationsError {
+    fn from(err: serde_json::error::Error) -> UpdateEventConfigurationsError {
+        UpdateEventConfigurationsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateEventConfigurationsError {
+    fn from(err: CredentialsError) -> UpdateEventConfigurationsError {
+        UpdateEventConfigurationsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateEventConfigurationsError {
+    fn from(err: HttpDispatchError) -> UpdateEventConfigurationsError {
+        UpdateEventConfigurationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateEventConfigurationsError {
+    fn from(err: io::Error) -> UpdateEventConfigurationsError {
+        UpdateEventConfigurationsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateEventConfigurationsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateEventConfigurationsError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateEventConfigurationsError::InternalFailure(ref cause) => cause,
+            UpdateEventConfigurationsError::InvalidRequest(ref cause) => cause,
+            UpdateEventConfigurationsError::Throttling(ref cause) => cause,
+            UpdateEventConfigurationsError::Validation(ref cause) => cause,
+            UpdateEventConfigurationsError::Credentials(ref err) => err.description(),
+            UpdateEventConfigurationsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateEventConfigurationsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdateIndexingConfiguration
+#[derive(Debug, PartialEq)]
+pub enum UpdateIndexingConfigurationError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateIndexingConfigurationError {
+    pub fn from_body(body: &str) -> UpdateIndexingConfigurationError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        UpdateIndexingConfigurationError::InternalFailure(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidRequestException" => UpdateIndexingConfigurationError::InvalidRequest(
+                        String::from(error_message),
+                    ),
+                    "ServiceUnavailableException" => {
+                        UpdateIndexingConfigurationError::ServiceUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ThrottlingException" => {
+                        UpdateIndexingConfigurationError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        UpdateIndexingConfigurationError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateIndexingConfigurationError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateIndexingConfigurationError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateIndexingConfigurationError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateIndexingConfigurationError {
+    fn from(err: serde_json::error::Error) -> UpdateIndexingConfigurationError {
+        UpdateIndexingConfigurationError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateIndexingConfigurationError {
+    fn from(err: CredentialsError) -> UpdateIndexingConfigurationError {
+        UpdateIndexingConfigurationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateIndexingConfigurationError {
+    fn from(err: HttpDispatchError) -> UpdateIndexingConfigurationError {
+        UpdateIndexingConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateIndexingConfigurationError {
+    fn from(err: io::Error) -> UpdateIndexingConfigurationError {
+        UpdateIndexingConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateIndexingConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateIndexingConfigurationError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateIndexingConfigurationError::InternalFailure(ref cause) => cause,
+            UpdateIndexingConfigurationError::InvalidRequest(ref cause) => cause,
+            UpdateIndexingConfigurationError::ServiceUnavailable(ref cause) => cause,
+            UpdateIndexingConfigurationError::Throttling(ref cause) => cause,
+            UpdateIndexingConfigurationError::Unauthorized(ref cause) => cause,
+            UpdateIndexingConfigurationError::Validation(ref cause) => cause,
+            UpdateIndexingConfigurationError::Credentials(ref err) => err.description(),
+            UpdateIndexingConfigurationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateIndexingConfigurationError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdateRoleAlias
+#[derive(Debug, PartialEq)]
+pub enum UpdateRoleAliasError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateRoleAliasError {
+    pub fn from_body(body: &str) -> UpdateRoleAliasError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        UpdateRoleAliasError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        UpdateRoleAliasError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        UpdateRoleAliasError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        UpdateRoleAliasError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        UpdateRoleAliasError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        UpdateRoleAliasError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateRoleAliasError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateRoleAliasError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateRoleAliasError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateRoleAliasError {
+    fn from(err: serde_json::error::Error) -> UpdateRoleAliasError {
+        UpdateRoleAliasError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateRoleAliasError {
+    fn from(err: CredentialsError) -> UpdateRoleAliasError {
+        UpdateRoleAliasError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateRoleAliasError {
+    fn from(err: HttpDispatchError) -> UpdateRoleAliasError {
+        UpdateRoleAliasError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateRoleAliasError {
+    fn from(err: io::Error) -> UpdateRoleAliasError {
+        UpdateRoleAliasError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateRoleAliasError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateRoleAliasError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateRoleAliasError::InternalFailure(ref cause) => cause,
+            UpdateRoleAliasError::InvalidRequest(ref cause) => cause,
+            UpdateRoleAliasError::ResourceNotFound(ref cause) => cause,
+            UpdateRoleAliasError::ServiceUnavailable(ref cause) => cause,
+            UpdateRoleAliasError::Throttling(ref cause) => cause,
+            UpdateRoleAliasError::Unauthorized(ref cause) => cause,
+            UpdateRoleAliasError::Validation(ref cause) => cause,
+            UpdateRoleAliasError::Credentials(ref err) => err.description(),
+            UpdateRoleAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UpdateRoleAliasError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdateStream
+#[derive(Debug, PartialEq)]
+pub enum UpdateStreamError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateStreamError {
+    pub fn from_body(body: &str) -> UpdateStreamError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        UpdateStreamError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        UpdateStreamError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        UpdateStreamError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        UpdateStreamError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        UpdateStreamError::Throttling(String::from(error_message))
+                    }
+                    "UnauthorizedException" => {
+                        UpdateStreamError::Unauthorized(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateStreamError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateStreamError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateStreamError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateStreamError {
+    fn from(err: serde_json::error::Error) -> UpdateStreamError {
+        UpdateStreamError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateStreamError {
+    fn from(err: CredentialsError) -> UpdateStreamError {
+        UpdateStreamError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateStreamError {
+    fn from(err: HttpDispatchError) -> UpdateStreamError {
+        UpdateStreamError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateStreamError {
+    fn from(err: io::Error) -> UpdateStreamError {
+        UpdateStreamError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateStreamError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateStreamError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateStreamError::InternalFailure(ref cause) => cause,
+            UpdateStreamError::InvalidRequest(ref cause) => cause,
+            UpdateStreamError::ResourceNotFound(ref cause) => cause,
+            UpdateStreamError::ServiceUnavailable(ref cause) => cause,
+            UpdateStreamError::Throttling(ref cause) => cause,
+            UpdateStreamError::Unauthorized(ref cause) => cause,
+            UpdateStreamError::Validation(ref cause) => cause,
+            UpdateStreamError::Credentials(ref err) => err.description(),
+            UpdateStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UpdateStreamError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateThing
 #[derive(Debug, PartialEq)]
 pub enum UpdateThingError {
@@ -8071,6 +17270,208 @@ impl Error for UpdateThingError {
         }
     }
 }
+/// Errors returned by UpdateThingGroup
+#[derive(Debug, PartialEq)]
+pub enum UpdateThingGroupError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>An exception thrown when the version of a thing passed to a command is different than the version specified with the --version parameter.</p>
+    VersionConflict(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateThingGroupError {
+    pub fn from_body(body: &str) -> UpdateThingGroupError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        UpdateThingGroupError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        UpdateThingGroupError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        UpdateThingGroupError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ThrottlingException" => {
+                        UpdateThingGroupError::Throttling(String::from(error_message))
+                    }
+                    "VersionConflictException" => {
+                        UpdateThingGroupError::VersionConflict(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateThingGroupError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateThingGroupError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateThingGroupError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateThingGroupError {
+    fn from(err: serde_json::error::Error) -> UpdateThingGroupError {
+        UpdateThingGroupError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateThingGroupError {
+    fn from(err: CredentialsError) -> UpdateThingGroupError {
+        UpdateThingGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateThingGroupError {
+    fn from(err: HttpDispatchError) -> UpdateThingGroupError {
+        UpdateThingGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateThingGroupError {
+    fn from(err: io::Error) -> UpdateThingGroupError {
+        UpdateThingGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateThingGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateThingGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateThingGroupError::InternalFailure(ref cause) => cause,
+            UpdateThingGroupError::InvalidRequest(ref cause) => cause,
+            UpdateThingGroupError::ResourceNotFound(ref cause) => cause,
+            UpdateThingGroupError::Throttling(ref cause) => cause,
+            UpdateThingGroupError::VersionConflict(ref cause) => cause,
+            UpdateThingGroupError::Validation(ref cause) => cause,
+            UpdateThingGroupError::Credentials(ref err) => err.description(),
+            UpdateThingGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UpdateThingGroupError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdateThingGroupsForThing
+#[derive(Debug, PartialEq)]
+pub enum UpdateThingGroupsForThingError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateThingGroupsForThingError {
+    pub fn from_body(body: &str) -> UpdateThingGroupsForThingError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalFailureException" => {
+                        UpdateThingGroupsForThingError::InternalFailure(String::from(error_message))
+                    }
+                    "InvalidRequestException" => {
+                        UpdateThingGroupsForThingError::InvalidRequest(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        UpdateThingGroupsForThingError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ThrottlingException" => {
+                        UpdateThingGroupsForThingError::Throttling(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateThingGroupsForThingError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateThingGroupsForThingError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateThingGroupsForThingError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateThingGroupsForThingError {
+    fn from(err: serde_json::error::Error) -> UpdateThingGroupsForThingError {
+        UpdateThingGroupsForThingError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateThingGroupsForThingError {
+    fn from(err: CredentialsError) -> UpdateThingGroupsForThingError {
+        UpdateThingGroupsForThingError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateThingGroupsForThingError {
+    fn from(err: HttpDispatchError) -> UpdateThingGroupsForThingError {
+        UpdateThingGroupsForThingError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateThingGroupsForThingError {
+    fn from(err: io::Error) -> UpdateThingGroupsForThingError {
+        UpdateThingGroupsForThingError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateThingGroupsForThingError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateThingGroupsForThingError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateThingGroupsForThingError::InternalFailure(ref cause) => cause,
+            UpdateThingGroupsForThingError::InvalidRequest(ref cause) => cause,
+            UpdateThingGroupsForThingError::ResourceNotFound(ref cause) => cause,
+            UpdateThingGroupsForThingError::Throttling(ref cause) => cause,
+            UpdateThingGroupsForThingError::Validation(ref cause) => cause,
+            UpdateThingGroupsForThingError::Credentials(ref err) => err.description(),
+            UpdateThingGroupsForThingError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateThingGroupsForThingError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the AWS IoT API. AWS IoT clients implement this trait.
 pub trait Iot {
     /// <p>Accepts a pending certificate transfer. The default state of the certificate is INACTIVE.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p>
@@ -8079,7 +17480,22 @@ pub trait Iot {
         input: &AcceptCertificateTransferRequest,
     ) -> Result<(), AcceptCertificateTransferError>;
 
-    /// <p>Attaches the specified policy to the specified principal (certificate or other credential).</p>
+    /// <p>Adds a thing to a thing group.</p>
+    fn add_thing_to_thing_group(
+        &self,
+        input: &AddThingToThingGroupRequest,
+    ) -> Result<AddThingToThingGroupResponse, AddThingToThingGroupError>;
+
+    /// <p><p>Associates a group with a continuous job. The following criteria must be met: </p> <ul> <li> <p>The job must have been created with the <code>targetSelection</code> field set to &quot;CONTINUOUS&quot;.</p> </li> <li> <p>The job status must currently be &quot;IN_PROGRESS&quot;.</p> </li> <li> <p>The total number of targets associated with a job must not exceed 100.</p> </li> </ul></p>
+    fn associate_targets_with_job(
+        &self,
+        input: &AssociateTargetsWithJobRequest,
+    ) -> Result<AssociateTargetsWithJobResponse, AssociateTargetsWithJobError>;
+
+    /// <p>Attaches a policy to the specified target.</p>
+    fn attach_policy(&self, input: &AttachPolicyRequest) -> Result<(), AttachPolicyError>;
+
+    /// <p>Attaches the specified policy to the specified principal (certificate or other credential).</p> <p> <b>Note:</b> This API is deprecated. Please use <a>AttachPolicy</a> instead.</p>
     fn attach_principal_policy(
         &self,
         input: &AttachPrincipalPolicyRequest,
@@ -8097,17 +17513,40 @@ pub trait Iot {
         input: &CancelCertificateTransferRequest,
     ) -> Result<(), CancelCertificateTransferError>;
 
+    /// <p>Cancels a job.</p>
+    fn cancel_job(&self, input: &CancelJobRequest) -> Result<CancelJobResponse, CancelJobError>;
+
+    /// <p>Clears the default authorizer.</p>
+    fn clear_default_authorizer(
+        &self,
+    ) -> Result<ClearDefaultAuthorizerResponse, ClearDefaultAuthorizerError>;
+
+    /// <p>Creates an authorizer.</p>
+    fn create_authorizer(
+        &self,
+        input: &CreateAuthorizerRequest,
+    ) -> Result<CreateAuthorizerResponse, CreateAuthorizerError>;
+
     /// <p>Creates an X.509 certificate using the specified certificate signing request.</p> <p> <b>Note:</b> The CSR must include a public key that is either an RSA key with a length of at least 2048 bits or an ECC key from NIST P-256 or NIST P-384 curves. </p> <p> <b>Note:</b> Reusing the same certificate signing request (CSR) results in a distinct certificate.</p> <p>You can create multiple certificates in a batch by creating a directory, copying multiple .csr files into that directory, and then specifying that directory on the command line. The following commands show how to create a batch of certificates given a batch of CSRs.</p> <p>Assuming a set of CSRs are located inside of the directory my-csr-directory:</p> <p>On Linux and OS X, the command is:</p> <p>$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>This command lists all of the CSRs in my-csr-directory and pipes each CSR file name to the aws iot create-certificate-from-csr AWS CLI command to create a certificate for the corresponding CSR.</p> <p>The aws iot create-certificate-from-csr part of the command can also be run in parallel to speed up the certificate creation process:</p> <p>$ ls my-csr-directory/ | xargs -P 10 -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>On Windows PowerShell, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/$_}</p> <p>On a Windows command prompt, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; forfiles /p my-csr-directory /c "cmd /c aws iot create-certificate-from-csr --certificate-signing-request file://@path"</p>
     fn create_certificate_from_csr(
         &self,
         input: &CreateCertificateFromCsrRequest,
     ) -> Result<CreateCertificateFromCsrResponse, CreateCertificateFromCsrError>;
 
+    /// <p>Creates a job.</p>
+    fn create_job(&self, input: &CreateJobRequest) -> Result<CreateJobResponse, CreateJobError>;
+
     /// <p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key.</p> <p> <b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>
     fn create_keys_and_certificate(
         &self,
         input: &CreateKeysAndCertificateRequest,
     ) -> Result<CreateKeysAndCertificateResponse, CreateKeysAndCertificateError>;
+
+    /// <p>Creates an AWS IoT OTAUpdate on a target group of things or groups.</p>
+    fn create_ota_update(
+        &self,
+        input: &CreateOTAUpdateRequest,
+    ) -> Result<CreateOTAUpdateResponse, CreateOTAUpdateError>;
 
     /// <p>Creates an AWS IoT policy.</p> <p>The created policy is the default version for the policy. This operation creates a policy version with a version identifier of <b>1</b> and sets <b>1</b> as the policy's default version.</p>
     fn create_policy(
@@ -8121,11 +17560,29 @@ pub trait Iot {
         input: &CreatePolicyVersionRequest,
     ) -> Result<CreatePolicyVersionResponse, CreatePolicyVersionError>;
 
+    /// <p>Creates a role alias.</p>
+    fn create_role_alias(
+        &self,
+        input: &CreateRoleAliasRequest,
+    ) -> Result<CreateRoleAliasResponse, CreateRoleAliasError>;
+
+    /// <p>Creates a stream for delivering one or more large files in chunks over MQTT. A stream transports data bytes in chunks or blocks packaged as MQTT messages from a source like S3. You can have one or more files associated with a stream. The total size of a file associated with the stream cannot exceed more than 2 MB. The stream will be created with version 0. If a stream is created with the same streamID as a stream that existed and was deleted within last 90 days, we will resurrect that old stream by incrementing the version by 1.</p>
+    fn create_stream(
+        &self,
+        input: &CreateStreamRequest,
+    ) -> Result<CreateStreamResponse, CreateStreamError>;
+
     /// <p>Creates a thing record in the thing registry.</p>
     fn create_thing(
         &self,
         input: &CreateThingRequest,
     ) -> Result<CreateThingResponse, CreateThingError>;
+
+    /// <p>Create a thing group.</p>
+    fn create_thing_group(
+        &self,
+        input: &CreateThingGroupRequest,
+    ) -> Result<CreateThingGroupResponse, CreateThingGroupError>;
 
     /// <p>Creates a new thing type.</p>
     fn create_thing_type(
@@ -8136,6 +17593,12 @@ pub trait Iot {
     /// <p>Creates a rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
     fn create_topic_rule(&self, input: &CreateTopicRuleRequest)
         -> Result<(), CreateTopicRuleError>;
+
+    /// <p>Deletes an authorizer.</p>
+    fn delete_authorizer(
+        &self,
+        input: &DeleteAuthorizerRequest,
+    ) -> Result<DeleteAuthorizerResponse, DeleteAuthorizerError>;
 
     /// <p>Deletes a registered CA certificate.</p>
     fn delete_ca_certificate(
@@ -8148,6 +17611,12 @@ pub trait Iot {
         &self,
         input: &DeleteCertificateRequest,
     ) -> Result<(), DeleteCertificateError>;
+
+    /// <p>Delete an OTA update.</p>
+    fn delete_ota_update(
+        &self,
+        input: &DeleteOTAUpdateRequest,
+    ) -> Result<DeleteOTAUpdateResponse, DeleteOTAUpdateError>;
 
     /// <p>Deletes the specified policy.</p> <p>A policy cannot be deleted if it has non-default versions or it is attached to any certificate.</p> <p>To delete a policy, use the DeletePolicyVersion API to delete all non-default versions of the policy; use the DetachPrincipalPolicy API to detach the policy from any certificate; and then use the DeletePolicy API to delete the policy.</p> <p>When a policy is deleted using DeletePolicy, its default version is deleted with it.</p>
     fn delete_policy(&self, input: &DeletePolicyRequest) -> Result<(), DeletePolicyError>;
@@ -8163,11 +17632,29 @@ pub trait Iot {
         &self,
     ) -> Result<DeleteRegistrationCodeResponse, DeleteRegistrationCodeError>;
 
+    /// <p>Deletes a role alias</p>
+    fn delete_role_alias(
+        &self,
+        input: &DeleteRoleAliasRequest,
+    ) -> Result<DeleteRoleAliasResponse, DeleteRoleAliasError>;
+
+    /// <p>Deletes a stream.</p>
+    fn delete_stream(
+        &self,
+        input: &DeleteStreamRequest,
+    ) -> Result<DeleteStreamResponse, DeleteStreamError>;
+
     /// <p>Deletes the specified thing.</p>
     fn delete_thing(
         &self,
         input: &DeleteThingRequest,
     ) -> Result<DeleteThingResponse, DeleteThingError>;
+
+    /// <p>Deletes a thing group.</p>
+    fn delete_thing_group(
+        &self,
+        input: &DeleteThingGroupRequest,
+    ) -> Result<DeleteThingGroupResponse, DeleteThingGroupError>;
 
     /// <p>Deletes the specified thing type . You cannot delete a thing type if it has things associated with it. To delete a thing type, first mark it as deprecated by calling <a>DeprecateThingType</a>, then remove any associated things by calling <a>UpdateThing</a> to change the thing type on any associated thing, and finally use <a>DeleteThingType</a> to delete the thing type.</p>
     fn delete_thing_type(
@@ -8175,15 +17662,27 @@ pub trait Iot {
         input: &DeleteThingTypeRequest,
     ) -> Result<DeleteThingTypeResponse, DeleteThingTypeError>;
 
-    /// <p>Deletes the specified rule.</p>
+    /// <p>Deletes the rule.</p>
     fn delete_topic_rule(&self, input: &DeleteTopicRuleRequest)
         -> Result<(), DeleteTopicRuleError>;
+
+    /// <p>Deletes a logging level.</p>
+    fn delete_v2_logging_level(
+        &self,
+        input: &DeleteV2LoggingLevelRequest,
+    ) -> Result<(), DeleteV2LoggingLevelError>;
 
     /// <p>Deprecates a thing type. You can not associate new things with deprecated thing type.</p>
     fn deprecate_thing_type(
         &self,
         input: &DeprecateThingTypeRequest,
     ) -> Result<DeprecateThingTypeResponse, DeprecateThingTypeError>;
+
+    /// <p>Describes an authorizer.</p>
+    fn describe_authorizer(
+        &self,
+        input: &DescribeAuthorizerRequest,
+    ) -> Result<DescribeAuthorizerResponse, DescribeAuthorizerError>;
 
     /// <p>Describes a registered CA certificate.</p>
     fn describe_ca_certificate(
@@ -8197,8 +17696,51 @@ pub trait Iot {
         input: &DescribeCertificateRequest,
     ) -> Result<DescribeCertificateResponse, DescribeCertificateError>;
 
+    /// <p>Describes the default authorizer.</p>
+    fn describe_default_authorizer(
+        &self,
+    ) -> Result<DescribeDefaultAuthorizerResponse, DescribeDefaultAuthorizerError>;
+
     /// <p>Returns a unique endpoint specific to the AWS account making the call.</p>
-    fn describe_endpoint(&self) -> Result<DescribeEndpointResponse, DescribeEndpointError>;
+    fn describe_endpoint(
+        &self,
+        input: &DescribeEndpointRequest,
+    ) -> Result<DescribeEndpointResponse, DescribeEndpointError>;
+
+    /// <p>Describes event configurations.</p>
+    fn describe_event_configurations(
+        &self,
+    ) -> Result<DescribeEventConfigurationsResponse, DescribeEventConfigurationsError>;
+
+    /// <p>Describes a search index.</p>
+    fn describe_index(
+        &self,
+        input: &DescribeIndexRequest,
+    ) -> Result<DescribeIndexResponse, DescribeIndexError>;
+
+    /// <p>Describes a job.</p>
+    fn describe_job(
+        &self,
+        input: &DescribeJobRequest,
+    ) -> Result<DescribeJobResponse, DescribeJobError>;
+
+    /// <p>Describes a job execution.</p>
+    fn describe_job_execution(
+        &self,
+        input: &DescribeJobExecutionRequest,
+    ) -> Result<DescribeJobExecutionResponse, DescribeJobExecutionError>;
+
+    /// <p>Describes a role alias.</p>
+    fn describe_role_alias(
+        &self,
+        input: &DescribeRoleAliasRequest,
+    ) -> Result<DescribeRoleAliasResponse, DescribeRoleAliasError>;
+
+    /// <p>Gets information about a stream.</p>
+    fn describe_stream(
+        &self,
+        input: &DescribeStreamRequest,
+    ) -> Result<DescribeStreamResponse, DescribeStreamError>;
 
     /// <p>Gets information about the specified thing.</p>
     fn describe_thing(
@@ -8206,13 +17748,28 @@ pub trait Iot {
         input: &DescribeThingRequest,
     ) -> Result<DescribeThingResponse, DescribeThingError>;
 
+    /// <p>Describe a thing group.</p>
+    fn describe_thing_group(
+        &self,
+        input: &DescribeThingGroupRequest,
+    ) -> Result<DescribeThingGroupResponse, DescribeThingGroupError>;
+
+    /// <p>Describes a bulk thing provisioning task.</p>
+    fn describe_thing_registration_task(
+        &self,
+        input: &DescribeThingRegistrationTaskRequest,
+    ) -> Result<DescribeThingRegistrationTaskResponse, DescribeThingRegistrationTaskError>;
+
     /// <p>Gets information about the specified thing type.</p>
     fn describe_thing_type(
         &self,
         input: &DescribeThingTypeRequest,
     ) -> Result<DescribeThingTypeResponse, DescribeThingTypeError>;
 
-    /// <p>Removes the specified policy from the specified certificate.</p>
+    /// <p>Detaches a policy from the specified target.</p>
+    fn detach_policy(&self, input: &DetachPolicyRequest) -> Result<(), DetachPolicyError>;
+
+    /// <p>Removes the specified policy from the specified certificate.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>DetachPolicy</a> instead.</p>
     fn detach_principal_policy(
         &self,
         input: &DetachPrincipalPolicyRequest,
@@ -8224,18 +17781,41 @@ pub trait Iot {
         input: &DetachThingPrincipalRequest,
     ) -> Result<DetachThingPrincipalResponse, DetachThingPrincipalError>;
 
-    /// <p>Disables the specified rule.</p>
+    /// <p>Disables the rule.</p>
     fn disable_topic_rule(
         &self,
         input: &DisableTopicRuleRequest,
     ) -> Result<(), DisableTopicRuleError>;
 
-    /// <p>Enables the specified rule.</p>
+    /// <p>Enables the rule.</p>
     fn enable_topic_rule(&self, input: &EnableTopicRuleRequest)
         -> Result<(), EnableTopicRuleError>;
 
+    /// <p>Gets effective policies.</p>
+    fn get_effective_policies(
+        &self,
+        input: &GetEffectivePoliciesRequest,
+    ) -> Result<GetEffectivePoliciesResponse, GetEffectivePoliciesError>;
+
+    /// <p>Gets the search configuration.</p>
+    fn get_indexing_configuration(
+        &self,
+    ) -> Result<GetIndexingConfigurationResponse, GetIndexingConfigurationError>;
+
+    /// <p>Gets a job document.</p>
+    fn get_job_document(
+        &self,
+        input: &GetJobDocumentRequest,
+    ) -> Result<GetJobDocumentResponse, GetJobDocumentError>;
+
     /// <p>Gets the logging options.</p>
     fn get_logging_options(&self) -> Result<GetLoggingOptionsResponse, GetLoggingOptionsError>;
+
+    /// <p>Gets an OTA update.</p>
+    fn get_ota_update(
+        &self,
+        input: &GetOTAUpdateRequest,
+    ) -> Result<GetOTAUpdateResponse, GetOTAUpdateError>;
 
     /// <p>Gets information about the specified policy with the policy document of the default version.</p>
     fn get_policy(&self, input: &GetPolicyRequest) -> Result<GetPolicyResponse, GetPolicyError>;
@@ -8251,11 +17831,28 @@ pub trait Iot {
         &self,
     ) -> Result<GetRegistrationCodeResponse, GetRegistrationCodeError>;
 
-    /// <p>Gets information about the specified rule.</p>
+    /// <p>Gets information about the rule.</p>
     fn get_topic_rule(
         &self,
         input: &GetTopicRuleRequest,
     ) -> Result<GetTopicRuleResponse, GetTopicRuleError>;
+
+    /// <p>Gets the fine grained logging options.</p>
+    fn get_v2_logging_options(
+        &self,
+    ) -> Result<GetV2LoggingOptionsResponse, GetV2LoggingOptionsError>;
+
+    /// <p>Lists the policies attached to the specified thing group.</p>
+    fn list_attached_policies(
+        &self,
+        input: &ListAttachedPoliciesRequest,
+    ) -> Result<ListAttachedPoliciesResponse, ListAttachedPoliciesError>;
+
+    /// <p>Lists the authorizers registered in your account.</p>
+    fn list_authorizers(
+        &self,
+        input: &ListAuthorizersRequest,
+    ) -> Result<ListAuthorizersResponse, ListAuthorizersError>;
 
     /// <p>Lists the CA certificates registered for your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
     fn list_ca_certificates(
@@ -8275,7 +17872,34 @@ pub trait Iot {
         input: &ListCertificatesByCARequest,
     ) -> Result<ListCertificatesByCAResponse, ListCertificatesByCAError>;
 
-    /// <p>Lists certificates that are being transfered but not yet accepted.</p>
+    /// <p>Lists the search indices.</p>
+    fn list_indices(
+        &self,
+        input: &ListIndicesRequest,
+    ) -> Result<ListIndicesResponse, ListIndicesError>;
+
+    /// <p>Lists the job executions for a job.</p>
+    fn list_job_executions_for_job(
+        &self,
+        input: &ListJobExecutionsForJobRequest,
+    ) -> Result<ListJobExecutionsForJobResponse, ListJobExecutionsForJobError>;
+
+    /// <p>Lists the job executions for the specified thing.</p>
+    fn list_job_executions_for_thing(
+        &self,
+        input: &ListJobExecutionsForThingRequest,
+    ) -> Result<ListJobExecutionsForThingResponse, ListJobExecutionsForThingError>;
+
+    /// <p>Lists jobs.</p>
+    fn list_jobs(&self, input: &ListJobsRequest) -> Result<ListJobsResponse, ListJobsError>;
+
+    /// <p>Lists OTA updates.</p>
+    fn list_ota_updates(
+        &self,
+        input: &ListOTAUpdatesRequest,
+    ) -> Result<ListOTAUpdatesResponse, ListOTAUpdatesError>;
+
+    /// <p>Lists certificates that are being transferred but not yet accepted.</p>
     fn list_outgoing_certificates(
         &self,
         input: &ListOutgoingCertificatesRequest,
@@ -8287,7 +17911,7 @@ pub trait Iot {
         input: &ListPoliciesRequest,
     ) -> Result<ListPoliciesResponse, ListPoliciesError>;
 
-    /// <p>Lists the principals associated with the specified policy.</p>
+    /// <p>Lists the principals associated with the specified policy.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListTargetsForPolicy</a> instead.</p>
     fn list_policy_principals(
         &self,
         input: &ListPolicyPrincipalsRequest,
@@ -8299,7 +17923,7 @@ pub trait Iot {
         input: &ListPolicyVersionsRequest,
     ) -> Result<ListPolicyVersionsResponse, ListPolicyVersionsError>;
 
-    /// <p>Lists the policies attached to the specified principal. If you use an Cognito identity, the ID must be in <a href="http://docs.aws.amazon.com/cognitoidentity/latest/APIReference/API_GetCredentialsForIdentity.html#API_GetCredentialsForIdentity_RequestSyntax">AmazonCognito Identity format</a>.</p>
+    /// <p>Lists the policies attached to the specified principal. If you use an Cognito identity, the ID must be in <a href="http://docs.aws.amazon.com/cognitoidentity/latest/APIReference/API_GetCredentialsForIdentity.html#API_GetCredentialsForIdentity_RequestSyntax">AmazonCognito Identity format</a>.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListAttachedPolicies</a> instead.</p>
     fn list_principal_policies(
         &self,
         input: &ListPrincipalPoliciesRequest,
@@ -8311,11 +17935,53 @@ pub trait Iot {
         input: &ListPrincipalThingsRequest,
     ) -> Result<ListPrincipalThingsResponse, ListPrincipalThingsError>;
 
+    /// <p>Lists the role aliases registered in your account.</p>
+    fn list_role_aliases(
+        &self,
+        input: &ListRoleAliasesRequest,
+    ) -> Result<ListRoleAliasesResponse, ListRoleAliasesError>;
+
+    /// <p>Lists all of the streams in your AWS account.</p>
+    fn list_streams(
+        &self,
+        input: &ListStreamsRequest,
+    ) -> Result<ListStreamsResponse, ListStreamsError>;
+
+    /// <p>List targets for the specified policy.</p>
+    fn list_targets_for_policy(
+        &self,
+        input: &ListTargetsForPolicyRequest,
+    ) -> Result<ListTargetsForPolicyResponse, ListTargetsForPolicyError>;
+
+    /// <p>List the thing groups in your account.</p>
+    fn list_thing_groups(
+        &self,
+        input: &ListThingGroupsRequest,
+    ) -> Result<ListThingGroupsResponse, ListThingGroupsError>;
+
+    /// <p>List the thing groups to which the specified thing belongs.</p>
+    fn list_thing_groups_for_thing(
+        &self,
+        input: &ListThingGroupsForThingRequest,
+    ) -> Result<ListThingGroupsForThingResponse, ListThingGroupsForThingError>;
+
     /// <p>Lists the principals associated with the specified thing.</p>
     fn list_thing_principals(
         &self,
         input: &ListThingPrincipalsRequest,
     ) -> Result<ListThingPrincipalsResponse, ListThingPrincipalsError>;
+
+    /// <p>Information about the thing registration tasks.</p>
+    fn list_thing_registration_task_reports(
+        &self,
+        input: &ListThingRegistrationTaskReportsRequest,
+    ) -> Result<ListThingRegistrationTaskReportsResponse, ListThingRegistrationTaskReportsError>;
+
+    /// <p>List bulk thing provisioning tasks.</p>
+    fn list_thing_registration_tasks(
+        &self,
+        input: &ListThingRegistrationTasksRequest,
+    ) -> Result<ListThingRegistrationTasksResponse, ListThingRegistrationTasksError>;
 
     /// <p>Lists the existing thing types.</p>
     fn list_thing_types(
@@ -8327,11 +17993,23 @@ pub trait Iot {
     fn list_things(&self, input: &ListThingsRequest)
         -> Result<ListThingsResponse, ListThingsError>;
 
+    /// <p>Lists the things in the specified group.</p>
+    fn list_things_in_thing_group(
+        &self,
+        input: &ListThingsInThingGroupRequest,
+    ) -> Result<ListThingsInThingGroupResponse, ListThingsInThingGroupError>;
+
     /// <p>Lists the rules for the specific topic.</p>
     fn list_topic_rules(
         &self,
         input: &ListTopicRulesRequest,
     ) -> Result<ListTopicRulesResponse, ListTopicRulesError>;
+
+    /// <p>Lists logging levels.</p>
+    fn list_v2_logging_levels(
+        &self,
+        input: &ListV2LoggingLevelsRequest,
+    ) -> Result<ListV2LoggingLevelsResponse, ListV2LoggingLevelsError>;
 
     /// <p>Registers a CA certificate with AWS IoT. This CA certificate can then be used to sign device certificates, which can be then registered with AWS IoT. You can register up to 10 CA certificates per AWS account that have the same subject field. This enables you to have up to 10 certificate authorities sign your device certificates. If you have more than one CA certificate registered, make sure you pass the CA certificate when you register your device certificates with the RegisterCertificate API.</p>
     fn register_ca_certificate(
@@ -8345,17 +18023,41 @@ pub trait Iot {
         input: &RegisterCertificateRequest,
     ) -> Result<RegisterCertificateResponse, RegisterCertificateError>;
 
+    /// <p>Provisions a thing.</p>
+    fn register_thing(
+        &self,
+        input: &RegisterThingRequest,
+    ) -> Result<RegisterThingResponse, RegisterThingError>;
+
     /// <p>Rejects a pending certificate transfer. After AWS IoT rejects a certificate transfer, the certificate status changes from <b>PENDING_TRANSFER</b> to <b>INACTIVE</b>.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p> <p>This operation can only be called by the transfer destination. After it is called, the certificate will be returned to the source's account in the INACTIVE state.</p>
     fn reject_certificate_transfer(
         &self,
         input: &RejectCertificateTransferRequest,
     ) -> Result<(), RejectCertificateTransferError>;
 
-    /// <p>Replaces the specified rule. You must specify all parameters for the new rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
+    /// <p>Remove the specified thing from the specified group.</p>
+    fn remove_thing_from_thing_group(
+        &self,
+        input: &RemoveThingFromThingGroupRequest,
+    ) -> Result<RemoveThingFromThingGroupResponse, RemoveThingFromThingGroupError>;
+
+    /// <p>Replaces the rule. You must specify all parameters for the new rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
     fn replace_topic_rule(
         &self,
         input: &ReplaceTopicRuleRequest,
     ) -> Result<(), ReplaceTopicRuleError>;
+
+    /// <p>The query search index.</p>
+    fn search_index(
+        &self,
+        input: &SearchIndexRequest,
+    ) -> Result<SearchIndexResponse, SearchIndexError>;
+
+    /// <p>Sets the default authorizer. This will be used if a websocket connection is made without specifying an authorizer.</p>
+    fn set_default_authorizer(
+        &self,
+        input: &SetDefaultAuthorizerRequest,
+    ) -> Result<SetDefaultAuthorizerResponse, SetDefaultAuthorizerError>;
 
     /// <p>Sets the specified version of the specified policy as the policy's default (operative) version. This action affects all certificates to which the policy is attached. To list the principals the policy is attached to, use the ListPrincipalPolicy API.</p>
     fn set_default_policy_version(
@@ -8369,11 +18071,53 @@ pub trait Iot {
         input: &SetLoggingOptionsRequest,
     ) -> Result<(), SetLoggingOptionsError>;
 
+    /// <p>Sets the logging level.</p>
+    fn set_v2_logging_level(
+        &self,
+        input: &SetV2LoggingLevelRequest,
+    ) -> Result<(), SetV2LoggingLevelError>;
+
+    /// <p>Sets the logging options for the V2 logging service.</p>
+    fn set_v2_logging_options(
+        &self,
+        input: &SetV2LoggingOptionsRequest,
+    ) -> Result<(), SetV2LoggingOptionsError>;
+
+    /// <p>Creates a bulk thing provisioning task.</p>
+    fn start_thing_registration_task(
+        &self,
+        input: &StartThingRegistrationTaskRequest,
+    ) -> Result<StartThingRegistrationTaskResponse, StartThingRegistrationTaskError>;
+
+    /// <p>Cancels a bulk thing provisioning task.</p>
+    fn stop_thing_registration_task(
+        &self,
+        input: &StopThingRegistrationTaskRequest,
+    ) -> Result<StopThingRegistrationTaskResponse, StopThingRegistrationTaskError>;
+
+    /// <p>Test custom authorization.</p>
+    fn test_authorization(
+        &self,
+        input: &TestAuthorizationRequest,
+    ) -> Result<TestAuthorizationResponse, TestAuthorizationError>;
+
+    /// <p>Invoke the specified custom authorizer for testing purposes.</p>
+    fn test_invoke_authorizer(
+        &self,
+        input: &TestInvokeAuthorizerRequest,
+    ) -> Result<TestInvokeAuthorizerResponse, TestInvokeAuthorizerError>;
+
     /// <p>Transfers the specified certificate to the specified AWS account.</p> <p>You can cancel the transfer until it is acknowledged by the recipient.</p> <p>No notification is sent to the transfer destination's account. It is up to the caller to notify the transfer target.</p> <p>The certificate being transferred must not be in the ACTIVE state. You can use the UpdateCertificate API to deactivate it.</p> <p>The certificate must not have any policies attached to it. You can use the DetachPrincipalPolicy API to detach them.</p>
     fn transfer_certificate(
         &self,
         input: &TransferCertificateRequest,
     ) -> Result<TransferCertificateResponse, TransferCertificateError>;
+
+    /// <p>Updates an authorizer.</p>
+    fn update_authorizer(
+        &self,
+        input: &UpdateAuthorizerRequest,
+    ) -> Result<UpdateAuthorizerResponse, UpdateAuthorizerError>;
 
     /// <p>Updates a registered CA certificate.</p>
     fn update_ca_certificate(
@@ -8387,11 +18131,47 @@ pub trait Iot {
         input: &UpdateCertificateRequest,
     ) -> Result<(), UpdateCertificateError>;
 
+    /// <p>Updates the event configurations.</p>
+    fn update_event_configurations(
+        &self,
+        input: &UpdateEventConfigurationsRequest,
+    ) -> Result<UpdateEventConfigurationsResponse, UpdateEventConfigurationsError>;
+
+    /// <p>Updates the search configuration.</p>
+    fn update_indexing_configuration(
+        &self,
+        input: &UpdateIndexingConfigurationRequest,
+    ) -> Result<UpdateIndexingConfigurationResponse, UpdateIndexingConfigurationError>;
+
+    /// <p>Updates a role alias.</p>
+    fn update_role_alias(
+        &self,
+        input: &UpdateRoleAliasRequest,
+    ) -> Result<UpdateRoleAliasResponse, UpdateRoleAliasError>;
+
+    /// <p>Updates an existing stream. The stream version will be incremented by one.</p>
+    fn update_stream(
+        &self,
+        input: &UpdateStreamRequest,
+    ) -> Result<UpdateStreamResponse, UpdateStreamError>;
+
     /// <p>Updates the data for a thing.</p>
     fn update_thing(
         &self,
         input: &UpdateThingRequest,
     ) -> Result<UpdateThingResponse, UpdateThingError>;
+
+    /// <p>Update a thing group.</p>
+    fn update_thing_group(
+        &self,
+        input: &UpdateThingGroupRequest,
+    ) -> Result<UpdateThingGroupResponse, UpdateThingGroupError>;
+
+    /// <p>Updates the groups to which the thing belongs.</p>
+    fn update_thing_groups_for_thing(
+        &self,
+        input: &UpdateThingGroupsForThingRequest,
+    ) -> Result<UpdateThingGroupsForThingResponse, UpdateThingGroupsForThingError>;
 }
 /// A client for the AWS IoT API.
 pub struct IotClient<P, D>
@@ -8463,7 +18243,125 @@ where
         }
     }
 
-    /// <p>Attaches the specified policy to the specified principal (certificate or other credential).</p>
+    /// <p>Adds a thing to a thing group.</p>
+    fn add_thing_to_thing_group(
+        &self,
+        input: &AddThingToThingGroupRequest,
+    ) -> Result<AddThingToThingGroupResponse, AddThingToThingGroupError> {
+        let request_uri = "/thing-groups/addThingToThingGroup";
+
+        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<AddThingToThingGroupResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddThingToThingGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p><p>Associates a group with a continuous job. The following criteria must be met: </p> <ul> <li> <p>The job must have been created with the <code>targetSelection</code> field set to &quot;CONTINUOUS&quot;.</p> </li> <li> <p>The job status must currently be &quot;IN_PROGRESS&quot;.</p> </li> <li> <p>The total number of targets associated with a job must not exceed 100.</p> </li> </ul></p>
+    fn associate_targets_with_job(
+        &self,
+        input: &AssociateTargetsWithJobRequest,
+    ) -> Result<AssociateTargetsWithJobResponse, AssociateTargetsWithJobError> {
+        let request_uri = format!("/jobs/{job_id}/targets", job_id = input.job_id);
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_slice::<AssociateTargetsWithJobResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AssociateTargetsWithJobError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Attaches a policy to the specified target.</p>
+    fn attach_policy(&self, input: &AttachPolicyRequest) -> Result<(), AttachPolicyError> {
+        let request_uri = format!(
+            "/target-policies/{policy_name}",
+            policy_name = input.policy_name
+        );
+
+        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AttachPolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Attaches the specified policy to the specified principal (certificate or other credential).</p> <p> <b>Note:</b> This API is deprecated. Please use <a>AttachPolicy</a> instead.</p>
     fn attach_principal_policy(
         &self,
         input: &AttachPrincipalPolicyRequest,
@@ -8578,6 +18476,130 @@ where
         }
     }
 
+    /// <p>Cancels a job.</p>
+    fn cancel_job(&self, input: &CancelJobRequest) -> Result<CancelJobResponse, CancelJobError> {
+        let request_uri = format!("/jobs/{job_id}/cancel", job_id = input.job_id);
+
+        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<CancelJobResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CancelJobError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Clears the default authorizer.</p>
+    fn clear_default_authorizer(
+        &self,
+    ) -> Result<ClearDefaultAuthorizerResponse, ClearDefaultAuthorizerError> {
+        let request_uri = "/default-authorizer";
+
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_slice::<ClearDefaultAuthorizerResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ClearDefaultAuthorizerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Creates an authorizer.</p>
+    fn create_authorizer(
+        &self,
+        input: &CreateAuthorizerRequest,
+    ) -> Result<CreateAuthorizerResponse, CreateAuthorizerError> {
+        let request_uri = format!(
+            "/authorizer/{authorizer_name}",
+            authorizer_name = input.authorizer_name
+        );
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<CreateAuthorizerResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateAuthorizerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Creates an X.509 certificate using the specified certificate signing request.</p> <p> <b>Note:</b> The CSR must include a public key that is either an RSA key with a length of at least 2048 bits or an ECC key from NIST P-256 or NIST P-384 curves. </p> <p> <b>Note:</b> Reusing the same certificate signing request (CSR) results in a distinct certificate.</p> <p>You can create multiple certificates in a batch by creating a directory, copying multiple .csr files into that directory, and then specifying that directory on the command line. The following commands show how to create a batch of certificates given a batch of CSRs.</p> <p>Assuming a set of CSRs are located inside of the directory my-csr-directory:</p> <p>On Linux and OS X, the command is:</p> <p>$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>This command lists all of the CSRs in my-csr-directory and pipes each CSR file name to the aws iot create-certificate-from-csr AWS CLI command to create a certificate for the corresponding CSR.</p> <p>The aws iot create-certificate-from-csr part of the command can also be run in parallel to speed up the certificate creation process:</p> <p>$ ls my-csr-directory/ | xargs -P 10 -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>On Windows PowerShell, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/$_}</p> <p>On a Windows command prompt, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; forfiles /p my-csr-directory /c "cmd /c aws iot create-certificate-from-csr --certificate-signing-request file://@path"</p>
     fn create_certificate_from_csr(
         &self,
@@ -8627,6 +18649,45 @@ where
         }
     }
 
+    /// <p>Creates a job.</p>
+    fn create_job(&self, input: &CreateJobRequest) -> Result<CreateJobResponse, CreateJobError> {
+        let request_uri = format!("/jobs/{job_id}", job_id = input.job_id);
+
+        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<CreateJobResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateJobError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key.</p> <p> <b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>
     fn create_keys_and_certificate(
         &self,
@@ -8668,6 +18729,51 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(CreateKeysAndCertificateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Creates an AWS IoT OTAUpdate on a target group of things or groups.</p>
+    fn create_ota_update(
+        &self,
+        input: &CreateOTAUpdateRequest,
+    ) -> Result<CreateOTAUpdateResponse, CreateOTAUpdateError> {
+        let request_uri = format!(
+            "/otaUpdates/{ota_update_id}",
+            ota_update_id = input.ota_update_id
+        );
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<CreateOTAUpdateResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateOTAUpdateError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -8767,6 +18873,90 @@ where
         }
     }
 
+    /// <p>Creates a role alias.</p>
+    fn create_role_alias(
+        &self,
+        input: &CreateRoleAliasRequest,
+    ) -> Result<CreateRoleAliasResponse, CreateRoleAliasError> {
+        let request_uri = format!("/role-aliases/{role_alias}", role_alias = input.role_alias);
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<CreateRoleAliasResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateRoleAliasError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Creates a stream for delivering one or more large files in chunks over MQTT. A stream transports data bytes in chunks or blocks packaged as MQTT messages from a source like S3. You can have one or more files associated with a stream. The total size of a file associated with the stream cannot exceed more than 2 MB. The stream will be created with version 0. If a stream is created with the same streamID as a stream that existed and was deleted within last 90 days, we will resurrect that old stream by incrementing the version by 1.</p>
+    fn create_stream(
+        &self,
+        input: &CreateStreamRequest,
+    ) -> Result<CreateStreamResponse, CreateStreamError> {
+        let request_uri = format!("/streams/{stream_id}", stream_id = input.stream_id);
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<CreateStreamResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateStreamError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Creates a thing record in the thing registry.</p>
     fn create_thing(
         &self,
@@ -8803,6 +18993,51 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(CreateThingError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Create a thing group.</p>
+    fn create_thing_group(
+        &self,
+        input: &CreateThingGroupRequest,
+    ) -> Result<CreateThingGroupResponse, CreateThingGroupError> {
+        let request_uri = format!(
+            "/thing-groups/{thing_group_name}",
+            thing_group_name = input.thing_group_name
+        );
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<CreateThingGroupResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateThingGroupError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -8887,6 +19122,49 @@ where
         }
     }
 
+    /// <p>Deletes an authorizer.</p>
+    fn delete_authorizer(
+        &self,
+        input: &DeleteAuthorizerRequest,
+    ) -> Result<DeleteAuthorizerResponse, DeleteAuthorizerError> {
+        let request_uri = format!(
+            "/authorizer/{authorizer_name}",
+            authorizer_name = input.authorizer_name
+        );
+
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<DeleteAuthorizerResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteAuthorizerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Deletes a registered CA certificate.</p>
     fn delete_ca_certificate(
         &self,
@@ -8945,6 +19223,12 @@ where
 
         request.set_endpoint_prefix("iot".to_string());
 
+        let mut params = Params::new();
+        if let Some(ref x) = input.force_delete {
+            params.put("forceDelete", x);
+        }
+        request.set_params(params);
+
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
 
@@ -8958,6 +19242,49 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(DeleteCertificateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Delete an OTA update.</p>
+    fn delete_ota_update(
+        &self,
+        input: &DeleteOTAUpdateRequest,
+    ) -> Result<DeleteOTAUpdateResponse, DeleteOTAUpdateError> {
+        let request_uri = format!(
+            "/otaUpdates/{ota_update_id}",
+            ota_update_id = input.ota_update_id
+        );
+
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<DeleteOTAUpdateResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteOTAUpdateError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -9067,6 +19394,86 @@ where
         }
     }
 
+    /// <p>Deletes a role alias</p>
+    fn delete_role_alias(
+        &self,
+        input: &DeleteRoleAliasRequest,
+    ) -> Result<DeleteRoleAliasResponse, DeleteRoleAliasError> {
+        let request_uri = format!("/role-aliases/{role_alias}", role_alias = input.role_alias);
+
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<DeleteRoleAliasResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteRoleAliasError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Deletes a stream.</p>
+    fn delete_stream(
+        &self,
+        input: &DeleteStreamRequest,
+    ) -> Result<DeleteStreamResponse, DeleteStreamError> {
+        let request_uri = format!("/streams/{stream_id}", stream_id = input.stream_id);
+
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<DeleteStreamResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteStreamError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Deletes the specified thing.</p>
     fn delete_thing(
         &self,
@@ -9107,6 +19514,55 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(DeleteThingError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Deletes a thing group.</p>
+    fn delete_thing_group(
+        &self,
+        input: &DeleteThingGroupRequest,
+    ) -> Result<DeleteThingGroupResponse, DeleteThingGroupError> {
+        let request_uri = format!(
+            "/thing-groups/{thing_group_name}",
+            thing_group_name = input.thing_group_name
+        );
+
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.expected_version {
+            params.put("expectedVersion", x);
+        }
+        request.set_params(params);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<DeleteThingGroupResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteThingGroupError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -9156,7 +19612,7 @@ where
         }
     }
 
-    /// <p>Deletes the specified rule.</p>
+    /// <p>Deletes the rule.</p>
     fn delete_topic_rule(
         &self,
         input: &DeleteTopicRuleRequest,
@@ -9181,6 +19637,42 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(DeleteTopicRuleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Deletes a logging level.</p>
+    fn delete_v2_logging_level(
+        &self,
+        input: &DeleteV2LoggingLevelRequest,
+    ) -> Result<(), DeleteV2LoggingLevelError> {
+        let request_uri = "/v2LoggingLevel";
+
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        params.put("targetName", &input.target_name);
+        params.put("targetType", &input.target_type);
+        request.set_params(params);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteV2LoggingLevelError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -9226,6 +19718,49 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(DeprecateThingTypeError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Describes an authorizer.</p>
+    fn describe_authorizer(
+        &self,
+        input: &DescribeAuthorizerRequest,
+    ) -> Result<DescribeAuthorizerResponse, DescribeAuthorizerError> {
+        let request_uri = format!(
+            "/authorizer/{authorizer_name}",
+            authorizer_name = input.authorizer_name
+        );
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<DescribeAuthorizerResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeAuthorizerError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -9319,14 +19854,63 @@ where
         }
     }
 
+    /// <p>Describes the default authorizer.</p>
+    fn describe_default_authorizer(
+        &self,
+    ) -> Result<DescribeDefaultAuthorizerResponse, DescribeDefaultAuthorizerError> {
+        let request_uri = "/default-authorizer";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_slice::<DescribeDefaultAuthorizerResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeDefaultAuthorizerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Returns a unique endpoint specific to the AWS account making the call.</p>
-    fn describe_endpoint(&self) -> Result<DescribeEndpointResponse, DescribeEndpointError> {
+    fn describe_endpoint(
+        &self,
+        input: &DescribeEndpointRequest,
+    ) -> Result<DescribeEndpointResponse, DescribeEndpointError> {
         let request_uri = "/endpoint";
 
         let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.endpoint_type {
+            params.put("endpointType", x);
+        }
+        request.set_params(params);
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
         let mut response = self.dispatcher.dispatch(&request)?;
@@ -9350,6 +19934,256 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(DescribeEndpointError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Describes event configurations.</p>
+    fn describe_event_configurations(
+        &self,
+    ) -> Result<DescribeEventConfigurationsResponse, DescribeEventConfigurationsError> {
+        let request_uri = "/event-configurations";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_slice::<DescribeEventConfigurationsResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeEventConfigurationsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Describes a search index.</p>
+    fn describe_index(
+        &self,
+        input: &DescribeIndexRequest,
+    ) -> Result<DescribeIndexResponse, DescribeIndexError> {
+        let request_uri = format!("/indices/{index_name}", index_name = input.index_name);
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<DescribeIndexResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeIndexError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Describes a job.</p>
+    fn describe_job(
+        &self,
+        input: &DescribeJobRequest,
+    ) -> Result<DescribeJobResponse, DescribeJobError> {
+        let request_uri = format!("/jobs/{job_id}", job_id = input.job_id);
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<DescribeJobResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeJobError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Describes a job execution.</p>
+    fn describe_job_execution(
+        &self,
+        input: &DescribeJobExecutionRequest,
+    ) -> Result<DescribeJobExecutionResponse, DescribeJobExecutionError> {
+        let request_uri = format!(
+            "/things/{thing_name}/jobs/{job_id}",
+            job_id = input.job_id,
+            thing_name = input.thing_name
+        );
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.execution_number {
+            params.put("executionNumber", x);
+        }
+        request.set_params(params);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<DescribeJobExecutionResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeJobExecutionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Describes a role alias.</p>
+    fn describe_role_alias(
+        &self,
+        input: &DescribeRoleAliasRequest,
+    ) -> Result<DescribeRoleAliasResponse, DescribeRoleAliasError> {
+        let request_uri = format!("/role-aliases/{role_alias}", role_alias = input.role_alias);
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<DescribeRoleAliasResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeRoleAliasError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Gets information about a stream.</p>
+    fn describe_stream(
+        &self,
+        input: &DescribeStreamRequest,
+    ) -> Result<DescribeStreamResponse, DescribeStreamError> {
+        let request_uri = format!("/streams/{stream_id}", stream_id = input.stream_id);
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<DescribeStreamResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeStreamError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -9390,6 +20224,93 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(DescribeThingError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Describe a thing group.</p>
+    fn describe_thing_group(
+        &self,
+        input: &DescribeThingGroupRequest,
+    ) -> Result<DescribeThingGroupResponse, DescribeThingGroupError> {
+        let request_uri = format!(
+            "/thing-groups/{thing_group_name}",
+            thing_group_name = input.thing_group_name
+        );
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<DescribeThingGroupResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeThingGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Describes a bulk thing provisioning task.</p>
+    fn describe_thing_registration_task(
+        &self,
+        input: &DescribeThingRegistrationTaskRequest,
+    ) -> Result<DescribeThingRegistrationTaskResponse, DescribeThingRegistrationTaskError> {
+        let request_uri = format!(
+            "/thing-registration-tasks/{task_id}",
+            task_id = input.task_id
+        );
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_slice::<DescribeThingRegistrationTaskResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeThingRegistrationTaskError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -9439,7 +20360,40 @@ where
         }
     }
 
-    /// <p>Removes the specified policy from the specified certificate.</p>
+    /// <p>Detaches a policy from the specified target.</p>
+    fn detach_policy(&self, input: &DetachPolicyRequest) -> Result<(), DetachPolicyError> {
+        let request_uri = format!(
+            "/target-policies/{policy_name}",
+            policy_name = input.policy_name
+        );
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DetachPolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Removes the specified policy from the specified certificate.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>DetachPolicy</a> instead.</p>
     fn detach_principal_policy(
         &self,
         input: &DetachPrincipalPolicyRequest,
@@ -9520,7 +20474,7 @@ where
         }
     }
 
-    /// <p>Disables the specified rule.</p>
+    /// <p>Disables the rule.</p>
     fn disable_topic_rule(
         &self,
         input: &DisableTopicRuleRequest,
@@ -9551,7 +20505,7 @@ where
         }
     }
 
-    /// <p>Enables the specified rule.</p>
+    /// <p>Enables the rule.</p>
     fn enable_topic_rule(
         &self,
         input: &EnableTopicRuleRequest,
@@ -9576,6 +20530,134 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(EnableTopicRuleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Gets effective policies.</p>
+    fn get_effective_policies(
+        &self,
+        input: &GetEffectivePoliciesRequest,
+    ) -> Result<GetEffectivePoliciesResponse, GetEffectivePoliciesError> {
+        let request_uri = "/effective-policies";
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.thing_name {
+            params.put("thingName", x);
+        }
+        request.set_params(params);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<GetEffectivePoliciesResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetEffectivePoliciesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Gets the search configuration.</p>
+    fn get_indexing_configuration(
+        &self,
+    ) -> Result<GetIndexingConfigurationResponse, GetIndexingConfigurationError> {
+        let request_uri = "/indexing/config";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_slice::<GetIndexingConfigurationResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetIndexingConfigurationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Gets a job document.</p>
+    fn get_job_document(
+        &self,
+        input: &GetJobDocumentRequest,
+    ) -> Result<GetJobDocumentResponse, GetJobDocumentError> {
+        let request_uri = format!("/jobs/{job_id}/job-document", job_id = input.job_id);
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<GetJobDocumentResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetJobDocumentError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -9613,6 +20695,49 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(GetLoggingOptionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Gets an OTA update.</p>
+    fn get_ota_update(
+        &self,
+        input: &GetOTAUpdateRequest,
+    ) -> Result<GetOTAUpdateResponse, GetOTAUpdateError> {
+        let request_uri = format!(
+            "/otaUpdates/{ota_update_id}",
+            ota_update_id = input.ota_update_id
+        );
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<GetOTAUpdateResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetOTAUpdateError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -9739,7 +20864,7 @@ where
         }
     }
 
-    /// <p>Gets information about the specified rule.</p>
+    /// <p>Gets information about the rule.</p>
     fn get_topic_rule(
         &self,
         input: &GetTopicRuleRequest,
@@ -9773,6 +20898,152 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(GetTopicRuleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Gets the fine grained logging options.</p>
+    fn get_v2_logging_options(
+        &self,
+    ) -> Result<GetV2LoggingOptionsResponse, GetV2LoggingOptionsError> {
+        let request_uri = "/v2LoggingOptions";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<GetV2LoggingOptionsResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetV2LoggingOptionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Lists the policies attached to the specified thing group.</p>
+    fn list_attached_policies(
+        &self,
+        input: &ListAttachedPoliciesRequest,
+    ) -> Result<ListAttachedPoliciesResponse, ListAttachedPoliciesError> {
+        let request_uri = format!("/attached-policies/{target}", target = input.target);
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.marker {
+            params.put("marker", x);
+        }
+        if let Some(ref x) = input.page_size {
+            params.put("pageSize", x);
+        }
+        if let Some(ref x) = input.recursive {
+            params.put("recursive", x);
+        }
+        request.set_params(params);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<ListAttachedPoliciesResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListAttachedPoliciesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Lists the authorizers registered in your account.</p>
+    fn list_authorizers(
+        &self,
+        input: &ListAuthorizersRequest,
+    ) -> Result<ListAuthorizersResponse, ListAuthorizersError> {
+        let request_uri = "/authorizers/";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.ascending_order {
+            params.put("isAscendingOrder", x);
+        }
+        if let Some(ref x) = input.marker {
+            params.put("marker", x);
+        }
+        if let Some(ref x) = input.page_size {
+            params.put("pageSize", x);
+        }
+        if let Some(ref x) = input.status {
+            params.put("status", x);
+        }
+        request.set_params(params);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<ListAuthorizersResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListAuthorizersError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -9938,7 +21209,272 @@ where
         }
     }
 
-    /// <p>Lists certificates that are being transfered but not yet accepted.</p>
+    /// <p>Lists the search indices.</p>
+    fn list_indices(
+        &self,
+        input: &ListIndicesRequest,
+    ) -> Result<ListIndicesResponse, ListIndicesError> {
+        let request_uri = "/indices";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<ListIndicesResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListIndicesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Lists the job executions for a job.</p>
+    fn list_job_executions_for_job(
+        &self,
+        input: &ListJobExecutionsForJobRequest,
+    ) -> Result<ListJobExecutionsForJobResponse, ListJobExecutionsForJobError> {
+        let request_uri = format!("/jobs/{job_id}/things", job_id = input.job_id);
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        if let Some(ref x) = input.status {
+            params.put("status", x);
+        }
+        request.set_params(params);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_slice::<ListJobExecutionsForJobResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListJobExecutionsForJobError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Lists the job executions for the specified thing.</p>
+    fn list_job_executions_for_thing(
+        &self,
+        input: &ListJobExecutionsForThingRequest,
+    ) -> Result<ListJobExecutionsForThingResponse, ListJobExecutionsForThingError> {
+        let request_uri = format!("/things/{thing_name}/jobs", thing_name = input.thing_name);
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        if let Some(ref x) = input.status {
+            params.put("status", x);
+        }
+        request.set_params(params);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_slice::<ListJobExecutionsForThingResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListJobExecutionsForThingError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Lists jobs.</p>
+    fn list_jobs(&self, input: &ListJobsRequest) -> Result<ListJobsResponse, ListJobsError> {
+        let request_uri = "/jobs";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        if let Some(ref x) = input.status {
+            params.put("status", x);
+        }
+        if let Some(ref x) = input.target_selection {
+            params.put("targetSelection", x);
+        }
+        if let Some(ref x) = input.thing_group_id {
+            params.put("thingGroupId", x);
+        }
+        if let Some(ref x) = input.thing_group_name {
+            params.put("thingGroupName", x);
+        }
+        request.set_params(params);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<ListJobsResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListJobsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Lists OTA updates.</p>
+    fn list_ota_updates(
+        &self,
+        input: &ListOTAUpdatesRequest,
+    ) -> Result<ListOTAUpdatesResponse, ListOTAUpdatesError> {
+        let request_uri = "/otaUpdates";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        if let Some(ref x) = input.ota_update_status {
+            params.put("otaUpdateStatus", x);
+        }
+        request.set_params(params);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<ListOTAUpdatesResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListOTAUpdatesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Lists certificates that are being transferred but not yet accepted.</p>
     fn list_outgoing_certificates(
         &self,
         input: &ListOutgoingCertificatesRequest,
@@ -10043,7 +21579,7 @@ where
         }
     }
 
-    /// <p>Lists the principals associated with the specified policy.</p>
+    /// <p>Lists the principals associated with the specified policy.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListTargetsForPolicy</a> instead.</p>
     fn list_policy_principals(
         &self,
         input: &ListPolicyPrincipalsRequest,
@@ -10139,7 +21675,7 @@ where
         }
     }
 
-    /// <p>Lists the policies attached to the specified principal. If you use an Cognito identity, the ID must be in <a href="http://docs.aws.amazon.com/cognitoidentity/latest/APIReference/API_GetCredentialsForIdentity.html#API_GetCredentialsForIdentity_RequestSyntax">AmazonCognito Identity format</a>.</p>
+    /// <p>Lists the policies attached to the specified principal. If you use an Cognito identity, the ID must be in <a href="http://docs.aws.amazon.com/cognitoidentity/latest/APIReference/API_GetCredentialsForIdentity.html#API_GetCredentialsForIdentity_RequestSyntax">AmazonCognito Identity format</a>.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListAttachedPolicies</a> instead.</p>
     fn list_principal_policies(
         &self,
         input: &ListPrincipalPoliciesRequest,
@@ -10243,6 +21779,273 @@ where
         }
     }
 
+    /// <p>Lists the role aliases registered in your account.</p>
+    fn list_role_aliases(
+        &self,
+        input: &ListRoleAliasesRequest,
+    ) -> Result<ListRoleAliasesResponse, ListRoleAliasesError> {
+        let request_uri = "/role-aliases";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.ascending_order {
+            params.put("isAscendingOrder", x);
+        }
+        if let Some(ref x) = input.marker {
+            params.put("marker", x);
+        }
+        if let Some(ref x) = input.page_size {
+            params.put("pageSize", x);
+        }
+        request.set_params(params);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<ListRoleAliasesResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListRoleAliasesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Lists all of the streams in your AWS account.</p>
+    fn list_streams(
+        &self,
+        input: &ListStreamsRequest,
+    ) -> Result<ListStreamsResponse, ListStreamsError> {
+        let request_uri = "/streams";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.ascending_order {
+            params.put("isAscendingOrder", x);
+        }
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<ListStreamsResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListStreamsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>List targets for the specified policy.</p>
+    fn list_targets_for_policy(
+        &self,
+        input: &ListTargetsForPolicyRequest,
+    ) -> Result<ListTargetsForPolicyResponse, ListTargetsForPolicyError> {
+        let request_uri = format!(
+            "/policy-targets/{policy_name}",
+            policy_name = input.policy_name
+        );
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.marker {
+            params.put("marker", x);
+        }
+        if let Some(ref x) = input.page_size {
+            params.put("pageSize", x);
+        }
+        request.set_params(params);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<ListTargetsForPolicyResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTargetsForPolicyError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>List the thing groups in your account.</p>
+    fn list_thing_groups(
+        &self,
+        input: &ListThingGroupsRequest,
+    ) -> Result<ListThingGroupsResponse, ListThingGroupsError> {
+        let request_uri = "/thing-groups";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.name_prefix_filter {
+            params.put("namePrefixFilter", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        if let Some(ref x) = input.parent_group {
+            params.put("parentGroup", x);
+        }
+        if let Some(ref x) = input.recursive {
+            params.put("recursive", x);
+        }
+        request.set_params(params);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<ListThingGroupsResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListThingGroupsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>List the thing groups to which the specified thing belongs.</p>
+    fn list_thing_groups_for_thing(
+        &self,
+        input: &ListThingGroupsForThingRequest,
+    ) -> Result<ListThingGroupsForThingResponse, ListThingGroupsForThingError> {
+        let request_uri = format!(
+            "/things/{thing_name}/thing-groups",
+            thing_name = input.thing_name
+        );
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_slice::<ListThingGroupsForThingResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListThingGroupsForThingError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Lists the principals associated with the specified thing.</p>
     fn list_thing_principals(
         &self,
@@ -10280,6 +22083,115 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(ListThingPrincipalsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Information about the thing registration tasks.</p>
+    fn list_thing_registration_task_reports(
+        &self,
+        input: &ListThingRegistrationTaskReportsRequest,
+    ) -> Result<ListThingRegistrationTaskReportsResponse, ListThingRegistrationTaskReportsError>
+    {
+        let request_uri = format!(
+            "/thing-registration-tasks/{task_id}/reports",
+            task_id = input.task_id
+        );
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        params.put("reportType", &input.report_type);
+        request.set_params(params);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<ListThingRegistrationTaskReportsResponse>(
+                    &body,
+                ).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListThingRegistrationTaskReportsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>List bulk thing provisioning tasks.</p>
+    fn list_thing_registration_tasks(
+        &self,
+        input: &ListThingRegistrationTasksRequest,
+    ) -> Result<ListThingRegistrationTasksResponse, ListThingRegistrationTasksError> {
+        let request_uri = "/thing-registration-tasks";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        if let Some(ref x) = input.status {
+            params.put("status", x);
+        }
+        request.set_params(params);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_slice::<ListThingRegistrationTasksResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListThingRegistrationTasksError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -10396,6 +22308,62 @@ where
         }
     }
 
+    /// <p>Lists the things in the specified group.</p>
+    fn list_things_in_thing_group(
+        &self,
+        input: &ListThingsInThingGroupRequest,
+    ) -> Result<ListThingsInThingGroupResponse, ListThingsInThingGroupError> {
+        let request_uri = format!(
+            "/thing-groups/{thing_group_name}/things",
+            thing_group_name = input.thing_group_name
+        );
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        if let Some(ref x) = input.recursive {
+            params.put("recursive", x);
+        }
+        request.set_params(params);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_slice::<ListThingsInThingGroupResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListThingsInThingGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Lists the rules for the specific topic.</p>
     fn list_topic_rules(
         &self,
@@ -10445,6 +22413,58 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(ListTopicRulesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Lists logging levels.</p>
+    fn list_v2_logging_levels(
+        &self,
+        input: &ListV2LoggingLevelsRequest,
+    ) -> Result<ListV2LoggingLevelsResponse, ListV2LoggingLevelsError> {
+        let request_uri = "/v2LoggingLevel";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        if let Some(ref x) = input.target_type {
+            params.put("targetType", x);
+        }
+        request.set_params(params);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<ListV2LoggingLevelsResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListV2LoggingLevelsError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -10545,6 +22565,48 @@ where
         }
     }
 
+    /// <p>Provisions a thing.</p>
+    fn register_thing(
+        &self,
+        input: &RegisterThingRequest,
+    ) -> Result<RegisterThingResponse, RegisterThingError> {
+        let request_uri = "/things";
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<RegisterThingResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RegisterThingError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Rejects a pending certificate transfer. After AWS IoT rejects a certificate transfer, the certificate status changes from <b>PENDING_TRANSFER</b> to <b>INACTIVE</b>.</p> <p>To check for pending certificate transfers, call <a>ListCertificates</a> to enumerate your certificates.</p> <p>This operation can only be called by the transfer destination. After it is called, the certificate will be returned to the source's account in the INACTIVE state.</p>
     fn reject_certificate_transfer(
         &self,
@@ -10581,7 +22643,50 @@ where
         }
     }
 
-    /// <p>Replaces the specified rule. You must specify all parameters for the new rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
+    /// <p>Remove the specified thing from the specified group.</p>
+    fn remove_thing_from_thing_group(
+        &self,
+        input: &RemoveThingFromThingGroupRequest,
+    ) -> Result<RemoveThingFromThingGroupResponse, RemoveThingFromThingGroupError> {
+        let request_uri = "/thing-groups/removeThingFromThingGroup";
+
+        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_slice::<RemoveThingFromThingGroupResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemoveThingFromThingGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Replaces the rule. You must specify all parameters for the new rule. Creating rules is an administrator-level action. Any user who has permission to create rules will be able to access data processed by the rule.</p>
     fn replace_topic_rule(
         &self,
         input: &ReplaceTopicRuleRequest,
@@ -10608,6 +22713,90 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(ReplaceTopicRuleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>The query search index.</p>
+    fn search_index(
+        &self,
+        input: &SearchIndexRequest,
+    ) -> Result<SearchIndexResponse, SearchIndexError> {
+        let request_uri = "/indices/search";
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<SearchIndexResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SearchIndexError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Sets the default authorizer. This will be used if a websocket connection is made without specifying an authorizer.</p>
+    fn set_default_authorizer(
+        &self,
+        input: &SetDefaultAuthorizerRequest,
+    ) -> Result<SetDefaultAuthorizerResponse, SetDefaultAuthorizerError> {
+        let request_uri = "/default-authorizer";
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<SetDefaultAuthorizerResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetDefaultAuthorizerError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -10682,6 +22871,252 @@ where
         }
     }
 
+    /// <p>Sets the logging level.</p>
+    fn set_v2_logging_level(
+        &self,
+        input: &SetV2LoggingLevelRequest,
+    ) -> Result<(), SetV2LoggingLevelError> {
+        let request_uri = "/v2LoggingLevel";
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetV2LoggingLevelError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Sets the logging options for the V2 logging service.</p>
+    fn set_v2_logging_options(
+        &self,
+        input: &SetV2LoggingOptionsRequest,
+    ) -> Result<(), SetV2LoggingOptionsError> {
+        let request_uri = "/v2LoggingOptions";
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetV2LoggingOptionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Creates a bulk thing provisioning task.</p>
+    fn start_thing_registration_task(
+        &self,
+        input: &StartThingRegistrationTaskRequest,
+    ) -> Result<StartThingRegistrationTaskResponse, StartThingRegistrationTaskError> {
+        let request_uri = "/thing-registration-tasks";
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_slice::<StartThingRegistrationTaskResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StartThingRegistrationTaskError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Cancels a bulk thing provisioning task.</p>
+    fn stop_thing_registration_task(
+        &self,
+        input: &StopThingRegistrationTaskRequest,
+    ) -> Result<StopThingRegistrationTaskResponse, StopThingRegistrationTaskError> {
+        let request_uri = format!(
+            "/thing-registration-tasks/{task_id}/cancel",
+            task_id = input.task_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_slice::<StopThingRegistrationTaskResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StopThingRegistrationTaskError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Test custom authorization.</p>
+    fn test_authorization(
+        &self,
+        input: &TestAuthorizationRequest,
+    ) -> Result<TestAuthorizationResponse, TestAuthorizationError> {
+        let request_uri = "/test-authorization";
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.client_id {
+            params.put("clientId", x);
+        }
+        request.set_params(params);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<TestAuthorizationResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(TestAuthorizationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Invoke the specified custom authorizer for testing purposes.</p>
+    fn test_invoke_authorizer(
+        &self,
+        input: &TestInvokeAuthorizerRequest,
+    ) -> Result<TestInvokeAuthorizerResponse, TestInvokeAuthorizerError> {
+        let request_uri = format!(
+            "/authorizer/{authorizer_name}/test",
+            authorizer_name = input.authorizer_name
+        );
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<TestInvokeAuthorizerResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(TestInvokeAuthorizerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Transfers the specified certificate to the specified AWS account.</p> <p>You can cancel the transfer until it is acknowledged by the recipient.</p> <p>No notification is sent to the transfer destination's account. It is up to the caller to notify the transfer target.</p> <p>The certificate being transferred must not be in the ACTIVE state. You can use the UpdateCertificate API to deactivate it.</p> <p>The certificate must not have any policies attached to it. You can use the DetachPrincipalPolicy API to detach them.</p>
     fn transfer_certificate(
         &self,
@@ -10731,6 +23166,51 @@ where
         }
     }
 
+    /// <p>Updates an authorizer.</p>
+    fn update_authorizer(
+        &self,
+        input: &UpdateAuthorizerRequest,
+    ) -> Result<UpdateAuthorizerResponse, UpdateAuthorizerError> {
+        let request_uri = format!(
+            "/authorizer/{authorizer_name}",
+            authorizer_name = input.authorizer_name
+        );
+
+        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<UpdateAuthorizerResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateAuthorizerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Updates a registered CA certificate.</p>
     fn update_ca_certificate(
         &self,
@@ -10745,6 +23225,8 @@ where
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
 
         let mut params = Params::new();
         if let Some(ref x) = input.new_auto_registration_status {
@@ -10812,6 +23294,176 @@ where
         }
     }
 
+    /// <p>Updates the event configurations.</p>
+    fn update_event_configurations(
+        &self,
+        input: &UpdateEventConfigurationsRequest,
+    ) -> Result<UpdateEventConfigurationsResponse, UpdateEventConfigurationsError> {
+        let request_uri = "/event-configurations";
+
+        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_slice::<UpdateEventConfigurationsResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateEventConfigurationsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Updates the search configuration.</p>
+    fn update_indexing_configuration(
+        &self,
+        input: &UpdateIndexingConfigurationRequest,
+    ) -> Result<UpdateIndexingConfigurationResponse, UpdateIndexingConfigurationError> {
+        let request_uri = "/indexing/config";
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_slice::<UpdateIndexingConfigurationResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateIndexingConfigurationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Updates a role alias.</p>
+    fn update_role_alias(
+        &self,
+        input: &UpdateRoleAliasRequest,
+    ) -> Result<UpdateRoleAliasResponse, UpdateRoleAliasError> {
+        let request_uri = format!("/role-aliases/{role_alias}", role_alias = input.role_alias);
+
+        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<UpdateRoleAliasResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateRoleAliasError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Updates an existing stream. The stream version will be incremented by one.</p>
+    fn update_stream(
+        &self,
+        input: &UpdateStreamRequest,
+    ) -> Result<UpdateStreamResponse, UpdateStreamError> {
+        let request_uri = format!("/streams/{stream_id}", stream_id = input.stream_id);
+
+        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<UpdateStreamResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateStreamError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Updates the data for a thing.</p>
     fn update_thing(
         &self,
@@ -10848,6 +23500,94 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(UpdateThingError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Update a thing group.</p>
+    fn update_thing_group(
+        &self,
+        input: &UpdateThingGroupRequest,
+    ) -> Result<UpdateThingGroupResponse, UpdateThingGroupError> {
+        let request_uri = format!(
+            "/thing-groups/{thing_group_name}",
+            thing_group_name = input.thing_group_name
+        );
+
+        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<UpdateThingGroupResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateThingGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Updates the groups to which the thing belongs.</p>
+    fn update_thing_groups_for_thing(
+        &self,
+        input: &UpdateThingGroupsForThingRequest,
+    ) -> Result<UpdateThingGroupsForThingResponse, UpdateThingGroupsForThingError> {
+        let request_uri = "/thing-groups/updateThingGroupsForThing";
+
+        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(input).unwrap());
+        request.set_payload(encoded);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result =
+                    serde_json::from_slice::<UpdateThingGroupsForThingResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateThingGroupsForThingError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }

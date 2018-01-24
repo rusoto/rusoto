@@ -146,7 +146,7 @@ pub struct Connection {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateEndpointMessage {
-    /// <p>The Amazon Resource Number (ARN) for the certificate.</p>
+    /// <p>The Amazon Resource Name (ARN) for the certificate.</p>
     #[serde(rename = "CertificateArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_arn: Option<String>,
@@ -834,6 +834,40 @@ pub struct DescribeReplicationSubnetGroupsResponse {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribeReplicationTaskAssessmentResultsMessage {
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    #[serde(rename = "MaxRecords")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_records: Option<i64>,
+    /// <p>- The Amazon Resource Name (ARN) string that uniquely identifies the task. When this input parameter is specified the API will return only one result and ignore the values of the max-records and marker parameters. </p>
+    #[serde(rename = "ReplicationTaskArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replication_task_arn: Option<String>,
+}
+
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeReplicationTaskAssessmentResultsResponse {
+    /// <p>- The Amazon S3 bucket where the task assessment report is located. </p>
+    #[serde(rename = "BucketName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bucket_name: Option<String>,
+    /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+    /// <p> The task assessment report. </p>
+    #[serde(rename = "ReplicationTaskAssessmentResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replication_task_assessment_results: Option<Vec<ReplicationTaskAssessmentResult>>,
+}
+
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeReplicationTasksMessage {
     /// <p>Filters applied to the describe action.</p> <p>Valid filter names: replication-task-arn | replication-task-id | migration-type | endpoint-arn | replication-instance-arn</p>
     #[serde(rename = "Filters")]
@@ -894,11 +928,15 @@ pub struct DescribeSchemasResponse {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeTableStatisticsMessage {
+    /// <p>Filters applied to the describe table statistics action.</p> <p>Valid filter names: schema-name | table-name | table-state</p> <p>A combination of filters creates an AND condition where each record matches all specified filters.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<Filter>>,
     /// <p> An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>. </p>
     #[serde(rename = "Marker")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved. </p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 500.</p>
     #[serde(rename = "MaxRecords")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_records: Option<i64>,
@@ -1170,7 +1208,7 @@ pub struct ModifyEndpointMessage {
     #[serde(rename = "EngineName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_name: Option<String>,
-    /// <p>Additional attributes associated with the connection.</p>
+    /// <p>Additional attributes associated with the connection. To reset this parameter, pass the empty string ("") as an argument.</p>
     #[serde(rename = "ExtraConnectionAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_connection_attributes: Option<String>,
@@ -1712,6 +1750,39 @@ pub struct ReplicationTask {
     pub target_endpoint_arn: Option<String>,
 }
 
+/// <p> The task assessment report in JSON format. </p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ReplicationTaskAssessmentResult {
+    /// <p> The task assessment results in JSON format. </p>
+    #[serde(rename = "AssessmentResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub assessment_results: Option<String>,
+    /// <p> The file containing the results of the task assessment. </p>
+    #[serde(rename = "AssessmentResultsFile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub assessment_results_file: Option<String>,
+    /// <p> The status of the task assessment. </p>
+    #[serde(rename = "AssessmentStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub assessment_status: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the replication task. </p>
+    #[serde(rename = "ReplicationTaskArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replication_task_arn: Option<String>,
+    /// <p> The replication task identifier of the task on which the task assessment was run. </p>
+    #[serde(rename = "ReplicationTaskIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replication_task_identifier: Option<String>,
+    /// <p>The date the task assessment was completed. </p>
+    #[serde(rename = "ReplicationTaskLastAssessmentDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replication_task_last_assessment_date: Option<f64>,
+    /// <p> The URL of the S3 object containing the task assessment results. </p>
+    #[serde(rename = "S3ObjectUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_object_url: Option<String>,
+}
+
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ReplicationTaskStats {
@@ -1776,12 +1847,29 @@ pub struct S3Settings {
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct StartReplicationTaskAssessmentMessage {
+    /// <p> The Amazon Resource Name (ARN) of the replication task. </p>
+    #[serde(rename = "ReplicationTaskArn")]
+    pub replication_task_arn: String,
+}
+
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct StartReplicationTaskAssessmentResponse {
+    /// <p> The assessed replication task. </p>
+    #[serde(rename = "ReplicationTask")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replication_task: Option<ReplicationTask>,
+}
+
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StartReplicationTaskMessage {
     /// <p>The start time for the Change Data Capture (CDC) operation.</p>
     #[serde(rename = "CdcStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cdc_start_time: Option<f64>,
-    /// <p>The Amazon Resource Number (ARN) of the replication task to be started.</p>
+    /// <p>The Amazon Resource Name (ARN) of the replication task to be started.</p>
     #[serde(rename = "ReplicationTaskArn")]
     pub replication_task_arn: String,
     /// <p>The type of replication task.</p>
@@ -1801,7 +1889,7 @@ pub struct StartReplicationTaskResponse {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct StopReplicationTaskMessage {
-    /// <p>The Amazon Resource Number(ARN) of the replication task to be stopped.</p>
+    /// <p>The Amazon Resource Name(ARN) of the replication task to be stopped.</p>
     #[serde(rename = "ReplicationTaskArn")]
     pub replication_task_arn: String,
 }
@@ -1888,7 +1976,7 @@ pub struct TableStatistics {
     #[serde(rename = "TableName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_name: Option<String>,
-    /// <p>The state of the table.</p>
+    /// <p>The state of the tables described.</p> <p>Valid states: Table does not exist | Before load | Full load | Table completed | Table cancelled | Table error | Table all | Table updates | Table is being reloaded</p>
     #[serde(rename = "TableState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_state: Option<String>,
@@ -1896,6 +1984,22 @@ pub struct TableStatistics {
     #[serde(rename = "Updates")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub updates: Option<i64>,
+    /// <p>The number of records that failed validation.</p>
+    #[serde(rename = "ValidationFailedRecords")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validation_failed_records: Option<i64>,
+    /// <p>The number of records that have yet to be validated.</p>
+    #[serde(rename = "ValidationPendingRecords")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validation_pending_records: Option<i64>,
+    /// <p><p>The validation state of the table.</p> <p>The parameter can have the following values</p> <ul> <li> <p>Not enabled—Validation is not enabled for the table in the migration task.</p> </li> <li> <p>Pending records—Some records in the table are waiting for validation.</p> </li> <li> <p>Mismatched records—Some records in the table do not match between the source and target.</p> </li> <li> <p>Suspended records—Some records in the table could not be validated.</p> </li> <li> <p>No primary key—The table could not be validated because it had no primary key.</p> </li> <li> <p>Table error—The table was not validated because it was in an error state and some data was not migrated.</p> </li> <li> <p>Validated—All rows in the table were validated. If the table is updated, the status can change from Validated.</p> </li> <li> <p>Error—The table could not be validated because of an unexpected error.</p> </li> </ul></p>
+    #[serde(rename = "ValidationState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validation_state: Option<String>,
+    /// <p>The number of records that could not be validated.</p>
+    #[serde(rename = "ValidationSuspendedRecords")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validation_suspended_records: Option<i64>,
 }
 
 /// <p><p/></p>
@@ -4063,6 +4167,94 @@ impl Error for DescribeReplicationSubnetGroupsError {
         }
     }
 }
+/// Errors returned by DescribeReplicationTaskAssessmentResults
+#[derive(Debug, PartialEq)]
+pub enum DescribeReplicationTaskAssessmentResultsError {
+    /// <p>The resource could not be found.</p>
+    ResourceNotFoundFault(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeReplicationTaskAssessmentResultsError {
+    pub fn from_body(body: &str) -> DescribeReplicationTaskAssessmentResultsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ResourceNotFoundFault" => {
+                        DescribeReplicationTaskAssessmentResultsError::ResourceNotFoundFault(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => {
+                        DescribeReplicationTaskAssessmentResultsError::Validation(
+                            error_message.to_string(),
+                        )
+                    }
+                    _ => DescribeReplicationTaskAssessmentResultsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeReplicationTaskAssessmentResultsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeReplicationTaskAssessmentResultsError {
+    fn from(err: serde_json::error::Error) -> DescribeReplicationTaskAssessmentResultsError {
+        DescribeReplicationTaskAssessmentResultsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeReplicationTaskAssessmentResultsError {
+    fn from(err: CredentialsError) -> DescribeReplicationTaskAssessmentResultsError {
+        DescribeReplicationTaskAssessmentResultsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeReplicationTaskAssessmentResultsError {
+    fn from(err: HttpDispatchError) -> DescribeReplicationTaskAssessmentResultsError {
+        DescribeReplicationTaskAssessmentResultsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeReplicationTaskAssessmentResultsError {
+    fn from(err: io::Error) -> DescribeReplicationTaskAssessmentResultsError {
+        DescribeReplicationTaskAssessmentResultsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeReplicationTaskAssessmentResultsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeReplicationTaskAssessmentResultsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeReplicationTaskAssessmentResultsError::ResourceNotFoundFault(ref cause) => {
+                cause
+            }
+            DescribeReplicationTaskAssessmentResultsError::Validation(ref cause) => cause,
+            DescribeReplicationTaskAssessmentResultsError::Credentials(ref err) => {
+                err.description()
+            }
+            DescribeReplicationTaskAssessmentResultsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeReplicationTaskAssessmentResultsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeReplicationTasks
 #[derive(Debug, PartialEq)]
 pub enum DescribeReplicationTasksError {
@@ -5365,6 +5557,96 @@ impl Error for StartReplicationTaskError {
         }
     }
 }
+/// Errors returned by StartReplicationTaskAssessment
+#[derive(Debug, PartialEq)]
+pub enum StartReplicationTaskAssessmentError {
+    /// <p>The resource is in a state that prevents it from being used for database migration.</p>
+    InvalidResourceStateFault(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFoundFault(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl StartReplicationTaskAssessmentError {
+    pub fn from_body(body: &str) -> StartReplicationTaskAssessmentError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidResourceStateFault" => {
+                        StartReplicationTaskAssessmentError::InvalidResourceStateFault(
+                            String::from(error_message),
+                        )
+                    }
+                    "ResourceNotFoundFault" => {
+                        StartReplicationTaskAssessmentError::ResourceNotFoundFault(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        StartReplicationTaskAssessmentError::Validation(error_message.to_string())
+                    }
+                    _ => StartReplicationTaskAssessmentError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => StartReplicationTaskAssessmentError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for StartReplicationTaskAssessmentError {
+    fn from(err: serde_json::error::Error) -> StartReplicationTaskAssessmentError {
+        StartReplicationTaskAssessmentError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for StartReplicationTaskAssessmentError {
+    fn from(err: CredentialsError) -> StartReplicationTaskAssessmentError {
+        StartReplicationTaskAssessmentError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for StartReplicationTaskAssessmentError {
+    fn from(err: HttpDispatchError) -> StartReplicationTaskAssessmentError {
+        StartReplicationTaskAssessmentError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StartReplicationTaskAssessmentError {
+    fn from(err: io::Error) -> StartReplicationTaskAssessmentError {
+        StartReplicationTaskAssessmentError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for StartReplicationTaskAssessmentError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartReplicationTaskAssessmentError {
+    fn description(&self) -> &str {
+        match *self {
+            StartReplicationTaskAssessmentError::InvalidResourceStateFault(ref cause) => cause,
+            StartReplicationTaskAssessmentError::ResourceNotFoundFault(ref cause) => cause,
+            StartReplicationTaskAssessmentError::Validation(ref cause) => cause,
+            StartReplicationTaskAssessmentError::Credentials(ref err) => err.description(),
+            StartReplicationTaskAssessmentError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            StartReplicationTaskAssessmentError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by StopReplicationTask
 #[derive(Debug, PartialEq)]
 pub enum StopReplicationTaskError {
@@ -5697,6 +5979,15 @@ pub trait DatabaseMigrationService {
         input: &DescribeReplicationSubnetGroupsMessage,
     ) -> Result<DescribeReplicationSubnetGroupsResponse, DescribeReplicationSubnetGroupsError>;
 
+    /// <p>Returns the task assessment results from Amazon S3. This action always returns the latest results.</p>
+    fn describe_replication_task_assessment_results(
+        &self,
+        input: &DescribeReplicationTaskAssessmentResultsMessage,
+    ) -> Result<
+        DescribeReplicationTaskAssessmentResultsResponse,
+        DescribeReplicationTaskAssessmentResultsError,
+    >;
+
     /// <p>Returns information about replication tasks for your account in the current region.</p>
     fn describe_replication_tasks(
         &self,
@@ -5709,7 +6000,7 @@ pub trait DatabaseMigrationService {
         input: &DescribeSchemasMessage,
     ) -> Result<DescribeSchemasResponse, DescribeSchemasError>;
 
-    /// <p>Returns table statistics on the database migration task, including table name, rows inserted, rows updated, and rows deleted.</p>
+    /// <p>Returns table statistics on the database migration task, including table name, rows inserted, rows updated, and rows deleted.</p> <p>Note that the "last updated" column the DMS console only indicates the time that AWS DMS last updated the table statistics record for a table. It does not indicate the time of the last update to the table.</p>
     fn describe_table_statistics(
         &self,
         input: &DescribeTableStatisticsMessage,
@@ -5780,6 +6071,12 @@ pub trait DatabaseMigrationService {
         &self,
         input: &StartReplicationTaskMessage,
     ) -> Result<StartReplicationTaskResponse, StartReplicationTaskError>;
+
+    /// <p> Starts the replication task assessment for unsupported data types in the source database. </p>
+    fn start_replication_task_assessment(
+        &self,
+        input: &StartReplicationTaskAssessmentMessage,
+    ) -> Result<StartReplicationTaskAssessmentResponse, StartReplicationTaskAssessmentError>;
 
     /// <p><p>Stops the replication task.</p> <p/></p>
     fn stop_replication_task(
@@ -6682,6 +6979,48 @@ where
         }
     }
 
+    /// <p>Returns the task assessment results from Amazon S3. This action always returns the latest results.</p>
+    fn describe_replication_task_assessment_results(
+        &self,
+        input: &DescribeReplicationTaskAssessmentResultsMessage,
+    ) -> Result<
+        DescribeReplicationTaskAssessmentResultsResponse,
+        DescribeReplicationTaskAssessmentResultsError,
+    > {
+        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AmazonDMSv20160101.DescribeReplicationTaskAssessmentResults",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(
+                    serde_json::from_str::<DescribeReplicationTaskAssessmentResultsResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeReplicationTaskAssessmentResultsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Returns information about replication tasks for your account in the current region.</p>
     fn describe_replication_tasks(
         &self,
@@ -6753,7 +7092,7 @@ where
         }
     }
 
-    /// <p>Returns table statistics on the database migration task, including table name, rows inserted, rows updated, and rows deleted.</p>
+    /// <p>Returns table statistics on the database migration task, including table name, rows inserted, rows updated, and rows deleted.</p> <p>Note that the "last updated" column the DMS console only indicates the time that AWS DMS last updated the table statistics record for a table. It does not indicate the time of the last update to the table.</p>
     fn describe_table_statistics(
         &self,
         input: &DescribeTableStatisticsMessage,
@@ -7163,6 +7502,45 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(StartReplicationTaskError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p> Starts the replication task assessment for unsupported data types in the source database. </p>
+    fn start_replication_task_assessment(
+        &self,
+        input: &StartReplicationTaskAssessmentMessage,
+    ) -> Result<StartReplicationTaskAssessmentResponse, StartReplicationTaskAssessmentError> {
+        let mut request = SignedRequest::new("POST", "dms", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AmazonDMSv20160101.StartReplicationTaskAssessment",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(
+                    serde_json::from_str::<StartReplicationTaskAssessmentResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StartReplicationTaskAssessmentError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }

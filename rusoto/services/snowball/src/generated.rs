@@ -203,7 +203,7 @@ pub struct CreateAddressResult {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateClusterRequest {
-    /// <p>The ID for the address that you want the cluster shipped to.&gt;</p>
+    /// <p>The ID for the address that you want the cluster shipped to.</p>
     #[serde(rename = "AddressId")]
     pub address_id: String,
     /// <p>An optional description of this specific cluster, for example <code>Environmental Data Cluster-01</code>.</p>
@@ -739,11 +739,11 @@ pub struct Shipment {
 /// <p>A job's shipping information, including inbound and outbound tracking numbers and shipping speed options.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ShippingDetails {
-    /// <p>The <code>Status</code> and <code>TrackingNumber</code> values for a Snowball being delivered to the address that you specified for a particular job.</p>
+    /// <p>The <code>Status</code> and <code>TrackingNumber</code> values for a Snowball being returned to AWS for a particular job.</p>
     #[serde(rename = "InboundShipment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inbound_shipment: Option<Shipment>,
-    /// <p>The <code>Status</code> and <code>TrackingNumber</code> values for a Snowball being returned to AWS for a particular job.</p>
+    /// <p>The <code>Status</code> and <code>TrackingNumber</code> values for a Snowball being delivered to the address that you specified for a particular job.</p>
     #[serde(rename = "OutboundShipment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub outbound_shipment: Option<Shipment>,

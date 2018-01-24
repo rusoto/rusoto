@@ -1053,6 +1053,8 @@ pub struct CreateStackInput {
     pub client_request_token: Option<String>,
     /// <p>Set to <code>true</code> to disable rollback of the stack if stack creation failed. You can specify either <code>DisableRollback</code> or <code>OnFailure</code>, but not both.</p> <p>Default: <code>false</code> </p>
     pub disable_rollback: Option<bool>,
+    /// <p>Whether to enable termination protection on the specified stack. If a user attempts to delete a stack with termination protection enabled, the operation fails and the stack remains unchanged. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-protect-stacks.html">Protecting a Stack From Being Deleted</a> in the <i>AWS CloudFormation User Guide</i>. Termination protection is disabled on stacks by default. </p> <p> For <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-nested-stacks.html">nested stacks</a>, termination protection is set on the root stack and cannot be changed directly on the nested stack.</p>
+    pub enable_termination_protection: Option<bool>,
     /// <p>The Simple Notification Service (SNS) topic ARNs to publish stack related events. You can find your SNS topic ARNs using the SNS console or your Command Line Interface (CLI).</p>
     pub notification_ar_ns: Option<Vec<String>>,
     /// <p>Determines what action will be taken if stack creation fails. This must be one of: DO_NOTHING, ROLLBACK, or DELETE. You can specify either <code>OnFailure</code> or <code>DisableRollback</code>, but not both.</p> <p>Default: <code>ROLLBACK</code> </p>
@@ -1106,6 +1108,12 @@ impl CreateStackInputSerializer {
         if let Some(ref field_value) = obj.disable_rollback {
             params.put(
                 &format!("{}{}", prefix, "DisableRollback"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.enable_termination_protection {
+            params.put(
+                &format!("{}{}", prefix, "EnableTerminationProtection"),
                 &field_value.to_string().replace("+", "%2B"),
             );
         }
@@ -1197,6 +1205,8 @@ pub struct CreateStackInstancesInput {
     pub operation_id: Option<String>,
     /// <p>Preferences for how AWS CloudFormation performs this stack set operation.</p>
     pub operation_preferences: Option<StackSetOperationPreferences>,
+    /// <p>A list of stack set parameters whose values you want to override in the selected stack instances.</p> <p>Any overridden parameter values will be applied to all stack instances in the specified accounts and regions. When specifying parameters and their values, be aware of how AWS CloudFormation sets parameter values during stack instance operations:</p> <ul> <li> <p>To override the current value for a parameter, include the parameter and specify its value.</p> </li> <li> <p>To leave a parameter set to its present value, you can do one of the following:</p> <ul> <li> <p>Do not include the parameter in the list.</p> </li> <li> <p>Include the parameter and specify <code>UsePreviousValue</code> as <code>true</code>. (You cannot specify both a value and set <code>UsePreviousValue</code> to <code>true</code>.)</p> </li> </ul> </li> <li> <p>To set all overridden parameter back to the values specified in the stack set, specify a parameter list but do not include any parameters.</p> </li> <li> <p>To leave all parameters set to their present values, do not specify this property at all.</p> </li> </ul> <p>During stack set updates, any parameter values overridden for a stack instance are not updated, but retain their overridden value.</p> <p>You can only override the parameter <i>values</i> that are specified in the stack set; to add or delete a parameter itself, use <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackSet.html">UpdateStackSet</a> to update the stack set template.</p>
+    pub parameter_overrides: Option<Vec<Parameter>>,
     /// <p>The names of one or more regions where you want to create stack instances using the specified AWS account(s). </p>
     pub regions: Vec<String>,
     /// <p>The name or unique ID of the stack set that you want to create stack instances from.</p>
@@ -1227,6 +1237,13 @@ impl CreateStackInstancesInputSerializer {
             StackSetOperationPreferencesSerializer::serialize(
                 params,
                 &format!("{}{}", prefix, "OperationPreferences"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.parameter_overrides {
+            ParametersSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "ParameterOverrides"),
                 field_value,
             );
         }
@@ -2584,6 +2601,20 @@ impl DescriptionDeserializer {
 }
 struct DisableRollbackDeserializer;
 impl DisableRollbackDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<bool, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct EnableTerminationProtectionDeserializer;
+impl EnableTerminationProtectionDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(
         tag_name: &str,
@@ -4464,8 +4495,10 @@ impl OutputsDeserializer {
 pub struct Parameter {
     /// <p>The key associated with the parameter. If you don't specify a key and value for a particular parameter, AWS CloudFormation uses the default value that is specified in your template.</p>
     pub parameter_key: Option<String>,
-    /// <p>The value associated with the parameter.</p>
+    /// <p>The input value associated with the parameter.</p>
     pub parameter_value: Option<String>,
+    /// <p>Read-only. The value that corresponds to a Systems Manager parameter key. This field is returned only for <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/parameters-section-structure.html#aws-ssm-parameter-types"> <code>SSM</code> parameter types</a> in the template.</p>
+    pub resolved_value: Option<String>,
     /// <p>During a stack update, use the existing parameter value that the stack is using for a given parameter key. If you specify <code>true</code>, do not specify a parameter value.</p>
     pub use_previous_value: Option<bool>,
 }
@@ -4501,6 +4534,12 @@ impl ParameterDeserializer {
                     "ParameterValue" => {
                         obj.parameter_value = Some(try!(ParameterValueDeserializer::deserialize(
                             "ParameterValue",
+                            stack
+                        )));
+                    }
+                    "ResolvedValue" => {
+                        obj.resolved_value = Some(try!(ParameterValueDeserializer::deserialize(
+                            "ResolvedValue",
                             stack
                         )));
                     }
@@ -4542,6 +4581,12 @@ impl ParameterSerializer {
         if let Some(ref field_value) = obj.parameter_value {
             params.put(
                 &format!("{}{}", prefix, "ParameterValue"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.resolved_value {
+            params.put(
+                &format!("{}{}", prefix, "ResolvedValue"),
                 &field_value.replace("+", "%2B"),
             );
         }
@@ -5747,10 +5792,14 @@ pub struct Stack {
     pub change_set_id: Option<String>,
     /// <p>The time at which the stack was created.</p>
     pub creation_time: String,
+    /// <p>The time the stack was deleted.</p>
+    pub deletion_time: Option<String>,
     /// <p>A user-defined description associated with the stack.</p>
     pub description: Option<String>,
     /// <p><p>Boolean to enable or disable rollback on stack creation failures:</p> <ul> <li> <p> <code>true</code>: disable rollback</p> </li> <li> <p> <code>false</code>: enable rollback</p> </li> </ul></p>
     pub disable_rollback: Option<bool>,
+    /// <p>Whether termination protection is enabled for the stack.</p> <p> For <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-nested-stacks.html">nested stacks</a>, termination protection is set on the root stack and cannot be changed directly on the nested stack. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-protect-stacks.html">Protecting a Stack From Being Deleted</a> in the <i>AWS CloudFormation User Guide</i>.</p>
+    pub enable_termination_protection: Option<bool>,
     /// <p>The time the stack was last updated. This field will only be returned if the stack has been updated at least once.</p>
     pub last_updated_time: Option<String>,
     /// <p>SNS topic ARNs to which stack related events are published.</p>
@@ -5759,10 +5808,14 @@ pub struct Stack {
     pub outputs: Option<Vec<Output>>,
     /// <p>A list of <code>Parameter</code> structures.</p>
     pub parameters: Option<Vec<Parameter>>,
+    /// <p>For nested stacks--stacks created as resources for another stack--the stack ID of the direct parent of this stack. For the first level of nested stacks, the root stack is also the parent stack.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-nested-stacks.html">Working with Nested Stacks</a> in the <i>AWS CloudFormation User Guide</i>.</p>
+    pub parent_id: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of an AWS Identity and Access Management (IAM) role that is associated with the stack. During a stack operation, AWS CloudFormation uses this role's credentials to make calls on your behalf.</p>
     pub role_arn: Option<String>,
     /// <p>The rollback triggers for AWS CloudFormation to monitor during stack creation and updating operations, and for the specified monitoring period afterwards.</p>
     pub rollback_configuration: Option<RollbackConfiguration>,
+    /// <p>For nested stacks--stacks created as resources for another stack--the stack ID of the the top-level stack to which the nested stack ultimately belongs.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-nested-stacks.html">Working with Nested Stacks</a> in the <i>AWS CloudFormation User Guide</i>.</p>
+    pub root_id: Option<String>,
     /// <p>Unique identifier of the stack.</p>
     pub stack_id: Option<String>,
     /// <p>The name associated with the stack.</p>
@@ -5815,6 +5868,12 @@ impl StackDeserializer {
                         obj.creation_time =
                             try!(CreationTimeDeserializer::deserialize("CreationTime", stack));
                     }
+                    "DeletionTime" => {
+                        obj.deletion_time = Some(try!(DeletionTimeDeserializer::deserialize(
+                            "DeletionTime",
+                            stack
+                        )));
+                    }
                     "Description" => {
                         obj.description = Some(try!(DescriptionDeserializer::deserialize(
                             "Description",
@@ -5825,6 +5884,13 @@ impl StackDeserializer {
                         obj.disable_rollback = Some(try!(
                             DisableRollbackDeserializer::deserialize("DisableRollback", stack)
                         ));
+                    }
+                    "EnableTerminationProtection" => {
+                        obj.enable_termination_protection =
+                            Some(try!(EnableTerminationProtectionDeserializer::deserialize(
+                                "EnableTerminationProtection",
+                                stack
+                            )));
                     }
                     "LastUpdatedTime" => {
                         obj.last_updated_time = Some(try!(
@@ -5846,6 +5912,10 @@ impl StackDeserializer {
                             stack
                         )));
                     }
+                    "ParentId" => {
+                        obj.parent_id =
+                            Some(try!(StackIdDeserializer::deserialize("ParentId", stack)));
+                    }
                     "RoleARN" => {
                         obj.role_arn =
                             Some(try!(RoleARNDeserializer::deserialize("RoleARN", stack)));
@@ -5856,6 +5926,9 @@ impl StackDeserializer {
                                 "RollbackConfiguration",
                                 stack
                             )));
+                    }
+                    "RootId" => {
+                        obj.root_id = Some(try!(StackIdDeserializer::deserialize("RootId", stack)));
                     }
                     "StackId" => {
                         obj.stack_id =
@@ -6077,6 +6150,8 @@ impl StackIdDeserializer {
 pub struct StackInstance {
     /// <p>The name of the AWS account that the stack instance is associated with.</p>
     pub account: Option<String>,
+    /// <p>A list of parameters from the stack set template whose values have been overridden in this stack instance.</p>
+    pub parameter_overrides: Option<Vec<Parameter>>,
     /// <p>The name of the AWS region that the stack instance is associated with.</p>
     pub region: Option<String>,
     /// <p>The ID of the stack instance.</p>
@@ -6114,6 +6189,12 @@ impl StackInstanceDeserializer {
                     "Account" => {
                         obj.account =
                             Some(try!(AccountDeserializer::deserialize("Account", stack)));
+                    }
+                    "ParameterOverrides" => {
+                        obj.parameter_overrides = Some(try!(ParametersDeserializer::deserialize(
+                            "ParameterOverrides",
+                            stack
+                        )));
                     }
                     "Region" => {
                         obj.region = Some(try!(RegionDeserializer::deserialize("Region", stack)));
@@ -6967,9 +7048,9 @@ pub struct StackSetOperationPreferences {
     pub failure_tolerance_count: Option<i64>,
     /// <p>The percentage of accounts, per region, for which this stack operation can fail before AWS CloudFormation stops the operation in that region. If the operation is stopped in a region, AWS CloudFormation doesn't attempt the operation in any subsequent regions.</p> <p>When calculating the number of accounts based on the specified percentage, AWS CloudFormation rounds <i>down</i> to the next whole number.</p> <p>Conditional: You must specify either <code>FailureToleranceCount</code> or <code>FailureTolerancePercentage</code>, but not both.</p>
     pub failure_tolerance_percentage: Option<i64>,
-    /// <p>The maximum number of accounts in which to perform this operation at one time. This is dependent on the value of <code>FailureToleranceCount</code>—<code>MaxConcurrentCount</code> is at most one more than the <code>FailureToleranceCount</code> .</p> <p>Conditional: You must specify either <code>MaxConcurrentCount</code> or <code>MaxConcurrentPercentage</code>, but not both.</p>
+    /// <p>The maximum number of accounts in which to perform this operation at one time. This is dependent on the value of <code>FailureToleranceCount</code>—<code>MaxConcurrentCount</code> is at most one more than the <code>FailureToleranceCount</code> .</p> <p>Note that this setting lets you specify the <i>maximum</i> for operations. For large deployments, under certain circumstances the actual number of accounts acted upon concurrently may be lower due to service throttling.</p> <p>Conditional: You must specify either <code>MaxConcurrentCount</code> or <code>MaxConcurrentPercentage</code>, but not both.</p>
     pub max_concurrent_count: Option<i64>,
-    /// <p>The maximum percentage of accounts in which to perform this operation at one time.</p> <p>When calculating the number of accounts based on the specified percentage, AWS CloudFormation rounds down to the next whole number. This is true except in cases where rounding down would result is zero. In this case, CloudFormation sets the number as one instead.</p> <p>Conditional: You must specify either <code>MaxConcurrentCount</code> or <code>MaxConcurrentPercentage</code>, but not both.</p>
+    /// <p>The maximum percentage of accounts in which to perform this operation at one time.</p> <p>When calculating the number of accounts based on the specified percentage, AWS CloudFormation rounds down to the next whole number. This is true except in cases where rounding down would result is zero. In this case, CloudFormation sets the number as one instead.</p> <p>Note that this setting lets you specify the <i>maximum</i> for operations. For large deployments, under certain circumstances the actual number of accounts acted upon concurrently may be lower due to service throttling.</p> <p>Conditional: You must specify either <code>MaxConcurrentCount</code> or <code>MaxConcurrentPercentage</code>, but not both.</p>
     pub max_concurrent_percentage: Option<i64>,
     /// <p>The order of the regions in where you want to perform the stack operation.</p>
     pub region_order: Option<Vec<String>>,
@@ -7575,6 +7656,10 @@ pub struct StackSummary {
     pub deletion_time: Option<String>,
     /// <p>The time the stack was last updated. This field will only be returned if the stack has been updated at least once.</p>
     pub last_updated_time: Option<String>,
+    /// <p>For nested stacks--stacks created as resources for another stack--the stack ID of the direct parent of this stack. For the first level of nested stacks, the root stack is also the parent stack.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-nested-stacks.html">Working with Nested Stacks</a> in the <i>AWS CloudFormation User Guide</i>.</p>
+    pub parent_id: Option<String>,
+    /// <p>For nested stacks--stacks created as resources for another stack--the stack ID of the the top-level stack to which the nested stack ultimately belongs.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-nested-stacks.html">Working with Nested Stacks</a> in the <i>AWS CloudFormation User Guide</i>.</p>
+    pub root_id: Option<String>,
     /// <p>Unique stack identifier.</p>
     pub stack_id: Option<String>,
     /// <p>The name associated with the stack.</p>
@@ -7623,6 +7708,13 @@ impl StackSummaryDeserializer {
                         obj.last_updated_time = Some(try!(
                             LastUpdatedTimeDeserializer::deserialize("LastUpdatedTime", stack)
                         ));
+                    }
+                    "ParentId" => {
+                        obj.parent_id =
+                            Some(try!(StackIdDeserializer::deserialize("ParentId", stack)));
+                    }
+                    "RootId" => {
+                        obj.root_id = Some(try!(StackIdDeserializer::deserialize("RootId", stack)));
                     }
                     "StackId" => {
                         obj.stack_id =
@@ -8343,6 +8435,111 @@ impl UpdateStackInputSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone)]
+pub struct UpdateStackInstancesInput {
+    /// <p>The names of one or more AWS accounts for which you want to update parameter values for stack instances. The overridden parameter values will be applied to all stack instances in the specified accounts and regions.</p>
+    pub accounts: Vec<String>,
+    /// <p>The unique identifier for this stack set operation. </p> <p>The operation ID also functions as an idempotency token, to ensure that AWS CloudFormation performs the stack set operation only once, even if you retry the request multiple times. You might retry stack set operation requests to ensure that AWS CloudFormation successfully received them.</p> <p>If you don't specify an operation ID, the SDK generates one automatically. </p>
+    pub operation_id: Option<String>,
+    /// <p>Preferences for how AWS CloudFormation performs this stack set operation.</p>
+    pub operation_preferences: Option<StackSetOperationPreferences>,
+    /// <p> A list of input parameters whose values you want to update for the specified stack instances. </p> <p>Any overridden parameter values will be applied to all stack instances in the specified accounts and regions. When specifying parameters and their values, be aware of how AWS CloudFormation sets parameter values during stack instance update operations:</p> <ul> <li> <p>To override the current value for a parameter, include the parameter and specify its value.</p> </li> <li> <p>To leave a parameter set to its present value, you can do one of the following:</p> <ul> <li> <p>Do not include the parameter in the list.</p> </li> <li> <p>Include the parameter and specify <code>UsePreviousValue</code> as <code>true</code>. (You cannot specify both a value and set <code>UsePreviousValue</code> to <code>true</code>.)</p> </li> </ul> </li> <li> <p>To set all overridden parameter back to the values specified in the stack set, specify a parameter list but do not include any parameters.</p> </li> <li> <p>To leave all parameters set to their present values, do not specify this property at all.</p> </li> </ul> <p>During stack set updates, any parameter values overridden for a stack instance are not updated, but retain their overridden value.</p> <p>You can only override the parameter <i>values</i> that are specified in the stack set; to add or delete a parameter itself, use <code>UpdateStackSet</code> to update the stack set template. If you add a parameter to a template, before you can override the parameter value specified in the stack set you must first use <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackSet.html">UpdateStackSet</a> to update all stack instances with the updated template and parameter value specified in the stack set. Once a stack instance has been updated with the new parameter, you can then override the parameter value using <code>UpdateStackInstances</code>.</p>
+    pub parameter_overrides: Option<Vec<Parameter>>,
+    /// <p>The names of one or more regions in which you want to update parameter values for stack instances. The overridden parameter values will be applied to all stack instances in the specified accounts and regions.</p>
+    pub regions: Vec<String>,
+    /// <p>The name or unique ID of the stack set associated with the stack instances.</p>
+    pub stack_set_name: String,
+}
+
+/// Serialize `UpdateStackInstancesInput` contents to a `SignedRequest`.
+struct UpdateStackInstancesInputSerializer;
+impl UpdateStackInstancesInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &UpdateStackInstancesInput) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        AccountListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "Accounts"),
+            &obj.accounts,
+        );
+        if let Some(ref field_value) = obj.operation_id {
+            params.put(
+                &format!("{}{}", prefix, "OperationId"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.operation_preferences {
+            StackSetOperationPreferencesSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "OperationPreferences"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.parameter_overrides {
+            ParametersSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "ParameterOverrides"),
+                field_value,
+            );
+        }
+        RegionListSerializer::serialize(params, &format!("{}{}", prefix, "Regions"), &obj.regions);
+        params.put(
+            &format!("{}{}", prefix, "StackSetName"),
+            &obj.stack_set_name.replace("+", "%2B"),
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct UpdateStackInstancesOutput {
+    /// <p>The unique identifier for this stack set operation. </p>
+    pub operation_id: Option<String>,
+}
+
+struct UpdateStackInstancesOutputDeserializer;
+impl UpdateStackInstancesOutputDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateStackInstancesOutput, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = UpdateStackInstancesOutput::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "OperationId" => {
+                        obj.operation_id = Some(try!(
+                            ClientRequestTokenDeserializer::deserialize("OperationId", stack)
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>The output for an <a>UpdateStack</a> action.</p>
 #[derive(Default, Debug, Clone)]
 pub struct UpdateStackOutput {
@@ -8516,6 +8713,82 @@ impl UpdateStackSetOutputDeserializer {
                         obj.operation_id = Some(try!(
                             ClientRequestTokenDeserializer::deserialize("OperationId", stack)
                         ));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
+pub struct UpdateTerminationProtectionInput {
+    /// <p>Whether to enable termination protection on the specified stack.</p>
+    pub enable_termination_protection: bool,
+    /// <p>The name or unique ID of the stack for which you want to set termination protection.</p>
+    pub stack_name: String,
+}
+
+/// Serialize `UpdateTerminationProtectionInput` contents to a `SignedRequest`.
+struct UpdateTerminationProtectionInputSerializer;
+impl UpdateTerminationProtectionInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &UpdateTerminationProtectionInput) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "EnableTerminationProtection"),
+            &obj.enable_termination_protection
+                .to_string()
+                .replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "StackName"),
+            &obj.stack_name.replace("+", "%2B"),
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct UpdateTerminationProtectionOutput {
+    /// <p>The unique ID of the stack.</p>
+    pub stack_id: Option<String>,
+}
+
+struct UpdateTerminationProtectionOutputDeserializer;
+impl UpdateTerminationProtectionOutputDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateTerminationProtectionOutput, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = UpdateTerminationProtectionOutput::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "StackId" => {
+                        obj.stack_id =
+                            Some(try!(StackIdDeserializer::deserialize("StackId", stack)));
                     }
                     _ => skip_tree(stack),
                 },
@@ -11358,6 +11631,111 @@ impl Error for UpdateStackError {
         }
     }
 }
+/// Errors returned by UpdateStackInstances
+#[derive(Debug, PartialEq)]
+pub enum UpdateStackInstancesError {
+    /// <p>The specified operation isn't valid.</p>
+    InvalidOperation(String),
+    /// <p>The specified operation ID already exists.</p>
+    OperationIdAlreadyExists(String),
+    /// <p>Another operation is currently in progress for this stack set. Only one operation can be performed for a stack set at a given time.</p>
+    OperationInProgress(String),
+    /// <p>The specified stack instance doesn't exist.</p>
+    StackInstanceNotFound(String),
+    /// <p>The specified stack set doesn't exist.</p>
+    StackSetNotFound(String),
+    /// <p>Another operation has been performed on this stack set since the specified operation was performed. </p>
+    StaleRequest(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateStackInstancesError {
+    pub fn from_body(body: &str) -> UpdateStackInstancesError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "InvalidOperationException" => {
+                    UpdateStackInstancesError::InvalidOperation(String::from(parsed_error.message))
+                }
+                "OperationIdAlreadyExistsException" => {
+                    UpdateStackInstancesError::OperationIdAlreadyExists(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "OperationInProgressException" => UpdateStackInstancesError::OperationInProgress(
+                    String::from(parsed_error.message),
+                ),
+                "StackInstanceNotFoundException" => {
+                    UpdateStackInstancesError::StackInstanceNotFound(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "StackSetNotFoundException" => {
+                    UpdateStackInstancesError::StackSetNotFound(String::from(parsed_error.message))
+                }
+                "StaleRequestException" => {
+                    UpdateStackInstancesError::StaleRequest(String::from(parsed_error.message))
+                }
+                _ => UpdateStackInstancesError::Unknown(String::from(body)),
+            },
+            Err(_) => UpdateStackInstancesError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for UpdateStackInstancesError {
+    fn from(err: XmlParseError) -> UpdateStackInstancesError {
+        let XmlParseError(message) = err;
+        UpdateStackInstancesError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for UpdateStackInstancesError {
+    fn from(err: CredentialsError) -> UpdateStackInstancesError {
+        UpdateStackInstancesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateStackInstancesError {
+    fn from(err: HttpDispatchError) -> UpdateStackInstancesError {
+        UpdateStackInstancesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateStackInstancesError {
+    fn from(err: io::Error) -> UpdateStackInstancesError {
+        UpdateStackInstancesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateStackInstancesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateStackInstancesError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateStackInstancesError::InvalidOperation(ref cause) => cause,
+            UpdateStackInstancesError::OperationIdAlreadyExists(ref cause) => cause,
+            UpdateStackInstancesError::OperationInProgress(ref cause) => cause,
+            UpdateStackInstancesError::StackInstanceNotFound(ref cause) => cause,
+            UpdateStackInstancesError::StackSetNotFound(ref cause) => cause,
+            UpdateStackInstancesError::StaleRequest(ref cause) => cause,
+            UpdateStackInstancesError::Validation(ref cause) => cause,
+            UpdateStackInstancesError::Credentials(ref err) => err.description(),
+            UpdateStackInstancesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateStackInstancesError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateStackSet
 #[derive(Debug, PartialEq)]
 pub enum UpdateStackSetError {
@@ -11450,6 +11828,71 @@ impl Error for UpdateStackSetError {
             UpdateStackSetError::Credentials(ref err) => err.description(),
             UpdateStackSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             UpdateStackSetError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdateTerminationProtection
+#[derive(Debug, PartialEq)]
+pub enum UpdateTerminationProtectionError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateTerminationProtectionError {
+    pub fn from_body(body: &str) -> UpdateTerminationProtectionError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => UpdateTerminationProtectionError::Unknown(String::from(body)),
+            },
+            Err(_) => UpdateTerminationProtectionError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for UpdateTerminationProtectionError {
+    fn from(err: XmlParseError) -> UpdateTerminationProtectionError {
+        let XmlParseError(message) = err;
+        UpdateTerminationProtectionError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for UpdateTerminationProtectionError {
+    fn from(err: CredentialsError) -> UpdateTerminationProtectionError {
+        UpdateTerminationProtectionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateTerminationProtectionError {
+    fn from(err: HttpDispatchError) -> UpdateTerminationProtectionError {
+        UpdateTerminationProtectionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateTerminationProtectionError {
+    fn from(err: io::Error) -> UpdateTerminationProtectionError {
+        UpdateTerminationProtectionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateTerminationProtectionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateTerminationProtectionError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateTerminationProtectionError::Validation(ref cause) => cause,
+            UpdateTerminationProtectionError::Credentials(ref err) => err.description(),
+            UpdateTerminationProtectionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateTerminationProtectionError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -11718,11 +12161,23 @@ pub trait CloudFormation {
     fn update_stack(&self, input: &UpdateStackInput)
         -> Result<UpdateStackOutput, UpdateStackError>;
 
+    /// <p>Updates the parameter values for stack instances for the specified accounts, within the specified regions. A stack instance refers to a stack in a specific account and region. </p> <p>You can only update stack instances in regions and accounts where they already exist; to create additional stack instances, use <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateStackInstances.html">CreateStackInstances</a>. </p> <p>During stack set updates, any parameters overridden for a stack instance are not updated, but retain their overridden value.</p> <p>You can only update the parameter <i>values</i> that are specified in the stack set; to add or delete a parameter itself, use <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackSet.html">UpdateStackSet</a> to update the stack set template. If you add a parameter to a template, before you can override the parameter value specified in the stack set you must first use <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackSet.html">UpdateStackSet</a> to update all stack instances with the updated template and parameter value specified in the stack set. Once a stack instance has been updated with the new parameter, you can then override the parameter value using <code>UpdateStackInstances</code>.</p>
+    fn update_stack_instances(
+        &self,
+        input: &UpdateStackInstancesInput,
+    ) -> Result<UpdateStackInstancesOutput, UpdateStackInstancesError>;
+
     /// <p>Updates the stack set and <i>all</i> associated stack instances.</p> <p>Even if the stack set operation created by updating the stack set fails (completely or partially, below or above a specified failure tolerance), the stack set is updated with your changes. Subsequent <a>CreateStackInstances</a> calls on the specified stack set use the updated stack set.</p>
     fn update_stack_set(
         &self,
         input: &UpdateStackSetInput,
     ) -> Result<UpdateStackSetOutput, UpdateStackSetError>;
+
+    /// <p>Updates termination protection for the specified stack. If a user attempts to delete a stack with termination protection enabled, the operation fails and the stack remains unchanged. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-protect-stacks.html">Protecting a Stack From Being Deleted</a> in the <i>AWS CloudFormation User Guide</i>.</p> <p> For <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-nested-stacks.html">nested stacks</a>, termination protection is set on the root stack and cannot be changed directly on the nested stack.</p>
+    fn update_termination_protection(
+        &self,
+        input: &UpdateTerminationProtectionInput,
+    ) -> Result<UpdateTerminationProtectionOutput, UpdateTerminationProtectionError>;
 
     /// <p>Validates a specified template. AWS CloudFormation first checks if the template is valid JSON. If it isn't, AWS CloudFormation checks if the template is valid YAML. If both these checks fail, AWS CloudFormation returns a template validation error.</p>
     fn validate_template(
@@ -13553,6 +14008,57 @@ where
         }
     }
 
+    /// <p>Updates the parameter values for stack instances for the specified accounts, within the specified regions. A stack instance refers to a stack in a specific account and region. </p> <p>You can only update stack instances in regions and accounts where they already exist; to create additional stack instances, use <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_CreateStackInstances.html">CreateStackInstances</a>. </p> <p>During stack set updates, any parameters overridden for a stack instance are not updated, but retain their overridden value.</p> <p>You can only update the parameter <i>values</i> that are specified in the stack set; to add or delete a parameter itself, use <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackSet.html">UpdateStackSet</a> to update the stack set template. If you add a parameter to a template, before you can override the parameter value specified in the stack set you must first use <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/APIReference/API_UpdateStackSet.html">UpdateStackSet</a> to update all stack instances with the updated template and parameter value specified in the stack set. Once a stack instance has been updated with the new parameter, you can then override the parameter value using <code>UpdateStackInstances</code>.</p>
+    fn update_stack_instances(
+        &self,
+        input: &UpdateStackInstancesInput,
+    ) -> Result<UpdateStackInstancesOutput, UpdateStackInstancesError> {
+        let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "UpdateStackInstances");
+        params.put("Version", "2010-05-15");
+        UpdateStackInstancesInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = UpdateStackInstancesOutput::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(UpdateStackInstancesOutputDeserializer::deserialize(
+                        "UpdateStackInstancesResult",
+                        &mut stack
+                    ));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateStackInstancesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Updates the stack set and <i>all</i> associated stack instances.</p> <p>Even if the stack set operation created by updating the stack set fails (completely or partially, below or above a specified failure tolerance), the stack set is updated with your changes. Subsequent <a>CreateStackInstances</a> calls on the specified stack set use the updated stack set.</p>
     fn update_stack_set(
         &self,
@@ -13598,6 +14104,57 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(UpdateStackSetError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Updates termination protection for the specified stack. If a user attempts to delete a stack with termination protection enabled, the operation fails and the stack remains unchanged. For more information, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-protect-stacks.html">Protecting a Stack From Being Deleted</a> in the <i>AWS CloudFormation User Guide</i>.</p> <p> For <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-nested-stacks.html">nested stacks</a>, termination protection is set on the root stack and cannot be changed directly on the nested stack.</p>
+    fn update_termination_protection(
+        &self,
+        input: &UpdateTerminationProtectionInput,
+    ) -> Result<UpdateTerminationProtectionOutput, UpdateTerminationProtectionError> {
+        let mut request = SignedRequest::new("POST", "cloudformation", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "UpdateTerminationProtection");
+        params.put("Version", "2010-05-15");
+        UpdateTerminationProtectionInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = UpdateTerminationProtectionOutput::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(UpdateTerminationProtectionOutputDeserializer::deserialize(
+                        "UpdateTerminationProtectionResult",
+                        &mut stack
+                    ));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateTerminationProtectionError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }

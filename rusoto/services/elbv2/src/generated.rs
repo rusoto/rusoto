@@ -181,6 +181,83 @@ impl ActionsSerializer {
 }
 
 #[derive(Default, Debug, Clone)]
+pub struct AddListenerCertificatesInput {
+    /// <p>The certificate to add. You can specify one certificate per call.</p>
+    pub certificates: Vec<Certificate>,
+    /// <p>The Amazon Resource Name (ARN) of the listener.</p>
+    pub listener_arn: String,
+}
+
+/// Serialize `AddListenerCertificatesInput` contents to a `SignedRequest`.
+struct AddListenerCertificatesInputSerializer;
+impl AddListenerCertificatesInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &AddListenerCertificatesInput) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        CertificateListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "Certificates"),
+            &obj.certificates,
+        );
+        params.put(
+            &format!("{}{}", prefix, "ListenerArn"),
+            &obj.listener_arn.replace("+", "%2B"),
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct AddListenerCertificatesOutput {
+    /// <p>Information about the certificates.</p>
+    pub certificates: Option<Vec<Certificate>>,
+}
+
+struct AddListenerCertificatesOutputDeserializer;
+impl AddListenerCertificatesOutputDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AddListenerCertificatesOutput, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = AddListenerCertificatesOutput::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Certificates" => {
+                        obj.certificates = Some(try!(CertificateListDeserializer::deserialize(
+                            "Certificates",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
 pub struct AddTagsInput {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     pub resource_arns: Vec<String>,
@@ -225,9 +302,25 @@ impl AddTagsOutputDeserializer {
         Ok(obj)
     }
 }
+struct AllocationIdDeserializer;
+impl AllocationIdDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>Information about an Availability Zone.</p>
 #[derive(Default, Debug, Clone)]
 pub struct AvailabilityZone {
+    /// <p>[Network Load Balancers] The static IP address.</p>
+    pub load_balancer_addresses: Option<Vec<LoadBalancerAddress>>,
     /// <p>The ID of the subnet.</p>
     pub subnet_id: Option<String>,
     /// <p>The name of the Availability Zone.</p>
@@ -256,6 +349,13 @@ impl AvailabilityZoneDeserializer {
 
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
+                    "LoadBalancerAddresses" => {
+                        obj.load_balancer_addresses =
+                            Some(try!(LoadBalancerAddressesDeserializer::deserialize(
+                                "LoadBalancerAddresses",
+                                stack
+                            )));
+                    }
                     "SubnetId" => {
                         obj.subnet_id =
                             Some(try!(SubnetIdDeserializer::deserialize("SubnetId", stack)));
@@ -335,11 +435,13 @@ impl CanonicalHostedZoneIdDeserializer {
         Ok(obj)
     }
 }
-/// <p>Information about an SSL server certificate deployed on a load balancer.</p>
+/// <p>Information about an SSL server certificate.</p>
 #[derive(Default, Debug, Clone)]
 pub struct Certificate {
     /// <p>The Amazon Resource Name (ARN) of the certificate.</p>
     pub certificate_arn: Option<String>,
+    /// <p>Indicates whether the certificate is the default certificate.</p>
+    pub is_default: Option<bool>,
 }
 
 struct CertificateDeserializer;
@@ -370,6 +472,10 @@ impl CertificateDeserializer {
                             stack
                         )));
                     }
+                    "IsDefault" => {
+                        obj.is_default =
+                            Some(try!(DefaultDeserializer::deserialize("IsDefault", stack)));
+                    }
                     _ => skip_tree(stack),
                 },
                 DeserializerNext::Close => break,
@@ -398,6 +504,12 @@ impl CertificateSerializer {
             params.put(
                 &format!("{}{}", prefix, "CertificateArn"),
                 &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.is_default {
+            params.put(
+                &format!("{}{}", prefix, "IsDefault"),
+                &field_value.to_string().replace("+", "%2B"),
             );
         }
     }
@@ -607,17 +719,17 @@ impl ConditionFieldNameDeserializer {
 }
 #[derive(Default, Debug, Clone)]
 pub struct CreateListenerInput {
-    /// <p>The SSL server certificate. You must provide exactly one certificate if the protocol is HTTPS.</p>
+    /// <p>[HTTPS listeners] The SSL server certificate. You must provide exactly one certificate.</p>
     pub certificates: Option<Vec<Certificate>>,
-    /// <p>The default action for the listener.</p>
+    /// <p>The default action for the listener. For Application Load Balancers, the protocol of the specified target group must be HTTP or HTTPS. For Network Load Balancers, the protocol of the specified target group must be TCP.</p>
     pub default_actions: Vec<Action>,
     /// <p>The Amazon Resource Name (ARN) of the load balancer.</p>
     pub load_balancer_arn: String,
     /// <p>The port on which the load balancer is listening.</p>
     pub port: i64,
-    /// <p>The protocol for connections from clients to the load balancer.</p>
+    /// <p>The protocol for connections from clients to the load balancer. For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocol is TCP.</p>
     pub protocol: String,
-    /// <p>The security policy that defines which ciphers and protocols are supported. The default is the current predefined security policy.</p>
+    /// <p>[HTTPS listeners] The security policy that defines which ciphers and protocols are supported. The default is the current predefined security policy.</p>
     pub ssl_policy: Option<String>,
 }
 
@@ -711,18 +823,22 @@ impl CreateListenerOutputDeserializer {
 }
 #[derive(Default, Debug, Clone)]
 pub struct CreateLoadBalancerInput {
-    /// <p>The type of IP addresses used by the subnets for your load balancer. The possible values are <code>ipv4</code> (for IPv4 addresses) and <code>dualstack</code> (for IPv4 and IPv6 addresses). Internal load balancers must use <code>ipv4</code>.</p>
+    /// <p>[Application Load Balancers] The type of IP addresses used by the subnets for your load balancer. The possible values are <code>ipv4</code> (for IPv4 addresses) and <code>dualstack</code> (for IPv4 and IPv6 addresses). Internal load balancers must use <code>ipv4</code>.</p>
     pub ip_address_type: Option<String>,
     /// <p>The name of the load balancer.</p> <p>This name must be unique per region per account, can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, and must not begin or end with a hyphen.</p>
     pub name: String,
     /// <p>The nodes of an Internet-facing load balancer have public IP addresses. The DNS name of an Internet-facing load balancer is publicly resolvable to the public IP addresses of the nodes. Therefore, Internet-facing load balancers can route requests from clients over the Internet.</p> <p>The nodes of an internal load balancer have only private IP addresses. The DNS name of an internal load balancer is publicly resolvable to the private IP addresses of the nodes. Therefore, internal load balancers can only route requests from clients with access to the VPC for the load balancer.</p> <p>The default is an Internet-facing load balancer.</p>
     pub scheme: Option<String>,
-    /// <p>The IDs of the security groups to assign to the load balancer.</p>
+    /// <p>[Application Load Balancers] The IDs of the security groups to assign to the load balancer.</p>
     pub security_groups: Option<Vec<String>>,
-    /// <p>The IDs of the subnets to attach to the load balancer. You can specify only one subnet per Availability Zone. You must specify subnets from at least two Availability Zones.</p>
-    pub subnets: Vec<String>,
+    /// <p>The IDs of the subnets to attach to the load balancer. You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings.</p> <p>[Application Load Balancers] You must specify subnets from at least two Availability Zones. You cannot specify Elastic IP addresses for your subnets.</p> <p>[Network Load Balancers] You can specify subnets from one or more Availability Zones. You can specify one Elastic IP address per subnet.</p>
+    pub subnet_mappings: Option<Vec<SubnetMapping>>,
+    /// <p>The IDs of the subnets to attach to the load balancer. You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings.</p> <p>[Application Load Balancers] You must specify subnets from at least two Availability Zones.</p> <p>[Network Load Balancers] You can specify subnets from one or more Availability Zones.</p>
+    pub subnets: Option<Vec<String>>,
     /// <p>One or more tags to assign to the load balancer.</p>
     pub tags: Option<Vec<Tag>>,
+    /// <p>The type of load balancer to create. The default is <code>application</code>.</p>
+    pub type_: Option<String>,
 }
 
 /// Serialize `CreateLoadBalancerInput` contents to a `SignedRequest`.
@@ -757,9 +873,24 @@ impl CreateLoadBalancerInputSerializer {
                 field_value,
             );
         }
-        SubnetsSerializer::serialize(params, &format!("{}{}", prefix, "Subnets"), &obj.subnets);
+        if let Some(ref field_value) = obj.subnet_mappings {
+            SubnetMappingsSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "SubnetMappings"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.subnets {
+            SubnetsSerializer::serialize(params, &format!("{}{}", prefix, "Subnets"), field_value);
+        }
         if let Some(ref field_value) = obj.tags {
             TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+        }
+        if let Some(ref field_value) = obj.type_ {
+            params.put(
+                &format!("{}{}", prefix, "Type"),
+                &field_value.replace("+", "%2B"),
+            );
         }
     }
 }
@@ -816,7 +947,7 @@ impl CreateLoadBalancerOutputDeserializer {
 pub struct CreateRuleInput {
     /// <p>An action. Each action has the type <code>forward</code> and specifies a target group.</p>
     pub actions: Vec<Action>,
-    /// <p><p>A condition. Each condition specifies a field name and a single value.</p> <p>If the field name is <code>host-header</code>, you can specify a single host name (for example, my.example.com). A host name is case insensitive, can be up to 128 characters in length, and can contain any of the following characters. Note that you can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>- .</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul> <p>If the field name is <code>path-pattern</code>, you can specify a single path pattern. A path pattern is case sensitive, can be up to 128 characters in length, and can contain any of the following characters. Note that you can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>_ - . $ / ~ &quot; &#39; @ : +</p> </li> <li> <p>&amp; (using &amp;amp;)</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul></p>
+    /// <p><p>The conditions. Each condition specifies a field name and a single value.</p> <p>If the field name is <code>host-header</code>, you can specify a single host name (for example, my.example.com). A host name is case insensitive, can be up to 128 characters in length, and can contain any of the following characters. Note that you can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>- .</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul> <p>If the field name is <code>path-pattern</code>, you can specify a single path pattern. A path pattern is case sensitive, can be up to 128 characters in length, and can contain any of the following characters. Note that you can include up to three wildcard characters.</p> <ul> <li> <p>A-Z, a-z, 0-9</p> </li> <li> <p>_ - . $ / ~ &quot; &#39; @ : +</p> </li> <li> <p>&amp; (using &amp;amp;)</p> </li> <li> <p>* (matches 0 or more characters)</p> </li> <li> <p>? (matches exactly 1 character)</p> </li> </ul></p>
     pub conditions: Vec<RuleCondition>,
     /// <p>The Amazon Resource Name (ARN) of the listener.</p>
     pub listener_arn: String,
@@ -897,27 +1028,29 @@ impl CreateRuleOutputDeserializer {
 }
 #[derive(Default, Debug, Clone)]
 pub struct CreateTargetGroupInput {
-    /// <p>The approximate amount of time, in seconds, between health checks of an individual target. The default is 30 seconds.</p>
+    /// <p>The approximate amount of time, in seconds, between health checks of an individual target. For Application Load Balancers, the range is 5 to 300 seconds. For Network Load Balancers, the supported values are 10 or 30 seconds. The default is 30 seconds.</p>
     pub health_check_interval_seconds: Option<i64>,
-    /// <p>The ping path that is the destination on the targets for health checks. The default is /.</p>
+    /// <p>[HTTP/HTTPS health checks] The ping path that is the destination on the targets for health checks. The default is /.</p>
     pub health_check_path: Option<String>,
-    /// <p>The port the load balancer uses when performing health checks on targets. The default is <code>traffic-port</code>, which indicates the port on which each target receives traffic from the load balancer.</p>
+    /// <p>The port the load balancer uses when performing health checks on targets. The default is <code>traffic-port</code>, which is the port on which each target receives traffic from the load balancer.</p>
     pub health_check_port: Option<String>,
-    /// <p>The protocol the load balancer uses when performing health checks on targets. The default is the HTTP protocol.</p>
+    /// <p>The protocol the load balancer uses when performing health checks on targets. The TCP protocol is supported only if the protocol of the target group is TCP. For Application Load Balancers, the default is HTTP. For Network Load Balancers, the default is TCP.</p>
     pub health_check_protocol: Option<String>,
-    /// <p>The amount of time, in seconds, during which no response from a target means a failed health check. The default is 5 seconds.</p>
+    /// <p>The amount of time, in seconds, during which no response from a target means a failed health check. For Application Load Balancers, the range is 2 to 60 seconds and the default is 5 seconds. For Network Load Balancers, this is 10 seconds for TCP and HTTPS health checks and 6 seconds for HTTP health checks.</p>
     pub health_check_timeout_seconds: Option<i64>,
-    /// <p>The number of consecutive health checks successes required before considering an unhealthy target healthy. The default is 5.</p>
+    /// <p>The number of consecutive health checks successes required before considering an unhealthy target healthy. For Application Load Balancers, the default is 5. For Network Load Balancers, the default is 3.</p>
     pub healthy_threshold_count: Option<i64>,
-    /// <p>The HTTP codes to use when checking for a successful response from a target. The default is 200.</p>
+    /// <p>[HTTP/HTTPS health checks] The HTTP codes to use when checking for a successful response from a target.</p>
     pub matcher: Option<Matcher>,
     /// <p>The name of the target group.</p> <p>This name must be unique per region per account, can have a maximum of 32 characters, must contain only alphanumeric characters or hyphens, and must not begin or end with a hyphen.</p>
     pub name: String,
     /// <p>The port on which the targets receive traffic. This port is used unless you specify a port override when registering the target.</p>
     pub port: i64,
-    /// <p>The protocol to use for routing traffic to the targets.</p>
+    /// <p>The protocol to use for routing traffic to the targets. For Application Load Balancers, the supported protocols are HTTP and HTTPS. For Network Load Balancers, the supported protocol is TCP.</p>
     pub protocol: String,
-    /// <p>The number of consecutive health check failures required before considering a target unhealthy. The default is 2.</p>
+    /// <p>The type of target that you must specify when registering targets with this target group. The possible values are <code>instance</code> (targets are specified by instance ID) or <code>ip</code> (targets are specified by IP address). The default is <code>instance</code>. Note that you can't specify targets for a target group using both instance IDs and IP addresses.</p> <p>If the target type is <code>ip</code>, specify IP addresses from the subnets of the virtual private cloud (VPC) for the target group, the RFC 1918 range (10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16), and the RFC 6598 range (100.64.0.0/10). You can't specify publicly routable IP addresses.</p>
+    pub target_type: Option<String>,
+    /// <p>The number of consecutive health check failures required before considering a target unhealthy. For Application Load Balancers, the default is 2. For Network Load Balancers, this value must be the same as the healthy threshold count.</p>
     pub unhealthy_threshold_count: Option<i64>,
     /// <p>The identifier of the virtual private cloud (VPC).</p>
     pub vpc_id: String,
@@ -983,6 +1116,12 @@ impl CreateTargetGroupInputSerializer {
             &format!("{}{}", prefix, "Protocol"),
             &obj.protocol.replace("+", "%2B"),
         );
+        if let Some(ref field_value) = obj.target_type {
+            params.put(
+                &format!("{}{}", prefix, "TargetType"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
         if let Some(ref field_value) = obj.unhealthy_threshold_count {
             params.put(
                 &format!("{}{}", prefix, "UnhealthyThresholdCount"),
@@ -1067,6 +1206,20 @@ impl DNSNameDeserializer {
     ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct DefaultDeserializer;
+impl DefaultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<bool, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = bool::from_str(try!(characters(stack)).as_ref()).unwrap();
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -1348,6 +1501,98 @@ impl DescribeAccountLimitsOutputDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "Limits" => {
                         obj.limits = Some(try!(LimitsDeserializer::deserialize("Limits", stack)));
+                    }
+                    "NextMarker" => {
+                        obj.next_marker =
+                            Some(try!(MarkerDeserializer::deserialize("NextMarker", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
+pub struct DescribeListenerCertificatesInput {
+    /// <p>The Amazon Resource Names (ARN) of the listener.</p>
+    pub listener_arn: String,
+    /// <p>The marker for the next set of results. (You received this marker from a previous call.)</p>
+    pub marker: Option<String>,
+    /// <p>The maximum number of results to return with this call.</p>
+    pub page_size: Option<i64>,
+}
+
+/// Serialize `DescribeListenerCertificatesInput` contents to a `SignedRequest`.
+struct DescribeListenerCertificatesInputSerializer;
+impl DescribeListenerCertificatesInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeListenerCertificatesInput) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "ListenerArn"),
+            &obj.listener_arn.replace("+", "%2B"),
+        );
+        if let Some(ref field_value) = obj.marker {
+            params.put(
+                &format!("{}{}", prefix, "Marker"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.page_size {
+            params.put(
+                &format!("{}{}", prefix, "PageSize"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct DescribeListenerCertificatesOutput {
+    /// <p>Information about the certificates.</p>
+    pub certificates: Option<Vec<Certificate>>,
+    /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
+    pub next_marker: Option<String>,
+}
+
+struct DescribeListenerCertificatesOutputDeserializer;
+impl DescribeListenerCertificatesOutputDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeListenerCertificatesOutput, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = DescribeListenerCertificatesOutput::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Certificates" => {
+                        obj.certificates = Some(try!(CertificateListDeserializer::deserialize(
+                            "Certificates",
+                            stack
+                        )));
                     }
                     "NextMarker" => {
                         obj.next_marker =
@@ -2251,6 +2496,20 @@ impl HttpCodeDeserializer {
         Ok(obj)
     }
 }
+struct IpAddressDeserializer;
+impl IpAddressDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 struct IpAddressTypeDeserializer;
 impl IpAddressTypeDeserializer {
     #[allow(unused_variables)]
@@ -2284,7 +2543,7 @@ impl IsDefaultDeserializer {
 pub struct Limit {
     /// <p>The maximum value of the limit.</p>
     pub max: Option<String>,
-    /// <p><p>The name of the limit. The possible values are:</p> <ul> <li> <p>application-load-balancers</p> </li> <li> <p>listeners-per-application-load-balancer</p> </li> <li> <p>rules-per-application-load-balancer</p> </li> <li> <p>target-groups</p> </li> <li> <p>targets-per-application-load-balancer</p> </li> </ul></p>
+    /// <p><p>The name of the limit. The possible values are:</p> <ul> <li> <p>application-load-balancers</p> </li> <li> <p>listeners-per-application-load-balancer</p> </li> <li> <p>listeners-per-network-load-balancer</p> </li> <li> <p>network-load-balancers</p> </li> <li> <p>rules-per-application-load-balancer</p> </li> <li> <p>target-groups</p> </li> <li> <p>targets-per-application-load-balancer</p> </li> <li> <p>targets-per-availability-zone-per-network-load-balancer</p> </li> <li> <p>targets-per-network-load-balancer</p> </li> </ul></p>
     pub name: Option<String>,
 }
 
@@ -2711,6 +2970,104 @@ impl LoadBalancerDeserializer {
         Ok(obj)
     }
 }
+/// <p>Information about a static IP address for a load balancer.</p>
+#[derive(Default, Debug, Clone)]
+pub struct LoadBalancerAddress {
+    /// <p>[Network Load Balancers] The allocation ID of the Elastic IP address.</p>
+    pub allocation_id: Option<String>,
+    /// <p>The static IP address.</p>
+    pub ip_address: Option<String>,
+}
+
+struct LoadBalancerAddressDeserializer;
+impl LoadBalancerAddressDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LoadBalancerAddress, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = LoadBalancerAddress::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AllocationId" => {
+                        obj.allocation_id = Some(try!(AllocationIdDeserializer::deserialize(
+                            "AllocationId",
+                            stack
+                        )));
+                    }
+                    "IpAddress" => {
+                        obj.ip_address =
+                            Some(try!(IpAddressDeserializer::deserialize("IpAddress", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct LoadBalancerAddressesDeserializer;
+impl LoadBalancerAddressesDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<LoadBalancerAddress>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "member" {
+                        obj.push(try!(LoadBalancerAddressDeserializer::deserialize(
+                            "member",
+                            stack
+                        )));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
 struct LoadBalancerArnDeserializer;
 impl LoadBalancerArnDeserializer {
     #[allow(unused_variables)]
@@ -2783,7 +3140,7 @@ impl LoadBalancerArnsSerializer {
 /// <p>Information about a load balancer attribute.</p>
 #[derive(Default, Debug, Clone)]
 pub struct LoadBalancerAttribute {
-    /// <p><p>The name of the attribute.</p> <ul> <li> <p> <code>access<em>logs.s3.enabled</code> - Indicates whether access logs stored in Amazon S3 are enabled. The value is <code>true</code> or <code>false</code>.</p> </li> <li> <p> <code>access</em>logs.s3.bucket</code> - The name of the S3 bucket for the access logs. This attribute is required if access logs in Amazon S3 are enabled. The bucket must exist in the same region as the load balancer and have a bucket policy that grants Elastic Load Balancing permission to write to the bucket.</p> </li> <li> <p> <code>access<em>logs.s3.prefix</code> - The prefix for the location in the S3 bucket. If you don&#39;t specify a prefix, the access logs are stored in the root of the bucket.</p> </li> <li> <p> <code>deletion</em>protection.enabled</code> - Indicates whether deletion protection is enabled. The value is <code>true</code> or <code>false</code>.</p> </li> <li> <p> <code>idle<em>timeout.timeout</em>seconds</code> - The idle timeout value, in seconds. The valid range is 1-3600. The default is 60 seconds.</p> </li> </ul></p>
+    /// <p><p>The name of the attribute.</p> <ul> <li> <p> <code>access<em>logs.s3.enabled</code> - [Application Load Balancers] Indicates whether access logs stored in Amazon S3 are enabled. The value is <code>true</code> or <code>false</code>.</p> </li> <li> <p> <code>access</em>logs.s3.bucket</code> - [Application Load Balancers] The name of the S3 bucket for the access logs. This attribute is required if access logs in Amazon S3 are enabled. The bucket must exist in the same region as the load balancer and have a bucket policy that grants Elastic Load Balancing permission to write to the bucket.</p> </li> <li> <p> <code>access<em>logs.s3.prefix</code> - [Application Load Balancers] The prefix for the location in the S3 bucket. If you don&#39;t specify a prefix, the access logs are stored in the root of the bucket.</p> </li> <li> <p> <code>deletion</em>protection.enabled</code> - Indicates whether deletion protection is enabled. The value is <code>true</code> or <code>false</code>.</p> </li> <li> <p> <code>idle<em>timeout.timeout</em>seconds</code> - [Application Load Balancers] The idle timeout value, in seconds. The valid range is 1-4000. The default is 60 seconds.</p> </li> </ul></p>
     pub key: Option<String>,
     /// <p>The value of the attribute.</p>
     pub value: Option<String>,
@@ -3124,7 +3481,7 @@ impl MarkerDeserializer {
 /// <p>Information to use when checking for a successful response from a target.</p>
 #[derive(Default, Debug, Clone)]
 pub struct Matcher {
-    /// <p>The HTTP codes. You can specify values between 200 and 499. The default value is 200. You can specify multiple values (for example, "200,202") or a range of values (for example, "200-299").</p>
+    /// <p>The HTTP codes.</p> <p>For Application Load Balancers, you can specify values between 200 and 499, and the default value is 200. You can specify multiple values (for example, "200,202") or a range of values (for example, "200-299").</p> <p>For Network Load Balancers, this is 200 to 399.</p>
     pub http_code: String,
 }
 
@@ -3200,15 +3557,15 @@ impl MaxDeserializer {
 }
 #[derive(Default, Debug, Clone)]
 pub struct ModifyListenerInput {
-    /// <p>The SSL server certificate.</p>
+    /// <p>The default SSL server certificate.</p>
     pub certificates: Option<Vec<Certificate>>,
-    /// <p>The default actions.</p>
+    /// <p>The default action. For Application Load Balancers, the protocol of the specified target group must be HTTP or HTTPS. For Network Load Balancers, the protocol of the specified target group must be TCP.</p>
     pub default_actions: Option<Vec<Action>>,
     /// <p>The Amazon Resource Name (ARN) of the listener.</p>
     pub listener_arn: String,
     /// <p>The port for connections from clients to the load balancer.</p>
     pub port: Option<i64>,
-    /// <p>The protocol for connections from clients to the load balancer.</p>
+    /// <p>The protocol for connections from clients to the load balancer. Application Load Balancers support HTTP and HTTPS and Network Load Balancers support TCP.</p>
     pub protocol: Option<String>,
     /// <p>The security policy that defines which protocols and ciphers are supported. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/create-https-listener.html#describe-ssl-policies">Security Policies</a> in the <i>Application Load Balancers Guide</i>.</p>
     pub ssl_policy: Option<String>,
@@ -3386,7 +3743,7 @@ impl ModifyLoadBalancerAttributesOutputDeserializer {
 }
 #[derive(Default, Debug, Clone)]
 pub struct ModifyRuleInput {
-    /// <p>The actions.</p>
+    /// <p>The actions. The target group must use the HTTP or HTTPS protocol.</p>
     pub actions: Option<Vec<Action>>,
     /// <p>The conditions.</p>
     pub conditions: Option<Vec<RuleCondition>>,
@@ -3543,23 +3900,23 @@ impl ModifyTargetGroupAttributesOutputDeserializer {
 }
 #[derive(Default, Debug, Clone)]
 pub struct ModifyTargetGroupInput {
-    /// <p>The approximate amount of time, in seconds, between health checks of an individual target.</p>
+    /// <p>The approximate amount of time, in seconds, between health checks of an individual target. For Application Load Balancers, the range is 5 to 300 seconds. For Network Load Balancers, the supported values are 10 or 30 seconds.</p>
     pub health_check_interval_seconds: Option<i64>,
-    /// <p>The ping path that is the destination for the health check request.</p>
+    /// <p>[HTTP/HTTPS health checks] The ping path that is the destination for the health check request.</p>
     pub health_check_path: Option<String>,
-    /// <p>The port to use to connect with the target.</p>
+    /// <p>The port the load balancer uses when performing health checks on targets.</p>
     pub health_check_port: Option<String>,
-    /// <p>The protocol to use to connect with the target.</p>
+    /// <p>The protocol the load balancer uses when performing health checks on targets. The TCP protocol is supported only if the protocol of the target group is TCP.</p>
     pub health_check_protocol: Option<String>,
-    /// <p>The amount of time, in seconds, during which no response means a failed health check.</p>
+    /// <p>[HTTP/HTTPS health checks] The amount of time, in seconds, during which no response means a failed health check.</p>
     pub health_check_timeout_seconds: Option<i64>,
     /// <p>The number of consecutive health checks successes required before considering an unhealthy target healthy.</p>
     pub healthy_threshold_count: Option<i64>,
-    /// <p>The HTTP codes to use when checking for a successful response from a target.</p>
+    /// <p>[HTTP/HTTPS health checks] The HTTP codes to use when checking for a successful response from a target.</p>
     pub matcher: Option<Matcher>,
     /// <p>The Amazon Resource Name (ARN) of the target group.</p>
     pub target_group_arn: String,
-    /// <p>The number of consecutive health check failures required before considering the target unhealthy.</p>
+    /// <p>The number of consecutive health check failures required before considering the target unhealthy. For Network Load Balancers, this value must be the same as the healthy threshold count.</p>
     pub unhealthy_threshold_count: Option<i64>,
 }
 
@@ -3732,7 +4089,7 @@ impl ProtocolEnumDeserializer {
 pub struct RegisterTargetsInput {
     /// <p>The Amazon Resource Name (ARN) of the target group.</p>
     pub target_group_arn: String,
-    /// <p>The targets. The default port for a target is the port for the target group. You can specify a port override. If a target is already registered, you can register it again using a different port.</p>
+    /// <p>The targets.</p>
     pub targets: Vec<TargetDescription>,
 }
 
@@ -3770,6 +4127,54 @@ impl RegisterTargetsOutputDeserializer {
         try!(start_element(tag_name, stack));
 
         let obj = RegisterTargetsOutput::default();
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
+pub struct RemoveListenerCertificatesInput {
+    /// <p>The certificate to remove. You can specify one certificate per call.</p>
+    pub certificates: Vec<Certificate>,
+    /// <p>The Amazon Resource Name (ARN) of the listener.</p>
+    pub listener_arn: String,
+}
+
+/// Serialize `RemoveListenerCertificatesInput` contents to a `SignedRequest`.
+struct RemoveListenerCertificatesInputSerializer;
+impl RemoveListenerCertificatesInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &RemoveListenerCertificatesInput) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        CertificateListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "Certificates"),
+            &obj.certificates,
+        );
+        params.put(
+            &format!("{}{}", prefix, "ListenerArn"),
+            &obj.listener_arn.replace("+", "%2B"),
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct RemoveListenerCertificatesOutput;
+
+struct RemoveListenerCertificatesOutputDeserializer;
+impl RemoveListenerCertificatesOutputDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RemoveListenerCertificatesOutput, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let obj = RemoveListenerCertificatesOutput::default();
 
         try!(end_element(tag_name, stack));
 
@@ -4459,7 +4864,9 @@ impl SetSecurityGroupsOutputDeserializer {
 pub struct SetSubnetsInput {
     /// <p>The Amazon Resource Name (ARN) of the load balancer.</p>
     pub load_balancer_arn: String,
-    /// <p>The IDs of the subnets. You must specify at least two subnets. You can add only one subnet per Availability Zone.</p>
+    /// <p>The IDs of the subnets. You must specify subnets from at least two Availability Zones. You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings.</p> <p>You cannot specify Elastic IP addresses for your subnets.</p>
+    pub subnet_mappings: Option<Vec<SubnetMapping>>,
+    /// <p>The IDs of the subnets. You must specify subnets from at least two Availability Zones. You can specify only one subnet per Availability Zone. You must specify either subnets or subnet mappings.</p>
     pub subnets: Vec<String>,
 }
 
@@ -4476,6 +4883,13 @@ impl SetSubnetsInputSerializer {
             &format!("{}{}", prefix, "LoadBalancerArn"),
             &obj.load_balancer_arn.replace("+", "%2B"),
         );
+        if let Some(ref field_value) = obj.subnet_mappings {
+            SubnetMappingsSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "SubnetMappings"),
+                field_value,
+            );
+        }
         SubnetsSerializer::serialize(params, &format!("{}{}", prefix, "Subnets"), &obj.subnets);
     }
 }
@@ -4764,6 +5178,49 @@ impl SubnetIdDeserializer {
         Ok(obj)
     }
 }
+/// <p>Information about a subnet mapping.</p>
+#[derive(Default, Debug, Clone)]
+pub struct SubnetMapping {
+    /// <p>[Network Load Balancers] The allocation ID of the Elastic IP address.</p>
+    pub allocation_id: Option<String>,
+    /// <p>The ID of the subnet.</p>
+    pub subnet_id: Option<String>,
+}
+
+/// Serialize `SubnetMapping` contents to a `SignedRequest`.
+struct SubnetMappingSerializer;
+impl SubnetMappingSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &SubnetMapping) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.allocation_id {
+            params.put(
+                &format!("{}{}", prefix, "AllocationId"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.subnet_id {
+            params.put(
+                &format!("{}{}", prefix, "SubnetId"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
+/// Serialize `SubnetMappings` contents to a `SignedRequest`.
+struct SubnetMappingsSerializer;
+impl SubnetMappingsSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<SubnetMapping>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            SubnetMappingSerializer::serialize(params, &key, obj);
+        }
+    }
+}
 
 /// Serialize `Subnets` contents to a `SignedRequest`.
 struct SubnetsSerializer;
@@ -5042,7 +5499,9 @@ impl TagValueDeserializer {
 /// <p>Information about a target.</p>
 #[derive(Default, Debug, Clone)]
 pub struct TargetDescription {
-    /// <p>The ID of the target.</p>
+    /// <p>An Availability Zone or <code>all</code>. This determines whether the target receives traffic from the load balancer nodes in the specified Availability Zone or from all enabled Availability Zones for the load balancer.</p> <p>This parameter is not supported if the target type of the target group is <code>instance</code>. If the IP address is in a subnet of the VPC for the target group, the Availability Zone is automatically detected and this parameter is optional. If the IP address is outside the VPC, this parameter is required.</p> <p>With an Application Load Balancer, if the IP address is outside the VPC for the target group, the only supported value is <code>all</code>.</p>
+    pub availability_zone: Option<String>,
+    /// <p>The ID of the target. If the target type of the target group is <code>instance</code>, specify an instance ID. If the target type is <code>ip</code>, specify an IP address.</p>
     pub id: String,
     /// <p>The port on which the target is listening.</p>
     pub port: Option<i64>,
@@ -5070,6 +5529,12 @@ impl TargetDescriptionDeserializer {
 
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
+                    "AvailabilityZone" => {
+                        obj.availability_zone = Some(try!(ZoneNameDeserializer::deserialize(
+                            "AvailabilityZone",
+                            stack
+                        )));
+                    }
                     "Id" => {
                         obj.id = try!(TargetIdDeserializer::deserialize("Id", stack));
                     }
@@ -5100,6 +5565,12 @@ impl TargetDescriptionSerializer {
             prefix.push_str(".");
         }
 
+        if let Some(ref field_value) = obj.availability_zone {
+            params.put(
+                &format!("{}{}", prefix, "AvailabilityZone"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
         params.put(&format!("{}{}", prefix, "Id"), &obj.id.replace("+", "%2B"));
         if let Some(ref field_value) = obj.port {
             params.put(
@@ -5148,6 +5619,8 @@ pub struct TargetGroup {
     pub target_group_arn: Option<String>,
     /// <p>The name of the target group.</p>
     pub target_group_name: Option<String>,
+    /// <p>The type of target that you must specify when registering targets with this target group. The possible values are <code>instance</code> (targets are specified by instance ID) or <code>ip</code> (targets are specified by IP address).</p>
+    pub target_type: Option<String>,
     /// <p>The number of consecutive health check failures required before considering the target unhealthy.</p>
     pub unhealthy_threshold_count: Option<i64>,
     /// <p>The ID of the VPC for the targets.</p>
@@ -5241,6 +5714,12 @@ impl TargetGroupDeserializer {
                             TargetGroupNameDeserializer::deserialize("TargetGroupName", stack)
                         ));
                     }
+                    "TargetType" => {
+                        obj.target_type = Some(try!(TargetTypeEnumDeserializer::deserialize(
+                            "TargetType",
+                            stack
+                        )));
+                    }
                     "UnhealthyThresholdCount" => {
                         obj.unhealthy_threshold_count =
                             Some(try!(HealthCheckThresholdCountDeserializer::deserialize(
@@ -5294,7 +5773,7 @@ impl TargetGroupArnsSerializer {
 /// <p>Information about a target group attribute.</p>
 #[derive(Default, Debug, Clone)]
 pub struct TargetGroupAttribute {
-    /// <p><p>The name of the attribute.</p> <ul> <li> <p> <code>deregistration<em>delay.timeout</em>seconds</code> - The amount time for Elastic Load Balancing to wait before changing the state of a deregistering target from <code>draining</code> to <code>unused</code>. The range is 0-3600 seconds. The default value is 300 seconds.</p> </li> <li> <p> <code>stickiness.enabled</code> - Indicates whether sticky sessions are enabled. The value is <code>true</code> or <code>false</code>.</p> </li> <li> <p> <code>stickiness.type</code> - The type of sticky sessions. The possible value is <code>lb<em>cookie</code>.</p> </li> <li> <p> <code>stickiness.lb</em>cookie.duration_seconds</code> - The time period, in seconds, during which requests from a client should be routed to the same target. After this time period expires, the load balancer-generated cookie is considered stale. The range is 1 second to 1 week (604800 seconds). The default value is 1 day (86400 seconds).</p> </li> </ul></p>
+    /// <p><p>The name of the attribute.</p> <ul> <li> <p> <code>deregistration<em>delay.timeout</em>seconds</code> - The amount time for Elastic Load Balancing to wait before changing the state of a deregistering target from <code>draining</code> to <code>unused</code>. The range is 0-3600 seconds. The default value is 300 seconds.</p> </li> <li> <p> <code>proxy<em>protocol</em>v2.enabled</code> - [Network Load Balancers] Indicates whether Proxy Protocol version 2 is enabled.</p> </li> <li> <p> <code>stickiness.enabled</code> - [Application Load Balancers] Indicates whether sticky sessions are enabled. The value is <code>true</code> or <code>false</code>.</p> </li> <li> <p> <code>stickiness.type</code> - [Application Load Balancers] The type of sticky sessions. The possible value is <code>lb<em>cookie</code>.</p> </li> <li> <p> <code>stickiness.lb</em>cookie.duration_seconds</code> - [Application Load Balancers] The time period, in seconds, during which requests from a client should be routed to the same target. After this time period expires, the load balancer-generated cookie is considered stale. The range is 1 second to 1 week (604800 seconds). The default value is 1 day (86400 seconds).</p> </li> </ul></p>
     pub key: Option<String>,
     /// <p>The value of the attribute.</p>
     pub value: Option<String>,
@@ -5526,7 +6005,7 @@ impl TargetGroupsDeserializer {
 pub struct TargetHealth {
     /// <p>A description of the target health that provides additional details. If the state is <code>healthy</code>, a description is not provided.</p>
     pub description: Option<String>,
-    /// <p><p>The reason code. If the target state is <code>healthy</code>, a reason code is not provided.</p> <p>If the target state is <code>initial</code>, the reason code can be one of the following values:</p> <ul> <li> <p> <code>Elb.RegistrationInProgress</code> - The target is in the process of being registered with the load balancer.</p> </li> <li> <p> <code>Elb.InitialHealthChecking</code> - The load balancer is still sending the target the minimum number of health checks required to determine its health status.</p> </li> </ul> <p>If the target state is <code>unhealthy</code>, the reason code can be one of the following values:</p> <ul> <li> <p> <code>Target.ResponseCodeMismatch</code> - The health checks did not return an expected HTTP code.</p> </li> <li> <p> <code>Target.Timeout</code> - The health check requests timed out.</p> </li> <li> <p> <code>Target.FailedHealthChecks</code> - The health checks failed because the connection to the target timed out, the target response was malformed, or the target failed the health check for an unknown reason.</p> </li> <li> <p> <code>Elb.InternalError</code> - The health checks failed due to an internal error.</p> </li> </ul> <p>If the target state is <code>unused</code>, the reason code can be one of the following values:</p> <ul> <li> <p> <code>Target.NotRegistered</code> - The target is not registered with the target group.</p> </li> <li> <p> <code>Target.NotInUse</code> - The target group is not used by any load balancer or the target is in an Availability Zone that is not enabled for its load balancer.</p> </li> <li> <p> <code>Target.InvalidState</code> - The target is in the stopped or terminated state.</p> </li> </ul> <p>If the target state is <code>draining</code>, the reason code can be the following value:</p> <ul> <li> <p> <code>Target.DeregistrationInProgress</code> - The target is in the process of being deregistered and the deregistration delay period has not expired.</p> </li> </ul></p>
+    /// <p><p>The reason code. If the target state is <code>healthy</code>, a reason code is not provided.</p> <p>If the target state is <code>initial</code>, the reason code can be one of the following values:</p> <ul> <li> <p> <code>Elb.RegistrationInProgress</code> - The target is in the process of being registered with the load balancer.</p> </li> <li> <p> <code>Elb.InitialHealthChecking</code> - The load balancer is still sending the target the minimum number of health checks required to determine its health status.</p> </li> </ul> <p>If the target state is <code>unhealthy</code>, the reason code can be one of the following values:</p> <ul> <li> <p> <code>Target.ResponseCodeMismatch</code> - The health checks did not return an expected HTTP code.</p> </li> <li> <p> <code>Target.Timeout</code> - The health check requests timed out.</p> </li> <li> <p> <code>Target.FailedHealthChecks</code> - The health checks failed because the connection to the target timed out, the target response was malformed, or the target failed the health check for an unknown reason.</p> </li> <li> <p> <code>Elb.InternalError</code> - The health checks failed due to an internal error.</p> </li> </ul> <p>If the target state is <code>unused</code>, the reason code can be one of the following values:</p> <ul> <li> <p> <code>Target.NotRegistered</code> - The target is not registered with the target group.</p> </li> <li> <p> <code>Target.NotInUse</code> - The target group is not used by any load balancer or the target is in an Availability Zone that is not enabled for its load balancer.</p> </li> <li> <p> <code>Target.IpUnusable</code> - The target IP address is reserved for use by a load balancer.</p> </li> <li> <p> <code>Target.InvalidState</code> - The target is in the stopped or terminated state.</p> </li> </ul> <p>If the target state is <code>draining</code>, the reason code can be the following value:</p> <ul> <li> <p> <code>Target.DeregistrationInProgress</code> - The target is in the process of being deregistered and the deregistration delay period has not expired.</p> </li> </ul></p>
     pub reason: Option<String>,
     /// <p>The state of the target.</p>
     pub state: Option<String>,
@@ -5735,6 +6214,20 @@ impl TargetIdDeserializer {
         Ok(obj)
     }
 }
+struct TargetTypeEnumDeserializer;
+impl TargetTypeEnumDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 struct VpcIdDeserializer;
 impl VpcIdDeserializer {
     #[allow(unused_variables)]
@@ -5761,6 +6254,93 @@ impl ZoneNameDeserializer {
         try!(end_element(tag_name, stack));
 
         Ok(obj)
+    }
+}
+/// Errors returned by AddListenerCertificates
+#[derive(Debug, PartialEq)]
+pub enum AddListenerCertificatesError {
+    /// <p>The specified certificate does not exist.</p>
+    CertificateNotFound(String),
+    /// <p>The specified listener does not exist.</p>
+    ListenerNotFound(String),
+    /// <p>You've reached the limit on the number of certificates per load balancer.</p>
+    TooManyCertificates(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl AddListenerCertificatesError {
+    pub fn from_body(body: &str) -> AddListenerCertificatesError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "CertificateNotFoundException" => {
+                    AddListenerCertificatesError::CertificateNotFound(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "ListenerNotFoundException" => AddListenerCertificatesError::ListenerNotFound(
+                    String::from(parsed_error.message),
+                ),
+                "TooManyCertificatesException" => {
+                    AddListenerCertificatesError::TooManyCertificates(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => AddListenerCertificatesError::Unknown(String::from(body)),
+            },
+            Err(_) => AddListenerCertificatesError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for AddListenerCertificatesError {
+    fn from(err: XmlParseError) -> AddListenerCertificatesError {
+        let XmlParseError(message) = err;
+        AddListenerCertificatesError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for AddListenerCertificatesError {
+    fn from(err: CredentialsError) -> AddListenerCertificatesError {
+        AddListenerCertificatesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AddListenerCertificatesError {
+    fn from(err: HttpDispatchError) -> AddListenerCertificatesError {
+        AddListenerCertificatesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AddListenerCertificatesError {
+    fn from(err: io::Error) -> AddListenerCertificatesError {
+        AddListenerCertificatesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for AddListenerCertificatesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AddListenerCertificatesError {
+    fn description(&self) -> &str {
+        match *self {
+            AddListenerCertificatesError::CertificateNotFound(ref cause) => cause,
+            AddListenerCertificatesError::ListenerNotFound(ref cause) => cause,
+            AddListenerCertificatesError::TooManyCertificates(ref cause) => cause,
+            AddListenerCertificatesError::Validation(ref cause) => cause,
+            AddListenerCertificatesError::Credentials(ref err) => err.description(),
+            AddListenerCertificatesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            AddListenerCertificatesError::Unknown(ref cause) => cause,
+        }
     }
 }
 /// Errors returned by AddTags
@@ -5869,12 +6449,14 @@ pub enum CreateListenerError {
     TargetGroupAssociationLimit(String),
     /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
-    /// <p>You've reached the limit on the number of certificates per listener.</p>
+    /// <p>You've reached the limit on the number of certificates per load balancer.</p>
     TooManyCertificates(String),
     /// <p>You've reached the limit on the number of listeners per load balancer.</p>
     TooManyListeners(String),
     /// <p>You've reached the limit on the number of times a target can be registered with a load balancer.</p>
     TooManyRegistrationsForTargetId(String),
+    /// <p>You've reached the limit on the number of targets.</p>
+    TooManyTargets(String),
     /// <p>The specified protocol is not supported.</p>
     UnsupportedProtocol(String),
     /// An error occurred dispatching the HTTP request
@@ -5933,6 +6515,9 @@ impl CreateListenerError {
                         parsed_error.message,
                     ))
                 }
+                "TooManyTargetsException" => {
+                    CreateListenerError::TooManyTargets(String::from(parsed_error.message))
+                }
                 "UnsupportedProtocolException" => {
                     CreateListenerError::UnsupportedProtocol(String::from(parsed_error.message))
                 }
@@ -5983,6 +6568,7 @@ impl Error for CreateListenerError {
             CreateListenerError::TooManyCertificates(ref cause) => cause,
             CreateListenerError::TooManyListeners(ref cause) => cause,
             CreateListenerError::TooManyRegistrationsForTargetId(ref cause) => cause,
+            CreateListenerError::TooManyTargets(ref cause) => cause,
             CreateListenerError::UnsupportedProtocol(ref cause) => cause,
             CreateListenerError::Validation(ref cause) => cause,
             CreateListenerError::Credentials(ref err) => err.description(),
@@ -5994,6 +6580,10 @@ impl Error for CreateListenerError {
 /// Errors returned by CreateLoadBalancer
 #[derive(Debug, PartialEq)]
 pub enum CreateLoadBalancerError {
+    /// <p>The specified allocation ID does not exist.</p>
+    AllocationIdNotFound(String),
+    /// <p>The specified Availability Zone is not supported.</p>
+    AvailabilityZoneNotSupported(String),
     /// <p>A load balancer with the specified name already exists.</p>
     DuplicateLoadBalancerName(String),
     /// <p>A tag key was specified more than once.</p>
@@ -6006,6 +6596,8 @@ pub enum CreateLoadBalancerError {
     InvalidSecurityGroup(String),
     /// <p>The specified subnet is out of available addresses.</p>
     InvalidSubnet(String),
+    /// <p>A specified resource is in use.</p>
+    ResourceInUse(String),
     /// <p>The specified subnet does not exist.</p>
     SubnetNotFound(String),
     /// <p>You've reached the limit on the number of load balancers for your AWS account.</p>
@@ -6029,6 +6621,14 @@ impl CreateLoadBalancerError {
         find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
+                "AllocationIdNotFoundException" => CreateLoadBalancerError::AllocationIdNotFound(
+                    String::from(parsed_error.message),
+                ),
+                "AvailabilityZoneNotSupportedException" => {
+                    CreateLoadBalancerError::AvailabilityZoneNotSupported(String::from(
+                        parsed_error.message,
+                    ))
+                }
                 "DuplicateLoadBalancerNameException" => {
                     CreateLoadBalancerError::DuplicateLoadBalancerName(String::from(
                         parsed_error.message,
@@ -6050,6 +6650,9 @@ impl CreateLoadBalancerError {
                 ),
                 "InvalidSubnetException" => {
                     CreateLoadBalancerError::InvalidSubnet(String::from(parsed_error.message))
+                }
+                "ResourceInUseException" => {
+                    CreateLoadBalancerError::ResourceInUse(String::from(parsed_error.message))
                 }
                 "SubnetNotFoundException" => {
                     CreateLoadBalancerError::SubnetNotFound(String::from(parsed_error.message))
@@ -6096,12 +6699,15 @@ impl fmt::Display for CreateLoadBalancerError {
 impl Error for CreateLoadBalancerError {
     fn description(&self) -> &str {
         match *self {
+            CreateLoadBalancerError::AllocationIdNotFound(ref cause) => cause,
+            CreateLoadBalancerError::AvailabilityZoneNotSupported(ref cause) => cause,
             CreateLoadBalancerError::DuplicateLoadBalancerName(ref cause) => cause,
             CreateLoadBalancerError::DuplicateTagKeys(ref cause) => cause,
             CreateLoadBalancerError::InvalidConfigurationRequest(ref cause) => cause,
             CreateLoadBalancerError::InvalidScheme(ref cause) => cause,
             CreateLoadBalancerError::InvalidSecurityGroup(ref cause) => cause,
             CreateLoadBalancerError::InvalidSubnet(ref cause) => cause,
+            CreateLoadBalancerError::ResourceInUse(ref cause) => cause,
             CreateLoadBalancerError::SubnetNotFound(ref cause) => cause,
             CreateLoadBalancerError::TooManyLoadBalancers(ref cause) => cause,
             CreateLoadBalancerError::TooManyTags(ref cause) => cause,
@@ -6117,6 +6723,8 @@ impl Error for CreateLoadBalancerError {
 /// Errors returned by CreateRule
 #[derive(Debug, PartialEq)]
 pub enum CreateRuleError {
+    /// <p>The specified configuration is not valid with this protocol.</p>
+    IncompatibleProtocols(String),
     /// <p>The requested configuration is not valid.</p>
     InvalidConfigurationRequest(String),
     /// <p>The specified listener does not exist.</p>
@@ -6133,6 +6741,8 @@ pub enum CreateRuleError {
     TooManyRules(String),
     /// <p>You've reached the limit on the number of target groups for your AWS account.</p>
     TooManyTargetGroups(String),
+    /// <p>You've reached the limit on the number of targets.</p>
+    TooManyTargets(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -6150,6 +6760,9 @@ impl CreateRuleError {
         find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
+                "IncompatibleProtocolsException" => {
+                    CreateRuleError::IncompatibleProtocols(String::from(parsed_error.message))
+                }
                 "InvalidConfigurationRequestException" => {
                     CreateRuleError::InvalidConfigurationRequest(String::from(parsed_error.message))
                 }
@@ -6175,6 +6788,9 @@ impl CreateRuleError {
                 }
                 "TooManyTargetGroupsException" => {
                     CreateRuleError::TooManyTargetGroups(String::from(parsed_error.message))
+                }
+                "TooManyTargetsException" => {
+                    CreateRuleError::TooManyTargets(String::from(parsed_error.message))
                 }
                 _ => CreateRuleError::Unknown(String::from(body)),
             },
@@ -6212,6 +6828,7 @@ impl fmt::Display for CreateRuleError {
 impl Error for CreateRuleError {
     fn description(&self) -> &str {
         match *self {
+            CreateRuleError::IncompatibleProtocols(ref cause) => cause,
             CreateRuleError::InvalidConfigurationRequest(ref cause) => cause,
             CreateRuleError::ListenerNotFound(ref cause) => cause,
             CreateRuleError::PriorityInUse(ref cause) => cause,
@@ -6220,6 +6837,7 @@ impl Error for CreateRuleError {
             CreateRuleError::TooManyRegistrationsForTargetId(ref cause) => cause,
             CreateRuleError::TooManyRules(ref cause) => cause,
             CreateRuleError::TooManyTargetGroups(ref cause) => cause,
+            CreateRuleError::TooManyTargets(ref cause) => cause,
             CreateRuleError::Validation(ref cause) => cause,
             CreateRuleError::Credentials(ref err) => err.description(),
             CreateRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -6232,6 +6850,8 @@ impl Error for CreateRuleError {
 pub enum CreateTargetGroupError {
     /// <p>A target group with the specified name already exists.</p>
     DuplicateTargetGroupName(String),
+    /// <p>The requested configuration is not valid.</p>
+    InvalidConfigurationRequest(String),
     /// <p>You've reached the limit on the number of target groups for your AWS account.</p>
     TooManyTargetGroups(String),
     /// An error occurred dispatching the HTTP request
@@ -6253,6 +6873,11 @@ impl CreateTargetGroupError {
             Ok(parsed_error) => match &parsed_error.code[..] {
                 "DuplicateTargetGroupNameException" => {
                     CreateTargetGroupError::DuplicateTargetGroupName(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "InvalidConfigurationRequestException" => {
+                    CreateTargetGroupError::InvalidConfigurationRequest(String::from(
                         parsed_error.message,
                     ))
                 }
@@ -6296,6 +6921,7 @@ impl Error for CreateTargetGroupError {
     fn description(&self) -> &str {
         match *self {
             CreateTargetGroupError::DuplicateTargetGroupName(ref cause) => cause,
+            CreateTargetGroupError::InvalidConfigurationRequest(ref cause) => cause,
             CreateTargetGroupError::TooManyTargetGroups(ref cause) => cause,
             CreateTargetGroupError::Validation(ref cause) => cause,
             CreateTargetGroupError::Credentials(ref err) => err.description(),
@@ -6382,6 +7008,8 @@ pub enum DeleteLoadBalancerError {
     LoadBalancerNotFound(String),
     /// <p>This operation is not allowed.</p>
     OperationNotPermitted(String),
+    /// <p>A specified resource is in use.</p>
+    ResourceInUse(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -6406,6 +7034,9 @@ impl DeleteLoadBalancerError {
                     DeleteLoadBalancerError::OperationNotPermitted(String::from(
                         parsed_error.message,
                     ))
+                }
+                "ResourceInUseException" => {
+                    DeleteLoadBalancerError::ResourceInUse(String::from(parsed_error.message))
                 }
                 _ => DeleteLoadBalancerError::Unknown(String::from(body)),
             },
@@ -6445,6 +7076,7 @@ impl Error for DeleteLoadBalancerError {
         match *self {
             DeleteLoadBalancerError::LoadBalancerNotFound(ref cause) => cause,
             DeleteLoadBalancerError::OperationNotPermitted(ref cause) => cause,
+            DeleteLoadBalancerError::ResourceInUse(ref cause) => cause,
             DeleteLoadBalancerError::Validation(ref cause) => cause,
             DeleteLoadBalancerError::Credentials(ref err) => err.description(),
             DeleteLoadBalancerError::HttpDispatch(ref dispatch_error) => {
@@ -6603,7 +7235,7 @@ impl Error for DeleteTargetGroupError {
 /// Errors returned by DeregisterTargets
 #[derive(Debug, PartialEq)]
 pub enum DeregisterTargetsError {
-    /// <p>The specified target does not exist or is not in the same VPC as the target group.</p>
+    /// <p>The specified target does not exist, is not in the same VPC as the target group, or has an unsupported instance type.</p>
     InvalidTarget(String),
     /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
@@ -6739,6 +7371,79 @@ impl Error for DescribeAccountLimitsError {
                 dispatch_error.description()
             }
             DescribeAccountLimitsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeListenerCertificates
+#[derive(Debug, PartialEq)]
+pub enum DescribeListenerCertificatesError {
+    /// <p>The specified listener does not exist.</p>
+    ListenerNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeListenerCertificatesError {
+    pub fn from_body(body: &str) -> DescribeListenerCertificatesError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "ListenerNotFoundException" => {
+                    DescribeListenerCertificatesError::ListenerNotFound(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => DescribeListenerCertificatesError::Unknown(String::from(body)),
+            },
+            Err(_) => DescribeListenerCertificatesError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DescribeListenerCertificatesError {
+    fn from(err: XmlParseError) -> DescribeListenerCertificatesError {
+        let XmlParseError(message) = err;
+        DescribeListenerCertificatesError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DescribeListenerCertificatesError {
+    fn from(err: CredentialsError) -> DescribeListenerCertificatesError {
+        DescribeListenerCertificatesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeListenerCertificatesError {
+    fn from(err: HttpDispatchError) -> DescribeListenerCertificatesError {
+        DescribeListenerCertificatesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeListenerCertificatesError {
+    fn from(err: io::Error) -> DescribeListenerCertificatesError {
+        DescribeListenerCertificatesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeListenerCertificatesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeListenerCertificatesError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeListenerCertificatesError::ListenerNotFound(ref cause) => cause,
+            DescribeListenerCertificatesError::Validation(ref cause) => cause,
+            DescribeListenerCertificatesError::Credentials(ref err) => err.description(),
+            DescribeListenerCertificatesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeListenerCertificatesError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -7355,7 +8060,7 @@ impl Error for DescribeTargetGroupsError {
 pub enum DescribeTargetHealthError {
     /// <p>The health of the specified targets could not be retrieved due to an internal error.</p>
     HealthUnavailable(String),
-    /// <p>The specified target does not exist or is not in the same VPC as the target group.</p>
+    /// <p>The specified target does not exist, is not in the same VPC as the target group, or has an unsupported instance type.</p>
     InvalidTarget(String),
     /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
@@ -7452,12 +8157,14 @@ pub enum ModifyListenerError {
     TargetGroupAssociationLimit(String),
     /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
-    /// <p>You've reached the limit on the number of certificates per listener.</p>
+    /// <p>You've reached the limit on the number of certificates per load balancer.</p>
     TooManyCertificates(String),
     /// <p>You've reached the limit on the number of listeners per load balancer.</p>
     TooManyListeners(String),
     /// <p>You've reached the limit on the number of times a target can be registered with a load balancer.</p>
     TooManyRegistrationsForTargetId(String),
+    /// <p>You've reached the limit on the number of targets.</p>
+    TooManyTargets(String),
     /// <p>The specified protocol is not supported.</p>
     UnsupportedProtocol(String),
     /// An error occurred dispatching the HTTP request
@@ -7516,6 +8223,9 @@ impl ModifyListenerError {
                         parsed_error.message,
                     ))
                 }
+                "TooManyTargetsException" => {
+                    ModifyListenerError::TooManyTargets(String::from(parsed_error.message))
+                }
                 "UnsupportedProtocolException" => {
                     ModifyListenerError::UnsupportedProtocol(String::from(parsed_error.message))
                 }
@@ -7566,6 +8276,7 @@ impl Error for ModifyListenerError {
             ModifyListenerError::TooManyCertificates(ref cause) => cause,
             ModifyListenerError::TooManyListeners(ref cause) => cause,
             ModifyListenerError::TooManyRegistrationsForTargetId(ref cause) => cause,
+            ModifyListenerError::TooManyTargets(ref cause) => cause,
             ModifyListenerError::UnsupportedProtocol(ref cause) => cause,
             ModifyListenerError::Validation(ref cause) => cause,
             ModifyListenerError::Credentials(ref err) => err.description(),
@@ -7658,6 +8369,8 @@ impl Error for ModifyLoadBalancerAttributesError {
 /// Errors returned by ModifyRule
 #[derive(Debug, PartialEq)]
 pub enum ModifyRuleError {
+    /// <p>The specified configuration is not valid with this protocol.</p>
+    IncompatibleProtocols(String),
     /// <p>This operation is not allowed.</p>
     OperationNotPermitted(String),
     /// <p>The specified rule does not exist.</p>
@@ -7687,6 +8400,9 @@ impl ModifyRuleError {
         find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
+                "IncompatibleProtocolsException" => {
+                    ModifyRuleError::IncompatibleProtocols(String::from(parsed_error.message))
+                }
                 "OperationNotPermittedException" => {
                     ModifyRuleError::OperationNotPermitted(String::from(parsed_error.message))
                 }
@@ -7743,6 +8459,7 @@ impl fmt::Display for ModifyRuleError {
 impl Error for ModifyRuleError {
     fn description(&self) -> &str {
         match *self {
+            ModifyRuleError::IncompatibleProtocols(ref cause) => cause,
             ModifyRuleError::OperationNotPermitted(ref cause) => cause,
             ModifyRuleError::RuleNotFound(ref cause) => cause,
             ModifyRuleError::TargetGroupAssociationLimit(ref cause) => cause,
@@ -7759,6 +8476,8 @@ impl Error for ModifyRuleError {
 /// Errors returned by ModifyTargetGroup
 #[derive(Debug, PartialEq)]
 pub enum ModifyTargetGroupError {
+    /// <p>The requested configuration is not valid.</p>
+    InvalidConfigurationRequest(String),
     /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
     /// An error occurred dispatching the HTTP request
@@ -7778,6 +8497,11 @@ impl ModifyTargetGroupError {
         find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
+                "InvalidConfigurationRequestException" => {
+                    ModifyTargetGroupError::InvalidConfigurationRequest(String::from(
+                        parsed_error.message,
+                    ))
+                }
                 "TargetGroupNotFoundException" => {
                     ModifyTargetGroupError::TargetGroupNotFound(String::from(parsed_error.message))
                 }
@@ -7817,6 +8541,7 @@ impl fmt::Display for ModifyTargetGroupError {
 impl Error for ModifyTargetGroupError {
     fn description(&self) -> &str {
         match *self {
+            ModifyTargetGroupError::InvalidConfigurationRequest(ref cause) => cause,
             ModifyTargetGroupError::TargetGroupNotFound(ref cause) => cause,
             ModifyTargetGroupError::Validation(ref cause) => cause,
             ModifyTargetGroupError::Credentials(ref err) => err.description(),
@@ -7830,6 +8555,8 @@ impl Error for ModifyTargetGroupError {
 /// Errors returned by ModifyTargetGroupAttributes
 #[derive(Debug, PartialEq)]
 pub enum ModifyTargetGroupAttributesError {
+    /// <p>The requested configuration is not valid.</p>
+    InvalidConfigurationRequest(String),
     /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
     /// An error occurred dispatching the HTTP request
@@ -7849,6 +8576,11 @@ impl ModifyTargetGroupAttributesError {
         find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
+                "InvalidConfigurationRequestException" => {
+                    ModifyTargetGroupAttributesError::InvalidConfigurationRequest(String::from(
+                        parsed_error.message,
+                    ))
+                }
                 "TargetGroupNotFoundException" => {
                     ModifyTargetGroupAttributesError::TargetGroupNotFound(String::from(
                         parsed_error.message,
@@ -7890,6 +8622,7 @@ impl fmt::Display for ModifyTargetGroupAttributesError {
 impl Error for ModifyTargetGroupAttributesError {
     fn description(&self) -> &str {
         match *self {
+            ModifyTargetGroupAttributesError::InvalidConfigurationRequest(ref cause) => cause,
             ModifyTargetGroupAttributesError::TargetGroupNotFound(ref cause) => cause,
             ModifyTargetGroupAttributesError::Validation(ref cause) => cause,
             ModifyTargetGroupAttributesError::Credentials(ref err) => err.description(),
@@ -7903,7 +8636,7 @@ impl Error for ModifyTargetGroupAttributesError {
 /// Errors returned by RegisterTargets
 #[derive(Debug, PartialEq)]
 pub enum RegisterTargetsError {
-    /// <p>The specified target does not exist or is not in the same VPC as the target group.</p>
+    /// <p>The specified target does not exist, is not in the same VPC as the target group, or has an unsupported instance type.</p>
     InvalidTarget(String),
     /// <p>The specified target group does not exist.</p>
     TargetGroupNotFound(String),
@@ -7986,6 +8719,85 @@ impl Error for RegisterTargetsError {
             RegisterTargetsError::Credentials(ref err) => err.description(),
             RegisterTargetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             RegisterTargetsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by RemoveListenerCertificates
+#[derive(Debug, PartialEq)]
+pub enum RemoveListenerCertificatesError {
+    /// <p>The specified listener does not exist.</p>
+    ListenerNotFound(String),
+    /// <p>This operation is not allowed.</p>
+    OperationNotPermitted(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl RemoveListenerCertificatesError {
+    pub fn from_body(body: &str) -> RemoveListenerCertificatesError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "ListenerNotFoundException" => RemoveListenerCertificatesError::ListenerNotFound(
+                    String::from(parsed_error.message),
+                ),
+                "OperationNotPermittedException" => {
+                    RemoveListenerCertificatesError::OperationNotPermitted(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => RemoveListenerCertificatesError::Unknown(String::from(body)),
+            },
+            Err(_) => RemoveListenerCertificatesError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for RemoveListenerCertificatesError {
+    fn from(err: XmlParseError) -> RemoveListenerCertificatesError {
+        let XmlParseError(message) = err;
+        RemoveListenerCertificatesError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for RemoveListenerCertificatesError {
+    fn from(err: CredentialsError) -> RemoveListenerCertificatesError {
+        RemoveListenerCertificatesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for RemoveListenerCertificatesError {
+    fn from(err: HttpDispatchError) -> RemoveListenerCertificatesError {
+        RemoveListenerCertificatesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RemoveListenerCertificatesError {
+    fn from(err: io::Error) -> RemoveListenerCertificatesError {
+        RemoveListenerCertificatesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for RemoveListenerCertificatesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for RemoveListenerCertificatesError {
+    fn description(&self) -> &str {
+        match *self {
+            RemoveListenerCertificatesError::ListenerNotFound(ref cause) => cause,
+            RemoveListenerCertificatesError::OperationNotPermitted(ref cause) => cause,
+            RemoveListenerCertificatesError::Validation(ref cause) => cause,
+            RemoveListenerCertificatesError::Credentials(ref err) => err.description(),
+            RemoveListenerCertificatesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            RemoveListenerCertificatesError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -8336,6 +9148,10 @@ impl Error for SetSecurityGroupsError {
 /// Errors returned by SetSubnets
 #[derive(Debug, PartialEq)]
 pub enum SetSubnetsError {
+    /// <p>The specified allocation ID does not exist.</p>
+    AllocationIdNotFound(String),
+    /// <p>The specified Availability Zone is not supported.</p>
+    AvailabilityZoneNotSupported(String),
     /// <p>The requested configuration is not valid.</p>
     InvalidConfigurationRequest(String),
     /// <p>The specified subnet is out of available addresses.</p>
@@ -8361,6 +9177,14 @@ impl SetSubnetsError {
         find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
+                "AllocationIdNotFoundException" => {
+                    SetSubnetsError::AllocationIdNotFound(String::from(parsed_error.message))
+                }
+                "AvailabilityZoneNotSupportedException" => {
+                    SetSubnetsError::AvailabilityZoneNotSupported(String::from(
+                        parsed_error.message,
+                    ))
+                }
                 "InvalidConfigurationRequestException" => {
                     SetSubnetsError::InvalidConfigurationRequest(String::from(parsed_error.message))
                 }
@@ -8409,6 +9233,8 @@ impl fmt::Display for SetSubnetsError {
 impl Error for SetSubnetsError {
     fn description(&self) -> &str {
         match *self {
+            SetSubnetsError::AllocationIdNotFound(ref cause) => cause,
+            SetSubnetsError::AvailabilityZoneNotSupported(ref cause) => cause,
             SetSubnetsError::InvalidConfigurationRequest(ref cause) => cause,
             SetSubnetsError::InvalidSubnet(ref cause) => cause,
             SetSubnetsError::LoadBalancerNotFound(ref cause) => cause,
@@ -8422,25 +9248,31 @@ impl Error for SetSubnetsError {
 }
 /// Trait representing the capabilities of the Elastic Load Balancing v2 API. Elastic Load Balancing v2 clients implement this trait.
 pub trait Elb {
-    /// <p>Adds the specified tags to the specified resource. You can tag your Application Load Balancers and your target groups.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, <code>AddTags</code> updates its value.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>. To remove tags from your resources, use <a>RemoveTags</a>.</p>
+    /// <p>Adds the specified certificate to the specified secure listener.</p> <p>If the certificate was already added, the call is successful but the certificate is not added again.</p> <p>To list the certificates for your listener, use <a>DescribeListenerCertificates</a>. To remove certificates from your listener, use <a>RemoveListenerCertificates</a>.</p>
+    fn add_listener_certificates(
+        &self,
+        input: &AddListenerCertificatesInput,
+    ) -> Result<AddListenerCertificatesOutput, AddListenerCertificatesError>;
+
+    /// <p>Adds the specified tags to the specified Elastic Load Balancing resource. You can tag your Application Load Balancers, Network Load Balancers, and your target groups.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, <code>AddTags</code> updates its value.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>. To remove tags from your resources, use <a>RemoveTags</a>.</p>
     fn add_tags(&self, input: &AddTagsInput) -> Result<AddTagsOutput, AddTagsError>;
 
-    /// <p>Creates a listener for the specified Application Load Balancer.</p> <p>You can create up to 10 listeners per load balancer.</p> <p>To update a listener, use <a>ModifyListener</a>. When you are finished with a listener, you can delete it using <a>DeleteListener</a>. If you are finished with both the listener and the load balancer, you can delete them both using <a>DeleteLoadBalancer</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html">Listeners for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i>.</p>
+    /// <p>Creates a listener for the specified Application Load Balancer or Network Load Balancer.</p> <p>To update a listener, use <a>ModifyListener</a>. When you are finished with a listener, you can delete it using <a>DeleteListener</a>. If you are finished with both the listener and the load balancer, you can delete them both using <a>DeleteLoadBalancer</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple listeners with the same settings, each call succeeds.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html">Listeners for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-listeners.html">Listeners for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn create_listener(
         &self,
         input: &CreateListenerInput,
     ) -> Result<CreateListenerOutput, CreateListenerError>;
 
-    /// <p>Creates an Application Load Balancer.</p> <p>When you create a load balancer, you can specify security groups, subnets, IP address type, and tags. Otherwise, you could do so later using <a>SetSecurityGroups</a>, <a>SetSubnets</a>, <a>SetIpAddressType</a>, and <a>AddTags</a>.</p> <p>To create listeners for your load balancer, use <a>CreateListener</a>. To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>You can create up to 20 load balancers per region per account. You can request an increase for the number of load balancers for your account. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancers Guide</i>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html">Application Load Balancers</a> in the <i>Application Load Balancers Guide</i>.</p>
+    /// <p>Creates an Application Load Balancer or a Network Load Balancer.</p> <p>When you create a load balancer, you can specify security groups, subnets, IP address type, and tags. Otherwise, you could do so later using <a>SetSecurityGroups</a>, <a>SetSubnets</a>, <a>SetIpAddressType</a>, and <a>AddTags</a>.</p> <p>To create listeners for your load balancer, use <a>CreateListener</a>. To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>For limit information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancers Guide</i> and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancer</a> in the <i>Network Load Balancers Guide</i>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple load balancers with the same settings, each call succeeds.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html">Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html">Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn create_load_balancer(
         &self,
         input: &CreateLoadBalancerInput,
     ) -> Result<CreateLoadBalancerOutput, CreateLoadBalancerError>;
 
-    /// <p>Creates a rule for the specified listener.</p> <p>Each rule can have one action and one condition. Rules are evaluated in priority order, from the lowest value to the highest value. When the condition for a rule is met, the specified action is taken. If no conditions are met, the default action for the default rule is taken. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>
+    /// <p>Creates a rule for the specified listener. The listener must be associated with an Application Load Balancer.</p> <p>Rules are evaluated in priority order, from the lowest value to the highest value. When the condition for a rule is met, the specified action is taken. If no conditions are met, the action for the default rule is taken. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>
     fn create_rule(&self, input: &CreateRuleInput) -> Result<CreateRuleOutput, CreateRuleError>;
 
-    /// <p>Creates a target group.</p> <p>To register targets with the target group, use <a>RegisterTargets</a>. To update the health check settings for the target group, use <a>ModifyTargetGroup</a>. To monitor the health of targets in the target group, use <a>DescribeTargetHealth</a>.</p> <p>To route traffic to the targets in a target group, specify the target group in an action using <a>CreateListener</a> or <a>CreateRule</a>.</p> <p>To delete a target group, use <a>DeleteTargetGroup</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html">Target Groups for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i>.</p>
+    /// <p>Creates a target group.</p> <p>To register targets with the target group, use <a>RegisterTargets</a>. To update the health check settings for the target group, use <a>ModifyTargetGroup</a>. To monitor the health of targets in the target group, use <a>DescribeTargetHealth</a>.</p> <p>To route traffic to the targets in a target group, specify the target group in an action using <a>CreateListener</a> or <a>CreateRule</a>.</p> <p>To delete a target group, use <a>DeleteTargetGroup</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple target groups with the same settings, each call succeeds.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html">Target Groups for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> or <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html">Target Groups for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn create_target_group(
         &self,
         input: &CreateTargetGroupInput,
@@ -8452,7 +9284,7 @@ pub trait Elb {
         input: &DeleteListenerInput,
     ) -> Result<DeleteListenerOutput, DeleteListenerError>;
 
-    /// <p>Deletes the specified Application Load Balancer and its attached listeners.</p> <p>You can't delete a load balancer if deletion protection is enabled. If the load balancer does not exist or has already been deleted, the call succeeds.</p> <p>Deleting a load balancer does not affect its registered targets. For example, your EC2 instances continue to run and are still registered to their target groups. If you no longer need these EC2 instances, you can stop or terminate them.</p>
+    /// <p>Deletes the specified Application Load Balancer or Network Load Balancer and its attached listeners.</p> <p>You can't delete a load balancer if deletion protection is enabled. If the load balancer does not exist or has already been deleted, the call succeeds.</p> <p>Deleting a load balancer does not affect its registered targets. For example, your EC2 instances continue to run and are still registered to their target groups. If you no longer need these EC2 instances, you can stop or terminate them.</p>
     fn delete_load_balancer(
         &self,
         input: &DeleteLoadBalancerInput,
@@ -8473,25 +9305,31 @@ pub trait Elb {
         input: &DeregisterTargetsInput,
     ) -> Result<DeregisterTargetsOutput, DeregisterTargetsError>;
 
-    /// <p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancer Guide</i>.</p>
+    /// <p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancers</a> in the <i>Application Load Balancer Guide</i> or <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn describe_account_limits(
         &self,
         input: &DescribeAccountLimitsInput,
     ) -> Result<DescribeAccountLimitsOutput, DescribeAccountLimitsError>;
 
-    /// <p>Describes the specified listeners or the listeners for the specified Application Load Balancer. You must specify either a load balancer or one or more listeners.</p>
+    /// <p>Describes the certificates for the specified secure listener.</p>
+    fn describe_listener_certificates(
+        &self,
+        input: &DescribeListenerCertificatesInput,
+    ) -> Result<DescribeListenerCertificatesOutput, DescribeListenerCertificatesError>;
+
+    /// <p>Describes the specified listeners or the listeners for the specified Application Load Balancer or Network Load Balancer. You must specify either a load balancer or one or more listeners.</p>
     fn describe_listeners(
         &self,
         input: &DescribeListenersInput,
     ) -> Result<DescribeListenersOutput, DescribeListenersError>;
 
-    /// <p>Describes the attributes for the specified Application Load Balancer.</p>
+    /// <p>Describes the attributes for the specified Application Load Balancer or Network Load Balancer.</p>
     fn describe_load_balancer_attributes(
         &self,
         input: &DescribeLoadBalancerAttributesInput,
     ) -> Result<DescribeLoadBalancerAttributesOutput, DescribeLoadBalancerAttributesError>;
 
-    /// <p>Describes the specified Application Load Balancers or all of your Application Load Balancers.</p> <p>To describe the listeners for a load balancer, use <a>DescribeListeners</a>. To describe the attributes for a load balancer, use <a>DescribeLoadBalancerAttributes</a>.</p>
+    /// <p>Describes the specified load balancers or all of your load balancers.</p> <p>To describe the listeners for a load balancer, use <a>DescribeListeners</a>. To describe the attributes for a load balancer, use <a>DescribeLoadBalancerAttributes</a>.</p>
     fn describe_load_balancers(
         &self,
         input: &DescribeLoadBalancersInput,
@@ -8509,7 +9347,7 @@ pub trait Elb {
         input: &DescribeSSLPoliciesInput,
     ) -> Result<DescribeSSLPoliciesOutput, DescribeSSLPoliciesError>;
 
-    /// <p>Describes the tags for the specified resources. You can describe the tags for one or more Application Load Balancers and target groups.</p>
+    /// <p>Describes the tags for the specified resources. You can describe the tags for one or more Application Load Balancers, Network Load Balancers, and target groups.</p>
     fn describe_tags(
         &self,
         input: &DescribeTagsInput,
@@ -8539,7 +9377,7 @@ pub trait Elb {
         input: &ModifyListenerInput,
     ) -> Result<ModifyListenerOutput, ModifyListenerError>;
 
-    /// <p>Modifies the specified attributes of the specified Application Load Balancer.</p> <p>If any of the specified attributes can't be modified as requested, the call fails. Any existing attributes that you do not modify retain their current values.</p>
+    /// <p>Modifies the specified attributes of the specified Application Load Balancer or Network Load Balancer.</p> <p>If any of the specified attributes can't be modified as requested, the call fails. Any existing attributes that you do not modify retain their current values.</p>
     fn modify_load_balancer_attributes(
         &self,
         input: &ModifyLoadBalancerAttributesInput,
@@ -8560,16 +9398,22 @@ pub trait Elb {
         input: &ModifyTargetGroupAttributesInput,
     ) -> Result<ModifyTargetGroupAttributesOutput, ModifyTargetGroupAttributesError>;
 
-    /// <p>Registers the specified targets with the specified target group.</p> <p>By default, the load balancer routes requests to registered targets using the protocol and port number for the target group. Alternatively, you can override the port for a target when you register it.</p> <p>The target must be in the virtual private cloud (VPC) that you specified for the target group. If the target is an EC2 instance, it must be in the <code>running</code> state when you register it.</p> <p>To remove a target from a target group, use <a>DeregisterTargets</a>.</p>
+    /// <p>Registers the specified targets with the specified target group.</p> <p>You can register targets by instance ID or by IP address. If the target is an EC2 instance, it must be in the <code>running</code> state when you register it.</p> <p>By default, the load balancer routes requests to registered targets using the protocol and port for the target group. Alternatively, you can override the port for a target when you register it. You can register each EC2 instance or IP address with the same target group multiple times using different ports.</p> <p>With a Network Load Balancer, you cannot register instances by instance ID if they have the following instance types: C1, CC1, CC2, CG1, CG2, CR1, CS1, G1, G2, HI1, HS1, M1, M2, M3, and T1. You can register instances of these types by IP address.</p> <p>To remove a target from a target group, use <a>DeregisterTargets</a>.</p>
     fn register_targets(
         &self,
         input: &RegisterTargetsInput,
     ) -> Result<RegisterTargetsOutput, RegisterTargetsError>;
 
-    /// <p>Removes the specified tags from the specified resource.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>.</p>
+    /// <p>Removes the specified certificate from the specified secure listener.</p> <p>You can't remove the default certificate for a listener. To replace the default certificate, call <a>ModifyListener</a>.</p> <p>To list the certificates for your listener, use <a>DescribeListenerCertificates</a>.</p>
+    fn remove_listener_certificates(
+        &self,
+        input: &RemoveListenerCertificatesInput,
+    ) -> Result<RemoveListenerCertificatesOutput, RemoveListenerCertificatesError>;
+
+    /// <p>Removes the specified tags from the specified Elastic Load Balancing resource.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>.</p>
     fn remove_tags(&self, input: &RemoveTagsInput) -> Result<RemoveTagsOutput, RemoveTagsError>;
 
-    /// <p>Sets the type of IP addresses used by the subnets of the specified Application Load Balancer.</p>
+    /// <p>Sets the type of IP addresses used by the subnets of the specified Application Load Balancer or Network Load Balancer.</p> <p>Note that Network Load Balancers must use <code>ipv4</code>.</p>
     fn set_ip_address_type(
         &self,
         input: &SetIpAddressTypeInput,
@@ -8581,13 +9425,13 @@ pub trait Elb {
         input: &SetRulePrioritiesInput,
     ) -> Result<SetRulePrioritiesOutput, SetRulePrioritiesError>;
 
-    /// <p>Associates the specified security groups with the specified load balancer. The specified security groups override the previously associated security groups.</p>
+    /// <p>Associates the specified security groups with the specified Application Load Balancer. The specified security groups override the previously associated security groups.</p> <p>Note that you can't specify a security group for a Network Load Balancer.</p>
     fn set_security_groups(
         &self,
         input: &SetSecurityGroupsInput,
     ) -> Result<SetSecurityGroupsOutput, SetSecurityGroupsError>;
 
-    /// <p>Enables the Availability Zone for the specified subnets for the specified load balancer. The specified subnets replace the previously enabled subnets.</p>
+    /// <p>Enables the Availability Zone for the specified subnets for the specified Application Load Balancer. The specified subnets replace the previously enabled subnets.</p> <p>Note that you can't change the subnets for a Network Load Balancer.</p>
     fn set_subnets(&self, input: &SetSubnetsInput) -> Result<SetSubnetsOutput, SetSubnetsError>;
 }
 /// A client for the Elastic Load Balancing v2 API.
@@ -8620,7 +9464,58 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    /// <p>Adds the specified tags to the specified resource. You can tag your Application Load Balancers and your target groups.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, <code>AddTags</code> updates its value.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>. To remove tags from your resources, use <a>RemoveTags</a>.</p>
+    /// <p>Adds the specified certificate to the specified secure listener.</p> <p>If the certificate was already added, the call is successful but the certificate is not added again.</p> <p>To list the certificates for your listener, use <a>DescribeListenerCertificates</a>. To remove certificates from your listener, use <a>RemoveListenerCertificates</a>.</p>
+    fn add_listener_certificates(
+        &self,
+        input: &AddListenerCertificatesInput,
+    ) -> Result<AddListenerCertificatesOutput, AddListenerCertificatesError> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "AddListenerCertificates");
+        params.put("Version", "2015-12-01");
+        AddListenerCertificatesInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = AddListenerCertificatesOutput::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(AddListenerCertificatesOutputDeserializer::deserialize(
+                        "AddListenerCertificatesResult",
+                        &mut stack
+                    ));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddListenerCertificatesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Adds the specified tags to the specified Elastic Load Balancing resource. You can tag your Application Load Balancers, Network Load Balancers, and your target groups.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, <code>AddTags</code> updates its value.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>. To remove tags from your resources, use <a>RemoveTags</a>.</p>
     fn add_tags(&self, input: &AddTagsInput) -> Result<AddTagsOutput, AddTagsError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -8668,7 +9563,7 @@ where
         }
     }
 
-    /// <p>Creates a listener for the specified Application Load Balancer.</p> <p>You can create up to 10 listeners per load balancer.</p> <p>To update a listener, use <a>ModifyListener</a>. When you are finished with a listener, you can delete it using <a>DeleteListener</a>. If you are finished with both the listener and the load balancer, you can delete them both using <a>DeleteLoadBalancer</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html">Listeners for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i>.</p>
+    /// <p>Creates a listener for the specified Application Load Balancer or Network Load Balancer.</p> <p>To update a listener, use <a>ModifyListener</a>. When you are finished with a listener, you can delete it using <a>DeleteListener</a>. If you are finished with both the listener and the load balancer, you can delete them both using <a>DeleteLoadBalancer</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple listeners with the same settings, each call succeeds.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html">Listeners for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-listeners.html">Listeners for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn create_listener(
         &self,
         input: &CreateListenerInput,
@@ -8719,7 +9614,7 @@ where
         }
     }
 
-    /// <p>Creates an Application Load Balancer.</p> <p>When you create a load balancer, you can specify security groups, subnets, IP address type, and tags. Otherwise, you could do so later using <a>SetSecurityGroups</a>, <a>SetSubnets</a>, <a>SetIpAddressType</a>, and <a>AddTags</a>.</p> <p>To create listeners for your load balancer, use <a>CreateListener</a>. To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>You can create up to 20 load balancers per region per account. You can request an increase for the number of load balancers for your account. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancers Guide</i>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html">Application Load Balancers</a> in the <i>Application Load Balancers Guide</i>.</p>
+    /// <p>Creates an Application Load Balancer or a Network Load Balancer.</p> <p>When you create a load balancer, you can specify security groups, subnets, IP address type, and tags. Otherwise, you could do so later using <a>SetSecurityGroups</a>, <a>SetSubnets</a>, <a>SetIpAddressType</a>, and <a>AddTags</a>.</p> <p>To create listeners for your load balancer, use <a>CreateListener</a>. To describe your current load balancers, see <a>DescribeLoadBalancers</a>. When you are finished with a load balancer, you can delete it using <a>DeleteLoadBalancer</a>.</p> <p>For limit information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancers Guide</i> and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancer</a> in the <i>Network Load Balancers Guide</i>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple load balancers with the same settings, each call succeeds.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/application-load-balancers.html">Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> and <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/network-load-balancers.html">Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn create_load_balancer(
         &self,
         input: &CreateLoadBalancerInput,
@@ -8770,7 +9665,7 @@ where
         }
     }
 
-    /// <p>Creates a rule for the specified listener.</p> <p>Each rule can have one action and one condition. Rules are evaluated in priority order, from the lowest value to the highest value. When the condition for a rule is met, the specified action is taken. If no conditions are met, the default action for the default rule is taken. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>
+    /// <p>Creates a rule for the specified listener. The listener must be associated with an Application Load Balancer.</p> <p>Rules are evaluated in priority order, from the lowest value to the highest value. When the condition for a rule is met, the specified action is taken. If no conditions are met, the action for the default rule is taken. For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-listeners.html#listener-rules">Listener Rules</a> in the <i>Application Load Balancers Guide</i>.</p> <p>To view your current rules, use <a>DescribeRules</a>. To update a rule, use <a>ModifyRule</a>. To set the priorities of your rules, use <a>SetRulePriorities</a>. To delete a rule, use <a>DeleteRule</a>.</p>
     fn create_rule(&self, input: &CreateRuleInput) -> Result<CreateRuleOutput, CreateRuleError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -8818,7 +9713,7 @@ where
         }
     }
 
-    /// <p>Creates a target group.</p> <p>To register targets with the target group, use <a>RegisterTargets</a>. To update the health check settings for the target group, use <a>ModifyTargetGroup</a>. To monitor the health of targets in the target group, use <a>DescribeTargetHealth</a>.</p> <p>To route traffic to the targets in a target group, specify the target group in an action using <a>CreateListener</a> or <a>CreateRule</a>.</p> <p>To delete a target group, use <a>DeleteTargetGroup</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html">Target Groups for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i>.</p>
+    /// <p>Creates a target group.</p> <p>To register targets with the target group, use <a>RegisterTargets</a>. To update the health check settings for the target group, use <a>ModifyTargetGroup</a>. To monitor the health of targets in the target group, use <a>DescribeTargetHealth</a>.</p> <p>To route traffic to the targets in a target group, specify the target group in an action using <a>CreateListener</a> or <a>CreateRule</a>.</p> <p>To delete a target group, use <a>DeleteTargetGroup</a>.</p> <p>This operation is idempotent, which means that it completes at most one time. If you attempt to create multiple target groups with the same settings, each call succeeds.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-target-groups.html">Target Groups for Your Application Load Balancers</a> in the <i>Application Load Balancers Guide</i> or <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-target-groups.html">Target Groups for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn create_target_group(
         &self,
         input: &CreateTargetGroupInput,
@@ -8920,7 +9815,7 @@ where
         }
     }
 
-    /// <p>Deletes the specified Application Load Balancer and its attached listeners.</p> <p>You can't delete a load balancer if deletion protection is enabled. If the load balancer does not exist or has already been deleted, the call succeeds.</p> <p>Deleting a load balancer does not affect its registered targets. For example, your EC2 instances continue to run and are still registered to their target groups. If you no longer need these EC2 instances, you can stop or terminate them.</p>
+    /// <p>Deletes the specified Application Load Balancer or Network Load Balancer and its attached listeners.</p> <p>You can't delete a load balancer if deletion protection is enabled. If the load balancer does not exist or has already been deleted, the call succeeds.</p> <p>Deleting a load balancer does not affect its registered targets. For example, your EC2 instances continue to run and are still registered to their target groups. If you no longer need these EC2 instances, you can stop or terminate them.</p>
     fn delete_load_balancer(
         &self,
         input: &DeleteLoadBalancerInput,
@@ -9121,7 +10016,7 @@ where
         }
     }
 
-    /// <p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancer</a> in the <i>Application Load Balancer Guide</i>.</p>
+    /// <p>Describes the current Elastic Load Balancing resource limits for your AWS account.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-limits.html">Limits for Your Application Load Balancers</a> in the <i>Application Load Balancer Guide</i> or <a href="http://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-limits.html">Limits for Your Network Load Balancers</a> in the <i>Network Load Balancers Guide</i>.</p>
     fn describe_account_limits(
         &self,
         input: &DescribeAccountLimitsInput,
@@ -9172,7 +10067,60 @@ where
         }
     }
 
-    /// <p>Describes the specified listeners or the listeners for the specified Application Load Balancer. You must specify either a load balancer or one or more listeners.</p>
+    /// <p>Describes the certificates for the specified secure listener.</p>
+    fn describe_listener_certificates(
+        &self,
+        input: &DescribeListenerCertificatesInput,
+    ) -> Result<DescribeListenerCertificatesOutput, DescribeListenerCertificatesError> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeListenerCertificates");
+        params.put("Version", "2015-12-01");
+        DescribeListenerCertificatesInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = DescribeListenerCertificatesOutput::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(
+                        DescribeListenerCertificatesOutputDeserializer::deserialize(
+                            "DescribeListenerCertificatesResult",
+                            &mut stack
+                        )
+                    );
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeListenerCertificatesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Describes the specified listeners or the listeners for the specified Application Load Balancer or Network Load Balancer. You must specify either a load balancer or one or more listeners.</p>
     fn describe_listeners(
         &self,
         input: &DescribeListenersInput,
@@ -9223,7 +10171,7 @@ where
         }
     }
 
-    /// <p>Describes the attributes for the specified Application Load Balancer.</p>
+    /// <p>Describes the attributes for the specified Application Load Balancer or Network Load Balancer.</p>
     fn describe_load_balancer_attributes(
         &self,
         input: &DescribeLoadBalancerAttributesInput,
@@ -9276,7 +10224,7 @@ where
         }
     }
 
-    /// <p>Describes the specified Application Load Balancers or all of your Application Load Balancers.</p> <p>To describe the listeners for a load balancer, use <a>DescribeListeners</a>. To describe the attributes for a load balancer, use <a>DescribeLoadBalancerAttributes</a>.</p>
+    /// <p>Describes the specified load balancers or all of your load balancers.</p> <p>To describe the listeners for a load balancer, use <a>DescribeListeners</a>. To describe the attributes for a load balancer, use <a>DescribeLoadBalancerAttributes</a>.</p>
     fn describe_load_balancers(
         &self,
         input: &DescribeLoadBalancersInput,
@@ -9429,7 +10377,7 @@ where
         }
     }
 
-    /// <p>Describes the tags for the specified resources. You can describe the tags for one or more Application Load Balancers and target groups.</p>
+    /// <p>Describes the tags for the specified resources. You can describe the tags for one or more Application Load Balancers, Network Load Balancers, and target groups.</p>
     fn describe_tags(
         &self,
         input: &DescribeTagsInput,
@@ -9686,7 +10634,7 @@ where
         }
     }
 
-    /// <p>Modifies the specified attributes of the specified Application Load Balancer.</p> <p>If any of the specified attributes can't be modified as requested, the call fails. Any existing attributes that you do not modify retain their current values.</p>
+    /// <p>Modifies the specified attributes of the specified Application Load Balancer or Network Load Balancer.</p> <p>If any of the specified attributes can't be modified as requested, the call fails. Any existing attributes that you do not modify retain their current values.</p>
     fn modify_load_balancer_attributes(
         &self,
         input: &ModifyLoadBalancerAttributesInput,
@@ -9889,7 +10837,7 @@ where
         }
     }
 
-    /// <p>Registers the specified targets with the specified target group.</p> <p>By default, the load balancer routes requests to registered targets using the protocol and port number for the target group. Alternatively, you can override the port for a target when you register it.</p> <p>The target must be in the virtual private cloud (VPC) that you specified for the target group. If the target is an EC2 instance, it must be in the <code>running</code> state when you register it.</p> <p>To remove a target from a target group, use <a>DeregisterTargets</a>.</p>
+    /// <p>Registers the specified targets with the specified target group.</p> <p>You can register targets by instance ID or by IP address. If the target is an EC2 instance, it must be in the <code>running</code> state when you register it.</p> <p>By default, the load balancer routes requests to registered targets using the protocol and port for the target group. Alternatively, you can override the port for a target when you register it. You can register each EC2 instance or IP address with the same target group multiple times using different ports.</p> <p>With a Network Load Balancer, you cannot register instances by instance ID if they have the following instance types: C1, CC1, CC2, CG1, CG2, CR1, CS1, G1, G2, HI1, HS1, M1, M2, M3, and T1. You can register instances of these types by IP address.</p> <p>To remove a target from a target group, use <a>DeregisterTargets</a>.</p>
     fn register_targets(
         &self,
         input: &RegisterTargetsInput,
@@ -9940,7 +10888,58 @@ where
         }
     }
 
-    /// <p>Removes the specified tags from the specified resource.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>.</p>
+    /// <p>Removes the specified certificate from the specified secure listener.</p> <p>You can't remove the default certificate for a listener. To replace the default certificate, call <a>ModifyListener</a>.</p> <p>To list the certificates for your listener, use <a>DescribeListenerCertificates</a>.</p>
+    fn remove_listener_certificates(
+        &self,
+        input: &RemoveListenerCertificatesInput,
+    ) -> Result<RemoveListenerCertificatesOutput, RemoveListenerCertificatesError> {
+        let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "RemoveListenerCertificates");
+        params.put("Version", "2015-12-01");
+        RemoveListenerCertificatesInputSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = RemoveListenerCertificatesOutput::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(RemoveListenerCertificatesOutputDeserializer::deserialize(
+                        "RemoveListenerCertificatesResult",
+                        &mut stack
+                    ));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RemoveListenerCertificatesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Removes the specified tags from the specified Elastic Load Balancing resource.</p> <p>To list the current tags for your resources, use <a>DescribeTags</a>.</p>
     fn remove_tags(&self, input: &RemoveTagsInput) -> Result<RemoveTagsOutput, RemoveTagsError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();
@@ -9988,7 +10987,7 @@ where
         }
     }
 
-    /// <p>Sets the type of IP addresses used by the subnets of the specified Application Load Balancer.</p>
+    /// <p>Sets the type of IP addresses used by the subnets of the specified Application Load Balancer or Network Load Balancer.</p> <p>Note that Network Load Balancers must use <code>ipv4</code>.</p>
     fn set_ip_address_type(
         &self,
         input: &SetIpAddressTypeInput,
@@ -10090,7 +11089,7 @@ where
         }
     }
 
-    /// <p>Associates the specified security groups with the specified load balancer. The specified security groups override the previously associated security groups.</p>
+    /// <p>Associates the specified security groups with the specified Application Load Balancer. The specified security groups override the previously associated security groups.</p> <p>Note that you can't specify a security group for a Network Load Balancer.</p>
     fn set_security_groups(
         &self,
         input: &SetSecurityGroupsInput,
@@ -10141,7 +11140,7 @@ where
         }
     }
 
-    /// <p>Enables the Availability Zone for the specified subnets for the specified load balancer. The specified subnets replace the previously enabled subnets.</p>
+    /// <p>Enables the Availability Zone for the specified subnets for the specified Application Load Balancer. The specified subnets replace the previously enabled subnets.</p> <p>Note that you can't change the subnets for a Network Load Balancer.</p>
     fn set_subnets(&self, input: &SetSubnetsInput) -> Result<SetSubnetsOutput, SetSubnetsError> {
         let mut request = SignedRequest::new("POST", "elasticloadbalancing", &self.region, "/");
         let mut params = Params::new();

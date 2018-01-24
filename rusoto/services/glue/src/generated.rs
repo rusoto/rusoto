@@ -27,11 +27,14 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
+/// <p>Defines an action to be initiated by a trigger.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Action {
+    /// <p>Arguments to be passed to the job.</p>
     #[serde(rename = "Arguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arguments: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The name of a job to be executed.</p>
     #[serde(rename = "JobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
@@ -161,6 +164,58 @@ pub struct BatchGetPartitionResponse {
     pub unprocessed_keys: Option<Vec<PartitionValueList>>,
 }
 
+/// <p>Details about the job run and the error that occurred while trying to submit it for stopping.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct BatchStopJobRunError {
+    /// <p>The details of the error that occurred.</p>
+    #[serde(rename = "ErrorDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_detail: Option<ErrorDetail>,
+    /// <p>The name of the job.</p>
+    #[serde(rename = "JobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_name: Option<String>,
+    /// <p>The job run Id.</p>
+    #[serde(rename = "JobRunId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_run_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct BatchStopJobRunRequest {
+    /// <p>The name of the job whose job runs are to be stopped.</p>
+    #[serde(rename = "JobName")]
+    pub job_name: String,
+    /// <p>A list of job run Ids of the given job to be stopped.</p>
+    #[serde(rename = "JobRunIds")]
+    pub job_run_ids: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct BatchStopJobRunResponse {
+    /// <p>A list containing the job run Ids and details of the error that occurred for each job run while submitting to stop.</p>
+    #[serde(rename = "Errors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub errors: Option<Vec<BatchStopJobRunError>>,
+    /// <p>A list of job runs which are successfully submitted for stopping.</p>
+    #[serde(rename = "SuccessfulSubmissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub successful_submissions: Option<Vec<BatchStopJobRunSuccessfulSubmission>>,
+}
+
+/// <p>Details about the job run which is submitted successfully for stopping.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct BatchStopJobRunSuccessfulSubmission {
+    /// <p>The name of the job.</p>
+    #[serde(rename = "JobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_name: Option<String>,
+    /// <p>The job run Id.</p>
+    #[serde(rename = "JobRunId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_run_id: Option<String>,
+}
+
 /// <p>Specifies a table definition in the Data Catalog.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CatalogEntry {
@@ -189,13 +244,17 @@ pub struct CatalogImportStatus {
     pub imported_by: Option<String>,
 }
 
-/// <p>Classifiers are written in Python and triggered during a Crawl Task. You can write your own Classifiers to best categorize your data sources and specify the appropriate schemas to use for them. A Classifier first checks whether a given file is in a format it can handle, and then, if so, creates a schema in the form of a <code>StructType</code> object that matches that data format.</p>
+/// <p>Classifiers are written in Python and triggered during a crawl task. You can write your own classifiers to best categorize your data sources and specify the appropriate schemas to use for them. A classifier checks whether a given file is in a format it can handle, and if it is, the classifier creates a schema in the form of a <code>StructType</code> object that matches that data format.</p> <p>A classifier can be either a <code>grok</code> classifier or an XML classifier, specified in one or the other field of the <code>Classifier</code> object.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Classifier {
-    /// <p>A GrokClassifier object.</p>
+    /// <p>A <code>GrokClassifier</code> object.</p>
     #[serde(rename = "GrokClassifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub grok_classifier: Option<GrokClassifier>,
+    /// <p>An <code>XMLClassifier</code> object.</p>
+    #[serde(rename = "XMLClassifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub xml_classifier: Option<XMLClassifier>,
 }
 
 /// <p>Represents a directional edge in a directed acyclic graph (DAG).</p>
@@ -262,14 +321,18 @@ pub struct Column {
     pub type_: Option<String>,
 }
 
+/// <p>Defines a condition under which a trigger fires.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Condition {
+    /// <p>The name of the job in question.</p>
     #[serde(rename = "JobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
+    /// <p>A logical operator.</p>
     #[serde(rename = "LogicalOperator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logical_operator: Option<String>,
+    /// <p>The condition state.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
@@ -282,7 +345,7 @@ pub struct Connection {
     #[serde(rename = "ConnectionProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_properties: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The type of the connection.</p>
+    /// <p>The type of the connection. Currently, only JDBC is supported; SFTP is not supported.</p>
     #[serde(rename = "ConnectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_type: Option<String>,
@@ -323,7 +386,7 @@ pub struct ConnectionInput {
     #[serde(rename = "ConnectionProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_properties: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The type of the connection.</p>
+    /// <p>The type of the connection. Currently, only JDBC is supported; SFTP is not supported.</p>
     #[serde(rename = "ConnectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_type: Option<String>,
@@ -354,26 +417,30 @@ pub struct ConnectionsList {
     pub connections: Option<Vec<String>>,
 }
 
-/// <p>Specifies a crawler program that examines a data source and uses classifiers to try to its schema. If successful, the crawler records metatdata concerning the data source in the Data Catalog.</p>
+/// <p>Specifies a crawler program that examines a data source and uses classifiers to try to determine its schema. If successful, the crawler records metadata concerning the data source in the AWS Glue Data Catalog.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Crawler {
-    /// <p>A list of custom <code>Classifier</code>s associated with this Crawler.</p>
+    /// <p>A list of custom classifiers associated with the crawler.</p>
     #[serde(rename = "Classifiers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub classifiers: Option<Vec<String>>,
-    /// <p>If this Crawler is running, contains the total time elapsed since the last crawl began.</p>
+    /// <p>Crawler configuration information. This versioned JSON string allows users to specify aspects of a Crawler's behavior.</p> <p>You can use this field to force partitions to inherit metadata such as classification, input format, output format, serde information, and schema from their parent table, rather than detect this information separately for each partition. Use the following JSON string to specify that behavior:</p>
+    #[serde(rename = "Configuration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration: Option<String>,
+    /// <p>If the crawler is running, contains the total time elapsed since the last crawl began.</p>
     #[serde(rename = "CrawlElapsedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub crawl_elapsed_time: Option<i64>,
-    /// <p>The time when the Crawler was created.</p>
+    /// <p>The time when the crawler was created.</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    /// <p>The <code>Database</code> where this Crawler's output should be stored.</p>
+    /// <p>The database where metadata is written by this crawler.</p>
     #[serde(rename = "DatabaseName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
-    /// <p>A description of this Crawler and where it should be used.</p>
+    /// <p>A description of the crawler.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -381,31 +448,31 @@ pub struct Crawler {
     #[serde(rename = "LastCrawl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_crawl: Option<LastCrawlInfo>,
-    /// <p>The time the Crawler was last updated.</p>
+    /// <p>The time the crawler was last updated.</p>
     #[serde(rename = "LastUpdated")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated: Option<f64>,
-    /// <p>The <code>Crawler</code> name.</p>
+    /// <p>The crawler name.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The ARN of an IAM role used to access customer resources such as data in S3.</p>
+    /// <p>The IAM role (or ARN of an IAM role) used to access customer resources, such as data in Amazon S3.</p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
-    /// <p>A <code>Schedule</code> object that specifies the schedule on which this Crawler is to be run.</p>
+    /// <p>For scheduled crawlers, the schedule when the crawler runs.</p>
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<Schedule>,
-    /// <p>Sets policy for the crawler's update and delete behavior.</p>
+    /// <p>Sets the behavior when the crawler finds a changed or deleted object.</p>
     #[serde(rename = "SchemaChangePolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_change_policy: Option<SchemaChangePolicy>,
-    /// <p>Indicates whether this Crawler is running, or whether a run is pending.</p>
+    /// <p>Indicates whether the crawler is running, or whether a run is pending.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
-    /// <p>The table prefix used for catalog tables created.</p>
+    /// <p>The prefix added to the names of tables that are created.</p>
     #[serde(rename = "TablePrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_prefix: Option<String>,
@@ -413,7 +480,7 @@ pub struct Crawler {
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<CrawlerTargets>,
-    /// <p>The version of the Crawler.</p>
+    /// <p>The version of the crawler.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<i64>,
@@ -434,19 +501,19 @@ pub struct CrawlerMetrics {
     #[serde(rename = "MedianRuntimeSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub median_runtime_seconds: Option<f64>,
-    /// <p>True if the crawler is estimating its </p>
+    /// <p>True if the crawler is still estimating how long it will take to complete this run.</p>
     #[serde(rename = "StillEstimating")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub still_estimating: Option<bool>,
-    /// <p>A list of the tables created by this crawler.</p>
+    /// <p>The number of tables created by this crawler.</p>
     #[serde(rename = "TablesCreated")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tables_created: Option<i64>,
-    /// <p>A list of the tables deleted by this crawler.</p>
+    /// <p>The number of tables deleted by this crawler.</p>
     #[serde(rename = "TablesDeleted")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tables_deleted: Option<i64>,
-    /// <p>A list of the tables created by this crawler.</p>
+    /// <p>The number of tables updated by this crawler.</p>
     #[serde(rename = "TablesUpdated")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tables_updated: Option<i64>,
@@ -456,14 +523,14 @@ pub struct CrawlerMetrics {
     pub time_left_seconds: Option<f64>,
 }
 
-/// <p>Specifies crawler targets.</p>
+/// <p>Specifies data stores to crawl.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct CrawlerTargets {
     /// <p>Specifies JDBC targets.</p>
     #[serde(rename = "JdbcTargets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub jdbc_targets: Option<Vec<JdbcTarget>>,
-    /// <p>Specifies targets in AWS S3.</p>
+    /// <p>Specifies Amazon S3 targets.</p>
     #[serde(rename = "S3Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_targets: Option<Vec<S3Target>>,
@@ -471,10 +538,14 @@ pub struct CrawlerTargets {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateClassifierRequest {
-    /// <p>A grok classifier to create.</p>
+    /// <p>A <code>GrokClassifier</code> object specifying the classifier to create.</p>
     #[serde(rename = "GrokClassifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub grok_classifier: Option<CreateGrokClassifierRequest>,
+    /// <p>An <code>XMLClassifier</code> object specifying the classifier to create.</p>
+    #[serde(rename = "XMLClassifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub xml_classifier: Option<CreateXMLClassifierRequest>,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -496,24 +567,28 @@ pub struct CreateConnectionResponse;
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateCrawlerRequest {
-    /// <p>A list of custom <code>Classifier</code> names that the user has registered. By default, all AWS classifiers are included in a crawl, but these custom classifiers always override the default classifiers for a given classification.</p>
+    /// <p>A list of custom classifiers that the user has registered. By default, all AWS classifiers are included in a crawl, but these custom classifiers always override the default classifiers for a given classification.</p>
     #[serde(rename = "Classifiers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub classifiers: Option<Vec<String>>,
-    /// <p>The Glue <code>Database</code> where results will be stored, such as: <code>arn:aws:daylight:us-east-1::database/sometable/*</code>.</p>
+    /// <p>Crawler configuration information. This versioned JSON string allows users to specify aspects of a Crawler's behavior.</p> <p>You can use this field to force partitions to inherit metadata such as classification, input format, output format, serde information, and schema from their parent table, rather than detect this information separately for each partition.</p>
+    #[serde(rename = "Configuration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration: Option<String>,
+    /// <p>The AWS Glue database where results are written, such as: <code>arn:aws:daylight:us-east-1::database/sometable/*</code>.</p>
     #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    /// <p>A description of the new <code>Crawler</code>.</p>
+    /// <p>A description of the new crawler.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Name of the new <code>Crawler</code>.</p>
+    /// <p>Name of the new crawler.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The AWS ARN of the IAM role used by the new <code>Crawler</code> to access customer resources.</p>
+    /// <p>The IAM role (or ARN of an IAM role) used by the new crawler to access customer resources.</p>
     #[serde(rename = "Role")]
     pub role: String,
-    /// <p>A cron expression that can be used as a Cloudwatch event (see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html">CloudWatch Schedule Expression Syntax</a>. For example, to run every day at 12:15 UTC, specify: <code>cron(15 12 * * ? *)</code>.</p>
+    /// <p>A <code>cron</code> expression used to specify the schedule (see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p>
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
@@ -521,7 +596,7 @@ pub struct CreateCrawlerRequest {
     #[serde(rename = "SchemaChangePolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_change_policy: Option<SchemaChangePolicy>,
-    /// <p>The table prefix used for catalog tables created.</p>
+    /// <p>The table prefix used for catalog tables that are created.</p>
     #[serde(rename = "TablePrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_prefix: Option<String>,
@@ -556,27 +631,28 @@ pub struct CreateDevEndpointRequest {
     #[serde(rename = "ExtraJarsS3Path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_jars_s3_path: Option<String>,
-    /// <p>Path to one or more Python libraries in an S3 bucket that should be loaded in your DevEndpoint.</p>
+    /// <p>Path(s) to one or more Python libraries in an S3 bucket that should be loaded in your DevEndpoint. Multiple values must be complete paths separated by a comma.</p> <p>Please note that only pure Python libraries can currently be used on a DevEndpoint. Libraries that rely on C extensions, such as the <a href="http://pandas.pydata.org/">pandas</a> Python data analysis library, are not yet supported.</p>
     #[serde(rename = "ExtraPythonLibsS3Path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_python_libs_s3_path: Option<String>,
-    /// <p>The number of nodes to use.</p>
+    /// <p>The number of AWS Glue Data Processing Units (DPUs) to allocate to this DevEndpoint.</p>
     #[serde(rename = "NumberOfNodes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_nodes: Option<i64>,
     /// <p>The public key to use for authentication.</p>
     #[serde(rename = "PublicKey")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub public_key: Option<String>,
+    pub public_key: String,
     /// <p>The IAM role for the DevEndpoint.</p>
     #[serde(rename = "RoleArn")]
     pub role_arn: String,
     /// <p>Security group IDs for the security groups to be used by the new DevEndpoint.</p>
     #[serde(rename = "SecurityGroupIds")]
-    pub security_group_ids: Vec<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_group_ids: Option<Vec<String>>,
     /// <p>The subnet ID for the new DevEndpoint to use.</p>
     #[serde(rename = "SubnetId")]
-    pub subnet_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subnet_id: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -597,7 +673,7 @@ pub struct CreateDevEndpointResponse {
     #[serde(rename = "ExtraJarsS3Path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_jars_s3_path: Option<String>,
-    /// <p>Path to one or more Python libraries in an S3 bucket that will be loaded in your DevEndpoint.</p>
+    /// <p>Path(s) to one or more Python libraries in an S3 bucket that will be loaded in your DevEndpoint.</p>
     #[serde(rename = "ExtraPythonLibsS3Path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_python_libs_s3_path: Option<String>,
@@ -605,7 +681,7 @@ pub struct CreateDevEndpointResponse {
     #[serde(rename = "FailureReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_reason: Option<String>,
-    /// <p>The number of nodes in this DevEndpoint.</p>
+    /// <p>The number of AWS Glue Data Processing Units (DPUs) allocated to this DevEndpoint.</p>
     #[serde(rename = "NumberOfNodes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_nodes: Option<i64>,
@@ -633,22 +709,26 @@ pub struct CreateDevEndpointResponse {
     #[serde(rename = "YarnEndpointAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub yarn_endpoint_address: Option<String>,
+    /// <p>The Apache Zeppelin port for the remote Apache Spark interpreter.</p>
+    #[serde(rename = "ZeppelinRemoteSparkInterpreterPort")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub zeppelin_remote_spark_interpreter_port: Option<i64>,
 }
 
-/// <p>Specifies a Grok classifier for CreateClassifier to create.</p>
+/// <p>Specifies a <code>grok</code> classifier for <code>CreateClassifier</code> to create.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateGrokClassifierRequest {
-    /// <p>The type of result that the classifier matches, such as Twitter Json, Omniture logs, Cloudwatch logs, and so forth.</p>
+    /// <p>An identifier of the data format that the classifier matches, such as Twitter, JSON, Omniture logs, Amazon CloudWatch Logs, and so on.</p>
     #[serde(rename = "Classification")]
     pub classification: String,
-    /// <p>Custom grok patterns used by this classifier.</p>
+    /// <p>Optional custom grok patterns used by this classifier.</p>
     #[serde(rename = "CustomPatterns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_patterns: Option<String>,
     /// <p>The grok pattern used by this classifier.</p>
     #[serde(rename = "GrokPattern")]
     pub grok_pattern: String,
-    /// <p>The name of the new Classifier.</p>
+    /// <p>The name of the new classifier.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
@@ -678,7 +758,7 @@ pub struct CreateJobRequest {
     #[serde(rename = "ExecutionProperty")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_property: Option<ExecutionProperty>,
-    /// <p>Location of the logs for this job.</p>
+    /// <p>This field is reserved for future use.</p>
     #[serde(rename = "LogUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_uri: Option<String>,
@@ -775,7 +855,7 @@ pub struct CreateTriggerRequest {
     #[serde(rename = "Predicate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub predicate: Option<Predicate>,
-    /// <p>A cron schedule expression for the new trigger.</p>
+    /// <p>A <code>cron</code> expression used to specify the schedule (see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p>
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
@@ -808,6 +888,21 @@ pub struct CreateUserDefinedFunctionRequest {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateUserDefinedFunctionResponse;
+
+/// <p>Specifies an XML classifier for <code>CreateClassifier</code> to create.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateXMLClassifierRequest {
+    /// <p>An identifier of the data format that the classifier matches.</p>
+    #[serde(rename = "Classification")]
+    pub classification: String,
+    /// <p>The name of the classifier.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The XML tag designating the element that contains each record in an XML document being parsed. Note that this cannot be an empty element. It must contain child elements representing fields in the record.</p>
+    #[serde(rename = "RowTag")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub row_tag: Option<String>,
+}
 
 /// <p>The <code>Database</code> object represents a logical grouping of tables that may reside in a Hive metastore or an RDBMS.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -855,7 +950,7 @@ pub struct DatabaseInput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteClassifierRequest {
-    /// <p>Name of the <code>Classifier</code> to remove.</p>
+    /// <p>Name of the classifier to remove.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
@@ -879,7 +974,7 @@ pub struct DeleteConnectionResponse;
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteCrawlerRequest {
-    /// <p>Name of the <code>Crawler</code> to remove.</p>
+    /// <p>Name of the crawler to remove.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
@@ -1010,11 +1105,11 @@ pub struct DevEndpoint {
     #[serde(rename = "EndpointName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_name: Option<String>,
-    /// <p>Path to one or more Java Jars in an S3 bucket that should be loaded in your DevEndpoint.</p>
+    /// <p>Path to one or more Java Jars in an S3 bucket that should be loaded in your DevEndpoint.</p> <p>Please note that only pure Java/Scala libraries can currently be used on a DevEndpoint.</p>
     #[serde(rename = "ExtraJarsS3Path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_jars_s3_path: Option<String>,
-    /// <p>Path to one or more Python libraries in an S3 bucket that should be loaded in your DevEndpoint.</p>
+    /// <p>Path(s) to one or more Python libraries in an S3 bucket that should be loaded in your DevEndpoint. Multiple values must be complete paths separated by a comma.</p> <p>Please note that only pure Python libraries can currently be used on a DevEndpoint. Libraries that rely on C extensions, such as the <a href="http://pandas.pydata.org/">pandas</a> Python data analysis library, are not yet supported.</p>
     #[serde(rename = "ExtraPythonLibsS3Path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_python_libs_s3_path: Option<String>,
@@ -1030,7 +1125,7 @@ pub struct DevEndpoint {
     #[serde(rename = "LastUpdateStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_update_status: Option<String>,
-    /// <p>The number of nodes used by this DevEndpoint.</p>
+    /// <p>The number of AWS Glue Data Processing Units (DPUs) allocated to this DevEndpoint.</p>
     #[serde(rename = "NumberOfNodes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_nodes: Option<i64>,
@@ -1066,16 +1161,20 @@ pub struct DevEndpoint {
     #[serde(rename = "YarnEndpointAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub yarn_endpoint_address: Option<String>,
+    /// <p>The Apache Zeppelin port for the remote Apache Spark interpreter.</p>
+    #[serde(rename = "ZeppelinRemoteSparkInterpreterPort")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub zeppelin_remote_spark_interpreter_port: Option<i64>,
 }
 
 /// <p>Custom libraries to be loaded into a DevEndpoint.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DevEndpointCustomLibraries {
-    /// <p>Path to one or more Java Jars in an S3 bucket that should be loaded in your DevEndpoint.</p>
+    /// <p>Path to one or more Java Jars in an S3 bucket that should be loaded in your DevEndpoint.</p> <p>Please note that only pure Java/Scala libraries can currently be used on a DevEndpoint.</p>
     #[serde(rename = "ExtraJarsS3Path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_jars_s3_path: Option<String>,
-    /// <p>Path to one or more Python libraries in an S3 bucket that should be loaded in your DevEndpoint.</p>
+    /// <p>Path(s) to one or more Python libraries in an S3 bucket that should be loaded in your DevEndpoint. Multiple values must be complete paths separated by a comma.</p> <p>Please note that only pure Python libraries can currently be used on a DevEndpoint. Libraries that rely on C extensions, such as the <a href="http://pandas.pydata.org/">pandas</a> Python data analysis library, are not yet supported.</p>
     #[serde(rename = "ExtraPythonLibsS3Path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_python_libs_s3_path: Option<String>,
@@ -1121,14 +1220,14 @@ pub struct GetCatalogImportStatusResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetClassifierRequest {
-    /// <p>Name of the <code>Classifier</code> to retrieve.</p>
+    /// <p>Name of the classifier to retrieve.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetClassifierResponse {
-    /// <p>The requested <code>Classifier</code>.</p>
+    /// <p>The requested classifier.</p>
     #[serde(rename = "Classifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub classifier: Option<Classifier>,
@@ -1148,7 +1247,7 @@ pub struct GetClassifiersRequest {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetClassifiersResponse {
-    /// <p>The requested list of <code>Classifier</code> objects.</p>
+    /// <p>The requested list of classifier objects.</p>
     #[serde(rename = "Classifiers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub classifiers: Option<Vec<Classifier>>,
@@ -1180,7 +1279,7 @@ pub struct GetConnectionResponse {
 /// <p>Filters the connection definitions returned by the <code>GetConnections</code> API.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetConnectionsFilter {
-    /// <p>The type of connections to return.</p>
+    /// <p>The type of connections to return. Currently, only JDBC is supported; SFTP is not supported.</p>
     #[serde(rename = "ConnectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_type: Option<String>,
@@ -1252,14 +1351,14 @@ pub struct GetCrawlerMetricsResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetCrawlerRequest {
-    /// <p>Name of the <code>Crawler</code> to retrieve metadata for.</p>
+    /// <p>Name of the crawler to retrieve metadata for.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetCrawlerResponse {
-    /// <p>The metadata for the specified <code>Crawler</code>.</p>
+    /// <p>The metadata for the specified crawler.</p>
     #[serde(rename = "Crawler")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub crawler: Option<Crawler>,
@@ -1267,7 +1366,7 @@ pub struct GetCrawlerResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetCrawlersRequest {
-    /// <p>The number of Crawlers to return on each call.</p>
+    /// <p>The number of crawlers to return on each call.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -1279,7 +1378,7 @@ pub struct GetCrawlersRequest {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetCrawlersResponse {
-    /// <p>A list of <code>Crawler</code> metadata.</p>
+    /// <p>A list of crawler metadata.</p>
     #[serde(rename = "Crawlers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub crawlers: Option<Vec<Crawler>>,
@@ -1591,7 +1690,7 @@ pub struct GetPlanRequest {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetPlanResponse {
-    /// <p>A python script to perform the mapping.</p>
+    /// <p>A Python script to perform the mapping.</p>
     #[serde(rename = "PythonScript")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub python_script: Option<String>,
@@ -1787,21 +1886,21 @@ pub struct GetUserDefinedFunctionsResponse {
     pub user_defined_functions: Option<Vec<UserDefinedFunction>>,
 }
 
-/// <p>A classifier that uses <code>grok</code>.</p>
+/// <p>A classifier that uses <code>grok</code> patterns.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct GrokClassifier {
-    /// <p>The data form that the classifier matches, such as Twitter, JSON, Omniture Logs, and so forth.</p>
+    /// <p>An identifier of the data format that the classifier matches, such as Twitter, JSON, Omniture logs, and so on.</p>
     #[serde(rename = "Classification")]
     pub classification: String,
     /// <p>The time this classifier was registered.</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    /// <p>Custom grok patterns used by this classifier.</p>
+    /// <p>Optional custom grok patterns defined by this classifier. For more information, see custom patterns in <a href="http://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html">Writing Custom Classifers</a>.</p>
     #[serde(rename = "CustomPatterns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_patterns: Option<String>,
-    /// <p>The grok pattern used by this classifier.</p>
+    /// <p>The grok pattern applied to a data store by this classifier. For more information, see built-in patterns in <a href="http://docs.aws.amazon.com/glue/latest/dg/custom-classifier.html">Writing Custom Classifers</a>.</p>
     #[serde(rename = "GrokPattern")]
     pub grok_pattern: String,
     /// <p>The time this classifier was last updated.</p>
@@ -1828,14 +1927,14 @@ pub struct ImportCatalogToGlueRequest {
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ImportCatalogToGlueResponse;
 
-/// <p>Specifies a JDBC target for a crawl.</p>
+/// <p>Specifies a JDBC data store to crawl.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct JdbcTarget {
-    /// <p>The name of the connection to use for the JDBC target.</p>
+    /// <p>The name of the connection to use to connect to the JDBC target.</p>
     #[serde(rename = "ConnectionName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_name: Option<String>,
-    /// <p>A list of items to exclude from the crawl.</p>
+    /// <p>A list of glob patterns used to exclude from the crawl. For more information, see <a href="http://docs.aws.amazon.com/glue/latest/dg/add-crawler.html">Catalog Tables with a Crawler</a>.</p>
     #[serde(rename = "Exclusions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub exclusions: Option<Vec<String>>,
@@ -1880,7 +1979,7 @@ pub struct Job {
     #[serde(rename = "LastModifiedOn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_on: Option<f64>,
-    /// <p>Location of the logs for this job.</p>
+    /// <p>This field is reserved for future use.</p>
     #[serde(rename = "LogUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_uri: Option<String>,
@@ -2020,7 +2119,7 @@ pub struct JobUpdate {
     #[serde(rename = "ExecutionProperty")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_property: Option<ExecutionProperty>,
-    /// <p>Location of the logs for this job.</p>
+    /// <p>This field is reserved for future use.</p>
     #[serde(rename = "LogUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_uri: Option<String>,
@@ -2037,7 +2136,7 @@ pub struct JobUpdate {
 /// <p>Status and error information about the most recent crawl.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct LastCrawlInfo {
-    /// <p>Error information about the last crawl, if an error occurred.</p>
+    /// <p>If an error occurred, the error information about the last crawl.</p>
     #[serde(rename = "ErrorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
@@ -2070,7 +2169,7 @@ pub struct Location {
     #[serde(rename = "Jdbc")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub jdbc: Option<Vec<CodeGenNodeArg>>,
-    /// <p>An AWS S3 location.</p>
+    /// <p>An Amazon S3 location.</p>
     #[serde(rename = "S3")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3: Option<Vec<CodeGenNodeArg>>,
@@ -2191,8 +2290,10 @@ pub struct PartitionInput {
     pub values: Option<Vec<String>>,
 }
 
+/// <p>Contains a list of values defining partitions.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct PartitionValueList {
+    /// <p>The list of values.</p>
     #[serde(rename = "Values")]
     pub values: Vec<String>,
 }
@@ -2268,14 +2369,14 @@ pub struct ResourceUri {
     pub uri: Option<String>,
 }
 
-/// <p>Specifies a crawler target in AWS S3.</p>
+/// <p>Specifies a data store in Amazon S3.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct S3Target {
-    /// <p>A list of S3 objects to exclude from the crawl.</p>
+    /// <p>A list of glob patterns used to exclude from the crawl. For more information, see <a href="http://docs.aws.amazon.com/glue/latest/dg/add-crawler.html">Catalog Tables with a Crawler</a>.</p>
     #[serde(rename = "Exclusions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub exclusions: Option<Vec<String>>,
-    /// <p>The path to the S3 target.</p>
+    /// <p>The path to the Amazon S3 target.</p>
     #[serde(rename = "Path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub path: Option<String>,
@@ -2284,7 +2385,7 @@ pub struct S3Target {
 /// <p>A scheduling object using a <code>cron</code> statement to schedule an event.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Schedule {
-    /// <p>A <code>cron</code> expression that can be used as a Cloudwatch event to schedule something (see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html">CloudWatch Schedule Expression Syntax</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p>
+    /// <p>A <code>cron</code> expression used to specify the schedule (see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p>
     #[serde(rename = "ScheduleExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_expression: Option<String>,
@@ -2297,11 +2398,11 @@ pub struct Schedule {
 /// <p>Crawler policy for update and deletion behavior.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct SchemaChangePolicy {
-    /// <p>The deletion behavior.</p>
+    /// <p>The deletion behavior when the crawler finds a deleted object.</p>
     #[serde(rename = "DeleteBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub delete_behavior: Option<String>,
-    /// <p>The update behavior.</p>
+    /// <p>The update behavior when the crawler finds a changed schema.</p>
     #[serde(rename = "UpdateBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub update_behavior: Option<String>,
@@ -2354,7 +2455,7 @@ pub struct SkewedInfo {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct StartCrawlerRequest {
-    /// <p>Name of the <code>Crawler</code> to start.</p>
+    /// <p>Name of the crawler to start.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
@@ -2416,7 +2517,7 @@ pub struct StartTriggerResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct StopCrawlerRequest {
-    /// <p>Name of the <code>Crawler</code> to stop.</p>
+    /// <p>Name of the crawler to stop.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
@@ -2635,11 +2736,14 @@ pub struct TableInput {
     pub view_original_text: Option<String>,
 }
 
+/// <p>Specifies a version of a table.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct TableVersion {
+    /// <p>The table in question</p>
     #[serde(rename = "Table")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table: Option<Table>,
+    /// <p>The ID value that identifies this table version.</p>
     #[serde(rename = "VersionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version_id: Option<String>,
@@ -2668,7 +2772,7 @@ pub struct Trigger {
     #[serde(rename = "Predicate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub predicate: Option<Predicate>,
-    /// <p>A cron schedule expression.</p>
+    /// <p>A <code>cron</code> expression used to specify the schedule (see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p>
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
@@ -2701,7 +2805,7 @@ pub struct TriggerUpdate {
     #[serde(rename = "Predicate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub predicate: Option<Predicate>,
-    /// <p>A cron expression specifying the schedule.</p>
+    /// <p>An updated <code>cron</code> expression used to specify the schedule (see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p>
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
@@ -2713,6 +2817,10 @@ pub struct UpdateClassifierRequest {
     #[serde(rename = "GrokClassifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub grok_classifier: Option<UpdateGrokClassifierRequest>,
+    /// <p>An <code>XMLClassifier</code> object with updated fields.</p>
+    #[serde(rename = "XMLClassifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub xml_classifier: Option<UpdateXMLClassifierRequest>,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -2737,26 +2845,30 @@ pub struct UpdateConnectionResponse;
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateCrawlerRequest {
-    /// <p>A list of custom <code>Classifier</code> names that the user has registered. By default, all AWS classifiers are included in a crawl, but these custom classifiers always override the default classifiers for a given classification.</p>
+    /// <p>A list of custom classifiers that the user has registered. By default, all classifiers are included in a crawl, but these custom classifiers always override the default classifiers for a given classification.</p>
     #[serde(rename = "Classifiers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub classifiers: Option<Vec<String>>,
-    /// <p>The Glue <code>Database</code> where results will be stored, such as: <code>arn:aws:daylight:us-east-1::database/sometable/*</code>.</p>
+    /// <p>Crawler configuration information. This versioned JSON string allows users to specify aspects of a Crawler's behavior.</p> <p>You can use this field to force partitions to inherit metadata such as classification, input format, output format, serde information, and schema from their parent table, rather than detect this information separately for each partition. Use the following JSON string to specify that behavior:</p>
+    #[serde(rename = "Configuration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration: Option<String>,
+    /// <p>The AWS Glue database where results are stored, such as: <code>arn:aws:daylight:us-east-1::database/sometable/*</code>.</p>
     #[serde(rename = "DatabaseName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
-    /// <p>A description of the new <code>Crawler</code>.</p>
+    /// <p>A description of the new crawler.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Name of the new <code>Crawler</code>.</p>
+    /// <p>Name of the new crawler.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The AWS ARN of the IAM role used by the new <code>Crawler</code> to access customer resources.</p>
+    /// <p>The IAM role (or ARN of an IAM role) used by the new crawler to access customer resources.</p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
-    /// <p>A cron expression that can be used as a Cloudwatch event (see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/ScheduledEvents.html">CloudWatch Schedule Expression Syntax</a>. For example, to run every day at 12:15 UTC, specify: <code>cron(15 12 * * ? *)</code>.</p>
+    /// <p>A <code>cron</code> expression used to specify the schedule (see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p>
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
@@ -2764,11 +2876,11 @@ pub struct UpdateCrawlerRequest {
     #[serde(rename = "SchemaChangePolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_change_policy: Option<SchemaChangePolicy>,
-    /// <p>The table prefix used for catalog tables created.</p>
+    /// <p>The table prefix used for catalog tables that are created.</p>
     #[serde(rename = "TablePrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_prefix: Option<String>,
-    /// <p>A list of collection of targets to crawl.</p>
+    /// <p>A list of targets to crawl.</p>
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<CrawlerTargets>,
@@ -2782,7 +2894,7 @@ pub struct UpdateCrawlerScheduleRequest {
     /// <p>Name of the crawler whose schedule to update.</p>
     #[serde(rename = "CrawlerName")]
     pub crawler_name: String,
-    /// <p>Cron expression of the updated schedule.</p>
+    /// <p>The updated <code>cron</code> expression used to specify the schedule (see <a href="http://docs.aws.amazon.com/glue/latest/dg/monitor-data-warehouse-schedule.html">Time-Based Schedules for Jobs and Crawlers</a>. For example, to run something every day at 12:15 UTC, you would specify: <code>cron(15 12 * * ? *)</code>.</p>
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
@@ -2810,7 +2922,7 @@ pub struct UpdateDatabaseResponse;
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateDevEndpointRequest {
-    /// <p>Custom Python or Java custom libraries to be loaded in the DevEndpoint.</p>
+    /// <p>Custom Python or Java libraries to be loaded in the DevEndpoint.</p>
     #[serde(rename = "CustomLibraries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_libraries: Option<DevEndpointCustomLibraries>,
@@ -2821,19 +2933,23 @@ pub struct UpdateDevEndpointRequest {
     #[serde(rename = "PublicKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub public_key: Option<String>,
+    /// <p>True if the list of custom libraries to be loaded in the development endpoint needs to be updated, or False otherwise.</p>
+    #[serde(rename = "UpdateEtlLibraries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update_etl_libraries: Option<bool>,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateDevEndpointResponse;
 
-/// <p>Specifies a Grok classifier to update when passed to UpdateClassifier.</p>
+/// <p>Specifies a grok classifier to update when passed to <code>UpdateClassifier</code>.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateGrokClassifierRequest {
-    /// <p>The type of result that the classifier matches, such as Twitter Json, Omniture logs, Cloudwatch logs, and so forth.</p>
+    /// <p>An identifier of the data format that the classifier matches, such as Twitter, JSON, Omniture logs, Amazon CloudWatch Logs, and so on.</p>
     #[serde(rename = "Classification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub classification: Option<String>,
-    /// <p>Custom grok patterns used by this classifier.</p>
+    /// <p>Optional custom grok patterns used by this classifier.</p>
     #[serde(rename = "CustomPatterns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_patterns: Option<String>,
@@ -2942,6 +3058,22 @@ pub struct UpdateUserDefinedFunctionRequest {
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateUserDefinedFunctionResponse;
 
+/// <p>Specifies an XML classifier to be updated.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct UpdateXMLClassifierRequest {
+    /// <p>An identifier of the data format that the classifier matches.</p>
+    #[serde(rename = "Classification")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub classification: Option<String>,
+    /// <p>The name of the classifier.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The XML tag designating the element that contains each record in an XML document being parsed. Note that this cannot be an empty element. It must contain child elements representing fields in the record.</p>
+    #[serde(rename = "RowTag")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub row_tag: Option<String>,
+}
+
 /// <p>Represents the equivalent of a Hive user-defined function (<code>UDF</code>) definition.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UserDefinedFunction {
@@ -2994,6 +3126,33 @@ pub struct UserDefinedFunctionInput {
     #[serde(rename = "ResourceUris")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_uris: Option<Vec<ResourceUri>>,
+}
+
+/// <p>A classifier for <code>XML</code> content.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct XMLClassifier {
+    /// <p>An identifier of the data format that the classifier matches.</p>
+    #[serde(rename = "Classification")]
+    pub classification: String,
+    /// <p>The time this classifier was registered.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The time this classifier was last updated.</p>
+    #[serde(rename = "LastUpdated")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated: Option<f64>,
+    /// <p>The name of the classifier.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The XML tag designating the element that contains each record in an XML document being parsed. Note that this cannot be an empty element. It must contain child elements representing fields in the record.</p>
+    #[serde(rename = "RowTag")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub row_tag: Option<String>,
+    /// <p>The version of this classifier.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<i64>,
 }
 
 /// Errors returned by BatchCreatePartition
@@ -3483,6 +3642,98 @@ impl Error for BatchGetPartitionError {
                 dispatch_error.description()
             }
             BatchGetPartitionError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by BatchStopJobRun
+#[derive(Debug, PartialEq)]
+pub enum GlueBatchStopJobRunError {
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GlueBatchStopJobRunError {
+    pub fn from_body(body: &str) -> GlueBatchStopJobRunError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalServiceException" => {
+                        GlueBatchStopJobRunError::InternalService(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        GlueBatchStopJobRunError::InvalidInput(String::from(error_message))
+                    }
+                    "OperationTimeoutException" => {
+                        GlueBatchStopJobRunError::OperationTimeout(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GlueBatchStopJobRunError::Validation(error_message.to_string())
+                    }
+                    _ => GlueBatchStopJobRunError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GlueBatchStopJobRunError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GlueBatchStopJobRunError {
+    fn from(err: serde_json::error::Error) -> GlueBatchStopJobRunError {
+        GlueBatchStopJobRunError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GlueBatchStopJobRunError {
+    fn from(err: CredentialsError) -> GlueBatchStopJobRunError {
+        GlueBatchStopJobRunError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GlueBatchStopJobRunError {
+    fn from(err: HttpDispatchError) -> GlueBatchStopJobRunError {
+        GlueBatchStopJobRunError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GlueBatchStopJobRunError {
+    fn from(err: io::Error) -> GlueBatchStopJobRunError {
+        GlueBatchStopJobRunError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GlueBatchStopJobRunError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GlueBatchStopJobRunError {
+    fn description(&self) -> &str {
+        match *self {
+            GlueBatchStopJobRunError::InternalService(ref cause) => cause,
+            GlueBatchStopJobRunError::InvalidInput(ref cause) => cause,
+            GlueBatchStopJobRunError::OperationTimeout(ref cause) => cause,
+            GlueBatchStopJobRunError::Validation(ref cause) => cause,
+            GlueBatchStopJobRunError::Credentials(ref err) => err.description(),
+            GlueBatchStopJobRunError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GlueBatchStopJobRunError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -7039,6 +7290,8 @@ impl Error for GetJobsError {
 /// Errors returned by GetMapping
 #[derive(Debug, PartialEq)]
 pub enum GetMappingError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
     /// <p>An internal service error occurred.</p>
     InternalService(String),
     /// <p>The input provided was not valid.</p>
@@ -7068,6 +7321,9 @@ impl GetMappingError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "EntityNotFoundException" => {
+                        GetMappingError::EntityNotFound(String::from(error_message))
+                    }
                     "InternalServiceException" => {
                         GetMappingError::InternalService(String::from(error_message))
                     }
@@ -7114,6 +7370,7 @@ impl fmt::Display for GetMappingError {
 impl Error for GetMappingError {
     fn description(&self) -> &str {
         match *self {
+            GetMappingError::EntityNotFound(ref cause) => cause,
             GetMappingError::InternalService(ref cause) => cause,
             GetMappingError::InvalidInput(ref cause) => cause,
             GetMappingError::OperationTimeout(ref cause) => cause,
@@ -10068,7 +10325,13 @@ pub trait Glue {
         input: &BatchGetPartitionRequest,
     ) -> Result<BatchGetPartitionResponse, BatchGetPartitionError>;
 
-    /// <p>Creates a <code>Classifier</code> in the user's account.</p>
+    /// <p>Stops a batch of job runs for a given job.</p>
+    fn batch_stop_job_run(
+        &self,
+        input: &BatchStopJobRunRequest,
+    ) -> Result<BatchStopJobRunResponse, GlueBatchStopJobRunError>;
+
+    /// <p>Creates a classifier in the user's account. This may be either a <code>GrokClassifier</code> or an <code>XMLClassifier</code>. </p>
     fn create_classifier(
         &self,
         input: &CreateClassifierRequest,
@@ -10080,7 +10343,7 @@ pub trait Glue {
         input: &CreateConnectionRequest,
     ) -> Result<CreateConnectionResponse, CreateConnectionError>;
 
-    /// <p>Creates a new <code>Crawler</code> with specified targets, role, configuration, and optional schedule. At least one crawl target must be specified, in either the <i>s3Targets</i> or the <i>jdbcTargets</i> field.</p>
+    /// <p>Creates a new crawler with specified targets, role, configuration, and optional schedule. At least one crawl target must be specified, in either the <i>s3Targets</i> or the <i>jdbcTargets</i> field.</p>
     fn create_crawler(
         &self,
         input: &CreateCrawlerRequest,
@@ -10131,7 +10394,7 @@ pub trait Glue {
         input: &CreateUserDefinedFunctionRequest,
     ) -> Result<CreateUserDefinedFunctionResponse, CreateUserDefinedFunctionError>;
 
-    /// <p>Removes a <code>Classifier</code> from the metadata store.</p>
+    /// <p>Removes a classifier from the Data Catalog.</p>
     fn delete_classifier(
         &self,
         input: &DeleteClassifierRequest,
@@ -10143,7 +10406,7 @@ pub trait Glue {
         input: &DeleteConnectionRequest,
     ) -> Result<DeleteConnectionResponse, DeleteConnectionError>;
 
-    /// <p>Removes a specified <code>Crawler</code> from the metadata store, unless the <code>Crawler</code> state is <code>RUNNING</code>.</p>
+    /// <p>Removes a specified crawler from the Data Catalog, unless the crawler state is <code>RUNNING</code>.</p>
     fn delete_crawler(
         &self,
         input: &DeleteCrawlerRequest,
@@ -10194,13 +10457,13 @@ pub trait Glue {
         input: &GetCatalogImportStatusRequest,
     ) -> Result<GetCatalogImportStatusResponse, GetCatalogImportStatusError>;
 
-    /// <p>Retrieve a <code>Classifier</code> by name.</p>
+    /// <p>Retrieve a classifier by name.</p>
     fn get_classifier(
         &self,
         input: &GetClassifierRequest,
     ) -> Result<GetClassifierResponse, GetClassifierError>;
 
-    /// <p>Lists all Classifier objects in the metadata store.</p>
+    /// <p>Lists all classifier objects in the Data Catalog.</p>
     fn get_classifiers(
         &self,
         input: &GetClassifiersRequest,
@@ -10218,7 +10481,7 @@ pub trait Glue {
         input: &GetConnectionsRequest,
     ) -> Result<GetConnectionsResponse, GetConnectionsError>;
 
-    /// <p>Retrieves metadata for a specified <code>Crawler</code>.</p>
+    /// <p>Retrieves metadata for a specified crawler.</p>
     fn get_crawler(&self, input: &GetCrawlerRequest)
         -> Result<GetCrawlerResponse, GetCrawlerError>;
 
@@ -10228,7 +10491,7 @@ pub trait Glue {
         input: &GetCrawlerMetricsRequest,
     ) -> Result<GetCrawlerMetricsResponse, GetCrawlerMetricsError>;
 
-    /// <p>Retrieves metadata for all <code>Crawlers</code> defined in the customer account.</p>
+    /// <p>Retrieves metadata for all crawlers defined in the customer account.</p>
     fn get_crawlers(
         &self,
         input: &GetCrawlersRequest,
@@ -10344,7 +10607,7 @@ pub trait Glue {
         input: &ResetJobBookmarkRequest,
     ) -> Result<ResetJobBookmarkResponse, ResetJobBookmarkError>;
 
-    /// <p>Starts a crawl using the specified <code>Crawler</code>, regardless of what is scheduled. If the <code>Crawler</code> is already running, does nothing.</p>
+    /// <p>Starts a crawl using the specified crawler, regardless of what is scheduled. If the crawler is already running, does nothing.</p>
     fn start_crawler(
         &self,
         input: &StartCrawlerRequest,
@@ -10368,7 +10631,7 @@ pub trait Glue {
         input: &StartTriggerRequest,
     ) -> Result<StartTriggerResponse, StartTriggerError>;
 
-    /// <p>If the specified <code>Crawler</code> is running, stops the crawl.</p>
+    /// <p>If the specified crawler is running, stops the crawl.</p>
     fn stop_crawler(
         &self,
         input: &StopCrawlerRequest,
@@ -10386,7 +10649,7 @@ pub trait Glue {
         input: &StopTriggerRequest,
     ) -> Result<StopTriggerResponse, StopTriggerError>;
 
-    /// <p>Modifies an existing <code>Classifier</code>.</p>
+    /// <p>Modifies an existing classifier (either a <code>GrokClassifier</code> or an <code>XMLClassifier</code>).</p>
     fn update_classifier(
         &self,
         input: &UpdateClassifierRequest,
@@ -10398,13 +10661,13 @@ pub trait Glue {
         input: &UpdateConnectionRequest,
     ) -> Result<UpdateConnectionResponse, UpdateConnectionError>;
 
-    /// <p>Updates a <code>Crawler</code>. If a <code>Crawler</code> is running, you must stop it using <code>StopCrawler</code> before updating it.</p>
+    /// <p>Updates a crawler. If a crawler is running, you must stop it using <code>StopCrawler</code> before updating it.</p>
     fn update_crawler(
         &self,
         input: &UpdateCrawlerRequest,
     ) -> Result<UpdateCrawlerResponse, UpdateCrawlerError>;
 
-    /// <p>Updates the schedule of a crawler using a Cron expression. </p>
+    /// <p>Updates the schedule of a crawler using a <code>cron</code> expression. </p>
     fn update_crawler_schedule(
         &self,
         input: &UpdateCrawlerScheduleRequest,
@@ -10649,7 +10912,41 @@ where
         }
     }
 
-    /// <p>Creates a <code>Classifier</code> in the user's account.</p>
+    /// <p>Stops a batch of job runs for a given job.</p>
+    fn batch_stop_job_run(
+        &self,
+        input: &BatchStopJobRunRequest,
+    ) -> Result<BatchStopJobRunResponse, GlueBatchStopJobRunError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.BatchStopJobRun");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<BatchStopJobRunResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GlueBatchStopJobRunError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Creates a classifier in the user's account. This may be either a <code>GrokClassifier</code> or an <code>XMLClassifier</code>. </p>
     fn create_classifier(
         &self,
         input: &CreateClassifierRequest,
@@ -10717,7 +11014,7 @@ where
         }
     }
 
-    /// <p>Creates a new <code>Crawler</code> with specified targets, role, configuration, and optional schedule. At least one crawl target must be specified, in either the <i>s3Targets</i> or the <i>jdbcTargets</i> field.</p>
+    /// <p>Creates a new crawler with specified targets, role, configuration, and optional schedule. At least one crawl target must be specified, in either the <i>s3Targets</i> or the <i>jdbcTargets</i> field.</p>
     fn create_crawler(
         &self,
         input: &CreateCrawlerRequest,
@@ -11020,7 +11317,7 @@ where
         }
     }
 
-    /// <p>Removes a <code>Classifier</code> from the metadata store.</p>
+    /// <p>Removes a classifier from the Data Catalog.</p>
     fn delete_classifier(
         &self,
         input: &DeleteClassifierRequest,
@@ -11088,7 +11385,7 @@ where
         }
     }
 
-    /// <p>Removes a specified <code>Crawler</code> from the metadata store, unless the <code>Crawler</code> state is <code>RUNNING</code>.</p>
+    /// <p>Removes a specified crawler from the Data Catalog, unless the crawler state is <code>RUNNING</code>.</p>
     fn delete_crawler(
         &self,
         input: &DeleteCrawlerRequest,
@@ -11391,7 +11688,7 @@ where
         }
     }
 
-    /// <p>Retrieve a <code>Classifier</code> by name.</p>
+    /// <p>Retrieve a classifier by name.</p>
     fn get_classifier(
         &self,
         input: &GetClassifierRequest,
@@ -11425,7 +11722,7 @@ where
         }
     }
 
-    /// <p>Lists all Classifier objects in the metadata store.</p>
+    /// <p>Lists all classifier objects in the Data Catalog.</p>
     fn get_classifiers(
         &self,
         input: &GetClassifiersRequest,
@@ -11527,7 +11824,7 @@ where
         }
     }
 
-    /// <p>Retrieves metadata for a specified <code>Crawler</code>.</p>
+    /// <p>Retrieves metadata for a specified crawler.</p>
     fn get_crawler(
         &self,
         input: &GetCrawlerRequest,
@@ -11595,7 +11892,7 @@ where
         }
     }
 
-    /// <p>Retrieves metadata for all <code>Crawlers</code> defined in the customer account.</p>
+    /// <p>Retrieves metadata for all crawlers defined in the customer account.</p>
     fn get_crawlers(
         &self,
         input: &GetCrawlersRequest,
@@ -12364,7 +12661,7 @@ where
         }
     }
 
-    /// <p>Starts a crawl using the specified <code>Crawler</code>, regardless of what is scheduled. If the <code>Crawler</code> is already running, does nothing.</p>
+    /// <p>Starts a crawl using the specified crawler, regardless of what is scheduled. If the crawler is already running, does nothing.</p>
     fn start_crawler(
         &self,
         input: &StartCrawlerRequest,
@@ -12500,7 +12797,7 @@ where
         }
     }
 
-    /// <p>If the specified <code>Crawler</code> is running, stops the crawl.</p>
+    /// <p>If the specified crawler is running, stops the crawl.</p>
     fn stop_crawler(
         &self,
         input: &StopCrawlerRequest,
@@ -12602,7 +12899,7 @@ where
         }
     }
 
-    /// <p>Modifies an existing <code>Classifier</code>.</p>
+    /// <p>Modifies an existing classifier (either a <code>GrokClassifier</code> or an <code>XMLClassifier</code>).</p>
     fn update_classifier(
         &self,
         input: &UpdateClassifierRequest,
@@ -12670,7 +12967,7 @@ where
         }
     }
 
-    /// <p>Updates a <code>Crawler</code>. If a <code>Crawler</code> is running, you must stop it using <code>StopCrawler</code> before updating it.</p>
+    /// <p>Updates a crawler. If a crawler is running, you must stop it using <code>StopCrawler</code> before updating it.</p>
     fn update_crawler(
         &self,
         input: &UpdateCrawlerRequest,
@@ -12704,7 +13001,7 @@ where
         }
     }
 
-    /// <p>Updates the schedule of a crawler using a Cron expression. </p>
+    /// <p>Updates the schedule of a crawler using a <code>cron</code> expression. </p>
     fn update_crawler_schedule(
         &self,
         input: &UpdateCrawlerScheduleRequest,

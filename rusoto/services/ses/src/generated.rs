@@ -448,6 +448,174 @@ impl BouncedRecipientInfoListSerializer {
     }
 }
 
+/// <p>An array that contains one or more Destinations, as well as the tags and replacement data associated with each of those Destinations.</p>
+#[derive(Default, Debug, Clone)]
+pub struct BulkEmailDestination {
+    pub destination: Destination,
+    /// <p>A list of tags, in the form of name/value pairs, to apply to an email that you send using <code>SendBulkTemplatedEmail</code>. Tags correspond to characteristics of the email that you define, so that you can publish email sending events.</p>
+    pub replacement_tags: Option<Vec<MessageTag>>,
+    /// <p>A list of replacement values to apply to the template. This parameter is a JSON object, typically consisting of key-value pairs in which the keys correspond to replacement tags in the email template.</p>
+    pub replacement_template_data: Option<String>,
+}
+
+/// Serialize `BulkEmailDestination` contents to a `SignedRequest`.
+struct BulkEmailDestinationSerializer;
+impl BulkEmailDestinationSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &BulkEmailDestination) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        DestinationSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "Destination"),
+            &obj.destination,
+        );
+        if let Some(ref field_value) = obj.replacement_tags {
+            MessageTagListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "ReplacementTags"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.replacement_template_data {
+            params.put(
+                &format!("{}{}", prefix, "ReplacementTemplateData"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
+/// Serialize `BulkEmailDestinationList` contents to a `SignedRequest`.
+struct BulkEmailDestinationListSerializer;
+impl BulkEmailDestinationListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<BulkEmailDestination>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            BulkEmailDestinationSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+/// <p>An object that contains the response from the <code>SendBulkTemplatedEmail</code> operation.</p>
+#[derive(Default, Debug, Clone)]
+pub struct BulkEmailDestinationStatus {
+    /// <p>A description of an error that prevented a message being sent using the <code>SendBulkTemplatedEmail</code> operation.</p>
+    pub error: Option<String>,
+    /// <p>The unique message identifier returned from the <code>SendBulkTemplatedEmail</code> operation.</p>
+    pub message_id: Option<String>,
+    /// <p><p>The status of a message sent using the <code>SendBulkTemplatedEmail</code> operation.</p> <p>Possible values for this parameter include:</p> <ul> <li> <p> <code>Success</code>: Amazon SES accepted the message, and will attempt to deliver it to the recipients.</p> </li> <li> <p> <code>MessageRejected</code>: The message was rejected because it contained a virus.</p> </li> <li> <p> <code>MailFromDomainNotVerified</code>: The sender&#39;s email address or domain was not verified.</p> </li> <li> <p> <code>ConfigurationSetDoesNotExist</code>: The configuration set you specified does not exist.</p> </li> <li> <p> <code>TemplateDoesNotExist</code>: The template you specified does not exist.</p> </li> <li> <p> <code>AccountSuspended</code>: Your account has been shut down because of issues related to your email sending practices.</p> </li> <li> <p> <code>AccountThrottled</code>: The number of emails you can send has been reduced because your account has exceeded its allocated sending limit.</p> </li> <li> <p> <code>AccountDailyQuotaExceeded</code>: You have reached or exceeded the maximum number of emails you can send from your account in a 24-hour period.</p> </li> <li> <p> <code>InvalidSendingPoolName</code>: The configuration set you specified refers to an IP pool that does not exist.</p> </li> <li> <p> <code>AccountSendingPaused</code>: Email sending for the Amazon SES account was disabled using the <a>UpdateAccountSendingEnabled</a> operation.</p> </li> <li> <p> <code>ConfigurationSetSendingPaused</code>: Email sending for this configuration set was disabled using the <a>UpdateConfigurationSetSendingEnabled</a> operation.</p> </li> <li> <p> <code>InvalidParameterValue</code>: One or more of the parameters you specified when calling this operation was invalid. See the error message for additional information.</p> </li> <li> <p> <code>TransientFailure</code>: Amazon SES was unable to process your request because of a temporary issue.</p> </li> <li> <p> <code>Failed</code>: Amazon SES was unable to process your request. See the error message for additional information.</p> </li> </ul></p>
+    pub status: Option<String>,
+}
+
+struct BulkEmailDestinationStatusDeserializer;
+impl BulkEmailDestinationStatusDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<BulkEmailDestinationStatus, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = BulkEmailDestinationStatus::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Error" => {
+                        obj.error = Some(try!(SesErrorDeserializer::deserialize("Error", stack)));
+                    }
+                    "MessageId" => {
+                        obj.message_id =
+                            Some(try!(MessageIdDeserializer::deserialize("MessageId", stack)));
+                    }
+                    "Status" => {
+                        obj.status = Some(try!(BulkEmailStatusDeserializer::deserialize(
+                            "Status",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct BulkEmailDestinationStatusListDeserializer;
+impl BulkEmailDestinationStatusListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<BulkEmailDestinationStatus>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "member" {
+                        obj.push(try!(BulkEmailDestinationStatusDeserializer::deserialize(
+                            "member",
+                            stack
+                        )));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+struct BulkEmailStatusDeserializer;
+impl BulkEmailStatusDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 struct CidrDeserializer;
 impl CidrDeserializer {
     #[allow(unused_variables)]
@@ -467,7 +635,7 @@ impl CidrDeserializer {
 pub struct CloneReceiptRuleSetRequest {
     /// <p>The name of the rule set to clone.</p>
     pub original_rule_set_name: String,
-    /// <p><p>The name of the rule set to create. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-).</p> </li> <li> <p>Start and end with a letter or number.</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul></p>
+    /// <p><p>The name of the rule set to create. The name must:</p> <ul> <li> <p>This value can only contain ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Start and end with a letter or number.</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul></p>
     pub rule_set_name: String,
 }
 
@@ -582,9 +750,9 @@ impl CloudWatchDestinationSerializer {
 /// <p>Contains the dimension configuration to use when you publish email sending events to Amazon CloudWatch.</p> <p>For information about publishing email sending events to Amazon CloudWatch, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone)]
 pub struct CloudWatchDimensionConfiguration {
-    /// <p><p>The default value of the dimension that is published to Amazon CloudWatch if you do not provide the value of the dimension when you send an email. The default value must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 256 characters.</p> </li> </ul></p>
+    /// <p><p>The default value of the dimension that is published to Amazon CloudWatch if you do not provide the value of the dimension when you send an email. The default value must:</p> <ul> <li> <p>This value can only contain ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 256 characters.</p> </li> </ul></p>
     pub default_dimension_value: String,
-    /// <p><p>The name of an Amazon CloudWatch dimension associated with an email sending metric. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 256 characters.</p> </li> </ul></p>
+    /// <p><p>The name of an Amazon CloudWatch dimension associated with an email sending metric. The name must:</p> <ul> <li> <p>This value can only contain ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 256 characters.</p> </li> </ul></p>
     pub dimension_name: String,
     /// <p>The place where Amazon SES finds the value of a dimension to publish to Amazon CloudWatch. If you want Amazon SES to use the message tags that you specify using an <code>X-SES-MESSAGE-TAGS</code> header or a parameter to the <code>SendEmail</code>/<code>SendRawEmail</code> API, choose <code>messageTag</code>. If you want Amazon SES to use your own email headers, choose <code>emailHeader</code>.</p>
     pub dimension_value_source: String,
@@ -728,10 +896,10 @@ impl CloudWatchDimensionConfigurationsSerializer {
     }
 }
 
-/// <p>The name of the configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
+/// <p>The name of the configuration set.</p> <p>Configuration sets let you create groups of rules that you can apply to the emails you send using Amazon SES. For more information about using configuration sets, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/using-configuration-sets.html">Using Amazon SES Configuration Sets</a> in the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone)]
 pub struct ConfigurationSet {
-    /// <p><p>The name of the configuration set. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul></p>
+    /// <p><p>The name of the configuration set. The name must meet the following requirements:</p> <ul> <li> <p>Contain only letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain 64 characters or fewer.</p> </li> </ul></p>
     pub name: String,
 }
 
@@ -908,9 +1076,9 @@ impl CounterDeserializer {
 /// <p>Represents a request to create a configuration set event destination. A configuration set event destination, which can be either Amazon CloudWatch or Amazon Kinesis Firehose, describes an AWS service in which Amazon SES publishes the email sending events associated with a configuration set. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone)]
 pub struct CreateConfigurationSetEventDestinationRequest {
-    /// <p>The name of the configuration set to which to apply the event destination.</p>
+    /// <p>The name of the configuration set that the event destination should be associated with.</p>
     pub configuration_set_name: String,
-    /// <p>An object that describes the AWS service to which Amazon SES will publish the email sending events associated with the specified configuration set.</p>
+    /// <p>An object that describes the AWS service that email sending event information will be published to.</p>
     pub event_destination: EventDestination,
 }
 
@@ -1003,6 +1171,116 @@ impl CreateConfigurationSetResponseDeserializer {
         Ok(obj)
     }
 }
+/// <p>Represents a request to create an open and click tracking option object in a configuration set. </p>
+#[derive(Default, Debug, Clone)]
+pub struct CreateConfigurationSetTrackingOptionsRequest {
+    /// <p>The name of the configuration set that the tracking options should be associated with.</p>
+    pub configuration_set_name: String,
+    pub tracking_options: TrackingOptions,
+}
+
+/// Serialize `CreateConfigurationSetTrackingOptionsRequest` contents to a `SignedRequest`.
+struct CreateConfigurationSetTrackingOptionsRequestSerializer;
+impl CreateConfigurationSetTrackingOptionsRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &CreateConfigurationSetTrackingOptionsRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "ConfigurationSetName"),
+            &obj.configuration_set_name.replace("+", "%2B"),
+        );
+        TrackingOptionsSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "TrackingOptions"),
+            &obj.tracking_options,
+        );
+    }
+}
+
+/// <p>An empty element returned on a successful request.</p>
+#[derive(Default, Debug, Clone)]
+pub struct CreateConfigurationSetTrackingOptionsResponse;
+
+struct CreateConfigurationSetTrackingOptionsResponseDeserializer;
+impl CreateConfigurationSetTrackingOptionsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateConfigurationSetTrackingOptionsResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let obj = CreateConfigurationSetTrackingOptionsResponse::default();
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>Represents a request to create a custom verification email template.</p>
+#[derive(Default, Debug, Clone)]
+pub struct CreateCustomVerificationEmailTemplateRequest {
+    /// <p>The URL that the recipient of the verification email is sent to if his or her address is not successfully verified.</p>
+    pub failure_redirection_url: String,
+    /// <p>The email address that the custom verification email is sent from.</p>
+    pub from_email_address: String,
+    /// <p>The URL that the recipient of the verification email is sent to if his or her address is successfully verified.</p>
+    pub success_redirection_url: String,
+    /// <p>The content of the custom verification email. The total size of the email must be less than 10 MB. The message body may contain HTML, with some limitations. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html#custom-verification-emails-faq">Custom Verification Email Frequently Asked Questions</a> in the <i>Amazon SES Developer Guide</i>.</p>
+    pub template_content: String,
+    /// <p>The name of the custom verification email template.</p>
+    pub template_name: String,
+    /// <p>The subject line of the custom verification email.</p>
+    pub template_subject: String,
+}
+
+/// Serialize `CreateCustomVerificationEmailTemplateRequest` contents to a `SignedRequest`.
+struct CreateCustomVerificationEmailTemplateRequestSerializer;
+impl CreateCustomVerificationEmailTemplateRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &CreateCustomVerificationEmailTemplateRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "FailureRedirectionURL"),
+            &obj.failure_redirection_url.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "FromEmailAddress"),
+            &obj.from_email_address.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "SuccessRedirectionURL"),
+            &obj.success_redirection_url.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "TemplateContent"),
+            &obj.template_content.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "TemplateName"),
+            &obj.template_name.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "TemplateSubject"),
+            &obj.template_subject.replace("+", "%2B"),
+        );
+    }
+}
+
 /// <p>Represents a request to create a new IP address filter. You use IP address filters when you receive email with Amazon SES. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone)]
 pub struct CreateReceiptFilterRequest {
@@ -1050,7 +1328,7 @@ pub struct CreateReceiptRuleRequest {
     pub after: Option<String>,
     /// <p>A data structure that contains the specified rule's name, actions, recipients, domains, enabled status, scan status, and TLS policy.</p>
     pub rule: ReceiptRule,
-    /// <p>The name of the rule set to which to add the rule.</p>
+    /// <p>The name of the rule set that the receipt rule will be added to.</p>
     pub rule_set_name: String,
 }
 
@@ -1100,7 +1378,7 @@ impl CreateReceiptRuleResponseDeserializer {
 /// <p>Represents a request to create an empty receipt rule set. You use receipt rule sets to receive email with Amazon SES. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone)]
 pub struct CreateReceiptRuleSetRequest {
-    /// <p><p>The name of the rule set to create. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-).</p> </li> <li> <p>Start and end with a letter or number.</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul></p>
+    /// <p><p>The name of the rule set to create. The name must:</p> <ul> <li> <p>This value can only contain ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Start and end with a letter or number.</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul></p>
     pub rule_set_name: String,
 }
 
@@ -1140,6 +1418,45 @@ impl CreateReceiptRuleSetResponseDeserializer {
         Ok(obj)
     }
 }
+/// <p>Represents a request to create an email template. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p>
+#[derive(Default, Debug, Clone)]
+pub struct CreateTemplateRequest {
+    /// <p>The content of the email, composed of a subject line, an HTML part, and a text-only part.</p>
+    pub template: Template,
+}
+
+/// Serialize `CreateTemplateRequest` contents to a `SignedRequest`.
+struct CreateTemplateRequestSerializer;
+impl CreateTemplateRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateTemplateRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        TemplateSerializer::serialize(params, &format!("{}{}", prefix, "Template"), &obj.template);
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct CreateTemplateResponse;
+
+struct CreateTemplateResponseDeserializer;
+impl CreateTemplateResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateTemplateResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let obj = CreateTemplateResponse::default();
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 struct CustomMailFromStatusDeserializer;
 impl CustomMailFromStatusDeserializer {
     #[allow(unused_variables)]
@@ -1150,6 +1467,148 @@ impl CustomMailFromStatusDeserializer {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct CustomRedirectDomainDeserializer;
+impl CustomRedirectDomainDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>Contains information about a custom verification email template.</p>
+#[derive(Default, Debug, Clone)]
+pub struct CustomVerificationEmailTemplate {
+    /// <p>The URL that the recipient of the verification email is sent to if his or her address is not successfully verified.</p>
+    pub failure_redirection_url: Option<String>,
+    /// <p>The email address that the custom verification email is sent from.</p>
+    pub from_email_address: Option<String>,
+    /// <p>The URL that the recipient of the verification email is sent to if his or her address is successfully verified.</p>
+    pub success_redirection_url: Option<String>,
+    /// <p>The name of the custom verification email template.</p>
+    pub template_name: Option<String>,
+    /// <p>The subject line of the custom verification email.</p>
+    pub template_subject: Option<String>,
+}
+
+struct CustomVerificationEmailTemplateDeserializer;
+impl CustomVerificationEmailTemplateDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CustomVerificationEmailTemplate, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = CustomVerificationEmailTemplate::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "FailureRedirectionURL" => {
+                        obj.failure_redirection_url =
+                            Some(try!(FailureRedirectionURLDeserializer::deserialize(
+                                "FailureRedirectionURL",
+                                stack
+                            )));
+                    }
+                    "FromEmailAddress" => {
+                        obj.from_email_address = Some(try!(FromAddressDeserializer::deserialize(
+                            "FromEmailAddress",
+                            stack
+                        )));
+                    }
+                    "SuccessRedirectionURL" => {
+                        obj.success_redirection_url =
+                            Some(try!(SuccessRedirectionURLDeserializer::deserialize(
+                                "SuccessRedirectionURL",
+                                stack
+                            )));
+                    }
+                    "TemplateName" => {
+                        obj.template_name = Some(try!(TemplateNameDeserializer::deserialize(
+                            "TemplateName",
+                            stack
+                        )));
+                    }
+                    "TemplateSubject" => {
+                        obj.template_subject = Some(try!(SubjectDeserializer::deserialize(
+                            "TemplateSubject",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct CustomVerificationEmailTemplatesDeserializer;
+impl CustomVerificationEmailTemplatesDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<CustomVerificationEmailTemplate>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "member" {
+                        obj.push(try!(
+                            CustomVerificationEmailTemplateDeserializer::deserialize(
+                                "member",
+                                stack
+                            )
+                        ));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
 
         Ok(obj)
     }
@@ -1264,6 +1723,80 @@ impl DeleteConfigurationSetResponseDeserializer {
         Ok(obj)
     }
 }
+/// <p>Represents a request to delete open and click tracking options in a configuration set. </p>
+#[derive(Default, Debug, Clone)]
+pub struct DeleteConfigurationSetTrackingOptionsRequest {
+    /// <p>The name of the configuration set from which you want to delete the tracking options.</p>
+    pub configuration_set_name: String,
+}
+
+/// Serialize `DeleteConfigurationSetTrackingOptionsRequest` contents to a `SignedRequest`.
+struct DeleteConfigurationSetTrackingOptionsRequestSerializer;
+impl DeleteConfigurationSetTrackingOptionsRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &DeleteConfigurationSetTrackingOptionsRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "ConfigurationSetName"),
+            &obj.configuration_set_name.replace("+", "%2B"),
+        );
+    }
+}
+
+/// <p>An empty element returned on a successful request.</p>
+#[derive(Default, Debug, Clone)]
+pub struct DeleteConfigurationSetTrackingOptionsResponse;
+
+struct DeleteConfigurationSetTrackingOptionsResponseDeserializer;
+impl DeleteConfigurationSetTrackingOptionsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteConfigurationSetTrackingOptionsResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let obj = DeleteConfigurationSetTrackingOptionsResponse::default();
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>Represents a request to delete an existing custom verification email template.</p>
+#[derive(Default, Debug, Clone)]
+pub struct DeleteCustomVerificationEmailTemplateRequest {
+    /// <p>The name of the custom verification email template that you want to delete.</p>
+    pub template_name: String,
+}
+
+/// Serialize `DeleteCustomVerificationEmailTemplateRequest` contents to a `SignedRequest`.
+struct DeleteCustomVerificationEmailTemplateRequestSerializer;
+impl DeleteCustomVerificationEmailTemplateRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &DeleteCustomVerificationEmailTemplateRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "TemplateName"),
+            &obj.template_name.replace("+", "%2B"),
+        );
+    }
+}
+
 /// <p>Represents a request to delete a sending authorization policy for an identity. Sending authorization is an Amazon SES feature that enables you to authorize other senders to use your identities. For information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone)]
 pub struct DeleteIdentityPolicyRequest {
@@ -1491,6 +2024,48 @@ impl DeleteReceiptRuleSetResponseDeserializer {
         Ok(obj)
     }
 }
+/// <p>Represents a request to delete an email template. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p>
+#[derive(Default, Debug, Clone)]
+pub struct DeleteTemplateRequest {
+    /// <p>The name of the template to be deleted.</p>
+    pub template_name: String,
+}
+
+/// Serialize `DeleteTemplateRequest` contents to a `SignedRequest`.
+struct DeleteTemplateRequestSerializer;
+impl DeleteTemplateRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteTemplateRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "TemplateName"),
+            &obj.template_name.replace("+", "%2B"),
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct DeleteTemplateResponse;
+
+struct DeleteTemplateResponseDeserializer;
+impl DeleteTemplateResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteTemplateResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let obj = DeleteTemplateResponse::default();
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>Represents a request to delete an email address from the list of email addresses you have attempted to verify under your AWS account.</p>
 #[derive(Default, Debug, Clone)]
 pub struct DeleteVerifiedEmailAddressRequest {
@@ -1624,6 +2199,10 @@ pub struct DescribeConfigurationSetResponse {
     pub configuration_set: Option<ConfigurationSet>,
     /// <p>A list of event destinations associated with the configuration set. </p>
     pub event_destinations: Option<Vec<EventDestination>>,
+    /// <p>An object that represents the reputation settings for the configuration set. </p>
+    pub reputation_options: Option<ReputationOptions>,
+    /// <p>The name of the custom open and click tracking domain associated with the configuration set.</p>
+    pub tracking_options: Option<TrackingOptions>,
 }
 
 struct DescribeConfigurationSetResponseDeserializer;
@@ -1658,6 +2237,16 @@ impl DescribeConfigurationSetResponseDeserializer {
                             EventDestinationsDeserializer::deserialize("EventDestinations", stack)
                         ));
                     }
+                    "ReputationOptions" => {
+                        obj.reputation_options = Some(try!(
+                            ReputationOptionsDeserializer::deserialize("ReputationOptions", stack)
+                        ));
+                    }
+                    "TrackingOptions" => {
+                        obj.tracking_options = Some(try!(
+                            TrackingOptionsDeserializer::deserialize("TrackingOptions", stack)
+                        ));
+                    }
                     _ => skip_tree(stack),
                 },
                 DeserializerNext::Close => break,
@@ -1677,7 +2266,7 @@ impl DescribeConfigurationSetResponseDeserializer {
 pub struct DescribeReceiptRuleRequest {
     /// <p>The name of the receipt rule.</p>
     pub rule_name: String,
-    /// <p>The name of the receipt rule set to which the receipt rule belongs.</p>
+    /// <p>The name of the receipt rule set that the receipt rule belongs to.</p>
     pub rule_set_name: String,
 }
 
@@ -1826,7 +2415,7 @@ impl DescribeReceiptRuleSetResponseDeserializer {
         Ok(obj)
     }
 }
-/// <p>Represents the destination of the message, consisting of To:, CC:, and BCC: fields.</p> <p> By default, the string must be 7-bit ASCII. If the text must contain any other characters, then you must use MIME encoded-word syntax (RFC 2047) instead of a literal string. MIME encoded-word syntax uses the following form: <code>=?charset?encoding?encoded-text?=</code>. For more information, see <a href="http://tools.ietf.org/html/rfc2047">RFC 2047</a>. </p>
+/// <p><p>Represents the destination of the message, consisting of To:, CC:, and BCC: fields.</p> <note> <p>Amazon SES does not support the SMTPUTF8 extension, as described in <a href="https://tools.ietf.org/html/rfc6531">RFC6531</a>. For this reason, the <i>local part</i> of a destination email address (the part of the email address that precedes the @ sign) may only contain <a href="https://en.wikipedia.org/wiki/Email_address#Local-part">7-bit ASCII characters</a>. If the <i>domain part</i> of an address (the part after the @ sign) contains non-ASCII characters, they must be encoded using Punycode, as described in <a href="https://tools.ietf.org/html/rfc3492.html">RFC3492</a>.</p> </note></p>
 #[derive(Default, Debug, Clone)]
 pub struct Destination {
     /// <p>The BCC: field(s) of the message.</p>
@@ -1938,7 +2527,21 @@ impl EnabledDeserializer {
         Ok(obj)
     }
 }
-/// <p>Contains information about the event destination to which the specified email sending events are published.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>Event destinations are associated with configuration sets, which enable you to publish email sending events to Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS). For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
+struct SesErrorDeserializer;
+impl SesErrorDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>Contains information about the event destination that the specified email sending events will be published to.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>Event destinations are associated with configuration sets, which enable you to publish email sending events to Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS). For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone)]
 pub struct EventDestination {
     /// <p>An object that contains the names, default values, and sources of the dimensions associated with an Amazon CloudWatch event destination.</p>
@@ -1949,7 +2552,7 @@ pub struct EventDestination {
     pub kinesis_firehose_destination: Option<KinesisFirehoseDestination>,
     /// <p>The type of email sending events to publish to the event destination.</p>
     pub matching_event_types: Vec<String>,
-    /// <p><p>The name of the event destination. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul></p>
+    /// <p><p>The name of the event destination. The name must:</p> <ul> <li> <p>This value can only contain ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul></p>
     pub name: String,
     /// <p>An object that contains the topic ARN associated with an Amazon Simple Notification Service (Amazon SNS) event destination.</p>
     pub sns_destination: Option<SNSDestination>,
@@ -2237,6 +2840,194 @@ impl ExtensionFieldListSerializer {
     }
 }
 
+struct FailureRedirectionURLDeserializer;
+impl FailureRedirectionURLDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct FromAddressDeserializer;
+impl FromAddressDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>Represents a request to return the email sending status for your Amazon SES account.</p>
+#[derive(Default, Debug, Clone)]
+pub struct GetAccountSendingEnabledResponse {
+    /// <p>Describes whether email sending is enabled or disabled for your Amazon SES account.</p>
+    pub enabled: Option<bool>,
+}
+
+struct GetAccountSendingEnabledResponseDeserializer;
+impl GetAccountSendingEnabledResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetAccountSendingEnabledResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = GetAccountSendingEnabledResponse::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Enabled" => {
+                        obj.enabled =
+                            Some(try!(EnabledDeserializer::deserialize("Enabled", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>Represents a request to retrieve an existing custom verification email template.</p>
+#[derive(Default, Debug, Clone)]
+pub struct GetCustomVerificationEmailTemplateRequest {
+    /// <p>The name of the custom verification email template that you want to retrieve.</p>
+    pub template_name: String,
+}
+
+/// Serialize `GetCustomVerificationEmailTemplateRequest` contents to a `SignedRequest`.
+struct GetCustomVerificationEmailTemplateRequestSerializer;
+impl GetCustomVerificationEmailTemplateRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &GetCustomVerificationEmailTemplateRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "TemplateName"),
+            &obj.template_name.replace("+", "%2B"),
+        );
+    }
+}
+
+/// <p>The content of the custom verification email template.</p>
+#[derive(Default, Debug, Clone)]
+pub struct GetCustomVerificationEmailTemplateResponse {
+    /// <p>The URL that the recipient of the verification email is sent to if his or her address is not successfully verified.</p>
+    pub failure_redirection_url: Option<String>,
+    /// <p>The email address that the custom verification email is sent from.</p>
+    pub from_email_address: Option<String>,
+    /// <p>The URL that the recipient of the verification email is sent to if his or her address is successfully verified.</p>
+    pub success_redirection_url: Option<String>,
+    /// <p>The content of the custom verification email.</p>
+    pub template_content: Option<String>,
+    /// <p>The name of the custom verification email template.</p>
+    pub template_name: Option<String>,
+    /// <p>The subject line of the custom verification email.</p>
+    pub template_subject: Option<String>,
+}
+
+struct GetCustomVerificationEmailTemplateResponseDeserializer;
+impl GetCustomVerificationEmailTemplateResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetCustomVerificationEmailTemplateResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = GetCustomVerificationEmailTemplateResponse::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "FailureRedirectionURL" => {
+                        obj.failure_redirection_url =
+                            Some(try!(FailureRedirectionURLDeserializer::deserialize(
+                                "FailureRedirectionURL",
+                                stack
+                            )));
+                    }
+                    "FromEmailAddress" => {
+                        obj.from_email_address = Some(try!(FromAddressDeserializer::deserialize(
+                            "FromEmailAddress",
+                            stack
+                        )));
+                    }
+                    "SuccessRedirectionURL" => {
+                        obj.success_redirection_url =
+                            Some(try!(SuccessRedirectionURLDeserializer::deserialize(
+                                "SuccessRedirectionURL",
+                                stack
+                            )));
+                    }
+                    "TemplateContent" => {
+                        obj.template_content = Some(try!(
+                            TemplateContentDeserializer::deserialize("TemplateContent", stack)
+                        ));
+                    }
+                    "TemplateName" => {
+                        obj.template_name = Some(try!(TemplateNameDeserializer::deserialize(
+                            "TemplateName",
+                            stack
+                        )));
+                    }
+                    "TemplateSubject" => {
+                        obj.template_subject = Some(try!(SubjectDeserializer::deserialize(
+                            "TemplateSubject",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>Represents a request for the status of Amazon SES Easy DKIM signing for an identity. For domain identities, this request also returns the DKIM tokens that are required for Easy DKIM signing, and whether Amazon SES successfully verified that these tokens were published. For more information about Easy DKIM, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone)]
 pub struct GetIdentityDkimAttributesRequest {
@@ -2727,6 +3518,73 @@ impl GetSendStatisticsResponseDeserializer {
         Ok(obj)
     }
 }
+#[derive(Default, Debug, Clone)]
+pub struct GetTemplateRequest {
+    /// <p>The name of the template you want to retrieve.</p>
+    pub template_name: String,
+}
+
+/// Serialize `GetTemplateRequest` contents to a `SignedRequest`.
+struct GetTemplateRequestSerializer;
+impl GetTemplateRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &GetTemplateRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "TemplateName"),
+            &obj.template_name.replace("+", "%2B"),
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct GetTemplateResponse {
+    pub template: Option<Template>,
+}
+
+struct GetTemplateResponseDeserializer;
+impl GetTemplateResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetTemplateResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = GetTemplateResponse::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Template" => {
+                        obj.template =
+                            Some(try!(TemplateDeserializer::deserialize("Template", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 struct HeaderNameDeserializer;
 impl HeaderNameDeserializer {
     #[allow(unused_variables)]
@@ -2743,6 +3601,20 @@ impl HeaderNameDeserializer {
 }
 struct HeaderValueDeserializer;
 impl HeaderValueDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct HtmlPartDeserializer;
+impl HtmlPartDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(
         tag_name: &str,
@@ -3123,7 +3995,7 @@ impl InvocationTypeDeserializer {
 /// <p>Contains the delivery stream ARN and the IAM role ARN associated with an Amazon Kinesis Firehose event destination.</p> <p>Event destinations, such as Amazon Kinesis Firehose, are associated with configuration sets, which enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone)]
 pub struct KinesisFirehoseDestination {
-    /// <p>The ARN of the Amazon Kinesis Firehose stream to which to publish email sending events.</p>
+    /// <p>The ARN of the Amazon Kinesis Firehose stream that email sending events should be published to.</p>
     pub delivery_stream_arn: String,
     /// <p>The ARN of the IAM role under which Amazon SES publishes email sending events to the Amazon Kinesis Firehose stream.</p>
     pub iam_role_arn: String,
@@ -3291,6 +4163,20 @@ impl LambdaActionSerializer {
     }
 }
 
+struct LastFreshStartDeserializer;
+impl LastFreshStartDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>Represents a request to list the configuration sets associated with your AWS account. Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone)]
 pub struct ListConfigurationSetsRequest {
@@ -3358,6 +4244,100 @@ impl ListConfigurationSetsResponseDeserializer {
                     "ConfigurationSets" => {
                         obj.configuration_sets = Some(try!(
                             ConfigurationSetsDeserializer::deserialize("ConfigurationSets", stack)
+                        ));
+                    }
+                    "NextToken" => {
+                        obj.next_token =
+                            Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>Represents a request to list the existing custom verification email templates for your account.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p>
+#[derive(Default, Debug, Clone)]
+pub struct ListCustomVerificationEmailTemplatesRequest {
+    /// <p>The maximum number of custom verification email templates to return. This value must be at least 1 and less than or equal to 50. If you do not specify a value, or if you specify a value less than 1 or greater than 50, the operation will return up to 50 results.</p>
+    pub max_results: Option<i64>,
+    /// <p>An array the contains the name and creation time stamp for each template in your Amazon SES account.</p>
+    pub next_token: Option<String>,
+}
+
+/// Serialize `ListCustomVerificationEmailTemplatesRequest` contents to a `SignedRequest`.
+struct ListCustomVerificationEmailTemplatesRequestSerializer;
+impl ListCustomVerificationEmailTemplatesRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &ListCustomVerificationEmailTemplatesRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.max_results {
+            params.put(
+                &format!("{}{}", prefix, "MaxResults"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
+/// <p>A paginated list of custom verification email templates.</p>
+#[derive(Default, Debug, Clone)]
+pub struct ListCustomVerificationEmailTemplatesResponse {
+    /// <p>A list of the custom verification email templates that exist in your account.</p>
+    pub custom_verification_email_templates: Option<Vec<CustomVerificationEmailTemplate>>,
+    /// <p>A token indicating that there are additional custom verification email templates available to be listed. Pass this token to a subsequent call to <code>ListTemplates</code> to retrieve the next 50 custom verification email templates.</p>
+    pub next_token: Option<String>,
+}
+
+struct ListCustomVerificationEmailTemplatesResponseDeserializer;
+impl ListCustomVerificationEmailTemplatesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListCustomVerificationEmailTemplatesResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ListCustomVerificationEmailTemplatesResponse::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "CustomVerificationEmailTemplates" => {
+                        obj.custom_verification_email_templates = Some(try!(
+                            CustomVerificationEmailTemplatesDeserializer::deserialize(
+                                "CustomVerificationEmailTemplates",
+                                stack
+                            )
                         ));
                     }
                     "NextToken" => {
@@ -3688,6 +4668,93 @@ impl ListReceiptRuleSetsResponseDeserializer {
         Ok(obj)
     }
 }
+#[derive(Default, Debug, Clone)]
+pub struct ListTemplatesRequest {
+    /// <p>The maximum number of templates to return. This value must be at least 1 and less than or equal to 10. If you do not specify a value, or if you specify a value less than 1 or greater than 10, the operation will return up to 10 results.</p>
+    pub max_items: Option<i64>,
+    /// <p>A token returned from a previous call to <code>ListTemplates</code> to indicate the position in the list of email templates.</p>
+    pub next_token: Option<String>,
+}
+
+/// Serialize `ListTemplatesRequest` contents to a `SignedRequest`.
+struct ListTemplatesRequestSerializer;
+impl ListTemplatesRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ListTemplatesRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.max_items {
+            params.put(
+                &format!("{}{}", prefix, "MaxItems"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct ListTemplatesResponse {
+    /// <p>A token indicating that there are additional email templates available to be listed. Pass this token to a subsequent call to <code>ListTemplates</code> to retrieve the next 50 email templates.</p>
+    pub next_token: Option<String>,
+    /// <p>An array the contains the name and creation time stamp for each template in your Amazon SES account.</p>
+    pub templates_metadata: Option<Vec<TemplateMetadata>>,
+}
+
+struct ListTemplatesResponseDeserializer;
+impl ListTemplatesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListTemplatesResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ListTemplatesResponse::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "NextToken" => {
+                        obj.next_token =
+                            Some(try!(NextTokenDeserializer::deserialize("NextToken", stack)));
+                    }
+                    "TemplatesMetadata" => {
+                        obj.templates_metadata =
+                            Some(try!(TemplateMetadataListDeserializer::deserialize(
+                                "TemplatesMetadata",
+                                stack
+                            )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>A list of email addresses that you have verified with Amazon SES under your AWS account.</p>
 #[derive(Default, Debug, Clone)]
 pub struct ListVerifiedEmailAddressesResponse {
@@ -3885,9 +4952,9 @@ impl MessageIdDeserializer {
 /// <p>Contains the name and value of a tag that you can provide to <code>SendEmail</code> or <code>SendRawEmail</code> to apply to an email.</p> <p>Message tags, which you use with configuration sets, enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone)]
 pub struct MessageTag {
-    /// <p><p>The name of the tag. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 256 characters.</p> </li> </ul></p>
+    /// <p><p>The name of the tag. The name must:</p> <ul> <li> <p>This value can only contain ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 256 characters.</p> </li> </ul></p>
     pub name: String,
-    /// <p><p>The value of the tag. The value must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 256 characters.</p> </li> </ul></p>
+    /// <p><p>The value of the tag. The value must:</p> <ul> <li> <p>This value can only contain ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Contain less than 256 characters.</p> </li> </ul></p>
     pub value: String,
 }
 
@@ -4083,7 +5150,7 @@ impl PolicyNameListSerializer {
 /// <p>Represents a request to add or update a sending authorization policy for an identity. Sending authorization is an Amazon SES feature that enables you to authorize other senders to use your identities. For information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone)]
 pub struct PutIdentityPolicyRequest {
-    /// <p>The identity to which the policy will apply. You can specify an identity by using its name or by using its Amazon Resource Name (ARN). Examples: <code>user@example.com</code>, <code>example.com</code>, <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>.</p> <p>To successfully call this API, you must own the identity.</p>
+    /// <p>The identity that the policy will apply to. You can specify an identity by using its name or by using its Amazon Resource Name (ARN). Examples: <code>user@example.com</code>, <code>example.com</code>, <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>.</p> <p>To successfully call this API, you must own the identity.</p>
     pub identity: String,
     /// <p>The text of the policy in JSON format. The policy cannot exceed 4 KB.</p> <p>For information about the syntax of sending authorization policies, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-policies.html">Amazon SES Developer Guide</a>. </p>
     pub policy: String,
@@ -4138,7 +5205,7 @@ impl PutIdentityPolicyResponseDeserializer {
 /// <p>Represents the raw data of the message.</p>
 #[derive(Default, Debug, Clone)]
 pub struct RawMessage {
-    /// <p>The raw data of the message. This data needs to base64-encoded if you are accessing Amazon SES directly through the HTTPS interface. If you are accessing Amazon SES using an AWS SDK, the SDK takes care of the base 64-encoding for you. In all cases, the client must ensure that the message format complies with Internet email standards regarding email header fields, MIME types, and MIME encoding.</p> <p>The To:, CC:, and BCC: headers in the raw message can contain a group list.</p> <p>If you are using <code>SendRawEmail</code> with sending authorization, you can include X-headers in the raw message to specify the "Source," "From," and "Return-Path" addresses. For more information, see the documentation for <code>SendRawEmail</code>. </p> <important> <p>Do not include these X-headers in the DKIM signature, because they are removed by Amazon SES before sending the email.</p> </important> <p>For more information, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-raw.html">Amazon SES Developer Guide</a>. </p>
+    /// <p>The raw data of the message. This data needs to base64-encoded if you are accessing Amazon SES directly through the HTTPS interface. If you are accessing Amazon SES using an AWS SDK, the SDK takes care of the base 64-encoding for you. In all cases, the client must ensure that the message format complies with Internet email standards regarding email header fields, MIME types, and MIME encoding.</p> <p>The To:, CC:, and BCC: headers in the raw message can contain a group list.</p> <p>If you are using <code>SendRawEmail</code> with sending authorization, you can include X-headers in the raw message to specify the "Source," "From," and "Return-Path" addresses. For more information, see the documentation for <code>SendRawEmail</code>. </p> <important> <p>Do not include these X-headers in the DKIM signature, because they are removed by Amazon SES before sending the email.</p> </important> <p>For more information, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-raw.html">Amazon SES Developer Guide</a>.</p>
     pub data: Vec<u8>,
 }
 
@@ -4374,7 +5441,7 @@ impl ReceiptActionsListSerializer {
 pub struct ReceiptFilter {
     /// <p>A structure that provides the IP addresses to block or allow, and whether to block or allow incoming mail from them.</p>
     pub ip_filter: ReceiptIpFilter,
-    /// <p><p>The name of the IP address filter. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-).</p> </li> <li> <p>Start and end with a letter or number.</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul></p>
+    /// <p><p>The name of the IP address filter. The name must:</p> <ul> <li> <p>This value can only contain ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Start and end with a letter or number.</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul></p>
     pub name: String,
 }
 
@@ -4589,18 +5656,18 @@ impl ReceiptIpFilterSerializer {
     }
 }
 
-/// <p>Receipt rules enable you to specify which actions Amazon SES should take when it receives mail on behalf of one or more email addresses or domains that you own.</p> <p>Each receipt rule defines a set of email addresses or domains to which it applies. If the email addresses or domains match at least one recipient address of the message, Amazon SES executes all of the receipt rule's actions on the message.</p> <p>For information about setting up receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html">Amazon SES Developer Guide</a>.</p>
+/// <p>Receipt rules enable you to specify which actions Amazon SES should take when it receives mail on behalf of one or more email addresses or domains that you own.</p> <p>Each receipt rule defines a set of email addresses or domains that it applies to. If the email addresses or domains match at least one recipient address of the message, Amazon SES executes all of the receipt rule's actions on the message.</p> <p>For information about setting up receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone)]
 pub struct ReceiptRule {
     /// <p>An ordered list of actions to perform on messages that match at least one of the recipient email addresses or domains specified in the receipt rule.</p>
     pub actions: Option<Vec<ReceiptAction>>,
     /// <p>If <code>true</code>, the receipt rule is active. The default value is <code>false</code>.</p>
     pub enabled: Option<bool>,
-    /// <p><p>The name of the receipt rule. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-).</p> </li> <li> <p>Start and end with a letter or number.</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul></p>
+    /// <p><p>The name of the receipt rule. The name must:</p> <ul> <li> <p>This value can only contain ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Start and end with a letter or number.</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul></p>
     pub name: String,
-    /// <p>The recipient domains and email addresses to which the receipt rule applies. If this field is not specified, this rule will match all recipients under all verified domains.</p>
+    /// <p>The recipient domains and email addresses that the receipt rule applies to. If this field is not specified, this rule will match all recipients under all verified domains.</p>
     pub recipients: Option<Vec<String>>,
-    /// <p>If <code>true</code>, then messages to which this receipt rule applies are scanned for spam and viruses. The default value is <code>false</code>.</p>
+    /// <p>If <code>true</code>, then messages that this receipt rule applies to are scanned for spam and viruses. The default value is <code>false</code>.</p>
     pub scan_enabled: Option<bool>,
     /// <p>Specifies whether Amazon SES should require that incoming email is delivered over a connection encrypted with Transport Layer Security (TLS). If this parameter is set to <code>Require</code>, Amazon SES will bounce emails that are not received over TLS. The default is <code>Optional</code>.</p>
     pub tls_policy: Option<String>,
@@ -4749,7 +5816,7 @@ impl ReceiptRuleNamesListSerializer {
 pub struct ReceiptRuleSetMetadata {
     /// <p>The date and time the receipt rule set was created.</p>
     pub created_timestamp: Option<String>,
-    /// <p><p>The name of the receipt rule set. The name must:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-).</p> </li> <li> <p>Start and end with a letter or number.</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul></p>
+    /// <p><p>The name of the receipt rule set. The name must:</p> <ul> <li> <p>This value can only contain ASCII letters (a-z, A-Z), numbers (0-9), underscores (_), or dashes (-).</p> </li> <li> <p>Start and end with a letter or number.</p> </li> <li> <p>Contain less than 64 characters.</p> </li> </ul></p>
     pub name: Option<String>,
 }
 
@@ -4921,7 +5988,7 @@ pub struct RecipientDsnFields {
     pub diagnostic_code: Option<String>,
     /// <p>Additional X-headers to include in the DSN.</p>
     pub extension_fields: Option<Vec<ExtensionField>>,
-    /// <p><p>The email address to which the message was ultimately delivered. This corresponds to the <code>Final-Recipient</code> in the DSN. If not specified, <code>FinalRecipient</code> will be set to the <code>Recipient</code> specified in the <code>BouncedRecipientInfo</code> structure. Either <code>FinalRecipient</code> or the recipient in <code>BouncedRecipientInfo</code> must be a recipient of the original bounced message.</p> <note> <p>Do not prepend the <code>FinalRecipient</code> email address with <code>rfc 822;</code>, as described in <a href="https://tools.ietf.org/html/rfc3798">RFC 3798</a>.</p> </note></p>
+    /// <p><p>The email address that the message was ultimately delivered to. This corresponds to the <code>Final-Recipient</code> in the DSN. If not specified, <code>FinalRecipient</code> will be set to the <code>Recipient</code> specified in the <code>BouncedRecipientInfo</code> structure. Either <code>FinalRecipient</code> or the recipient in <code>BouncedRecipientInfo</code> must be a recipient of the original bounced message.</p> <note> <p>Do not prepend the <code>FinalRecipient</code> email address with <code>rfc 822;</code>, as described in <a href="https://tools.ietf.org/html/rfc3798">RFC 3798</a>.</p> </note></p>
     pub final_recipient: Option<String>,
     /// <p>The time the final delivery attempt was made, in <a href="https://www.ietf.org/rfc/rfc0822.txt">RFC 822</a> date-time format.</p>
     pub last_attempt_date: Option<String>,
@@ -5034,6 +6101,20 @@ impl RecipientsListSerializer {
     }
 }
 
+struct RenderedTemplateDeserializer;
+impl RenderedTemplateDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>Represents a request to reorder the receipt rules within a receipt rule set. You use receipt rule sets to receive email with Amazon SES. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone)]
 pub struct ReorderReceiptRuleSetRequest {
@@ -5084,12 +6165,75 @@ impl ReorderReceiptRuleSetResponseDeserializer {
         Ok(obj)
     }
 }
+/// <p>Contains information about the reputation settings for a configuration set.</p>
+#[derive(Default, Debug, Clone)]
+pub struct ReputationOptions {
+    /// <p>The date and time at which the reputation metrics for the configuration set were last reset. Resetting these metrics is known as a <i>fresh start</i>.</p> <p>When you disable email sending for a configuration set using <a>UpdateConfigurationSetSendingEnabled</a> and later re-enable it, the reputation metrics for the configuration set (but not for the entire Amazon SES account) are reset.</p> <p>If email sending for the configuration set has never been disabled and later re-enabled, the value of this attribute is <code>null</code>.</p>
+    pub last_fresh_start: Option<String>,
+    /// <p>Describes whether or not Amazon SES publishes reputation metrics for the configuration set, such as bounce and complaint rates, to Amazon CloudWatch.</p> <p>If the value is <code>true</code>, reputation metrics are published. If the value is <code>false</code>, reputation metrics are not published. The default value is <code>false</code>.</p>
+    pub reputation_metrics_enabled: Option<bool>,
+    /// <p>Describes whether email sending is enabled or disabled for the configuration set. If the value is <code>true</code>, then Amazon SES will send emails that use the configuration set. If the value is <code>false</code>, Amazon SES will not send emails that use the configuration set. The default value is <code>true</code>. You can change this setting using <a>UpdateConfigurationSetSendingEnabled</a>.</p>
+    pub sending_enabled: Option<bool>,
+}
+
+struct ReputationOptionsDeserializer;
+impl ReputationOptionsDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ReputationOptions, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ReputationOptions::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "LastFreshStart" => {
+                        obj.last_fresh_start = Some(try!(
+                            LastFreshStartDeserializer::deserialize("LastFreshStart", stack)
+                        ));
+                    }
+                    "ReputationMetricsEnabled" => {
+                        obj.reputation_metrics_enabled = Some(try!(
+                            EnabledDeserializer::deserialize("ReputationMetricsEnabled", stack)
+                        ));
+                    }
+                    "SendingEnabled" => {
+                        obj.sending_enabled = Some(try!(EnabledDeserializer::deserialize(
+                            "SendingEnabled",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>When included in a receipt rule, this action saves the received message to an Amazon Simple Storage Service (Amazon S3) bucket and, optionally, publishes a notification to Amazon Simple Notification Service (Amazon SNS).</p> <p>To enable Amazon SES to write emails to your Amazon S3 bucket, use an AWS KMS key to encrypt your emails, or publish to an Amazon SNS topic of another account, Amazon SES must have permission to access those resources. For information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p> <note> <p>When you save your emails to an Amazon S3 bucket, the maximum email size (including headers) is 30 MB. Emails larger than that will bounce.</p> </note> <p>For information about specifying Amazon S3 actions in receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-action-s3.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone)]
 pub struct S3Action {
-    /// <p>The name of the Amazon S3 bucket to which to save the received email.</p>
+    /// <p>The name of the Amazon S3 bucket that incoming email will be saved to.</p>
     pub bucket_name: String,
-    /// <p><p>The customer master key that Amazon SES should use to encrypt your emails before saving them to the Amazon S3 bucket. You can use the default master key or a custom master key you created in AWS KMS as follows:</p> <ul> <li> <p>To use the default master key, provide an ARN in the form of <code>arn:aws:kms:REGION:ACCOUNT-ID-WITHOUT-HYPHENS:alias/aws/ses</code>. For example, if your AWS account ID is 123456789012 and you want to use the default master key in the US West (Oregon) region, the ARN of the default master key would be <code>arn:aws:kms:us-west-2:123456789012:alias/aws/ses</code>. If you use the default master key, you don&#39;t need to perform any extra steps to give Amazon SES permission to use the key.</p> </li> <li> <p>To use a custom master key you created in AWS KMS, provide the ARN of the master key and ensure that you add a statement to your key&#39;s policy to give Amazon SES permission to use it. For more information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p> </li> </ul> <p>For more information about key policies, see the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html">AWS KMS Developer Guide</a>. If you do not specify a master key, Amazon SES will not encrypt your emails.</p> <important> <p>Your mail is encrypted by Amazon SES using the Amazon S3 encryption client before the mail is submitted to Amazon S3 for storage. It is not encrypted using Amazon S3 server-side encryption. This means that you must use the Amazon S3 encryption client to decrypt the email after retrieving it from Amazon S3, as the service has no access to use your AWS KMS keys for decryption. This encryption client is currently available with the <a href="http://aws.amazon.com/sdk-for-java/">AWS Java SDK</a> and <a href="http://aws.amazon.com/sdk-for-ruby/">AWS Ruby SDK</a> only. For more information about client-side encryption using AWS KMS master keys, see the <a href="http://alpha-docs-aws.amazon.com/AmazonS3/latest/dev/UsingClientSideEncryption.html">Amazon S3 Developer Guide</a>.</p> </important></p>
+    /// <p><p>The customer master key that Amazon SES should use to encrypt your emails before saving them to the Amazon S3 bucket. You can use the default master key or a custom master key you created in AWS KMS as follows:</p> <ul> <li> <p>To use the default master key, provide an ARN in the form of <code>arn:aws:kms:REGION:ACCOUNT-ID-WITHOUT-HYPHENS:alias/aws/ses</code>. For example, if your AWS account ID is 123456789012 and you want to use the default master key in the US West (Oregon) region, the ARN of the default master key would be <code>arn:aws:kms:us-west-2:123456789012:alias/aws/ses</code>. If you use the default master key, you don&#39;t need to perform any extra steps to give Amazon SES permission to use the key.</p> </li> <li> <p>To use a custom master key you created in AWS KMS, provide the ARN of the master key and ensure that you add a statement to your key&#39;s policy to give Amazon SES permission to use it. For more information about giving permissions, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-permissions.html">Amazon SES Developer Guide</a>.</p> </li> </ul> <p>For more information about key policies, see the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html">AWS KMS Developer Guide</a>. If you do not specify a master key, Amazon SES will not encrypt your emails.</p> <important> <p>Your mail is encrypted by Amazon SES using the Amazon S3 encryption client before the mail is submitted to Amazon S3 for storage. It is not encrypted using Amazon S3 server-side encryption. This means that you must use the Amazon S3 encryption client to decrypt the email after retrieving it from Amazon S3, as the service has no access to use your AWS KMS keys for decryption. This encryption client is currently available with the <a href="http://aws.amazon.com/sdk-for-java/">AWS Java SDK</a> and <a href="http://aws.amazon.com/sdk-for-ruby/">AWS Ruby SDK</a> only. For more information about client-side encryption using AWS KMS master keys, see the <a href="AmazonS3/latest/dev/UsingClientSideEncryption.html">Amazon S3 Developer Guide</a>.</p> </important></p>
     pub kms_key_arn: Option<String>,
     /// <p>The key prefix of the Amazon S3 bucket. The key prefix is similar to a directory name that enables you to store similar data under the same directory in a bucket.</p>
     pub object_key_prefix: Option<String>,
@@ -5314,7 +6458,7 @@ impl SNSActionEncodingDeserializer {
 /// <p>Contains the topic ARN associated with an Amazon Simple Notification Service (Amazon SNS) event destination.</p> <p>Event destinations, such as Amazon SNS, are associated with configuration sets, which enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone)]
 pub struct SNSDestination {
-    /// <p>The ARN of the Amazon SNS topic to which you want to publish email sending events. An example of an Amazon SNS topic ARN is arn:aws:sns:us-west-2:123456789012:MyTopic. For more information about Amazon SNS topics, see the <a href="http://docs.aws.amazon.com/http:/alpha-docs-aws.amazon.com/sns/latest/dg/CreateTopic.html"> <i>Amazon SNS Developer Guide</i> </a>.</p>
+    /// <p>The ARN of the Amazon SNS topic that email sending events will be published to. An example of an Amazon SNS topic ARN is <code>arn:aws:sns:us-west-2:123456789012:MyTopic</code>. For more information about Amazon SNS topics, see the <a href="http://docs.aws.amazon.com/sns/latest/dg/CreateTopic.html">Amazon SNS Developer Guide</a>.</p>
     pub topic_arn: String,
 }
 
@@ -5485,6 +6629,241 @@ impl SendBounceResponseDeserializer {
         Ok(obj)
     }
 }
+/// <p>Represents a request to send a templated email to multiple destinations using Amazon SES. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p>
+#[derive(Default, Debug, Clone)]
+pub struct SendBulkTemplatedEmailRequest {
+    /// <p>The name of the configuration set to use when you send an email using <code>SendBulkTemplatedEmail</code>.</p>
+    pub configuration_set_name: Option<String>,
+    /// <p>A list of tags, in the form of name/value pairs, to apply to an email that you send to a destination using <code>SendBulkTemplatedEmail</code>.</p>
+    pub default_tags: Option<Vec<MessageTag>>,
+    /// <p>A list of replacement values to apply to the template when replacement data is not specified in a Destination object. These values act as a default or fallback option when no other data is available.</p> <p>The template data is a JSON object, typically consisting of key-value pairs in which the keys correspond to replacement tags in the email template.</p>
+    pub default_template_data: Option<String>,
+    /// <p>One or more <code>Destination</code> objects. All of the recipients in a <code>Destination</code> will receive the same version of the email. You can specify up to 50 <code>Destination</code> objects within a <code>Destinations</code> array.</p>
+    pub destinations: Vec<BulkEmailDestination>,
+    /// <p>The reply-to email address(es) for the message. If the recipient replies to the message, each reply-to address will receive the reply.</p>
+    pub reply_to_addresses: Option<Vec<String>>,
+    /// <p>The email address that bounces and complaints will be forwarded to when feedback forwarding is enabled. If the message cannot be delivered to the recipient, then an error message will be returned from the recipient's ISP; this message will then be forwarded to the email address specified by the <code>ReturnPath</code> parameter. The <code>ReturnPath</code> parameter is never overwritten. This email address must be either individually verified with Amazon SES, or from a domain that has been verified with Amazon SES. </p>
+    pub return_path: Option<String>,
+    /// <p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to use the email address specified in the <code>ReturnPath</code> parameter.</p> <p>For example, if the owner of <code>example.com</code> (which has ARN <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>) attaches a policy to it that authorizes you to use <code>feedback@example.com</code>, then you would specify the <code>ReturnPathArn</code> to be <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>, and the <code>ReturnPath</code> to be <code>feedback@example.com</code>.</p> <p>For more information about sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p>
+    pub return_path_arn: Option<String>,
+    /// <p><p>The email address that is sending the email. This email address must be either individually verified with Amazon SES, or from a domain that has been verified with Amazon SES. For information about verifying identities, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Amazon SES Developer Guide</a>.</p> <p>If you are sending on behalf of another user and have been permitted to do so by a sending authorization policy, then you must also specify the <code>SourceArn</code> parameter. For more information about sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <note> <p>Amazon SES does not support the SMTPUTF8 extension, as described in <a href="https://tools.ietf.org/html/rfc6531">RFC6531</a>. For this reason, the <i>local part</i> of a source email address (the part of the email address that precedes the @ sign) may only contain <a href="https://en.wikipedia.org/wiki/Email_address#Local-part">7-bit ASCII characters</a>. If the <i>domain part</i> of an address (the part after the @ sign) contains non-ASCII characters, they must be encoded using Punycode, as described in <a href="https://tools.ietf.org/html/rfc3492.html">RFC3492</a>. The sender name (also known as the <i>friendly name</i>) may contain non-ASCII characters. These characters must be encoded using MIME encoded-word syntax, as described in <a href="https://tools.ietf.org/html/rfc2047">RFC 2047</a>. MIME encoded-word syntax uses the following form: <code>=?charset?encoding?encoded-text?=</code>.</p> </note></p>
+    pub source: String,
+    /// <p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to send for the email address specified in the <code>Source</code> parameter.</p> <p>For example, if the owner of <code>example.com</code> (which has ARN <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>) attaches a policy to it that authorizes you to send from <code>user@example.com</code>, then you would specify the <code>SourceArn</code> to be <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>, and the <code>Source</code> to be <code>user@example.com</code>.</p> <p>For more information about sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p>
+    pub source_arn: Option<String>,
+    /// <p>The template to use when sending this email.</p>
+    pub template: String,
+    /// <p>The ARN of the template to use when sending this email.</p>
+    pub template_arn: Option<String>,
+}
+
+/// Serialize `SendBulkTemplatedEmailRequest` contents to a `SignedRequest`.
+struct SendBulkTemplatedEmailRequestSerializer;
+impl SendBulkTemplatedEmailRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &SendBulkTemplatedEmailRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.configuration_set_name {
+            params.put(
+                &format!("{}{}", prefix, "ConfigurationSetName"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.default_tags {
+            MessageTagListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "DefaultTags"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.default_template_data {
+            params.put(
+                &format!("{}{}", prefix, "DefaultTemplateData"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        BulkEmailDestinationListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "Destinations"),
+            &obj.destinations,
+        );
+        if let Some(ref field_value) = obj.reply_to_addresses {
+            AddressListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "ReplyToAddresses"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.return_path {
+            params.put(
+                &format!("{}{}", prefix, "ReturnPath"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.return_path_arn {
+            params.put(
+                &format!("{}{}", prefix, "ReturnPathArn"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "Source"),
+            &obj.source.replace("+", "%2B"),
+        );
+        if let Some(ref field_value) = obj.source_arn {
+            params.put(
+                &format!("{}{}", prefix, "SourceArn"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "Template"),
+            &obj.template.replace("+", "%2B"),
+        );
+        if let Some(ref field_value) = obj.template_arn {
+            params.put(
+                &format!("{}{}", prefix, "TemplateArn"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct SendBulkTemplatedEmailResponse {
+    /// <p>The unique message identifier returned from the <code>SendBulkTemplatedEmail</code> action.</p>
+    pub status: Vec<BulkEmailDestinationStatus>,
+}
+
+struct SendBulkTemplatedEmailResponseDeserializer;
+impl SendBulkTemplatedEmailResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SendBulkTemplatedEmailResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = SendBulkTemplatedEmailResponse::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Status" => {
+                        obj.status =
+                            try!(BulkEmailDestinationStatusListDeserializer::deserialize(
+                                "Status",
+                                stack
+                            ));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>Represents a request to send a custom verification email to a specified recipient.</p>
+#[derive(Default, Debug, Clone)]
+pub struct SendCustomVerificationEmailRequest {
+    /// <p>Name of a configuration set to use when sending the verification email.</p>
+    pub configuration_set_name: Option<String>,
+    /// <p>The email address to verify.</p>
+    pub email_address: String,
+    /// <p>The name of the custom verification email template to use when sending the verification email.</p>
+    pub template_name: String,
+}
+
+/// Serialize `SendCustomVerificationEmailRequest` contents to a `SignedRequest`.
+struct SendCustomVerificationEmailRequestSerializer;
+impl SendCustomVerificationEmailRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &SendCustomVerificationEmailRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.configuration_set_name {
+            params.put(
+                &format!("{}{}", prefix, "ConfigurationSetName"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "EmailAddress"),
+            &obj.email_address.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "TemplateName"),
+            &obj.template_name.replace("+", "%2B"),
+        );
+    }
+}
+
+/// <p>The response received when attempting to send the custom verification email.</p>
+#[derive(Default, Debug, Clone)]
+pub struct SendCustomVerificationEmailResponse {
+    /// <p>The unique message identifier returned from the <code>SendCustomVerificationEmail</code> operation.</p>
+    pub message_id: Option<String>,
+}
+
+struct SendCustomVerificationEmailResponseDeserializer;
+impl SendCustomVerificationEmailResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SendCustomVerificationEmailResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = SendCustomVerificationEmailResponse::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "MessageId" => {
+                        obj.message_id =
+                            Some(try!(MessageIdDeserializer::deserialize("MessageId", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>Represents sending statistics data. Each <code>SendDataPoint</code> contains statistics for a 15-minute period of sending activity. </p>
 #[derive(Default, Debug, Clone)]
 pub struct SendDataPoint {
@@ -5612,13 +6991,13 @@ pub struct SendEmailRequest {
     pub message: Message,
     /// <p>The reply-to email address(es) for the message. If the recipient replies to the message, each reply-to address will receive the reply.</p>
     pub reply_to_addresses: Option<Vec<String>>,
-    /// <p>The email address to which bounces and complaints are to be forwarded when feedback forwarding is enabled. If the message cannot be delivered to the recipient, then an error message will be returned from the recipient's ISP; this message will then be forwarded to the email address specified by the <code>ReturnPath</code> parameter. The <code>ReturnPath</code> parameter is never overwritten. This email address must be either individually verified with Amazon SES, or from a domain that has been verified with Amazon SES. </p>
+    /// <p>The email address that bounces and complaints will be forwarded to when feedback forwarding is enabled. If the message cannot be delivered to the recipient, then an error message will be returned from the recipient's ISP; this message will then be forwarded to the email address specified by the <code>ReturnPath</code> parameter. The <code>ReturnPath</code> parameter is never overwritten. This email address must be either individually verified with Amazon SES, or from a domain that has been verified with Amazon SES. </p>
     pub return_path: Option<String>,
-    /// <p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to use the email address specified in the <code>ReturnPath</code> parameter.</p> <p>For example, if the owner of <code>example.com</code> (which has ARN <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>) attaches a policy to it that authorizes you to use <code>feedback@example.com</code>, then you would specify the <code>ReturnPathArn</code> to be <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>, and the <code>ReturnPath</code> to be <code>feedback@example.com</code>.</p> <p>For more information about sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>. </p>
+    /// <p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to use the email address specified in the <code>ReturnPath</code> parameter.</p> <p>For example, if the owner of <code>example.com</code> (which has ARN <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>) attaches a policy to it that authorizes you to use <code>feedback@example.com</code>, then you would specify the <code>ReturnPathArn</code> to be <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>, and the <code>ReturnPath</code> to be <code>feedback@example.com</code>.</p> <p>For more information about sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p>
     pub return_path_arn: Option<String>,
-    /// <p>The email address that is sending the email. This email address must be either individually verified with Amazon SES, or from a domain that has been verified with Amazon SES. For information about verifying identities, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Amazon SES Developer Guide</a>.</p> <p>If you are sending on behalf of another user and have been permitted to do so by a sending authorization policy, then you must also specify the <code>SourceArn</code> parameter. For more information about sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p> In all cases, the email address must be 7-bit ASCII. If the text must contain any other characters, then you must use MIME encoded-word syntax (RFC 2047) instead of a literal string. MIME encoded-word syntax uses the following form: <code>=?charset?encoding?encoded-text?=</code>. For more information, see <a href="http://tools.ietf.org/html/rfc2047">RFC 2047</a>. </p>
+    /// <p><p>The email address that is sending the email. This email address must be either individually verified with Amazon SES, or from a domain that has been verified with Amazon SES. For information about verifying identities, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Amazon SES Developer Guide</a>.</p> <p>If you are sending on behalf of another user and have been permitted to do so by a sending authorization policy, then you must also specify the <code>SourceArn</code> parameter. For more information about sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <note> <p>Amazon SES does not support the SMTPUTF8 extension, as described in <a href="https://tools.ietf.org/html/rfc6531">RFC6531</a>. For this reason, the <i>local part</i> of a source email address (the part of the email address that precedes the @ sign) may only contain <a href="https://en.wikipedia.org/wiki/Email_address#Local-part">7-bit ASCII characters</a>. If the <i>domain part</i> of an address (the part after the @ sign) contains non-ASCII characters, they must be encoded using Punycode, as described in <a href="https://tools.ietf.org/html/rfc3492.html">RFC3492</a>. The sender name (also known as the <i>friendly name</i>) may contain non-ASCII characters. These characters must be encoded using MIME encoded-word syntax, as described in <a href="https://tools.ietf.org/html/rfc2047">RFC 2047</a>. MIME encoded-word syntax uses the following form: <code>=?charset?encoding?encoded-text?=</code>.</p> </note></p>
     pub source: String,
-    /// <p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to send for the email address specified in the <code>Source</code> parameter.</p> <p>For example, if the owner of <code>example.com</code> (which has ARN <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>) attaches a policy to it that authorizes you to send from <code>user@example.com</code>, then you would specify the <code>SourceArn</code> to be <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>, and the <code>Source</code> to be <code>user@example.com</code>.</p> <p>For more information about sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>. </p>
+    /// <p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to send for the email address specified in the <code>Source</code> parameter.</p> <p>For example, if the owner of <code>example.com</code> (which has ARN <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>) attaches a policy to it that authorizes you to send from <code>user@example.com</code>, then you would specify the <code>SourceArn</code> to be <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>, and the <code>Source</code> to be <code>user@example.com</code>.</p> <p>For more information about sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p>
     pub source_arn: Option<String>,
     /// <p>A list of tags, in the form of name/value pairs, to apply to an email that you send using <code>SendEmail</code>. Tags correspond to characteristics of the email that you define, so that you can publish email sending events.</p>
     pub tags: Option<Vec<MessageTag>>,
@@ -5744,7 +7123,7 @@ pub struct SendRawEmailRequest {
     pub raw_message: RawMessage,
     /// <p><p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to use the email address specified in the <code>ReturnPath</code> parameter.</p> <p>For example, if the owner of <code>example.com</code> (which has ARN <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>) attaches a policy to it that authorizes you to use <code>feedback@example.com</code>, then you would specify the <code>ReturnPathArn</code> to be <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>, and the <code>ReturnPath</code> to be <code>feedback@example.com</code>.</p> <p>Instead of using this parameter, you can use the X-header <code>X-SES-RETURN-PATH-ARN</code> in the raw message of the email. If you use both the <code>ReturnPathArn</code> parameter and the corresponding X-header, Amazon SES uses the value of the <code>ReturnPathArn</code> parameter.</p> <note> <p>For information about when to use this parameter, see the description of <code>SendRawEmail</code> in this guide, or see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-delegate-sender-tasks-email.html">Amazon SES Developer Guide</a>.</p> </note></p>
     pub return_path_arn: Option<String>,
-    /// <p><p>The identity&#39;s email address. If you do not provide a value for this parameter, you must specify a &quot;From&quot; address in the raw text of the message. (You can also specify both.)</p> <p> By default, the string must be 7-bit ASCII. If the text must contain any other characters, then you must use MIME encoded-word syntax (RFC 2047) instead of a literal string. MIME encoded-word syntax uses the following form: <code>=?charset?encoding?encoded-text?=</code>. For more information, see <a href="http://tools.ietf.org/html/rfc2047">RFC 2047</a>. </p> <note> <p>If you specify the <code>Source</code> parameter and have feedback forwarding enabled, then bounces and complaints will be sent to this email address. This takes precedence over any <i>Return-Path</i> header that you might include in the raw text of the message.</p> </note></p>
+    /// <p>The identity's email address. If you do not provide a value for this parameter, you must specify a "From" address in the raw text of the message. (You can also specify both.)</p> <note> <p>Amazon SES does not support the SMTPUTF8 extension, as described in<a href="https://tools.ietf.org/html/rfc6531">RFC6531</a>. For this reason, the <i>local part</i> of a source email address (the part of the email address that precedes the @ sign) may only contain <a href="https://en.wikipedia.org/wiki/Email_address#Local-part">7-bit ASCII characters</a>. If the <i>domain part</i> of an address (the part after the @ sign) contains non-ASCII characters, they must be encoded using Punycode, as described in <a href="https://tools.ietf.org/html/rfc3492.html">RFC3492</a>. The sender name (also known as the <i>friendly name</i>) may contain non-ASCII characters. These characters must be encoded using MIME encoded-word syntax, as described in <a href="https://tools.ietf.org/html/rfc2047">RFC 2047</a>. MIME encoded-word syntax uses the following form: <code>=?charset?encoding?encoded-text?=</code>.</p> </note> <p>If you specify the <code>Source</code> parameter and have feedback forwarding enabled, then bounces and complaints will be sent to this email address. This takes precedence over any Return-Path header that you might include in the raw text of the message.</p>
     pub source: Option<String>,
     /// <p><p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to send for the email address specified in the <code>Source</code> parameter.</p> <p>For example, if the owner of <code>example.com</code> (which has ARN <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>) attaches a policy to it that authorizes you to send from <code>user@example.com</code>, then you would specify the <code>SourceArn</code> to be <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>, and the <code>Source</code> to be <code>user@example.com</code>.</p> <p>Instead of using this parameter, you can use the X-header <code>X-SES-SOURCE-ARN</code> in the raw message of the email. If you use both the <code>SourceArn</code> parameter and the corresponding X-header, Amazon SES uses the value of the <code>SourceArn</code> parameter.</p> <note> <p>For information about when to use this parameter, see the description of <code>SendRawEmail</code> in this guide, or see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-delegate-sender-tasks-email.html">Amazon SES Developer Guide</a>.</p> </note></p>
     pub source_arn: Option<String>,
@@ -5830,6 +7209,152 @@ impl SendRawEmailResponseDeserializer {
         try!(start_element(tag_name, stack));
 
         let mut obj = SendRawEmailResponse::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "MessageId" => {
+                        obj.message_id =
+                            try!(MessageIdDeserializer::deserialize("MessageId", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>Represents a request to send a templated email using Amazon SES. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p>
+#[derive(Default, Debug, Clone)]
+pub struct SendTemplatedEmailRequest {
+    /// <p>The name of the configuration set to use when you send an email using <code>SendTemplatedEmail</code>.</p>
+    pub configuration_set_name: Option<String>,
+    /// <p>The destination for this email, composed of To:, CC:, and BCC: fields. A Destination can include up to 50 recipients across these three fields.</p>
+    pub destination: Destination,
+    /// <p>The reply-to email address(es) for the message. If the recipient replies to the message, each reply-to address will receive the reply.</p>
+    pub reply_to_addresses: Option<Vec<String>>,
+    /// <p>The email address that bounces and complaints will be forwarded to when feedback forwarding is enabled. If the message cannot be delivered to the recipient, then an error message will be returned from the recipient's ISP; this message will then be forwarded to the email address specified by the <code>ReturnPath</code> parameter. The <code>ReturnPath</code> parameter is never overwritten. This email address must be either individually verified with Amazon SES, or from a domain that has been verified with Amazon SES. </p>
+    pub return_path: Option<String>,
+    /// <p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to use the email address specified in the <code>ReturnPath</code> parameter.</p> <p>For example, if the owner of <code>example.com</code> (which has ARN <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>) attaches a policy to it that authorizes you to use <code>feedback@example.com</code>, then you would specify the <code>ReturnPathArn</code> to be <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>, and the <code>ReturnPath</code> to be <code>feedback@example.com</code>.</p> <p>For more information about sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p>
+    pub return_path_arn: Option<String>,
+    /// <p><p>The email address that is sending the email. This email address must be either individually verified with Amazon SES, or from a domain that has been verified with Amazon SES. For information about verifying identities, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Amazon SES Developer Guide</a>.</p> <p>If you are sending on behalf of another user and have been permitted to do so by a sending authorization policy, then you must also specify the <code>SourceArn</code> parameter. For more information about sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <note> <p>Amazon SES does not support the SMTPUTF8 extension, as described in <a href="https://tools.ietf.org/html/rfc6531">RFC6531</a>. For this reason, the <i>local part</i> of a source email address (the part of the email address that precedes the @ sign) may only contain <a href="https://en.wikipedia.org/wiki/Email_address#Local-part">7-bit ASCII characters</a>. If the <i>domain part</i> of an address (the part after the @ sign) contains non-ASCII characters, they must be encoded using Punycode, as described in <a href="https://tools.ietf.org/html/rfc3492.html">RFC3492</a>. The sender name (also known as the <i>friendly name</i>) may contain non-ASCII characters. These characters must be encoded using MIME encoded-word syntax, as described in<a href="https://tools.ietf.org/html/rfc2047">RFC 2047</a>. MIME encoded-word syntax uses the following form: <code>=?charset?encoding?encoded-text?=</code>.</p> </note></p>
+    pub source: String,
+    /// <p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to send for the email address specified in the <code>Source</code> parameter.</p> <p>For example, if the owner of <code>example.com</code> (which has ARN <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>) attaches a policy to it that authorizes you to send from <code>user@example.com</code>, then you would specify the <code>SourceArn</code> to be <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>, and the <code>Source</code> to be <code>user@example.com</code>.</p> <p>For more information about sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p>
+    pub source_arn: Option<String>,
+    /// <p>A list of tags, in the form of name/value pairs, to apply to an email that you send using <code>SendTemplatedEmail</code>. Tags correspond to characteristics of the email that you define, so that you can publish email sending events.</p>
+    pub tags: Option<Vec<MessageTag>>,
+    /// <p>The template to use when sending this email.</p>
+    pub template: String,
+    /// <p>The ARN of the template to use when sending this email.</p>
+    pub template_arn: Option<String>,
+    /// <p>A list of replacement values to apply to the template. This parameter is a JSON object, typically consisting of key-value pairs in which the keys correspond to replacement tags in the email template.</p>
+    pub template_data: String,
+}
+
+/// Serialize `SendTemplatedEmailRequest` contents to a `SignedRequest`.
+struct SendTemplatedEmailRequestSerializer;
+impl SendTemplatedEmailRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &SendTemplatedEmailRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.configuration_set_name {
+            params.put(
+                &format!("{}{}", prefix, "ConfigurationSetName"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        DestinationSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "Destination"),
+            &obj.destination,
+        );
+        if let Some(ref field_value) = obj.reply_to_addresses {
+            AddressListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "ReplyToAddresses"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.return_path {
+            params.put(
+                &format!("{}{}", prefix, "ReturnPath"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.return_path_arn {
+            params.put(
+                &format!("{}{}", prefix, "ReturnPathArn"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "Source"),
+            &obj.source.replace("+", "%2B"),
+        );
+        if let Some(ref field_value) = obj.source_arn {
+            params.put(
+                &format!("{}{}", prefix, "SourceArn"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.tags {
+            MessageTagListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Tags"),
+                field_value,
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "Template"),
+            &obj.template.replace("+", "%2B"),
+        );
+        if let Some(ref field_value) = obj.template_arn {
+            params.put(
+                &format!("{}{}", prefix, "TemplateArn"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "TemplateData"),
+            &obj.template_data.replace("+", "%2B"),
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct SendTemplatedEmailResponse {
+    /// <p>The unique message identifier returned from the <code>SendTemplatedEmail</code> action. </p>
+    pub message_id: String,
+}
+
+struct SendTemplatedEmailResponseDeserializer;
+impl SendTemplatedEmailResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SendTemplatedEmailResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = SendTemplatedEmailResponse::default();
 
         loop {
             let next_event = match stack.peek() {
@@ -6256,7 +7781,7 @@ impl SetReceiptRulePositionResponseDeserializer {
 /// <p>When included in a receipt rule, this action terminates the evaluation of the receipt rule set and, optionally, publishes a notification to Amazon Simple Notification Service (Amazon SNS).</p> <p>For information about setting a stop action in a receipt rule, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-action-stop.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone)]
 pub struct StopAction {
-    /// <p>The scope to which the Stop action applies. That is, what is being stopped.</p>
+    /// <p>The name of the RuleSet that is being stopped.</p>
     pub scope: String,
     /// <p>The Amazon Resource Name (ARN) of the Amazon SNS topic to notify when the stop action is taken. An example of an Amazon SNS topic ARN is <code>arn:aws:sns:us-west-2:123456789012:MyTopic</code>. For more information about Amazon SNS topics, see the <a href="http://docs.aws.amazon.com/sns/latest/dg/CreateTopic.html">Amazon SNS Developer Guide</a>.</p>
     pub topic_arn: Option<String>,
@@ -6344,6 +7869,364 @@ impl StopScopeDeserializer {
         Ok(obj)
     }
 }
+struct SubjectDeserializer;
+impl SubjectDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct SubjectPartDeserializer;
+impl SubjectPartDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct SuccessRedirectionURLDeserializer;
+impl SuccessRedirectionURLDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>The content of the email, composed of a subject line, an HTML part, and a text-only part.</p>
+#[derive(Default, Debug, Clone)]
+pub struct Template {
+    /// <p>The HTML body of the email.</p>
+    pub html_part: Option<String>,
+    /// <p>The subject line of the email.</p>
+    pub subject_part: Option<String>,
+    /// <p>The name of the template. You will refer to this name when you send email using the <code>SendTemplatedEmail</code> or <code>SendBulkTemplatedEmail</code> operations.</p>
+    pub template_name: String,
+    /// <p>The email body that will be visible to recipients whose email clients do not display HTML.</p>
+    pub text_part: Option<String>,
+}
+
+struct TemplateDeserializer;
+impl TemplateDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Template, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = Template::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "HtmlPart" => {
+                        obj.html_part =
+                            Some(try!(HtmlPartDeserializer::deserialize("HtmlPart", stack)));
+                    }
+                    "SubjectPart" => {
+                        obj.subject_part = Some(try!(SubjectPartDeserializer::deserialize(
+                            "SubjectPart",
+                            stack
+                        )));
+                    }
+                    "TemplateName" => {
+                        obj.template_name =
+                            try!(TemplateNameDeserializer::deserialize("TemplateName", stack));
+                    }
+                    "TextPart" => {
+                        obj.text_part =
+                            Some(try!(TextPartDeserializer::deserialize("TextPart", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `Template` contents to a `SignedRequest`.
+struct TemplateSerializer;
+impl TemplateSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Template) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.html_part {
+            params.put(
+                &format!("{}{}", prefix, "HtmlPart"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.subject_part {
+            params.put(
+                &format!("{}{}", prefix, "SubjectPart"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "TemplateName"),
+            &obj.template_name.replace("+", "%2B"),
+        );
+        if let Some(ref field_value) = obj.text_part {
+            params.put(
+                &format!("{}{}", prefix, "TextPart"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
+struct TemplateContentDeserializer;
+impl TemplateContentDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>Contains information about an email template.</p>
+#[derive(Default, Debug, Clone)]
+pub struct TemplateMetadata {
+    /// <p>The time and date the template was created.</p>
+    pub created_timestamp: Option<String>,
+    /// <p>The name of the template.</p>
+    pub name: Option<String>,
+}
+
+struct TemplateMetadataDeserializer;
+impl TemplateMetadataDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TemplateMetadata, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = TemplateMetadata::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "CreatedTimestamp" => {
+                        obj.created_timestamp = Some(try!(TimestampDeserializer::deserialize(
+                            "CreatedTimestamp",
+                            stack
+                        )));
+                    }
+                    "Name" => {
+                        obj.name = Some(try!(TemplateNameDeserializer::deserialize("Name", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct TemplateMetadataListDeserializer;
+impl TemplateMetadataListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<TemplateMetadata>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "member" {
+                        obj.push(try!(TemplateMetadataDeserializer::deserialize(
+                            "member",
+                            stack
+                        )));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+struct TemplateNameDeserializer;
+impl TemplateNameDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
+pub struct TestRenderTemplateRequest {
+    /// <p>A list of replacement values to apply to the template. This parameter is a JSON object, typically consisting of key-value pairs in which the keys correspond to replacement tags in the email template.</p>
+    pub template_data: String,
+    /// <p>The name of the template that you want to render.</p>
+    pub template_name: String,
+}
+
+/// Serialize `TestRenderTemplateRequest` contents to a `SignedRequest`.
+struct TestRenderTemplateRequestSerializer;
+impl TestRenderTemplateRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &TestRenderTemplateRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "TemplateData"),
+            &obj.template_data.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "TemplateName"),
+            &obj.template_name.replace("+", "%2B"),
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct TestRenderTemplateResponse {
+    /// <p>The complete MIME message rendered by applying the data in the TemplateData parameter to the template specified in the TemplateName parameter.</p>
+    pub rendered_template: Option<String>,
+}
+
+struct TestRenderTemplateResponseDeserializer;
+impl TestRenderTemplateResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TestRenderTemplateResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = TestRenderTemplateResponse::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "RenderedTemplate" => {
+                        obj.rendered_template = Some(try!(
+                            RenderedTemplateDeserializer::deserialize("RenderedTemplate", stack)
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct TextPartDeserializer;
+impl TextPartDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 struct TimestampDeserializer;
 impl TimestampDeserializer {
     #[allow(unused_variables)]
@@ -6372,10 +8255,104 @@ impl TlsPolicyDeserializer {
         Ok(obj)
     }
 }
+/// <p>A domain that is used to redirect email recipients to an Amazon SES-operated domain. This domain captures open and click events generated by Amazon SES emails.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Configuring Custom Domains to Handle Open and Click Tracking</a> in the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/Welcome.html">Amazon SES Developer Guide</a>.</p>
+#[derive(Default, Debug, Clone)]
+pub struct TrackingOptions {
+    /// <p>The custom subdomain that will be used to redirect email recipients to the Amazon SES event tracking domain.</p>
+    pub custom_redirect_domain: Option<String>,
+}
+
+struct TrackingOptionsDeserializer;
+impl TrackingOptionsDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TrackingOptions, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = TrackingOptions::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "CustomRedirectDomain" => {
+                        obj.custom_redirect_domain =
+                            Some(try!(CustomRedirectDomainDeserializer::deserialize(
+                                "CustomRedirectDomain",
+                                stack
+                            )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `TrackingOptions` contents to a `SignedRequest`.
+struct TrackingOptionsSerializer;
+impl TrackingOptionsSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &TrackingOptions) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.custom_redirect_domain {
+            params.put(
+                &format!("{}{}", prefix, "CustomRedirectDomain"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
+/// <p>Represents a request to enable or disable the email sending capabilities for your entire Amazon SES account.</p>
+#[derive(Default, Debug, Clone)]
+pub struct UpdateAccountSendingEnabledRequest {
+    /// <p>Describes whether email sending is enabled or disabled for your Amazon SES account.</p>
+    pub enabled: Option<bool>,
+}
+
+/// Serialize `UpdateAccountSendingEnabledRequest` contents to a `SignedRequest`.
+struct UpdateAccountSendingEnabledRequestSerializer;
+impl UpdateAccountSendingEnabledRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &UpdateAccountSendingEnabledRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.enabled {
+            params.put(
+                &format!("{}{}", prefix, "Enabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+    }
+}
+
 /// <p>Represents a request to update the event destination of a configuration set. Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone)]
 pub struct UpdateConfigurationSetEventDestinationRequest {
-    /// <p>The name of the configuration set that you want to update.</p>
+    /// <p>The name of the configuration set that contains the event destination that you want to update.</p>
     pub configuration_set_name: String,
     /// <p>The event destination object that you want to apply to the specified configuration set.</p>
     pub event_destination: EventDestination,
@@ -6426,12 +8403,198 @@ impl UpdateConfigurationSetEventDestinationResponseDeserializer {
         Ok(obj)
     }
 }
+/// <p>Represents a request to modify the reputation metric publishing settings for a configuration set.</p>
+#[derive(Default, Debug, Clone)]
+pub struct UpdateConfigurationSetReputationMetricsEnabledRequest {
+    /// <p>The name of the configuration set that you want to update.</p>
+    pub configuration_set_name: String,
+    /// <p>Describes whether or not Amazon SES will publish reputation metrics for the configuration set, such as bounce and complaint rates, to Amazon CloudWatch.</p>
+    pub enabled: bool,
+}
+
+/// Serialize `UpdateConfigurationSetReputationMetricsEnabledRequest` contents to a `SignedRequest`.
+struct UpdateConfigurationSetReputationMetricsEnabledRequestSerializer;
+impl UpdateConfigurationSetReputationMetricsEnabledRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &UpdateConfigurationSetReputationMetricsEnabledRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "ConfigurationSetName"),
+            &obj.configuration_set_name.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "Enabled"),
+            &obj.enabled.to_string().replace("+", "%2B"),
+        );
+    }
+}
+
+/// <p>Represents a request to enable or disable the email sending capabilities for a specific configuration set.</p>
+#[derive(Default, Debug, Clone)]
+pub struct UpdateConfigurationSetSendingEnabledRequest {
+    /// <p>The name of the configuration set that you want to update.</p>
+    pub configuration_set_name: String,
+    /// <p>Describes whether email sending is enabled or disabled for the configuration set. </p>
+    pub enabled: bool,
+}
+
+/// Serialize `UpdateConfigurationSetSendingEnabledRequest` contents to a `SignedRequest`.
+struct UpdateConfigurationSetSendingEnabledRequestSerializer;
+impl UpdateConfigurationSetSendingEnabledRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &UpdateConfigurationSetSendingEnabledRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "ConfigurationSetName"),
+            &obj.configuration_set_name.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "Enabled"),
+            &obj.enabled.to_string().replace("+", "%2B"),
+        );
+    }
+}
+
+/// <p>Represents a request to update the tracking options for a configuration set. </p>
+#[derive(Default, Debug, Clone)]
+pub struct UpdateConfigurationSetTrackingOptionsRequest {
+    /// <p>The name of the configuration set for which you want to update the custom tracking domain.</p>
+    pub configuration_set_name: String,
+    pub tracking_options: TrackingOptions,
+}
+
+/// Serialize `UpdateConfigurationSetTrackingOptionsRequest` contents to a `SignedRequest`.
+struct UpdateConfigurationSetTrackingOptionsRequestSerializer;
+impl UpdateConfigurationSetTrackingOptionsRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &UpdateConfigurationSetTrackingOptionsRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "ConfigurationSetName"),
+            &obj.configuration_set_name.replace("+", "%2B"),
+        );
+        TrackingOptionsSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "TrackingOptions"),
+            &obj.tracking_options,
+        );
+    }
+}
+
+/// <p>An empty element returned on a successful request.</p>
+#[derive(Default, Debug, Clone)]
+pub struct UpdateConfigurationSetTrackingOptionsResponse;
+
+struct UpdateConfigurationSetTrackingOptionsResponseDeserializer;
+impl UpdateConfigurationSetTrackingOptionsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateConfigurationSetTrackingOptionsResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let obj = UpdateConfigurationSetTrackingOptionsResponse::default();
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>Represents a request to update an existing custom verification email template.</p>
+#[derive(Default, Debug, Clone)]
+pub struct UpdateCustomVerificationEmailTemplateRequest {
+    /// <p>The URL that the recipient of the verification email is sent to if his or her address is not successfully verified.</p>
+    pub failure_redirection_url: Option<String>,
+    /// <p>The email address that the custom verification email is sent from.</p>
+    pub from_email_address: Option<String>,
+    /// <p>The URL that the recipient of the verification email is sent to if his or her address is successfully verified.</p>
+    pub success_redirection_url: Option<String>,
+    /// <p>The content of the custom verification email. The total size of the email must be less than 10 MB. The message body may contain HTML, with some limitations. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html#custom-verification-emails-faq">Custom Verification Email Frequently Asked Questions</a> in the <i>Amazon SES Developer Guide</i>.</p>
+    pub template_content: Option<String>,
+    /// <p>The name of the custom verification email template that you want to update.</p>
+    pub template_name: String,
+    /// <p>The subject line of the custom verification email.</p>
+    pub template_subject: Option<String>,
+}
+
+/// Serialize `UpdateCustomVerificationEmailTemplateRequest` contents to a `SignedRequest`.
+struct UpdateCustomVerificationEmailTemplateRequestSerializer;
+impl UpdateCustomVerificationEmailTemplateRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &UpdateCustomVerificationEmailTemplateRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.failure_redirection_url {
+            params.put(
+                &format!("{}{}", prefix, "FailureRedirectionURL"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.from_email_address {
+            params.put(
+                &format!("{}{}", prefix, "FromEmailAddress"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.success_redirection_url {
+            params.put(
+                &format!("{}{}", prefix, "SuccessRedirectionURL"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.template_content {
+            params.put(
+                &format!("{}{}", prefix, "TemplateContent"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "TemplateName"),
+            &obj.template_name.replace("+", "%2B"),
+        );
+        if let Some(ref field_value) = obj.template_subject {
+            params.put(
+                &format!("{}{}", prefix, "TemplateSubject"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
 /// <p>Represents a request to update a receipt rule. You use receipt rules to receive email with Amazon SES. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-concepts.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone)]
 pub struct UpdateReceiptRuleRequest {
     /// <p>A data structure that contains the updated receipt rule information.</p>
     pub rule: ReceiptRule,
-    /// <p>The name of the receipt rule set to which the receipt rule belongs.</p>
+    /// <p>The name of the receipt rule set that the receipt rule belongs to.</p>
     pub rule_set_name: String,
 }
 
@@ -6466,6 +8629,43 @@ impl UpdateReceiptRuleResponseDeserializer {
         try!(start_element(tag_name, stack));
 
         let obj = UpdateReceiptRuleResponse::default();
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
+pub struct UpdateTemplateRequest {
+    pub template: Template,
+}
+
+/// Serialize `UpdateTemplateRequest` contents to a `SignedRequest`.
+struct UpdateTemplateRequestSerializer;
+impl UpdateTemplateRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &UpdateTemplateRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        TemplateSerializer::serialize(params, &format!("{}{}", prefix, "Template"), &obj.template);
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct UpdateTemplateResponse;
+
+struct UpdateTemplateResponseDeserializer;
+impl UpdateTemplateResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateTemplateResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let obj = UpdateTemplateResponse::default();
 
         try!(end_element(tag_name, stack));
 
@@ -7151,6 +9351,176 @@ impl Error for CreateConfigurationSetEventDestinationError {
         }
     }
 }
+/// Errors returned by CreateConfigurationSetTrackingOptions
+#[derive(Debug, PartialEq)]
+pub enum CreateConfigurationSetTrackingOptionsError {
+    /// <p>Indicates that the configuration set does not exist.</p>
+    ConfigurationSetDoesNotExist(String),
+    /// <p><p>Indicates that the custom domain to be used for open and click tracking redirects is invalid. This error appears most often in the following situations:</p> <ul> <li> <p>When the tracking domain you specified is not verified in Amazon SES.</p> </li> <li> <p>When the tracking domain you specified is not a valid domain or subdomain.</p> </li> </ul></p>
+    InvalidTrackingOptions(String),
+    /// <p>Indicates that the configuration set you specified already contains a TrackingOptions object.</p>
+    TrackingOptionsAlreadyExists(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateConfigurationSetTrackingOptionsError {
+    pub fn from_body(body: &str) -> CreateConfigurationSetTrackingOptionsError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "ConfigurationSetDoesNotExistException" => {
+                    CreateConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "InvalidTrackingOptionsException" => {
+                    CreateConfigurationSetTrackingOptionsError::InvalidTrackingOptions(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "TrackingOptionsAlreadyExistsException" => {
+                    CreateConfigurationSetTrackingOptionsError::TrackingOptionsAlreadyExists(
+                        String::from(parsed_error.message),
+                    )
+                }
+                _ => CreateConfigurationSetTrackingOptionsError::Unknown(String::from(body)),
+            },
+            Err(_) => CreateConfigurationSetTrackingOptionsError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for CreateConfigurationSetTrackingOptionsError {
+    fn from(err: XmlParseError) -> CreateConfigurationSetTrackingOptionsError {
+        let XmlParseError(message) = err;
+        CreateConfigurationSetTrackingOptionsError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for CreateConfigurationSetTrackingOptionsError {
+    fn from(err: CredentialsError) -> CreateConfigurationSetTrackingOptionsError {
+        CreateConfigurationSetTrackingOptionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateConfigurationSetTrackingOptionsError {
+    fn from(err: HttpDispatchError) -> CreateConfigurationSetTrackingOptionsError {
+        CreateConfigurationSetTrackingOptionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateConfigurationSetTrackingOptionsError {
+    fn from(err: io::Error) -> CreateConfigurationSetTrackingOptionsError {
+        CreateConfigurationSetTrackingOptionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateConfigurationSetTrackingOptionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateConfigurationSetTrackingOptionsError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(ref cause) => {
+                cause
+            }
+            CreateConfigurationSetTrackingOptionsError::InvalidTrackingOptions(ref cause) => cause,
+            CreateConfigurationSetTrackingOptionsError::TrackingOptionsAlreadyExists(ref cause) => {
+                cause
+            }
+            CreateConfigurationSetTrackingOptionsError::Validation(ref cause) => cause,
+            CreateConfigurationSetTrackingOptionsError::Credentials(ref err) => err.description(),
+            CreateConfigurationSetTrackingOptionsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateConfigurationSetTrackingOptionsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateCustomVerificationEmailTemplate
+#[derive(Debug, PartialEq)]
+pub enum CreateCustomVerificationEmailTemplateError {
+    /// <p>Indicates that custom verification email template provided content is invalid.</p>
+    CustomVerificationEmailInvalidContent(String),
+    /// <p>Indicates that a custom verification email template with the name you specified already exists.</p>
+    CustomVerificationEmailTemplateAlreadyExists(String),
+    /// <p>Indicates that the sender address specified for a custom verification email is not verified, and is therefore not eligible to send the custom verification email. </p>
+    FromEmailAddressNotVerified(String),
+    /// <p>Indicates that a resource could not be created because of service limits. For a list of Amazon SES limits, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html">Amazon SES Developer Guide</a>.</p>
+    LimitExceeded(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateCustomVerificationEmailTemplateError {
+    pub fn from_body(body: &str) -> CreateCustomVerificationEmailTemplateError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+                            Ok(parsed_error) => {
+                                match &parsed_error.code[..] {
+                                    "CustomVerificationEmailInvalidContentException" => CreateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(String::from(parsed_error.message)),"CustomVerificationEmailTemplateAlreadyExistsException" => CreateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateAlreadyExists(String::from(parsed_error.message)),"FromEmailAddressNotVerifiedException" => CreateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(String::from(parsed_error.message)),"LimitExceededException" => CreateCustomVerificationEmailTemplateError::LimitExceeded(String::from(parsed_error.message)),_ => CreateCustomVerificationEmailTemplateError::Unknown(String::from(body))
+                                }
+                           },
+                           Err(_) => CreateCustomVerificationEmailTemplateError::Unknown(body.to_string())
+                       }
+    }
+}
+
+impl From<XmlParseError> for CreateCustomVerificationEmailTemplateError {
+    fn from(err: XmlParseError) -> CreateCustomVerificationEmailTemplateError {
+        let XmlParseError(message) = err;
+        CreateCustomVerificationEmailTemplateError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for CreateCustomVerificationEmailTemplateError {
+    fn from(err: CredentialsError) -> CreateCustomVerificationEmailTemplateError {
+        CreateCustomVerificationEmailTemplateError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateCustomVerificationEmailTemplateError {
+    fn from(err: HttpDispatchError) -> CreateCustomVerificationEmailTemplateError {
+        CreateCustomVerificationEmailTemplateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateCustomVerificationEmailTemplateError {
+    fn from(err: io::Error) -> CreateCustomVerificationEmailTemplateError {
+        CreateCustomVerificationEmailTemplateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateCustomVerificationEmailTemplateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateCustomVerificationEmailTemplateError {
+    fn description(&self) -> &str {
+        match *self {
+                            CreateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(ref cause) => cause,
+CreateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateAlreadyExists(ref cause) => cause,
+CreateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(ref cause) => cause,
+CreateCustomVerificationEmailTemplateError::LimitExceeded(ref cause) => cause,
+CreateCustomVerificationEmailTemplateError::Validation(ref cause) => cause,
+CreateCustomVerificationEmailTemplateError::Credentials(ref err) => err.description(),
+CreateCustomVerificationEmailTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+CreateCustomVerificationEmailTemplateError::Unknown(ref cause) => cause
+                        }
+    }
+}
 /// Errors returned by CreateReceiptFilter
 #[derive(Debug, PartialEq)]
 pub enum CreateReceiptFilterError {
@@ -7414,6 +9784,87 @@ impl Error for CreateReceiptRuleSetError {
         }
     }
 }
+/// Errors returned by CreateTemplate
+#[derive(Debug, PartialEq)]
+pub enum CreateTemplateError {
+    /// <p>Indicates that a resource could not be created because of a naming conflict.</p>
+    AlreadyExists(String),
+    /// <p>Indicates that a template could not be created because it contained invalid JSON.</p>
+    InvalidTemplate(String),
+    /// <p>Indicates that a resource could not be created because of service limits. For a list of Amazon SES limits, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/limits.html">Amazon SES Developer Guide</a>.</p>
+    LimitExceeded(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateTemplateError {
+    pub fn from_body(body: &str) -> CreateTemplateError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AlreadyExistsException" => {
+                    CreateTemplateError::AlreadyExists(String::from(parsed_error.message))
+                }
+                "InvalidTemplateException" => {
+                    CreateTemplateError::InvalidTemplate(String::from(parsed_error.message))
+                }
+                "LimitExceededException" => {
+                    CreateTemplateError::LimitExceeded(String::from(parsed_error.message))
+                }
+                _ => CreateTemplateError::Unknown(String::from(body)),
+            },
+            Err(_) => CreateTemplateError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for CreateTemplateError {
+    fn from(err: XmlParseError) -> CreateTemplateError {
+        let XmlParseError(message) = err;
+        CreateTemplateError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for CreateTemplateError {
+    fn from(err: CredentialsError) -> CreateTemplateError {
+        CreateTemplateError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateTemplateError {
+    fn from(err: HttpDispatchError) -> CreateTemplateError {
+        CreateTemplateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateTemplateError {
+    fn from(err: io::Error) -> CreateTemplateError {
+        CreateTemplateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateTemplateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateTemplateError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateTemplateError::AlreadyExists(ref cause) => cause,
+            CreateTemplateError::InvalidTemplate(ref cause) => cause,
+            CreateTemplateError::LimitExceeded(ref cause) => cause,
+            CreateTemplateError::Validation(ref cause) => cause,
+            CreateTemplateError::Credentials(ref err) => err.description(),
+            CreateTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CreateTemplateError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteConfigurationSet
 #[derive(Debug, PartialEq)]
 pub enum DeleteConfigurationSetError {
@@ -7569,6 +10020,156 @@ impl Error for DeleteConfigurationSetEventDestinationError {
                 dispatch_error.description()
             }
             DeleteConfigurationSetEventDestinationError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteConfigurationSetTrackingOptions
+#[derive(Debug, PartialEq)]
+pub enum DeleteConfigurationSetTrackingOptionsError {
+    /// <p>Indicates that the configuration set does not exist.</p>
+    ConfigurationSetDoesNotExist(String),
+    /// <p>Indicates that the TrackingOptions object you specified does not exist.</p>
+    TrackingOptionsDoesNotExist(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteConfigurationSetTrackingOptionsError {
+    pub fn from_body(body: &str) -> DeleteConfigurationSetTrackingOptionsError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "ConfigurationSetDoesNotExistException" => {
+                    DeleteConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "TrackingOptionsDoesNotExistException" => {
+                    DeleteConfigurationSetTrackingOptionsError::TrackingOptionsDoesNotExist(
+                        String::from(parsed_error.message),
+                    )
+                }
+                _ => DeleteConfigurationSetTrackingOptionsError::Unknown(String::from(body)),
+            },
+            Err(_) => DeleteConfigurationSetTrackingOptionsError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DeleteConfigurationSetTrackingOptionsError {
+    fn from(err: XmlParseError) -> DeleteConfigurationSetTrackingOptionsError {
+        let XmlParseError(message) = err;
+        DeleteConfigurationSetTrackingOptionsError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DeleteConfigurationSetTrackingOptionsError {
+    fn from(err: CredentialsError) -> DeleteConfigurationSetTrackingOptionsError {
+        DeleteConfigurationSetTrackingOptionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteConfigurationSetTrackingOptionsError {
+    fn from(err: HttpDispatchError) -> DeleteConfigurationSetTrackingOptionsError {
+        DeleteConfigurationSetTrackingOptionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteConfigurationSetTrackingOptionsError {
+    fn from(err: io::Error) -> DeleteConfigurationSetTrackingOptionsError {
+        DeleteConfigurationSetTrackingOptionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteConfigurationSetTrackingOptionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteConfigurationSetTrackingOptionsError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(ref cause) => {
+                cause
+            }
+            DeleteConfigurationSetTrackingOptionsError::TrackingOptionsDoesNotExist(ref cause) => {
+                cause
+            }
+            DeleteConfigurationSetTrackingOptionsError::Validation(ref cause) => cause,
+            DeleteConfigurationSetTrackingOptionsError::Credentials(ref err) => err.description(),
+            DeleteConfigurationSetTrackingOptionsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteConfigurationSetTrackingOptionsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteCustomVerificationEmailTemplate
+#[derive(Debug, PartialEq)]
+pub enum DeleteCustomVerificationEmailTemplateError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteCustomVerificationEmailTemplateError {
+    pub fn from_body(body: &str) -> DeleteCustomVerificationEmailTemplateError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => DeleteCustomVerificationEmailTemplateError::Unknown(String::from(body)),
+            },
+            Err(_) => DeleteCustomVerificationEmailTemplateError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DeleteCustomVerificationEmailTemplateError {
+    fn from(err: XmlParseError) -> DeleteCustomVerificationEmailTemplateError {
+        let XmlParseError(message) = err;
+        DeleteCustomVerificationEmailTemplateError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DeleteCustomVerificationEmailTemplateError {
+    fn from(err: CredentialsError) -> DeleteCustomVerificationEmailTemplateError {
+        DeleteCustomVerificationEmailTemplateError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteCustomVerificationEmailTemplateError {
+    fn from(err: HttpDispatchError) -> DeleteCustomVerificationEmailTemplateError {
+        DeleteCustomVerificationEmailTemplateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteCustomVerificationEmailTemplateError {
+    fn from(err: io::Error) -> DeleteCustomVerificationEmailTemplateError {
+        DeleteCustomVerificationEmailTemplateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteCustomVerificationEmailTemplateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteCustomVerificationEmailTemplateError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteCustomVerificationEmailTemplateError::Validation(ref cause) => cause,
+            DeleteCustomVerificationEmailTemplateError::Credentials(ref err) => err.description(),
+            DeleteCustomVerificationEmailTemplateError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteCustomVerificationEmailTemplateError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -7904,6 +10505,69 @@ impl Error for DeleteReceiptRuleSetError {
                 dispatch_error.description()
             }
             DeleteReceiptRuleSetError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteTemplate
+#[derive(Debug, PartialEq)]
+pub enum DeleteTemplateError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteTemplateError {
+    pub fn from_body(body: &str) -> DeleteTemplateError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => DeleteTemplateError::Unknown(String::from(body)),
+            },
+            Err(_) => DeleteTemplateError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DeleteTemplateError {
+    fn from(err: XmlParseError) -> DeleteTemplateError {
+        let XmlParseError(message) = err;
+        DeleteTemplateError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DeleteTemplateError {
+    fn from(err: CredentialsError) -> DeleteTemplateError {
+        DeleteTemplateError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteTemplateError {
+    fn from(err: HttpDispatchError) -> DeleteTemplateError {
+        DeleteTemplateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteTemplateError {
+    fn from(err: io::Error) -> DeleteTemplateError {
+        DeleteTemplateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteTemplateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteTemplateError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteTemplateError::Validation(ref cause) => cause,
+            DeleteTemplateError::Credentials(ref err) => err.description(),
+            DeleteTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteTemplateError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -8258,6 +10922,139 @@ impl Error for DescribeReceiptRuleSetError {
             }
             DescribeReceiptRuleSetError::Unknown(ref cause) => cause,
         }
+    }
+}
+/// Errors returned by GetAccountSendingEnabled
+#[derive(Debug, PartialEq)]
+pub enum GetAccountSendingEnabledError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetAccountSendingEnabledError {
+    pub fn from_body(body: &str) -> GetAccountSendingEnabledError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => GetAccountSendingEnabledError::Unknown(String::from(body)),
+            },
+            Err(_) => GetAccountSendingEnabledError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for GetAccountSendingEnabledError {
+    fn from(err: XmlParseError) -> GetAccountSendingEnabledError {
+        let XmlParseError(message) = err;
+        GetAccountSendingEnabledError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for GetAccountSendingEnabledError {
+    fn from(err: CredentialsError) -> GetAccountSendingEnabledError {
+        GetAccountSendingEnabledError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetAccountSendingEnabledError {
+    fn from(err: HttpDispatchError) -> GetAccountSendingEnabledError {
+        GetAccountSendingEnabledError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetAccountSendingEnabledError {
+    fn from(err: io::Error) -> GetAccountSendingEnabledError {
+        GetAccountSendingEnabledError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetAccountSendingEnabledError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetAccountSendingEnabledError {
+    fn description(&self) -> &str {
+        match *self {
+            GetAccountSendingEnabledError::Validation(ref cause) => cause,
+            GetAccountSendingEnabledError::Credentials(ref err) => err.description(),
+            GetAccountSendingEnabledError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetAccountSendingEnabledError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetCustomVerificationEmailTemplate
+#[derive(Debug, PartialEq)]
+pub enum GetCustomVerificationEmailTemplateError {
+    /// <p>Indicates that a custom verification email template with the name you specified does not exist.</p>
+    CustomVerificationEmailTemplateDoesNotExist(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetCustomVerificationEmailTemplateError {
+    pub fn from_body(body: &str) -> GetCustomVerificationEmailTemplateError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+                            Ok(parsed_error) => {
+                                match &parsed_error.code[..] {
+                                    "CustomVerificationEmailTemplateDoesNotExistException" => GetCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(String::from(parsed_error.message)),_ => GetCustomVerificationEmailTemplateError::Unknown(String::from(body))
+                                }
+                           },
+                           Err(_) => GetCustomVerificationEmailTemplateError::Unknown(body.to_string())
+                       }
+    }
+}
+
+impl From<XmlParseError> for GetCustomVerificationEmailTemplateError {
+    fn from(err: XmlParseError) -> GetCustomVerificationEmailTemplateError {
+        let XmlParseError(message) = err;
+        GetCustomVerificationEmailTemplateError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for GetCustomVerificationEmailTemplateError {
+    fn from(err: CredentialsError) -> GetCustomVerificationEmailTemplateError {
+        GetCustomVerificationEmailTemplateError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetCustomVerificationEmailTemplateError {
+    fn from(err: HttpDispatchError) -> GetCustomVerificationEmailTemplateError {
+        GetCustomVerificationEmailTemplateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetCustomVerificationEmailTemplateError {
+    fn from(err: io::Error) -> GetCustomVerificationEmailTemplateError {
+        GetCustomVerificationEmailTemplateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetCustomVerificationEmailTemplateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetCustomVerificationEmailTemplateError {
+    fn description(&self) -> &str {
+        match *self {
+                            GetCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(ref cause) => cause,
+GetCustomVerificationEmailTemplateError::Validation(ref cause) => cause,
+GetCustomVerificationEmailTemplateError::Credentials(ref err) => err.description(),
+GetCustomVerificationEmailTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+GetCustomVerificationEmailTemplateError::Unknown(ref cause) => cause
+                        }
     }
 }
 /// Errors returned by GetIdentityDkimAttributes
@@ -8713,6 +11510,75 @@ impl Error for GetSendStatisticsError {
         }
     }
 }
+/// Errors returned by GetTemplate
+#[derive(Debug, PartialEq)]
+pub enum GetTemplateError {
+    /// <p>Indicates that the Template object you specified does not exist in your Amazon SES account.</p>
+    TemplateDoesNotExist(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetTemplateError {
+    pub fn from_body(body: &str) -> GetTemplateError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "TemplateDoesNotExistException" => {
+                    GetTemplateError::TemplateDoesNotExist(String::from(parsed_error.message))
+                }
+                _ => GetTemplateError::Unknown(String::from(body)),
+            },
+            Err(_) => GetTemplateError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for GetTemplateError {
+    fn from(err: XmlParseError) -> GetTemplateError {
+        let XmlParseError(message) = err;
+        GetTemplateError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for GetTemplateError {
+    fn from(err: CredentialsError) -> GetTemplateError {
+        GetTemplateError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetTemplateError {
+    fn from(err: HttpDispatchError) -> GetTemplateError {
+        GetTemplateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetTemplateError {
+    fn from(err: io::Error) -> GetTemplateError {
+        GetTemplateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetTemplateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetTemplateError {
+    fn description(&self) -> &str {
+        match *self {
+            GetTemplateError::TemplateDoesNotExist(ref cause) => cause,
+            GetTemplateError::Validation(ref cause) => cause,
+            GetTemplateError::Credentials(ref err) => err.description(),
+            GetTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetTemplateError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListConfigurationSets
 #[derive(Debug, PartialEq)]
 pub enum ListConfigurationSetsError {
@@ -8775,6 +11641,71 @@ impl Error for ListConfigurationSetsError {
                 dispatch_error.description()
             }
             ListConfigurationSetsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListCustomVerificationEmailTemplates
+#[derive(Debug, PartialEq)]
+pub enum ListCustomVerificationEmailTemplatesError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListCustomVerificationEmailTemplatesError {
+    pub fn from_body(body: &str) -> ListCustomVerificationEmailTemplatesError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => ListCustomVerificationEmailTemplatesError::Unknown(String::from(body)),
+            },
+            Err(_) => ListCustomVerificationEmailTemplatesError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for ListCustomVerificationEmailTemplatesError {
+    fn from(err: XmlParseError) -> ListCustomVerificationEmailTemplatesError {
+        let XmlParseError(message) = err;
+        ListCustomVerificationEmailTemplatesError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for ListCustomVerificationEmailTemplatesError {
+    fn from(err: CredentialsError) -> ListCustomVerificationEmailTemplatesError {
+        ListCustomVerificationEmailTemplatesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListCustomVerificationEmailTemplatesError {
+    fn from(err: HttpDispatchError) -> ListCustomVerificationEmailTemplatesError {
+        ListCustomVerificationEmailTemplatesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListCustomVerificationEmailTemplatesError {
+    fn from(err: io::Error) -> ListCustomVerificationEmailTemplatesError {
+        ListCustomVerificationEmailTemplatesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListCustomVerificationEmailTemplatesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListCustomVerificationEmailTemplatesError {
+    fn description(&self) -> &str {
+        match *self {
+            ListCustomVerificationEmailTemplatesError::Validation(ref cause) => cause,
+            ListCustomVerificationEmailTemplatesError::Credentials(ref err) => err.description(),
+            ListCustomVerificationEmailTemplatesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListCustomVerificationEmailTemplatesError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -9033,6 +11964,69 @@ impl Error for ListReceiptRuleSetsError {
                 dispatch_error.description()
             }
             ListReceiptRuleSetsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListTemplates
+#[derive(Debug, PartialEq)]
+pub enum ListTemplatesError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListTemplatesError {
+    pub fn from_body(body: &str) -> ListTemplatesError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => ListTemplatesError::Unknown(String::from(body)),
+            },
+            Err(_) => ListTemplatesError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for ListTemplatesError {
+    fn from(err: XmlParseError) -> ListTemplatesError {
+        let XmlParseError(message) = err;
+        ListTemplatesError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for ListTemplatesError {
+    fn from(err: CredentialsError) -> ListTemplatesError {
+        ListTemplatesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListTemplatesError {
+    fn from(err: HttpDispatchError) -> ListTemplatesError {
+        ListTemplatesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTemplatesError {
+    fn from(err: io::Error) -> ListTemplatesError {
+        ListTemplatesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListTemplatesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTemplatesError {
+    fn description(&self) -> &str {
+        match *self {
+            ListTemplatesError::Validation(ref cause) => cause,
+            ListTemplatesError::Credentials(ref err) => err.description(),
+            ListTemplatesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ListTemplatesError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -9318,11 +12312,231 @@ impl Error for SendBounceError {
         }
     }
 }
+/// Errors returned by SendBulkTemplatedEmail
+#[derive(Debug, PartialEq)]
+pub enum SendBulkTemplatedEmailError {
+    /// <p>Indicates that email sending is disabled for your entire Amazon SES account.</p> <p>You can enable or disable email sending for your Amazon SES account using <a>UpdateAccountSendingEnabled</a>.</p>
+    AccountSendingPaused(String),
+    /// <p>Indicates that the configuration set does not exist.</p>
+    ConfigurationSetDoesNotExist(String),
+    /// <p>Indicates that email sending is disabled for the configuration set.</p> <p>You can enable or disable email sending for a configuration set using <a>UpdateConfigurationSetSendingEnabled</a>.</p>
+    ConfigurationSetSendingPaused(String),
+    /// <p> Indicates that the message could not be sent because Amazon SES could not read the MX record required to use the specified MAIL FROM domain. For information about editing the custom MAIL FROM domain settings for an identity, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from-edit.html">Amazon SES Developer Guide</a>.</p>
+    MailFromDomainNotVerified(String),
+    /// <p>Indicates that the action failed, and the message could not be sent. Check the error stack for more information about what caused the error.</p>
+    MessageRejected(String),
+    /// <p>Indicates that the Template object you specified does not exist in your Amazon SES account.</p>
+    TemplateDoesNotExist(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl SendBulkTemplatedEmailError {
+    pub fn from_body(body: &str) -> SendBulkTemplatedEmailError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccountSendingPausedException" => {
+                    SendBulkTemplatedEmailError::AccountSendingPaused(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "ConfigurationSetDoesNotExistException" => {
+                    SendBulkTemplatedEmailError::ConfigurationSetDoesNotExist(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "ConfigurationSetSendingPausedException" => {
+                    SendBulkTemplatedEmailError::ConfigurationSetSendingPaused(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "MailFromDomainNotVerifiedException" => {
+                    SendBulkTemplatedEmailError::MailFromDomainNotVerified(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "MessageRejected" => {
+                    SendBulkTemplatedEmailError::MessageRejected(String::from(parsed_error.message))
+                }
+                "TemplateDoesNotExistException" => {
+                    SendBulkTemplatedEmailError::TemplateDoesNotExist(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => SendBulkTemplatedEmailError::Unknown(String::from(body)),
+            },
+            Err(_) => SendBulkTemplatedEmailError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for SendBulkTemplatedEmailError {
+    fn from(err: XmlParseError) -> SendBulkTemplatedEmailError {
+        let XmlParseError(message) = err;
+        SendBulkTemplatedEmailError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for SendBulkTemplatedEmailError {
+    fn from(err: CredentialsError) -> SendBulkTemplatedEmailError {
+        SendBulkTemplatedEmailError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for SendBulkTemplatedEmailError {
+    fn from(err: HttpDispatchError) -> SendBulkTemplatedEmailError {
+        SendBulkTemplatedEmailError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SendBulkTemplatedEmailError {
+    fn from(err: io::Error) -> SendBulkTemplatedEmailError {
+        SendBulkTemplatedEmailError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for SendBulkTemplatedEmailError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SendBulkTemplatedEmailError {
+    fn description(&self) -> &str {
+        match *self {
+            SendBulkTemplatedEmailError::AccountSendingPaused(ref cause) => cause,
+            SendBulkTemplatedEmailError::ConfigurationSetDoesNotExist(ref cause) => cause,
+            SendBulkTemplatedEmailError::ConfigurationSetSendingPaused(ref cause) => cause,
+            SendBulkTemplatedEmailError::MailFromDomainNotVerified(ref cause) => cause,
+            SendBulkTemplatedEmailError::MessageRejected(ref cause) => cause,
+            SendBulkTemplatedEmailError::TemplateDoesNotExist(ref cause) => cause,
+            SendBulkTemplatedEmailError::Validation(ref cause) => cause,
+            SendBulkTemplatedEmailError::Credentials(ref err) => err.description(),
+            SendBulkTemplatedEmailError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            SendBulkTemplatedEmailError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by SendCustomVerificationEmail
+#[derive(Debug, PartialEq)]
+pub enum SendCustomVerificationEmailError {
+    /// <p>Indicates that the configuration set does not exist.</p>
+    ConfigurationSetDoesNotExist(String),
+    /// <p>Indicates that a custom verification email template with the name you specified does not exist.</p>
+    CustomVerificationEmailTemplateDoesNotExist(String),
+    /// <p>Indicates that the sender address specified for a custom verification email is not verified, and is therefore not eligible to send the custom verification email. </p>
+    FromEmailAddressNotVerified(String),
+    /// <p>Indicates that the action failed, and the message could not be sent. Check the error stack for more information about what caused the error.</p>
+    MessageRejected(String),
+    /// <p>Indicates that the account has not been granted production access.</p>
+    ProductionAccessNotGranted(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl SendCustomVerificationEmailError {
+    pub fn from_body(body: &str) -> SendCustomVerificationEmailError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "ConfigurationSetDoesNotExistException" => {
+                    SendCustomVerificationEmailError::ConfigurationSetDoesNotExist(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "CustomVerificationEmailTemplateDoesNotExistException" => {
+                    SendCustomVerificationEmailError::CustomVerificationEmailTemplateDoesNotExist(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "FromEmailAddressNotVerifiedException" => {
+                    SendCustomVerificationEmailError::FromEmailAddressNotVerified(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "MessageRejected" => SendCustomVerificationEmailError::MessageRejected(
+                    String::from(parsed_error.message),
+                ),
+                "ProductionAccessNotGrantedException" => {
+                    SendCustomVerificationEmailError::ProductionAccessNotGranted(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => SendCustomVerificationEmailError::Unknown(String::from(body)),
+            },
+            Err(_) => SendCustomVerificationEmailError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for SendCustomVerificationEmailError {
+    fn from(err: XmlParseError) -> SendCustomVerificationEmailError {
+        let XmlParseError(message) = err;
+        SendCustomVerificationEmailError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for SendCustomVerificationEmailError {
+    fn from(err: CredentialsError) -> SendCustomVerificationEmailError {
+        SendCustomVerificationEmailError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for SendCustomVerificationEmailError {
+    fn from(err: HttpDispatchError) -> SendCustomVerificationEmailError {
+        SendCustomVerificationEmailError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SendCustomVerificationEmailError {
+    fn from(err: io::Error) -> SendCustomVerificationEmailError {
+        SendCustomVerificationEmailError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for SendCustomVerificationEmailError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SendCustomVerificationEmailError {
+    fn description(&self) -> &str {
+        match *self {
+            SendCustomVerificationEmailError::ConfigurationSetDoesNotExist(ref cause) => cause,
+            SendCustomVerificationEmailError::CustomVerificationEmailTemplateDoesNotExist(
+                ref cause,
+            ) => cause,
+            SendCustomVerificationEmailError::FromEmailAddressNotVerified(ref cause) => cause,
+            SendCustomVerificationEmailError::MessageRejected(ref cause) => cause,
+            SendCustomVerificationEmailError::ProductionAccessNotGranted(ref cause) => cause,
+            SendCustomVerificationEmailError::Validation(ref cause) => cause,
+            SendCustomVerificationEmailError::Credentials(ref err) => err.description(),
+            SendCustomVerificationEmailError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            SendCustomVerificationEmailError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by SendEmail
 #[derive(Debug, PartialEq)]
 pub enum SendEmailError {
+    /// <p>Indicates that email sending is disabled for your entire Amazon SES account.</p> <p>You can enable or disable email sending for your Amazon SES account using <a>UpdateAccountSendingEnabled</a>.</p>
+    AccountSendingPaused(String),
     /// <p>Indicates that the configuration set does not exist.</p>
     ConfigurationSetDoesNotExist(String),
+    /// <p>Indicates that email sending is disabled for the configuration set.</p> <p>You can enable or disable email sending for a configuration set using <a>UpdateConfigurationSetSendingEnabled</a>.</p>
+    ConfigurationSetSendingPaused(String),
     /// <p> Indicates that the message could not be sent because Amazon SES could not read the MX record required to use the specified MAIL FROM domain. For information about editing the custom MAIL FROM domain settings for an identity, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from-edit.html">Amazon SES Developer Guide</a>.</p>
     MailFromDomainNotVerified(String),
     /// <p>Indicates that the action failed, and the message could not be sent. Check the error stack for more information about what caused the error.</p>
@@ -9344,8 +12558,16 @@ impl SendEmailError {
         find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccountSendingPausedException" => {
+                    SendEmailError::AccountSendingPaused(String::from(parsed_error.message))
+                }
                 "ConfigurationSetDoesNotExistException" => {
                     SendEmailError::ConfigurationSetDoesNotExist(String::from(parsed_error.message))
+                }
+                "ConfigurationSetSendingPausedException" => {
+                    SendEmailError::ConfigurationSetSendingPaused(String::from(
+                        parsed_error.message,
+                    ))
                 }
                 "MailFromDomainNotVerifiedException" => {
                     SendEmailError::MailFromDomainNotVerified(String::from(parsed_error.message))
@@ -9389,7 +12611,9 @@ impl fmt::Display for SendEmailError {
 impl Error for SendEmailError {
     fn description(&self) -> &str {
         match *self {
+            SendEmailError::AccountSendingPaused(ref cause) => cause,
             SendEmailError::ConfigurationSetDoesNotExist(ref cause) => cause,
+            SendEmailError::ConfigurationSetSendingPaused(ref cause) => cause,
             SendEmailError::MailFromDomainNotVerified(ref cause) => cause,
             SendEmailError::MessageRejected(ref cause) => cause,
             SendEmailError::Validation(ref cause) => cause,
@@ -9402,8 +12626,12 @@ impl Error for SendEmailError {
 /// Errors returned by SendRawEmail
 #[derive(Debug, PartialEq)]
 pub enum SendRawEmailError {
+    /// <p>Indicates that email sending is disabled for your entire Amazon SES account.</p> <p>You can enable or disable email sending for your Amazon SES account using <a>UpdateAccountSendingEnabled</a>.</p>
+    AccountSendingPaused(String),
     /// <p>Indicates that the configuration set does not exist.</p>
     ConfigurationSetDoesNotExist(String),
+    /// <p>Indicates that email sending is disabled for the configuration set.</p> <p>You can enable or disable email sending for a configuration set using <a>UpdateConfigurationSetSendingEnabled</a>.</p>
+    ConfigurationSetSendingPaused(String),
     /// <p> Indicates that the message could not be sent because Amazon SES could not read the MX record required to use the specified MAIL FROM domain. For information about editing the custom MAIL FROM domain settings for an identity, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from-edit.html">Amazon SES Developer Guide</a>.</p>
     MailFromDomainNotVerified(String),
     /// <p>Indicates that the action failed, and the message could not be sent. Check the error stack for more information about what caused the error.</p>
@@ -9425,8 +12653,16 @@ impl SendRawEmailError {
         find_start_element(&mut stack);
         match XmlErrorDeserializer::deserialize("Error", &mut stack) {
             Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccountSendingPausedException" => {
+                    SendRawEmailError::AccountSendingPaused(String::from(parsed_error.message))
+                }
                 "ConfigurationSetDoesNotExistException" => {
                     SendRawEmailError::ConfigurationSetDoesNotExist(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "ConfigurationSetSendingPausedException" => {
+                    SendRawEmailError::ConfigurationSetSendingPaused(String::from(
                         parsed_error.message,
                     ))
                 }
@@ -9472,13 +12708,122 @@ impl fmt::Display for SendRawEmailError {
 impl Error for SendRawEmailError {
     fn description(&self) -> &str {
         match *self {
+            SendRawEmailError::AccountSendingPaused(ref cause) => cause,
             SendRawEmailError::ConfigurationSetDoesNotExist(ref cause) => cause,
+            SendRawEmailError::ConfigurationSetSendingPaused(ref cause) => cause,
             SendRawEmailError::MailFromDomainNotVerified(ref cause) => cause,
             SendRawEmailError::MessageRejected(ref cause) => cause,
             SendRawEmailError::Validation(ref cause) => cause,
             SendRawEmailError::Credentials(ref err) => err.description(),
             SendRawEmailError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             SendRawEmailError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by SendTemplatedEmail
+#[derive(Debug, PartialEq)]
+pub enum SendTemplatedEmailError {
+    /// <p>Indicates that email sending is disabled for your entire Amazon SES account.</p> <p>You can enable or disable email sending for your Amazon SES account using <a>UpdateAccountSendingEnabled</a>.</p>
+    AccountSendingPaused(String),
+    /// <p>Indicates that the configuration set does not exist.</p>
+    ConfigurationSetDoesNotExist(String),
+    /// <p>Indicates that email sending is disabled for the configuration set.</p> <p>You can enable or disable email sending for a configuration set using <a>UpdateConfigurationSetSendingEnabled</a>.</p>
+    ConfigurationSetSendingPaused(String),
+    /// <p> Indicates that the message could not be sent because Amazon SES could not read the MX record required to use the specified MAIL FROM domain. For information about editing the custom MAIL FROM domain settings for an identity, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from-edit.html">Amazon SES Developer Guide</a>.</p>
+    MailFromDomainNotVerified(String),
+    /// <p>Indicates that the action failed, and the message could not be sent. Check the error stack for more information about what caused the error.</p>
+    MessageRejected(String),
+    /// <p>Indicates that the Template object you specified does not exist in your Amazon SES account.</p>
+    TemplateDoesNotExist(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl SendTemplatedEmailError {
+    pub fn from_body(body: &str) -> SendTemplatedEmailError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "AccountSendingPausedException" => SendTemplatedEmailError::AccountSendingPaused(
+                    String::from(parsed_error.message),
+                ),
+                "ConfigurationSetDoesNotExistException" => {
+                    SendTemplatedEmailError::ConfigurationSetDoesNotExist(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "ConfigurationSetSendingPausedException" => {
+                    SendTemplatedEmailError::ConfigurationSetSendingPaused(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "MailFromDomainNotVerifiedException" => {
+                    SendTemplatedEmailError::MailFromDomainNotVerified(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "MessageRejected" => {
+                    SendTemplatedEmailError::MessageRejected(String::from(parsed_error.message))
+                }
+                "TemplateDoesNotExistException" => SendTemplatedEmailError::TemplateDoesNotExist(
+                    String::from(parsed_error.message),
+                ),
+                _ => SendTemplatedEmailError::Unknown(String::from(body)),
+            },
+            Err(_) => SendTemplatedEmailError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for SendTemplatedEmailError {
+    fn from(err: XmlParseError) -> SendTemplatedEmailError {
+        let XmlParseError(message) = err;
+        SendTemplatedEmailError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for SendTemplatedEmailError {
+    fn from(err: CredentialsError) -> SendTemplatedEmailError {
+        SendTemplatedEmailError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for SendTemplatedEmailError {
+    fn from(err: HttpDispatchError) -> SendTemplatedEmailError {
+        SendTemplatedEmailError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SendTemplatedEmailError {
+    fn from(err: io::Error) -> SendTemplatedEmailError {
+        SendTemplatedEmailError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for SendTemplatedEmailError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SendTemplatedEmailError {
+    fn description(&self) -> &str {
+        match *self {
+            SendTemplatedEmailError::AccountSendingPaused(ref cause) => cause,
+            SendTemplatedEmailError::ConfigurationSetDoesNotExist(ref cause) => cause,
+            SendTemplatedEmailError::ConfigurationSetSendingPaused(ref cause) => cause,
+            SendTemplatedEmailError::MailFromDomainNotVerified(ref cause) => cause,
+            SendTemplatedEmailError::MessageRejected(ref cause) => cause,
+            SendTemplatedEmailError::TemplateDoesNotExist(ref cause) => cause,
+            SendTemplatedEmailError::Validation(ref cause) => cause,
+            SendTemplatedEmailError::Credentials(ref err) => err.description(),
+            SendTemplatedEmailError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            SendTemplatedEmailError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -9961,6 +13306,158 @@ impl Error for SetReceiptRulePositionError {
         }
     }
 }
+/// Errors returned by TestRenderTemplate
+#[derive(Debug, PartialEq)]
+pub enum TestRenderTemplateError {
+    /// <p>Indicates that one or more of the replacement values you provided is invalid. This error may occur when the TemplateData object contains invalid JSON.</p>
+    InvalidRenderingParameter(String),
+    /// <p>Indicates that one or more of the replacement values for the specified template was not specified. Ensure that the TemplateData object contains references to all of the replacement tags in the specified template.</p>
+    MissingRenderingAttribute(String),
+    /// <p>Indicates that the Template object you specified does not exist in your Amazon SES account.</p>
+    TemplateDoesNotExist(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl TestRenderTemplateError {
+    pub fn from_body(body: &str) -> TestRenderTemplateError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "InvalidRenderingParameterException" => {
+                    TestRenderTemplateError::InvalidRenderingParameter(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "MissingRenderingAttributeException" => {
+                    TestRenderTemplateError::MissingRenderingAttribute(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "TemplateDoesNotExistException" => TestRenderTemplateError::TemplateDoesNotExist(
+                    String::from(parsed_error.message),
+                ),
+                _ => TestRenderTemplateError::Unknown(String::from(body)),
+            },
+            Err(_) => TestRenderTemplateError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for TestRenderTemplateError {
+    fn from(err: XmlParseError) -> TestRenderTemplateError {
+        let XmlParseError(message) = err;
+        TestRenderTemplateError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for TestRenderTemplateError {
+    fn from(err: CredentialsError) -> TestRenderTemplateError {
+        TestRenderTemplateError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for TestRenderTemplateError {
+    fn from(err: HttpDispatchError) -> TestRenderTemplateError {
+        TestRenderTemplateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for TestRenderTemplateError {
+    fn from(err: io::Error) -> TestRenderTemplateError {
+        TestRenderTemplateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for TestRenderTemplateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TestRenderTemplateError {
+    fn description(&self) -> &str {
+        match *self {
+            TestRenderTemplateError::InvalidRenderingParameter(ref cause) => cause,
+            TestRenderTemplateError::MissingRenderingAttribute(ref cause) => cause,
+            TestRenderTemplateError::TemplateDoesNotExist(ref cause) => cause,
+            TestRenderTemplateError::Validation(ref cause) => cause,
+            TestRenderTemplateError::Credentials(ref err) => err.description(),
+            TestRenderTemplateError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            TestRenderTemplateError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdateAccountSendingEnabled
+#[derive(Debug, PartialEq)]
+pub enum UpdateAccountSendingEnabledError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateAccountSendingEnabledError {
+    pub fn from_body(body: &str) -> UpdateAccountSendingEnabledError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => UpdateAccountSendingEnabledError::Unknown(String::from(body)),
+            },
+            Err(_) => UpdateAccountSendingEnabledError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for UpdateAccountSendingEnabledError {
+    fn from(err: XmlParseError) -> UpdateAccountSendingEnabledError {
+        let XmlParseError(message) = err;
+        UpdateAccountSendingEnabledError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for UpdateAccountSendingEnabledError {
+    fn from(err: CredentialsError) -> UpdateAccountSendingEnabledError {
+        UpdateAccountSendingEnabledError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateAccountSendingEnabledError {
+    fn from(err: HttpDispatchError) -> UpdateAccountSendingEnabledError {
+        UpdateAccountSendingEnabledError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateAccountSendingEnabledError {
+    fn from(err: io::Error) -> UpdateAccountSendingEnabledError {
+        UpdateAccountSendingEnabledError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateAccountSendingEnabledError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateAccountSendingEnabledError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateAccountSendingEnabledError::Validation(ref cause) => cause,
+            UpdateAccountSendingEnabledError::Credentials(ref err) => err.description(),
+            UpdateAccountSendingEnabledError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateAccountSendingEnabledError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateConfigurationSetEventDestination
 #[derive(Debug, PartialEq)]
 pub enum UpdateConfigurationSetEventDestinationError {
@@ -10074,6 +13571,324 @@ impl Error for UpdateConfigurationSetEventDestinationError {
         }
     }
 }
+/// Errors returned by UpdateConfigurationSetReputationMetricsEnabled
+#[derive(Debug, PartialEq)]
+pub enum UpdateConfigurationSetReputationMetricsEnabledError {
+    /// <p>Indicates that the configuration set does not exist.</p>
+    ConfigurationSetDoesNotExist(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateConfigurationSetReputationMetricsEnabledError {
+    pub fn from_body(body: &str) -> UpdateConfigurationSetReputationMetricsEnabledError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+                            Ok(parsed_error) => {
+                                match &parsed_error.code[..] {
+                                    "ConfigurationSetDoesNotExistException" => UpdateConfigurationSetReputationMetricsEnabledError::ConfigurationSetDoesNotExist(String::from(parsed_error.message)),_ => UpdateConfigurationSetReputationMetricsEnabledError::Unknown(String::from(body))
+                                }
+                           },
+                           Err(_) => UpdateConfigurationSetReputationMetricsEnabledError::Unknown(body.to_string())
+                       }
+    }
+}
+
+impl From<XmlParseError> for UpdateConfigurationSetReputationMetricsEnabledError {
+    fn from(err: XmlParseError) -> UpdateConfigurationSetReputationMetricsEnabledError {
+        let XmlParseError(message) = err;
+        UpdateConfigurationSetReputationMetricsEnabledError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for UpdateConfigurationSetReputationMetricsEnabledError {
+    fn from(err: CredentialsError) -> UpdateConfigurationSetReputationMetricsEnabledError {
+        UpdateConfigurationSetReputationMetricsEnabledError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateConfigurationSetReputationMetricsEnabledError {
+    fn from(err: HttpDispatchError) -> UpdateConfigurationSetReputationMetricsEnabledError {
+        UpdateConfigurationSetReputationMetricsEnabledError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateConfigurationSetReputationMetricsEnabledError {
+    fn from(err: io::Error) -> UpdateConfigurationSetReputationMetricsEnabledError {
+        UpdateConfigurationSetReputationMetricsEnabledError::HttpDispatch(HttpDispatchError::from(
+            err,
+        ))
+    }
+}
+impl fmt::Display for UpdateConfigurationSetReputationMetricsEnabledError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateConfigurationSetReputationMetricsEnabledError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateConfigurationSetReputationMetricsEnabledError::ConfigurationSetDoesNotExist(
+                ref cause,
+            ) => cause,
+            UpdateConfigurationSetReputationMetricsEnabledError::Validation(ref cause) => cause,
+            UpdateConfigurationSetReputationMetricsEnabledError::Credentials(ref err) => {
+                err.description()
+            }
+            UpdateConfigurationSetReputationMetricsEnabledError::HttpDispatch(
+                ref dispatch_error,
+            ) => dispatch_error.description(),
+            UpdateConfigurationSetReputationMetricsEnabledError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdateConfigurationSetSendingEnabled
+#[derive(Debug, PartialEq)]
+pub enum UpdateConfigurationSetSendingEnabledError {
+    /// <p>Indicates that the configuration set does not exist.</p>
+    ConfigurationSetDoesNotExist(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateConfigurationSetSendingEnabledError {
+    pub fn from_body(body: &str) -> UpdateConfigurationSetSendingEnabledError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "ConfigurationSetDoesNotExistException" => {
+                    UpdateConfigurationSetSendingEnabledError::ConfigurationSetDoesNotExist(
+                        String::from(parsed_error.message),
+                    )
+                }
+                _ => UpdateConfigurationSetSendingEnabledError::Unknown(String::from(body)),
+            },
+            Err(_) => UpdateConfigurationSetSendingEnabledError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for UpdateConfigurationSetSendingEnabledError {
+    fn from(err: XmlParseError) -> UpdateConfigurationSetSendingEnabledError {
+        let XmlParseError(message) = err;
+        UpdateConfigurationSetSendingEnabledError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for UpdateConfigurationSetSendingEnabledError {
+    fn from(err: CredentialsError) -> UpdateConfigurationSetSendingEnabledError {
+        UpdateConfigurationSetSendingEnabledError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateConfigurationSetSendingEnabledError {
+    fn from(err: HttpDispatchError) -> UpdateConfigurationSetSendingEnabledError {
+        UpdateConfigurationSetSendingEnabledError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateConfigurationSetSendingEnabledError {
+    fn from(err: io::Error) -> UpdateConfigurationSetSendingEnabledError {
+        UpdateConfigurationSetSendingEnabledError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateConfigurationSetSendingEnabledError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateConfigurationSetSendingEnabledError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateConfigurationSetSendingEnabledError::ConfigurationSetDoesNotExist(ref cause) => {
+                cause
+            }
+            UpdateConfigurationSetSendingEnabledError::Validation(ref cause) => cause,
+            UpdateConfigurationSetSendingEnabledError::Credentials(ref err) => err.description(),
+            UpdateConfigurationSetSendingEnabledError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateConfigurationSetSendingEnabledError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdateConfigurationSetTrackingOptions
+#[derive(Debug, PartialEq)]
+pub enum UpdateConfigurationSetTrackingOptionsError {
+    /// <p>Indicates that the configuration set does not exist.</p>
+    ConfigurationSetDoesNotExist(String),
+    /// <p><p>Indicates that the custom domain to be used for open and click tracking redirects is invalid. This error appears most often in the following situations:</p> <ul> <li> <p>When the tracking domain you specified is not verified in Amazon SES.</p> </li> <li> <p>When the tracking domain you specified is not a valid domain or subdomain.</p> </li> </ul></p>
+    InvalidTrackingOptions(String),
+    /// <p>Indicates that the TrackingOptions object you specified does not exist.</p>
+    TrackingOptionsDoesNotExist(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateConfigurationSetTrackingOptionsError {
+    pub fn from_body(body: &str) -> UpdateConfigurationSetTrackingOptionsError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "ConfigurationSetDoesNotExistException" => {
+                    UpdateConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "InvalidTrackingOptionsException" => {
+                    UpdateConfigurationSetTrackingOptionsError::InvalidTrackingOptions(
+                        String::from(parsed_error.message),
+                    )
+                }
+                "TrackingOptionsDoesNotExistException" => {
+                    UpdateConfigurationSetTrackingOptionsError::TrackingOptionsDoesNotExist(
+                        String::from(parsed_error.message),
+                    )
+                }
+                _ => UpdateConfigurationSetTrackingOptionsError::Unknown(String::from(body)),
+            },
+            Err(_) => UpdateConfigurationSetTrackingOptionsError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for UpdateConfigurationSetTrackingOptionsError {
+    fn from(err: XmlParseError) -> UpdateConfigurationSetTrackingOptionsError {
+        let XmlParseError(message) = err;
+        UpdateConfigurationSetTrackingOptionsError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for UpdateConfigurationSetTrackingOptionsError {
+    fn from(err: CredentialsError) -> UpdateConfigurationSetTrackingOptionsError {
+        UpdateConfigurationSetTrackingOptionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateConfigurationSetTrackingOptionsError {
+    fn from(err: HttpDispatchError) -> UpdateConfigurationSetTrackingOptionsError {
+        UpdateConfigurationSetTrackingOptionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateConfigurationSetTrackingOptionsError {
+    fn from(err: io::Error) -> UpdateConfigurationSetTrackingOptionsError {
+        UpdateConfigurationSetTrackingOptionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateConfigurationSetTrackingOptionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateConfigurationSetTrackingOptionsError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateConfigurationSetTrackingOptionsError::ConfigurationSetDoesNotExist(ref cause) => {
+                cause
+            }
+            UpdateConfigurationSetTrackingOptionsError::InvalidTrackingOptions(ref cause) => cause,
+            UpdateConfigurationSetTrackingOptionsError::TrackingOptionsDoesNotExist(ref cause) => {
+                cause
+            }
+            UpdateConfigurationSetTrackingOptionsError::Validation(ref cause) => cause,
+            UpdateConfigurationSetTrackingOptionsError::Credentials(ref err) => err.description(),
+            UpdateConfigurationSetTrackingOptionsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateConfigurationSetTrackingOptionsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdateCustomVerificationEmailTemplate
+#[derive(Debug, PartialEq)]
+pub enum UpdateCustomVerificationEmailTemplateError {
+    /// <p>Indicates that custom verification email template provided content is invalid.</p>
+    CustomVerificationEmailInvalidContent(String),
+    /// <p>Indicates that a custom verification email template with the name you specified does not exist.</p>
+    CustomVerificationEmailTemplateDoesNotExist(String),
+    /// <p>Indicates that the sender address specified for a custom verification email is not verified, and is therefore not eligible to send the custom verification email. </p>
+    FromEmailAddressNotVerified(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateCustomVerificationEmailTemplateError {
+    pub fn from_body(body: &str) -> UpdateCustomVerificationEmailTemplateError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+                            Ok(parsed_error) => {
+                                match &parsed_error.code[..] {
+                                    "CustomVerificationEmailInvalidContentException" => UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(String::from(parsed_error.message)),"CustomVerificationEmailTemplateDoesNotExistException" => UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(String::from(parsed_error.message)),"FromEmailAddressNotVerifiedException" => UpdateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(String::from(parsed_error.message)),_ => UpdateCustomVerificationEmailTemplateError::Unknown(String::from(body))
+                                }
+                           },
+                           Err(_) => UpdateCustomVerificationEmailTemplateError::Unknown(body.to_string())
+                       }
+    }
+}
+
+impl From<XmlParseError> for UpdateCustomVerificationEmailTemplateError {
+    fn from(err: XmlParseError) -> UpdateCustomVerificationEmailTemplateError {
+        let XmlParseError(message) = err;
+        UpdateCustomVerificationEmailTemplateError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for UpdateCustomVerificationEmailTemplateError {
+    fn from(err: CredentialsError) -> UpdateCustomVerificationEmailTemplateError {
+        UpdateCustomVerificationEmailTemplateError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateCustomVerificationEmailTemplateError {
+    fn from(err: HttpDispatchError) -> UpdateCustomVerificationEmailTemplateError {
+        UpdateCustomVerificationEmailTemplateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateCustomVerificationEmailTemplateError {
+    fn from(err: io::Error) -> UpdateCustomVerificationEmailTemplateError {
+        UpdateCustomVerificationEmailTemplateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateCustomVerificationEmailTemplateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateCustomVerificationEmailTemplateError {
+    fn description(&self) -> &str {
+        match *self {
+                            UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailInvalidContent(ref cause) => cause,
+UpdateCustomVerificationEmailTemplateError::CustomVerificationEmailTemplateDoesNotExist(ref cause) => cause,
+UpdateCustomVerificationEmailTemplateError::FromEmailAddressNotVerified(ref cause) => cause,
+UpdateCustomVerificationEmailTemplateError::Validation(ref cause) => cause,
+UpdateCustomVerificationEmailTemplateError::Credentials(ref err) => err.description(),
+UpdateCustomVerificationEmailTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+UpdateCustomVerificationEmailTemplateError::Unknown(ref cause) => cause
+                        }
+    }
+}
 /// Errors returned by UpdateReceiptRule
 #[derive(Debug, PartialEq)]
 pub enum UpdateReceiptRuleError {
@@ -10174,6 +13989,81 @@ impl Error for UpdateReceiptRuleError {
                 dispatch_error.description()
             }
             UpdateReceiptRuleError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdateTemplate
+#[derive(Debug, PartialEq)]
+pub enum UpdateTemplateError {
+    /// <p>Indicates that a template could not be created because it contained invalid JSON.</p>
+    InvalidTemplate(String),
+    /// <p>Indicates that the Template object you specified does not exist in your Amazon SES account.</p>
+    TemplateDoesNotExist(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateTemplateError {
+    pub fn from_body(body: &str) -> UpdateTemplateError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "InvalidTemplateException" => {
+                    UpdateTemplateError::InvalidTemplate(String::from(parsed_error.message))
+                }
+                "TemplateDoesNotExistException" => {
+                    UpdateTemplateError::TemplateDoesNotExist(String::from(parsed_error.message))
+                }
+                _ => UpdateTemplateError::Unknown(String::from(body)),
+            },
+            Err(_) => UpdateTemplateError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for UpdateTemplateError {
+    fn from(err: XmlParseError) -> UpdateTemplateError {
+        let XmlParseError(message) = err;
+        UpdateTemplateError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for UpdateTemplateError {
+    fn from(err: CredentialsError) -> UpdateTemplateError {
+        UpdateTemplateError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateTemplateError {
+    fn from(err: HttpDispatchError) -> UpdateTemplateError {
+        UpdateTemplateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateTemplateError {
+    fn from(err: io::Error) -> UpdateTemplateError {
+        UpdateTemplateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateTemplateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateTemplateError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateTemplateError::InvalidTemplate(ref cause) => cause,
+            UpdateTemplateError::TemplateDoesNotExist(ref cause) => cause,
+            UpdateTemplateError::Validation(ref cause) => cause,
+            UpdateTemplateError::Credentials(ref err) => err.description(),
+            UpdateTemplateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UpdateTemplateError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -10437,19 +14327,19 @@ impl Error for VerifyEmailIdentityError {
 }
 /// Trait representing the capabilities of the Amazon SES API. Amazon SES clients implement this trait.
 pub trait Ses {
-    /// <p>Creates a receipt rule set by cloning an existing one. All receipt rules and configurations are copied to the new receipt rule set and are completely independent of the source rule set.</p> <p>For information about setting up rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Creates a receipt rule set by cloning an existing one. All receipt rules and configurations are copied to the new receipt rule set and are completely independent of the source rule set.</p> <p>For information about setting up rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn clone_receipt_rule_set(
         &self,
         input: &CloneReceiptRuleSetRequest,
     ) -> Result<CloneReceiptRuleSetResponse, CloneReceiptRuleSetError>;
 
-    /// <p>Creates a configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Creates a configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn create_configuration_set(
         &self,
         input: &CreateConfigurationSetRequest,
     ) -> Result<CreateConfigurationSetResponse, CreateConfigurationSetError>;
 
-    /// <p>Creates a configuration set event destination.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>An event destination is the AWS service to which Amazon SES publishes the email sending events associated with a configuration set. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Creates a configuration set event destination.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>An event destination is the AWS service to which Amazon SES publishes the email sending events associated with a configuration set. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn create_configuration_set_event_destination(
         &self,
         input: &CreateConfigurationSetEventDestinationRequest,
@@ -10458,31 +14348,52 @@ pub trait Ses {
         CreateConfigurationSetEventDestinationError,
     >;
 
-    /// <p>Creates a new IP address filter.</p> <p>For information about setting up IP address filters, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Creates an association between a configuration set and a custom domain for open and click event tracking. </p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using configuration sets, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Configuring Custom Domains to Handle Open and Click Tracking</a> in the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/Welcome.html">Amazon SES Developer Guide</a>.</p>
+    fn create_configuration_set_tracking_options(
+        &self,
+        input: &CreateConfigurationSetTrackingOptionsRequest,
+    ) -> Result<
+        CreateConfigurationSetTrackingOptionsResponse,
+        CreateConfigurationSetTrackingOptionsError,
+    >;
+
+    /// <p>Creates a new custom verification email template.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn create_custom_verification_email_template(
+        &self,
+        input: &CreateCustomVerificationEmailTemplateRequest,
+    ) -> Result<(), CreateCustomVerificationEmailTemplateError>;
+
+    /// <p>Creates a new IP address filter.</p> <p>For information about setting up IP address filters, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn create_receipt_filter(
         &self,
         input: &CreateReceiptFilterRequest,
     ) -> Result<CreateReceiptFilterResponse, CreateReceiptFilterError>;
 
-    /// <p>Creates a receipt rule.</p> <p>For information about setting up receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Creates a receipt rule.</p> <p>For information about setting up receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn create_receipt_rule(
         &self,
         input: &CreateReceiptRuleRequest,
     ) -> Result<CreateReceiptRuleResponse, CreateReceiptRuleError>;
 
-    /// <p>Creates an empty receipt rule set.</p> <p>For information about setting up receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Creates an empty receipt rule set.</p> <p>For information about setting up receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn create_receipt_rule_set(
         &self,
         input: &CreateReceiptRuleSetRequest,
     ) -> Result<CreateReceiptRuleSetResponse, CreateReceiptRuleSetError>;
 
-    /// <p>Deletes a configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Creates an email template. Email templates enable you to send personalized email to one or more destinations in a single API operation. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn create_template(
+        &self,
+        input: &CreateTemplateRequest,
+    ) -> Result<CreateTemplateResponse, CreateTemplateError>;
+
+    /// <p>Deletes a configuration set. Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn delete_configuration_set(
         &self,
         input: &DeleteConfigurationSetRequest,
     ) -> Result<DeleteConfigurationSetResponse, DeleteConfigurationSetError>;
 
-    /// <p>Deletes a configuration set event destination.</p> <p>Configuration set event destinations are associated with configuration sets, which enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Deletes a configuration set event destination. Configuration set event destinations are associated with configuration sets, which enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn delete_configuration_set_event_destination(
         &self,
         input: &DeleteConfigurationSetEventDestinationRequest,
@@ -10491,175 +14402,246 @@ pub trait Ses {
         DeleteConfigurationSetEventDestinationError,
     >;
 
-    /// <p>Deletes the specified identity (an email address or a domain) from the list of verified identities.</p> <p>This action is throttled at one request per second.</p>
+    /// <p><p>Deletes an association between a configuration set and a custom domain for open and click event tracking.</p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using configuration sets, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Configuring Custom Domains to Handle Open and Click Tracking</a> in the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/Welcome.html">Amazon SES Developer Guide</a>.</p> <note> <p>Deleting this kind of association will result in emails sent using the specified configuration set to capture open and click events using the standard, Amazon SES-operated domains.</p> </note></p>
+    fn delete_configuration_set_tracking_options(
+        &self,
+        input: &DeleteConfigurationSetTrackingOptionsRequest,
+    ) -> Result<
+        DeleteConfigurationSetTrackingOptionsResponse,
+        DeleteConfigurationSetTrackingOptionsError,
+    >;
+
+    /// <p>Deletes an existing custom verification email template. </p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn delete_custom_verification_email_template(
+        &self,
+        input: &DeleteCustomVerificationEmailTemplateRequest,
+    ) -> Result<(), DeleteCustomVerificationEmailTemplateError>;
+
+    /// <p>Deletes the specified identity (an email address or a domain) from the list of verified identities.</p> <p>You can execute this operation no more than once per second.</p>
     fn delete_identity(
         &self,
         input: &DeleteIdentityRequest,
     ) -> Result<DeleteIdentityResponse, DeleteIdentityError>;
 
-    /// <p>Deletes the specified sending authorization policy for the given identity (an email address or a domain). This API returns successfully even if a policy with the specified name does not exist.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Deletes the specified sending authorization policy for the given identity (an email address or a domain). This API returns successfully even if a policy with the specified name does not exist.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn delete_identity_policy(
         &self,
         input: &DeleteIdentityPolicyRequest,
     ) -> Result<DeleteIdentityPolicyResponse, DeleteIdentityPolicyError>;
 
-    /// <p>Deletes the specified IP address filter.</p> <p>For information about managing IP address filters, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Deletes the specified IP address filter.</p> <p>For information about managing IP address filters, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn delete_receipt_filter(
         &self,
         input: &DeleteReceiptFilterRequest,
     ) -> Result<DeleteReceiptFilterResponse, DeleteReceiptFilterError>;
 
-    /// <p>Deletes the specified receipt rule.</p> <p>For information about managing receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Deletes the specified receipt rule.</p> <p>For information about managing receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn delete_receipt_rule(
         &self,
         input: &DeleteReceiptRuleRequest,
     ) -> Result<DeleteReceiptRuleResponse, DeleteReceiptRuleError>;
 
-    /// <p>Deletes the specified receipt rule set and all of the receipt rules it contains.</p> <note> <p>The currently active rule set cannot be deleted.</p> </note> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Deletes the specified receipt rule set and all of the receipt rules it contains.</p> <note> <p>The currently active rule set cannot be deleted.</p> </note> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn delete_receipt_rule_set(
         &self,
         input: &DeleteReceiptRuleSetRequest,
     ) -> Result<DeleteReceiptRuleSetResponse, DeleteReceiptRuleSetError>;
 
-    /// <p>Deletes the specified email address from the list of verified addresses.</p> <important> <p>The DeleteVerifiedEmailAddress action is deprecated as of the May 15, 2012 release of Domain Verification. The DeleteIdentity action is now preferred.</p> </important> <p>This action is throttled at one request per second.</p>
+    /// <p>Deletes an email template.</p> <p>You can execute this operation no more than once per second.</p>
+    fn delete_template(
+        &self,
+        input: &DeleteTemplateRequest,
+    ) -> Result<DeleteTemplateResponse, DeleteTemplateError>;
+
+    /// <p>Deprecated. Use the <code>DeleteIdentity</code> operation to delete email addresses and domains.</p>
     fn delete_verified_email_address(
         &self,
         input: &DeleteVerifiedEmailAddressRequest,
     ) -> Result<(), DeleteVerifiedEmailAddressError>;
 
-    /// <p>Returns the metadata and receipt rules for the receipt rule set that is currently active.</p> <p>For information about setting up receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Returns the metadata and receipt rules for the receipt rule set that is currently active.</p> <p>For information about setting up receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn describe_active_receipt_rule_set(
         &self,
         input: &DescribeActiveReceiptRuleSetRequest,
     ) -> Result<DescribeActiveReceiptRuleSetResponse, DescribeActiveReceiptRuleSetError>;
 
-    /// <p>Returns the details of the specified configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Returns the details of the specified configuration set. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn describe_configuration_set(
         &self,
         input: &DescribeConfigurationSetRequest,
     ) -> Result<DescribeConfigurationSetResponse, DescribeConfigurationSetError>;
 
-    /// <p>Returns the details of the specified receipt rule.</p> <p>For information about setting up receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Returns the details of the specified receipt rule.</p> <p>For information about setting up receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn describe_receipt_rule(
         &self,
         input: &DescribeReceiptRuleRequest,
     ) -> Result<DescribeReceiptRuleResponse, DescribeReceiptRuleError>;
 
-    /// <p>Returns the details of the specified receipt rule set.</p> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Returns the details of the specified receipt rule set.</p> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn describe_receipt_rule_set(
         &self,
         input: &DescribeReceiptRuleSetRequest,
     ) -> Result<DescribeReceiptRuleSetResponse, DescribeReceiptRuleSetError>;
 
-    /// <p>Returns the current status of Easy DKIM signing for an entity. For domain name identities, this action also returns the DKIM tokens that are required for Easy DKIM signing, and whether Amazon SES has successfully verified that these tokens have been published.</p> <p>This action takes a list of identities as input and returns the following information for each:</p> <ul> <li> <p>Whether Easy DKIM signing is enabled or disabled.</p> </li> <li> <p>A set of DKIM tokens that represent the identity. If the identity is an email address, the tokens represent the domain of that address.</p> </li> <li> <p>Whether Amazon SES has successfully verified the DKIM tokens published in the domain's DNS. This information is only returned for domain name identities, not for email addresses.</p> </li> </ul> <p>This action is throttled at one request per second and can only get DKIM attributes for up to 100 identities at a time.</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Returns the email sending status of the Amazon SES account.</p> <p>You can execute this operation no more than once per second.</p>
+    fn get_account_sending_enabled(
+        &self,
+    ) -> Result<GetAccountSendingEnabledResponse, GetAccountSendingEnabledError>;
+
+    /// <p>Returns the custom email verification template for the template name you specify.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn get_custom_verification_email_template(
+        &self,
+        input: &GetCustomVerificationEmailTemplateRequest,
+    ) -> Result<GetCustomVerificationEmailTemplateResponse, GetCustomVerificationEmailTemplateError>;
+
+    /// <p>Returns the current status of Easy DKIM signing for an entity. For domain name identities, this operation also returns the DKIM tokens that are required for Easy DKIM signing, and whether Amazon SES has successfully verified that these tokens have been published.</p> <p>This operation takes a list of identities as input and returns the following information for each:</p> <ul> <li> <p>Whether Easy DKIM signing is enabled or disabled.</p> </li> <li> <p>A set of DKIM tokens that represent the identity. If the identity is an email address, the tokens represent the domain of that address.</p> </li> <li> <p>Whether Amazon SES has successfully verified the DKIM tokens published in the domain's DNS. This information is only returned for domain name identities, not for email addresses.</p> </li> </ul> <p>This operation is throttled at one request per second and can only get DKIM attributes for up to 100 identities at a time.</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html">Amazon SES Developer Guide</a>.</p>
     fn get_identity_dkim_attributes(
         &self,
         input: &GetIdentityDkimAttributesRequest,
     ) -> Result<GetIdentityDkimAttributesResponse, GetIdentityDkimAttributesError>;
 
-    /// <p>Returns the custom MAIL FROM attributes for a list of identities (email addresses and/or domains).</p> <p>This action is throttled at one request per second and can only get custom MAIL FROM attributes for up to 100 identities at a time.</p>
+    /// <p>Returns the custom MAIL FROM attributes for a list of identities (email addresses : domains).</p> <p>This operation is throttled at one request per second and can only get custom MAIL FROM attributes for up to 100 identities at a time.</p>
     fn get_identity_mail_from_domain_attributes(
         &self,
         input: &GetIdentityMailFromDomainAttributesRequest,
     ) -> Result<GetIdentityMailFromDomainAttributesResponse, GetIdentityMailFromDomainAttributesError>;
 
-    /// <p>Given a list of verified identities (email addresses and/or domains), returns a structure describing identity notification attributes.</p> <p>This action is throttled at one request per second and can only get notification attributes for up to 100 identities at a time.</p> <p>For more information about using notifications with Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Given a list of verified identities (email addresses and/or domains), returns a structure describing identity notification attributes.</p> <p>This operation is throttled at one request per second and can only get notification attributes for up to 100 identities at a time.</p> <p>For more information about using notifications with Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
     fn get_identity_notification_attributes(
         &self,
         input: &GetIdentityNotificationAttributesRequest,
     ) -> Result<GetIdentityNotificationAttributesResponse, GetIdentityNotificationAttributesError>;
 
-    /// <p>Returns the requested sending authorization policies for the given identity (an email address or a domain). The policies are returned as a map of policy names to policy contents. You can retrieve a maximum of 20 policies at a time.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Returns the requested sending authorization policies for the given identity (an email address or a domain). The policies are returned as a map of policy names to policy contents. You can retrieve a maximum of 20 policies at a time.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn get_identity_policies(
         &self,
         input: &GetIdentityPoliciesRequest,
     ) -> Result<GetIdentityPoliciesResponse, GetIdentityPoliciesError>;
 
-    /// <p>Given a list of identities (email addresses and/or domains), returns the verification status and (for domain identities) the verification token for each identity.</p> <p>The verification status of an email address is "Pending" until the email address owner clicks the link within the verification email that Amazon SES sent to that address. If the email address owner clicks the link within 24 hours, the verification status of the email address changes to "Success". If the link is not clicked within 24 hours, the verification status changes to "Failed." In that case, if you still want to verify the email address, you must restart the verification process from the beginning.</p> <p>For domain identities, the domain's verification status is "Pending" as Amazon SES searches for the required TXT record in the DNS settings of the domain. When Amazon SES detects the record, the domain's verification status changes to "Success". If Amazon SES is unable to detect the record within 72 hours, the domain's verification status changes to "Failed." In that case, if you still want to verify the domain, you must restart the verification process from the beginning.</p> <p>This action is throttled at one request per second and can only get verification attributes for up to 100 identities at a time.</p>
+    /// <p>Given a list of identities (email addresses and/or domains), returns the verification status and (for domain identities) the verification token for each identity.</p> <p>The verification status of an email address is "Pending" until the email address owner clicks the link within the verification email that Amazon SES sent to that address. If the email address owner clicks the link within 24 hours, the verification status of the email address changes to "Success". If the link is not clicked within 24 hours, the verification status changes to "Failed." In that case, if you still want to verify the email address, you must restart the verification process from the beginning.</p> <p>For domain identities, the domain's verification status is "Pending" as Amazon SES searches for the required TXT record in the DNS settings of the domain. When Amazon SES detects the record, the domain's verification status changes to "Success". If Amazon SES is unable to detect the record within 72 hours, the domain's verification status changes to "Failed." In that case, if you still want to verify the domain, you must restart the verification process from the beginning.</p> <p>This operation is throttled at one request per second and can only get verification attributes for up to 100 identities at a time.</p>
     fn get_identity_verification_attributes(
         &self,
         input: &GetIdentityVerificationAttributesRequest,
     ) -> Result<GetIdentityVerificationAttributesResponse, GetIdentityVerificationAttributesError>;
 
-    /// <p>Returns the user's current sending limits.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Provides the sending limits for the Amazon SES account. </p> <p>You can execute this operation no more than once per second.</p>
     fn get_send_quota(&self) -> Result<GetSendQuotaResponse, GetSendQuotaError>;
 
-    /// <p>Returns the user's sending statistics. The result is a list of data points, representing the last two weeks of sending activity.</p> <p>Each data point in the list contains statistics for a 15-minute interval.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Provides sending statistics for the Amazon SES account. The result is a list of data points, representing the last two weeks of sending activity. Each data point in the list contains statistics for a 15-minute period of time.</p> <p>You can execute this operation no more than once per second.</p>
     fn get_send_statistics(&self) -> Result<GetSendStatisticsResponse, GetSendStatisticsError>;
 
-    /// <p>Lists the configuration sets associated with your AWS account.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second and can return up to 50 configuration sets at a time.</p>
+    /// <p>Displays the template object (which includes the Subject line, HTML part and text part) for the template you specify.</p> <p>You can execute this operation no more than once per second.</p>
+    fn get_template(
+        &self,
+        input: &GetTemplateRequest,
+    ) -> Result<GetTemplateResponse, GetTemplateError>;
+
+    /// <p>Provides a list of the configuration sets associated with your Amazon SES account. For information about using configuration sets, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Monitoring Your Amazon SES Sending Activity</a> in the <i>Amazon SES Developer Guide.</i> </p> <p>You can execute this operation no more than once per second. This operation will return up to 1,000 configuration sets each time it is run. If your Amazon SES account has more than 1,000 configuration sets, this operation will also return a NextToken element. You can then execute the <code>ListConfigurationSets</code> operation again, passing the <code>NextToken</code> parameter and the value of the NextToken element to retrieve additional results.</p>
     fn list_configuration_sets(
         &self,
         input: &ListConfigurationSetsRequest,
     ) -> Result<ListConfigurationSetsResponse, ListConfigurationSetsError>;
 
-    /// <p>Returns a list containing all of the identities (email addresses and domains) for your AWS account, regardless of verification status.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Lists the existing custom verification email templates for your account.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn list_custom_verification_email_templates(
+        &self,
+        input: &ListCustomVerificationEmailTemplatesRequest,
+    ) -> Result<
+        ListCustomVerificationEmailTemplatesResponse,
+        ListCustomVerificationEmailTemplatesError,
+    >;
+
+    /// <p>Returns a list containing all of the identities (email addresses and domains) for your AWS account, regardless of verification status.</p> <p>You can execute this operation no more than once per second.</p>
     fn list_identities(
         &self,
         input: &ListIdentitiesRequest,
     ) -> Result<ListIdentitiesResponse, ListIdentitiesError>;
 
-    /// <p>Returns a list of sending authorization policies that are attached to the given identity (an email address or a domain). This API returns only a list. If you want the actual policy content, you can use <code>GetIdentityPolicies</code>.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Returns a list of sending authorization policies that are attached to the given identity (an email address or a domain). This API returns only a list. If you want the actual policy content, you can use <code>GetIdentityPolicies</code>.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn list_identity_policies(
         &self,
         input: &ListIdentityPoliciesRequest,
     ) -> Result<ListIdentityPoliciesResponse, ListIdentityPoliciesError>;
 
-    /// <p>Lists the IP address filters associated with your AWS account.</p> <p>For information about managing IP address filters, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Lists the IP address filters associated with your AWS account.</p> <p>For information about managing IP address filters, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn list_receipt_filters(
         &self,
         input: &ListReceiptFiltersRequest,
     ) -> Result<ListReceiptFiltersResponse, ListReceiptFiltersError>;
 
-    /// <p>Lists the receipt rule sets that exist under your AWS account. If there are additional receipt rule sets to be retrieved, you will receive a <code>NextToken</code> that you can provide to the next call to <code>ListReceiptRuleSets</code> to retrieve the additional entries.</p> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Lists the receipt rule sets that exist under your AWS account. If there are additional receipt rule sets to be retrieved, you will receive a <code>NextToken</code> that you can provide to the next call to <code>ListReceiptRuleSets</code> to retrieve the additional entries.</p> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn list_receipt_rule_sets(
         &self,
         input: &ListReceiptRuleSetsRequest,
     ) -> Result<ListReceiptRuleSetsResponse, ListReceiptRuleSetsError>;
 
-    /// <p>Returns a list containing all of the email addresses that have been verified.</p> <important> <p>The ListVerifiedEmailAddresses action is deprecated as of the May 15, 2012 release of Domain Verification. The ListIdentities action is now preferred.</p> </important> <p>This action is throttled at one request per second.</p>
+    /// <p>Lists the email templates present in your Amazon SES account.</p> <p>You can execute this operation no more than once per second.</p>
+    fn list_templates(
+        &self,
+        input: &ListTemplatesRequest,
+    ) -> Result<ListTemplatesResponse, ListTemplatesError>;
+
+    /// <p>Deprecated. Use the <code>ListIdentities</code> operation to list the email addresses and domains associated with your account.</p>
     fn list_verified_email_addresses(
         &self,
     ) -> Result<ListVerifiedEmailAddressesResponse, ListVerifiedEmailAddressesError>;
 
-    /// <p>Adds or updates a sending authorization policy for the specified identity (an email address or a domain).</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Adds or updates a sending authorization policy for the specified identity (an email address or a domain).</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn put_identity_policy(
         &self,
         input: &PutIdentityPolicyRequest,
     ) -> Result<PutIdentityPolicyResponse, PutIdentityPolicyError>;
 
-    /// <p>Reorders the receipt rules within a receipt rule set.</p> <note> <p>All of the rules in the rule set must be represented in this request. That is, this API will return an error if the reorder request doesn't explicitly position all of the rules.</p> </note> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Reorders the receipt rules within a receipt rule set.</p> <note> <p>All of the rules in the rule set must be represented in this request. That is, this API will return an error if the reorder request doesn't explicitly position all of the rules.</p> </note> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn reorder_receipt_rule_set(
         &self,
         input: &ReorderReceiptRuleSetRequest,
     ) -> Result<ReorderReceiptRuleSetResponse, ReorderReceiptRuleSetError>;
 
-    /// <p>Generates and sends a bounce message to the sender of an email you received through Amazon SES. You can only use this API on an email up to 24 hours after you receive it.</p> <note> <p>You cannot use this API to send generic bounces for mail that was not received by Amazon SES.</p> </note> <p>For information about receiving email through Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Generates and sends a bounce message to the sender of an email you received through Amazon SES. You can only use this API on an email up to 24 hours after you receive it.</p> <note> <p>You cannot use this API to send generic bounces for mail that was not received by Amazon SES.</p> </note> <p>For information about receiving email through Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn send_bounce(&self, input: &SendBounceRequest)
         -> Result<SendBounceResponse, SendBounceError>;
 
-    /// <p><p>Composes an email message based on input data, and then immediately queues the message for sending.</p> <p>There are several important points to know about <code>SendEmail</code>:</p> <ul> <li> <p>You can only send email from verified email addresses and domains; otherwise, you will get an &quot;Email address not verified&quot; error. If your account is still in the Amazon SES sandbox, you must also verify every recipient email address except for the recipients provided by the Amazon SES mailbox simulator. For more information, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Amazon SES Developer Guide</a>.</p> </li> <li> <p>The total size of the message cannot exceed 10 MB. This includes any attachments that are part of the message.</p> </li> <li> <p>You must provide at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If any email address you provide is invalid, Amazon SES rejects the entire email.</p> </li> <li> <p>Amazon SES has a limit on the total number of recipients per message. The combined number of To:, CC: and BCC: email addresses cannot exceed 50. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call Amazon SES repeatedly to send the message to each group.</p> </li> <li> <p>For every message that you send, the total number of recipients (To:, CC: and BCC:) is counted against your sending quota - the maximum number of emails you can send in a 24-hour period. For information about your sending quota, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html">Amazon SES Developer Guide</a>.</p> </li> </ul></p>
+    /// <p><p>Composes an email message to multiple destinations. The message body is created using an email template.</p> <p>In order to send email using the <code>SendBulkTemplatedEmail</code> operation, your call to the API must meet the following requirements:</p> <ul> <li> <p>The call must refer to an existing email template. You can create email templates using the <a>CreateTemplate</a> operation.</p> </li> <li> <p>The message must be sent from a verified email address or domain.</p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The total size of the message, including attachments, must be less than 10 MB.</p> </li> <li> <p>Each <code>Destination</code> parameter must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> </ul></p>
+    fn send_bulk_templated_email(
+        &self,
+        input: &SendBulkTemplatedEmailRequest,
+    ) -> Result<SendBulkTemplatedEmailResponse, SendBulkTemplatedEmailError>;
+
+    /// <p>Adds an email address to the list of identities for your Amazon SES account and attempts to verify it. As a result of executing this operation, a customized verification email is sent to the specified address.</p> <p>To use this operation, you must first create a custom verification email template. For more information about creating and using custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn send_custom_verification_email(
+        &self,
+        input: &SendCustomVerificationEmailRequest,
+    ) -> Result<SendCustomVerificationEmailResponse, SendCustomVerificationEmailError>;
+
+    /// <p><p>Composes an email message and immediately queues it for sending. In order to send email using the <code>SendEmail</code> operation, your message must meet the following requirements:</p> <ul> <li> <p>The message must be sent from a verified email address or domain. If you attempt to send email using a non-verified address or domain, the operation will result in an &quot;Email address not verified&quot; error. </p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The total size of the message, including attachments, must be smaller than 10 MB.</p> </li> <li> <p>The message must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> <li> <p>The message may not include more than 50 recipients, across the To:, CC: and BCC: fields. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call the <code>SendEmail</code> operation several times to send the message to each group.</p> </li> </ul> <important> <p>For every message that you send, the total number of recipients (including each recipient in the To:, CC: and BCC: fields) is counted against the maximum number of emails you can send in a 24-hour period (your <i>sending quota</i>). For more information about sending quotas in Amazon SES, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html">Managing Your Amazon SES Sending Limits</a> in the <i>Amazon SES Developer Guide.</i> </p> </important></p>
     fn send_email(&self, input: &SendEmailRequest) -> Result<SendEmailResponse, SendEmailError>;
 
-    /// <p><p>Sends an email message, with header and content specified by the client. The <code>SendRawEmail</code> action is useful for sending multipart MIME emails. The raw text of the message must comply with Internet email standards; otherwise, the message cannot be sent. </p> <p>There are several important points to know about <code>SendRawEmail</code>:</p> <ul> <li> <p>You can only send email from verified email addresses and domains; otherwise, you will get an &quot;Email address not verified&quot; error. If your account is still in the Amazon SES sandbox, you must also verify every recipient email address except for the recipients provided by the Amazon SES mailbox simulator. For more information, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Amazon SES Developer Guide</a>.</p> </li> <li> <p>The total size of the message cannot exceed 10 MB. This includes any attachments that are part of the message.</p> </li> <li> <p>You must provide at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If any email address you provide is invalid, Amazon SES rejects the entire email.</p> </li> <li> <p>Amazon SES has a limit on the total number of recipients per message. The combined number of To:, CC: and BCC: email addresses cannot exceed 50. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call Amazon SES repeatedly to send the message to each group.</p> </li> <li> <p>The To:, CC:, and BCC: headers in the raw message can contain a group list. Note that each recipient in a group list counts towards the 50-recipient limit.</p> </li> <li> <p>Amazon SES overrides any Message-ID and Date headers you provide.</p> </li> <li> <p>For every message that you send, the total number of recipients (To:, CC: and BCC:) is counted against your sending quota - the maximum number of emails you can send in a 24-hour period. For information about your sending quota, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html">Amazon SES Developer Guide</a>.</p> </li> <li> <p>If you are using sending authorization to send on behalf of another user, <code>SendRawEmail</code> enables you to specify the cross-account identity for the email&#39;s &quot;Source,&quot; &quot;From,&quot; and &quot;Return-Path&quot; parameters in one of two ways: you can pass optional parameters <code>SourceArn</code>, <code>FromArn</code>, and/or <code>ReturnPathArn</code> to the API, or you can include the following X-headers in the header of your raw email:</p> <ul> <li> <p> <code>X-SES-SOURCE-ARN</code> </p> </li> <li> <p> <code>X-SES-FROM-ARN</code> </p> </li> <li> <p> <code>X-SES-RETURN-PATH-ARN</code> </p> </li> </ul> <important> <p>Do not include these X-headers in the DKIM signature, because they are removed by Amazon SES before sending the email.</p> </important> <p>For the most common sending authorization use case, we recommend that you specify the <code>SourceIdentityArn</code> and do not specify either the <code>FromIdentityArn</code> or <code>ReturnPathIdentityArn</code>. (The same note applies to the corresponding X-headers.) If you only specify the <code>SourceIdentityArn</code>, Amazon SES will simply set the &quot;From&quot; address and the &quot;Return Path&quot; address to the identity specified in <code>SourceIdentityArn</code>. For more information about sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> </li> </ul></p>
+    /// <p><p>Composes an email message and immediately queues it for sending. When calling this operation, you may specify the message headers as well as the content. The <code>SendRawEmail</code> operation is particularly useful for sending multipart MIME emails (such as those that contain both a plain-text and an HTML version). </p> <p>In order to send email using the <code>SendRawEmail</code> operation, your message must meet the following requirements:</p> <ul> <li> <p>The message must be sent from a verified email address or domain. If you attempt to send email using a non-verified address or domain, the operation will result in an &quot;Email address not verified&quot; error. </p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The total size of the message, including attachments, must be smaller than 10 MB.</p> </li> <li> <p>The message must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> <li> <p>The message may not include more than 50 recipients, across the To:, CC: and BCC: fields. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call the <code>SendRawEmail</code> operation several times to send the message to each group.</p> </li> </ul> <important> <p>For every message that you send, the total number of recipients (including each recipient in the To:, CC: and BCC: fields) is counted against the maximum number of emails you can send in a 24-hour period (your <i>sending quota</i>). For more information about sending quotas in Amazon SES, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html">Managing Your Amazon SES Sending Limits</a> in the <i>Amazon SES Developer Guide.</i> </p> </important> <p>Additionally, keep the following considerations in mind when using the <code>SendRawEmail</code> operation:</p> <ul> <li> <p>Although you can customize the message headers when using the <code>SendRawEmail</code> operation, Amazon SES will automatically apply its own <code>Message-ID</code> and <code>Date</code> headers; if you passed these headers when creating the message, they will be overwritten by the values that Amazon SES provides.</p> </li> <li> <p>If you are using sending authorization to send on behalf of another user, <code>SendRawEmail</code> enables you to specify the cross-account identity for the email&#39;s Source, From, and Return-Path parameters in one of two ways: you can pass optional parameters <code>SourceArn</code>, <code>FromArn</code>, and/or <code>ReturnPathArn</code> to the API, or you can include the following X-headers in the header of your raw email:</p> <ul> <li> <p> <code>X-SES-SOURCE-ARN</code> </p> </li> <li> <p> <code>X-SES-FROM-ARN</code> </p> </li> <li> <p> <code>X-SES-RETURN-PATH-ARN</code> </p> </li> </ul> <important> <p>Do not include these X-headers in the DKIM signature; Amazon SES will remove them before sending the email.</p> </important> <p>For most common sending authorization scenarios, we recommend that you specify the <code>SourceIdentityArn</code> parameter and not the <code>FromIdentityArn</code> or <code>ReturnPathIdentityArn</code> parameters. If you only specify the <code>SourceIdentityArn</code> parameter, Amazon SES will set the From and Return Path addresses to the identity specified in <code>SourceIdentityArn</code>. For more information about sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Using Sending Authorization with Amazon SES</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> </ul></p>
     fn send_raw_email(
         &self,
         input: &SendRawEmailRequest,
     ) -> Result<SendRawEmailResponse, SendRawEmailError>;
 
-    /// <p>Sets the specified receipt rule set as the active receipt rule set.</p> <note> <p>To disable your email-receiving through Amazon SES completely, you can call this API with RuleSetName set to null.</p> </note> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p><p>Composes an email message using an email template and immediately queues it for sending.</p> <p>In order to send email using the <code>SendTemplatedEmail</code> operation, your call to the API must meet the following requirements:</p> <ul> <li> <p>The call must refer to an existing email template. You can create email templates using the <a>CreateTemplate</a> operation.</p> </li> <li> <p>The message must be sent from a verified email address or domain.</p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The total size of the message, including attachments, must be less than 10 MB.</p> </li> <li> <p>Calls to the <code>SendTemplatedEmail</code> operation may only include one <code>Destination</code> parameter. A destination is a set of recipients who will receive the same version of the email. The <code>Destination</code> parameter can include up to 50 recipients, across the To:, CC: and BCC: fields.</p> </li> <li> <p>The <code>Destination</code> parameter must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> </ul></p>
+    fn send_templated_email(
+        &self,
+        input: &SendTemplatedEmailRequest,
+    ) -> Result<SendTemplatedEmailResponse, SendTemplatedEmailError>;
+
+    /// <p>Sets the specified receipt rule set as the active receipt rule set.</p> <note> <p>To disable your email-receiving through Amazon SES completely, you can call this API with RuleSetName set to null.</p> </note> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn set_active_receipt_rule_set(
         &self,
         input: &SetActiveReceiptRuleSetRequest,
     ) -> Result<SetActiveReceiptRuleSetResponse, SetActiveReceiptRuleSetError>;
 
-    /// <p>Enables or disables Easy DKIM signing of email sent from an identity:</p> <ul> <li> <p>If Easy DKIM signing is enabled for a domain name identity (e.g., <code>example.com</code>), then Amazon SES will DKIM-sign all email sent by addresses under that domain name (e.g., <code>user@example.com</code>).</p> </li> <li> <p>If Easy DKIM signing is enabled for an email address, then Amazon SES will DKIM-sign all email sent by that email address.</p> </li> </ul> <p>For email addresses (e.g., <code>user@example.com</code>), you can only enable Easy DKIM signing if the corresponding domain (e.g., <code>example.com</code>) has been set up for Easy DKIM using the AWS Console or the <code>VerifyDomainDkim</code> action.</p> <p>This action is throttled at one request per second.</p> <p>For more information about Easy DKIM signing, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Enables or disables Easy DKIM signing of email sent from an identity:</p> <ul> <li> <p>If Easy DKIM signing is enabled for a domain name identity (such as <code>example.com</code>), then Amazon SES will DKIM-sign all email sent by addresses under that domain name (for example, <code>user@example.com</code>).</p> </li> <li> <p>If Easy DKIM signing is enabled for an email address, then Amazon SES will DKIM-sign all email sent by that email address.</p> </li> </ul> <p>For email addresses (for example, <code>user@example.com</code>), you can only enable Easy DKIM signing if the corresponding domain (in this case, <code>example.com</code>) has been set up for Easy DKIM using the AWS Console or the <code>VerifyDomainDkim</code> operation.</p> <p>You can execute this operation no more than once per second.</p> <p>For more information about Easy DKIM signing, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">Amazon SES Developer Guide</a>.</p>
     fn set_identity_dkim_enabled(
         &self,
         input: &SetIdentityDkimEnabledRequest,
     ) -> Result<SetIdentityDkimEnabledResponse, SetIdentityDkimEnabledError>;
 
-    /// <p>Given an identity (an email address or a domain), enables or disables whether Amazon SES forwards bounce and complaint notifications as email. Feedback forwarding can only be disabled when Amazon Simple Notification Service (Amazon SNS) topics are specified for both bounces and complaints.</p> <note> <p>Feedback forwarding does not apply to delivery notifications. Delivery notifications are only available through Amazon SNS.</p> </note> <p>This action is throttled at one request per second.</p> <p>For more information about using notifications with Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Given an identity (an email address or a domain), enables or disables whether Amazon SES forwards bounce and complaint notifications as email. Feedback forwarding can only be disabled when Amazon Simple Notification Service (Amazon SNS) topics are specified for both bounces and complaints.</p> <note> <p>Feedback forwarding does not apply to delivery notifications. Delivery notifications are only available through Amazon SNS.</p> </note> <p>You can execute this operation no more than once per second.</p> <p>For more information about using notifications with Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
     fn set_identity_feedback_forwarding_enabled(
         &self,
         input: &SetIdentityFeedbackForwardingEnabledRequest,
@@ -10668,7 +14650,7 @@ pub trait Ses {
         SetIdentityFeedbackForwardingEnabledError,
     >;
 
-    /// <p>Given an identity (an email address or a domain), sets whether Amazon SES includes the original email headers in the Amazon Simple Notification Service (Amazon SNS) notifications of a specified type.</p> <p>This action is throttled at one request per second.</p> <p>For more information about using notifications with Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Given an identity (an email address or a domain), sets whether Amazon SES includes the original email headers in the Amazon Simple Notification Service (Amazon SNS) notifications of a specified type.</p> <p>You can execute this operation no more than once per second.</p> <p>For more information about using notifications with Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
     fn set_identity_headers_in_notifications_enabled(
         &self,
         input: &SetIdentityHeadersInNotificationsEnabledRequest,
@@ -10677,25 +14659,37 @@ pub trait Ses {
         SetIdentityHeadersInNotificationsEnabledError,
     >;
 
-    /// <p>Enables or disables the custom MAIL FROM domain setup for a verified identity (an email address or a domain).</p> <important> <p>To send emails using the specified MAIL FROM domain, you must add an MX record to your MAIL FROM domain's DNS settings. If you want your emails to pass Sender Policy Framework (SPF) checks, you must also add or update an SPF record. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from-set.html">Amazon SES Developer Guide</a>.</p> </important> <p>This action is throttled at one request per second.</p>
+    /// <p>Enables or disables the custom MAIL FROM domain setup for a verified identity (an email address or a domain).</p> <important> <p>To send emails using the specified MAIL FROM domain, you must add an MX record to your MAIL FROM domain's DNS settings. If you want your emails to pass Sender Policy Framework (SPF) checks, you must also add or update an SPF record. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from-set.html">Amazon SES Developer Guide</a>.</p> </important> <p>You can execute this operation no more than once per second.</p>
     fn set_identity_mail_from_domain(
         &self,
         input: &SetIdentityMailFromDomainRequest,
     ) -> Result<SetIdentityMailFromDomainResponse, SetIdentityMailFromDomainError>;
 
-    /// <p>Given an identity (an email address or a domain), sets the Amazon Simple Notification Service (Amazon SNS) topic to which Amazon SES will publish bounce, complaint, and/or delivery notifications for emails sent with that identity as the <code>Source</code>.</p> <note> <p>Unless feedback forwarding is enabled, you must specify Amazon SNS topics for bounce and complaint notifications. For more information, see <code>SetIdentityFeedbackForwardingEnabled</code>.</p> </note> <p>This action is throttled at one request per second.</p> <p>For more information about feedback notification, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Given an identity (an email address or a domain), sets the Amazon Simple Notification Service (Amazon SNS) topic to which Amazon SES will publish bounce, complaint, and/or delivery notifications for emails sent with that identity as the <code>Source</code>.</p> <note> <p>Unless feedback forwarding is enabled, you must specify Amazon SNS topics for bounce and complaint notifications. For more information, see <code>SetIdentityFeedbackForwardingEnabled</code>.</p> </note> <p>You can execute this operation no more than once per second.</p> <p>For more information about feedback notification, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
     fn set_identity_notification_topic(
         &self,
         input: &SetIdentityNotificationTopicRequest,
     ) -> Result<SetIdentityNotificationTopicResponse, SetIdentityNotificationTopicError>;
 
-    /// <p>Sets the position of the specified receipt rule in the receipt rule set.</p> <p>For information about managing receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Sets the position of the specified receipt rule in the receipt rule set.</p> <p>For information about managing receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn set_receipt_rule_position(
         &self,
         input: &SetReceiptRulePositionRequest,
     ) -> Result<SetReceiptRulePositionResponse, SetReceiptRulePositionError>;
 
-    /// <p>Updates the event destination of a configuration set.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>Event destinations are associated with configuration sets, which enable you to publish email sending events to Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS). For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Creates a preview of the MIME content of an email when provided with a template and a set of replacement data.</p> <p>You can execute this operation no more than once per second.</p>
+    fn test_render_template(
+        &self,
+        input: &TestRenderTemplateRequest,
+    ) -> Result<TestRenderTemplateResponse, TestRenderTemplateError>;
+
+    /// <p>Enables or disables email sending across your entire Amazon SES account. You can use this operation in conjunction with Amazon CloudWatch alarms to temporarily pause email sending across your Amazon SES account when reputation metrics (such as your bounce on complaint rate) reach certain thresholds.</p> <p>You can execute this operation no more than once per second.</p>
+    fn update_account_sending_enabled(
+        &self,
+        input: &UpdateAccountSendingEnabledRequest,
+    ) -> Result<(), UpdateAccountSendingEnabledError>;
+
+    /// <p>Updates the event destination of a configuration set. Event destinations are associated with configuration sets, which enable you to publish email sending events to Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS). For information about using configuration sets, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Monitoring Your Amazon SES Sending Activity</a> in the <i>Amazon SES Developer Guide.</i> </p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>You can execute this operation no more than once per second.</p>
     fn update_configuration_set_event_destination(
         &self,
         input: &UpdateConfigurationSetEventDestinationRequest,
@@ -10704,31 +14698,64 @@ pub trait Ses {
         UpdateConfigurationSetEventDestinationError,
     >;
 
-    /// <p>Updates a receipt rule.</p> <p>For information about managing receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Enables or disables the publishing of reputation metrics for emails sent using a specific configuration set. Reputation metrics include bounce and complaint rates. These metrics are published to Amazon CloudWatch. By using Amazon CloudWatch, you can create alarms when bounce or complaint rates exceed a certain threshold.</p> <p>You can execute this operation no more than once per second.</p>
+    fn update_configuration_set_reputation_metrics_enabled(
+        &self,
+        input: &UpdateConfigurationSetReputationMetricsEnabledRequest,
+    ) -> Result<(), UpdateConfigurationSetReputationMetricsEnabledError>;
+
+    /// <p>Enables or disables email sending for messages sent using a specific configuration set. You can use this operation in conjunction with Amazon CloudWatch alarms to temporarily pause email sending for a configuration set when the reputation metrics for that configuration set (such as your bounce on complaint rate) reach certain thresholds.</p> <p>You can execute this operation no more than once per second.</p>
+    fn update_configuration_set_sending_enabled(
+        &self,
+        input: &UpdateConfigurationSetSendingEnabledRequest,
+    ) -> Result<(), UpdateConfigurationSetSendingEnabledError>;
+
+    /// <p>Modifies an association between a configuration set and a custom domain for open and click event tracking. </p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using configuration sets, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Configuring Custom Domains to Handle Open and Click Tracking</a> in the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/Welcome.html">Amazon SES Developer Guide</a>.</p>
+    fn update_configuration_set_tracking_options(
+        &self,
+        input: &UpdateConfigurationSetTrackingOptionsRequest,
+    ) -> Result<
+        UpdateConfigurationSetTrackingOptionsResponse,
+        UpdateConfigurationSetTrackingOptionsError,
+    >;
+
+    /// <p>Updates an existing custom verification email template.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn update_custom_verification_email_template(
+        &self,
+        input: &UpdateCustomVerificationEmailTemplateRequest,
+    ) -> Result<(), UpdateCustomVerificationEmailTemplateError>;
+
+    /// <p>Updates a receipt rule.</p> <p>For information about managing receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn update_receipt_rule(
         &self,
         input: &UpdateReceiptRuleRequest,
     ) -> Result<UpdateReceiptRuleResponse, UpdateReceiptRuleError>;
 
-    /// <p>Returns a set of DKIM tokens for a domain. DKIM <i>tokens</i> are character strings that represent your domain's identity. Using these tokens, you will need to create DNS CNAME records that point to DKIM public keys hosted by Amazon SES. Amazon Web Services will eventually detect that you have updated your DNS records; this detection process may take up to 72 hours. Upon successful detection, Amazon SES will be able to DKIM-sign email originating from that domain.</p> <p>This action is throttled at one request per second.</p> <p>To enable or disable Easy DKIM signing for a domain, use the <code>SetIdentityDkimEnabled</code> action.</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Updates an email template. Email templates enable you to send personalized email to one or more destinations in a single API operation. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn update_template(
+        &self,
+        input: &UpdateTemplateRequest,
+    ) -> Result<UpdateTemplateResponse, UpdateTemplateError>;
+
+    /// <p>Returns a set of DKIM tokens for a domain. DKIM <i>tokens</i> are character strings that represent your domain's identity. Using these tokens, you will need to create DNS CNAME records that point to DKIM public keys hosted by Amazon SES. Amazon Web Services will eventually detect that you have updated your DNS records; this detection process may take up to 72 hours. Upon successful detection, Amazon SES will be able to DKIM-sign email originating from that domain.</p> <p>You can execute this operation no more than once per second.</p> <p>To enable or disable Easy DKIM signing for a domain, use the <code>SetIdentityDkimEnabled</code> operation.</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html">Amazon SES Developer Guide</a>.</p>
     fn verify_domain_dkim(
         &self,
         input: &VerifyDomainDkimRequest,
     ) -> Result<VerifyDomainDkimResponse, VerifyDomainDkimError>;
 
-    /// <p>Verifies a domain.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Adds a domain to the list of identities for your Amazon SES account and attempts to verify it. For more information about verifying domains, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> <p>You can execute this operation no more than once per second.</p>
     fn verify_domain_identity(
         &self,
         input: &VerifyDomainIdentityRequest,
     ) -> Result<VerifyDomainIdentityResponse, VerifyDomainIdentityError>;
 
-    /// <p>Verifies an email address. This action causes a confirmation email message to be sent to the specified address.</p> <important> <p>The VerifyEmailAddress action is deprecated as of the May 15, 2012 release of Domain Verification. The VerifyEmailIdentity action is now preferred.</p> </important> <p>This action is throttled at one request per second.</p>
+    /// <p>Deprecated. Use the <code>VerifyEmailIdentity</code> operation to verify a new email address.</p>
     fn verify_email_address(
         &self,
         input: &VerifyEmailAddressRequest,
     ) -> Result<(), VerifyEmailAddressError>;
 
-    /// <p>Verifies an email address. This action causes a confirmation email message to be sent to the specified address.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Adds an email address to the list of identities for your Amazon SES account and attempts to verify it. As a result of executing this operation, a verification email is sent to the specified address.</p> <p>You can execute this operation no more than once per second.</p>
     fn verify_email_identity(
         &self,
         input: &VerifyEmailIdentityRequest,
@@ -10764,7 +14791,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    /// <p>Creates a receipt rule set by cloning an existing one. All receipt rules and configurations are copied to the new receipt rule set and are completely independent of the source rule set.</p> <p>For information about setting up rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Creates a receipt rule set by cloning an existing one. All receipt rules and configurations are copied to the new receipt rule set and are completely independent of the source rule set.</p> <p>For information about setting up rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn clone_receipt_rule_set(
         &self,
         input: &CloneReceiptRuleSetRequest,
@@ -10815,7 +14842,7 @@ where
         }
     }
 
-    /// <p>Creates a configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Creates a configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn create_configuration_set(
         &self,
         input: &CreateConfigurationSetRequest,
@@ -10866,7 +14893,7 @@ where
         }
     }
 
-    /// <p>Creates a configuration set event destination.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>An event destination is the AWS service to which Amazon SES publishes the email sending events associated with a configuration set. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Creates a configuration set event destination.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>An event destination is the AWS service to which Amazon SES publishes the email sending events associated with a configuration set. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn create_configuration_set_event_destination(
         &self,
         input: &CreateConfigurationSetEventDestinationRequest,
@@ -10922,7 +14949,93 @@ where
         }
     }
 
-    /// <p>Creates a new IP address filter.</p> <p>For information about setting up IP address filters, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Creates an association between a configuration set and a custom domain for open and click event tracking. </p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using configuration sets, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Configuring Custom Domains to Handle Open and Click Tracking</a> in the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/Welcome.html">Amazon SES Developer Guide</a>.</p>
+    fn create_configuration_set_tracking_options(
+        &self,
+        input: &CreateConfigurationSetTrackingOptionsRequest,
+    ) -> Result<
+        CreateConfigurationSetTrackingOptionsResponse,
+        CreateConfigurationSetTrackingOptionsError,
+    > {
+        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "CreateConfigurationSetTrackingOptions");
+        params.put("Version", "2010-12-01");
+        CreateConfigurationSetTrackingOptionsRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = CreateConfigurationSetTrackingOptionsResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(
+                        CreateConfigurationSetTrackingOptionsResponseDeserializer::deserialize(
+                            "CreateConfigurationSetTrackingOptionsResult",
+                            &mut stack
+                        )
+                    );
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateConfigurationSetTrackingOptionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Creates a new custom verification email template.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn create_custom_verification_email_template(
+        &self,
+        input: &CreateCustomVerificationEmailTemplateRequest,
+    ) -> Result<(), CreateCustomVerificationEmailTemplateError> {
+        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "CreateCustomVerificationEmailTemplate");
+        params.put("Version", "2010-12-01");
+        CreateCustomVerificationEmailTemplateRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateCustomVerificationEmailTemplateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Creates a new IP address filter.</p> <p>For information about setting up IP address filters, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn create_receipt_filter(
         &self,
         input: &CreateReceiptFilterRequest,
@@ -10973,7 +15086,7 @@ where
         }
     }
 
-    /// <p>Creates a receipt rule.</p> <p>For information about setting up receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Creates a receipt rule.</p> <p>For information about setting up receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn create_receipt_rule(
         &self,
         input: &CreateReceiptRuleRequest,
@@ -11024,7 +15137,7 @@ where
         }
     }
 
-    /// <p>Creates an empty receipt rule set.</p> <p>For information about setting up receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Creates an empty receipt rule set.</p> <p>For information about setting up receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn create_receipt_rule_set(
         &self,
         input: &CreateReceiptRuleSetRequest,
@@ -11075,7 +15188,58 @@ where
         }
     }
 
-    /// <p>Deletes a configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Creates an email template. Email templates enable you to send personalized email to one or more destinations in a single API operation. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn create_template(
+        &self,
+        input: &CreateTemplateRequest,
+    ) -> Result<CreateTemplateResponse, CreateTemplateError> {
+        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "CreateTemplate");
+        params.put("Version", "2010-12-01");
+        CreateTemplateRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = CreateTemplateResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(CreateTemplateResponseDeserializer::deserialize(
+                        "CreateTemplateResult",
+                        &mut stack
+                    ));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateTemplateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Deletes a configuration set. Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn delete_configuration_set(
         &self,
         input: &DeleteConfigurationSetRequest,
@@ -11126,7 +15290,7 @@ where
         }
     }
 
-    /// <p>Deletes a configuration set event destination.</p> <p>Configuration set event destinations are associated with configuration sets, which enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Deletes a configuration set event destination. Configuration set event destinations are associated with configuration sets, which enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn delete_configuration_set_event_destination(
         &self,
         input: &DeleteConfigurationSetEventDestinationRequest,
@@ -11182,7 +15346,93 @@ where
         }
     }
 
-    /// <p>Deletes the specified identity (an email address or a domain) from the list of verified identities.</p> <p>This action is throttled at one request per second.</p>
+    /// <p><p>Deletes an association between a configuration set and a custom domain for open and click event tracking.</p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using configuration sets, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Configuring Custom Domains to Handle Open and Click Tracking</a> in the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/Welcome.html">Amazon SES Developer Guide</a>.</p> <note> <p>Deleting this kind of association will result in emails sent using the specified configuration set to capture open and click events using the standard, Amazon SES-operated domains.</p> </note></p>
+    fn delete_configuration_set_tracking_options(
+        &self,
+        input: &DeleteConfigurationSetTrackingOptionsRequest,
+    ) -> Result<
+        DeleteConfigurationSetTrackingOptionsResponse,
+        DeleteConfigurationSetTrackingOptionsError,
+    > {
+        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DeleteConfigurationSetTrackingOptions");
+        params.put("Version", "2010-12-01");
+        DeleteConfigurationSetTrackingOptionsRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = DeleteConfigurationSetTrackingOptionsResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(
+                        DeleteConfigurationSetTrackingOptionsResponseDeserializer::deserialize(
+                            "DeleteConfigurationSetTrackingOptionsResult",
+                            &mut stack
+                        )
+                    );
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteConfigurationSetTrackingOptionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Deletes an existing custom verification email template. </p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn delete_custom_verification_email_template(
+        &self,
+        input: &DeleteCustomVerificationEmailTemplateRequest,
+    ) -> Result<(), DeleteCustomVerificationEmailTemplateError> {
+        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DeleteCustomVerificationEmailTemplate");
+        params.put("Version", "2010-12-01");
+        DeleteCustomVerificationEmailTemplateRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteCustomVerificationEmailTemplateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Deletes the specified identity (an email address or a domain) from the list of verified identities.</p> <p>You can execute this operation no more than once per second.</p>
     fn delete_identity(
         &self,
         input: &DeleteIdentityRequest,
@@ -11233,7 +15483,7 @@ where
         }
     }
 
-    /// <p>Deletes the specified sending authorization policy for the given identity (an email address or a domain). This API returns successfully even if a policy with the specified name does not exist.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Deletes the specified sending authorization policy for the given identity (an email address or a domain). This API returns successfully even if a policy with the specified name does not exist.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn delete_identity_policy(
         &self,
         input: &DeleteIdentityPolicyRequest,
@@ -11284,7 +15534,7 @@ where
         }
     }
 
-    /// <p>Deletes the specified IP address filter.</p> <p>For information about managing IP address filters, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Deletes the specified IP address filter.</p> <p>For information about managing IP address filters, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn delete_receipt_filter(
         &self,
         input: &DeleteReceiptFilterRequest,
@@ -11335,7 +15585,7 @@ where
         }
     }
 
-    /// <p>Deletes the specified receipt rule.</p> <p>For information about managing receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Deletes the specified receipt rule.</p> <p>For information about managing receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn delete_receipt_rule(
         &self,
         input: &DeleteReceiptRuleRequest,
@@ -11386,7 +15636,7 @@ where
         }
     }
 
-    /// <p>Deletes the specified receipt rule set and all of the receipt rules it contains.</p> <note> <p>The currently active rule set cannot be deleted.</p> </note> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Deletes the specified receipt rule set and all of the receipt rules it contains.</p> <note> <p>The currently active rule set cannot be deleted.</p> </note> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn delete_receipt_rule_set(
         &self,
         input: &DeleteReceiptRuleSetRequest,
@@ -11437,7 +15687,58 @@ where
         }
     }
 
-    /// <p>Deletes the specified email address from the list of verified addresses.</p> <important> <p>The DeleteVerifiedEmailAddress action is deprecated as of the May 15, 2012 release of Domain Verification. The DeleteIdentity action is now preferred.</p> </important> <p>This action is throttled at one request per second.</p>
+    /// <p>Deletes an email template.</p> <p>You can execute this operation no more than once per second.</p>
+    fn delete_template(
+        &self,
+        input: &DeleteTemplateRequest,
+    ) -> Result<DeleteTemplateResponse, DeleteTemplateError> {
+        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DeleteTemplate");
+        params.put("Version", "2010-12-01");
+        DeleteTemplateRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = DeleteTemplateResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(DeleteTemplateResponseDeserializer::deserialize(
+                        "DeleteTemplateResult",
+                        &mut stack
+                    ));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteTemplateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Deprecated. Use the <code>DeleteIdentity</code> operation to delete email addresses and domains.</p>
     fn delete_verified_email_address(
         &self,
         input: &DeleteVerifiedEmailAddressRequest,
@@ -11467,7 +15768,7 @@ where
         }
     }
 
-    /// <p>Returns the metadata and receipt rules for the receipt rule set that is currently active.</p> <p>For information about setting up receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Returns the metadata and receipt rules for the receipt rule set that is currently active.</p> <p>For information about setting up receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rule-set.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn describe_active_receipt_rule_set(
         &self,
         input: &DescribeActiveReceiptRuleSetRequest,
@@ -11520,7 +15821,7 @@ where
         }
     }
 
-    /// <p>Returns the details of the specified configuration set.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Returns the details of the specified configuration set. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn describe_configuration_set(
         &self,
         input: &DescribeConfigurationSetRequest,
@@ -11571,7 +15872,7 @@ where
         }
     }
 
-    /// <p>Returns the details of the specified receipt rule.</p> <p>For information about setting up receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Returns the details of the specified receipt rule.</p> <p>For information about setting up receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn describe_receipt_rule(
         &self,
         input: &DescribeReceiptRuleRequest,
@@ -11622,7 +15923,7 @@ where
         }
     }
 
-    /// <p>Returns the details of the specified receipt rule set.</p> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Returns the details of the specified receipt rule set.</p> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn describe_receipt_rule_set(
         &self,
         input: &DescribeReceiptRuleSetRequest,
@@ -11673,7 +15974,111 @@ where
         }
     }
 
-    /// <p>Returns the current status of Easy DKIM signing for an entity. For domain name identities, this action also returns the DKIM tokens that are required for Easy DKIM signing, and whether Amazon SES has successfully verified that these tokens have been published.</p> <p>This action takes a list of identities as input and returns the following information for each:</p> <ul> <li> <p>Whether Easy DKIM signing is enabled or disabled.</p> </li> <li> <p>A set of DKIM tokens that represent the identity. If the identity is an email address, the tokens represent the domain of that address.</p> </li> <li> <p>Whether Amazon SES has successfully verified the DKIM tokens published in the domain's DNS. This information is only returned for domain name identities, not for email addresses.</p> </li> </ul> <p>This action is throttled at one request per second and can only get DKIM attributes for up to 100 identities at a time.</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Returns the email sending status of the Amazon SES account.</p> <p>You can execute this operation no more than once per second.</p>
+    fn get_account_sending_enabled(
+        &self,
+    ) -> Result<GetAccountSendingEnabledResponse, GetAccountSendingEnabledError> {
+        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "GetAccountSendingEnabled");
+        params.put("Version", "2010-12-01");
+
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = GetAccountSendingEnabledResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(GetAccountSendingEnabledResponseDeserializer::deserialize(
+                        "GetAccountSendingEnabledResult",
+                        &mut stack
+                    ));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetAccountSendingEnabledError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Returns the custom email verification template for the template name you specify.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn get_custom_verification_email_template(
+        &self,
+        input: &GetCustomVerificationEmailTemplateRequest,
+    ) -> Result<GetCustomVerificationEmailTemplateResponse, GetCustomVerificationEmailTemplateError>
+    {
+        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "GetCustomVerificationEmailTemplate");
+        params.put("Version", "2010-12-01");
+        GetCustomVerificationEmailTemplateRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = GetCustomVerificationEmailTemplateResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(
+                        GetCustomVerificationEmailTemplateResponseDeserializer::deserialize(
+                            "GetCustomVerificationEmailTemplateResult",
+                            &mut stack
+                        )
+                    );
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetCustomVerificationEmailTemplateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Returns the current status of Easy DKIM signing for an entity. For domain name identities, this operation also returns the DKIM tokens that are required for Easy DKIM signing, and whether Amazon SES has successfully verified that these tokens have been published.</p> <p>This operation takes a list of identities as input and returns the following information for each:</p> <ul> <li> <p>Whether Easy DKIM signing is enabled or disabled.</p> </li> <li> <p>A set of DKIM tokens that represent the identity. If the identity is an email address, the tokens represent the domain of that address.</p> </li> <li> <p>Whether Amazon SES has successfully verified the DKIM tokens published in the domain's DNS. This information is only returned for domain name identities, not for email addresses.</p> </li> </ul> <p>This operation is throttled at one request per second and can only get DKIM attributes for up to 100 identities at a time.</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html">Amazon SES Developer Guide</a>.</p>
     fn get_identity_dkim_attributes(
         &self,
         input: &GetIdentityDkimAttributesRequest,
@@ -11724,7 +16129,7 @@ where
         }
     }
 
-    /// <p>Returns the custom MAIL FROM attributes for a list of identities (email addresses and/or domains).</p> <p>This action is throttled at one request per second and can only get custom MAIL FROM attributes for up to 100 identities at a time.</p>
+    /// <p>Returns the custom MAIL FROM attributes for a list of identities (email addresses : domains).</p> <p>This operation is throttled at one request per second and can only get custom MAIL FROM attributes for up to 100 identities at a time.</p>
     fn get_identity_mail_from_domain_attributes(
         &self,
         input: &GetIdentityMailFromDomainAttributesRequest,
@@ -11778,7 +16183,7 @@ where
         }
     }
 
-    /// <p>Given a list of verified identities (email addresses and/or domains), returns a structure describing identity notification attributes.</p> <p>This action is throttled at one request per second and can only get notification attributes for up to 100 identities at a time.</p> <p>For more information about using notifications with Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Given a list of verified identities (email addresses and/or domains), returns a structure describing identity notification attributes.</p> <p>This operation is throttled at one request per second and can only get notification attributes for up to 100 identities at a time.</p> <p>For more information about using notifications with Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
     fn get_identity_notification_attributes(
         &self,
         input: &GetIdentityNotificationAttributesRequest,
@@ -11832,7 +16237,7 @@ where
         }
     }
 
-    /// <p>Returns the requested sending authorization policies for the given identity (an email address or a domain). The policies are returned as a map of policy names to policy contents. You can retrieve a maximum of 20 policies at a time.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Returns the requested sending authorization policies for the given identity (an email address or a domain). The policies are returned as a map of policy names to policy contents. You can retrieve a maximum of 20 policies at a time.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn get_identity_policies(
         &self,
         input: &GetIdentityPoliciesRequest,
@@ -11883,7 +16288,7 @@ where
         }
     }
 
-    /// <p>Given a list of identities (email addresses and/or domains), returns the verification status and (for domain identities) the verification token for each identity.</p> <p>The verification status of an email address is "Pending" until the email address owner clicks the link within the verification email that Amazon SES sent to that address. If the email address owner clicks the link within 24 hours, the verification status of the email address changes to "Success". If the link is not clicked within 24 hours, the verification status changes to "Failed." In that case, if you still want to verify the email address, you must restart the verification process from the beginning.</p> <p>For domain identities, the domain's verification status is "Pending" as Amazon SES searches for the required TXT record in the DNS settings of the domain. When Amazon SES detects the record, the domain's verification status changes to "Success". If Amazon SES is unable to detect the record within 72 hours, the domain's verification status changes to "Failed." In that case, if you still want to verify the domain, you must restart the verification process from the beginning.</p> <p>This action is throttled at one request per second and can only get verification attributes for up to 100 identities at a time.</p>
+    /// <p>Given a list of identities (email addresses and/or domains), returns the verification status and (for domain identities) the verification token for each identity.</p> <p>The verification status of an email address is "Pending" until the email address owner clicks the link within the verification email that Amazon SES sent to that address. If the email address owner clicks the link within 24 hours, the verification status of the email address changes to "Success". If the link is not clicked within 24 hours, the verification status changes to "Failed." In that case, if you still want to verify the email address, you must restart the verification process from the beginning.</p> <p>For domain identities, the domain's verification status is "Pending" as Amazon SES searches for the required TXT record in the DNS settings of the domain. When Amazon SES detects the record, the domain's verification status changes to "Success". If Amazon SES is unable to detect the record within 72 hours, the domain's verification status changes to "Failed." In that case, if you still want to verify the domain, you must restart the verification process from the beginning.</p> <p>This operation is throttled at one request per second and can only get verification attributes for up to 100 identities at a time.</p>
     fn get_identity_verification_attributes(
         &self,
         input: &GetIdentityVerificationAttributesRequest,
@@ -11937,7 +16342,7 @@ where
         }
     }
 
-    /// <p>Returns the user's current sending limits.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Provides the sending limits for the Amazon SES account. </p> <p>You can execute this operation no more than once per second.</p>
     fn get_send_quota(&self) -> Result<GetSendQuotaResponse, GetSendQuotaError> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
@@ -11985,7 +16390,7 @@ where
         }
     }
 
-    /// <p>Returns the user's sending statistics. The result is a list of data points, representing the last two weeks of sending activity.</p> <p>Each data point in the list contains statistics for a 15-minute interval.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Provides sending statistics for the Amazon SES account. The result is a list of data points, representing the last two weeks of sending activity. Each data point in the list contains statistics for a 15-minute period of time.</p> <p>You can execute this operation no more than once per second.</p>
     fn get_send_statistics(&self) -> Result<GetSendStatisticsResponse, GetSendStatisticsError> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
@@ -12033,7 +16438,58 @@ where
         }
     }
 
-    /// <p>Lists the configuration sets associated with your AWS account.</p> <p>Configuration sets enable you to publish email sending events. For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second and can return up to 50 configuration sets at a time.</p>
+    /// <p>Displays the template object (which includes the Subject line, HTML part and text part) for the template you specify.</p> <p>You can execute this operation no more than once per second.</p>
+    fn get_template(
+        &self,
+        input: &GetTemplateRequest,
+    ) -> Result<GetTemplateResponse, GetTemplateError> {
+        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "GetTemplate");
+        params.put("Version", "2010-12-01");
+        GetTemplateRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = GetTemplateResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(GetTemplateResponseDeserializer::deserialize(
+                        "GetTemplateResult",
+                        &mut stack
+                    ));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetTemplateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Provides a list of the configuration sets associated with your Amazon SES account. For information about using configuration sets, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Monitoring Your Amazon SES Sending Activity</a> in the <i>Amazon SES Developer Guide.</i> </p> <p>You can execute this operation no more than once per second. This operation will return up to 1,000 configuration sets each time it is run. If your Amazon SES account has more than 1,000 configuration sets, this operation will also return a NextToken element. You can then execute the <code>ListConfigurationSets</code> operation again, passing the <code>NextToken</code> parameter and the value of the NextToken element to retrieve additional results.</p>
     fn list_configuration_sets(
         &self,
         input: &ListConfigurationSetsRequest,
@@ -12084,7 +16540,63 @@ where
         }
     }
 
-    /// <p>Returns a list containing all of the identities (email addresses and domains) for your AWS account, regardless of verification status.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Lists the existing custom verification email templates for your account.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn list_custom_verification_email_templates(
+        &self,
+        input: &ListCustomVerificationEmailTemplatesRequest,
+    ) -> Result<
+        ListCustomVerificationEmailTemplatesResponse,
+        ListCustomVerificationEmailTemplatesError,
+    > {
+        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ListCustomVerificationEmailTemplates");
+        params.put("Version", "2010-12-01");
+        ListCustomVerificationEmailTemplatesRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = ListCustomVerificationEmailTemplatesResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(
+                        ListCustomVerificationEmailTemplatesResponseDeserializer::deserialize(
+                            "ListCustomVerificationEmailTemplatesResult",
+                            &mut stack
+                        )
+                    );
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListCustomVerificationEmailTemplatesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Returns a list containing all of the identities (email addresses and domains) for your AWS account, regardless of verification status.</p> <p>You can execute this operation no more than once per second.</p>
     fn list_identities(
         &self,
         input: &ListIdentitiesRequest,
@@ -12135,7 +16647,7 @@ where
         }
     }
 
-    /// <p>Returns a list of sending authorization policies that are attached to the given identity (an email address or a domain). This API returns only a list. If you want the actual policy content, you can use <code>GetIdentityPolicies</code>.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Returns a list of sending authorization policies that are attached to the given identity (an email address or a domain). This API returns only a list. If you want the actual policy content, you can use <code>GetIdentityPolicies</code>.</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn list_identity_policies(
         &self,
         input: &ListIdentityPoliciesRequest,
@@ -12186,7 +16698,7 @@ where
         }
     }
 
-    /// <p>Lists the IP address filters associated with your AWS account.</p> <p>For information about managing IP address filters, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Lists the IP address filters associated with your AWS account.</p> <p>For information about managing IP address filters, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-ip-filters.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn list_receipt_filters(
         &self,
         input: &ListReceiptFiltersRequest,
@@ -12237,7 +16749,7 @@ where
         }
     }
 
-    /// <p>Lists the receipt rule sets that exist under your AWS account. If there are additional receipt rule sets to be retrieved, you will receive a <code>NextToken</code> that you can provide to the next call to <code>ListReceiptRuleSets</code> to retrieve the additional entries.</p> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Lists the receipt rule sets that exist under your AWS account. If there are additional receipt rule sets to be retrieved, you will receive a <code>NextToken</code> that you can provide to the next call to <code>ListReceiptRuleSets</code> to retrieve the additional entries.</p> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn list_receipt_rule_sets(
         &self,
         input: &ListReceiptRuleSetsRequest,
@@ -12288,7 +16800,58 @@ where
         }
     }
 
-    /// <p>Returns a list containing all of the email addresses that have been verified.</p> <important> <p>The ListVerifiedEmailAddresses action is deprecated as of the May 15, 2012 release of Domain Verification. The ListIdentities action is now preferred.</p> </important> <p>This action is throttled at one request per second.</p>
+    /// <p>Lists the email templates present in your Amazon SES account.</p> <p>You can execute this operation no more than once per second.</p>
+    fn list_templates(
+        &self,
+        input: &ListTemplatesRequest,
+    ) -> Result<ListTemplatesResponse, ListTemplatesError> {
+        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ListTemplates");
+        params.put("Version", "2010-12-01");
+        ListTemplatesRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = ListTemplatesResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(ListTemplatesResponseDeserializer::deserialize(
+                        "ListTemplatesResult",
+                        &mut stack
+                    ));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTemplatesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Deprecated. Use the <code>ListIdentities</code> operation to list the email addresses and domains associated with your account.</p>
     fn list_verified_email_addresses(
         &self,
     ) -> Result<ListVerifiedEmailAddressesResponse, ListVerifiedEmailAddressesError> {
@@ -12340,7 +16903,7 @@ where
         }
     }
 
-    /// <p>Adds or updates a sending authorization policy for the specified identity (an email address or a domain).</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Adds or updates a sending authorization policy for the specified identity (an email address or a domain).</p> <note> <p>This API is for the identity owner only. If you have not verified the identity, this API will return an error.</p> </note> <p>Sending authorization is a feature that enables an identity owner to authorize other senders to use its identities. For information about using sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn put_identity_policy(
         &self,
         input: &PutIdentityPolicyRequest,
@@ -12391,7 +16954,7 @@ where
         }
     }
 
-    /// <p>Reorders the receipt rules within a receipt rule set.</p> <note> <p>All of the rules in the rule set must be represented in this request. That is, this API will return an error if the reorder request doesn't explicitly position all of the rules.</p> </note> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Reorders the receipt rules within a receipt rule set.</p> <note> <p>All of the rules in the rule set must be represented in this request. That is, this API will return an error if the reorder request doesn't explicitly position all of the rules.</p> </note> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn reorder_receipt_rule_set(
         &self,
         input: &ReorderReceiptRuleSetRequest,
@@ -12442,7 +17005,7 @@ where
         }
     }
 
-    /// <p>Generates and sends a bounce message to the sender of an email you received through Amazon SES. You can only use this API on an email up to 24 hours after you receive it.</p> <note> <p>You cannot use this API to send generic bounces for mail that was not received by Amazon SES.</p> </note> <p>For information about receiving email through Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Generates and sends a bounce message to the sender of an email you received through Amazon SES. You can only use this API on an email up to 24 hours after you receive it.</p> <note> <p>You cannot use this API to send generic bounces for mail that was not received by Amazon SES.</p> </note> <p>For information about receiving email through Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn send_bounce(
         &self,
         input: &SendBounceRequest,
@@ -12493,7 +17056,111 @@ where
         }
     }
 
-    /// <p><p>Composes an email message based on input data, and then immediately queues the message for sending.</p> <p>There are several important points to know about <code>SendEmail</code>:</p> <ul> <li> <p>You can only send email from verified email addresses and domains; otherwise, you will get an &quot;Email address not verified&quot; error. If your account is still in the Amazon SES sandbox, you must also verify every recipient email address except for the recipients provided by the Amazon SES mailbox simulator. For more information, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Amazon SES Developer Guide</a>.</p> </li> <li> <p>The total size of the message cannot exceed 10 MB. This includes any attachments that are part of the message.</p> </li> <li> <p>You must provide at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If any email address you provide is invalid, Amazon SES rejects the entire email.</p> </li> <li> <p>Amazon SES has a limit on the total number of recipients per message. The combined number of To:, CC: and BCC: email addresses cannot exceed 50. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call Amazon SES repeatedly to send the message to each group.</p> </li> <li> <p>For every message that you send, the total number of recipients (To:, CC: and BCC:) is counted against your sending quota - the maximum number of emails you can send in a 24-hour period. For information about your sending quota, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html">Amazon SES Developer Guide</a>.</p> </li> </ul></p>
+    /// <p><p>Composes an email message to multiple destinations. The message body is created using an email template.</p> <p>In order to send email using the <code>SendBulkTemplatedEmail</code> operation, your call to the API must meet the following requirements:</p> <ul> <li> <p>The call must refer to an existing email template. You can create email templates using the <a>CreateTemplate</a> operation.</p> </li> <li> <p>The message must be sent from a verified email address or domain.</p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The total size of the message, including attachments, must be less than 10 MB.</p> </li> <li> <p>Each <code>Destination</code> parameter must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> </ul></p>
+    fn send_bulk_templated_email(
+        &self,
+        input: &SendBulkTemplatedEmailRequest,
+    ) -> Result<SendBulkTemplatedEmailResponse, SendBulkTemplatedEmailError> {
+        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "SendBulkTemplatedEmail");
+        params.put("Version", "2010-12-01");
+        SendBulkTemplatedEmailRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = SendBulkTemplatedEmailResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(SendBulkTemplatedEmailResponseDeserializer::deserialize(
+                        "SendBulkTemplatedEmailResult",
+                        &mut stack
+                    ));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SendBulkTemplatedEmailError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Adds an email address to the list of identities for your Amazon SES account and attempts to verify it. As a result of executing this operation, a customized verification email is sent to the specified address.</p> <p>To use this operation, you must first create a custom verification email template. For more information about creating and using custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn send_custom_verification_email(
+        &self,
+        input: &SendCustomVerificationEmailRequest,
+    ) -> Result<SendCustomVerificationEmailResponse, SendCustomVerificationEmailError> {
+        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "SendCustomVerificationEmail");
+        params.put("Version", "2010-12-01");
+        SendCustomVerificationEmailRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = SendCustomVerificationEmailResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(
+                        SendCustomVerificationEmailResponseDeserializer::deserialize(
+                            "SendCustomVerificationEmailResult",
+                            &mut stack
+                        )
+                    );
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SendCustomVerificationEmailError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p><p>Composes an email message and immediately queues it for sending. In order to send email using the <code>SendEmail</code> operation, your message must meet the following requirements:</p> <ul> <li> <p>The message must be sent from a verified email address or domain. If you attempt to send email using a non-verified address or domain, the operation will result in an &quot;Email address not verified&quot; error. </p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The total size of the message, including attachments, must be smaller than 10 MB.</p> </li> <li> <p>The message must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> <li> <p>The message may not include more than 50 recipients, across the To:, CC: and BCC: fields. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call the <code>SendEmail</code> operation several times to send the message to each group.</p> </li> </ul> <important> <p>For every message that you send, the total number of recipients (including each recipient in the To:, CC: and BCC: fields) is counted against the maximum number of emails you can send in a 24-hour period (your <i>sending quota</i>). For more information about sending quotas in Amazon SES, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html">Managing Your Amazon SES Sending Limits</a> in the <i>Amazon SES Developer Guide.</i> </p> </important></p>
     fn send_email(&self, input: &SendEmailRequest) -> Result<SendEmailResponse, SendEmailError> {
         let mut request = SignedRequest::new("POST", "email", &self.region, "/");
         let mut params = Params::new();
@@ -12541,7 +17208,7 @@ where
         }
     }
 
-    /// <p><p>Sends an email message, with header and content specified by the client. The <code>SendRawEmail</code> action is useful for sending multipart MIME emails. The raw text of the message must comply with Internet email standards; otherwise, the message cannot be sent. </p> <p>There are several important points to know about <code>SendRawEmail</code>:</p> <ul> <li> <p>You can only send email from verified email addresses and domains; otherwise, you will get an &quot;Email address not verified&quot; error. If your account is still in the Amazon SES sandbox, you must also verify every recipient email address except for the recipients provided by the Amazon SES mailbox simulator. For more information, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Amazon SES Developer Guide</a>.</p> </li> <li> <p>The total size of the message cannot exceed 10 MB. This includes any attachments that are part of the message.</p> </li> <li> <p>You must provide at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If any email address you provide is invalid, Amazon SES rejects the entire email.</p> </li> <li> <p>Amazon SES has a limit on the total number of recipients per message. The combined number of To:, CC: and BCC: email addresses cannot exceed 50. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call Amazon SES repeatedly to send the message to each group.</p> </li> <li> <p>The To:, CC:, and BCC: headers in the raw message can contain a group list. Note that each recipient in a group list counts towards the 50-recipient limit.</p> </li> <li> <p>Amazon SES overrides any Message-ID and Date headers you provide.</p> </li> <li> <p>For every message that you send, the total number of recipients (To:, CC: and BCC:) is counted against your sending quota - the maximum number of emails you can send in a 24-hour period. For information about your sending quota, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html">Amazon SES Developer Guide</a>.</p> </li> <li> <p>If you are using sending authorization to send on behalf of another user, <code>SendRawEmail</code> enables you to specify the cross-account identity for the email&#39;s &quot;Source,&quot; &quot;From,&quot; and &quot;Return-Path&quot; parameters in one of two ways: you can pass optional parameters <code>SourceArn</code>, <code>FromArn</code>, and/or <code>ReturnPathArn</code> to the API, or you can include the following X-headers in the header of your raw email:</p> <ul> <li> <p> <code>X-SES-SOURCE-ARN</code> </p> </li> <li> <p> <code>X-SES-FROM-ARN</code> </p> </li> <li> <p> <code>X-SES-RETURN-PATH-ARN</code> </p> </li> </ul> <important> <p>Do not include these X-headers in the DKIM signature, because they are removed by Amazon SES before sending the email.</p> </important> <p>For the most common sending authorization use case, we recommend that you specify the <code>SourceIdentityArn</code> and do not specify either the <code>FromIdentityArn</code> or <code>ReturnPathIdentityArn</code>. (The same note applies to the corresponding X-headers.) If you only specify the <code>SourceIdentityArn</code>, Amazon SES will simply set the &quot;From&quot; address and the &quot;Return Path&quot; address to the identity specified in <code>SourceIdentityArn</code>. For more information about sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Amazon SES Developer Guide</a>.</p> </li> </ul></p>
+    /// <p><p>Composes an email message and immediately queues it for sending. When calling this operation, you may specify the message headers as well as the content. The <code>SendRawEmail</code> operation is particularly useful for sending multipart MIME emails (such as those that contain both a plain-text and an HTML version). </p> <p>In order to send email using the <code>SendRawEmail</code> operation, your message must meet the following requirements:</p> <ul> <li> <p>The message must be sent from a verified email address or domain. If you attempt to send email using a non-verified address or domain, the operation will result in an &quot;Email address not verified&quot; error. </p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The total size of the message, including attachments, must be smaller than 10 MB.</p> </li> <li> <p>The message must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> <li> <p>The message may not include more than 50 recipients, across the To:, CC: and BCC: fields. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call the <code>SendRawEmail</code> operation several times to send the message to each group.</p> </li> </ul> <important> <p>For every message that you send, the total number of recipients (including each recipient in the To:, CC: and BCC: fields) is counted against the maximum number of emails you can send in a 24-hour period (your <i>sending quota</i>). For more information about sending quotas in Amazon SES, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html">Managing Your Amazon SES Sending Limits</a> in the <i>Amazon SES Developer Guide.</i> </p> </important> <p>Additionally, keep the following considerations in mind when using the <code>SendRawEmail</code> operation:</p> <ul> <li> <p>Although you can customize the message headers when using the <code>SendRawEmail</code> operation, Amazon SES will automatically apply its own <code>Message-ID</code> and <code>Date</code> headers; if you passed these headers when creating the message, they will be overwritten by the values that Amazon SES provides.</p> </li> <li> <p>If you are using sending authorization to send on behalf of another user, <code>SendRawEmail</code> enables you to specify the cross-account identity for the email&#39;s Source, From, and Return-Path parameters in one of two ways: you can pass optional parameters <code>SourceArn</code>, <code>FromArn</code>, and/or <code>ReturnPathArn</code> to the API, or you can include the following X-headers in the header of your raw email:</p> <ul> <li> <p> <code>X-SES-SOURCE-ARN</code> </p> </li> <li> <p> <code>X-SES-FROM-ARN</code> </p> </li> <li> <p> <code>X-SES-RETURN-PATH-ARN</code> </p> </li> </ul> <important> <p>Do not include these X-headers in the DKIM signature; Amazon SES will remove them before sending the email.</p> </important> <p>For most common sending authorization scenarios, we recommend that you specify the <code>SourceIdentityArn</code> parameter and not the <code>FromIdentityArn</code> or <code>ReturnPathIdentityArn</code> parameters. If you only specify the <code>SourceIdentityArn</code> parameter, Amazon SES will set the From and Return Path addresses to the identity specified in <code>SourceIdentityArn</code>. For more information about sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Using Sending Authorization with Amazon SES</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> </ul></p>
     fn send_raw_email(
         &self,
         input: &SendRawEmailRequest,
@@ -12592,7 +17259,58 @@ where
         }
     }
 
-    /// <p>Sets the specified receipt rule set as the active receipt rule set.</p> <note> <p>To disable your email-receiving through Amazon SES completely, you can call this API with RuleSetName set to null.</p> </note> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p><p>Composes an email message using an email template and immediately queues it for sending.</p> <p>In order to send email using the <code>SendTemplatedEmail</code> operation, your call to the API must meet the following requirements:</p> <ul> <li> <p>The call must refer to an existing email template. You can create email templates using the <a>CreateTemplate</a> operation.</p> </li> <li> <p>The message must be sent from a verified email address or domain.</p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The total size of the message, including attachments, must be less than 10 MB.</p> </li> <li> <p>Calls to the <code>SendTemplatedEmail</code> operation may only include one <code>Destination</code> parameter. A destination is a set of recipients who will receive the same version of the email. The <code>Destination</code> parameter can include up to 50 recipients, across the To:, CC: and BCC: fields.</p> </li> <li> <p>The <code>Destination</code> parameter must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> </ul></p>
+    fn send_templated_email(
+        &self,
+        input: &SendTemplatedEmailRequest,
+    ) -> Result<SendTemplatedEmailResponse, SendTemplatedEmailError> {
+        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "SendTemplatedEmail");
+        params.put("Version", "2010-12-01");
+        SendTemplatedEmailRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = SendTemplatedEmailResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(SendTemplatedEmailResponseDeserializer::deserialize(
+                        "SendTemplatedEmailResult",
+                        &mut stack
+                    ));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SendTemplatedEmailError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Sets the specified receipt rule set as the active receipt rule set.</p> <note> <p>To disable your email-receiving through Amazon SES completely, you can call this API with RuleSetName set to null.</p> </note> <p>For information about managing receipt rule sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rule-sets.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn set_active_receipt_rule_set(
         &self,
         input: &SetActiveReceiptRuleSetRequest,
@@ -12643,7 +17361,7 @@ where
         }
     }
 
-    /// <p>Enables or disables Easy DKIM signing of email sent from an identity:</p> <ul> <li> <p>If Easy DKIM signing is enabled for a domain name identity (e.g., <code>example.com</code>), then Amazon SES will DKIM-sign all email sent by addresses under that domain name (e.g., <code>user@example.com</code>).</p> </li> <li> <p>If Easy DKIM signing is enabled for an email address, then Amazon SES will DKIM-sign all email sent by that email address.</p> </li> </ul> <p>For email addresses (e.g., <code>user@example.com</code>), you can only enable Easy DKIM signing if the corresponding domain (e.g., <code>example.com</code>) has been set up for Easy DKIM using the AWS Console or the <code>VerifyDomainDkim</code> action.</p> <p>This action is throttled at one request per second.</p> <p>For more information about Easy DKIM signing, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Enables or disables Easy DKIM signing of email sent from an identity:</p> <ul> <li> <p>If Easy DKIM signing is enabled for a domain name identity (such as <code>example.com</code>), then Amazon SES will DKIM-sign all email sent by addresses under that domain name (for example, <code>user@example.com</code>).</p> </li> <li> <p>If Easy DKIM signing is enabled for an email address, then Amazon SES will DKIM-sign all email sent by that email address.</p> </li> </ul> <p>For email addresses (for example, <code>user@example.com</code>), you can only enable Easy DKIM signing if the corresponding domain (in this case, <code>example.com</code>) has been set up for Easy DKIM using the AWS Console or the <code>VerifyDomainDkim</code> operation.</p> <p>You can execute this operation no more than once per second.</p> <p>For more information about Easy DKIM signing, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">Amazon SES Developer Guide</a>.</p>
     fn set_identity_dkim_enabled(
         &self,
         input: &SetIdentityDkimEnabledRequest,
@@ -12694,7 +17412,7 @@ where
         }
     }
 
-    /// <p>Given an identity (an email address or a domain), enables or disables whether Amazon SES forwards bounce and complaint notifications as email. Feedback forwarding can only be disabled when Amazon Simple Notification Service (Amazon SNS) topics are specified for both bounces and complaints.</p> <note> <p>Feedback forwarding does not apply to delivery notifications. Delivery notifications are only available through Amazon SNS.</p> </note> <p>This action is throttled at one request per second.</p> <p>For more information about using notifications with Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Given an identity (an email address or a domain), enables or disables whether Amazon SES forwards bounce and complaint notifications as email. Feedback forwarding can only be disabled when Amazon Simple Notification Service (Amazon SNS) topics are specified for both bounces and complaints.</p> <note> <p>Feedback forwarding does not apply to delivery notifications. Delivery notifications are only available through Amazon SNS.</p> </note> <p>You can execute this operation no more than once per second.</p> <p>For more information about using notifications with Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
     fn set_identity_feedback_forwarding_enabled(
         &self,
         input: &SetIdentityFeedbackForwardingEnabledRequest,
@@ -12750,7 +17468,7 @@ where
         }
     }
 
-    /// <p>Given an identity (an email address or a domain), sets whether Amazon SES includes the original email headers in the Amazon Simple Notification Service (Amazon SNS) notifications of a specified type.</p> <p>This action is throttled at one request per second.</p> <p>For more information about using notifications with Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Given an identity (an email address or a domain), sets whether Amazon SES includes the original email headers in the Amazon Simple Notification Service (Amazon SNS) notifications of a specified type.</p> <p>You can execute this operation no more than once per second.</p> <p>For more information about using notifications with Amazon SES, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
     fn set_identity_headers_in_notifications_enabled(
         &self,
         input: &SetIdentityHeadersInNotificationsEnabledRequest,
@@ -12810,7 +17528,7 @@ where
         }
     }
 
-    /// <p>Enables or disables the custom MAIL FROM domain setup for a verified identity (an email address or a domain).</p> <important> <p>To send emails using the specified MAIL FROM domain, you must add an MX record to your MAIL FROM domain's DNS settings. If you want your emails to pass Sender Policy Framework (SPF) checks, you must also add or update an SPF record. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from-set.html">Amazon SES Developer Guide</a>.</p> </important> <p>This action is throttled at one request per second.</p>
+    /// <p>Enables or disables the custom MAIL FROM domain setup for a verified identity (an email address or a domain).</p> <important> <p>To send emails using the specified MAIL FROM domain, you must add an MX record to your MAIL FROM domain's DNS settings. If you want your emails to pass Sender Policy Framework (SPF) checks, you must also add or update an SPF record. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mail-from-set.html">Amazon SES Developer Guide</a>.</p> </important> <p>You can execute this operation no more than once per second.</p>
     fn set_identity_mail_from_domain(
         &self,
         input: &SetIdentityMailFromDomainRequest,
@@ -12861,7 +17579,7 @@ where
         }
     }
 
-    /// <p>Given an identity (an email address or a domain), sets the Amazon Simple Notification Service (Amazon SNS) topic to which Amazon SES will publish bounce, complaint, and/or delivery notifications for emails sent with that identity as the <code>Source</code>.</p> <note> <p>Unless feedback forwarding is enabled, you must specify Amazon SNS topics for bounce and complaint notifications. For more information, see <code>SetIdentityFeedbackForwardingEnabled</code>.</p> </note> <p>This action is throttled at one request per second.</p> <p>For more information about feedback notification, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Given an identity (an email address or a domain), sets the Amazon Simple Notification Service (Amazon SNS) topic to which Amazon SES will publish bounce, complaint, and/or delivery notifications for emails sent with that identity as the <code>Source</code>.</p> <note> <p>Unless feedback forwarding is enabled, you must specify Amazon SNS topics for bounce and complaint notifications. For more information, see <code>SetIdentityFeedbackForwardingEnabled</code>.</p> </note> <p>You can execute this operation no more than once per second.</p> <p>For more information about feedback notification, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
     fn set_identity_notification_topic(
         &self,
         input: &SetIdentityNotificationTopicRequest,
@@ -12914,7 +17632,7 @@ where
         }
     }
 
-    /// <p>Sets the position of the specified receipt rule in the receipt rule set.</p> <p>For information about managing receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Sets the position of the specified receipt rule in the receipt rule set.</p> <p>For information about managing receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn set_receipt_rule_position(
         &self,
         input: &SetReceiptRulePositionRequest,
@@ -12965,7 +17683,88 @@ where
         }
     }
 
-    /// <p>Updates the event destination of a configuration set.</p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>Event destinations are associated with configuration sets, which enable you to publish email sending events to Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS). For information about using configuration sets, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Creates a preview of the MIME content of an email when provided with a template and a set of replacement data.</p> <p>You can execute this operation no more than once per second.</p>
+    fn test_render_template(
+        &self,
+        input: &TestRenderTemplateRequest,
+    ) -> Result<TestRenderTemplateResponse, TestRenderTemplateError> {
+        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "TestRenderTemplate");
+        params.put("Version", "2010-12-01");
+        TestRenderTemplateRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = TestRenderTemplateResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(TestRenderTemplateResponseDeserializer::deserialize(
+                        "TestRenderTemplateResult",
+                        &mut stack
+                    ));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(TestRenderTemplateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Enables or disables email sending across your entire Amazon SES account. You can use this operation in conjunction with Amazon CloudWatch alarms to temporarily pause email sending across your Amazon SES account when reputation metrics (such as your bounce on complaint rate) reach certain thresholds.</p> <p>You can execute this operation no more than once per second.</p>
+    fn update_account_sending_enabled(
+        &self,
+        input: &UpdateAccountSendingEnabledRequest,
+    ) -> Result<(), UpdateAccountSendingEnabledError> {
+        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "UpdateAccountSendingEnabled");
+        params.put("Version", "2010-12-01");
+        UpdateAccountSendingEnabledRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateAccountSendingEnabledError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Updates the event destination of a configuration set. Event destinations are associated with configuration sets, which enable you to publish email sending events to Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS). For information about using configuration sets, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/monitor-sending-activity.html">Monitoring Your Amazon SES Sending Activity</a> in the <i>Amazon SES Developer Guide.</i> </p> <note> <p>When you create or update an event destination, you must provide one, and only one, destination. The destination can be Amazon CloudWatch, Amazon Kinesis Firehose, or Amazon Simple Notification Service (Amazon SNS).</p> </note> <p>You can execute this operation no more than once per second.</p>
     fn update_configuration_set_event_destination(
         &self,
         input: &UpdateConfigurationSetEventDestinationRequest,
@@ -13021,7 +17820,159 @@ where
         }
     }
 
-    /// <p>Updates a receipt rule.</p> <p>For information about managing receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Enables or disables the publishing of reputation metrics for emails sent using a specific configuration set. Reputation metrics include bounce and complaint rates. These metrics are published to Amazon CloudWatch. By using Amazon CloudWatch, you can create alarms when bounce or complaint rates exceed a certain threshold.</p> <p>You can execute this operation no more than once per second.</p>
+    fn update_configuration_set_reputation_metrics_enabled(
+        &self,
+        input: &UpdateConfigurationSetReputationMetricsEnabledRequest,
+    ) -> Result<(), UpdateConfigurationSetReputationMetricsEnabledError> {
+        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "UpdateConfigurationSetReputationMetricsEnabled");
+        params.put("Version", "2010-12-01");
+        UpdateConfigurationSetReputationMetricsEnabledRequestSerializer::serialize(
+            &mut params,
+            "",
+            &input,
+        );
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(
+                    UpdateConfigurationSetReputationMetricsEnabledError::from_body(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ),
+                )
+            }
+        }
+    }
+
+    /// <p>Enables or disables email sending for messages sent using a specific configuration set. You can use this operation in conjunction with Amazon CloudWatch alarms to temporarily pause email sending for a configuration set when the reputation metrics for that configuration set (such as your bounce on complaint rate) reach certain thresholds.</p> <p>You can execute this operation no more than once per second.</p>
+    fn update_configuration_set_sending_enabled(
+        &self,
+        input: &UpdateConfigurationSetSendingEnabledRequest,
+    ) -> Result<(), UpdateConfigurationSetSendingEnabledError> {
+        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "UpdateConfigurationSetSendingEnabled");
+        params.put("Version", "2010-12-01");
+        UpdateConfigurationSetSendingEnabledRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateConfigurationSetSendingEnabledError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Modifies an association between a configuration set and a custom domain for open and click event tracking. </p> <p>By default, images and links used for tracking open and click events are hosted on domains operated by Amazon SES. You can configure a subdomain of your own to handle these events. For information about using configuration sets, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/configure-custom-open-click-domains.html">Configuring Custom Domains to Handle Open and Click Tracking</a> in the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/Welcome.html">Amazon SES Developer Guide</a>.</p>
+    fn update_configuration_set_tracking_options(
+        &self,
+        input: &UpdateConfigurationSetTrackingOptionsRequest,
+    ) -> Result<
+        UpdateConfigurationSetTrackingOptionsResponse,
+        UpdateConfigurationSetTrackingOptionsError,
+    > {
+        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "UpdateConfigurationSetTrackingOptions");
+        params.put("Version", "2010-12-01");
+        UpdateConfigurationSetTrackingOptionsRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = UpdateConfigurationSetTrackingOptionsResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(
+                        UpdateConfigurationSetTrackingOptionsResponseDeserializer::deserialize(
+                            "UpdateConfigurationSetTrackingOptionsResult",
+                            &mut stack
+                        )
+                    );
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateConfigurationSetTrackingOptionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Updates an existing custom verification email template.</p> <p>For more information about custom verification email templates, see <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/custom-verification-emails.html">Using Custom Verification Email Templates</a> in the <i>Amazon SES Developer Guide</i>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn update_custom_verification_email_template(
+        &self,
+        input: &UpdateCustomVerificationEmailTemplateRequest,
+    ) -> Result<(), UpdateCustomVerificationEmailTemplateError> {
+        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "UpdateCustomVerificationEmailTemplate");
+        params.put("Version", "2010-12-01");
+        UpdateCustomVerificationEmailTemplateRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateCustomVerificationEmailTemplateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Updates a receipt rule.</p> <p>For information about managing receipt rules, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/receiving-email-managing-receipt-rules.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
     fn update_receipt_rule(
         &self,
         input: &UpdateReceiptRuleRequest,
@@ -13072,7 +18023,58 @@ where
         }
     }
 
-    /// <p>Returns a set of DKIM tokens for a domain. DKIM <i>tokens</i> are character strings that represent your domain's identity. Using these tokens, you will need to create DNS CNAME records that point to DKIM public keys hosted by Amazon SES. Amazon Web Services will eventually detect that you have updated your DNS records; this detection process may take up to 72 hours. Upon successful detection, Amazon SES will be able to DKIM-sign email originating from that domain.</p> <p>This action is throttled at one request per second.</p> <p>To enable or disable Easy DKIM signing for a domain, use the <code>SetIdentityDkimEnabled</code> action.</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Updates an email template. Email templates enable you to send personalized email to one or more destinations in a single API operation. For more information, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Amazon SES Developer Guide</a>.</p> <p>You can execute this operation no more than once per second.</p>
+    fn update_template(
+        &self,
+        input: &UpdateTemplateRequest,
+    ) -> Result<UpdateTemplateResponse, UpdateTemplateError> {
+        let mut request = SignedRequest::new("POST", "email", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "UpdateTemplate");
+        params.put("Version", "2010-12-01");
+        UpdateTemplateRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = UpdateTemplateResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(UpdateTemplateResponseDeserializer::deserialize(
+                        "UpdateTemplateResult",
+                        &mut stack
+                    ));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateTemplateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Returns a set of DKIM tokens for a domain. DKIM <i>tokens</i> are character strings that represent your domain's identity. Using these tokens, you will need to create DNS CNAME records that point to DKIM public keys hosted by Amazon SES. Amazon Web Services will eventually detect that you have updated your DNS records; this detection process may take up to 72 hours. Upon successful detection, Amazon SES will be able to DKIM-sign email originating from that domain.</p> <p>You can execute this operation no more than once per second.</p> <p>To enable or disable Easy DKIM signing for a domain, use the <code>SetIdentityDkimEnabled</code> operation.</p> <p>For more information about creating DNS records using DKIM tokens, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim-dns-records.html">Amazon SES Developer Guide</a>.</p>
     fn verify_domain_dkim(
         &self,
         input: &VerifyDomainDkimRequest,
@@ -13123,7 +18125,7 @@ where
         }
     }
 
-    /// <p>Verifies a domain.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Adds a domain to the list of identities for your Amazon SES account and attempts to verify it. For more information about verifying domains, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> <p>You can execute this operation no more than once per second.</p>
     fn verify_domain_identity(
         &self,
         input: &VerifyDomainIdentityRequest,
@@ -13174,7 +18176,7 @@ where
         }
     }
 
-    /// <p>Verifies an email address. This action causes a confirmation email message to be sent to the specified address.</p> <important> <p>The VerifyEmailAddress action is deprecated as of the May 15, 2012 release of Domain Verification. The VerifyEmailIdentity action is now preferred.</p> </important> <p>This action is throttled at one request per second.</p>
+    /// <p>Deprecated. Use the <code>VerifyEmailIdentity</code> operation to verify a new email address.</p>
     fn verify_email_address(
         &self,
         input: &VerifyEmailAddressRequest,
@@ -13204,7 +18206,7 @@ where
         }
     }
 
-    /// <p>Verifies an email address. This action causes a confirmation email message to be sent to the specified address.</p> <p>This action is throttled at one request per second.</p>
+    /// <p>Adds an email address to the list of identities for your Amazon SES account and attempts to verify it. As a result of executing this operation, a verification email is sent to the specified address.</p> <p>You can execute this operation no more than once per second.</p>
     fn verify_email_identity(
         &self,
         input: &VerifyEmailIdentityRequest,

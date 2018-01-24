@@ -30,16 +30,21 @@ use serde_json::from_str;
 /// <p>The <code>ActivatedRule</code> object in an <a>UpdateWebACL</a> request specifies a <code>Rule</code> that you want to insert or delete, the priority of the <code>Rule</code> in the <code>WebACL</code>, and the action that you want AWS WAF to take when a web request matches the <code>Rule</code> (<code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>).</p> <p>To specify whether to insert or delete a <code>Rule</code>, use the <code>Action</code> parameter in the <a>WebACLUpdate</a> data type.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ActivatedRule {
-    /// <p><p>Specifies the action that CloudFront or AWS WAF takes when a web request matches the conditions in the <code>Rule</code>. Valid values for <code>Action</code> include the following:</p> <ul> <li> <p> <code>ALLOW</code>: CloudFront responds with the requested object.</p> </li> <li> <p> <code>BLOCK</code>: CloudFront responds with an HTTP 403 (Forbidden) status code.</p> </li> <li> <p> <code>COUNT</code>: AWS WAF increments a counter of requests that match the conditions in the rule and then continues to inspect the web request based on the remaining rules in the web ACL. </p> </li> </ul></p>
+    /// <p>Specifies the action that CloudFront or AWS WAF takes when a web request matches the conditions in the <code>Rule</code>. Valid values for <code>Action</code> include the following:</p> <ul> <li> <p> <code>ALLOW</code>: CloudFront responds with the requested object.</p> </li> <li> <p> <code>BLOCK</code>: CloudFront responds with an HTTP 403 (Forbidden) status code.</p> </li> <li> <p> <code>COUNT</code>: AWS WAF increments a counter of requests that match the conditions in the rule and then continues to inspect the web request based on the remaining rules in the web ACL. </p> </li> </ul> <p>The <code>Action</code> data type within <code>ActivatedRule</code> is used only when submitting an <code>UpdateWebACL</code> request. <code>ActivatedRule|Action</code> is not applicable and therefore not available for <code>UpdateRuleGroup</code>.</p>
     #[serde(rename = "Action")]
-    pub action: WafAction,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action: Option<WafAction>,
+    /// <p>Use the <code>OverrideAction</code> to test your <code>RuleGroup</code>.</p> <p>Any rule in a <code>RuleGroup</code> can potentially block a request. If you set the <code>OverrideAction</code> to <code>None</code>, the <code>RuleGroup</code> will block a request if any individual rule in the <code>RuleGroup</code> matches the request and is configured to block that request. However if you first want to test the <code>RuleGroup</code>, set the <code>OverrideAction</code> to <code>Count</code>. The <code>RuleGroup</code> will then override any block action specified by individual rules contained within the group. Instead of blocking matching requests, those requests will be counted. You can view a record of counted requests using <a>GetSampledRequests</a>. </p> <p>The <code>OverrideAction</code> data type within <code>ActivatedRule</code> is used only when submitting an <code>UpdateRuleGroup</code> request. <code>ActivatedRule|OverrideAction</code> is not applicable and therefore not available for <code>UpdateWebACL</code>.</p>
+    #[serde(rename = "OverrideAction")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub override_action: Option<WafOverrideAction>,
     /// <p>Specifies the order in which the <code>Rules</code> in a <code>WebACL</code> are evaluated. Rules with a lower value for <code>Priority</code> are evaluated before <code>Rules</code> with a higher value. The value must be a unique integer. If you add multiple <code>Rules</code> to a <code>WebACL</code>, the values don't need to be consecutive.</p>
     #[serde(rename = "Priority")]
     pub priority: i64,
     /// <p>The <code>RuleId</code> for a <code>Rule</code>. You use <code>RuleId</code> to get more information about a <code>Rule</code> (see <a>GetRule</a>), update a <code>Rule</code> (see <a>UpdateRule</a>), insert a <code>Rule</code> into a <code>WebACL</code> or delete a one from a <code>WebACL</code> (see <a>UpdateWebACL</a>), or delete a <code>Rule</code> from AWS WAF (see <a>DeleteRule</a>).</p> <p> <code>RuleId</code> is returned by <a>CreateRule</a> and by <a>ListRules</a>.</p>
     #[serde(rename = "RuleId")]
     pub rule_id: String,
-    /// <p>The rule type, either <code>REGULAR</code>, as defined by <a>Rule</a>, or <code>RATE_BASED</code>, as defined by <a>RateBasedRule</a>. The default is REGULAR. Although this field is optional, be aware that if you try to add a RATE_BASED rule to a web ACL without setting the type, the <a>UpdateWebACL</a> request will fail because the request tries to add a REGULAR rule with the specified ID, which does not exist. </p>
+    /// <p>The rule type, either <code>REGULAR</code>, as defined by <a>Rule</a>, <code>RATE_BASED</code>, as defined by <a>RateBasedRule</a>, or <code>GROUP</code>, as defined by <a>RuleGroup</a>. The default is REGULAR. Although this field is optional, be aware that if you try to add a RATE_BASED rule to a web ACL without setting the type, the <a>UpdateWebACL</a> request will fail because the request tries to add a REGULAR rule with the specified ID, which does not exist. </p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -124,6 +129,28 @@ pub struct CreateByteMatchSetResponse {
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateGeoMatchSetRequest {
+    /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
+    #[serde(rename = "ChangeToken")]
+    pub change_token: String,
+    /// <p>A friendly name or description of the <a>GeoMatchSet</a>. You can't change <code>Name</code> after you create the <code>GeoMatchSet</code>.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CreateGeoMatchSetResponse {
+    /// <p>The <code>ChangeToken</code> that you used to submit the <code>CreateGeoMatchSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>
+    #[serde(rename = "ChangeToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub change_token: Option<String>,
+    /// <p>The <a>GeoMatchSet</a> returned in the <code>CreateGeoMatchSet</code> response. The <code>GeoMatchSet</code> contains no <code>GeoMatchConstraints</code>.</p>
+    #[serde(rename = "GeoMatchSet")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub geo_match_set: Option<GeoMatchSet>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateIPSetRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -174,6 +201,75 @@ pub struct CreateRateBasedRuleResponse {
     #[serde(rename = "Rule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rule: Option<RateBasedRule>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateRegexMatchSetRequest {
+    /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
+    #[serde(rename = "ChangeToken")]
+    pub change_token: String,
+    /// <p>A friendly name or description of the <a>RegexMatchSet</a>. You can't change <code>Name</code> after you create a <code>RegexMatchSet</code>.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CreateRegexMatchSetResponse {
+    /// <p>The <code>ChangeToken</code> that you used to submit the <code>CreateRegexMatchSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>
+    #[serde(rename = "ChangeToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub change_token: Option<String>,
+    /// <p>A <a>RegexMatchSet</a> that contains no <code>RegexMatchTuple</code> objects.</p>
+    #[serde(rename = "RegexMatchSet")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regex_match_set: Option<RegexMatchSet>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateRegexPatternSetRequest {
+    /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
+    #[serde(rename = "ChangeToken")]
+    pub change_token: String,
+    /// <p>A friendly name or description of the <a>RegexPatternSet</a>. You can't change <code>Name</code> after you create a <code>RegexPatternSet</code>.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CreateRegexPatternSetResponse {
+    /// <p>The <code>ChangeToken</code> that you used to submit the <code>CreateRegexPatternSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>
+    #[serde(rename = "ChangeToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub change_token: Option<String>,
+    /// <p>A <a>RegexPatternSet</a> that contains no objects.</p>
+    #[serde(rename = "RegexPatternSet")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regex_pattern_set: Option<RegexPatternSet>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateRuleGroupRequest {
+    /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
+    #[serde(rename = "ChangeToken")]
+    pub change_token: String,
+    /// <p>A friendly name or description for the metrics for this <code>RuleGroup</code>. The name can contain only alphanumeric characters (A-Z, a-z, 0-9); the name can't contain whitespace. You can't change the name of the metric after you create the <code>RuleGroup</code>.</p>
+    #[serde(rename = "MetricName")]
+    pub metric_name: String,
+    /// <p>A friendly name or description of the <a>RuleGroup</a>. You can't change <code>Name</code> after you create a <code>RuleGroup</code>.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CreateRuleGroupResponse {
+    /// <p>The <code>ChangeToken</code> that you used to submit the <code>CreateRuleGroup</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>
+    #[serde(rename = "ChangeToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub change_token: Option<String>,
+    /// <p>An empty <a>RuleGroup</a>.</p>
+    #[serde(rename = "RuleGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_group: Option<RuleGroup>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
@@ -318,6 +414,24 @@ pub struct DeleteByteMatchSetResponse {
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteGeoMatchSetRequest {
+    /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
+    #[serde(rename = "ChangeToken")]
+    pub change_token: String,
+    /// <p>The <code>GeoMatchSetID</code> of the <a>GeoMatchSet</a> that you want to delete. <code>GeoMatchSetId</code> is returned by <a>CreateGeoMatchSet</a> and by <a>ListGeoMatchSets</a>.</p>
+    #[serde(rename = "GeoMatchSetId")]
+    pub geo_match_set_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteGeoMatchSetResponse {
+    /// <p>The <code>ChangeToken</code> that you used to submit the <code>DeleteGeoMatchSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>
+    #[serde(rename = "ChangeToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub change_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteIPSetRequest {
     /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
     #[serde(rename = "ChangeToken")]
@@ -348,6 +462,60 @@ pub struct DeleteRateBasedRuleRequest {
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteRateBasedRuleResponse {
     /// <p>The <code>ChangeToken</code> that you used to submit the <code>DeleteRateBasedRule</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>
+    #[serde(rename = "ChangeToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub change_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteRegexMatchSetRequest {
+    /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
+    #[serde(rename = "ChangeToken")]
+    pub change_token: String,
+    /// <p>The <code>RegexMatchSetId</code> of the <a>RegexMatchSet</a> that you want to delete. <code>RegexMatchSetId</code> is returned by <a>CreateRegexMatchSet</a> and by <a>ListRegexMatchSets</a>.</p>
+    #[serde(rename = "RegexMatchSetId")]
+    pub regex_match_set_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteRegexMatchSetResponse {
+    /// <p>The <code>ChangeToken</code> that you used to submit the <code>DeleteRegexMatchSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>
+    #[serde(rename = "ChangeToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub change_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteRegexPatternSetRequest {
+    /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
+    #[serde(rename = "ChangeToken")]
+    pub change_token: String,
+    /// <p>The <code>RegexPatternSetId</code> of the <a>RegexPatternSet</a> that you want to delete. <code>RegexPatternSetId</code> is returned by <a>CreateRegexPatternSet</a> and by <a>ListRegexPatternSets</a>.</p>
+    #[serde(rename = "RegexPatternSetId")]
+    pub regex_pattern_set_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteRegexPatternSetResponse {
+    /// <p>The <code>ChangeToken</code> that you used to submit the <code>DeleteRegexPatternSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>
+    #[serde(rename = "ChangeToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub change_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteRuleGroupRequest {
+    /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
+    #[serde(rename = "ChangeToken")]
+    pub change_token: String,
+    /// <p>The <code>RuleGroupId</code> of the <a>RuleGroup</a> that you want to delete. <code>RuleGroupId</code> is returned by <a>CreateRuleGroup</a> and by <a>ListRuleGroups</a>.</p>
+    #[serde(rename = "RuleGroupId")]
+    pub rule_group_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteRuleGroupResponse {
+    /// <p>The <code>ChangeToken</code> that you used to submit the <code>DeleteRuleGroup</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>
     #[serde(rename = "ChangeToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub change_token: Option<String>,
@@ -459,6 +627,54 @@ pub struct FieldToMatch {
     pub type_: String,
 }
 
+/// <p>The country from which web requests originate that you want AWS WAF to search for.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct GeoMatchConstraint {
+    /// <p>The type of geographical area you want AWS WAF to search for. Currently <code>Country</code> is the only valid value.</p>
+    #[serde(rename = "Type")]
+    pub type_: String,
+    /// <p>The country that you want AWS WAF to search for.</p>
+    #[serde(rename = "Value")]
+    pub value: String,
+}
+
+/// <p>Contains one or more countries that AWS WAF will search for.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GeoMatchSet {
+    /// <p>An array of <a>GeoMatchConstraint</a> objects, which contain the country that you want AWS WAF to search for.</p>
+    #[serde(rename = "GeoMatchConstraints")]
+    pub geo_match_constraints: Vec<GeoMatchConstraint>,
+    /// <p>The <code>GeoMatchSetId</code> for an <code>GeoMatchSet</code>. You use <code>GeoMatchSetId</code> to get information about a <code>GeoMatchSet</code> (see <a>GeoMatchSet</a>), update a <code>GeoMatchSet</code> (see <a>UpdateGeoMatchSet</a>), insert a <code>GeoMatchSet</code> into a <code>Rule</code> or delete one from a <code>Rule</code> (see <a>UpdateRule</a>), and delete a <code>GeoMatchSet</code> from AWS WAF (see <a>DeleteGeoMatchSet</a>).</p> <p> <code>GeoMatchSetId</code> is returned by <a>CreateGeoMatchSet</a> and by <a>ListGeoMatchSets</a>.</p>
+    #[serde(rename = "GeoMatchSetId")]
+    pub geo_match_set_id: String,
+    /// <p>A friendly name or description of the <a>GeoMatchSet</a>. You can't change the name of an <code>GeoMatchSet</code> after you create it.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+/// <p>Contains the identifier and the name of the <code>GeoMatchSet</code>.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GeoMatchSetSummary {
+    /// <p>The <code>GeoMatchSetId</code> for an <a>GeoMatchSet</a>. You can use <code>GeoMatchSetId</code> in a <a>GetGeoMatchSet</a> request to get detailed information about an <a>GeoMatchSet</a>.</p>
+    #[serde(rename = "GeoMatchSetId")]
+    pub geo_match_set_id: String,
+    /// <p>A friendly name or description of the <a>GeoMatchSet</a>. You can't change the name of an <code>GeoMatchSet</code> after you create it.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+/// <p>Specifies the type of update to perform to an <a>GeoMatchSet</a> with <a>UpdateGeoMatchSet</a>.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GeoMatchSetUpdate {
+    /// <p>Specifies whether to insert or delete a country with <a>UpdateGeoMatchSet</a>.</p>
+    #[serde(rename = "Action")]
+    pub action: String,
+    /// <p>The country from which web requests originate that you want AWS WAF to search for.</p>
+    #[serde(rename = "GeoMatchConstraint")]
+    pub geo_match_constraint: GeoMatchConstraint,
+}
+
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetByteMatchSetRequest {
     /// <p>The <code>ByteMatchSetId</code> of the <a>ByteMatchSet</a> that you want to get. <code>ByteMatchSetId</code> is returned by <a>CreateByteMatchSet</a> and by <a>ListByteMatchSets</a>.</p>
@@ -498,6 +714,21 @@ pub struct GetChangeTokenStatusResponse {
     #[serde(rename = "ChangeTokenStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub change_token_status: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetGeoMatchSetRequest {
+    /// <p>The <code>GeoMatchSetId</code> of the <a>GeoMatchSet</a> that you want to get. <code>GeoMatchSetId</code> is returned by <a>CreateGeoMatchSet</a> and by <a>ListGeoMatchSets</a>.</p>
+    #[serde(rename = "GeoMatchSetId")]
+    pub geo_match_set_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetGeoMatchSetResponse {
+    /// <p>Information about the <a>GeoMatchSet</a> that you specified in the <code>GetGeoMatchSet</code> request. This includes the <code>Type</code>, which for a <code>GeoMatchContraint</code> is always <code>Country</code>, as well as the <code>Value</code>, which is the identifier for a specific country.</p>
+    #[serde(rename = "GeoMatchSet")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub geo_match_set: Option<GeoMatchSet>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
@@ -554,6 +785,51 @@ pub struct GetRateBasedRuleResponse {
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct GetRegexMatchSetRequest {
+    /// <p>The <code>RegexMatchSetId</code> of the <a>RegexMatchSet</a> that you want to get. <code>RegexMatchSetId</code> is returned by <a>CreateRegexMatchSet</a> and by <a>ListRegexMatchSets</a>.</p>
+    #[serde(rename = "RegexMatchSetId")]
+    pub regex_match_set_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetRegexMatchSetResponse {
+    /// <p>Information about the <a>RegexMatchSet</a> that you specified in the <code>GetRegexMatchSet</code> request. For more information, see <a>RegexMatchTuple</a>.</p>
+    #[serde(rename = "RegexMatchSet")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regex_match_set: Option<RegexMatchSet>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetRegexPatternSetRequest {
+    /// <p>The <code>RegexPatternSetId</code> of the <a>RegexPatternSet</a> that you want to get. <code>RegexPatternSetId</code> is returned by <a>CreateRegexPatternSet</a> and by <a>ListRegexPatternSets</a>.</p>
+    #[serde(rename = "RegexPatternSetId")]
+    pub regex_pattern_set_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetRegexPatternSetResponse {
+    /// <p>Information about the <a>RegexPatternSet</a> that you specified in the <code>GetRegexPatternSet</code> request, including the identifier of the pattern set and the regular expression patterns you want AWS WAF to search for. </p>
+    #[serde(rename = "RegexPatternSet")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regex_pattern_set: Option<RegexPatternSet>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetRuleGroupRequest {
+    /// <p>The <code>RuleGroupId</code> of the <a>RuleGroup</a> that you want to get. <code>RuleGroupId</code> is returned by <a>CreateRuleGroup</a> and by <a>ListRuleGroups</a>.</p>
+    #[serde(rename = "RuleGroupId")]
+    pub rule_group_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetRuleGroupResponse {
+    /// <p>Information about the <a>RuleGroup</a> that you specified in the <code>GetRuleGroup</code> request. </p>
+    #[serde(rename = "RuleGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_group: Option<RuleGroup>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetRuleRequest {
     /// <p>The <code>RuleId</code> of the <a>Rule</a> that you want to get. <code>RuleId</code> is returned by <a>CreateRule</a> and by <a>ListRules</a>.</p>
     #[serde(rename = "RuleId")]
@@ -573,7 +849,7 @@ pub struct GetSampledRequestsRequest {
     /// <p>The number of requests that you want AWS WAF to return from among the first 5,000 requests that your AWS resource received during the time range. If your resource received fewer requests than the value of <code>MaxItems</code>, <code>GetSampledRequests</code> returns information about all of them. </p>
     #[serde(rename = "MaxItems")]
     pub max_items: i64,
-    /// <p><p> <code>RuleId</code> is one of two values:</p> <ul> <li> <p>The <code>RuleId</code> of the <code>Rule</code> for which you want <code>GetSampledRequests</code> to return a sample of requests.</p> </li> <li> <p> <code>Default_Action</code>, which causes <code>GetSampledRequests</code> to return a sample of the requests that didn&#39;t match any of the rules in the specified <code>WebACL</code>.</p> </li> </ul></p>
+    /// <p><p> <code>RuleId</code> is one of three values:</p> <ul> <li> <p>The <code>RuleId</code> of the <code>Rule</code> or the <code>RuleGroupId</code> of the <code>RuleGroup</code> for which you want <code>GetSampledRequests</code> to return a sample of requests.</p> </li> <li> <p> <code>Default_Action</code>, which causes <code>GetSampledRequests</code> to return a sample of the requests that didn&#39;t match any of the rules in the specified <code>WebACL</code>.</p> </li> </ul></p>
     #[serde(rename = "RuleId")]
     pub rule_id: String,
     /// <p>The start date and time and the end date and time of the range for which you want <code>GetSampledRequests</code> to return a sample of requests. Specify the date and time in the following format: <code>"2016-09-27T14:50Z"</code>. You can specify any time range in the previous three hours.</p>
@@ -755,6 +1031,34 @@ pub struct IPSetUpdate {
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct ListActivatedRulesInRuleGroupRequest {
+    /// <p>Specifies the number of <code>ActivatedRules</code> that you want AWS WAF to return for this request. If you have more <code>ActivatedRules</code> than the number that you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>ActivatedRules</code>.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>If you specify a value for <code>Limit</code> and you have more <code>ActivatedRules</code> than the value of <code>Limit</code>, AWS WAF returns a <code>NextMarker</code> value in the response that allows you to list another group of <code>ActivatedRules</code>. For the second and subsequent <code>ListActivatedRulesInRuleGroup</code> requests, specify the value of <code>NextMarker</code> from the previous response to get information about another batch of <code>ActivatedRules</code>.</p>
+    #[serde(rename = "NextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_marker: Option<String>,
+    /// <p>The <code>RuleGroupId</code> of the <a>RuleGroup</a> for which you want to get a list of <a>ActivatedRule</a> objects.</p>
+    #[serde(rename = "RuleGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_group_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ListActivatedRulesInRuleGroupResponse {
+    /// <p>An array of <code>ActivatedRules</code> objects.</p>
+    #[serde(rename = "ActivatedRules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub activated_rules: Option<Vec<ActivatedRule>>,
+    /// <p>If you have more <code>ActivatedRules</code> than the number that you specified for <code>Limit</code> in the request, the response includes a <code>NextMarker</code> value. To list more <code>ActivatedRules</code>, submit another <code>ListActivatedRulesInRuleGroup</code> request, and specify the <code>NextMarker</code> value from the response in the <code>NextMarker</code> value in the next request.</p>
+    #[serde(rename = "NextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_marker: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListByteMatchSetsRequest {
     /// <p>Specifies the number of <code>ByteMatchSet</code> objects that you want AWS WAF to return for this request. If you have more <code>ByteMatchSets</code> objects than the number you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>ByteMatchSet</code> objects.</p>
     #[serde(rename = "Limit")]
@@ -779,12 +1083,36 @@ pub struct ListByteMatchSetsResponse {
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct ListGeoMatchSetsRequest {
+    /// <p>Specifies the number of <code>GeoMatchSet</code> objects that you want AWS WAF to return for this request. If you have more <code>GeoMatchSet</code> objects than the number you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>GeoMatchSet</code> objects.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>If you specify a value for <code>Limit</code> and you have more <code>GeoMatchSet</code>s than the value of <code>Limit</code>, AWS WAF returns a <code>NextMarker</code> value in the response that allows you to list another group of <code>GeoMatchSet</code> objects. For the second and subsequent <code>ListGeoMatchSets</code> requests, specify the value of <code>NextMarker</code> from the previous response to get information about another batch of <code>GeoMatchSet</code> objects.</p>
+    #[serde(rename = "NextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_marker: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ListGeoMatchSetsResponse {
+    /// <p>An array of <a>GeoMatchSetSummary</a> objects.</p>
+    #[serde(rename = "GeoMatchSets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub geo_match_sets: Option<Vec<GeoMatchSetSummary>>,
+    /// <p>If you have more <code>GeoMatchSet</code> objects than the number that you specified for <code>Limit</code> in the request, the response includes a <code>NextMarker</code> value. To list more <code>GeoMatchSet</code> objects, submit another <code>ListGeoMatchSets</code> request, and specify the <code>NextMarker</code> value from the response in the <code>NextMarker</code> value in the next request.</p>
+    #[serde(rename = "NextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_marker: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListIPSetsRequest {
     /// <p>Specifies the number of <code>IPSet</code> objects that you want AWS WAF to return for this request. If you have more <code>IPSet</code> objects than the number you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>IPSet</code> objects.</p>
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    /// <p>If you specify a value for <code>Limit</code> and you have more <code>IPSets</code> than the value of <code>Limit</code>, AWS WAF returns a <code>NextMarker</code> value in the response that allows you to list another group of <code>IPSets</code>. For the second and subsequent <code>ListIPSets</code> requests, specify the value of <code>NextMarker</code> from the previous response to get information about another batch of <code>ByteMatchSets</code>.</p>
+    /// <p>If you specify a value for <code>Limit</code> and you have more <code>IPSets</code> than the value of <code>Limit</code>, AWS WAF returns a <code>NextMarker</code> value in the response that allows you to list another group of <code>IPSets</code>. For the second and subsequent <code>ListIPSets</code> requests, specify the value of <code>NextMarker</code> from the previous response to get information about another batch of <code>IPSets</code>.</p>
     #[serde(rename = "NextMarker")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_marker: Option<String>,
@@ -824,6 +1152,78 @@ pub struct ListRateBasedRulesResponse {
     #[serde(rename = "Rules")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rules: Option<Vec<RuleSummary>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ListRegexMatchSetsRequest {
+    /// <p>Specifies the number of <code>RegexMatchSet</code> objects that you want AWS WAF to return for this request. If you have more <code>RegexMatchSet</code> objects than the number you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>RegexMatchSet</code> objects.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>If you specify a value for <code>Limit</code> and you have more <code>RegexMatchSet</code> objects than the value of <code>Limit</code>, AWS WAF returns a <code>NextMarker</code> value in the response that allows you to list another group of <code>ByteMatchSets</code>. For the second and subsequent <code>ListRegexMatchSets</code> requests, specify the value of <code>NextMarker</code> from the previous response to get information about another batch of <code>RegexMatchSet</code> objects.</p>
+    #[serde(rename = "NextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_marker: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ListRegexMatchSetsResponse {
+    /// <p>If you have more <code>RegexMatchSet</code> objects than the number that you specified for <code>Limit</code> in the request, the response includes a <code>NextMarker</code> value. To list more <code>RegexMatchSet</code> objects, submit another <code>ListRegexMatchSets</code> request, and specify the <code>NextMarker</code> value from the response in the <code>NextMarker</code> value in the next request.</p>
+    #[serde(rename = "NextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_marker: Option<String>,
+    /// <p>An array of <a>RegexMatchSetSummary</a> objects.</p>
+    #[serde(rename = "RegexMatchSets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regex_match_sets: Option<Vec<RegexMatchSetSummary>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ListRegexPatternSetsRequest {
+    /// <p>Specifies the number of <code>RegexPatternSet</code> objects that you want AWS WAF to return for this request. If you have more <code>RegexPatternSet</code> objects than the number you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>RegexPatternSet</code> objects.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>If you specify a value for <code>Limit</code> and you have more <code>RegexPatternSet</code> objects than the value of <code>Limit</code>, AWS WAF returns a <code>NextMarker</code> value in the response that allows you to list another group of <code>RegexPatternSet</code> objects. For the second and subsequent <code>ListRegexPatternSets</code> requests, specify the value of <code>NextMarker</code> from the previous response to get information about another batch of <code>RegexPatternSet</code> objects.</p>
+    #[serde(rename = "NextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_marker: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ListRegexPatternSetsResponse {
+    /// <p>If you have more <code>RegexPatternSet</code> objects than the number that you specified for <code>Limit</code> in the request, the response includes a <code>NextMarker</code> value. To list more <code>RegexPatternSet</code> objects, submit another <code>ListRegexPatternSets</code> request, and specify the <code>NextMarker</code> value from the response in the <code>NextMarker</code> value in the next request.</p>
+    #[serde(rename = "NextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_marker: Option<String>,
+    /// <p>An array of <a>RegexPatternSetSummary</a> objects.</p>
+    #[serde(rename = "RegexPatternSets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regex_pattern_sets: Option<Vec<RegexPatternSetSummary>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ListRuleGroupsRequest {
+    /// <p>Specifies the number of <code>RuleGroups</code> that you want AWS WAF to return for this request. If you have more <code>RuleGroups</code> than the number that you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>RuleGroups</code>.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>If you specify a value for <code>Limit</code> and you have more <code>RuleGroups</code> than the value of <code>Limit</code>, AWS WAF returns a <code>NextMarker</code> value in the response that allows you to list another group of <code>RuleGroups</code>. For the second and subsequent <code>ListRuleGroups</code> requests, specify the value of <code>NextMarker</code> from the previous response to get information about another batch of <code>RuleGroups</code>.</p>
+    #[serde(rename = "NextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_marker: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ListRuleGroupsResponse {
+    /// <p>If you have more <code>RuleGroups</code> than the number that you specified for <code>Limit</code> in the request, the response includes a <code>NextMarker</code> value. To list more <code>RuleGroups</code>, submit another <code>ListRuleGroups</code> request, and specify the <code>NextMarker</code> value from the response in the <code>NextMarker</code> value in the next request.</p>
+    #[serde(rename = "NextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_marker: Option<String>,
+    /// <p>An array of <a>RuleGroup</a> objects.</p>
+    #[serde(rename = "RuleGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_groups: Option<Vec<RuleGroupSummary>>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
@@ -901,6 +1301,30 @@ pub struct ListSqlInjectionMatchSetsResponse {
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct ListSubscribedRuleGroupsRequest {
+    /// <p>Specifies the number of subscribed rule groups that you want AWS WAF to return for this request. If you have more objects than the number you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of objects.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>If you specify a value for <code>Limit</code> and you have more <code>ByteMatchSets</code>subscribed rule groups than the value of <code>Limit</code>, AWS WAF returns a <code>NextMarker</code> value in the response that allows you to list another group of subscribed rule groups. For the second and subsequent <code>ListSubscribedRuleGroupsRequest</code> requests, specify the value of <code>NextMarker</code> from the previous response to get information about another batch of subscribed rule groups.</p>
+    #[serde(rename = "NextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_marker: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ListSubscribedRuleGroupsResponse {
+    /// <p>If you have more objects than the number that you specified for <code>Limit</code> in the request, the response includes a <code>NextMarker</code> value. To list more objects, submit another <code>ListSubscribedRuleGroups</code> request, and specify the <code>NextMarker</code> value from the response in the <code>NextMarker</code> value in the next request.</p>
+    #[serde(rename = "NextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_marker: Option<String>,
+    /// <p>An array of <a>RuleGroup</a> objects.</p>
+    #[serde(rename = "RuleGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_groups: Option<Vec<SubscribedRuleGroupSummary>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListWebACLsRequest {
     /// <p>Specifies the number of <code>WebACL</code> objects that you want AWS WAF to return for this request. If you have more <code>WebACL</code> objects than the number that you specify for <code>Limit</code>, the response includes a <code>NextMarker</code> value that you can use to get another batch of <code>WebACL</code> objects.</p>
     #[serde(rename = "Limit")]
@@ -950,13 +1374,13 @@ pub struct ListXssMatchSetsResponse {
     pub xss_match_sets: Option<Vec<XssMatchSetSummary>>,
 }
 
-/// <p>Specifies the <a>ByteMatchSet</a>, <a>IPSet</a>, <a>SqlInjectionMatchSet</a>, <a>XssMatchSet</a>, and <a>SizeConstraintSet</a> objects that you want to add to a <code>Rule</code> and, for each object, indicates whether you want to negate the settings, for example, requests that do NOT originate from the IP address 192.0.2.44. </p>
+/// <p>Specifies the <a>ByteMatchSet</a>, <a>IPSet</a>, <a>SqlInjectionMatchSet</a>, <a>XssMatchSet</a>, <a>RegexMatchSet</a>, <a>GeoMatchSet</a>, and <a>SizeConstraintSet</a> objects that you want to add to a <code>Rule</code> and, for each object, indicates whether you want to negate the settings, for example, requests that do NOT originate from the IP address 192.0.2.44. </p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Predicate {
     /// <p>A unique identifier for a predicate in a <code>Rule</code>, such as <code>ByteMatchSetId</code> or <code>IPSetId</code>. The ID is returned by the corresponding <code>Create</code> or <code>List</code> command.</p>
     #[serde(rename = "DataId")]
     pub data_id: String,
-    /// <p>Set <code>Negated</code> to <code>False</code> if you want AWS WAF to allow, block, or count requests based on the settings in the specified <a>ByteMatchSet</a>, <a>IPSet</a>, <a>SqlInjectionMatchSet</a>, <a>XssMatchSet</a>, or <a>SizeConstraintSet</a>. For example, if an <code>IPSet</code> includes the IP address <code>192.0.2.44</code>, AWS WAF will allow or block requests based on that IP address.</p> <p>Set <code>Negated</code> to <code>True</code> if you want AWS WAF to allow or block a request based on the negation of the settings in the <a>ByteMatchSet</a>, <a>IPSet</a>, <a>SqlInjectionMatchSet</a>, <a>XssMatchSet</a>, or <a>SizeConstraintSet</a>. For example, if an <code>IPSet</code> includes the IP address <code>192.0.2.44</code>, AWS WAF will allow, block, or count requests based on all IP addresses <i>except</i> <code>192.0.2.44</code>.</p>
+    /// <p>Set <code>Negated</code> to <code>False</code> if you want AWS WAF to allow, block, or count requests based on the settings in the specified <a>ByteMatchSet</a>, <a>IPSet</a>, <a>SqlInjectionMatchSet</a>, <a>XssMatchSet</a>, <a>RegexMatchSet</a>, <a>GeoMatchSet</a>, or <a>SizeConstraintSet</a>. For example, if an <code>IPSet</code> includes the IP address <code>192.0.2.44</code>, AWS WAF will allow or block requests based on that IP address.</p> <p>Set <code>Negated</code> to <code>True</code> if you want AWS WAF to allow or block a request based on the negation of the settings in the <a>ByteMatchSet</a>, <a>IPSet</a>, <a>SqlInjectionMatchSet</a>, <a>XssMatchSet</a>, <a>RegexMatchSet</a>, <a>GeoMatchSet</a>, or <a>SizeConstraintSet</a>. For example, if an <code>IPSet</code> includes the IP address <code>192.0.2.44</code>, AWS WAF will allow, block, or count requests based on all IP addresses <i>except</i> <code>192.0.2.44</code>.</p>
     #[serde(rename = "Negated")]
     pub negated: bool,
     /// <p>The type of predicate in a <code>Rule</code>, such as <code>ByteMatchSet</code> or <code>IPSet</code>.</p>
@@ -989,6 +1413,96 @@ pub struct RateBasedRule {
     pub rule_id: String,
 }
 
+/// <p>In a <a>GetRegexMatchSet</a> request, <code>RegexMatchSet</code> is a complex type that contains the <code>RegexMatchSetId</code> and <code>Name</code> of a <code>RegexMatchSet</code>, and the values that you specified when you updated the <code>RegexMatchSet</code>.</p> <p> The values are contained in a <code>RegexMatchTuple</code> object, which specify the parts of web requests that you want AWS WAF to inspect and the values that you want AWS WAF to search for. If a <code>RegexMatchSet</code> contains more than one <code>RegexMatchTuple</code> object, a request needs to match the settings in only one <code>ByteMatchTuple</code> to be considered a match.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct RegexMatchSet {
+    /// <p>A friendly name or description of the <a>RegexMatchSet</a>. You can't change <code>Name</code> after you create a <code>RegexMatchSet</code>.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The <code>RegexMatchSetId</code> for a <code>RegexMatchSet</code>. You use <code>RegexMatchSetId</code> to get information about a <code>RegexMatchSet</code> (see <a>GetRegexMatchSet</a>), update a <code>RegexMatchSet</code> (see <a>UpdateRegexMatchSet</a>), insert a <code>RegexMatchSet</code> into a <code>Rule</code> or delete one from a <code>Rule</code> (see <a>UpdateRule</a>), and delete a <code>RegexMatchSet</code> from AWS WAF (see <a>DeleteRegexMatchSet</a>).</p> <p> <code>RegexMatchSetId</code> is returned by <a>CreateRegexMatchSet</a> and by <a>ListRegexMatchSets</a>.</p>
+    #[serde(rename = "RegexMatchSetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regex_match_set_id: Option<String>,
+    /// <p><p>Contains an array of <a>RegexMatchTuple</a> objects. Each <code>RegexMatchTuple</code> object contains: </p> <ul> <li> <p>The part of a web request that you want AWS WAF to inspect, such as a query string or the value of the <code>User-Agent</code> header. </p> </li> <li> <p>The identifier of the pattern (a regular expression) that you want AWS WAF to look for. For more information, see <a>RegexPatternSet</a>.</p> </li> <li> <p>Whether to perform any conversions on the request, such as converting it to lowercase, before inspecting it for the specified string.</p> </li> </ul></p>
+    #[serde(rename = "RegexMatchTuples")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regex_match_tuples: Option<Vec<RegexMatchTuple>>,
+}
+
+/// <p>Returned by <a>ListRegexMatchSets</a>. Each <code>RegexMatchSetSummary</code> object includes the <code>Name</code> and <code>RegexMatchSetId</code> for one <a>RegexMatchSet</a>.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct RegexMatchSetSummary {
+    /// <p>A friendly name or description of the <a>RegexMatchSet</a>. You can't change <code>Name</code> after you create a <code>RegexMatchSet</code>.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The <code>RegexMatchSetId</code> for a <code>RegexMatchSet</code>. You use <code>RegexMatchSetId</code> to get information about a <code>RegexMatchSet</code>, update a <code>RegexMatchSet</code>, remove a <code>RegexMatchSet</code> from a <code>Rule</code>, and delete a <code>RegexMatchSet</code> from AWS WAF.</p> <p> <code>RegexMatchSetId</code> is returned by <a>CreateRegexMatchSet</a> and by <a>ListRegexMatchSets</a>.</p>
+    #[serde(rename = "RegexMatchSetId")]
+    pub regex_match_set_id: String,
+}
+
+/// <p>In an <a>UpdateRegexMatchSet</a> request, <code>RegexMatchSetUpdate</code> specifies whether to insert or delete a <a>RegexMatchTuple</a> and includes the settings for the <code>RegexMatchTuple</code>.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct RegexMatchSetUpdate {
+    /// <p>Specifies whether to insert or delete a <a>RegexMatchTuple</a>.</p>
+    #[serde(rename = "Action")]
+    pub action: String,
+    /// <p>Information about the part of a web request that you want AWS WAF to inspect and the identifier of the regular expression (regex) pattern that you want AWS WAF to search for. If you specify <code>DELETE</code> for the value of <code>Action</code>, the <code>RegexMatchTuple</code> values must exactly match the values in the <code>RegexMatchTuple</code> that you want to delete from the <code>RegexMatchSet</code>.</p>
+    #[serde(rename = "RegexMatchTuple")]
+    pub regex_match_tuple: RegexMatchTuple,
+}
+
+/// <p><p>The regular expression pattern that you want AWS WAF to search for in web requests, the location in requests that you want AWS WAF to search, and other settings. Each <code>RegexMatchTuple</code> object contains: </p> <ul> <li> <p>The part of a web request that you want AWS WAF to inspect, such as a query string or the value of the <code>User-Agent</code> header. </p> </li> <li> <p>The identifier of the pattern (a regular expression) that you want AWS WAF to look for. For more information, see <a>RegexPatternSet</a>. </p> </li> <li> <p>Whether to perform any conversions on the request, such as converting it to lowercase, before inspecting it for the specified string.</p> </li> </ul></p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct RegexMatchTuple {
+    /// <p>Specifies where in a web request to look for the <code>RegexPatternSet</code>.</p>
+    #[serde(rename = "FieldToMatch")]
+    pub field_to_match: FieldToMatch,
+    /// <p>The <code>RegexPatternSetId</code> for a <code>RegexPatternSet</code>. You use <code>RegexPatternSetId</code> to get information about a <code>RegexPatternSet</code> (see <a>GetRegexPatternSet</a>), update a <code>RegexPatternSet</code> (see <a>UpdateRegexPatternSet</a>), insert a <code>RegexPatternSet</code> into a <code>RegexMatchSet</code> or delete one from a <code>RegexMatchSet</code> (see <a>UpdateRegexMatchSet</a>), and delete an <code>RegexPatternSet</code> from AWS WAF (see <a>DeleteRegexPatternSet</a>).</p> <p> <code>RegexPatternSetId</code> is returned by <a>CreateRegexPatternSet</a> and by <a>ListRegexPatternSets</a>.</p>
+    #[serde(rename = "RegexPatternSetId")]
+    pub regex_pattern_set_id: String,
+    /// <p>Text transformations eliminate some of the unusual formatting that attackers use in web requests in an effort to bypass AWS WAF. If you specify a transformation, AWS WAF performs the transformation on <code>RegexPatternSet</code> before inspecting a request for a match.</p> <p> <b>CMD_LINE</b> </p> <p>When you're concerned that attackers are injecting an operating system commandline command and using unusual formatting to disguise some or all of the command, use this option to perform the following transformations:</p> <ul> <li> <p>Delete the following characters: \ " ' ^</p> </li> <li> <p>Delete spaces before the following characters: / (</p> </li> <li> <p>Replace the following characters with a space: , ;</p> </li> <li> <p>Replace multiple spaces with one space</p> </li> <li> <p>Convert uppercase letters (A-Z) to lowercase (a-z)</p> </li> </ul> <p> <b>COMPRESS_WHITE_SPACE</b> </p> <p>Use this option to replace the following characters with a space character (decimal 32):</p> <ul> <li> <p>\f, formfeed, decimal 12</p> </li> <li> <p>\t, tab, decimal 9</p> </li> <li> <p>\n, newline, decimal 10</p> </li> <li> <p>\r, carriage return, decimal 13</p> </li> <li> <p>\v, vertical tab, decimal 11</p> </li> <li> <p>non-breaking space, decimal 160</p> </li> </ul> <p> <code>COMPRESS_WHITE_SPACE</code> also replaces multiple spaces with one space.</p> <p> <b>HTML_ENTITY_DECODE</b> </p> <p>Use this option to replace HTML-encoded characters with unencoded characters. <code>HTML_ENTITY_DECODE</code> performs the following operations:</p> <ul> <li> <p>Replaces <code>(ampersand)quot;</code> with <code>"</code> </p> </li> <li> <p>Replaces <code>(ampersand)nbsp;</code> with a non-breaking space, decimal 160</p> </li> <li> <p>Replaces <code>(ampersand)lt;</code> with a "less than" symbol</p> </li> <li> <p>Replaces <code>(ampersand)gt;</code> with <code>&gt;</code> </p> </li> <li> <p>Replaces characters that are represented in hexadecimal format, <code>(ampersand)#xhhhh;</code>, with the corresponding characters</p> </li> <li> <p>Replaces characters that are represented in decimal format, <code>(ampersand)#nnnn;</code>, with the corresponding characters</p> </li> </ul> <p> <b>LOWERCASE</b> </p> <p>Use this option to convert uppercase letters (A-Z) to lowercase (a-z).</p> <p> <b>URL_DECODE</b> </p> <p>Use this option to decode a URL-encoded value.</p> <p> <b>NONE</b> </p> <p>Specify <code>NONE</code> if you don't want to perform any text transformations.</p>
+    #[serde(rename = "TextTransformation")]
+    pub text_transformation: String,
+}
+
+/// <p>The <code>RegexPatternSet</code> specifies the regular expression (regex) pattern that you want AWS WAF to search for, such as <code>B[a@]dB[o0]t</code>. You can then configure AWS WAF to reject those requests.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct RegexPatternSet {
+    /// <p>A friendly name or description of the <a>RegexPatternSet</a>. You can't change <code>Name</code> after you create a <code>RegexPatternSet</code>.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The identifier for the <code>RegexPatternSet</code>. You use <code>RegexPatternSetId</code> to get information about a <code>RegexPatternSet</code>, update a <code>RegexPatternSet</code>, remove a <code>RegexPatternSet</code> from a <code>RegexMatchSet</code>, and delete a <code>RegexPatternSet</code> from AWS WAF.</p> <p> <code>RegexMatchSetId</code> is returned by <a>CreateRegexPatternSet</a> and by <a>ListRegexPatternSets</a>.</p>
+    #[serde(rename = "RegexPatternSetId")]
+    pub regex_pattern_set_id: String,
+    /// <p>Specifies the regular expression (regex) patterns that you want AWS WAF to search for, such as <code>B[a@]dB[o0]t</code>.</p>
+    #[serde(rename = "RegexPatternStrings")]
+    pub regex_pattern_strings: Vec<String>,
+}
+
+/// <p>Returned by <a>ListRegexPatternSets</a>. Each <code>RegexPatternSetSummary</code> object includes the <code>Name</code> and <code>RegexPatternSetId</code> for one <a>RegexPatternSet</a>.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct RegexPatternSetSummary {
+    /// <p>A friendly name or description of the <a>RegexPatternSet</a>. You can't change <code>Name</code> after you create a <code>RegexPatternSet</code>.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The <code>RegexPatternSetId</code> for a <code>RegexPatternSet</code>. You use <code>RegexPatternSetId</code> to get information about a <code>RegexPatternSet</code>, update a <code>RegexPatternSet</code>, remove a <code>RegexPatternSet</code> from a <code>RegexMatchSet</code>, and delete a <code>RegexPatternSet</code> from AWS WAF.</p> <p> <code>RegexPatternSetId</code> is returned by <a>CreateRegexPatternSet</a> and by <a>ListRegexPatternSets</a>.</p>
+    #[serde(rename = "RegexPatternSetId")]
+    pub regex_pattern_set_id: String,
+}
+
+/// <p>In an <a>UpdateRegexPatternSet</a> request, <code>RegexPatternSetUpdate</code> specifies whether to insert or delete a <code>RegexPatternString</code> and includes the settings for the <code>RegexPatternString</code>.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct RegexPatternSetUpdate {
+    /// <p>Specifies whether to insert or delete a <code>RegexPatternString</code>.</p>
+    #[serde(rename = "Action")]
+    pub action: String,
+    /// <p>Specifies the regular expression (regex) pattern that you want AWS WAF to search for, such as <code>B[a@]dB[o0]t</code>.</p>
+    #[serde(rename = "RegexPatternString")]
+    pub regex_pattern_string: String,
+}
+
 /// <p>A combination of <a>ByteMatchSet</a>, <a>IPSet</a>, and/or <a>SqlInjectionMatchSet</a> objects that identify the web requests that you want to allow, block, or count. For example, you might create a <code>Rule</code> that includes the following predicates:</p> <ul> <li> <p>An <code>IPSet</code> that causes AWS WAF to search for web requests that originate from the IP address <code>192.0.2.44</code> </p> </li> <li> <p>A <code>ByteMatchSet</code> that causes AWS WAF to search for web requests for which the value of the <code>User-Agent</code> header is <code>BadBot</code>.</p> </li> </ul> <p>To match the settings in this <code>Rule</code>, a request must originate from <code>192.0.2.44</code> AND include a <code>User-Agent</code> header for which the value is <code>BadBot</code>.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Rule {
@@ -1006,6 +1520,44 @@ pub struct Rule {
     /// <p>A unique identifier for a <code>Rule</code>. You use <code>RuleId</code> to get more information about a <code>Rule</code> (see <a>GetRule</a>), update a <code>Rule</code> (see <a>UpdateRule</a>), insert a <code>Rule</code> into a <code>WebACL</code> or delete a one from a <code>WebACL</code> (see <a>UpdateWebACL</a>), or delete a <code>Rule</code> from AWS WAF (see <a>DeleteRule</a>).</p> <p> <code>RuleId</code> is returned by <a>CreateRule</a> and by <a>ListRules</a>.</p>
     #[serde(rename = "RuleId")]
     pub rule_id: String,
+}
+
+/// <p><p>A collection of predefined rules that you can add to a web ACL.</p> <p>Rule groups are subject to the following limits:</p> <ul> <li> <p>Three rule groups per account. You can request an increase to this limit by contacting customer support.</p> </li> <li> <p>One rule group per web ACL.</p> </li> <li> <p>Ten rules per rule group.</p> </li> </ul></p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct RuleGroup {
+    /// <p>A friendly name or description for the metrics for this <code>RuleGroup</code>. The name can contain only alphanumeric characters (A-Z, a-z, 0-9); the name can't contain whitespace. You can't change the name of the metric after you create the <code>RuleGroup</code>.</p>
+    #[serde(rename = "MetricName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metric_name: Option<String>,
+    /// <p>The friendly name or description for the <code>RuleGroup</code>. You can't change the name of a <code>RuleGroup</code> after you create it.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A unique identifier for a <code>RuleGroup</code>. You use <code>RuleGroupId</code> to get more information about a <code>RuleGroup</code> (see <a>GetRuleGroup</a>), update a <code>RuleGroup</code> (see <a>UpdateRuleGroup</a>), insert a <code>RuleGroup</code> into a <code>WebACL</code> or delete a one from a <code>WebACL</code> (see <a>UpdateWebACL</a>), or delete a <code>RuleGroup</code> from AWS WAF (see <a>DeleteRuleGroup</a>).</p> <p> <code>RuleGroupId</code> is returned by <a>CreateRuleGroup</a> and by <a>ListRuleGroups</a>.</p>
+    #[serde(rename = "RuleGroupId")]
+    pub rule_group_id: String,
+}
+
+/// <p>Contains the identifier and the friendly name or description of the <code>RuleGroup</code>.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct RuleGroupSummary {
+    /// <p>A friendly name or description of the <a>RuleGroup</a>. You can't change the name of a <code>RuleGroup</code> after you create it.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>A unique identifier for a <code>RuleGroup</code>. You use <code>RuleGroupId</code> to get more information about a <code>RuleGroup</code> (see <a>GetRuleGroup</a>), update a <code>RuleGroup</code> (see <a>UpdateRuleGroup</a>), insert a <code>RuleGroup</code> into a <code>WebACL</code> or delete one from a <code>WebACL</code> (see <a>UpdateWebACL</a>), or delete a <code>RuleGroup</code> from AWS WAF (see <a>DeleteRuleGroup</a>).</p> <p> <code>RuleGroupId</code> is returned by <a>CreateRuleGroup</a> and by <a>ListRuleGroups</a>.</p>
+    #[serde(rename = "RuleGroupId")]
+    pub rule_group_id: String,
+}
+
+/// <p>Specifies an <code>ActivatedRule</code> and indicates whether you want to add it to a <code>RuleGroup</code> or delete it from a <code>RuleGroup</code>.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct RuleGroupUpdate {
+    /// <p>Specify <code>INSERT</code> to add an <code>ActivatedRule</code> to a <code>RuleGroup</code>. Use <code>DELETE</code> to remove an <code>ActivatedRule</code> from a <code>RuleGroup</code>.</p>
+    #[serde(rename = "Action")]
+    pub action: String,
+    /// <p>The <code>ActivatedRule</code> object specifies a <code>Rule</code> that you want to insert or delete, the priority of the <code>Rule</code> in the <code>WebACL</code>, and the action that you want AWS WAF to take when a web request matches the <code>Rule</code> (<code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>).</p>
+    #[serde(rename = "ActivatedRule")]
+    pub activated_rule: ActivatedRule,
 }
 
 /// <p>Contains the identifier and the friendly name or description of the <code>Rule</code>.</p>
@@ -1040,6 +1592,10 @@ pub struct SampledHTTPRequest {
     /// <p>A complex type that contains detailed information about the request.</p>
     #[serde(rename = "Request")]
     pub request: HTTPRequest,
+    /// <p>This value is returned if the <code>GetSampledRequests</code> request specifies the ID of a <code>RuleGroup</code> rather than the ID of an individual rule. <code>RuleWithinRuleGroup</code> is the rule within the specified <code>RuleGroup</code> that matched the request listed in the response.</p>
+    #[serde(rename = "RuleWithinRuleGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_within_rule_group: Option<String>,
     /// <p>The time at which AWS WAF received the request from your AWS resource, in Unix time format (in seconds).</p>
     #[serde(rename = "Timestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1151,6 +1707,20 @@ pub struct SqlInjectionMatchTuple {
     pub text_transformation: String,
 }
 
+/// <p>A summary of the rule groups you are subscribed to.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct SubscribedRuleGroupSummary {
+    /// <p>A friendly name or description for the metrics for this <code>RuleGroup</code>. The name can contain only alphanumeric characters (A-Z, a-z, 0-9); the name can't contain whitespace. You can't change the name of the metric after you create the <code>RuleGroup</code>.</p>
+    #[serde(rename = "MetricName")]
+    pub metric_name: String,
+    /// <p>A friendly name or description of the <code>RuleGroup</code>. You can't change the name of a <code>RuleGroup</code> after you create it.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>A unique identifier for a <code>RuleGroup</code>.</p>
+    #[serde(rename = "RuleGroupId")]
+    pub rule_group_id: String,
+}
+
 /// <p>In a <a>GetSampledRequests</a> request, the <code>StartTime</code> and <code>EndTime</code> objects specify the time range for which you want AWS WAF to return a sample of web requests.</p> <p>In a <a>GetSampledRequests</a> response, the <code>StartTime</code> and <code>EndTime</code> objects specify the time range for which AWS WAF actually returned a sample of web requests. AWS WAF gets the specified number of requests from among the first 5,000 requests that your AWS resource receives during the specified time period. If your resource receives more than 5,000 requests during that period, AWS WAF stops sampling after the 5,000th request. In that case, <code>EndTime</code> is the time that AWS WAF received the 5,000th request. </p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct TimeWindow {
@@ -1178,6 +1748,27 @@ pub struct UpdateByteMatchSetRequest {
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateByteMatchSetResponse {
     /// <p>The <code>ChangeToken</code> that you used to submit the <code>UpdateByteMatchSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>
+    #[serde(rename = "ChangeToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub change_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct UpdateGeoMatchSetRequest {
+    /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
+    #[serde(rename = "ChangeToken")]
+    pub change_token: String,
+    /// <p>The <code>GeoMatchSetId</code> of the <a>GeoMatchSet</a> that you want to update. <code>GeoMatchSetId</code> is returned by <a>CreateGeoMatchSet</a> and by <a>ListGeoMatchSets</a>.</p>
+    #[serde(rename = "GeoMatchSetId")]
+    pub geo_match_set_id: String,
+    /// <p><p>An array of <code>GeoMatchSetUpdate</code> objects that you want to insert into or delete from an <a>GeoMatchSet</a>. For more information, see the applicable data types:</p> <ul> <li> <p> <a>GeoMatchSetUpdate</a>: Contains <code>Action</code> and <code>GeoMatchConstraint</code> </p> </li> <li> <p> <a>GeoMatchConstraint</a>: Contains <code>Type</code> and <code>Value</code> </p> <p>You can have only one <code>Type</code> and <code>Value</code> per <code>GeoMatchConstraint</code>. To add multiple countries, include multiple <code>GeoMatchSetUpdate</code> objects in your request.</p> </li> </ul></p>
+    #[serde(rename = "Updates")]
+    pub updates: Vec<GeoMatchSetUpdate>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct UpdateGeoMatchSetResponse {
+    /// <p>The <code>ChangeToken</code> that you used to submit the <code>UpdateGeoMatchSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>
     #[serde(rename = "ChangeToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub change_token: Option<String>,
@@ -1223,6 +1814,69 @@ pub struct UpdateRateBasedRuleRequest {
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateRateBasedRuleResponse {
     /// <p>The <code>ChangeToken</code> that you used to submit the <code>UpdateRateBasedRule</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>
+    #[serde(rename = "ChangeToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub change_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct UpdateRegexMatchSetRequest {
+    /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
+    #[serde(rename = "ChangeToken")]
+    pub change_token: String,
+    /// <p>The <code>RegexMatchSetId</code> of the <a>RegexMatchSet</a> that you want to update. <code>RegexMatchSetId</code> is returned by <a>CreateRegexMatchSet</a> and by <a>ListRegexMatchSets</a>.</p>
+    #[serde(rename = "RegexMatchSetId")]
+    pub regex_match_set_id: String,
+    /// <p>An array of <code>RegexMatchSetUpdate</code> objects that you want to insert into or delete from a <a>RegexMatchSet</a>. For more information, see <a>RegexMatchTuple</a>.</p>
+    #[serde(rename = "Updates")]
+    pub updates: Vec<RegexMatchSetUpdate>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct UpdateRegexMatchSetResponse {
+    /// <p>The <code>ChangeToken</code> that you used to submit the <code>UpdateRegexMatchSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>
+    #[serde(rename = "ChangeToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub change_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct UpdateRegexPatternSetRequest {
+    /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
+    #[serde(rename = "ChangeToken")]
+    pub change_token: String,
+    /// <p>The <code>RegexPatternSetId</code> of the <a>RegexPatternSet</a> that you want to update. <code>RegexPatternSetId</code> is returned by <a>CreateRegexPatternSet</a> and by <a>ListRegexPatternSets</a>.</p>
+    #[serde(rename = "RegexPatternSetId")]
+    pub regex_pattern_set_id: String,
+    /// <p>An array of <code>RegexPatternSetUpdate</code> objects that you want to insert into or delete from a <a>RegexPatternSet</a>.</p>
+    #[serde(rename = "Updates")]
+    pub updates: Vec<RegexPatternSetUpdate>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct UpdateRegexPatternSetResponse {
+    /// <p>The <code>ChangeToken</code> that you used to submit the <code>UpdateRegexPatternSet</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>
+    #[serde(rename = "ChangeToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub change_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct UpdateRuleGroupRequest {
+    /// <p>The value returned by the most recent call to <a>GetChangeToken</a>.</p>
+    #[serde(rename = "ChangeToken")]
+    pub change_token: String,
+    /// <p>The <code>RuleGroupId</code> of the <a>RuleGroup</a> that you want to update. <code>RuleGroupId</code> is returned by <a>CreateRuleGroup</a> and by <a>ListRuleGroups</a>.</p>
+    #[serde(rename = "RuleGroupId")]
+    pub rule_group_id: String,
+    /// <p>An array of <code>RuleGroupUpdate</code> objects that you want to insert into or delete from a <a>RuleGroup</a>.</p> <p>You can only insert <code>REGULAR</code> rules into a rule group.</p> <p>The <code>Action</code> data type within <code>ActivatedRule</code> is used only when submitting an <code>UpdateWebACL</code> request. <code>ActivatedRule|Action</code> is not applicable and therefore not available for <code>UpdateRuleGroup</code>.</p>
+    #[serde(rename = "Updates")]
+    pub updates: Vec<RuleGroupUpdate>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct UpdateRuleGroupResponse {
+    /// <p>The <code>ChangeToken</code> that you used to submit the <code>UpdateRuleGroup</code> request. You can also use this value to query the status of the request. For more information, see <a>GetChangeTokenStatus</a>.</p>
     #[serde(rename = "ChangeToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub change_token: Option<String>,
@@ -1302,7 +1956,7 @@ pub struct UpdateWebACLRequest {
     #[serde(rename = "DefaultAction")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_action: Option<WafAction>,
-    /// <p><p>An array of updates to make to the <a>WebACL</a>.</p> <p>An array of <code>WebACLUpdate</code> objects that you want to insert into or delete from a <a>WebACL</a>. For more information, see the applicable data types:</p> <ul> <li> <p> <a>WebACLUpdate</a>: Contains <code>Action</code> and <code>ActivatedRule</code> </p> </li> <li> <p> <a>ActivatedRule</a>: Contains <code>Action</code>, <code>Priority</code>, <code>RuleId</code>, and <code>Type</code> </p> </li> <li> <p> <a>WafAction</a>: Contains <code>Type</code> </p> </li> </ul></p>
+    /// <p><p>An array of updates to make to the <a>WebACL</a>.</p> <p>An array of <code>WebACLUpdate</code> objects that you want to insert into or delete from a <a>WebACL</a>. For more information, see the applicable data types:</p> <ul> <li> <p> <a>WebACLUpdate</a>: Contains <code>Action</code> and <code>ActivatedRule</code> </p> </li> <li> <p> <a>ActivatedRule</a>: Contains <code>Action</code>, <code>Priority</code>, <code>RuleId</code>, and <code>Type</code>. The <code>OverrideAction</code> data type within <code>ActivatedRule</code> is used only when submitting an <code>UpdateRuleGroup</code> request. <code>ActivatedRule|OverrideAction</code> is not applicable and therefore not available for <code>UpdateWebACL</code>. </p> </li> <li> <p> <a>WafAction</a>: Contains <code>Type</code> </p> </li> </ul></p>
     #[serde(rename = "Updates")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub updates: Option<Vec<WebACLUpdate>>,
@@ -1346,6 +2000,14 @@ pub struct UpdateXssMatchSetResponse {
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct WafAction {
     /// <p><p>Specifies how you want AWS WAF to respond to requests that match the settings in a <code>Rule</code>. Valid settings include the following:</p> <ul> <li> <p> <code>ALLOW</code>: AWS WAF allows requests</p> </li> <li> <p> <code>BLOCK</code>: AWS WAF blocks requests</p> </li> <li> <p> <code>COUNT</code>: AWS WAF increments a counter of the requests that match all of the conditions in the rule. AWS WAF then continues to inspect the web request based on the remaining rules in the web ACL. You can&#39;t specify <code>COUNT</code> for the default action for a <code>WebACL</code>.</p> </li> </ul></p>
+    #[serde(rename = "Type")]
+    pub type_: String,
+}
+
+/// <p>The action to take if any rule within the <code>RuleGroup</code> matches a request. </p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct WafOverrideAction {
+    /// <p> <code>COUNT</code> overrides the action specified by the individual rule within a <code>RuleGroup</code> . If set to <code>NONE</code>, the rule's action will take place.</p>
     #[serde(rename = "Type")]
     pub type_: String,
 }
@@ -1451,7 +2113,7 @@ pub enum CreateByteMatchSetError {
     WAFInternalError(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
     WAFInvalidAccount(String),
-    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, QUERY_STRING, or URI.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
+    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, METHOD, QUERY_STRING, URI, or BODY.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
     WAFInvalidParameter(String),
     /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>WebACL</code> objects that you can create for an AWS account. For more information, see <a href="http://docs.aws.amazon.com/waf/latest/developerguide/limits.html">Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
     WAFLimitsExceeded(String),
@@ -1552,6 +2214,116 @@ impl Error for CreateByteMatchSetError {
         }
     }
 }
+/// Errors returned by CreateGeoMatchSet
+#[derive(Debug, PartialEq)]
+pub enum CreateGeoMatchSetError {
+    /// <p>The name specified is invalid.</p>
+    WAFDisallowedName(String),
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    WAFInternalError(String),
+    /// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
+    WAFInvalidAccount(String),
+    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, METHOD, QUERY_STRING, URI, or BODY.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
+    WAFInvalidParameter(String),
+    /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>WebACL</code> objects that you can create for an AWS account. For more information, see <a href="http://docs.aws.amazon.com/waf/latest/developerguide/limits.html">Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
+    WAFLimitsExceeded(String),
+    /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
+    WAFStaleData(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateGeoMatchSetError {
+    pub fn from_body(body: &str) -> CreateGeoMatchSetError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "WAFDisallowedNameException" => {
+                        CreateGeoMatchSetError::WAFDisallowedName(String::from(error_message))
+                    }
+                    "WAFInternalErrorException" => {
+                        CreateGeoMatchSetError::WAFInternalError(String::from(error_message))
+                    }
+                    "WAFInvalidAccountException" => {
+                        CreateGeoMatchSetError::WAFInvalidAccount(String::from(error_message))
+                    }
+                    "WAFInvalidParameterException" => {
+                        CreateGeoMatchSetError::WAFInvalidParameter(String::from(error_message))
+                    }
+                    "WAFLimitsExceededException" => {
+                        CreateGeoMatchSetError::WAFLimitsExceeded(String::from(error_message))
+                    }
+                    "WAFStaleDataException" => {
+                        CreateGeoMatchSetError::WAFStaleData(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CreateGeoMatchSetError::Validation(error_message.to_string())
+                    }
+                    _ => CreateGeoMatchSetError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateGeoMatchSetError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateGeoMatchSetError {
+    fn from(err: serde_json::error::Error) -> CreateGeoMatchSetError {
+        CreateGeoMatchSetError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateGeoMatchSetError {
+    fn from(err: CredentialsError) -> CreateGeoMatchSetError {
+        CreateGeoMatchSetError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateGeoMatchSetError {
+    fn from(err: HttpDispatchError) -> CreateGeoMatchSetError {
+        CreateGeoMatchSetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateGeoMatchSetError {
+    fn from(err: io::Error) -> CreateGeoMatchSetError {
+        CreateGeoMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateGeoMatchSetError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateGeoMatchSetError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateGeoMatchSetError::WAFDisallowedName(ref cause) => cause,
+            CreateGeoMatchSetError::WAFInternalError(ref cause) => cause,
+            CreateGeoMatchSetError::WAFInvalidAccount(ref cause) => cause,
+            CreateGeoMatchSetError::WAFInvalidParameter(ref cause) => cause,
+            CreateGeoMatchSetError::WAFLimitsExceeded(ref cause) => cause,
+            CreateGeoMatchSetError::WAFStaleData(ref cause) => cause,
+            CreateGeoMatchSetError::Validation(ref cause) => cause,
+            CreateGeoMatchSetError::Credentials(ref err) => err.description(),
+            CreateGeoMatchSetError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateGeoMatchSetError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateIPSet
 #[derive(Debug, PartialEq)]
 pub enum CreateIPSetError {
@@ -1561,7 +2333,7 @@ pub enum CreateIPSetError {
     WAFInternalError(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
     WAFInvalidAccount(String),
-    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, QUERY_STRING, or URI.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
+    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, METHOD, QUERY_STRING, URI, or BODY.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
     WAFInvalidParameter(String),
     /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>WebACL</code> objects that you can create for an AWS account. For more information, see <a href="http://docs.aws.amazon.com/waf/latest/developerguide/limits.html">Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
     WAFLimitsExceeded(String),
@@ -1667,7 +2439,7 @@ pub enum CreateRateBasedRuleError {
     WAFDisallowedName(String),
     /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
     WAFInternalError(String),
-    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, QUERY_STRING, or URI.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
+    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, METHOD, QUERY_STRING, URI, or BODY.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
     WAFInvalidParameter(String),
     /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>WebACL</code> objects that you can create for an AWS account. For more information, see <a href="http://docs.aws.amazon.com/waf/latest/developerguide/limits.html">Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
     WAFLimitsExceeded(String),
@@ -1764,6 +2536,202 @@ impl Error for CreateRateBasedRuleError {
         }
     }
 }
+/// Errors returned by CreateRegexMatchSet
+#[derive(Debug, PartialEq)]
+pub enum CreateRegexMatchSetError {
+    /// <p>The name specified is invalid.</p>
+    WAFDisallowedName(String),
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    WAFInternalError(String),
+    /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>WebACL</code> objects that you can create for an AWS account. For more information, see <a href="http://docs.aws.amazon.com/waf/latest/developerguide/limits.html">Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
+    WAFLimitsExceeded(String),
+    /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
+    WAFStaleData(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateRegexMatchSetError {
+    pub fn from_body(body: &str) -> CreateRegexMatchSetError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "WAFDisallowedNameException" => {
+                        CreateRegexMatchSetError::WAFDisallowedName(String::from(error_message))
+                    }
+                    "WAFInternalErrorException" => {
+                        CreateRegexMatchSetError::WAFInternalError(String::from(error_message))
+                    }
+                    "WAFLimitsExceededException" => {
+                        CreateRegexMatchSetError::WAFLimitsExceeded(String::from(error_message))
+                    }
+                    "WAFStaleDataException" => {
+                        CreateRegexMatchSetError::WAFStaleData(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CreateRegexMatchSetError::Validation(error_message.to_string())
+                    }
+                    _ => CreateRegexMatchSetError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateRegexMatchSetError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateRegexMatchSetError {
+    fn from(err: serde_json::error::Error) -> CreateRegexMatchSetError {
+        CreateRegexMatchSetError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateRegexMatchSetError {
+    fn from(err: CredentialsError) -> CreateRegexMatchSetError {
+        CreateRegexMatchSetError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateRegexMatchSetError {
+    fn from(err: HttpDispatchError) -> CreateRegexMatchSetError {
+        CreateRegexMatchSetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateRegexMatchSetError {
+    fn from(err: io::Error) -> CreateRegexMatchSetError {
+        CreateRegexMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateRegexMatchSetError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateRegexMatchSetError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateRegexMatchSetError::WAFDisallowedName(ref cause) => cause,
+            CreateRegexMatchSetError::WAFInternalError(ref cause) => cause,
+            CreateRegexMatchSetError::WAFLimitsExceeded(ref cause) => cause,
+            CreateRegexMatchSetError::WAFStaleData(ref cause) => cause,
+            CreateRegexMatchSetError::Validation(ref cause) => cause,
+            CreateRegexMatchSetError::Credentials(ref err) => err.description(),
+            CreateRegexMatchSetError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateRegexMatchSetError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateRegexPatternSet
+#[derive(Debug, PartialEq)]
+pub enum CreateRegexPatternSetError {
+    /// <p>The name specified is invalid.</p>
+    WAFDisallowedName(String),
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    WAFInternalError(String),
+    /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>WebACL</code> objects that you can create for an AWS account. For more information, see <a href="http://docs.aws.amazon.com/waf/latest/developerguide/limits.html">Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
+    WAFLimitsExceeded(String),
+    /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
+    WAFStaleData(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateRegexPatternSetError {
+    pub fn from_body(body: &str) -> CreateRegexPatternSetError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "WAFDisallowedNameException" => {
+                        CreateRegexPatternSetError::WAFDisallowedName(String::from(error_message))
+                    }
+                    "WAFInternalErrorException" => {
+                        CreateRegexPatternSetError::WAFInternalError(String::from(error_message))
+                    }
+                    "WAFLimitsExceededException" => {
+                        CreateRegexPatternSetError::WAFLimitsExceeded(String::from(error_message))
+                    }
+                    "WAFStaleDataException" => {
+                        CreateRegexPatternSetError::WAFStaleData(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CreateRegexPatternSetError::Validation(error_message.to_string())
+                    }
+                    _ => CreateRegexPatternSetError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateRegexPatternSetError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateRegexPatternSetError {
+    fn from(err: serde_json::error::Error) -> CreateRegexPatternSetError {
+        CreateRegexPatternSetError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateRegexPatternSetError {
+    fn from(err: CredentialsError) -> CreateRegexPatternSetError {
+        CreateRegexPatternSetError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateRegexPatternSetError {
+    fn from(err: HttpDispatchError) -> CreateRegexPatternSetError {
+        CreateRegexPatternSetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateRegexPatternSetError {
+    fn from(err: io::Error) -> CreateRegexPatternSetError {
+        CreateRegexPatternSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateRegexPatternSetError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateRegexPatternSetError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateRegexPatternSetError::WAFDisallowedName(ref cause) => cause,
+            CreateRegexPatternSetError::WAFInternalError(ref cause) => cause,
+            CreateRegexPatternSetError::WAFLimitsExceeded(ref cause) => cause,
+            CreateRegexPatternSetError::WAFStaleData(ref cause) => cause,
+            CreateRegexPatternSetError::Validation(ref cause) => cause,
+            CreateRegexPatternSetError::Credentials(ref err) => err.description(),
+            CreateRegexPatternSetError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateRegexPatternSetError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateRule
 #[derive(Debug, PartialEq)]
 pub enum CreateRuleError {
@@ -1771,7 +2739,7 @@ pub enum CreateRuleError {
     WAFDisallowedName(String),
     /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
     WAFInternalError(String),
-    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, QUERY_STRING, or URI.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
+    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, METHOD, QUERY_STRING, URI, or BODY.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
     WAFInvalidParameter(String),
     /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>WebACL</code> objects that you can create for an AWS account. For more information, see <a href="http://docs.aws.amazon.com/waf/latest/developerguide/limits.html">Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
     WAFLimitsExceeded(String),
@@ -1864,6 +2832,102 @@ impl Error for CreateRuleError {
         }
     }
 }
+/// Errors returned by CreateRuleGroup
+#[derive(Debug, PartialEq)]
+pub enum CreateRuleGroupError {
+    /// <p>The name specified is invalid.</p>
+    WAFDisallowedName(String),
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    WAFInternalError(String),
+    /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>WebACL</code> objects that you can create for an AWS account. For more information, see <a href="http://docs.aws.amazon.com/waf/latest/developerguide/limits.html">Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
+    WAFLimitsExceeded(String),
+    /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
+    WAFStaleData(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateRuleGroupError {
+    pub fn from_body(body: &str) -> CreateRuleGroupError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "WAFDisallowedNameException" => {
+                        CreateRuleGroupError::WAFDisallowedName(String::from(error_message))
+                    }
+                    "WAFInternalErrorException" => {
+                        CreateRuleGroupError::WAFInternalError(String::from(error_message))
+                    }
+                    "WAFLimitsExceededException" => {
+                        CreateRuleGroupError::WAFLimitsExceeded(String::from(error_message))
+                    }
+                    "WAFStaleDataException" => {
+                        CreateRuleGroupError::WAFStaleData(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CreateRuleGroupError::Validation(error_message.to_string())
+                    }
+                    _ => CreateRuleGroupError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateRuleGroupError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateRuleGroupError {
+    fn from(err: serde_json::error::Error) -> CreateRuleGroupError {
+        CreateRuleGroupError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateRuleGroupError {
+    fn from(err: CredentialsError) -> CreateRuleGroupError {
+        CreateRuleGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateRuleGroupError {
+    fn from(err: HttpDispatchError) -> CreateRuleGroupError {
+        CreateRuleGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateRuleGroupError {
+    fn from(err: io::Error) -> CreateRuleGroupError {
+        CreateRuleGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateRuleGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateRuleGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateRuleGroupError::WAFDisallowedName(ref cause) => cause,
+            CreateRuleGroupError::WAFInternalError(ref cause) => cause,
+            CreateRuleGroupError::WAFLimitsExceeded(ref cause) => cause,
+            CreateRuleGroupError::WAFStaleData(ref cause) => cause,
+            CreateRuleGroupError::Validation(ref cause) => cause,
+            CreateRuleGroupError::Credentials(ref err) => err.description(),
+            CreateRuleGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CreateRuleGroupError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateSizeConstraintSet
 #[derive(Debug, PartialEq)]
 pub enum CreateSizeConstraintSetError {
@@ -1873,7 +2937,7 @@ pub enum CreateSizeConstraintSetError {
     WAFInternalError(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
     WAFInvalidAccount(String),
-    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, QUERY_STRING, or URI.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
+    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, METHOD, QUERY_STRING, URI, or BODY.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
     WAFInvalidParameter(String),
     /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>WebACL</code> objects that you can create for an AWS account. For more information, see <a href="http://docs.aws.amazon.com/waf/latest/developerguide/limits.html">Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
     WAFLimitsExceeded(String),
@@ -1985,7 +3049,7 @@ pub enum CreateSqlInjectionMatchSetError {
     WAFInternalError(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
     WAFInvalidAccount(String),
-    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, QUERY_STRING, or URI.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
+    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, METHOD, QUERY_STRING, URI, or BODY.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
     WAFInvalidParameter(String),
     /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>WebACL</code> objects that you can create for an AWS account. For more information, see <a href="http://docs.aws.amazon.com/waf/latest/developerguide/limits.html">Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
     WAFLimitsExceeded(String),
@@ -2105,7 +3169,7 @@ pub enum CreateWebACLError {
     WAFInternalError(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
     WAFInvalidAccount(String),
-    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, QUERY_STRING, or URI.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
+    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, METHOD, QUERY_STRING, URI, or BODY.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
     WAFInvalidParameter(String),
     /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>WebACL</code> objects that you can create for an AWS account. For more information, see <a href="http://docs.aws.amazon.com/waf/latest/developerguide/limits.html">Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
     WAFLimitsExceeded(String),
@@ -2213,7 +3277,7 @@ pub enum CreateXssMatchSetError {
     WAFInternalError(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
     WAFInvalidAccount(String),
-    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, QUERY_STRING, or URI.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
+    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, METHOD, QUERY_STRING, URI, or BODY.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
     WAFInvalidParameter(String),
     /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>WebACL</code> objects that you can create for an AWS account. For more information, see <a href="http://docs.aws.amazon.com/waf/latest/developerguide/limits.html">Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
     WAFLimitsExceeded(String),
@@ -2421,6 +3485,116 @@ impl Error for DeleteByteMatchSetError {
                 dispatch_error.description()
             }
             DeleteByteMatchSetError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteGeoMatchSet
+#[derive(Debug, PartialEq)]
+pub enum DeleteGeoMatchSetError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    WAFInternalError(String),
+    /// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
+    WAFInvalidAccount(String),
+    /// <p><p>The operation failed because you tried to delete an object that isn&#39;t empty. For example:</p> <ul> <li> <p>You tried to delete a <code>WebACL</code> that still contains one or more <code>Rule</code> objects.</p> </li> <li> <p>You tried to delete a <code>Rule</code> that still contains one or more <code>ByteMatchSet</code> objects or other predicates.</p> </li> <li> <p>You tried to delete a <code>ByteMatchSet</code> that contains one or more <code>ByteMatchTuple</code> objects.</p> </li> <li> <p>You tried to delete an <code>IPSet</code> that references one or more IP addresses.</p> </li> </ul></p>
+    WAFNonEmptyEntity(String),
+    /// <p>The operation failed because the referenced object doesn't exist.</p>
+    WAFNonexistentItem(String),
+    /// <p><p>The operation failed because you tried to delete an object that is still in use. For example:</p> <ul> <li> <p>You tried to delete a <code>ByteMatchSet</code> that is still referenced by a <code>Rule</code>.</p> </li> <li> <p>You tried to delete a <code>Rule</code> that is still referenced by a <code>WebACL</code>.</p> </li> </ul></p>
+    WAFReferencedItem(String),
+    /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
+    WAFStaleData(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteGeoMatchSetError {
+    pub fn from_body(body: &str) -> DeleteGeoMatchSetError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "WAFInternalErrorException" => {
+                        DeleteGeoMatchSetError::WAFInternalError(String::from(error_message))
+                    }
+                    "WAFInvalidAccountException" => {
+                        DeleteGeoMatchSetError::WAFInvalidAccount(String::from(error_message))
+                    }
+                    "WAFNonEmptyEntityException" => {
+                        DeleteGeoMatchSetError::WAFNonEmptyEntity(String::from(error_message))
+                    }
+                    "WAFNonexistentItemException" => {
+                        DeleteGeoMatchSetError::WAFNonexistentItem(String::from(error_message))
+                    }
+                    "WAFReferencedItemException" => {
+                        DeleteGeoMatchSetError::WAFReferencedItem(String::from(error_message))
+                    }
+                    "WAFStaleDataException" => {
+                        DeleteGeoMatchSetError::WAFStaleData(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteGeoMatchSetError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteGeoMatchSetError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteGeoMatchSetError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteGeoMatchSetError {
+    fn from(err: serde_json::error::Error) -> DeleteGeoMatchSetError {
+        DeleteGeoMatchSetError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteGeoMatchSetError {
+    fn from(err: CredentialsError) -> DeleteGeoMatchSetError {
+        DeleteGeoMatchSetError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteGeoMatchSetError {
+    fn from(err: HttpDispatchError) -> DeleteGeoMatchSetError {
+        DeleteGeoMatchSetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteGeoMatchSetError {
+    fn from(err: io::Error) -> DeleteGeoMatchSetError {
+        DeleteGeoMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteGeoMatchSetError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteGeoMatchSetError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteGeoMatchSetError::WAFInternalError(ref cause) => cause,
+            DeleteGeoMatchSetError::WAFInvalidAccount(ref cause) => cause,
+            DeleteGeoMatchSetError::WAFNonEmptyEntity(ref cause) => cause,
+            DeleteGeoMatchSetError::WAFNonexistentItem(ref cause) => cause,
+            DeleteGeoMatchSetError::WAFReferencedItem(ref cause) => cause,
+            DeleteGeoMatchSetError::WAFStaleData(ref cause) => cause,
+            DeleteGeoMatchSetError::Validation(ref cause) => cause,
+            DeleteGeoMatchSetError::Credentials(ref err) => err.description(),
+            DeleteGeoMatchSetError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteGeoMatchSetError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -2642,6 +3816,226 @@ impl Error for DeleteRateBasedRuleError {
         }
     }
 }
+/// Errors returned by DeleteRegexMatchSet
+#[derive(Debug, PartialEq)]
+pub enum DeleteRegexMatchSetError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    WAFInternalError(String),
+    /// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
+    WAFInvalidAccount(String),
+    /// <p><p>The operation failed because you tried to delete an object that isn&#39;t empty. For example:</p> <ul> <li> <p>You tried to delete a <code>WebACL</code> that still contains one or more <code>Rule</code> objects.</p> </li> <li> <p>You tried to delete a <code>Rule</code> that still contains one or more <code>ByteMatchSet</code> objects or other predicates.</p> </li> <li> <p>You tried to delete a <code>ByteMatchSet</code> that contains one or more <code>ByteMatchTuple</code> objects.</p> </li> <li> <p>You tried to delete an <code>IPSet</code> that references one or more IP addresses.</p> </li> </ul></p>
+    WAFNonEmptyEntity(String),
+    /// <p>The operation failed because the referenced object doesn't exist.</p>
+    WAFNonexistentItem(String),
+    /// <p><p>The operation failed because you tried to delete an object that is still in use. For example:</p> <ul> <li> <p>You tried to delete a <code>ByteMatchSet</code> that is still referenced by a <code>Rule</code>.</p> </li> <li> <p>You tried to delete a <code>Rule</code> that is still referenced by a <code>WebACL</code>.</p> </li> </ul></p>
+    WAFReferencedItem(String),
+    /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
+    WAFStaleData(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteRegexMatchSetError {
+    pub fn from_body(body: &str) -> DeleteRegexMatchSetError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "WAFInternalErrorException" => {
+                        DeleteRegexMatchSetError::WAFInternalError(String::from(error_message))
+                    }
+                    "WAFInvalidAccountException" => {
+                        DeleteRegexMatchSetError::WAFInvalidAccount(String::from(error_message))
+                    }
+                    "WAFNonEmptyEntityException" => {
+                        DeleteRegexMatchSetError::WAFNonEmptyEntity(String::from(error_message))
+                    }
+                    "WAFNonexistentItemException" => {
+                        DeleteRegexMatchSetError::WAFNonexistentItem(String::from(error_message))
+                    }
+                    "WAFReferencedItemException" => {
+                        DeleteRegexMatchSetError::WAFReferencedItem(String::from(error_message))
+                    }
+                    "WAFStaleDataException" => {
+                        DeleteRegexMatchSetError::WAFStaleData(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteRegexMatchSetError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteRegexMatchSetError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteRegexMatchSetError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteRegexMatchSetError {
+    fn from(err: serde_json::error::Error) -> DeleteRegexMatchSetError {
+        DeleteRegexMatchSetError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteRegexMatchSetError {
+    fn from(err: CredentialsError) -> DeleteRegexMatchSetError {
+        DeleteRegexMatchSetError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteRegexMatchSetError {
+    fn from(err: HttpDispatchError) -> DeleteRegexMatchSetError {
+        DeleteRegexMatchSetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteRegexMatchSetError {
+    fn from(err: io::Error) -> DeleteRegexMatchSetError {
+        DeleteRegexMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteRegexMatchSetError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteRegexMatchSetError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteRegexMatchSetError::WAFInternalError(ref cause) => cause,
+            DeleteRegexMatchSetError::WAFInvalidAccount(ref cause) => cause,
+            DeleteRegexMatchSetError::WAFNonEmptyEntity(ref cause) => cause,
+            DeleteRegexMatchSetError::WAFNonexistentItem(ref cause) => cause,
+            DeleteRegexMatchSetError::WAFReferencedItem(ref cause) => cause,
+            DeleteRegexMatchSetError::WAFStaleData(ref cause) => cause,
+            DeleteRegexMatchSetError::Validation(ref cause) => cause,
+            DeleteRegexMatchSetError::Credentials(ref err) => err.description(),
+            DeleteRegexMatchSetError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteRegexMatchSetError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteRegexPatternSet
+#[derive(Debug, PartialEq)]
+pub enum DeleteRegexPatternSetError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    WAFInternalError(String),
+    /// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
+    WAFInvalidAccount(String),
+    /// <p><p>The operation failed because you tried to delete an object that isn&#39;t empty. For example:</p> <ul> <li> <p>You tried to delete a <code>WebACL</code> that still contains one or more <code>Rule</code> objects.</p> </li> <li> <p>You tried to delete a <code>Rule</code> that still contains one or more <code>ByteMatchSet</code> objects or other predicates.</p> </li> <li> <p>You tried to delete a <code>ByteMatchSet</code> that contains one or more <code>ByteMatchTuple</code> objects.</p> </li> <li> <p>You tried to delete an <code>IPSet</code> that references one or more IP addresses.</p> </li> </ul></p>
+    WAFNonEmptyEntity(String),
+    /// <p>The operation failed because the referenced object doesn't exist.</p>
+    WAFNonexistentItem(String),
+    /// <p><p>The operation failed because you tried to delete an object that is still in use. For example:</p> <ul> <li> <p>You tried to delete a <code>ByteMatchSet</code> that is still referenced by a <code>Rule</code>.</p> </li> <li> <p>You tried to delete a <code>Rule</code> that is still referenced by a <code>WebACL</code>.</p> </li> </ul></p>
+    WAFReferencedItem(String),
+    /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
+    WAFStaleData(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteRegexPatternSetError {
+    pub fn from_body(body: &str) -> DeleteRegexPatternSetError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "WAFInternalErrorException" => {
+                        DeleteRegexPatternSetError::WAFInternalError(String::from(error_message))
+                    }
+                    "WAFInvalidAccountException" => {
+                        DeleteRegexPatternSetError::WAFInvalidAccount(String::from(error_message))
+                    }
+                    "WAFNonEmptyEntityException" => {
+                        DeleteRegexPatternSetError::WAFNonEmptyEntity(String::from(error_message))
+                    }
+                    "WAFNonexistentItemException" => {
+                        DeleteRegexPatternSetError::WAFNonexistentItem(String::from(error_message))
+                    }
+                    "WAFReferencedItemException" => {
+                        DeleteRegexPatternSetError::WAFReferencedItem(String::from(error_message))
+                    }
+                    "WAFStaleDataException" => {
+                        DeleteRegexPatternSetError::WAFStaleData(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteRegexPatternSetError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteRegexPatternSetError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteRegexPatternSetError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteRegexPatternSetError {
+    fn from(err: serde_json::error::Error) -> DeleteRegexPatternSetError {
+        DeleteRegexPatternSetError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteRegexPatternSetError {
+    fn from(err: CredentialsError) -> DeleteRegexPatternSetError {
+        DeleteRegexPatternSetError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteRegexPatternSetError {
+    fn from(err: HttpDispatchError) -> DeleteRegexPatternSetError {
+        DeleteRegexPatternSetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteRegexPatternSetError {
+    fn from(err: io::Error) -> DeleteRegexPatternSetError {
+        DeleteRegexPatternSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteRegexPatternSetError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteRegexPatternSetError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteRegexPatternSetError::WAFInternalError(ref cause) => cause,
+            DeleteRegexPatternSetError::WAFInvalidAccount(ref cause) => cause,
+            DeleteRegexPatternSetError::WAFNonEmptyEntity(ref cause) => cause,
+            DeleteRegexPatternSetError::WAFNonexistentItem(ref cause) => cause,
+            DeleteRegexPatternSetError::WAFReferencedItem(ref cause) => cause,
+            DeleteRegexPatternSetError::WAFStaleData(ref cause) => cause,
+            DeleteRegexPatternSetError::Validation(ref cause) => cause,
+            DeleteRegexPatternSetError::Credentials(ref err) => err.description(),
+            DeleteRegexPatternSetError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteRegexPatternSetError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteRule
 #[derive(Debug, PartialEq)]
 pub enum DeleteRuleError {
@@ -2745,6 +4139,108 @@ impl Error for DeleteRuleError {
             DeleteRuleError::Credentials(ref err) => err.description(),
             DeleteRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             DeleteRuleError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteRuleGroup
+#[derive(Debug, PartialEq)]
+pub enum DeleteRuleGroupError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    WAFInternalError(String),
+    /// <p><p>The operation failed because you tried to delete an object that isn&#39;t empty. For example:</p> <ul> <li> <p>You tried to delete a <code>WebACL</code> that still contains one or more <code>Rule</code> objects.</p> </li> <li> <p>You tried to delete a <code>Rule</code> that still contains one or more <code>ByteMatchSet</code> objects or other predicates.</p> </li> <li> <p>You tried to delete a <code>ByteMatchSet</code> that contains one or more <code>ByteMatchTuple</code> objects.</p> </li> <li> <p>You tried to delete an <code>IPSet</code> that references one or more IP addresses.</p> </li> </ul></p>
+    WAFNonEmptyEntity(String),
+    /// <p>The operation failed because the referenced object doesn't exist.</p>
+    WAFNonexistentItem(String),
+    /// <p><p>The operation failed because you tried to delete an object that is still in use. For example:</p> <ul> <li> <p>You tried to delete a <code>ByteMatchSet</code> that is still referenced by a <code>Rule</code>.</p> </li> <li> <p>You tried to delete a <code>Rule</code> that is still referenced by a <code>WebACL</code>.</p> </li> </ul></p>
+    WAFReferencedItem(String),
+    /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
+    WAFStaleData(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteRuleGroupError {
+    pub fn from_body(body: &str) -> DeleteRuleGroupError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "WAFInternalErrorException" => {
+                        DeleteRuleGroupError::WAFInternalError(String::from(error_message))
+                    }
+                    "WAFNonEmptyEntityException" => {
+                        DeleteRuleGroupError::WAFNonEmptyEntity(String::from(error_message))
+                    }
+                    "WAFNonexistentItemException" => {
+                        DeleteRuleGroupError::WAFNonexistentItem(String::from(error_message))
+                    }
+                    "WAFReferencedItemException" => {
+                        DeleteRuleGroupError::WAFReferencedItem(String::from(error_message))
+                    }
+                    "WAFStaleDataException" => {
+                        DeleteRuleGroupError::WAFStaleData(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteRuleGroupError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteRuleGroupError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteRuleGroupError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteRuleGroupError {
+    fn from(err: serde_json::error::Error) -> DeleteRuleGroupError {
+        DeleteRuleGroupError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteRuleGroupError {
+    fn from(err: CredentialsError) -> DeleteRuleGroupError {
+        DeleteRuleGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteRuleGroupError {
+    fn from(err: HttpDispatchError) -> DeleteRuleGroupError {
+        DeleteRuleGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteRuleGroupError {
+    fn from(err: io::Error) -> DeleteRuleGroupError {
+        DeleteRuleGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteRuleGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteRuleGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteRuleGroupError::WAFInternalError(ref cause) => cause,
+            DeleteRuleGroupError::WAFNonEmptyEntity(ref cause) => cause,
+            DeleteRuleGroupError::WAFNonexistentItem(ref cause) => cause,
+            DeleteRuleGroupError::WAFReferencedItem(ref cause) => cause,
+            DeleteRuleGroupError::WAFStaleData(ref cause) => cause,
+            DeleteRuleGroupError::Validation(ref cause) => cause,
+            DeleteRuleGroupError::Credentials(ref err) => err.description(),
+            DeleteRuleGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteRuleGroupError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -3452,6 +4948,96 @@ impl Error for GetChangeTokenStatusError {
         }
     }
 }
+/// Errors returned by GetGeoMatchSet
+#[derive(Debug, PartialEq)]
+pub enum GetGeoMatchSetError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    WAFInternalError(String),
+    /// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
+    WAFInvalidAccount(String),
+    /// <p>The operation failed because the referenced object doesn't exist.</p>
+    WAFNonexistentItem(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetGeoMatchSetError {
+    pub fn from_body(body: &str) -> GetGeoMatchSetError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "WAFInternalErrorException" => {
+                        GetGeoMatchSetError::WAFInternalError(String::from(error_message))
+                    }
+                    "WAFInvalidAccountException" => {
+                        GetGeoMatchSetError::WAFInvalidAccount(String::from(error_message))
+                    }
+                    "WAFNonexistentItemException" => {
+                        GetGeoMatchSetError::WAFNonexistentItem(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetGeoMatchSetError::Validation(error_message.to_string())
+                    }
+                    _ => GetGeoMatchSetError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetGeoMatchSetError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetGeoMatchSetError {
+    fn from(err: serde_json::error::Error) -> GetGeoMatchSetError {
+        GetGeoMatchSetError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetGeoMatchSetError {
+    fn from(err: CredentialsError) -> GetGeoMatchSetError {
+        GetGeoMatchSetError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetGeoMatchSetError {
+    fn from(err: HttpDispatchError) -> GetGeoMatchSetError {
+        GetGeoMatchSetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetGeoMatchSetError {
+    fn from(err: io::Error) -> GetGeoMatchSetError {
+        GetGeoMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetGeoMatchSetError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetGeoMatchSetError {
+    fn description(&self) -> &str {
+        match *self {
+            GetGeoMatchSetError::WAFInternalError(ref cause) => cause,
+            GetGeoMatchSetError::WAFInvalidAccount(ref cause) => cause,
+            GetGeoMatchSetError::WAFNonexistentItem(ref cause) => cause,
+            GetGeoMatchSetError::Validation(ref cause) => cause,
+            GetGeoMatchSetError::Credentials(ref err) => err.description(),
+            GetGeoMatchSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetGeoMatchSetError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetIPSet
 #[derive(Debug, PartialEq)]
 pub enum GetIPSetError {
@@ -3637,7 +5223,7 @@ pub enum GetRateBasedRuleManagedKeysError {
     WAFInternalError(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
     WAFInvalidAccount(String),
-    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, QUERY_STRING, or URI.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
+    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, METHOD, QUERY_STRING, URI, or BODY.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
     WAFInvalidParameter(String),
     /// <p>The operation failed because the referenced object doesn't exist.</p>
     WAFNonexistentItem(String),
@@ -3736,6 +5322,188 @@ impl Error for GetRateBasedRuleManagedKeysError {
         }
     }
 }
+/// Errors returned by GetRegexMatchSet
+#[derive(Debug, PartialEq)]
+pub enum GetRegexMatchSetError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    WAFInternalError(String),
+    /// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
+    WAFInvalidAccount(String),
+    /// <p>The operation failed because the referenced object doesn't exist.</p>
+    WAFNonexistentItem(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetRegexMatchSetError {
+    pub fn from_body(body: &str) -> GetRegexMatchSetError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "WAFInternalErrorException" => {
+                        GetRegexMatchSetError::WAFInternalError(String::from(error_message))
+                    }
+                    "WAFInvalidAccountException" => {
+                        GetRegexMatchSetError::WAFInvalidAccount(String::from(error_message))
+                    }
+                    "WAFNonexistentItemException" => {
+                        GetRegexMatchSetError::WAFNonexistentItem(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetRegexMatchSetError::Validation(error_message.to_string())
+                    }
+                    _ => GetRegexMatchSetError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetRegexMatchSetError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetRegexMatchSetError {
+    fn from(err: serde_json::error::Error) -> GetRegexMatchSetError {
+        GetRegexMatchSetError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetRegexMatchSetError {
+    fn from(err: CredentialsError) -> GetRegexMatchSetError {
+        GetRegexMatchSetError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetRegexMatchSetError {
+    fn from(err: HttpDispatchError) -> GetRegexMatchSetError {
+        GetRegexMatchSetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetRegexMatchSetError {
+    fn from(err: io::Error) -> GetRegexMatchSetError {
+        GetRegexMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetRegexMatchSetError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetRegexMatchSetError {
+    fn description(&self) -> &str {
+        match *self {
+            GetRegexMatchSetError::WAFInternalError(ref cause) => cause,
+            GetRegexMatchSetError::WAFInvalidAccount(ref cause) => cause,
+            GetRegexMatchSetError::WAFNonexistentItem(ref cause) => cause,
+            GetRegexMatchSetError::Validation(ref cause) => cause,
+            GetRegexMatchSetError::Credentials(ref err) => err.description(),
+            GetRegexMatchSetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetRegexMatchSetError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetRegexPatternSet
+#[derive(Debug, PartialEq)]
+pub enum GetRegexPatternSetError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    WAFInternalError(String),
+    /// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
+    WAFInvalidAccount(String),
+    /// <p>The operation failed because the referenced object doesn't exist.</p>
+    WAFNonexistentItem(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetRegexPatternSetError {
+    pub fn from_body(body: &str) -> GetRegexPatternSetError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "WAFInternalErrorException" => {
+                        GetRegexPatternSetError::WAFInternalError(String::from(error_message))
+                    }
+                    "WAFInvalidAccountException" => {
+                        GetRegexPatternSetError::WAFInvalidAccount(String::from(error_message))
+                    }
+                    "WAFNonexistentItemException" => {
+                        GetRegexPatternSetError::WAFNonexistentItem(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetRegexPatternSetError::Validation(error_message.to_string())
+                    }
+                    _ => GetRegexPatternSetError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetRegexPatternSetError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetRegexPatternSetError {
+    fn from(err: serde_json::error::Error) -> GetRegexPatternSetError {
+        GetRegexPatternSetError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetRegexPatternSetError {
+    fn from(err: CredentialsError) -> GetRegexPatternSetError {
+        GetRegexPatternSetError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetRegexPatternSetError {
+    fn from(err: HttpDispatchError) -> GetRegexPatternSetError {
+        GetRegexPatternSetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetRegexPatternSetError {
+    fn from(err: io::Error) -> GetRegexPatternSetError {
+        GetRegexPatternSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetRegexPatternSetError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetRegexPatternSetError {
+    fn description(&self) -> &str {
+        match *self {
+            GetRegexPatternSetError::WAFInternalError(ref cause) => cause,
+            GetRegexPatternSetError::WAFInvalidAccount(ref cause) => cause,
+            GetRegexPatternSetError::WAFNonexistentItem(ref cause) => cause,
+            GetRegexPatternSetError::Validation(ref cause) => cause,
+            GetRegexPatternSetError::Credentials(ref err) => err.description(),
+            GetRegexPatternSetError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetRegexPatternSetError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetRule
 #[derive(Debug, PartialEq)]
 pub enum GetRuleError {
@@ -3821,6 +5589,90 @@ impl Error for GetRuleError {
             GetRuleError::Credentials(ref err) => err.description(),
             GetRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             GetRuleError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetRuleGroup
+#[derive(Debug, PartialEq)]
+pub enum GetRuleGroupError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    WAFInternalError(String),
+    /// <p>The operation failed because the referenced object doesn't exist.</p>
+    WAFNonexistentItem(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetRuleGroupError {
+    pub fn from_body(body: &str) -> GetRuleGroupError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "WAFInternalErrorException" => {
+                        GetRuleGroupError::WAFInternalError(String::from(error_message))
+                    }
+                    "WAFNonexistentItemException" => {
+                        GetRuleGroupError::WAFNonexistentItem(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetRuleGroupError::Validation(error_message.to_string())
+                    }
+                    _ => GetRuleGroupError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetRuleGroupError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetRuleGroupError {
+    fn from(err: serde_json::error::Error) -> GetRuleGroupError {
+        GetRuleGroupError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetRuleGroupError {
+    fn from(err: CredentialsError) -> GetRuleGroupError {
+        GetRuleGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetRuleGroupError {
+    fn from(err: HttpDispatchError) -> GetRuleGroupError {
+        GetRuleGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetRuleGroupError {
+    fn from(err: io::Error) -> GetRuleGroupError {
+        GetRuleGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetRuleGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetRuleGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            GetRuleGroupError::WAFInternalError(ref cause) => cause,
+            GetRuleGroupError::WAFNonexistentItem(ref cause) => cause,
+            GetRuleGroupError::Validation(ref cause) => cause,
+            GetRuleGroupError::Credentials(ref err) => err.description(),
+            GetRuleGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetRuleGroupError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -4274,6 +6126,104 @@ impl Error for GetXssMatchSetError {
         }
     }
 }
+/// Errors returned by ListActivatedRulesInRuleGroup
+#[derive(Debug, PartialEq)]
+pub enum ListActivatedRulesInRuleGroupError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    WAFInternalError(String),
+    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, METHOD, QUERY_STRING, URI, or BODY.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
+    WAFInvalidParameter(String),
+    /// <p>The operation failed because the referenced object doesn't exist.</p>
+    WAFNonexistentItem(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListActivatedRulesInRuleGroupError {
+    pub fn from_body(body: &str) -> ListActivatedRulesInRuleGroupError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "WAFInternalErrorException" => {
+                        ListActivatedRulesInRuleGroupError::WAFInternalError(String::from(
+                            error_message,
+                        ))
+                    }
+                    "WAFInvalidParameterException" => {
+                        ListActivatedRulesInRuleGroupError::WAFInvalidParameter(String::from(
+                            error_message,
+                        ))
+                    }
+                    "WAFNonexistentItemException" => {
+                        ListActivatedRulesInRuleGroupError::WAFNonexistentItem(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        ListActivatedRulesInRuleGroupError::Validation(error_message.to_string())
+                    }
+                    _ => ListActivatedRulesInRuleGroupError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListActivatedRulesInRuleGroupError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListActivatedRulesInRuleGroupError {
+    fn from(err: serde_json::error::Error) -> ListActivatedRulesInRuleGroupError {
+        ListActivatedRulesInRuleGroupError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListActivatedRulesInRuleGroupError {
+    fn from(err: CredentialsError) -> ListActivatedRulesInRuleGroupError {
+        ListActivatedRulesInRuleGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListActivatedRulesInRuleGroupError {
+    fn from(err: HttpDispatchError) -> ListActivatedRulesInRuleGroupError {
+        ListActivatedRulesInRuleGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListActivatedRulesInRuleGroupError {
+    fn from(err: io::Error) -> ListActivatedRulesInRuleGroupError {
+        ListActivatedRulesInRuleGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListActivatedRulesInRuleGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListActivatedRulesInRuleGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            ListActivatedRulesInRuleGroupError::WAFInternalError(ref cause) => cause,
+            ListActivatedRulesInRuleGroupError::WAFInvalidParameter(ref cause) => cause,
+            ListActivatedRulesInRuleGroupError::WAFNonexistentItem(ref cause) => cause,
+            ListActivatedRulesInRuleGroupError::Validation(ref cause) => cause,
+            ListActivatedRulesInRuleGroupError::Credentials(ref err) => err.description(),
+            ListActivatedRulesInRuleGroupError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListActivatedRulesInRuleGroupError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListByteMatchSets
 #[derive(Debug, PartialEq)]
 pub enum ListByteMatchSetsError {
@@ -4357,6 +6307,90 @@ impl Error for ListByteMatchSetsError {
                 dispatch_error.description()
             }
             ListByteMatchSetsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListGeoMatchSets
+#[derive(Debug, PartialEq)]
+pub enum ListGeoMatchSetsError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    WAFInternalError(String),
+    /// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
+    WAFInvalidAccount(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListGeoMatchSetsError {
+    pub fn from_body(body: &str) -> ListGeoMatchSetsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "WAFInternalErrorException" => {
+                        ListGeoMatchSetsError::WAFInternalError(String::from(error_message))
+                    }
+                    "WAFInvalidAccountException" => {
+                        ListGeoMatchSetsError::WAFInvalidAccount(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListGeoMatchSetsError::Validation(error_message.to_string())
+                    }
+                    _ => ListGeoMatchSetsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListGeoMatchSetsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListGeoMatchSetsError {
+    fn from(err: serde_json::error::Error) -> ListGeoMatchSetsError {
+        ListGeoMatchSetsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListGeoMatchSetsError {
+    fn from(err: CredentialsError) -> ListGeoMatchSetsError {
+        ListGeoMatchSetsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListGeoMatchSetsError {
+    fn from(err: HttpDispatchError) -> ListGeoMatchSetsError {
+        ListGeoMatchSetsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListGeoMatchSetsError {
+    fn from(err: io::Error) -> ListGeoMatchSetsError {
+        ListGeoMatchSetsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListGeoMatchSetsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListGeoMatchSetsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListGeoMatchSetsError::WAFInternalError(ref cause) => cause,
+            ListGeoMatchSetsError::WAFInvalidAccount(ref cause) => cause,
+            ListGeoMatchSetsError::Validation(ref cause) => cause,
+            ListGeoMatchSetsError::Credentials(ref err) => err.description(),
+            ListGeoMatchSetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ListGeoMatchSetsError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -4525,6 +6559,256 @@ impl Error for ListRateBasedRulesError {
                 dispatch_error.description()
             }
             ListRateBasedRulesError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListRegexMatchSets
+#[derive(Debug, PartialEq)]
+pub enum ListRegexMatchSetsError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    WAFInternalError(String),
+    /// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
+    WAFInvalidAccount(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListRegexMatchSetsError {
+    pub fn from_body(body: &str) -> ListRegexMatchSetsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "WAFInternalErrorException" => {
+                        ListRegexMatchSetsError::WAFInternalError(String::from(error_message))
+                    }
+                    "WAFInvalidAccountException" => {
+                        ListRegexMatchSetsError::WAFInvalidAccount(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListRegexMatchSetsError::Validation(error_message.to_string())
+                    }
+                    _ => ListRegexMatchSetsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListRegexMatchSetsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListRegexMatchSetsError {
+    fn from(err: serde_json::error::Error) -> ListRegexMatchSetsError {
+        ListRegexMatchSetsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListRegexMatchSetsError {
+    fn from(err: CredentialsError) -> ListRegexMatchSetsError {
+        ListRegexMatchSetsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListRegexMatchSetsError {
+    fn from(err: HttpDispatchError) -> ListRegexMatchSetsError {
+        ListRegexMatchSetsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListRegexMatchSetsError {
+    fn from(err: io::Error) -> ListRegexMatchSetsError {
+        ListRegexMatchSetsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListRegexMatchSetsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListRegexMatchSetsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListRegexMatchSetsError::WAFInternalError(ref cause) => cause,
+            ListRegexMatchSetsError::WAFInvalidAccount(ref cause) => cause,
+            ListRegexMatchSetsError::Validation(ref cause) => cause,
+            ListRegexMatchSetsError::Credentials(ref err) => err.description(),
+            ListRegexMatchSetsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListRegexMatchSetsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListRegexPatternSets
+#[derive(Debug, PartialEq)]
+pub enum ListRegexPatternSetsError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    WAFInternalError(String),
+    /// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
+    WAFInvalidAccount(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListRegexPatternSetsError {
+    pub fn from_body(body: &str) -> ListRegexPatternSetsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "WAFInternalErrorException" => {
+                        ListRegexPatternSetsError::WAFInternalError(String::from(error_message))
+                    }
+                    "WAFInvalidAccountException" => {
+                        ListRegexPatternSetsError::WAFInvalidAccount(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListRegexPatternSetsError::Validation(error_message.to_string())
+                    }
+                    _ => ListRegexPatternSetsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListRegexPatternSetsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListRegexPatternSetsError {
+    fn from(err: serde_json::error::Error) -> ListRegexPatternSetsError {
+        ListRegexPatternSetsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListRegexPatternSetsError {
+    fn from(err: CredentialsError) -> ListRegexPatternSetsError {
+        ListRegexPatternSetsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListRegexPatternSetsError {
+    fn from(err: HttpDispatchError) -> ListRegexPatternSetsError {
+        ListRegexPatternSetsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListRegexPatternSetsError {
+    fn from(err: io::Error) -> ListRegexPatternSetsError {
+        ListRegexPatternSetsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListRegexPatternSetsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListRegexPatternSetsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListRegexPatternSetsError::WAFInternalError(ref cause) => cause,
+            ListRegexPatternSetsError::WAFInvalidAccount(ref cause) => cause,
+            ListRegexPatternSetsError::Validation(ref cause) => cause,
+            ListRegexPatternSetsError::Credentials(ref err) => err.description(),
+            ListRegexPatternSetsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListRegexPatternSetsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ListRuleGroups
+#[derive(Debug, PartialEq)]
+pub enum ListRuleGroupsError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    WAFInternalError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListRuleGroupsError {
+    pub fn from_body(body: &str) -> ListRuleGroupsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "WAFInternalErrorException" => {
+                        ListRuleGroupsError::WAFInternalError(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListRuleGroupsError::Validation(error_message.to_string())
+                    }
+                    _ => ListRuleGroupsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListRuleGroupsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListRuleGroupsError {
+    fn from(err: serde_json::error::Error) -> ListRuleGroupsError {
+        ListRuleGroupsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListRuleGroupsError {
+    fn from(err: CredentialsError) -> ListRuleGroupsError {
+        ListRuleGroupsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListRuleGroupsError {
+    fn from(err: HttpDispatchError) -> ListRuleGroupsError {
+        ListRuleGroupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListRuleGroupsError {
+    fn from(err: io::Error) -> ListRuleGroupsError {
+        ListRuleGroupsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListRuleGroupsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListRuleGroupsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListRuleGroupsError::WAFInternalError(ref cause) => cause,
+            ListRuleGroupsError::Validation(ref cause) => cause,
+            ListRuleGroupsError::Credentials(ref err) => err.description(),
+            ListRuleGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ListRuleGroupsError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -4786,6 +7070,94 @@ impl Error for ListSqlInjectionMatchSetsError {
         }
     }
 }
+/// Errors returned by ListSubscribedRuleGroups
+#[derive(Debug, PartialEq)]
+pub enum ListSubscribedRuleGroupsError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    WAFInternalError(String),
+    /// <p>The operation failed because the referenced object doesn't exist.</p>
+    WAFNonexistentItem(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListSubscribedRuleGroupsError {
+    pub fn from_body(body: &str) -> ListSubscribedRuleGroupsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "WAFInternalErrorException" => {
+                        ListSubscribedRuleGroupsError::WAFInternalError(String::from(error_message))
+                    }
+                    "WAFNonexistentItemException" => {
+                        ListSubscribedRuleGroupsError::WAFNonexistentItem(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        ListSubscribedRuleGroupsError::Validation(error_message.to_string())
+                    }
+                    _ => ListSubscribedRuleGroupsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListSubscribedRuleGroupsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListSubscribedRuleGroupsError {
+    fn from(err: serde_json::error::Error) -> ListSubscribedRuleGroupsError {
+        ListSubscribedRuleGroupsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListSubscribedRuleGroupsError {
+    fn from(err: CredentialsError) -> ListSubscribedRuleGroupsError {
+        ListSubscribedRuleGroupsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListSubscribedRuleGroupsError {
+    fn from(err: HttpDispatchError) -> ListSubscribedRuleGroupsError {
+        ListSubscribedRuleGroupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListSubscribedRuleGroupsError {
+    fn from(err: io::Error) -> ListSubscribedRuleGroupsError {
+        ListSubscribedRuleGroupsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListSubscribedRuleGroupsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListSubscribedRuleGroupsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListSubscribedRuleGroupsError::WAFInternalError(ref cause) => cause,
+            ListSubscribedRuleGroupsError::WAFNonexistentItem(ref cause) => cause,
+            ListSubscribedRuleGroupsError::Validation(ref cause) => cause,
+            ListSubscribedRuleGroupsError::Credentials(ref err) => err.description(),
+            ListSubscribedRuleGroupsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListSubscribedRuleGroupsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListWebACLs
 #[derive(Debug, PartialEq)]
 pub enum ListWebACLsError {
@@ -4963,7 +7335,7 @@ pub enum UpdateByteMatchSetError {
     WAFInvalidAccount(String),
     /// <p><p>The operation failed because there was nothing to do. For example:</p> <ul> <li> <p>You tried to remove a <code>Rule</code> from a <code>WebACL</code>, but the <code>Rule</code> isn&#39;t in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to remove an IP address from an <code>IPSet</code>, but the IP address isn&#39;t in the specified <code>IPSet</code>.</p> </li> <li> <p>You tried to remove a <code>ByteMatchTuple</code> from a <code>ByteMatchSet</code>, but the <code>ByteMatchTuple</code> isn&#39;t in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to add a <code>Rule</code> to a <code>WebACL</code>, but the <code>Rule</code> already exists in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to add an IP address to an <code>IPSet</code>, but the IP address already exists in the specified <code>IPSet</code>.</p> </li> <li> <p>You tried to add a <code>ByteMatchTuple</code> to a <code>ByteMatchSet</code>, but the <code>ByteMatchTuple</code> already exists in the specified <code>WebACL</code>.</p> </li> </ul></p>
     WAFInvalidOperation(String),
-    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, QUERY_STRING, or URI.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
+    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, METHOD, QUERY_STRING, URI, or BODY.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
     WAFInvalidParameter(String),
     /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>WebACL</code> objects that you can create for an AWS account. For more information, see <a href="http://docs.aws.amazon.com/waf/latest/developerguide/limits.html">Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
     WAFLimitsExceeded(String),
@@ -5078,6 +7450,134 @@ impl Error for UpdateByteMatchSetError {
         }
     }
 }
+/// Errors returned by UpdateGeoMatchSet
+#[derive(Debug, PartialEq)]
+pub enum UpdateGeoMatchSetError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    WAFInternalError(String),
+    /// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
+    WAFInvalidAccount(String),
+    /// <p><p>The operation failed because there was nothing to do. For example:</p> <ul> <li> <p>You tried to remove a <code>Rule</code> from a <code>WebACL</code>, but the <code>Rule</code> isn&#39;t in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to remove an IP address from an <code>IPSet</code>, but the IP address isn&#39;t in the specified <code>IPSet</code>.</p> </li> <li> <p>You tried to remove a <code>ByteMatchTuple</code> from a <code>ByteMatchSet</code>, but the <code>ByteMatchTuple</code> isn&#39;t in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to add a <code>Rule</code> to a <code>WebACL</code>, but the <code>Rule</code> already exists in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to add an IP address to an <code>IPSet</code>, but the IP address already exists in the specified <code>IPSet</code>.</p> </li> <li> <p>You tried to add a <code>ByteMatchTuple</code> to a <code>ByteMatchSet</code>, but the <code>ByteMatchTuple</code> already exists in the specified <code>WebACL</code>.</p> </li> </ul></p>
+    WAFInvalidOperation(String),
+    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, METHOD, QUERY_STRING, URI, or BODY.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
+    WAFInvalidParameter(String),
+    /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>WebACL</code> objects that you can create for an AWS account. For more information, see <a href="http://docs.aws.amazon.com/waf/latest/developerguide/limits.html">Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
+    WAFLimitsExceeded(String),
+    /// <p><p>The operation failed because you tried to add an object to or delete an object from another object that doesn&#39;t exist. For example:</p> <ul> <li> <p>You tried to add a <code>Rule</code> to or delete a <code>Rule</code> from a <code>WebACL</code> that doesn&#39;t exist.</p> </li> <li> <p>You tried to add a <code>ByteMatchSet</code> to or delete a <code>ByteMatchSet</code> from a <code>Rule</code> that doesn&#39;t exist.</p> </li> <li> <p>You tried to add an IP address to or delete an IP address from an <code>IPSet</code> that doesn&#39;t exist.</p> </li> <li> <p>You tried to add a <code>ByteMatchTuple</code> to or delete a <code>ByteMatchTuple</code> from a <code>ByteMatchSet</code> that doesn&#39;t exist.</p> </li> </ul></p>
+    WAFNonexistentContainer(String),
+    /// <p>The operation failed because the referenced object doesn't exist.</p>
+    WAFNonexistentItem(String),
+    /// <p><p>The operation failed because you tried to delete an object that is still in use. For example:</p> <ul> <li> <p>You tried to delete a <code>ByteMatchSet</code> that is still referenced by a <code>Rule</code>.</p> </li> <li> <p>You tried to delete a <code>Rule</code> that is still referenced by a <code>WebACL</code>.</p> </li> </ul></p>
+    WAFReferencedItem(String),
+    /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
+    WAFStaleData(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateGeoMatchSetError {
+    pub fn from_body(body: &str) -> UpdateGeoMatchSetError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "WAFInternalErrorException" => {
+                        UpdateGeoMatchSetError::WAFInternalError(String::from(error_message))
+                    }
+                    "WAFInvalidAccountException" => {
+                        UpdateGeoMatchSetError::WAFInvalidAccount(String::from(error_message))
+                    }
+                    "WAFInvalidOperationException" => {
+                        UpdateGeoMatchSetError::WAFInvalidOperation(String::from(error_message))
+                    }
+                    "WAFInvalidParameterException" => {
+                        UpdateGeoMatchSetError::WAFInvalidParameter(String::from(error_message))
+                    }
+                    "WAFLimitsExceededException" => {
+                        UpdateGeoMatchSetError::WAFLimitsExceeded(String::from(error_message))
+                    }
+                    "WAFNonexistentContainerException" => {
+                        UpdateGeoMatchSetError::WAFNonexistentContainer(String::from(error_message))
+                    }
+                    "WAFNonexistentItemException" => {
+                        UpdateGeoMatchSetError::WAFNonexistentItem(String::from(error_message))
+                    }
+                    "WAFReferencedItemException" => {
+                        UpdateGeoMatchSetError::WAFReferencedItem(String::from(error_message))
+                    }
+                    "WAFStaleDataException" => {
+                        UpdateGeoMatchSetError::WAFStaleData(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateGeoMatchSetError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateGeoMatchSetError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateGeoMatchSetError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateGeoMatchSetError {
+    fn from(err: serde_json::error::Error) -> UpdateGeoMatchSetError {
+        UpdateGeoMatchSetError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateGeoMatchSetError {
+    fn from(err: CredentialsError) -> UpdateGeoMatchSetError {
+        UpdateGeoMatchSetError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateGeoMatchSetError {
+    fn from(err: HttpDispatchError) -> UpdateGeoMatchSetError {
+        UpdateGeoMatchSetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateGeoMatchSetError {
+    fn from(err: io::Error) -> UpdateGeoMatchSetError {
+        UpdateGeoMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateGeoMatchSetError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateGeoMatchSetError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateGeoMatchSetError::WAFInternalError(ref cause) => cause,
+            UpdateGeoMatchSetError::WAFInvalidAccount(ref cause) => cause,
+            UpdateGeoMatchSetError::WAFInvalidOperation(ref cause) => cause,
+            UpdateGeoMatchSetError::WAFInvalidParameter(ref cause) => cause,
+            UpdateGeoMatchSetError::WAFLimitsExceeded(ref cause) => cause,
+            UpdateGeoMatchSetError::WAFNonexistentContainer(ref cause) => cause,
+            UpdateGeoMatchSetError::WAFNonexistentItem(ref cause) => cause,
+            UpdateGeoMatchSetError::WAFReferencedItem(ref cause) => cause,
+            UpdateGeoMatchSetError::WAFStaleData(ref cause) => cause,
+            UpdateGeoMatchSetError::Validation(ref cause) => cause,
+            UpdateGeoMatchSetError::Credentials(ref err) => err.description(),
+            UpdateGeoMatchSetError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateGeoMatchSetError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateIPSet
 #[derive(Debug, PartialEq)]
 pub enum UpdateIPSetError {
@@ -5087,7 +7587,7 @@ pub enum UpdateIPSetError {
     WAFInvalidAccount(String),
     /// <p><p>The operation failed because there was nothing to do. For example:</p> <ul> <li> <p>You tried to remove a <code>Rule</code> from a <code>WebACL</code>, but the <code>Rule</code> isn&#39;t in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to remove an IP address from an <code>IPSet</code>, but the IP address isn&#39;t in the specified <code>IPSet</code>.</p> </li> <li> <p>You tried to remove a <code>ByteMatchTuple</code> from a <code>ByteMatchSet</code>, but the <code>ByteMatchTuple</code> isn&#39;t in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to add a <code>Rule</code> to a <code>WebACL</code>, but the <code>Rule</code> already exists in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to add an IP address to an <code>IPSet</code>, but the IP address already exists in the specified <code>IPSet</code>.</p> </li> <li> <p>You tried to add a <code>ByteMatchTuple</code> to a <code>ByteMatchSet</code>, but the <code>ByteMatchTuple</code> already exists in the specified <code>WebACL</code>.</p> </li> </ul></p>
     WAFInvalidOperation(String),
-    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, QUERY_STRING, or URI.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
+    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, METHOD, QUERY_STRING, URI, or BODY.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
     WAFInvalidParameter(String),
     /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>WebACL</code> objects that you can create for an AWS account. For more information, see <a href="http://docs.aws.amazon.com/waf/latest/developerguide/limits.html">Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
     WAFLimitsExceeded(String),
@@ -5213,7 +7713,7 @@ pub enum UpdateRateBasedRuleError {
     WAFInvalidAccount(String),
     /// <p><p>The operation failed because there was nothing to do. For example:</p> <ul> <li> <p>You tried to remove a <code>Rule</code> from a <code>WebACL</code>, but the <code>Rule</code> isn&#39;t in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to remove an IP address from an <code>IPSet</code>, but the IP address isn&#39;t in the specified <code>IPSet</code>.</p> </li> <li> <p>You tried to remove a <code>ByteMatchTuple</code> from a <code>ByteMatchSet</code>, but the <code>ByteMatchTuple</code> isn&#39;t in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to add a <code>Rule</code> to a <code>WebACL</code>, but the <code>Rule</code> already exists in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to add an IP address to an <code>IPSet</code>, but the IP address already exists in the specified <code>IPSet</code>.</p> </li> <li> <p>You tried to add a <code>ByteMatchTuple</code> to a <code>ByteMatchSet</code>, but the <code>ByteMatchTuple</code> already exists in the specified <code>WebACL</code>.</p> </li> </ul></p>
     WAFInvalidOperation(String),
-    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, QUERY_STRING, or URI.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
+    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, METHOD, QUERY_STRING, URI, or BODY.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
     WAFInvalidParameter(String),
     /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>WebACL</code> objects that you can create for an AWS account. For more information, see <a href="http://docs.aws.amazon.com/waf/latest/developerguide/limits.html">Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
     WAFLimitsExceeded(String),
@@ -5334,6 +7834,256 @@ impl Error for UpdateRateBasedRuleError {
         }
     }
 }
+/// Errors returned by UpdateRegexMatchSet
+#[derive(Debug, PartialEq)]
+pub enum UpdateRegexMatchSetError {
+    /// <p>The name specified is invalid.</p>
+    WAFDisallowedName(String),
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    WAFInternalError(String),
+    /// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
+    WAFInvalidAccount(String),
+    /// <p><p>The operation failed because there was nothing to do. For example:</p> <ul> <li> <p>You tried to remove a <code>Rule</code> from a <code>WebACL</code>, but the <code>Rule</code> isn&#39;t in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to remove an IP address from an <code>IPSet</code>, but the IP address isn&#39;t in the specified <code>IPSet</code>.</p> </li> <li> <p>You tried to remove a <code>ByteMatchTuple</code> from a <code>ByteMatchSet</code>, but the <code>ByteMatchTuple</code> isn&#39;t in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to add a <code>Rule</code> to a <code>WebACL</code>, but the <code>Rule</code> already exists in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to add an IP address to an <code>IPSet</code>, but the IP address already exists in the specified <code>IPSet</code>.</p> </li> <li> <p>You tried to add a <code>ByteMatchTuple</code> to a <code>ByteMatchSet</code>, but the <code>ByteMatchTuple</code> already exists in the specified <code>WebACL</code>.</p> </li> </ul></p>
+    WAFInvalidOperation(String),
+    /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>WebACL</code> objects that you can create for an AWS account. For more information, see <a href="http://docs.aws.amazon.com/waf/latest/developerguide/limits.html">Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
+    WAFLimitsExceeded(String),
+    /// <p><p>The operation failed because you tried to add an object to or delete an object from another object that doesn&#39;t exist. For example:</p> <ul> <li> <p>You tried to add a <code>Rule</code> to or delete a <code>Rule</code> from a <code>WebACL</code> that doesn&#39;t exist.</p> </li> <li> <p>You tried to add a <code>ByteMatchSet</code> to or delete a <code>ByteMatchSet</code> from a <code>Rule</code> that doesn&#39;t exist.</p> </li> <li> <p>You tried to add an IP address to or delete an IP address from an <code>IPSet</code> that doesn&#39;t exist.</p> </li> <li> <p>You tried to add a <code>ByteMatchTuple</code> to or delete a <code>ByteMatchTuple</code> from a <code>ByteMatchSet</code> that doesn&#39;t exist.</p> </li> </ul></p>
+    WAFNonexistentContainer(String),
+    /// <p>The operation failed because the referenced object doesn't exist.</p>
+    WAFNonexistentItem(String),
+    /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
+    WAFStaleData(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateRegexMatchSetError {
+    pub fn from_body(body: &str) -> UpdateRegexMatchSetError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "WAFDisallowedNameException" => {
+                        UpdateRegexMatchSetError::WAFDisallowedName(String::from(error_message))
+                    }
+                    "WAFInternalErrorException" => {
+                        UpdateRegexMatchSetError::WAFInternalError(String::from(error_message))
+                    }
+                    "WAFInvalidAccountException" => {
+                        UpdateRegexMatchSetError::WAFInvalidAccount(String::from(error_message))
+                    }
+                    "WAFInvalidOperationException" => {
+                        UpdateRegexMatchSetError::WAFInvalidOperation(String::from(error_message))
+                    }
+                    "WAFLimitsExceededException" => {
+                        UpdateRegexMatchSetError::WAFLimitsExceeded(String::from(error_message))
+                    }
+                    "WAFNonexistentContainerException" => {
+                        UpdateRegexMatchSetError::WAFNonexistentContainer(String::from(
+                            error_message,
+                        ))
+                    }
+                    "WAFNonexistentItemException" => {
+                        UpdateRegexMatchSetError::WAFNonexistentItem(String::from(error_message))
+                    }
+                    "WAFStaleDataException" => {
+                        UpdateRegexMatchSetError::WAFStaleData(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateRegexMatchSetError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateRegexMatchSetError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateRegexMatchSetError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateRegexMatchSetError {
+    fn from(err: serde_json::error::Error) -> UpdateRegexMatchSetError {
+        UpdateRegexMatchSetError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateRegexMatchSetError {
+    fn from(err: CredentialsError) -> UpdateRegexMatchSetError {
+        UpdateRegexMatchSetError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateRegexMatchSetError {
+    fn from(err: HttpDispatchError) -> UpdateRegexMatchSetError {
+        UpdateRegexMatchSetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateRegexMatchSetError {
+    fn from(err: io::Error) -> UpdateRegexMatchSetError {
+        UpdateRegexMatchSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateRegexMatchSetError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateRegexMatchSetError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateRegexMatchSetError::WAFDisallowedName(ref cause) => cause,
+            UpdateRegexMatchSetError::WAFInternalError(ref cause) => cause,
+            UpdateRegexMatchSetError::WAFInvalidAccount(ref cause) => cause,
+            UpdateRegexMatchSetError::WAFInvalidOperation(ref cause) => cause,
+            UpdateRegexMatchSetError::WAFLimitsExceeded(ref cause) => cause,
+            UpdateRegexMatchSetError::WAFNonexistentContainer(ref cause) => cause,
+            UpdateRegexMatchSetError::WAFNonexistentItem(ref cause) => cause,
+            UpdateRegexMatchSetError::WAFStaleData(ref cause) => cause,
+            UpdateRegexMatchSetError::Validation(ref cause) => cause,
+            UpdateRegexMatchSetError::Credentials(ref err) => err.description(),
+            UpdateRegexMatchSetError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateRegexMatchSetError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdateRegexPatternSet
+#[derive(Debug, PartialEq)]
+pub enum UpdateRegexPatternSetError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    WAFInternalError(String),
+    /// <p>The operation failed because you tried to create, update, or delete an object by using an invalid account identifier.</p>
+    WAFInvalidAccount(String),
+    /// <p><p>The operation failed because there was nothing to do. For example:</p> <ul> <li> <p>You tried to remove a <code>Rule</code> from a <code>WebACL</code>, but the <code>Rule</code> isn&#39;t in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to remove an IP address from an <code>IPSet</code>, but the IP address isn&#39;t in the specified <code>IPSet</code>.</p> </li> <li> <p>You tried to remove a <code>ByteMatchTuple</code> from a <code>ByteMatchSet</code>, but the <code>ByteMatchTuple</code> isn&#39;t in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to add a <code>Rule</code> to a <code>WebACL</code>, but the <code>Rule</code> already exists in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to add an IP address to an <code>IPSet</code>, but the IP address already exists in the specified <code>IPSet</code>.</p> </li> <li> <p>You tried to add a <code>ByteMatchTuple</code> to a <code>ByteMatchSet</code>, but the <code>ByteMatchTuple</code> already exists in the specified <code>WebACL</code>.</p> </li> </ul></p>
+    WAFInvalidOperation(String),
+    /// <p>The regular expression (regex) you specified in <code>RegexPatternString</code> is invalid.</p>
+    WAFInvalidRegexPattern(String),
+    /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>WebACL</code> objects that you can create for an AWS account. For more information, see <a href="http://docs.aws.amazon.com/waf/latest/developerguide/limits.html">Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
+    WAFLimitsExceeded(String),
+    /// <p><p>The operation failed because you tried to add an object to or delete an object from another object that doesn&#39;t exist. For example:</p> <ul> <li> <p>You tried to add a <code>Rule</code> to or delete a <code>Rule</code> from a <code>WebACL</code> that doesn&#39;t exist.</p> </li> <li> <p>You tried to add a <code>ByteMatchSet</code> to or delete a <code>ByteMatchSet</code> from a <code>Rule</code> that doesn&#39;t exist.</p> </li> <li> <p>You tried to add an IP address to or delete an IP address from an <code>IPSet</code> that doesn&#39;t exist.</p> </li> <li> <p>You tried to add a <code>ByteMatchTuple</code> to or delete a <code>ByteMatchTuple</code> from a <code>ByteMatchSet</code> that doesn&#39;t exist.</p> </li> </ul></p>
+    WAFNonexistentContainer(String),
+    /// <p>The operation failed because the referenced object doesn't exist.</p>
+    WAFNonexistentItem(String),
+    /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
+    WAFStaleData(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateRegexPatternSetError {
+    pub fn from_body(body: &str) -> UpdateRegexPatternSetError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "WAFInternalErrorException" => {
+                        UpdateRegexPatternSetError::WAFInternalError(String::from(error_message))
+                    }
+                    "WAFInvalidAccountException" => {
+                        UpdateRegexPatternSetError::WAFInvalidAccount(String::from(error_message))
+                    }
+                    "WAFInvalidOperationException" => {
+                        UpdateRegexPatternSetError::WAFInvalidOperation(String::from(error_message))
+                    }
+                    "WAFInvalidRegexPatternException" => {
+                        UpdateRegexPatternSetError::WAFInvalidRegexPattern(String::from(
+                            error_message,
+                        ))
+                    }
+                    "WAFLimitsExceededException" => {
+                        UpdateRegexPatternSetError::WAFLimitsExceeded(String::from(error_message))
+                    }
+                    "WAFNonexistentContainerException" => {
+                        UpdateRegexPatternSetError::WAFNonexistentContainer(String::from(
+                            error_message,
+                        ))
+                    }
+                    "WAFNonexistentItemException" => {
+                        UpdateRegexPatternSetError::WAFNonexistentItem(String::from(error_message))
+                    }
+                    "WAFStaleDataException" => {
+                        UpdateRegexPatternSetError::WAFStaleData(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateRegexPatternSetError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateRegexPatternSetError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateRegexPatternSetError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateRegexPatternSetError {
+    fn from(err: serde_json::error::Error) -> UpdateRegexPatternSetError {
+        UpdateRegexPatternSetError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateRegexPatternSetError {
+    fn from(err: CredentialsError) -> UpdateRegexPatternSetError {
+        UpdateRegexPatternSetError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateRegexPatternSetError {
+    fn from(err: HttpDispatchError) -> UpdateRegexPatternSetError {
+        UpdateRegexPatternSetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateRegexPatternSetError {
+    fn from(err: io::Error) -> UpdateRegexPatternSetError {
+        UpdateRegexPatternSetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateRegexPatternSetError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateRegexPatternSetError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateRegexPatternSetError::WAFInternalError(ref cause) => cause,
+            UpdateRegexPatternSetError::WAFInvalidAccount(ref cause) => cause,
+            UpdateRegexPatternSetError::WAFInvalidOperation(ref cause) => cause,
+            UpdateRegexPatternSetError::WAFInvalidRegexPattern(ref cause) => cause,
+            UpdateRegexPatternSetError::WAFLimitsExceeded(ref cause) => cause,
+            UpdateRegexPatternSetError::WAFNonexistentContainer(ref cause) => cause,
+            UpdateRegexPatternSetError::WAFNonexistentItem(ref cause) => cause,
+            UpdateRegexPatternSetError::WAFStaleData(ref cause) => cause,
+            UpdateRegexPatternSetError::Validation(ref cause) => cause,
+            UpdateRegexPatternSetError::Credentials(ref err) => err.description(),
+            UpdateRegexPatternSetError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateRegexPatternSetError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateRule
 #[derive(Debug, PartialEq)]
 pub enum UpdateRuleError {
@@ -5343,7 +8093,7 @@ pub enum UpdateRuleError {
     WAFInvalidAccount(String),
     /// <p><p>The operation failed because there was nothing to do. For example:</p> <ul> <li> <p>You tried to remove a <code>Rule</code> from a <code>WebACL</code>, but the <code>Rule</code> isn&#39;t in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to remove an IP address from an <code>IPSet</code>, but the IP address isn&#39;t in the specified <code>IPSet</code>.</p> </li> <li> <p>You tried to remove a <code>ByteMatchTuple</code> from a <code>ByteMatchSet</code>, but the <code>ByteMatchTuple</code> isn&#39;t in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to add a <code>Rule</code> to a <code>WebACL</code>, but the <code>Rule</code> already exists in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to add an IP address to an <code>IPSet</code>, but the IP address already exists in the specified <code>IPSet</code>.</p> </li> <li> <p>You tried to add a <code>ByteMatchTuple</code> to a <code>ByteMatchSet</code>, but the <code>ByteMatchTuple</code> already exists in the specified <code>WebACL</code>.</p> </li> </ul></p>
     WAFInvalidOperation(String),
-    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, QUERY_STRING, or URI.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
+    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, METHOD, QUERY_STRING, URI, or BODY.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
     WAFInvalidParameter(String),
     /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>WebACL</code> objects that you can create for an AWS account. For more information, see <a href="http://docs.aws.amazon.com/waf/latest/developerguide/limits.html">Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
     WAFLimitsExceeded(String),
@@ -5458,6 +8208,120 @@ impl Error for UpdateRuleError {
         }
     }
 }
+/// Errors returned by UpdateRuleGroup
+#[derive(Debug, PartialEq)]
+pub enum UpdateRuleGroupError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    WAFInternalError(String),
+    /// <p><p>The operation failed because there was nothing to do. For example:</p> <ul> <li> <p>You tried to remove a <code>Rule</code> from a <code>WebACL</code>, but the <code>Rule</code> isn&#39;t in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to remove an IP address from an <code>IPSet</code>, but the IP address isn&#39;t in the specified <code>IPSet</code>.</p> </li> <li> <p>You tried to remove a <code>ByteMatchTuple</code> from a <code>ByteMatchSet</code>, but the <code>ByteMatchTuple</code> isn&#39;t in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to add a <code>Rule</code> to a <code>WebACL</code>, but the <code>Rule</code> already exists in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to add an IP address to an <code>IPSet</code>, but the IP address already exists in the specified <code>IPSet</code>.</p> </li> <li> <p>You tried to add a <code>ByteMatchTuple</code> to a <code>ByteMatchSet</code>, but the <code>ByteMatchTuple</code> already exists in the specified <code>WebACL</code>.</p> </li> </ul></p>
+    WAFInvalidOperation(String),
+    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, METHOD, QUERY_STRING, URI, or BODY.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
+    WAFInvalidParameter(String),
+    /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>WebACL</code> objects that you can create for an AWS account. For more information, see <a href="http://docs.aws.amazon.com/waf/latest/developerguide/limits.html">Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
+    WAFLimitsExceeded(String),
+    /// <p><p>The operation failed because you tried to add an object to or delete an object from another object that doesn&#39;t exist. For example:</p> <ul> <li> <p>You tried to add a <code>Rule</code> to or delete a <code>Rule</code> from a <code>WebACL</code> that doesn&#39;t exist.</p> </li> <li> <p>You tried to add a <code>ByteMatchSet</code> to or delete a <code>ByteMatchSet</code> from a <code>Rule</code> that doesn&#39;t exist.</p> </li> <li> <p>You tried to add an IP address to or delete an IP address from an <code>IPSet</code> that doesn&#39;t exist.</p> </li> <li> <p>You tried to add a <code>ByteMatchTuple</code> to or delete a <code>ByteMatchTuple</code> from a <code>ByteMatchSet</code> that doesn&#39;t exist.</p> </li> </ul></p>
+    WAFNonexistentContainer(String),
+    /// <p>The operation failed because the referenced object doesn't exist.</p>
+    WAFNonexistentItem(String),
+    /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
+    WAFStaleData(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateRuleGroupError {
+    pub fn from_body(body: &str) -> UpdateRuleGroupError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "WAFInternalErrorException" => {
+                        UpdateRuleGroupError::WAFInternalError(String::from(error_message))
+                    }
+                    "WAFInvalidOperationException" => {
+                        UpdateRuleGroupError::WAFInvalidOperation(String::from(error_message))
+                    }
+                    "WAFInvalidParameterException" => {
+                        UpdateRuleGroupError::WAFInvalidParameter(String::from(error_message))
+                    }
+                    "WAFLimitsExceededException" => {
+                        UpdateRuleGroupError::WAFLimitsExceeded(String::from(error_message))
+                    }
+                    "WAFNonexistentContainerException" => {
+                        UpdateRuleGroupError::WAFNonexistentContainer(String::from(error_message))
+                    }
+                    "WAFNonexistentItemException" => {
+                        UpdateRuleGroupError::WAFNonexistentItem(String::from(error_message))
+                    }
+                    "WAFStaleDataException" => {
+                        UpdateRuleGroupError::WAFStaleData(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateRuleGroupError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateRuleGroupError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateRuleGroupError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateRuleGroupError {
+    fn from(err: serde_json::error::Error) -> UpdateRuleGroupError {
+        UpdateRuleGroupError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateRuleGroupError {
+    fn from(err: CredentialsError) -> UpdateRuleGroupError {
+        UpdateRuleGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateRuleGroupError {
+    fn from(err: HttpDispatchError) -> UpdateRuleGroupError {
+        UpdateRuleGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateRuleGroupError {
+    fn from(err: io::Error) -> UpdateRuleGroupError {
+        UpdateRuleGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateRuleGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateRuleGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateRuleGroupError::WAFInternalError(ref cause) => cause,
+            UpdateRuleGroupError::WAFInvalidOperation(ref cause) => cause,
+            UpdateRuleGroupError::WAFInvalidParameter(ref cause) => cause,
+            UpdateRuleGroupError::WAFLimitsExceeded(ref cause) => cause,
+            UpdateRuleGroupError::WAFNonexistentContainer(ref cause) => cause,
+            UpdateRuleGroupError::WAFNonexistentItem(ref cause) => cause,
+            UpdateRuleGroupError::WAFStaleData(ref cause) => cause,
+            UpdateRuleGroupError::Validation(ref cause) => cause,
+            UpdateRuleGroupError::Credentials(ref err) => err.description(),
+            UpdateRuleGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UpdateRuleGroupError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateSizeConstraintSet
 #[derive(Debug, PartialEq)]
 pub enum UpdateSizeConstraintSetError {
@@ -5467,7 +8331,7 @@ pub enum UpdateSizeConstraintSetError {
     WAFInvalidAccount(String),
     /// <p><p>The operation failed because there was nothing to do. For example:</p> <ul> <li> <p>You tried to remove a <code>Rule</code> from a <code>WebACL</code>, but the <code>Rule</code> isn&#39;t in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to remove an IP address from an <code>IPSet</code>, but the IP address isn&#39;t in the specified <code>IPSet</code>.</p> </li> <li> <p>You tried to remove a <code>ByteMatchTuple</code> from a <code>ByteMatchSet</code>, but the <code>ByteMatchTuple</code> isn&#39;t in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to add a <code>Rule</code> to a <code>WebACL</code>, but the <code>Rule</code> already exists in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to add an IP address to an <code>IPSet</code>, but the IP address already exists in the specified <code>IPSet</code>.</p> </li> <li> <p>You tried to add a <code>ByteMatchTuple</code> to a <code>ByteMatchSet</code>, but the <code>ByteMatchTuple</code> already exists in the specified <code>WebACL</code>.</p> </li> </ul></p>
     WAFInvalidOperation(String),
-    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, QUERY_STRING, or URI.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
+    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, METHOD, QUERY_STRING, URI, or BODY.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
     WAFInvalidParameter(String),
     /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>WebACL</code> objects that you can create for an AWS account. For more information, see <a href="http://docs.aws.amazon.com/waf/latest/developerguide/limits.html">Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
     WAFLimitsExceeded(String),
@@ -5603,7 +8467,7 @@ pub enum UpdateSqlInjectionMatchSetError {
     WAFInvalidAccount(String),
     /// <p><p>The operation failed because there was nothing to do. For example:</p> <ul> <li> <p>You tried to remove a <code>Rule</code> from a <code>WebACL</code>, but the <code>Rule</code> isn&#39;t in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to remove an IP address from an <code>IPSet</code>, but the IP address isn&#39;t in the specified <code>IPSet</code>.</p> </li> <li> <p>You tried to remove a <code>ByteMatchTuple</code> from a <code>ByteMatchSet</code>, but the <code>ByteMatchTuple</code> isn&#39;t in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to add a <code>Rule</code> to a <code>WebACL</code>, but the <code>Rule</code> already exists in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to add an IP address to an <code>IPSet</code>, but the IP address already exists in the specified <code>IPSet</code>.</p> </li> <li> <p>You tried to add a <code>ByteMatchTuple</code> to a <code>ByteMatchSet</code>, but the <code>ByteMatchTuple</code> already exists in the specified <code>WebACL</code>.</p> </li> </ul></p>
     WAFInvalidOperation(String),
-    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, QUERY_STRING, or URI.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
+    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, METHOD, QUERY_STRING, URI, or BODY.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
     WAFInvalidParameter(String),
     /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>WebACL</code> objects that you can create for an AWS account. For more information, see <a href="http://docs.aws.amazon.com/waf/latest/developerguide/limits.html">Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
     WAFLimitsExceeded(String),
@@ -5739,7 +8603,7 @@ pub enum UpdateWebACLError {
     WAFInvalidAccount(String),
     /// <p><p>The operation failed because there was nothing to do. For example:</p> <ul> <li> <p>You tried to remove a <code>Rule</code> from a <code>WebACL</code>, but the <code>Rule</code> isn&#39;t in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to remove an IP address from an <code>IPSet</code>, but the IP address isn&#39;t in the specified <code>IPSet</code>.</p> </li> <li> <p>You tried to remove a <code>ByteMatchTuple</code> from a <code>ByteMatchSet</code>, but the <code>ByteMatchTuple</code> isn&#39;t in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to add a <code>Rule</code> to a <code>WebACL</code>, but the <code>Rule</code> already exists in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to add an IP address to an <code>IPSet</code>, but the IP address already exists in the specified <code>IPSet</code>.</p> </li> <li> <p>You tried to add a <code>ByteMatchTuple</code> to a <code>ByteMatchSet</code>, but the <code>ByteMatchTuple</code> already exists in the specified <code>WebACL</code>.</p> </li> </ul></p>
     WAFInvalidOperation(String),
-    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, QUERY_STRING, or URI.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
+    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, METHOD, QUERY_STRING, URI, or BODY.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
     WAFInvalidParameter(String),
     /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>WebACL</code> objects that you can create for an AWS account. For more information, see <a href="http://docs.aws.amazon.com/waf/latest/developerguide/limits.html">Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
     WAFLimitsExceeded(String),
@@ -5751,6 +8615,8 @@ pub enum UpdateWebACLError {
     WAFReferencedItem(String),
     /// <p>The operation failed because you tried to create, update, or delete an object by using a change token that has already been used.</p>
     WAFStaleData(String),
+    /// <p>The specified subscription does not exist.</p>
+    WAFSubscriptionNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -5801,6 +8667,9 @@ impl UpdateWebACLError {
                     "WAFStaleDataException" => {
                         UpdateWebACLError::WAFStaleData(String::from(error_message))
                     }
+                    "WAFSubscriptionNotFoundException" => {
+                        UpdateWebACLError::WAFSubscriptionNotFound(String::from(error_message))
+                    }
                     "ValidationException" => {
                         UpdateWebACLError::Validation(error_message.to_string())
                     }
@@ -5849,6 +8718,7 @@ impl Error for UpdateWebACLError {
             UpdateWebACLError::WAFNonexistentItem(ref cause) => cause,
             UpdateWebACLError::WAFReferencedItem(ref cause) => cause,
             UpdateWebACLError::WAFStaleData(ref cause) => cause,
+            UpdateWebACLError::WAFSubscriptionNotFound(ref cause) => cause,
             UpdateWebACLError::Validation(ref cause) => cause,
             UpdateWebACLError::Credentials(ref err) => err.description(),
             UpdateWebACLError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -5865,7 +8735,7 @@ pub enum UpdateXssMatchSetError {
     WAFInvalidAccount(String),
     /// <p><p>The operation failed because there was nothing to do. For example:</p> <ul> <li> <p>You tried to remove a <code>Rule</code> from a <code>WebACL</code>, but the <code>Rule</code> isn&#39;t in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to remove an IP address from an <code>IPSet</code>, but the IP address isn&#39;t in the specified <code>IPSet</code>.</p> </li> <li> <p>You tried to remove a <code>ByteMatchTuple</code> from a <code>ByteMatchSet</code>, but the <code>ByteMatchTuple</code> isn&#39;t in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to add a <code>Rule</code> to a <code>WebACL</code>, but the <code>Rule</code> already exists in the specified <code>WebACL</code>.</p> </li> <li> <p>You tried to add an IP address to an <code>IPSet</code>, but the IP address already exists in the specified <code>IPSet</code>.</p> </li> <li> <p>You tried to add a <code>ByteMatchTuple</code> to a <code>ByteMatchSet</code>, but the <code>ByteMatchTuple</code> already exists in the specified <code>WebACL</code>.</p> </li> </ul></p>
     WAFInvalidOperation(String),
-    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, QUERY_STRING, or URI.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
+    /// <p><p>The operation failed because AWS WAF didn&#39;t recognize a parameter in the request. For example:</p> <ul> <li> <p>You specified an invalid parameter name.</p> </li> <li> <p>You specified an invalid value.</p> </li> <li> <p>You tried to update an object (<code>ByteMatchSet</code>, <code>IPSet</code>, <code>Rule</code>, or <code>WebACL</code>) using an action other than <code>INSERT</code> or <code>DELETE</code>.</p> </li> <li> <p>You tried to create a <code>WebACL</code> with a <code>DefaultAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to create a <code>RateBasedRule</code> with a <code>RateKey</code> value other than <code>IP</code>.</p> </li> <li> <p>You tried to update a <code>WebACL</code> with a <code>WafAction</code> <code>Type</code> other than <code>ALLOW</code>, <code>BLOCK</code>, or <code>COUNT</code>.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>FieldToMatch</code> <code>Type</code> other than HEADER, METHOD, QUERY_STRING, URI, or BODY.</p> </li> <li> <p>You tried to update a <code>ByteMatchSet</code> with a <code>Field</code> of <code>HEADER</code> but no value for <code>Data</code>.</p> </li> <li> <p>Your request references an ARN that is malformed, or corresponds to a resource with which a web ACL cannot be associated.</p> </li> </ul></p>
     WAFInvalidParameter(String),
     /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>WebACL</code> objects that you can create for an AWS account. For more information, see <a href="http://docs.aws.amazon.com/waf/latest/developerguide/limits.html">Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
     WAFLimitsExceeded(String),
@@ -5986,6 +8856,12 @@ pub trait Waf {
         input: &CreateByteMatchSetRequest,
     ) -> Result<CreateByteMatchSetResponse, CreateByteMatchSetError>;
 
+    /// <p>Creates an <a>GeoMatchSet</a>, which you use to specify which web requests you want to allow or block based on the country that the requests originate from. For example, if you're receiving a lot of requests from one or more countries and you want to block the requests, you can create an <code>GeoMatchSet</code> that contains those countries and then configure AWS WAF to block the requests. </p> <p>To create and configure a <code>GeoMatchSet</code>, perform the following steps:</p> <ol> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of a <code>CreateGeoMatchSet</code> request.</p> </li> <li> <p>Submit a <code>CreateGeoMatchSet</code> request.</p> </li> <li> <p>Use <code>GetChangeToken</code> to get the change token that you provide in the <code>ChangeToken</code> parameter of an <a>UpdateGeoMatchSet</a> request.</p> </li> <li> <p>Submit an <code>UpdateGeoMatchSetSet</code> request to specify the countries that you want AWS WAF to watch for.</p> </li> </ol> <p>For more information about how to use the AWS WAF API to allow or block HTTP requests, see the <a href="http://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF Developer Guide</a>.</p>
+    fn create_geo_match_set(
+        &self,
+        input: &CreateGeoMatchSetRequest,
+    ) -> Result<CreateGeoMatchSetResponse, CreateGeoMatchSetError>;
+
     /// <p>Creates an <a>IPSet</a>, which you use to specify which web requests you want to allow or block based on the IP addresses that the requests originate from. For example, if you're receiving a lot of requests from one or more individual IP addresses or one or more ranges of IP addresses and you want to block the requests, you can create an <code>IPSet</code> that contains those IP addresses and then configure AWS WAF to block the requests. </p> <p>To create and configure an <code>IPSet</code>, perform the following steps:</p> <ol> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of a <code>CreateIPSet</code> request.</p> </li> <li> <p>Submit a <code>CreateIPSet</code> request.</p> </li> <li> <p>Use <code>GetChangeToken</code> to get the change token that you provide in the <code>ChangeToken</code> parameter of an <a>UpdateIPSet</a> request.</p> </li> <li> <p>Submit an <code>UpdateIPSet</code> request to specify the IP addresses that you want AWS WAF to watch for.</p> </li> </ol> <p>For more information about how to use the AWS WAF API to allow or block HTTP requests, see the <a href="http://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF Developer Guide</a>.</p>
     fn create_ip_set(
         &self,
@@ -5998,9 +8874,27 @@ pub trait Waf {
         input: &CreateRateBasedRuleRequest,
     ) -> Result<CreateRateBasedRuleResponse, CreateRateBasedRuleError>;
 
+    /// <p>Creates a <a>RegexMatchSet</a>. You then use <a>UpdateRegexMatchSet</a> to identify the part of a web request that you want AWS WAF to inspect, such as the values of the <code>User-Agent</code> header or the query string. For example, you can create a <code>RegexMatchSet</code> that contains a <code>RegexMatchTuple</code> that looks for any requests with <code>User-Agent</code> headers that match a <code>RegexPatternSet</code> with pattern <code>B[a@]dB[o0]t</code>. You can then configure AWS WAF to reject those requests.</p> <p>To create and configure a <code>RegexMatchSet</code>, perform the following steps:</p> <ol> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of a <code>CreateRegexMatchSet</code> request.</p> </li> <li> <p>Submit a <code>CreateRegexMatchSet</code> request.</p> </li> <li> <p>Use <code>GetChangeToken</code> to get the change token that you provide in the <code>ChangeToken</code> parameter of an <code>UpdateRegexMatchSet</code> request.</p> </li> <li> <p>Submit an <a>UpdateRegexMatchSet</a> request to specify the part of the request that you want AWS WAF to inspect (for example, the header or the URI) and the value, using a <code>RegexPatternSet</code>, that you want AWS WAF to watch for.</p> </li> </ol> <p>For more information about how to use the AWS WAF API to allow or block HTTP requests, see the <a href="http://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF Developer Guide</a>.</p>
+    fn create_regex_match_set(
+        &self,
+        input: &CreateRegexMatchSetRequest,
+    ) -> Result<CreateRegexMatchSetResponse, CreateRegexMatchSetError>;
+
+    /// <p>Creates a <code>RegexPatternSet</code>. You then use <a>UpdateRegexPatternSet</a> to specify the regular expression (regex) pattern that you want AWS WAF to search for, such as <code>B[a@]dB[o0]t</code>. You can then configure AWS WAF to reject those requests.</p> <p>To create and configure a <code>RegexPatternSet</code>, perform the following steps:</p> <ol> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of a <code>CreateRegexPatternSet</code> request.</p> </li> <li> <p>Submit a <code>CreateRegexPatternSet</code> request.</p> </li> <li> <p>Use <code>GetChangeToken</code> to get the change token that you provide in the <code>ChangeToken</code> parameter of an <code>UpdateRegexPatternSet</code> request.</p> </li> <li> <p>Submit an <a>UpdateRegexPatternSet</a> request to specify the string that you want AWS WAF to watch for.</p> </li> </ol> <p>For more information about how to use the AWS WAF API to allow or block HTTP requests, see the <a href="http://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF Developer Guide</a>.</p>
+    fn create_regex_pattern_set(
+        &self,
+        input: &CreateRegexPatternSetRequest,
+    ) -> Result<CreateRegexPatternSetResponse, CreateRegexPatternSetError>;
+
     /// <p>Creates a <code>Rule</code>, which contains the <code>IPSet</code> objects, <code>ByteMatchSet</code> objects, and other predicates that identify the requests that you want to block. If you add more than one predicate to a <code>Rule</code>, a request must match all of the specifications to be allowed or blocked. For example, suppose you add the following to a <code>Rule</code>:</p> <ul> <li> <p>An <code>IPSet</code> that matches the IP address <code>192.0.2.44/32</code> </p> </li> <li> <p>A <code>ByteMatchSet</code> that matches <code>BadBot</code> in the <code>User-Agent</code> header</p> </li> </ul> <p>You then add the <code>Rule</code> to a <code>WebACL</code> and specify that you want to blocks requests that satisfy the <code>Rule</code>. For a request to be blocked, it must come from the IP address 192.0.2.44 <i>and</i> the <code>User-Agent</code> header in the request must contain the value <code>BadBot</code>.</p> <p>To create and configure a <code>Rule</code>, perform the following steps:</p> <ol> <li> <p>Create and update the predicates that you want to include in the <code>Rule</code>. For more information, see <a>CreateByteMatchSet</a>, <a>CreateIPSet</a>, and <a>CreateSqlInjectionMatchSet</a>.</p> </li> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of a <code>CreateRule</code> request.</p> </li> <li> <p>Submit a <code>CreateRule</code> request.</p> </li> <li> <p>Use <code>GetChangeToken</code> to get the change token that you provide in the <code>ChangeToken</code> parameter of an <a>UpdateRule</a> request.</p> </li> <li> <p>Submit an <code>UpdateRule</code> request to specify the predicates that you want to include in the <code>Rule</code>.</p> </li> <li> <p>Create and update a <code>WebACL</code> that contains the <code>Rule</code>. For more information, see <a>CreateWebACL</a>.</p> </li> </ol> <p>For more information about how to use the AWS WAF API to allow or block HTTP requests, see the <a href="http://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF Developer Guide</a>.</p>
     fn create_rule(&self, input: &CreateRuleRequest)
         -> Result<CreateRuleResponse, CreateRuleError>;
+
+    /// <p>Creates a <code>RuleGroup</code>. A rule group is a collection of predefined rules that you add to a web ACL. You use <a>UpdateRuleGroup</a> to add rules to the rule group.</p> <p>Rule groups are subject to the following limits:</p> <ul> <li> <p>Three rule groups per account. You can request an increase to this limit by contacting customer support.</p> </li> <li> <p>One rule group per web ACL.</p> </li> <li> <p>Ten rules per rule group.</p> </li> </ul> <p>For more information about how to use the AWS WAF API to allow or block HTTP requests, see the <a href="http://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF Developer Guide</a>.</p>
+    fn create_rule_group(
+        &self,
+        input: &CreateRuleGroupRequest,
+    ) -> Result<CreateRuleGroupResponse, CreateRuleGroupError>;
 
     /// <p>Creates a <code>SizeConstraintSet</code>. You then use <a>UpdateSizeConstraintSet</a> to identify the part of a web request that you want AWS WAF to check for length, such as the length of the <code>User-Agent</code> header or the length of the query string. For example, you can create a <code>SizeConstraintSet</code> that matches any requests that have a query string that is longer than 100 bytes. You can then configure AWS WAF to reject those requests.</p> <p>To create and configure a <code>SizeConstraintSet</code>, perform the following steps:</p> <ol> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of a <code>CreateSizeConstraintSet</code> request.</p> </li> <li> <p>Submit a <code>CreateSizeConstraintSet</code> request.</p> </li> <li> <p>Use <code>GetChangeToken</code> to get the change token that you provide in the <code>ChangeToken</code> parameter of an <code>UpdateSizeConstraintSet</code> request.</p> </li> <li> <p>Submit an <a>UpdateSizeConstraintSet</a> request to specify the part of the request that you want AWS WAF to inspect (for example, the header or the URI) and the value that you want AWS WAF to watch for.</p> </li> </ol> <p>For more information about how to use the AWS WAF API to allow or block HTTP requests, see the <a href="http://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF Developer Guide</a>.</p>
     fn create_size_constraint_set(
@@ -6032,6 +8926,12 @@ pub trait Waf {
         input: &DeleteByteMatchSetRequest,
     ) -> Result<DeleteByteMatchSetResponse, DeleteByteMatchSetError>;
 
+    /// <p><p>Permanently deletes a <a>GeoMatchSet</a>. You can&#39;t delete a <code>GeoMatchSet</code> if it&#39;s still used in any <code>Rules</code> or if it still includes any countries.</p> <p>If you just want to remove a <code>GeoMatchSet</code> from a <code>Rule</code>, use <a>UpdateRule</a>.</p> <p>To permanently delete a <code>GeoMatchSet</code> from AWS WAF, perform the following steps:</p> <ol> <li> <p>Update the <code>GeoMatchSet</code> to remove any countries. For more information, see <a>UpdateGeoMatchSet</a>.</p> </li> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of a <code>DeleteGeoMatchSet</code> request.</p> </li> <li> <p>Submit a <code>DeleteGeoMatchSet</code> request.</p> </li> </ol></p>
+    fn delete_geo_match_set(
+        &self,
+        input: &DeleteGeoMatchSetRequest,
+    ) -> Result<DeleteGeoMatchSetResponse, DeleteGeoMatchSetError>;
+
     /// <p><p>Permanently deletes an <a>IPSet</a>. You can&#39;t delete an <code>IPSet</code> if it&#39;s still used in any <code>Rules</code> or if it still includes any IP addresses.</p> <p>If you just want to remove an <code>IPSet</code> from a <code>Rule</code>, use <a>UpdateRule</a>.</p> <p>To permanently delete an <code>IPSet</code> from AWS WAF, perform the following steps:</p> <ol> <li> <p>Update the <code>IPSet</code> to remove IP address ranges, if any. For more information, see <a>UpdateIPSet</a>.</p> </li> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of a <code>DeleteIPSet</code> request.</p> </li> <li> <p>Submit a <code>DeleteIPSet</code> request.</p> </li> </ol></p>
     fn delete_ip_set(
         &self,
@@ -6044,9 +8944,27 @@ pub trait Waf {
         input: &DeleteRateBasedRuleRequest,
     ) -> Result<DeleteRateBasedRuleResponse, DeleteRateBasedRuleError>;
 
+    /// <p><p>Permanently deletes a <a>RegexMatchSet</a>. You can&#39;t delete a <code>RegexMatchSet</code> if it&#39;s still used in any <code>Rules</code> or if it still includes any <code>RegexMatchTuples</code> objects (any filters).</p> <p>If you just want to remove a <code>RegexMatchSet</code> from a <code>Rule</code>, use <a>UpdateRule</a>.</p> <p>To permanently delete a <code>RegexMatchSet</code>, perform the following steps:</p> <ol> <li> <p>Update the <code>RegexMatchSet</code> to remove filters, if any. For more information, see <a>UpdateRegexMatchSet</a>.</p> </li> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of a <code>DeleteRegexMatchSet</code> request.</p> </li> <li> <p>Submit a <code>DeleteRegexMatchSet</code> request.</p> </li> </ol></p>
+    fn delete_regex_match_set(
+        &self,
+        input: &DeleteRegexMatchSetRequest,
+    ) -> Result<DeleteRegexMatchSetResponse, DeleteRegexMatchSetError>;
+
+    /// <p>Permanently deletes a <a>RegexPatternSet</a>. You can't delete a <code>RegexPatternSet</code> if it's still used in any <code>RegexMatchSet</code> or if the <code>RegexPatternSet</code> is not empty. </p>
+    fn delete_regex_pattern_set(
+        &self,
+        input: &DeleteRegexPatternSetRequest,
+    ) -> Result<DeleteRegexPatternSetResponse, DeleteRegexPatternSetError>;
+
     /// <p><p>Permanently deletes a <a>Rule</a>. You can&#39;t delete a <code>Rule</code> if it&#39;s still used in any <code>WebACL</code> objects or if it still includes any predicates, such as <code>ByteMatchSet</code> objects.</p> <p>If you just want to remove a <code>Rule</code> from a <code>WebACL</code>, use <a>UpdateWebACL</a>.</p> <p>To permanently delete a <code>Rule</code> from AWS WAF, perform the following steps:</p> <ol> <li> <p>Update the <code>Rule</code> to remove predicates, if any. For more information, see <a>UpdateRule</a>.</p> </li> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of a <code>DeleteRule</code> request.</p> </li> <li> <p>Submit a <code>DeleteRule</code> request.</p> </li> </ol></p>
     fn delete_rule(&self, input: &DeleteRuleRequest)
         -> Result<DeleteRuleResponse, DeleteRuleError>;
+
+    /// <p><p>Permanently deletes a <a>RuleGroup</a>. You can&#39;t delete a <code>RuleGroup</code> if it&#39;s still used in any <code>WebACL</code> objects or if it still includes any rules.</p> <p>If you just want to remove a <code>RuleGroup</code> from a <code>WebACL</code>, use <a>UpdateWebACL</a>.</p> <p>To permanently delete a <code>RuleGroup</code> from AWS WAF, perform the following steps:</p> <ol> <li> <p>Update the <code>RuleGroup</code> to remove rules, if any. For more information, see <a>UpdateRuleGroup</a>.</p> </li> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of a <code>DeleteRuleGroup</code> request.</p> </li> <li> <p>Submit a <code>DeleteRuleGroup</code> request.</p> </li> </ol></p>
+    fn delete_rule_group(
+        &self,
+        input: &DeleteRuleGroupRequest,
+    ) -> Result<DeleteRuleGroupResponse, DeleteRuleGroupError>;
 
     /// <p><p>Permanently deletes a <a>SizeConstraintSet</a>. You can&#39;t delete a <code>SizeConstraintSet</code> if it&#39;s still used in any <code>Rules</code> or if it still includes any <a>SizeConstraint</a> objects (any filters).</p> <p>If you just want to remove a <code>SizeConstraintSet</code> from a <code>Rule</code>, use <a>UpdateRule</a>.</p> <p>To permanently delete a <code>SizeConstraintSet</code>, perform the following steps:</p> <ol> <li> <p>Update the <code>SizeConstraintSet</code> to remove filters, if any. For more information, see <a>UpdateSizeConstraintSet</a>.</p> </li> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of a <code>DeleteSizeConstraintSet</code> request.</p> </li> <li> <p>Submit a <code>DeleteSizeConstraintSet</code> request.</p> </li> </ol></p>
     fn delete_size_constraint_set(
@@ -6087,6 +9005,12 @@ pub trait Waf {
         input: &GetChangeTokenStatusRequest,
     ) -> Result<GetChangeTokenStatusResponse, GetChangeTokenStatusError>;
 
+    /// <p>Returns the <a>GeoMatchSet</a> that is specified by <code>GeoMatchSetId</code>.</p>
+    fn get_geo_match_set(
+        &self,
+        input: &GetGeoMatchSetRequest,
+    ) -> Result<GetGeoMatchSetResponse, GetGeoMatchSetError>;
+
     /// <p>Returns the <a>IPSet</a> that is specified by <code>IPSetId</code>.</p>
     fn get_ip_set(&self, input: &GetIPSetRequest) -> Result<GetIPSetResponse, GetIPSetError>;
 
@@ -6102,8 +9026,26 @@ pub trait Waf {
         input: &GetRateBasedRuleManagedKeysRequest,
     ) -> Result<GetRateBasedRuleManagedKeysResponse, GetRateBasedRuleManagedKeysError>;
 
+    /// <p>Returns the <a>RegexMatchSet</a> specified by <code>RegexMatchSetId</code>.</p>
+    fn get_regex_match_set(
+        &self,
+        input: &GetRegexMatchSetRequest,
+    ) -> Result<GetRegexMatchSetResponse, GetRegexMatchSetError>;
+
+    /// <p>Returns the <a>RegexPatternSet</a> specified by <code>RegexPatternSetId</code>.</p>
+    fn get_regex_pattern_set(
+        &self,
+        input: &GetRegexPatternSetRequest,
+    ) -> Result<GetRegexPatternSetResponse, GetRegexPatternSetError>;
+
     /// <p>Returns the <a>Rule</a> that is specified by the <code>RuleId</code> that you included in the <code>GetRule</code> request.</p>
     fn get_rule(&self, input: &GetRuleRequest) -> Result<GetRuleResponse, GetRuleError>;
+
+    /// <p>Returns the <a>RuleGroup</a> that is specified by the <code>RuleGroupId</code> that you included in the <code>GetRuleGroup</code> request.</p> <p>To view the rules in a rule group, use <a>ListActivatedRulesInRuleGroup</a>.</p>
+    fn get_rule_group(
+        &self,
+        input: &GetRuleGroupRequest,
+    ) -> Result<GetRuleGroupResponse, GetRuleGroupError>;
 
     /// <p>Gets detailed information about a specified number of requests--a sample--that AWS WAF randomly selects from among the first 5,000 requests that your AWS resource received during a time range that you choose. You can specify a sample size of up to 500 requests, and you can specify any time range in the previous three hours.</p> <p> <code>GetSampledRequests</code> returns a time range, which is usually the time range that you specified. However, if your resource (such as a CloudFront distribution) received 5,000 requests before the specified time range elapsed, <code>GetSampledRequests</code> returns an updated time range. This new time range indicates the actual period during which AWS WAF selected the requests in the sample.</p>
     fn get_sampled_requests(
@@ -6132,11 +9074,23 @@ pub trait Waf {
         input: &GetXssMatchSetRequest,
     ) -> Result<GetXssMatchSetResponse, GetXssMatchSetError>;
 
+    /// <p>Returns an array of <a>ActivatedRule</a> objects.</p>
+    fn list_activated_rules_in_rule_group(
+        &self,
+        input: &ListActivatedRulesInRuleGroupRequest,
+    ) -> Result<ListActivatedRulesInRuleGroupResponse, ListActivatedRulesInRuleGroupError>;
+
     /// <p>Returns an array of <a>ByteMatchSetSummary</a> objects.</p>
     fn list_byte_match_sets(
         &self,
         input: &ListByteMatchSetsRequest,
     ) -> Result<ListByteMatchSetsResponse, ListByteMatchSetsError>;
+
+    /// <p>Returns an array of <a>GeoMatchSetSummary</a> objects in the response.</p>
+    fn list_geo_match_sets(
+        &self,
+        input: &ListGeoMatchSetsRequest,
+    ) -> Result<ListGeoMatchSetsResponse, ListGeoMatchSetsError>;
 
     /// <p>Returns an array of <a>IPSetSummary</a> objects in the response.</p>
     fn list_ip_sets(
@@ -6149,6 +9103,24 @@ pub trait Waf {
         &self,
         input: &ListRateBasedRulesRequest,
     ) -> Result<ListRateBasedRulesResponse, ListRateBasedRulesError>;
+
+    /// <p>Returns an array of <a>RegexMatchSetSummary</a> objects.</p>
+    fn list_regex_match_sets(
+        &self,
+        input: &ListRegexMatchSetsRequest,
+    ) -> Result<ListRegexMatchSetsResponse, ListRegexMatchSetsError>;
+
+    /// <p>Returns an array of <a>RegexPatternSetSummary</a> objects.</p>
+    fn list_regex_pattern_sets(
+        &self,
+        input: &ListRegexPatternSetsRequest,
+    ) -> Result<ListRegexPatternSetsResponse, ListRegexPatternSetsError>;
+
+    /// <p>Returns an array of <a>RuleGroup</a> objects.</p>
+    fn list_rule_groups(
+        &self,
+        input: &ListRuleGroupsRequest,
+    ) -> Result<ListRuleGroupsResponse, ListRuleGroupsError>;
 
     /// <p>Returns an array of <a>RuleSummary</a> objects.</p>
     fn list_rules(&self, input: &ListRulesRequest) -> Result<ListRulesResponse, ListRulesError>;
@@ -6164,6 +9136,12 @@ pub trait Waf {
         &self,
         input: &ListSqlInjectionMatchSetsRequest,
     ) -> Result<ListSqlInjectionMatchSetsResponse, ListSqlInjectionMatchSetsError>;
+
+    /// <p>Returns an array of <a>RuleGroup</a> objects that you are subscribed to.</p>
+    fn list_subscribed_rule_groups(
+        &self,
+        input: &ListSubscribedRuleGroupsRequest,
+    ) -> Result<ListSubscribedRuleGroupsResponse, ListSubscribedRuleGroupsError>;
 
     /// <p>Returns an array of <a>WebACLSummary</a> objects in the response.</p>
     fn list_web_ac_ls(
@@ -6183,6 +9161,12 @@ pub trait Waf {
         input: &UpdateByteMatchSetRequest,
     ) -> Result<UpdateByteMatchSetResponse, UpdateByteMatchSetError>;
 
+    /// <p>Inserts or deletes <a>GeoMatchConstraint</a> objects in an <code>GeoMatchSet</code>. For each <code>GeoMatchConstraint</code> object, you specify the following values: </p> <ul> <li> <p>Whether to insert or delete the object from the array. If you want to change an <code>GeoMatchConstraint</code> object, you delete the existing object and add a new one.</p> </li> <li> <p>The <code>Type</code>. The only valid value for <code>Type</code> is <code>Country</code>.</p> </li> <li> <p>The <code>Value</code>, which is a two character code for the country to add to the <code>GeoMatchConstraint</code> object. Valid codes are listed in <a>GeoMatchConstraint$Value</a>.</p> </li> </ul> <p>To create and configure an <code>GeoMatchSet</code>, perform the following steps:</p> <ol> <li> <p>Submit a <a>CreateGeoMatchSet</a> request.</p> </li> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of an <a>UpdateGeoMatchSet</a> request.</p> </li> <li> <p>Submit an <code>UpdateGeoMatchSet</code> request to specify the country that you want AWS WAF to watch for.</p> </li> </ol> <p>When you update an <code>GeoMatchSet</code>, you specify the country that you want to add and/or the country that you want to delete. If you want to change a country, you delete the existing country and add the new one.</p> <p>For more information about how to use the AWS WAF API to allow or block HTTP requests, see the <a href="http://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF Developer Guide</a>.</p>
+    fn update_geo_match_set(
+        &self,
+        input: &UpdateGeoMatchSetRequest,
+    ) -> Result<UpdateGeoMatchSetResponse, UpdateGeoMatchSetError>;
+
     /// <p>Inserts or deletes <a>IPSetDescriptor</a> objects in an <code>IPSet</code>. For each <code>IPSetDescriptor</code> object, you specify the following values: </p> <ul> <li> <p>Whether to insert or delete the object from the array. If you want to change an <code>IPSetDescriptor</code> object, you delete the existing object and add a new one.</p> </li> <li> <p>The IP address version, <code>IPv4</code> or <code>IPv6</code>. </p> </li> <li> <p>The IP address in CIDR notation, for example, <code>192.0.2.0/24</code> (for the range of IP addresses from <code>192.0.2.0</code> to <code>192.0.2.255</code>) or <code>192.0.2.44/32</code> (for the individual IP address <code>192.0.2.44</code>). </p> </li> </ul> <p>AWS WAF supports /8, /16, /24, and /32 IP address ranges for IPv4, and /24, /32, /48, /56, /64 and /128 for IPv6. For more information about CIDR notation, see the Wikipedia entry <a href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Classless Inter-Domain Routing</a>.</p> <p>IPv6 addresses can be represented using any of the following formats:</p> <ul> <li> <p>1111:0000:0000:0000:0000:0000:0000:0111/128</p> </li> <li> <p>1111:0:0:0:0:0:0:0111/128</p> </li> <li> <p>1111::0111/128</p> </li> <li> <p>1111::111/128</p> </li> </ul> <p>You use an <code>IPSet</code> to specify which web requests you want to allow or block based on the IP addresses that the requests originated from. For example, if you're receiving a lot of requests from one or a small number of IP addresses and you want to block the requests, you can create an <code>IPSet</code> that specifies those IP addresses, and then configure AWS WAF to block the requests. </p> <p>To create and configure an <code>IPSet</code>, perform the following steps:</p> <ol> <li> <p>Submit a <a>CreateIPSet</a> request.</p> </li> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of an <a>UpdateIPSet</a> request.</p> </li> <li> <p>Submit an <code>UpdateIPSet</code> request to specify the IP addresses that you want AWS WAF to watch for.</p> </li> </ol> <p>When you update an <code>IPSet</code>, you specify the IP addresses that you want to add and/or the IP addresses that you want to delete. If you want to change an IP address, you delete the existing IP address and add the new one.</p> <p>For more information about how to use the AWS WAF API to allow or block HTTP requests, see the <a href="http://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF Developer Guide</a>.</p>
     fn update_ip_set(
         &self,
@@ -6195,9 +9179,27 @@ pub trait Waf {
         input: &UpdateRateBasedRuleRequest,
     ) -> Result<UpdateRateBasedRuleResponse, UpdateRateBasedRuleError>;
 
+    /// <p>Inserts or deletes <a>RegexMatchTuple</a> objects (filters) in a <a>RegexMatchSet</a>. For each <code>RegexMatchSetUpdate</code> object, you specify the following values: </p> <ul> <li> <p>Whether to insert or delete the object from the array. If you want to change a <code>RegexMatchSetUpdate</code> object, you delete the existing object and add a new one.</p> </li> <li> <p>The part of a web request that you want AWS WAF to inspectupdate, such as a query string or the value of the <code>User-Agent</code> header. </p> </li> <li> <p>The identifier of the pattern (a regular expression) that you want AWS WAF to look for. For more information, see <a>RegexPatternSet</a>. </p> </li> <li> <p>Whether to perform any conversions on the request, such as converting it to lowercase, before inspecting it for the specified string.</p> </li> </ul> <p> For example, you can create a <code>RegexPatternSet</code> that matches any requests with <code>User-Agent</code> headers that contain the string <code>B[a@]dB[o0]t</code>. You can then configure AWS WAF to reject those requests.</p> <p>To create and configure a <code>RegexMatchSet</code>, perform the following steps:</p> <ol> <li> <p>Create a <code>RegexMatchSet.</code> For more information, see <a>CreateRegexMatchSet</a>.</p> </li> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of an <code>UpdateRegexMatchSet</code> request.</p> </li> <li> <p>Submit an <code>UpdateRegexMatchSet</code> request to specify the part of the request that you want AWS WAF to inspect (for example, the header or the URI) and the identifier of the <code>RegexPatternSet</code> that contain the regular expression patters you want AWS WAF to watch for.</p> </li> </ol> <p>For more information about how to use the AWS WAF API to allow or block HTTP requests, see the <a href="http://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF Developer Guide</a>.</p>
+    fn update_regex_match_set(
+        &self,
+        input: &UpdateRegexMatchSetRequest,
+    ) -> Result<UpdateRegexMatchSetResponse, UpdateRegexMatchSetError>;
+
+    /// <p>Inserts or deletes <code>RegexPatternString</code> objects in a <a>RegexPatternSet</a>. For each <code>RegexPatternString</code> object, you specify the following values: </p> <ul> <li> <p>Whether to insert or delete the <code>RegexPatternString</code>.</p> </li> <li> <p>The regular expression pattern that you want to insert or delete. For more information, see <a>RegexPatternSet</a>. </p> </li> </ul> <p> For example, you can create a <code>RegexPatternString</code> such as <code>B[a@]dB[o0]t</code>. AWS WAF will match this <code>RegexPatternString</code> to:</p> <ul> <li> <p>BadBot</p> </li> <li> <p>BadB0t</p> </li> <li> <p>B@dBot</p> </li> <li> <p>B@dB0t</p> </li> </ul> <p>To create and configure a <code>RegexPatternSet</code>, perform the following steps:</p> <ol> <li> <p>Create a <code>RegexPatternSet.</code> For more information, see <a>CreateRegexPatternSet</a>.</p> </li> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of an <code>UpdateRegexPatternSet</code> request.</p> </li> <li> <p>Submit an <code>UpdateRegexPatternSet</code> request to specify the regular expression pattern that you want AWS WAF to watch for.</p> </li> </ol> <p>For more information about how to use the AWS WAF API to allow or block HTTP requests, see the <a href="http://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF Developer Guide</a>.</p>
+    fn update_regex_pattern_set(
+        &self,
+        input: &UpdateRegexPatternSetRequest,
+    ) -> Result<UpdateRegexPatternSetResponse, UpdateRegexPatternSetError>;
+
     /// <p>Inserts or deletes <a>Predicate</a> objects in a <code>Rule</code>. Each <code>Predicate</code> object identifies a predicate, such as a <a>ByteMatchSet</a> or an <a>IPSet</a>, that specifies the web requests that you want to allow, block, or count. If you add more than one predicate to a <code>Rule</code>, a request must match all of the specifications to be allowed, blocked, or counted. For example, suppose you add the following to a <code>Rule</code>: </p> <ul> <li> <p>A <code>ByteMatchSet</code> that matches the value <code>BadBot</code> in the <code>User-Agent</code> header</p> </li> <li> <p>An <code>IPSet</code> that matches the IP address <code>192.0.2.44</code> </p> </li> </ul> <p>You then add the <code>Rule</code> to a <code>WebACL</code> and specify that you want to block requests that satisfy the <code>Rule</code>. For a request to be blocked, the <code>User-Agent</code> header in the request must contain the value <code>BadBot</code> <i>and</i> the request must originate from the IP address 192.0.2.44.</p> <p>To create and configure a <code>Rule</code>, perform the following steps:</p> <ol> <li> <p>Create and update the predicates that you want to include in the <code>Rule</code>.</p> </li> <li> <p>Create the <code>Rule</code>. See <a>CreateRule</a>.</p> </li> <li> <p>Use <code>GetChangeToken</code> to get the change token that you provide in the <code>ChangeToken</code> parameter of an <a>UpdateRule</a> request.</p> </li> <li> <p>Submit an <code>UpdateRule</code> request to add predicates to the <code>Rule</code>.</p> </li> <li> <p>Create and update a <code>WebACL</code> that contains the <code>Rule</code>. See <a>CreateWebACL</a>.</p> </li> </ol> <p>If you want to replace one <code>ByteMatchSet</code> or <code>IPSet</code> with another, you delete the existing one and add the new one.</p> <p>For more information about how to use the AWS WAF API to allow or block HTTP requests, see the <a href="http://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF Developer Guide</a>.</p>
     fn update_rule(&self, input: &UpdateRuleRequest)
         -> Result<UpdateRuleResponse, UpdateRuleError>;
+
+    /// <p>Inserts or deletes <a>ActivatedRule</a> objects in a <code>RuleGroup</code>.</p> <p>You can only insert <code>REGULAR</code> rules into a rule group.</p> <p>You can have a maximum of ten rules per rule group.</p> <p>To create and configure a <code>RuleGroup</code>, perform the following steps:</p> <ol> <li> <p>Create and update the <code>Rules</code> that you want to include in the <code>RuleGroup</code>. See <a>CreateRule</a>.</p> </li> <li> <p>Use <code>GetChangeToken</code> to get the change token that you provide in the <code>ChangeToken</code> parameter of an <a>UpdateRuleGroup</a> request.</p> </li> <li> <p>Submit an <code>UpdateRuleGroup</code> request to add <code>Rules</code> to the <code>RuleGroup</code>.</p> </li> <li> <p>Create and update a <code>WebACL</code> that contains the <code>RuleGroup</code>. See <a>CreateWebACL</a>.</p> </li> </ol> <p>If you want to replace one <code>Rule</code> with another, you delete the existing one and add the new one.</p> <p>For more information about how to use the AWS WAF API to allow or block HTTP requests, see the <a href="http://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF Developer Guide</a>.</p>
+    fn update_rule_group(
+        &self,
+        input: &UpdateRuleGroupRequest,
+    ) -> Result<UpdateRuleGroupResponse, UpdateRuleGroupError>;
 
     /// <p>Inserts or deletes <a>SizeConstraint</a> objects (filters) in a <a>SizeConstraintSet</a>. For each <code>SizeConstraint</code> object, you specify the following values: </p> <ul> <li> <p>Whether to insert or delete the object from the array. If you want to change a <code>SizeConstraintSetUpdate</code> object, you delete the existing object and add a new one.</p> </li> <li> <p>The part of a web request that you want AWS WAF to evaluate, such as the length of a query string or the length of the <code>User-Agent</code> header.</p> </li> <li> <p>Whether to perform any transformations on the request, such as converting it to lowercase, before checking its length. Note that transformations of the request body are not supported because the AWS resource forwards only the first <code>8192</code> bytes of your request to AWS WAF.</p> </li> <li> <p>A <code>ComparisonOperator</code> used for evaluating the selected part of the request against the specified <code>Size</code>, such as equals, greater than, less than, and so on.</p> </li> <li> <p>The length, in bytes, that you want AWS WAF to watch for in selected part of the request. The length is computed after applying the transformation.</p> </li> </ul> <p>For example, you can add a <code>SizeConstraintSetUpdate</code> object that matches web requests in which the length of the <code>User-Agent</code> header is greater than 100 bytes. You can then configure AWS WAF to block those requests.</p> <p>To create and configure a <code>SizeConstraintSet</code>, perform the following steps:</p> <ol> <li> <p>Create a <code>SizeConstraintSet.</code> For more information, see <a>CreateSizeConstraintSet</a>.</p> </li> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of an <code>UpdateSizeConstraintSet</code> request.</p> </li> <li> <p>Submit an <code>UpdateSizeConstraintSet</code> request to specify the part of the request that you want AWS WAF to inspect (for example, the header or the URI) and the value that you want AWS WAF to watch for.</p> </li> </ol> <p>For more information about how to use the AWS WAF API to allow or block HTTP requests, see the <a href="http://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF Developer Guide</a>.</p>
     fn update_size_constraint_set(
@@ -6287,6 +9289,40 @@ where
         }
     }
 
+    /// <p>Creates an <a>GeoMatchSet</a>, which you use to specify which web requests you want to allow or block based on the country that the requests originate from. For example, if you're receiving a lot of requests from one or more countries and you want to block the requests, you can create an <code>GeoMatchSet</code> that contains those countries and then configure AWS WAF to block the requests. </p> <p>To create and configure a <code>GeoMatchSet</code>, perform the following steps:</p> <ol> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of a <code>CreateGeoMatchSet</code> request.</p> </li> <li> <p>Submit a <code>CreateGeoMatchSet</code> request.</p> </li> <li> <p>Use <code>GetChangeToken</code> to get the change token that you provide in the <code>ChangeToken</code> parameter of an <a>UpdateGeoMatchSet</a> request.</p> </li> <li> <p>Submit an <code>UpdateGeoMatchSetSet</code> request to specify the countries that you want AWS WAF to watch for.</p> </li> </ol> <p>For more information about how to use the AWS WAF API to allow or block HTTP requests, see the <a href="http://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF Developer Guide</a>.</p>
+    fn create_geo_match_set(
+        &self,
+        input: &CreateGeoMatchSetRequest,
+    ) -> Result<CreateGeoMatchSetResponse, CreateGeoMatchSetError> {
+        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSWAF_20150824.CreateGeoMatchSet");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateGeoMatchSetResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateGeoMatchSetError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Creates an <a>IPSet</a>, which you use to specify which web requests you want to allow or block based on the IP addresses that the requests originate from. For example, if you're receiving a lot of requests from one or more individual IP addresses or one or more ranges of IP addresses and you want to block the requests, you can create an <code>IPSet</code> that contains those IP addresses and then configure AWS WAF to block the requests. </p> <p>To create and configure an <code>IPSet</code>, perform the following steps:</p> <ol> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of a <code>CreateIPSet</code> request.</p> </li> <li> <p>Submit a <code>CreateIPSet</code> request.</p> </li> <li> <p>Use <code>GetChangeToken</code> to get the change token that you provide in the <code>ChangeToken</code> parameter of an <a>UpdateIPSet</a> request.</p> </li> <li> <p>Submit an <code>UpdateIPSet</code> request to specify the IP addresses that you want AWS WAF to watch for.</p> </li> </ol> <p>For more information about how to use the AWS WAF API to allow or block HTTP requests, see the <a href="http://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF Developer Guide</a>.</p>
     fn create_ip_set(
         &self,
@@ -6355,6 +9391,74 @@ where
         }
     }
 
+    /// <p>Creates a <a>RegexMatchSet</a>. You then use <a>UpdateRegexMatchSet</a> to identify the part of a web request that you want AWS WAF to inspect, such as the values of the <code>User-Agent</code> header or the query string. For example, you can create a <code>RegexMatchSet</code> that contains a <code>RegexMatchTuple</code> that looks for any requests with <code>User-Agent</code> headers that match a <code>RegexPatternSet</code> with pattern <code>B[a@]dB[o0]t</code>. You can then configure AWS WAF to reject those requests.</p> <p>To create and configure a <code>RegexMatchSet</code>, perform the following steps:</p> <ol> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of a <code>CreateRegexMatchSet</code> request.</p> </li> <li> <p>Submit a <code>CreateRegexMatchSet</code> request.</p> </li> <li> <p>Use <code>GetChangeToken</code> to get the change token that you provide in the <code>ChangeToken</code> parameter of an <code>UpdateRegexMatchSet</code> request.</p> </li> <li> <p>Submit an <a>UpdateRegexMatchSet</a> request to specify the part of the request that you want AWS WAF to inspect (for example, the header or the URI) and the value, using a <code>RegexPatternSet</code>, that you want AWS WAF to watch for.</p> </li> </ol> <p>For more information about how to use the AWS WAF API to allow or block HTTP requests, see the <a href="http://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF Developer Guide</a>.</p>
+    fn create_regex_match_set(
+        &self,
+        input: &CreateRegexMatchSetRequest,
+    ) -> Result<CreateRegexMatchSetResponse, CreateRegexMatchSetError> {
+        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSWAF_20150824.CreateRegexMatchSet");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateRegexMatchSetResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateRegexMatchSetError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Creates a <code>RegexPatternSet</code>. You then use <a>UpdateRegexPatternSet</a> to specify the regular expression (regex) pattern that you want AWS WAF to search for, such as <code>B[a@]dB[o0]t</code>. You can then configure AWS WAF to reject those requests.</p> <p>To create and configure a <code>RegexPatternSet</code>, perform the following steps:</p> <ol> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of a <code>CreateRegexPatternSet</code> request.</p> </li> <li> <p>Submit a <code>CreateRegexPatternSet</code> request.</p> </li> <li> <p>Use <code>GetChangeToken</code> to get the change token that you provide in the <code>ChangeToken</code> parameter of an <code>UpdateRegexPatternSet</code> request.</p> </li> <li> <p>Submit an <a>UpdateRegexPatternSet</a> request to specify the string that you want AWS WAF to watch for.</p> </li> </ol> <p>For more information about how to use the AWS WAF API to allow or block HTTP requests, see the <a href="http://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF Developer Guide</a>.</p>
+    fn create_regex_pattern_set(
+        &self,
+        input: &CreateRegexPatternSetRequest,
+    ) -> Result<CreateRegexPatternSetResponse, CreateRegexPatternSetError> {
+        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSWAF_20150824.CreateRegexPatternSet");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateRegexPatternSetResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateRegexPatternSetError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Creates a <code>Rule</code>, which contains the <code>IPSet</code> objects, <code>ByteMatchSet</code> objects, and other predicates that identify the requests that you want to block. If you add more than one predicate to a <code>Rule</code>, a request must match all of the specifications to be allowed or blocked. For example, suppose you add the following to a <code>Rule</code>:</p> <ul> <li> <p>An <code>IPSet</code> that matches the IP address <code>192.0.2.44/32</code> </p> </li> <li> <p>A <code>ByteMatchSet</code> that matches <code>BadBot</code> in the <code>User-Agent</code> header</p> </li> </ul> <p>You then add the <code>Rule</code> to a <code>WebACL</code> and specify that you want to blocks requests that satisfy the <code>Rule</code>. For a request to be blocked, it must come from the IP address 192.0.2.44 <i>and</i> the <code>User-Agent</code> header in the request must contain the value <code>BadBot</code>.</p> <p>To create and configure a <code>Rule</code>, perform the following steps:</p> <ol> <li> <p>Create and update the predicates that you want to include in the <code>Rule</code>. For more information, see <a>CreateByteMatchSet</a>, <a>CreateIPSet</a>, and <a>CreateSqlInjectionMatchSet</a>.</p> </li> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of a <code>CreateRule</code> request.</p> </li> <li> <p>Submit a <code>CreateRule</code> request.</p> </li> <li> <p>Use <code>GetChangeToken</code> to get the change token that you provide in the <code>ChangeToken</code> parameter of an <a>UpdateRule</a> request.</p> </li> <li> <p>Submit an <code>UpdateRule</code> request to specify the predicates that you want to include in the <code>Rule</code>.</p> </li> <li> <p>Create and update a <code>WebACL</code> that contains the <code>Rule</code>. For more information, see <a>CreateWebACL</a>.</p> </li> </ol> <p>For more information about how to use the AWS WAF API to allow or block HTTP requests, see the <a href="http://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF Developer Guide</a>.</p>
     fn create_rule(
         &self,
@@ -6383,6 +9487,40 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(CreateRuleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Creates a <code>RuleGroup</code>. A rule group is a collection of predefined rules that you add to a web ACL. You use <a>UpdateRuleGroup</a> to add rules to the rule group.</p> <p>Rule groups are subject to the following limits:</p> <ul> <li> <p>Three rule groups per account. You can request an increase to this limit by contacting customer support.</p> </li> <li> <p>One rule group per web ACL.</p> </li> <li> <p>Ten rules per rule group.</p> </li> </ul> <p>For more information about how to use the AWS WAF API to allow or block HTTP requests, see the <a href="http://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF Developer Guide</a>.</p>
+    fn create_rule_group(
+        &self,
+        input: &CreateRuleGroupRequest,
+    ) -> Result<CreateRuleGroupResponse, CreateRuleGroupError> {
+        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSWAF_20150824.CreateRuleGroup");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateRuleGroupResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateRuleGroupError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -6559,6 +9697,40 @@ where
         }
     }
 
+    /// <p><p>Permanently deletes a <a>GeoMatchSet</a>. You can&#39;t delete a <code>GeoMatchSet</code> if it&#39;s still used in any <code>Rules</code> or if it still includes any countries.</p> <p>If you just want to remove a <code>GeoMatchSet</code> from a <code>Rule</code>, use <a>UpdateRule</a>.</p> <p>To permanently delete a <code>GeoMatchSet</code> from AWS WAF, perform the following steps:</p> <ol> <li> <p>Update the <code>GeoMatchSet</code> to remove any countries. For more information, see <a>UpdateGeoMatchSet</a>.</p> </li> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of a <code>DeleteGeoMatchSet</code> request.</p> </li> <li> <p>Submit a <code>DeleteGeoMatchSet</code> request.</p> </li> </ol></p>
+    fn delete_geo_match_set(
+        &self,
+        input: &DeleteGeoMatchSetRequest,
+    ) -> Result<DeleteGeoMatchSetResponse, DeleteGeoMatchSetError> {
+        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSWAF_20150824.DeleteGeoMatchSet");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteGeoMatchSetResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteGeoMatchSetError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p><p>Permanently deletes an <a>IPSet</a>. You can&#39;t delete an <code>IPSet</code> if it&#39;s still used in any <code>Rules</code> or if it still includes any IP addresses.</p> <p>If you just want to remove an <code>IPSet</code> from a <code>Rule</code>, use <a>UpdateRule</a>.</p> <p>To permanently delete an <code>IPSet</code> from AWS WAF, perform the following steps:</p> <ol> <li> <p>Update the <code>IPSet</code> to remove IP address ranges, if any. For more information, see <a>UpdateIPSet</a>.</p> </li> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of a <code>DeleteIPSet</code> request.</p> </li> <li> <p>Submit a <code>DeleteIPSet</code> request.</p> </li> </ol></p>
     fn delete_ip_set(
         &self,
@@ -6627,6 +9799,74 @@ where
         }
     }
 
+    /// <p><p>Permanently deletes a <a>RegexMatchSet</a>. You can&#39;t delete a <code>RegexMatchSet</code> if it&#39;s still used in any <code>Rules</code> or if it still includes any <code>RegexMatchTuples</code> objects (any filters).</p> <p>If you just want to remove a <code>RegexMatchSet</code> from a <code>Rule</code>, use <a>UpdateRule</a>.</p> <p>To permanently delete a <code>RegexMatchSet</code>, perform the following steps:</p> <ol> <li> <p>Update the <code>RegexMatchSet</code> to remove filters, if any. For more information, see <a>UpdateRegexMatchSet</a>.</p> </li> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of a <code>DeleteRegexMatchSet</code> request.</p> </li> <li> <p>Submit a <code>DeleteRegexMatchSet</code> request.</p> </li> </ol></p>
+    fn delete_regex_match_set(
+        &self,
+        input: &DeleteRegexMatchSetRequest,
+    ) -> Result<DeleteRegexMatchSetResponse, DeleteRegexMatchSetError> {
+        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSWAF_20150824.DeleteRegexMatchSet");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteRegexMatchSetResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteRegexMatchSetError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Permanently deletes a <a>RegexPatternSet</a>. You can't delete a <code>RegexPatternSet</code> if it's still used in any <code>RegexMatchSet</code> or if the <code>RegexPatternSet</code> is not empty. </p>
+    fn delete_regex_pattern_set(
+        &self,
+        input: &DeleteRegexPatternSetRequest,
+    ) -> Result<DeleteRegexPatternSetResponse, DeleteRegexPatternSetError> {
+        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSWAF_20150824.DeleteRegexPatternSet");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteRegexPatternSetResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteRegexPatternSetError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p><p>Permanently deletes a <a>Rule</a>. You can&#39;t delete a <code>Rule</code> if it&#39;s still used in any <code>WebACL</code> objects or if it still includes any predicates, such as <code>ByteMatchSet</code> objects.</p> <p>If you just want to remove a <code>Rule</code> from a <code>WebACL</code>, use <a>UpdateWebACL</a>.</p> <p>To permanently delete a <code>Rule</code> from AWS WAF, perform the following steps:</p> <ol> <li> <p>Update the <code>Rule</code> to remove predicates, if any. For more information, see <a>UpdateRule</a>.</p> </li> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of a <code>DeleteRule</code> request.</p> </li> <li> <p>Submit a <code>DeleteRule</code> request.</p> </li> </ol></p>
     fn delete_rule(
         &self,
@@ -6655,6 +9895,40 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(DeleteRuleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p><p>Permanently deletes a <a>RuleGroup</a>. You can&#39;t delete a <code>RuleGroup</code> if it&#39;s still used in any <code>WebACL</code> objects or if it still includes any rules.</p> <p>If you just want to remove a <code>RuleGroup</code> from a <code>WebACL</code>, use <a>UpdateWebACL</a>.</p> <p>To permanently delete a <code>RuleGroup</code> from AWS WAF, perform the following steps:</p> <ol> <li> <p>Update the <code>RuleGroup</code> to remove rules, if any. For more information, see <a>UpdateRuleGroup</a>.</p> </li> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of a <code>DeleteRuleGroup</code> request.</p> </li> <li> <p>Submit a <code>DeleteRuleGroup</code> request.</p> </li> </ol></p>
+    fn delete_rule_group(
+        &self,
+        input: &DeleteRuleGroupRequest,
+    ) -> Result<DeleteRuleGroupResponse, DeleteRuleGroupError> {
+        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSWAF_20150824.DeleteRuleGroup");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteRuleGroupResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteRuleGroupError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -6895,6 +10169,40 @@ where
         }
     }
 
+    /// <p>Returns the <a>GeoMatchSet</a> that is specified by <code>GeoMatchSetId</code>.</p>
+    fn get_geo_match_set(
+        &self,
+        input: &GetGeoMatchSetRequest,
+    ) -> Result<GetGeoMatchSetResponse, GetGeoMatchSetError> {
+        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSWAF_20150824.GetGeoMatchSet");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetGeoMatchSetResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetGeoMatchSetError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Returns the <a>IPSet</a> that is specified by <code>IPSetId</code>.</p>
     fn get_ip_set(&self, input: &GetIPSetRequest) -> Result<GetIPSetResponse, GetIPSetError> {
         let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
@@ -6997,6 +10305,74 @@ where
         }
     }
 
+    /// <p>Returns the <a>RegexMatchSet</a> specified by <code>RegexMatchSetId</code>.</p>
+    fn get_regex_match_set(
+        &self,
+        input: &GetRegexMatchSetRequest,
+    ) -> Result<GetRegexMatchSetResponse, GetRegexMatchSetError> {
+        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSWAF_20150824.GetRegexMatchSet");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetRegexMatchSetResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetRegexMatchSetError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Returns the <a>RegexPatternSet</a> specified by <code>RegexPatternSetId</code>.</p>
+    fn get_regex_pattern_set(
+        &self,
+        input: &GetRegexPatternSetRequest,
+    ) -> Result<GetRegexPatternSetResponse, GetRegexPatternSetError> {
+        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSWAF_20150824.GetRegexPatternSet");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetRegexPatternSetResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetRegexPatternSetError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Returns the <a>Rule</a> that is specified by the <code>RuleId</code> that you included in the <code>GetRule</code> request.</p>
     fn get_rule(&self, input: &GetRuleRequest) -> Result<GetRuleResponse, GetRuleError> {
         let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
@@ -7024,6 +10400,40 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(GetRuleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Returns the <a>RuleGroup</a> that is specified by the <code>RuleGroupId</code> that you included in the <code>GetRuleGroup</code> request.</p> <p>To view the rules in a rule group, use <a>ListActivatedRulesInRuleGroup</a>.</p>
+    fn get_rule_group(
+        &self,
+        input: &GetRuleGroupRequest,
+    ) -> Result<GetRuleGroupResponse, GetRuleGroupError> {
+        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSWAF_20150824.GetRuleGroup");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetRuleGroupResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetRuleGroupError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -7197,6 +10607,45 @@ where
         }
     }
 
+    /// <p>Returns an array of <a>ActivatedRule</a> objects.</p>
+    fn list_activated_rules_in_rule_group(
+        &self,
+        input: &ListActivatedRulesInRuleGroupRequest,
+    ) -> Result<ListActivatedRulesInRuleGroupResponse, ListActivatedRulesInRuleGroupError> {
+        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSWAF_20150824.ListActivatedRulesInRuleGroup",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(
+                    serde_json::from_str::<ListActivatedRulesInRuleGroupResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListActivatedRulesInRuleGroupError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Returns an array of <a>ByteMatchSetSummary</a> objects.</p>
     fn list_byte_match_sets(
         &self,
@@ -7225,6 +10674,40 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(ListByteMatchSetsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Returns an array of <a>GeoMatchSetSummary</a> objects in the response.</p>
+    fn list_geo_match_sets(
+        &self,
+        input: &ListGeoMatchSetsRequest,
+    ) -> Result<ListGeoMatchSetsResponse, ListGeoMatchSetsError> {
+        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSWAF_20150824.ListGeoMatchSets");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListGeoMatchSetsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListGeoMatchSetsError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -7293,6 +10776,108 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(ListRateBasedRulesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Returns an array of <a>RegexMatchSetSummary</a> objects.</p>
+    fn list_regex_match_sets(
+        &self,
+        input: &ListRegexMatchSetsRequest,
+    ) -> Result<ListRegexMatchSetsResponse, ListRegexMatchSetsError> {
+        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSWAF_20150824.ListRegexMatchSets");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListRegexMatchSetsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListRegexMatchSetsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Returns an array of <a>RegexPatternSetSummary</a> objects.</p>
+    fn list_regex_pattern_sets(
+        &self,
+        input: &ListRegexPatternSetsRequest,
+    ) -> Result<ListRegexPatternSetsResponse, ListRegexPatternSetsError> {
+        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSWAF_20150824.ListRegexPatternSets");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListRegexPatternSetsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListRegexPatternSetsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Returns an array of <a>RuleGroup</a> objects.</p>
+    fn list_rule_groups(
+        &self,
+        input: &ListRuleGroupsRequest,
+    ) -> Result<ListRuleGroupsResponse, ListRuleGroupsError> {
+        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSWAF_20150824.ListRuleGroups");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListRuleGroupsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListRuleGroupsError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -7392,6 +10977,40 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(ListSqlInjectionMatchSetsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Returns an array of <a>RuleGroup</a> objects that you are subscribed to.</p>
+    fn list_subscribed_rule_groups(
+        &self,
+        input: &ListSubscribedRuleGroupsRequest,
+    ) -> Result<ListSubscribedRuleGroupsResponse, ListSubscribedRuleGroupsError> {
+        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSWAF_20150824.ListSubscribedRuleGroups");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListSubscribedRuleGroupsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListSubscribedRuleGroupsError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -7500,6 +11119,40 @@ where
         }
     }
 
+    /// <p>Inserts or deletes <a>GeoMatchConstraint</a> objects in an <code>GeoMatchSet</code>. For each <code>GeoMatchConstraint</code> object, you specify the following values: </p> <ul> <li> <p>Whether to insert or delete the object from the array. If you want to change an <code>GeoMatchConstraint</code> object, you delete the existing object and add a new one.</p> </li> <li> <p>The <code>Type</code>. The only valid value for <code>Type</code> is <code>Country</code>.</p> </li> <li> <p>The <code>Value</code>, which is a two character code for the country to add to the <code>GeoMatchConstraint</code> object. Valid codes are listed in <a>GeoMatchConstraint$Value</a>.</p> </li> </ul> <p>To create and configure an <code>GeoMatchSet</code>, perform the following steps:</p> <ol> <li> <p>Submit a <a>CreateGeoMatchSet</a> request.</p> </li> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of an <a>UpdateGeoMatchSet</a> request.</p> </li> <li> <p>Submit an <code>UpdateGeoMatchSet</code> request to specify the country that you want AWS WAF to watch for.</p> </li> </ol> <p>When you update an <code>GeoMatchSet</code>, you specify the country that you want to add and/or the country that you want to delete. If you want to change a country, you delete the existing country and add the new one.</p> <p>For more information about how to use the AWS WAF API to allow or block HTTP requests, see the <a href="http://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF Developer Guide</a>.</p>
+    fn update_geo_match_set(
+        &self,
+        input: &UpdateGeoMatchSetRequest,
+    ) -> Result<UpdateGeoMatchSetResponse, UpdateGeoMatchSetError> {
+        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSWAF_20150824.UpdateGeoMatchSet");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateGeoMatchSetResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateGeoMatchSetError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Inserts or deletes <a>IPSetDescriptor</a> objects in an <code>IPSet</code>. For each <code>IPSetDescriptor</code> object, you specify the following values: </p> <ul> <li> <p>Whether to insert or delete the object from the array. If you want to change an <code>IPSetDescriptor</code> object, you delete the existing object and add a new one.</p> </li> <li> <p>The IP address version, <code>IPv4</code> or <code>IPv6</code>. </p> </li> <li> <p>The IP address in CIDR notation, for example, <code>192.0.2.0/24</code> (for the range of IP addresses from <code>192.0.2.0</code> to <code>192.0.2.255</code>) or <code>192.0.2.44/32</code> (for the individual IP address <code>192.0.2.44</code>). </p> </li> </ul> <p>AWS WAF supports /8, /16, /24, and /32 IP address ranges for IPv4, and /24, /32, /48, /56, /64 and /128 for IPv6. For more information about CIDR notation, see the Wikipedia entry <a href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Classless Inter-Domain Routing</a>.</p> <p>IPv6 addresses can be represented using any of the following formats:</p> <ul> <li> <p>1111:0000:0000:0000:0000:0000:0000:0111/128</p> </li> <li> <p>1111:0:0:0:0:0:0:0111/128</p> </li> <li> <p>1111::0111/128</p> </li> <li> <p>1111::111/128</p> </li> </ul> <p>You use an <code>IPSet</code> to specify which web requests you want to allow or block based on the IP addresses that the requests originated from. For example, if you're receiving a lot of requests from one or a small number of IP addresses and you want to block the requests, you can create an <code>IPSet</code> that specifies those IP addresses, and then configure AWS WAF to block the requests. </p> <p>To create and configure an <code>IPSet</code>, perform the following steps:</p> <ol> <li> <p>Submit a <a>CreateIPSet</a> request.</p> </li> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of an <a>UpdateIPSet</a> request.</p> </li> <li> <p>Submit an <code>UpdateIPSet</code> request to specify the IP addresses that you want AWS WAF to watch for.</p> </li> </ol> <p>When you update an <code>IPSet</code>, you specify the IP addresses that you want to add and/or the IP addresses that you want to delete. If you want to change an IP address, you delete the existing IP address and add the new one.</p> <p>For more information about how to use the AWS WAF API to allow or block HTTP requests, see the <a href="http://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF Developer Guide</a>.</p>
     fn update_ip_set(
         &self,
@@ -7568,6 +11221,74 @@ where
         }
     }
 
+    /// <p>Inserts or deletes <a>RegexMatchTuple</a> objects (filters) in a <a>RegexMatchSet</a>. For each <code>RegexMatchSetUpdate</code> object, you specify the following values: </p> <ul> <li> <p>Whether to insert or delete the object from the array. If you want to change a <code>RegexMatchSetUpdate</code> object, you delete the existing object and add a new one.</p> </li> <li> <p>The part of a web request that you want AWS WAF to inspectupdate, such as a query string or the value of the <code>User-Agent</code> header. </p> </li> <li> <p>The identifier of the pattern (a regular expression) that you want AWS WAF to look for. For more information, see <a>RegexPatternSet</a>. </p> </li> <li> <p>Whether to perform any conversions on the request, such as converting it to lowercase, before inspecting it for the specified string.</p> </li> </ul> <p> For example, you can create a <code>RegexPatternSet</code> that matches any requests with <code>User-Agent</code> headers that contain the string <code>B[a@]dB[o0]t</code>. You can then configure AWS WAF to reject those requests.</p> <p>To create and configure a <code>RegexMatchSet</code>, perform the following steps:</p> <ol> <li> <p>Create a <code>RegexMatchSet.</code> For more information, see <a>CreateRegexMatchSet</a>.</p> </li> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of an <code>UpdateRegexMatchSet</code> request.</p> </li> <li> <p>Submit an <code>UpdateRegexMatchSet</code> request to specify the part of the request that you want AWS WAF to inspect (for example, the header or the URI) and the identifier of the <code>RegexPatternSet</code> that contain the regular expression patters you want AWS WAF to watch for.</p> </li> </ol> <p>For more information about how to use the AWS WAF API to allow or block HTTP requests, see the <a href="http://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF Developer Guide</a>.</p>
+    fn update_regex_match_set(
+        &self,
+        input: &UpdateRegexMatchSetRequest,
+    ) -> Result<UpdateRegexMatchSetResponse, UpdateRegexMatchSetError> {
+        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSWAF_20150824.UpdateRegexMatchSet");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateRegexMatchSetResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateRegexMatchSetError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Inserts or deletes <code>RegexPatternString</code> objects in a <a>RegexPatternSet</a>. For each <code>RegexPatternString</code> object, you specify the following values: </p> <ul> <li> <p>Whether to insert or delete the <code>RegexPatternString</code>.</p> </li> <li> <p>The regular expression pattern that you want to insert or delete. For more information, see <a>RegexPatternSet</a>. </p> </li> </ul> <p> For example, you can create a <code>RegexPatternString</code> such as <code>B[a@]dB[o0]t</code>. AWS WAF will match this <code>RegexPatternString</code> to:</p> <ul> <li> <p>BadBot</p> </li> <li> <p>BadB0t</p> </li> <li> <p>B@dBot</p> </li> <li> <p>B@dB0t</p> </li> </ul> <p>To create and configure a <code>RegexPatternSet</code>, perform the following steps:</p> <ol> <li> <p>Create a <code>RegexPatternSet.</code> For more information, see <a>CreateRegexPatternSet</a>.</p> </li> <li> <p>Use <a>GetChangeToken</a> to get the change token that you provide in the <code>ChangeToken</code> parameter of an <code>UpdateRegexPatternSet</code> request.</p> </li> <li> <p>Submit an <code>UpdateRegexPatternSet</code> request to specify the regular expression pattern that you want AWS WAF to watch for.</p> </li> </ol> <p>For more information about how to use the AWS WAF API to allow or block HTTP requests, see the <a href="http://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF Developer Guide</a>.</p>
+    fn update_regex_pattern_set(
+        &self,
+        input: &UpdateRegexPatternSetRequest,
+    ) -> Result<UpdateRegexPatternSetResponse, UpdateRegexPatternSetError> {
+        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSWAF_20150824.UpdateRegexPatternSet");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateRegexPatternSetResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateRegexPatternSetError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Inserts or deletes <a>Predicate</a> objects in a <code>Rule</code>. Each <code>Predicate</code> object identifies a predicate, such as a <a>ByteMatchSet</a> or an <a>IPSet</a>, that specifies the web requests that you want to allow, block, or count. If you add more than one predicate to a <code>Rule</code>, a request must match all of the specifications to be allowed, blocked, or counted. For example, suppose you add the following to a <code>Rule</code>: </p> <ul> <li> <p>A <code>ByteMatchSet</code> that matches the value <code>BadBot</code> in the <code>User-Agent</code> header</p> </li> <li> <p>An <code>IPSet</code> that matches the IP address <code>192.0.2.44</code> </p> </li> </ul> <p>You then add the <code>Rule</code> to a <code>WebACL</code> and specify that you want to block requests that satisfy the <code>Rule</code>. For a request to be blocked, the <code>User-Agent</code> header in the request must contain the value <code>BadBot</code> <i>and</i> the request must originate from the IP address 192.0.2.44.</p> <p>To create and configure a <code>Rule</code>, perform the following steps:</p> <ol> <li> <p>Create and update the predicates that you want to include in the <code>Rule</code>.</p> </li> <li> <p>Create the <code>Rule</code>. See <a>CreateRule</a>.</p> </li> <li> <p>Use <code>GetChangeToken</code> to get the change token that you provide in the <code>ChangeToken</code> parameter of an <a>UpdateRule</a> request.</p> </li> <li> <p>Submit an <code>UpdateRule</code> request to add predicates to the <code>Rule</code>.</p> </li> <li> <p>Create and update a <code>WebACL</code> that contains the <code>Rule</code>. See <a>CreateWebACL</a>.</p> </li> </ol> <p>If you want to replace one <code>ByteMatchSet</code> or <code>IPSet</code> with another, you delete the existing one and add the new one.</p> <p>For more information about how to use the AWS WAF API to allow or block HTTP requests, see the <a href="http://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF Developer Guide</a>.</p>
     fn update_rule(
         &self,
@@ -7596,6 +11317,40 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(UpdateRuleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Inserts or deletes <a>ActivatedRule</a> objects in a <code>RuleGroup</code>.</p> <p>You can only insert <code>REGULAR</code> rules into a rule group.</p> <p>You can have a maximum of ten rules per rule group.</p> <p>To create and configure a <code>RuleGroup</code>, perform the following steps:</p> <ol> <li> <p>Create and update the <code>Rules</code> that you want to include in the <code>RuleGroup</code>. See <a>CreateRule</a>.</p> </li> <li> <p>Use <code>GetChangeToken</code> to get the change token that you provide in the <code>ChangeToken</code> parameter of an <a>UpdateRuleGroup</a> request.</p> </li> <li> <p>Submit an <code>UpdateRuleGroup</code> request to add <code>Rules</code> to the <code>RuleGroup</code>.</p> </li> <li> <p>Create and update a <code>WebACL</code> that contains the <code>RuleGroup</code>. See <a>CreateWebACL</a>.</p> </li> </ol> <p>If you want to replace one <code>Rule</code> with another, you delete the existing one and add the new one.</p> <p>For more information about how to use the AWS WAF API to allow or block HTTP requests, see the <a href="http://docs.aws.amazon.com/waf/latest/developerguide/">AWS WAF Developer Guide</a>.</p>
+    fn update_rule_group(
+        &self,
+        input: &UpdateRuleGroupRequest,
+    ) -> Result<UpdateRuleGroupResponse, UpdateRuleGroupError> {
+        let mut request = SignedRequest::new("POST", "waf", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSWAF_20150824.UpdateRuleGroup");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateRuleGroupResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateRuleGroupError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
