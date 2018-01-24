@@ -3,7 +3,7 @@ extern crate env_logger;
 
 use std::collections::BTreeMap;
 use std::fs::{self, OpenOptions};
-use std::io::{BufWriter, Write};
+use std::io::{BufWriter, Read, Write};
 use std::path::Path;
 
 use self::stopwatch::Stopwatch;
@@ -15,6 +15,46 @@ mod codegen;
 
 use cargo;
 use ::{Service, ServiceConfig, ServiceDefinition};
+
+fn generate_examples(crate_dir_path: &Path) -> Option<String> {
+    let examples_dir_path = crate_dir_path.join("examples");
+
+    if !examples_dir_path.exists() {
+        return None;
+    }
+
+    let mut output = "//!\n//! # Examples\n".to_string();
+
+    for dir_entry_result in fs::read_dir(&examples_dir_path).expect("failed to read examples dir") {
+        let dir_entry = dir_entry_result.expect("failed to read examples dir");
+        let mut contents = Vec::new();
+        let mut file = fs::File::open(dir_entry.path()).expect("failed to open example");
+        file.read_to_end(&mut contents).expect("failed to read from example file");
+        let string_contents = String::from_utf8(contents).expect("example file has invalid encoding");
+
+        output.push_str("//!\n");
+
+        let mut inside_header_section = true;
+        for line in string_contents.lines() {
+            if line.starts_with("//!") {
+                output.push_str(line);
+                output.push('\n');
+            } else {
+                if inside_header_section {
+                    // switching from header to code section
+                    output.push_str("//!\n//! ```rust,no_run\n");
+                    inside_header_section = false;
+                }
+                output.push_str("//! ");
+                output.push_str(line);
+                output.push('\n');
+            }
+        }
+        output.push_str("//! ```\n");
+    }
+
+    Some(output)
+}
 
 pub fn generate_services(services: &BTreeMap<String, ServiceConfig>, out_dir: &Path) {
     let _ = env_logger::try_init();
@@ -194,7 +234,7 @@ See [LICENSE][license] for details.
 {service_docs}
 //!
 //! If you're using the service, you're probably looking for [{client_name}](struct.{client_name}.html) and [{trait_name}](trait.{trait_name}.html).
-
+{examples}
 {extern_crates}
 
 mod generated;
@@ -206,6 +246,7 @@ pub use custom::*;
             service_docs = ::doco::Module(service.documentation().unwrap_or(&service.full_name().to_owned())),
             client_name = service.client_type_name(),
             trait_name = service.service_type_name(),
+            examples = generate_examples(&crate_dir).unwrap_or("".to_string()),
             extern_crates = extern_crates
             ).expect("Couldn't write library file");
 
