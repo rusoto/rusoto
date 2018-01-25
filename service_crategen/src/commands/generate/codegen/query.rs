@@ -18,7 +18,7 @@ impl GenerateProtocol for QueryGenerator {
                 {method_signature};
                 ",
                 documentation = generate_documentation(operation),
-                method_signature = generate_method_signature(operation_name, operation),
+                method_signature = generate_method_signature(operation_name, operation, service),
             )?
         }
         Ok(())
@@ -55,12 +55,12 @@ impl GenerateProtocol for QueryGenerator {
                 ",
                      api_version = service.api_version(),
                      documentation = generate_documentation(operation),
-                     error_type = error_type_name(operation_name),
+                     error_type = error_type_name(service, operation_name),
                      http_method = &operation.http.method,
                      endpoint_prefix = service.endpoint_prefix(),
                      parse_payload =
                          xml_payload_parser::generate_response_parser(service, operation, false),
-                     method_signature = generate_method_signature(operation_name, operation),
+                     method_signature = generate_method_signature(operation_name, operation, service),
                      operation_name = &operation.name,
                      request_uri = &operation.http.request_uri,
                      serialize_input = generate_method_input_serialization(operation))?;
@@ -375,21 +375,21 @@ fn generate_documentation(operation: &Operation) -> String {
     }
 }
 
-fn generate_method_signature(operation_name: &str, operation: &Operation) -> String {
+fn generate_method_signature(operation_name: &str, operation: &Operation, service: &Service) -> String {
     if operation.input.is_some() {
         format!(
             "fn {operation_name}(&self, input: &{input_type}) -> Result<{output_type}, {error_type}>",
             input_type = operation.input.as_ref().unwrap().shape,
             operation_name = operation.name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),
-            error_type = error_type_name(operation_name),
+            error_type = error_type_name(service, operation_name),
         )
     } else {
         format!(
             "fn {operation_name}(&self) -> Result<{output_type}, {error_type}>",
             operation_name = operation.name.to_snake_case(),
             output_type = &operation.output_shape_or("()"),
-            error_type = error_type_name(operation_name),
+            error_type = error_type_name(service, operation_name),
         )
     }
 }

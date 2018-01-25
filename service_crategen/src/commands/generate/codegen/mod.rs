@@ -217,7 +217,7 @@ pub fn get_rust_type(service: &Service,
                     get_rust_type(service, shape.value_type(), service.get_shape(shape.value_type()).unwrap(), false, for_timestamps),
                     )
             }
-            ShapeType::Structure => mutate_type_name(shape_name),
+            ShapeType::Structure => mutate_type_name(service, shape_name),
         }
     } else {
         mutate_type_name_for_streaming(shape_name)
@@ -246,18 +246,21 @@ fn is_input_shape(service: &Service, name: &str) -> bool {
 }
 
 // do any type name mutation needed to avoid collisions with Rust types
-fn mutate_type_name(type_name: &str) -> String {
+fn mutate_type_name(service: &Service, type_name: &str) -> String {
     let capitalized = util::capitalize_first(type_name.to_owned());
 
     // some cloudfront types have underscoare that anger the lint checker
     let without_underscores = capitalized.replace("_", "");
 
     match &without_underscores[..] {
-        // S3 has an 'Error' shape that collides with Rust's Error trait
-        "Error" => "S3Error".to_owned(),
+        // Some services have an 'Error' shape that collides with Rust's Error trait
+        "Error" => format!("{}Error", service.service_type_name()),
 
         // EC2 has a CancelSpotFleetRequestsError struct, avoid collision with our error enum
         "CancelSpotFleetRequests" => "EC2CancelSpotFleetRequests".to_owned(),
+
+        // Glue has a BatchStopJobRunError struct, avoid collision with our error enum
+        "BatchStopJobRun" => "GlueBatchStopJobRun".to_owned(),
 
         // RDS has a conveniently named "Option" type
         "Option" => "RDSOption".to_owned(),
@@ -285,7 +288,7 @@ fn generate_types<P>(writer: &mut FileWriter, service: &Service, protocol_genera
             continue;
         }
 
-        let type_name = mutate_type_name(name);
+        let type_name = mutate_type_name(service, name);
 
         let deserialized = deserialized_types.contains(&type_name);
         let serialized = serialized_types.contains(&type_name);
@@ -456,7 +459,7 @@ fn generate_struct_fields<P: GenerateProtocol>(service: &Service,
     }).collect::<Vec<String>>().join("\n")
 }
 
-fn error_type_name(name: &str) -> String {
-    let type_name = mutate_type_name(name);
+fn error_type_name(service: &Service, name: &str) -> String {
+    let type_name = mutate_type_name(service, name);
     format!("{}Error", type_name)
 }

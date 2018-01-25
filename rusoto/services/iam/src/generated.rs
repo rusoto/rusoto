@@ -477,6 +477,46 @@ impl AddUserToGroupRequestSerializer {
     }
 }
 
+struct ArnListTypeDeserializer;
+impl ArnListTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "member" {
+                        obj.push(try!(ArnTypeDeserializer::deserialize("member", stack)));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
 struct ArnTypeDeserializer;
 impl ArnTypeDeserializer {
     #[allow(unused_variables)]
@@ -1468,7 +1508,7 @@ pub struct CreatePolicyRequest {
     pub path: Option<String>,
     /// <p>The JSON policy document that you want to use as the content for the new policy.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF). It also includes the special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D).</p>
     pub policy_document: String,
-    /// <p>The friendly name of the policy.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>
+    /// <p>The friendly name of the policy.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-+</p>
     pub policy_name: String,
 }
 
@@ -2215,7 +2255,7 @@ impl DeleteAccountAliasRequestSerializer {
 pub struct DeleteGroupPolicyRequest {
     /// <p>The name (friendly name, not ARN) identifying the group that the policy is embedded in.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>
     pub group_name: String,
-    /// <p>The name identifying the policy document to delete.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>
+    /// <p>The name identifying the policy document to delete.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-+</p>
     pub policy_name: String,
 }
 
@@ -2379,7 +2419,7 @@ impl DeletePolicyVersionRequestSerializer {
 
 #[derive(Default, Debug, Clone)]
 pub struct DeleteRolePolicyRequest {
-    /// <p>The name of the inline policy to delete from the specified IAM role.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>
+    /// <p>The name of the inline policy to delete from the specified IAM role.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-+</p>
     pub policy_name: String,
     /// <p>The name (friendly name, not ARN) identifying the role that the policy is embedded in.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub role_name: String,
@@ -2500,6 +2540,76 @@ impl DeleteServerCertificateRequestSerializer {
 }
 
 #[derive(Default, Debug, Clone)]
+pub struct DeleteServiceLinkedRoleRequest {
+    /// <p>The name of the service-linked role to be deleted.</p>
+    pub role_name: String,
+}
+
+/// Serialize `DeleteServiceLinkedRoleRequest` contents to a `SignedRequest`.
+struct DeleteServiceLinkedRoleRequestSerializer;
+impl DeleteServiceLinkedRoleRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteServiceLinkedRoleRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "RoleName"),
+            &obj.role_name.replace("+", "%2B"),
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct DeleteServiceLinkedRoleResponse {
+    /// <p>The deletion task identifier that you can use to check the status of the deletion. This identifier is returned in the format <code>task/aws-service-role/&lt;service-principal-name&gt;/&lt;role-name&gt;/&lt;task-uuid&gt;</code>.</p>
+    pub deletion_task_id: String,
+}
+
+struct DeleteServiceLinkedRoleResponseDeserializer;
+impl DeleteServiceLinkedRoleResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteServiceLinkedRoleResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = DeleteServiceLinkedRoleResponse::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "DeletionTaskId" => {
+                        obj.deletion_task_id = try!(DeletionTaskIdTypeDeserializer::deserialize(
+                            "DeletionTaskId",
+                            stack
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
 pub struct DeleteServiceSpecificCredentialRequest {
     /// <p>The unique identifier of the service-specific credential. You can get this value by calling <a>ListServiceSpecificCredentials</a>.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub service_specific_credential_id: String,
@@ -2561,7 +2671,7 @@ impl DeleteSigningCertificateRequestSerializer {
 
 #[derive(Default, Debug, Clone)]
 pub struct DeleteUserPolicyRequest {
-    /// <p>The name identifying the policy document to delete.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>
+    /// <p>The name identifying the policy document to delete.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-+</p>
     pub policy_name: String,
     /// <p>The name (friendly name, not ARN) identifying the user that the policy is embedded in.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>
     pub user_name: String,
@@ -2631,6 +2741,88 @@ impl DeleteVirtualMFADeviceRequestSerializer {
     }
 }
 
+/// <p>The reason that the service-linked role deletion failed.</p> <p>This data type is used as a response element in the <a>GetServiceLinkedRoleDeletionStatus</a> operation.</p>
+#[derive(Default, Debug, Clone)]
+pub struct DeletionTaskFailureReasonType {
+    /// <p>A short description of the reason that the service-linked role deletion failed.</p>
+    pub reason: Option<String>,
+    /// <p>A list of objects that contains details about the service-linked role deletion failure. If the service-linked role has active sessions or if any resources that were used by the role have not been deleted from the linked service, the role can't be deleted. This parameter includes a list of the resources that are associated with the role and the region in which the resources are being used.</p>
+    pub role_usage_list: Option<Vec<RoleUsageType>>,
+}
+
+struct DeletionTaskFailureReasonTypeDeserializer;
+impl DeletionTaskFailureReasonTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeletionTaskFailureReasonType, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = DeletionTaskFailureReasonType::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Reason" => {
+                        obj.reason =
+                            Some(try!(ReasonTypeDeserializer::deserialize("Reason", stack)));
+                    }
+                    "RoleUsageList" => {
+                        obj.role_usage_list = Some(try!(
+                            RoleUsageListTypeDeserializer::deserialize("RoleUsageList", stack)
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct DeletionTaskIdTypeDeserializer;
+impl DeletionTaskIdTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct DeletionTaskStatusTypeDeserializer;
+impl DeletionTaskStatusTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 #[derive(Default, Debug, Clone)]
 pub struct DetachGroupPolicyRequest {
     /// <p>The name (friendly name, not ARN) of the IAM group to detach the policy from.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>
@@ -3508,7 +3700,7 @@ impl GetCredentialReportResponseDeserializer {
 pub struct GetGroupPolicyRequest {
     /// <p>The name of the group the policy is associated with.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>
     pub group_name: String,
-    /// <p>The name of the policy document to get.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>
+    /// <p>The name of the policy document to get.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-+</p>
     pub policy_name: String,
 }
 
@@ -4073,7 +4265,7 @@ impl GetPolicyVersionResponseDeserializer {
 }
 #[derive(Default, Debug, Clone)]
 pub struct GetRolePolicyRequest {
-    /// <p>The name of the policy document to get.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>
+    /// <p>The name of the policy document to get.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-+</p>
     pub policy_name: String,
     /// <p>The name of the role associated with the policy.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub role_name: String,
@@ -4467,8 +4659,85 @@ impl GetServerCertificateResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone)]
+pub struct GetServiceLinkedRoleDeletionStatusRequest {
+    /// <p>The deletion task identifier. This identifier is returned by the <a>DeleteServiceLinkedRole</a> operation in the format <code>task/aws-service-role/&lt;service-principal-name&gt;/&lt;role-name&gt;/&lt;task-uuid&gt;</code>.</p>
+    pub deletion_task_id: String,
+}
+
+/// Serialize `GetServiceLinkedRoleDeletionStatusRequest` contents to a `SignedRequest`.
+struct GetServiceLinkedRoleDeletionStatusRequestSerializer;
+impl GetServiceLinkedRoleDeletionStatusRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &GetServiceLinkedRoleDeletionStatusRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "DeletionTaskId"),
+            &obj.deletion_task_id.replace("+", "%2B"),
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct GetServiceLinkedRoleDeletionStatusResponse {
+    /// <p>An object that contains details about the reason the deletion failed.</p>
+    pub reason: Option<DeletionTaskFailureReasonType>,
+    /// <p>The status of the deletion.</p>
+    pub status: String,
+}
+
+struct GetServiceLinkedRoleDeletionStatusResponseDeserializer;
+impl GetServiceLinkedRoleDeletionStatusResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetServiceLinkedRoleDeletionStatusResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = GetServiceLinkedRoleDeletionStatusResponse::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Reason" => {
+                        obj.reason = Some(try!(
+                            DeletionTaskFailureReasonTypeDeserializer::deserialize("Reason", stack)
+                        ));
+                    }
+                    "Status" => {
+                        obj.status = try!(DeletionTaskStatusTypeDeserializer::deserialize(
+                            "Status",
+                            stack
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
 pub struct GetUserPolicyRequest {
-    /// <p>The name of the policy document to get.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>
+    /// <p>The name of the policy document to get.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-+</p>
     pub policy_name: String,
     /// <p>The name of the user who the policy is associated with.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>
     pub user_name: String,
@@ -5784,7 +6053,7 @@ pub struct ListGroupPoliciesResponse {
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
-    /// <p>A list of policy names.</p>
+    /// <p>A list of policy names.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-+</p>
     pub policy_names: Vec<String>,
 }
 
@@ -9155,7 +9424,7 @@ pub struct PutGroupPolicyRequest {
     pub group_name: String,
     /// <p>The policy document.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF). It also includes the special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D).</p>
     pub policy_document: String,
-    /// <p>The name of the policy document.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>
+    /// <p>The name of the policy document.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-+</p>
     pub policy_name: String,
 }
 
@@ -9187,7 +9456,7 @@ impl PutGroupPolicyRequestSerializer {
 pub struct PutRolePolicyRequest {
     /// <p>The policy document.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF). It also includes the special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D).</p>
     pub policy_document: String,
-    /// <p>The name of the policy document.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>
+    /// <p>The name of the policy document.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-+</p>
     pub policy_name: String,
     /// <p>The name of the role to associate the policy with.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub role_name: String,
@@ -9221,7 +9490,7 @@ impl PutRolePolicyRequestSerializer {
 pub struct PutUserPolicyRequest {
     /// <p>The policy document.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of any printable ASCII character ranging from the space character (\u0020) through end of the ASCII character range as well as the printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF). It also includes the special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D).</p>
     pub policy_document: String,
-    /// <p>The name of the policy document.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>
+    /// <p>The name of the policy document.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-+</p>
     pub policy_name: String,
     /// <p>The name of the user to associate the policy with.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>
     pub user_name: String,
@@ -9251,6 +9520,34 @@ impl PutUserPolicyRequestSerializer {
     }
 }
 
+struct ReasonTypeDeserializer;
+impl ReasonTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct RegionNameTypeDeserializer;
+impl RegionNameTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 #[derive(Default, Debug, Clone)]
 pub struct RemoveClientIDFromOpenIDConnectProviderRequest {
     /// <p>The client ID (also known as audience) to remove from the IAM OIDC provider resource. For more information about client IDs, see <a>CreateOpenIDConnectProvider</a>.</p>
@@ -9957,6 +10254,106 @@ impl RoleNameTypeDeserializer {
     ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct RoleUsageListTypeDeserializer;
+impl RoleUsageListTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<RoleUsageType>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "member" {
+                        obj.push(try!(RoleUsageTypeDeserializer::deserialize(
+                            "member",
+                            stack
+                        )));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+/// <p>An object that contains details about how a service-linked role is used.</p> <p>This data type is used as a response element in the <a>GetServiceLinkedRoleDeletionStatus</a> operation.</p>
+#[derive(Default, Debug, Clone)]
+pub struct RoleUsageType {
+    /// <p>The name of the region where the service-linked role is being used.</p>
+    pub region: Option<String>,
+    /// <p>The name of the resource that is using the service-linked role.</p>
+    pub resources: Option<Vec<String>>,
+}
+
+struct RoleUsageTypeDeserializer;
+impl RoleUsageTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RoleUsageType, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = RoleUsageType::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Region" => {
+                        obj.region = Some(try!(RegionNameTypeDeserializer::deserialize(
+                            "Region",
+                            stack
+                        )));
+                    }
+                    "Resources" => {
+                        obj.resources = Some(try!(ArnListTypeDeserializer::deserialize(
+                            "Resources",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -12250,7 +12647,7 @@ pub struct User {
     pub arn: String,
     /// <p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when the user was created.</p>
     pub create_date: String,
-    /// <p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when the user's password was last used to sign in to an AWS website. For a list of AWS websites that capture a user's last sign-in time, see the <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/credential-reports.html">Credential Reports</a> topic in the <i>Using IAM</i> guide. If a password is used more than once in a five-minute span, only the first use is returned in this field. This field is null (not present) when:</p> <ul> <li> <p>The user does not have a password</p> </li> <li> <p>The password exists but has never been used (at least not since IAM started tracking this information on October 20th, 2014</p> </li> <li> <p>there is no sign-in data associated with the user</p> </li> </ul> <p>This value is returned only in the <a>GetUser</a> and <a>ListUsers</a> actions. </p>
+    /// <p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when the user's password was last used to sign in to an AWS website. For a list of AWS websites that capture a user's last sign-in time, see the <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/credential-reports.html">Credential Reports</a> topic in the <i>Using IAM</i> guide. If a password is used more than once in a five-minute span, only the first use is returned in this field. If the field is null (no value) then it indicates that they never signed in with a password. This can be because:</p> <ul> <li> <p>The user never had a password.</p> </li> <li> <p>A password exists but has not been used since IAM started tracking this information on October 20th, 2014.</p> </li> </ul> <p>A null does not mean that the user <i>never</i> had a password. Also, if the user does not currently have a password, but had one in the past, then this field contains the date and time the most recent password was used.</p> <p>This value is returned only in the <a>GetUser</a> and <a>ListUsers</a> actions. </p>
     pub password_last_used: Option<String>,
     /// <p>The path to the user. For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>
     pub path: String,
@@ -12906,6 +13303,8 @@ pub enum AttachGroupPolicyError {
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
+    /// <p>The request failed because AWS service role policies can only be attached to the service-linked role for that service.</p>
+    PolicyNotAttachable(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
@@ -12933,6 +13332,9 @@ impl AttachGroupPolicyError {
                 }
                 "NoSuchEntityException" => {
                     AttachGroupPolicyError::NoSuchEntity(String::from(parsed_error.message))
+                }
+                "PolicyNotAttachableException" => {
+                    AttachGroupPolicyError::PolicyNotAttachable(String::from(parsed_error.message))
                 }
                 "ServiceFailureException" => {
                     AttachGroupPolicyError::ServiceFailure(String::from(parsed_error.message))
@@ -12976,6 +13378,7 @@ impl Error for AttachGroupPolicyError {
             AttachGroupPolicyError::InvalidInput(ref cause) => cause,
             AttachGroupPolicyError::LimitExceeded(ref cause) => cause,
             AttachGroupPolicyError::NoSuchEntity(ref cause) => cause,
+            AttachGroupPolicyError::PolicyNotAttachable(ref cause) => cause,
             AttachGroupPolicyError::ServiceFailure(ref cause) => cause,
             AttachGroupPolicyError::Validation(ref cause) => cause,
             AttachGroupPolicyError::Credentials(ref err) => err.description(),
@@ -12995,6 +13398,8 @@ pub enum AttachRolePolicyError {
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
+    /// <p>The request failed because AWS service role policies can only be attached to the service-linked role for that service.</p>
+    PolicyNotAttachable(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// <p>The request was rejected because only the service that depends on the service-linked role can modify or delete the role on your behalf. The error message includes the name of the service that depends on this service-linked role. You must request the change through that service.</p>
@@ -13024,6 +13429,9 @@ impl AttachRolePolicyError {
                 }
                 "NoSuchEntityException" => {
                     AttachRolePolicyError::NoSuchEntity(String::from(parsed_error.message))
+                }
+                "PolicyNotAttachableException" => {
+                    AttachRolePolicyError::PolicyNotAttachable(String::from(parsed_error.message))
                 }
                 "ServiceFailureException" => {
                     AttachRolePolicyError::ServiceFailure(String::from(parsed_error.message))
@@ -13070,6 +13478,7 @@ impl Error for AttachRolePolicyError {
             AttachRolePolicyError::InvalidInput(ref cause) => cause,
             AttachRolePolicyError::LimitExceeded(ref cause) => cause,
             AttachRolePolicyError::NoSuchEntity(ref cause) => cause,
+            AttachRolePolicyError::PolicyNotAttachable(ref cause) => cause,
             AttachRolePolicyError::ServiceFailure(ref cause) => cause,
             AttachRolePolicyError::UnmodifiableEntity(ref cause) => cause,
             AttachRolePolicyError::Validation(ref cause) => cause,
@@ -13088,6 +13497,8 @@ pub enum AttachUserPolicyError {
     LimitExceeded(String),
     /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
+    /// <p>The request failed because AWS service role policies can only be attached to the service-linked role for that service.</p>
+    PolicyNotAttachable(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
     /// An error occurred dispatching the HTTP request
@@ -13115,6 +13526,9 @@ impl AttachUserPolicyError {
                 }
                 "NoSuchEntityException" => {
                     AttachUserPolicyError::NoSuchEntity(String::from(parsed_error.message))
+                }
+                "PolicyNotAttachableException" => {
+                    AttachUserPolicyError::PolicyNotAttachable(String::from(parsed_error.message))
                 }
                 "ServiceFailureException" => {
                     AttachUserPolicyError::ServiceFailure(String::from(parsed_error.message))
@@ -13158,6 +13572,7 @@ impl Error for AttachUserPolicyError {
             AttachUserPolicyError::InvalidInput(ref cause) => cause,
             AttachUserPolicyError::LimitExceeded(ref cause) => cause,
             AttachUserPolicyError::NoSuchEntity(ref cause) => cause,
+            AttachUserPolicyError::PolicyNotAttachable(ref cause) => cause,
             AttachUserPolicyError::ServiceFailure(ref cause) => cause,
             AttachUserPolicyError::Validation(ref cause) => cause,
             AttachUserPolicyError::Credentials(ref err) => err.description(),
@@ -15895,6 +16310,89 @@ impl Error for DeleteServerCertificateError {
         }
     }
 }
+/// Errors returned by DeleteServiceLinkedRole
+#[derive(Debug, PartialEq)]
+pub enum DeleteServiceLinkedRoleError {
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    NoSuchEntity(String),
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
+    ServiceFailure(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteServiceLinkedRoleError {
+    pub fn from_body(body: &str) -> DeleteServiceLinkedRoleError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "LimitExceededException" => {
+                    DeleteServiceLinkedRoleError::LimitExceeded(String::from(parsed_error.message))
+                }
+                "NoSuchEntityException" => {
+                    DeleteServiceLinkedRoleError::NoSuchEntity(String::from(parsed_error.message))
+                }
+                "ServiceFailureException" => {
+                    DeleteServiceLinkedRoleError::ServiceFailure(String::from(parsed_error.message))
+                }
+                _ => DeleteServiceLinkedRoleError::Unknown(String::from(body)),
+            },
+            Err(_) => DeleteServiceLinkedRoleError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DeleteServiceLinkedRoleError {
+    fn from(err: XmlParseError) -> DeleteServiceLinkedRoleError {
+        let XmlParseError(message) = err;
+        DeleteServiceLinkedRoleError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DeleteServiceLinkedRoleError {
+    fn from(err: CredentialsError) -> DeleteServiceLinkedRoleError {
+        DeleteServiceLinkedRoleError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteServiceLinkedRoleError {
+    fn from(err: HttpDispatchError) -> DeleteServiceLinkedRoleError {
+        DeleteServiceLinkedRoleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteServiceLinkedRoleError {
+    fn from(err: io::Error) -> DeleteServiceLinkedRoleError {
+        DeleteServiceLinkedRoleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteServiceLinkedRoleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteServiceLinkedRoleError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteServiceLinkedRoleError::LimitExceeded(ref cause) => cause,
+            DeleteServiceLinkedRoleError::NoSuchEntity(ref cause) => cause,
+            DeleteServiceLinkedRoleError::ServiceFailure(ref cause) => cause,
+            DeleteServiceLinkedRoleError::Validation(ref cause) => cause,
+            DeleteServiceLinkedRoleError::Credentials(ref err) => err.description(),
+            DeleteServiceLinkedRoleError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteServiceLinkedRoleError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteServiceSpecificCredential
 #[derive(Debug, PartialEq)]
 pub enum DeleteServiceSpecificCredentialError {
@@ -18217,6 +18715,91 @@ impl Error for GetServerCertificateError {
                 dispatch_error.description()
             }
             GetServerCertificateError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetServiceLinkedRoleDeletionStatus
+#[derive(Debug, PartialEq)]
+pub enum GetServiceLinkedRoleDeletionStatusError {
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    InvalidInput(String),
+    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    NoSuchEntity(String),
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
+    ServiceFailure(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetServiceLinkedRoleDeletionStatusError {
+    pub fn from_body(body: &str) -> GetServiceLinkedRoleDeletionStatusError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "InvalidInputException" => GetServiceLinkedRoleDeletionStatusError::InvalidInput(
+                    String::from(parsed_error.message),
+                ),
+                "NoSuchEntityException" => GetServiceLinkedRoleDeletionStatusError::NoSuchEntity(
+                    String::from(parsed_error.message),
+                ),
+                "ServiceFailureException" => {
+                    GetServiceLinkedRoleDeletionStatusError::ServiceFailure(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => GetServiceLinkedRoleDeletionStatusError::Unknown(String::from(body)),
+            },
+            Err(_) => GetServiceLinkedRoleDeletionStatusError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for GetServiceLinkedRoleDeletionStatusError {
+    fn from(err: XmlParseError) -> GetServiceLinkedRoleDeletionStatusError {
+        let XmlParseError(message) = err;
+        GetServiceLinkedRoleDeletionStatusError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for GetServiceLinkedRoleDeletionStatusError {
+    fn from(err: CredentialsError) -> GetServiceLinkedRoleDeletionStatusError {
+        GetServiceLinkedRoleDeletionStatusError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetServiceLinkedRoleDeletionStatusError {
+    fn from(err: HttpDispatchError) -> GetServiceLinkedRoleDeletionStatusError {
+        GetServiceLinkedRoleDeletionStatusError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetServiceLinkedRoleDeletionStatusError {
+    fn from(err: io::Error) -> GetServiceLinkedRoleDeletionStatusError {
+        GetServiceLinkedRoleDeletionStatusError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetServiceLinkedRoleDeletionStatusError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetServiceLinkedRoleDeletionStatusError {
+    fn description(&self) -> &str {
+        match *self {
+            GetServiceLinkedRoleDeletionStatusError::InvalidInput(ref cause) => cause,
+            GetServiceLinkedRoleDeletionStatusError::NoSuchEntity(ref cause) => cause,
+            GetServiceLinkedRoleDeletionStatusError::ServiceFailure(ref cause) => cause,
+            GetServiceLinkedRoleDeletionStatusError::Validation(ref cause) => cause,
+            GetServiceLinkedRoleDeletionStatusError::Credentials(ref err) => err.description(),
+            GetServiceLinkedRoleDeletionStatusError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetServiceLinkedRoleDeletionStatusError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -21023,7 +21606,7 @@ impl Error for SetDefaultPolicyVersionError {
 pub enum SimulateCustomPolicyError {
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request failed because a provided policy could not be successfully evaluated. An additional detail message indicates the source of the failure.</p>
+    /// <p>The request failed because a provided policy could not be successfully evaluated. An additional detailed message indicates the source of the failure.</p>
     PolicyEvaluation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -21102,7 +21685,7 @@ pub enum SimulatePrincipalPolicyError {
     InvalidInput(String),
     /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
     NoSuchEntity(String),
-    /// <p>The request failed because a provided policy could not be successfully evaluated. An additional detail message indicates the source of the failure.</p>
+    /// <p>The request failed because a provided policy could not be successfully evaluated. An additional detailed message indicates the source of the failure.</p>
     PolicyEvaluation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -22818,6 +23401,12 @@ pub trait Iam {
         input: &DeleteServerCertificateRequest,
     ) -> Result<(), DeleteServerCertificateError>;
 
+    /// <p>Submits a service-linked role deletion request and returns a <code>DeletionTaskId</code>, which you can use to check the status of the deletion. Before you call this operation, confirm that the role has no active sessions and that any resources used by the role in the linked service are deleted. If you call this operation more than once for the same service-linked role and an earlier deletion task is not complete, then the <code>DeletionTaskId</code> of the earlier request is returned.</p> <p>If you submit a deletion request for a service-linked role whose linked service is still accessing a resource, then the deletion task fails. If it fails, the <a>GetServiceLinkedRoleDeletionStatus</a> API operation returns the reason for the failure, including the resources that must be deleted. To delete the service-linked role, you must first remove those resources from the linked service and then submit the deletion request again. Resources are specific to the service that is linked to the role. For more information about removing resources from a service, see the <a href="http://docs.aws.amazon.com/">AWS documentation</a> for your service.</p> <p>For more information about service-linked roles, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html#iam-term-service-linked-role">Roles Terms and Concepts: AWS Service-Linked Role</a> in the <i>IAM User Guide</i>.</p>
+    fn delete_service_linked_role(
+        &self,
+        input: &DeleteServiceLinkedRoleRequest,
+    ) -> Result<DeleteServiceLinkedRoleResponse, DeleteServiceLinkedRoleError>;
+
     /// <p>Deletes the specified service-specific credential.</p>
     fn delete_service_specific_credential(
         &self,
@@ -22971,6 +23560,12 @@ pub trait Iam {
         &self,
         input: &GetServerCertificateRequest,
     ) -> Result<GetServerCertificateResponse, GetServerCertificateError>;
+
+    /// <p>Retrieves the status of your service-linked role deletion. After you use the <a>DeleteServiceLinkedRole</a> API operation to submit a service-linked role for deletion, you can use the <code>DeletionTaskId</code> parameter in <code>GetServiceLinkedRoleDeletionStatus</code> to check the status of the deletion. If the deletion fails, this operation returns the reason that it failed.</p>
+    fn get_service_linked_role_deletion_status(
+        &self,
+        input: &GetServiceLinkedRoleDeletionStatusRequest,
+    ) -> Result<GetServiceLinkedRoleDeletionStatusResponse, GetServiceLinkedRoleDeletionStatusError>;
 
     /// <p>Retrieves information about the specified IAM user, including the user's creation date, path, unique ID, and ARN.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID used to sign the request to this API.</p>
     fn get_user(&self, input: &GetUserRequest) -> Result<GetUserResponse, GetUserError>;
@@ -24665,6 +25260,57 @@ where
         }
     }
 
+    /// <p>Submits a service-linked role deletion request and returns a <code>DeletionTaskId</code>, which you can use to check the status of the deletion. Before you call this operation, confirm that the role has no active sessions and that any resources used by the role in the linked service are deleted. If you call this operation more than once for the same service-linked role and an earlier deletion task is not complete, then the <code>DeletionTaskId</code> of the earlier request is returned.</p> <p>If you submit a deletion request for a service-linked role whose linked service is still accessing a resource, then the deletion task fails. If it fails, the <a>GetServiceLinkedRoleDeletionStatus</a> API operation returns the reason for the failure, including the resources that must be deleted. To delete the service-linked role, you must first remove those resources from the linked service and then submit the deletion request again. Resources are specific to the service that is linked to the role. For more information about removing resources from a service, see the <a href="http://docs.aws.amazon.com/">AWS documentation</a> for your service.</p> <p>For more information about service-linked roles, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html#iam-term-service-linked-role">Roles Terms and Concepts: AWS Service-Linked Role</a> in the <i>IAM User Guide</i>.</p>
+    fn delete_service_linked_role(
+        &self,
+        input: &DeleteServiceLinkedRoleRequest,
+    ) -> Result<DeleteServiceLinkedRoleResponse, DeleteServiceLinkedRoleError> {
+        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DeleteServiceLinkedRole");
+        params.put("Version", "2010-05-08");
+        DeleteServiceLinkedRoleRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = DeleteServiceLinkedRoleResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(DeleteServiceLinkedRoleResponseDeserializer::deserialize(
+                        "DeleteServiceLinkedRoleResult",
+                        &mut stack
+                    ));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteServiceLinkedRoleError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Deletes the specified service-specific credential.</p>
     fn delete_service_specific_credential(
         &self,
@@ -25933,6 +26579,60 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(GetServerCertificateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Retrieves the status of your service-linked role deletion. After you use the <a>DeleteServiceLinkedRole</a> API operation to submit a service-linked role for deletion, you can use the <code>DeletionTaskId</code> parameter in <code>GetServiceLinkedRoleDeletionStatus</code> to check the status of the deletion. If the deletion fails, this operation returns the reason that it failed.</p>
+    fn get_service_linked_role_deletion_status(
+        &self,
+        input: &GetServiceLinkedRoleDeletionStatusRequest,
+    ) -> Result<GetServiceLinkedRoleDeletionStatusResponse, GetServiceLinkedRoleDeletionStatusError>
+    {
+        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "GetServiceLinkedRoleDeletionStatus");
+        params.put("Version", "2010-05-08");
+        GetServiceLinkedRoleDeletionStatusRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = GetServiceLinkedRoleDeletionStatusResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(
+                        GetServiceLinkedRoleDeletionStatusResponseDeserializer::deserialize(
+                            "GetServiceLinkedRoleDeletionStatusResult",
+                            &mut stack
+                        )
+                    );
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetServiceLinkedRoleDeletionStatusError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }

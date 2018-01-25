@@ -38,7 +38,11 @@ pub struct AttackDetail {
     #[serde(rename = "AttackId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attack_id: Option<String>,
-    /// <p>The time the attack ended, in the format 2016-12-16T13:50Z.</p>
+    /// <p>The array of <a>AttackProperty</a> objects.</p>
+    #[serde(rename = "AttackProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attack_properties: Option<Vec<AttackProperty>>,
+    /// <p>The time the attack ended, in Unix time in seconds. For more information see <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#parameter-types">timestamp</a>.</p>
     #[serde(rename = "EndTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
@@ -50,7 +54,7 @@ pub struct AttackDetail {
     #[serde(rename = "ResourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_arn: Option<String>,
-    /// <p>The time the attack started, in the format 2016-12-16T13:50Z.</p>
+    /// <p>The time the attack started, in Unix time in seconds. For more information see <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#parameter-types">timestamp</a>.</p>
     #[serde(rename = "StartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
@@ -58,6 +62,31 @@ pub struct AttackDetail {
     #[serde(rename = "SubResources")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sub_resources: Option<Vec<SubResourceSummary>>,
+}
+
+/// <p>Details of the described attack.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct AttackProperty {
+    /// <p>The type of DDoS event that was observed. <code>NETWORK</code> indicates layer 3 and layer 4 events and <code>APPLICATION</code> indicates layer 7 events.</p>
+    #[serde(rename = "AttackLayer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attack_layer: Option<String>,
+    /// <p>Defines the DDoS attack property information that is provided.</p>
+    #[serde(rename = "AttackPropertyIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attack_property_identifier: Option<String>,
+    /// <p>The array of <a>Contributor</a> objects that includes the top five contributors to an attack. </p>
+    #[serde(rename = "TopContributors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub top_contributors: Option<Vec<Contributor>>,
+    /// <p>The total contributions made to this attack by all contributors, not just the five listed in the <code>TopContributors</code> list.</p>
+    #[serde(rename = "Total")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total: Option<i64>,
+    /// <p>The unit of the <code>Value</code> of the contributions.</p>
+    #[serde(rename = "Unit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unit: Option<String>,
 }
 
 /// <p>Summarizes all DDoS attacks for a specified time period.</p>
@@ -71,7 +100,7 @@ pub struct AttackSummary {
     #[serde(rename = "AttackVectors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attack_vectors: Option<Vec<AttackVectorDescription>>,
-    /// <p>The end time of the attack, in the format 2016-12-16T13:50Z.</p>
+    /// <p>The end time of the attack, in Unix time in seconds. For more information see <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#parameter-types">timestamp</a>.</p>
     #[serde(rename = "EndTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
@@ -79,7 +108,7 @@ pub struct AttackSummary {
     #[serde(rename = "ResourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_arn: Option<String>,
-    /// <p>The start time of the attack, in the format 2016-12-16T13:50Z.</p>
+    /// <p>The start time of the attack, in Unix time in seconds. For more information see <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#parameter-types">timestamp</a>.</p>
     #[serde(rename = "StartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
@@ -88,9 +117,22 @@ pub struct AttackSummary {
 /// <p>Describes the attack.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AttackVectorDescription {
-    /// <p>The attack type, for example, SNMP reflection or SYN flood.</p>
+    /// <p><p>The attack type. Valid values:</p> <ul> <li> <p>UDP<em>TRAFFIC</p> </li> <li> <p>UDP</em>FRAGMENT</p> </li> <li> <p>GENERIC<em>UDP</em>REFLECTION</p> </li> <li> <p>DNS<em>REFLECTION</p> </li> <li> <p>NTP</em>REFLECTION</p> </li> <li> <p>CHARGEN<em>REFLECTION</p> </li> <li> <p>SSDP</em>REFLECTION</p> </li> <li> <p>PORT<em>MAPPER</p> </li> <li> <p>RIP</em>REFLECTION</p> </li> <li> <p>SNMP<em>REFLECTION</p> </li> <li> <p>MSSQL</em>REFLECTION</p> </li> <li> <p>NET<em>BIOS</em>REFLECTION</p> </li> <li> <p>SYN<em>FLOOD</p> </li> <li> <p>ACK</em>FLOOD</p> </li> <li> <p>REQUEST_FLOOD</p> </li> </ul></p>
     #[serde(rename = "VectorType")]
     pub vector_type: String,
+}
+
+/// <p>A contributor to the attack and their contribution.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct Contributor {
+    /// <p>The name of the contributor. This is dependent on the <code>AttackPropertyIdentifier</code>. For example, if the <code>AttackPropertyIdentifier</code> is <code>SOURCE_COUNTRY</code>, the <code>Name</code> could be <code>United States</code>.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The contribution of this contributor expressed in <a>Protection</a> units. For example <code>10,000</code>.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<i64>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
@@ -98,7 +140,7 @@ pub struct CreateProtectionRequest {
     /// <p>Friendly name for the <code>Protection</code> you are creating.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The ARN (Amazon Resource Name) of the resource to be protected.</p>
+    /// <p><p>The ARN (Amazon Resource Name) of the resource to be protected.</p> <p>The ARN should be in one of the following formats:</p> <ul> <li> <p>For an Application Load Balancer: <code>arn:aws:elasticloadbalancing:<i>region</i>:<i>account-id</i>:loadbalancer/app/<i>load-balancer-name</i>/<i>load-balancer-id</i> </code> </p> </li> <li> <p>For an Elastic Load Balancer (Classic Load Balancer): <code>arn:aws:elasticloadbalancing:<i>region</i>:<i>account-id</i>:loadbalancer/<i>load-balancer-name</i> </code> </p> </li> <li> <p>For AWS CloudFront distribution: <code>arn:aws:cloudfront::<i>account-id</i>:distribution/<i>distribution-id</i> </code> </p> </li> <li> <p>For Amazon Route 53: <code>arn:aws:route53::<i>account-id</i>:hostedzone/<i>hosted-zone-id</i> </code> </p> </li> <li> <p>For an Elastic IP address: <code>arn:aws:ec2:<i>region</i>:<i>account-id</i>:eip-allocation/<i>allocation-id</i> </code> </p> </li> </ul></p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
 }
@@ -175,8 +217,18 @@ pub struct DescribeSubscriptionResponse {
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct GetSubscriptionStateRequest;
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetSubscriptionStateResponse {
+    /// <p>The status of the subscription.</p>
+    #[serde(rename = "SubscriptionState")]
+    pub subscription_state: String,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct ListAttacksRequest {
-    /// <p>The end of the time period for the attacks.</p>
+    /// <p>The end of the time period for the attacks. This is a <code>timestamp</code> type. The sample request above indicates a <code>number</code> type because the default used by WAF is Unix time in seconds. However any valid <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#parameter-types">timestamp format</a> is allowed. </p>
     #[serde(rename = "EndTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<TimeRange>,
@@ -192,7 +244,7 @@ pub struct ListAttacksRequest {
     #[serde(rename = "ResourceArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_arns: Option<Vec<String>>,
-    /// <p>The time period for the attacks.</p>
+    /// <p>The start of the time period for the attacks. This is a <code>timestamp</code> type. The sample request above indicates a <code>number</code> type because the default used by WAF is Unix time in seconds. However any valid <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#parameter-types">timestamp format</a> is allowed. </p>
     #[serde(rename = "StartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<TimeRange>,
@@ -284,7 +336,7 @@ pub struct SubResourceSummary {
 /// <p>Information about the AWS Shield Advanced subscription for an account.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Subscription {
-    /// <p>The start time of the subscription, in the format "2016-12-16T13:50Z".</p>
+    /// <p>The start time of the subscription, in Unix time in seconds. For more information see <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#parameter-types">timestamp</a>.</p>
     #[serde(rename = "StartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
@@ -338,11 +390,11 @@ pub struct SummarizedCounter {
 /// <p>The time range.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct TimeRange {
-    /// <p>The start time, in the format 2016-12-16T13:50Z.</p>
+    /// <p>The start time, in Unix time in seconds. For more information see <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#parameter-types">timestamp</a>.</p>
     #[serde(rename = "FromInclusive")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub from_inclusive: Option<f64>,
-    /// <p>The end time, in the format 2016-12-16T15:50Z.</p>
+    /// <p>The end time, in Unix time in seconds. For more information see <a href="http://docs.aws.amazon.com/cli/latest/userguide/cli-using-param.html#parameter-types">timestamp</a>.</p>
     #[serde(rename = "ToExclusive")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub to_exclusive: Option<f64>,
@@ -357,7 +409,7 @@ pub enum CreateProtectionError {
     InvalidOperation(String),
     /// <p>Exception that indicates that the resource is invalid. You might not have access to the resource, or the resource might not exist.</p>
     InvalidResource(String),
-    /// <p>Exception that indicates that the operation would exceed a limit.</p>
+    /// <p>Exception that indicates that the operation would exceed a limit.</p> <p> <code>Type</code> is the type of limit that would be exceeded.</p> <p> <code>Limit</code> is the threshold that would be exceeded.</p>
     LimitsExceeded(String),
     /// <p>Exception that indicates that the protection state has been modified by another client. You can retry the request.</p>
     OptimisticLock(String),
@@ -643,7 +695,7 @@ impl Error for DeleteProtectionError {
 pub enum DeleteSubscriptionError {
     /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
     InternalError(String),
-    /// <p>Exception that indicates that the subscription has been modified by another client. You can retry the request.</p>
+    /// <p>Exception that indicates that the subscription you are trying to delete has not yet completed the 1-year commitment. You cannot delete this subscription.</p>
     LockedSubscription(String),
     /// <p>Exception indicating the specified resource does not exist.</p>
     ResourceNotFound(String),
@@ -986,6 +1038,86 @@ impl Error for DescribeSubscriptionError {
         }
     }
 }
+/// Errors returned by GetSubscriptionState
+#[derive(Debug, PartialEq)]
+pub enum GetSubscriptionStateError {
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    InternalError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetSubscriptionStateError {
+    pub fn from_body(body: &str) -> GetSubscriptionStateError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalErrorException" => {
+                        GetSubscriptionStateError::InternalError(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetSubscriptionStateError::Validation(error_message.to_string())
+                    }
+                    _ => GetSubscriptionStateError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetSubscriptionStateError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetSubscriptionStateError {
+    fn from(err: serde_json::error::Error) -> GetSubscriptionStateError {
+        GetSubscriptionStateError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetSubscriptionStateError {
+    fn from(err: CredentialsError) -> GetSubscriptionStateError {
+        GetSubscriptionStateError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetSubscriptionStateError {
+    fn from(err: HttpDispatchError) -> GetSubscriptionStateError {
+        GetSubscriptionStateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetSubscriptionStateError {
+    fn from(err: io::Error) -> GetSubscriptionStateError {
+        GetSubscriptionStateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetSubscriptionStateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetSubscriptionStateError {
+    fn description(&self) -> &str {
+        match *self {
+            GetSubscriptionStateError::InternalError(ref cause) => cause,
+            GetSubscriptionStateError::Validation(ref cause) => cause,
+            GetSubscriptionStateError::Credentials(ref err) => err.description(),
+            GetSubscriptionStateError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetSubscriptionStateError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListAttacks
 #[derive(Debug, PartialEq)]
 pub enum ListAttacksError {
@@ -1162,7 +1294,7 @@ impl Error for ListProtectionsError {
 }
 /// Trait representing the capabilities of the AWS Shield API. AWS Shield clients implement this trait.
 pub trait Shield {
-    /// <p>Enables AWS Shield Advanced for a specific AWS resource. The resource can be an Amazon CloudFront distribution, Elastic Load Balancing load balancer, or an Amazon Route 53 hosted zone.</p>
+    /// <p>Enables AWS Shield Advanced for a specific AWS resource. The resource can be an Amazon CloudFront distribution, Elastic Load Balancing load balancer, Elastic IP Address, or an Amazon Route 53 hosted zone.</p>
     fn create_protection(
         &self,
         input: &CreateProtectionRequest,
@@ -1177,7 +1309,7 @@ pub trait Shield {
         input: &DeleteProtectionRequest,
     ) -> Result<DeleteProtectionResponse, DeleteProtectionError>;
 
-    /// <p>Removes AWS Shield Advanced from an account.</p>
+    /// <p>Removes AWS Shield Advanced from an account. AWS Shield Advanced requires a 1-year subscription commitment. You cannot delete a subscription prior to the completion of that commitment. </p>
     fn delete_subscription(&self) -> Result<DeleteSubscriptionResponse, DeleteSubscriptionError>;
 
     /// <p>Describes the details of a DDoS attack. </p>
@@ -1196,6 +1328,11 @@ pub trait Shield {
     fn describe_subscription(
         &self,
     ) -> Result<DescribeSubscriptionResponse, DescribeSubscriptionError>;
+
+    /// <p>Returns the <code>SubscriptionState</code>, either <code>Active</code> or <code>Inactive</code>.</p>
+    fn get_subscription_state(
+        &self,
+    ) -> Result<GetSubscriptionStateResponse, GetSubscriptionStateError>;
 
     /// <p>Returns all ongoing DDoS attacks or all DDoS attacks during a specified time period.</p>
     fn list_attacks(
@@ -1239,7 +1376,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    /// <p>Enables AWS Shield Advanced for a specific AWS resource. The resource can be an Amazon CloudFront distribution, Elastic Load Balancing load balancer, or an Amazon Route 53 hosted zone.</p>
+    /// <p>Enables AWS Shield Advanced for a specific AWS resource. The resource can be an Amazon CloudFront distribution, Elastic Load Balancing load balancer, Elastic IP Address, or an Amazon Route 53 hosted zone.</p>
     fn create_protection(
         &self,
         input: &CreateProtectionRequest,
@@ -1337,7 +1474,7 @@ where
         }
     }
 
-    /// <p>Removes AWS Shield Advanced from an account.</p>
+    /// <p>Removes AWS Shield Advanced from an account. AWS Shield Advanced requires a 1-year subscription commitment. You cannot delete a subscription prior to the completion of that commitment. </p>
     fn delete_subscription(&self) -> Result<DeleteSubscriptionResponse, DeleteSubscriptionError> {
         let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
 
@@ -1461,6 +1598,38 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(DescribeSubscriptionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Returns the <code>SubscriptionState</code>, either <code>Active</code> or <code>Inactive</code>.</p>
+    fn get_subscription_state(
+        &self,
+    ) -> Result<GetSubscriptionStateResponse, GetSubscriptionStateError> {
+        let mut request = SignedRequest::new("POST", "shield", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSShield_20160616.GetSubscriptionState");
+        request.set_payload(Some(b"{}".to_vec()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetSubscriptionStateResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetSubscriptionStateError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }

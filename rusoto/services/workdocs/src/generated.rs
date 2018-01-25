@@ -30,7 +30,7 @@ use serde_json::from_str;
 use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AbortDocumentVersionUploadRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -44,7 +44,7 @@ pub struct AbortDocumentVersionUploadRequest {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ActivateUserRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -100,10 +100,14 @@ pub struct Activity {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AddResourcePermissionsRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
+    /// <p>The notification options.</p>
+    #[serde(rename = "NotificationOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notification_options: Option<NotificationOptions>,
     /// <p>The users, groups, or organization being granted permission.</p>
     #[serde(rename = "Principals")]
     pub principals: Vec<SharePrincipal>,
@@ -167,6 +171,7 @@ pub struct CommentMetadata {
     #[serde(rename = "CommentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub comment_id: Option<String>,
+    /// <p>The status of the comment.</p>
     #[serde(rename = "CommentStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub comment_status: Option<String>,
@@ -174,6 +179,7 @@ pub struct CommentMetadata {
     #[serde(rename = "Contributor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub contributor: Option<User>,
+    /// <p>The timestamp that the comment was created.</p>
     #[serde(rename = "CreatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_timestamp: Option<f64>,
@@ -185,7 +191,7 @@ pub struct CommentMetadata {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateCommentRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -226,7 +232,7 @@ pub struct CreateCommentResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateCustomMetadataRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -247,7 +253,7 @@ pub struct CreateCustomMetadataResponse;
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateFolderRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -270,7 +276,7 @@ pub struct CreateFolderResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateLabelsRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -293,7 +299,7 @@ pub struct CreateNotificationSubscriptionRequest {
     /// <p>The ID of the organization.</p>
     #[serde(rename = "OrganizationId")]
     pub organization_id: String,
-    /// <p>The protocol to use. The supported value is https, which delivers JSON-encoded messasges using HTTPS POST.</p>
+    /// <p>The protocol to use. The supported value is https, which delivers JSON-encoded messages using HTTPS POST.</p>
     #[serde(rename = "Protocol")]
     pub protocol: String,
     /// <p>The notification type.</p>
@@ -311,7 +317,7 @@ pub struct CreateNotificationSubscriptionResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateUserRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -355,7 +361,7 @@ pub struct CreateUserResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeactivateUserRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -366,7 +372,7 @@ pub struct DeactivateUserRequest {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteCommentRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -383,7 +389,7 @@ pub struct DeleteCommentRequest {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteCustomMetadataRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -409,7 +415,7 @@ pub struct DeleteCustomMetadataResponse;
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteDocumentRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -420,7 +426,7 @@ pub struct DeleteDocumentRequest {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteFolderContentsRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -431,7 +437,7 @@ pub struct DeleteFolderContentsRequest {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteFolderRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -442,7 +448,7 @@ pub struct DeleteFolderRequest {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteLabelsRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -474,7 +480,7 @@ pub struct DeleteNotificationSubscriptionRequest {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteUserRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -485,11 +491,11 @@ pub struct DeleteUserRequest {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeActivitiesRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    /// <p>The timestamp that determines the end time of the activities; the response includes the activities performed before the specified timestamp.</p>
+    /// <p>The timestamp that determines the end time of the activities. The response includes the activities performed before the specified timestamp.</p>
     #[serde(rename = "EndTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
@@ -497,7 +503,7 @@ pub struct DescribeActivitiesRequest {
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    /// <p>The marker for the next set of results. (You received this marker from a previous call.)</p>
+    /// <p>The marker for the next set of results.</p>
     #[serde(rename = "Marker")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
@@ -505,7 +511,7 @@ pub struct DescribeActivitiesRequest {
     #[serde(rename = "OrganizationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub organization_id: Option<String>,
-    /// <p>The timestamp that determines the starting time of the activities; the response includes the activities performed after the specified timestamp.</p>
+    /// <p>The timestamp that determines the starting time of the activities. The response includes the activities performed after the specified timestamp.</p>
     #[serde(rename = "StartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
@@ -529,7 +535,7 @@ pub struct DescribeActivitiesResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeCommentsRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -563,7 +569,7 @@ pub struct DescribeCommentsResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeDocumentVersionsRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -602,7 +608,7 @@ pub struct DescribeDocumentVersionsResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeFolderContentsRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -652,6 +658,41 @@ pub struct DescribeFolderContentsResponse {
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribeGroupsRequest {
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authentication_token: Option<String>,
+    /// <p>The maximum number of items to return with this call.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The marker for the next set of results. (You received this marker from a previous call.)</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+    /// <p>The ID of the organization.</p>
+    #[serde(rename = "OrganizationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_id: Option<String>,
+    /// <p>A query to describe groups by group name.</p>
+    #[serde(rename = "SearchQuery")]
+    pub search_query: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeGroupsResponse {
+    /// <p>The list of groups.</p>
+    #[serde(rename = "Groups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub groups: Option<Vec<GroupMetadata>>,
+    /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeNotificationSubscriptionsRequest {
     /// <p>The maximum number of items to return with this call.</p>
     #[serde(rename = "Limit")]
@@ -680,7 +721,7 @@ pub struct DescribeNotificationSubscriptionsResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeResourcePermissionsRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -692,6 +733,10 @@ pub struct DescribeResourcePermissionsRequest {
     #[serde(rename = "Marker")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
+    /// <p>The ID of the principal to filter permissions by.</p>
+    #[serde(rename = "PrincipalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub principal_id: Option<String>,
     /// <p>The ID of the resource.</p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
@@ -711,7 +756,7 @@ pub struct DescribeResourcePermissionsResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeRootFoldersRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     pub authentication_token: String,
     /// <p>The maximum number of items to return.</p>
@@ -738,7 +783,7 @@ pub struct DescribeRootFoldersResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeUsersRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -786,10 +831,6 @@ pub struct DescribeUsersResponse {
     #[serde(rename = "Marker")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
-    /// <p>The total number of users included in the results.</p>
-    #[serde(rename = "TotalNumberOfUsers")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub total_number_of_users: Option<i64>,
     /// <p>The users.</p>
     #[serde(rename = "Users")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -836,11 +877,11 @@ pub struct DocumentMetadata {
 /// <p>Describes a version of a document.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DocumentVersionMetadata {
-    /// <p>The time stamp when the content of the document was originally created.</p>
+    /// <p>The timestamp when the content of the document was originally created.</p>
     #[serde(rename = "ContentCreatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content_created_timestamp: Option<f64>,
-    /// <p>The time stamp when the content of the document was modified.</p>
+    /// <p>The timestamp when the content of the document was modified.</p>
     #[serde(rename = "ContentModifiedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content_modified_timestamp: Option<f64>,
@@ -848,7 +889,7 @@ pub struct DocumentVersionMetadata {
     #[serde(rename = "ContentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content_type: Option<String>,
-    /// <p>The time stamp when the document was first uploaded.</p>
+    /// <p>The timestamp when the document was first uploaded.</p>
     #[serde(rename = "CreatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_timestamp: Option<f64>,
@@ -860,7 +901,7 @@ pub struct DocumentVersionMetadata {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The time stamp when the document was last uploaded.</p>
+    /// <p>The timestamp when the document was last uploaded.</p>
     #[serde(rename = "ModifiedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub modified_timestamp: Option<f64>,
@@ -941,7 +982,7 @@ pub struct FolderMetadata {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetCurrentUserRequest {
-    /// <p>Amazon WorkDocs authentication token.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     pub authentication_token: String,
 }
@@ -956,7 +997,7 @@ pub struct GetCurrentUserResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDocumentPathRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -987,7 +1028,7 @@ pub struct GetDocumentPathResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDocumentRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -1014,7 +1055,7 @@ pub struct GetDocumentResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDocumentVersionRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -1048,7 +1089,7 @@ pub struct GetDocumentVersionResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetFolderPathRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -1079,7 +1120,7 @@ pub struct GetFolderPathResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetFolderRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -1119,15 +1160,15 @@ pub struct GroupMetadata {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct InitiateDocumentVersionUploadRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
-    /// <p>The time stamp when the content of the document was originally created.</p>
+    /// <p>The timestamp when the content of the document was originally created.</p>
     #[serde(rename = "ContentCreatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content_created_timestamp: Option<f64>,
-    /// <p>The time stamp when the content of the document was modified.</p>
+    /// <p>The timestamp when the content of the document was modified.</p>
     #[serde(rename = "ContentModifiedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content_modified_timestamp: Option<f64>,
@@ -1164,7 +1205,20 @@ pub struct InitiateDocumentVersionUploadResponse {
     pub upload_metadata: Option<UploadMetadata>,
 }
 
-/// <p>Describes the users and/or user groups.</p>
+/// <p>Set of options which defines notification preferences of given action.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct NotificationOptions {
+    /// <p>Text value to be included in the email body.</p>
+    #[serde(rename = "EmailMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub email_message: Option<String>,
+    /// <p>Boolean value to indicate an email notification should be sent to the receipients.</p>
+    #[serde(rename = "SendEmail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub send_email: Option<bool>,
+}
+
+/// <p>Describes the users or user groups.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Participants {
     /// <p>The list of user groups.</p>
@@ -1209,7 +1263,7 @@ pub struct Principal {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct RemoveAllResourcePermissionsRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -1220,7 +1274,7 @@ pub struct RemoveAllResourcePermissionsRequest {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct RemoveResourcePermissionRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -1247,7 +1301,7 @@ pub struct ResourceMetadata {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The original name of the resource prior to a rename operation.</p>
+    /// <p>The original name of the resource before a rename operation.</p>
     #[serde(rename = "OriginalName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub original_name: Option<String>,
@@ -1362,7 +1416,7 @@ pub struct Subscription {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateDocumentRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -1377,7 +1431,7 @@ pub struct UpdateDocumentRequest {
     #[serde(rename = "ParentFolderId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parent_folder_id: Option<String>,
-    /// <p>The resource state of the document. Note that only ACTIVE and RECYCLED are supported.</p>
+    /// <p>The resource state of the document. Only ACTIVE and RECYCLED are supported.</p>
     #[serde(rename = "ResourceState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_state: Option<String>,
@@ -1385,7 +1439,7 @@ pub struct UpdateDocumentRequest {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateDocumentVersionRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -1403,7 +1457,7 @@ pub struct UpdateDocumentVersionRequest {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateFolderRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -1418,7 +1472,7 @@ pub struct UpdateFolderRequest {
     #[serde(rename = "ParentFolderId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parent_folder_id: Option<String>,
-    /// <p>The resource state of the folder. Note that only ACTIVE and RECYCLED are accepted values from the API.</p>
+    /// <p>The resource state of the folder. Only ACTIVE and RECYCLED are accepted values from the API.</p>
     #[serde(rename = "ResourceState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_state: Option<String>,
@@ -1426,7 +1480,7 @@ pub struct UpdateFolderRequest {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateUserRequest {
-    /// <p>Amazon WorkDocs authentication token. This field should not be set when using administrative API actions, as in accessing the API using AWS credentials.</p>
+    /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_token: Option<String>,
@@ -1434,6 +1488,10 @@ pub struct UpdateUserRequest {
     #[serde(rename = "GivenName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub given_name: Option<String>,
+    /// <p>Boolean value to determine whether the user is granted Poweruser privileges.</p>
+    #[serde(rename = "GrantPoweruserPrivileges")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub grant_poweruser_privileges: Option<String>,
     /// <p>The locale of the user.</p>
     #[serde(rename = "Locale")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1564,7 +1622,7 @@ pub struct UserMetadata {
     #[serde(rename = "Surname")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub surname: Option<String>,
-    /// <p>The username of the user.</p>
+    /// <p>The name of the user.</p>
     #[serde(rename = "Username")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
@@ -1577,7 +1635,7 @@ pub struct UserStorageMetadata {
     #[serde(rename = "StorageRule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_rule: Option<StorageRuleType>,
-    /// <p>The amount of storage utilized, in bytes.</p>
+    /// <p>The amount of storage used, in bytes.</p>
     #[serde(rename = "StorageUtilizedInBytes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_utilized_in_bytes: Option<i64>,
@@ -1588,7 +1646,7 @@ pub struct UserStorageMetadata {
 pub enum AbortDocumentVersionUploadError {
     /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
     /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
@@ -1710,7 +1768,7 @@ impl Error for AbortDocumentVersionUploadError {
 pub enum ActivateUserError {
     /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
     /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
@@ -1810,7 +1868,7 @@ impl Error for ActivateUserError {
 /// Errors returned by AddResourcePermissions
 #[derive(Debug, PartialEq)]
 pub enum AddResourcePermissionsError {
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
     /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
@@ -1916,7 +1974,7 @@ pub enum CreateCommentError {
     DocumentLockedForComments(String),
     /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
     /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
@@ -2030,7 +2088,7 @@ pub enum CreateCustomMetadataError {
     CustomMetadataLimitExceeded(String),
     /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
     /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
@@ -2152,7 +2210,7 @@ pub enum CreateFolderError {
     EntityAlreadyExists(String),
     /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
     /// <p>The maximum of 100,000 folders under the parent folder has been exceeded.</p>
     LimitExceeded(String),
@@ -2270,7 +2328,7 @@ impl Error for CreateFolderError {
 pub enum CreateLabelsError {
     /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
     /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
@@ -2476,7 +2534,7 @@ impl Error for CreateNotificationSubscriptionError {
 pub enum CreateUserError {
     /// <p>The resource already exists.</p>
     EntityAlreadyExists(String),
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
     /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
@@ -2576,7 +2634,7 @@ impl Error for CreateUserError {
 pub enum DeactivateUserError {
     /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
     /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
@@ -2680,7 +2738,7 @@ pub enum DeleteCommentError {
     DocumentLockedForComments(String),
     /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
     /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
@@ -2792,7 +2850,7 @@ impl Error for DeleteCommentError {
 pub enum DeleteCustomMetadataError {
     /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
     /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
@@ -2908,7 +2966,7 @@ pub enum DeleteDocumentError {
     ConcurrentModification(String),
     /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
     /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
@@ -3022,7 +3080,7 @@ pub enum DeleteFolderError {
     ConcurrentModification(String),
     /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
     /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
@@ -3134,7 +3192,7 @@ impl Error for DeleteFolderError {
 pub enum DeleteFolderContentsError {
     /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
     /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
@@ -3242,7 +3300,7 @@ impl Error for DeleteFolderContentsError {
 pub enum DeleteLabelsError {
     /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
     /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
@@ -3450,7 +3508,7 @@ impl Error for DeleteNotificationSubscriptionError {
 pub enum DeleteUserError {
     /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
     /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
@@ -3548,9 +3606,9 @@ impl Error for DeleteUserError {
 /// Errors returned by DescribeActivities
 #[derive(Debug, PartialEq)]
 pub enum DescribeActivitiesError {
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
-    /// <p>The pagination marker and/or limit fields are not valid.</p>
+    /// <p>The pagination marker or limit fields are not valid.</p>
     InvalidArgument(String),
     /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
@@ -3656,7 +3714,7 @@ impl Error for DescribeActivitiesError {
 pub enum DescribeCommentsError {
     /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
     /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
@@ -3766,9 +3824,9 @@ impl Error for DescribeCommentsError {
 pub enum DescribeDocumentVersionsError {
     /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
-    /// <p>The pagination marker and/or limit fields are not valid.</p>
+    /// <p>The pagination marker or limit fields are not valid.</p>
     InvalidArgument(String),
     /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
@@ -3888,9 +3946,9 @@ impl Error for DescribeDocumentVersionsError {
 pub enum DescribeFolderContentsError {
     /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
-    /// <p>The pagination marker and/or limit fields are not valid.</p>
+    /// <p>The pagination marker or limit fields are not valid.</p>
     InvalidArgument(String),
     /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
@@ -3995,6 +4053,102 @@ impl Error for DescribeFolderContentsError {
         }
     }
 }
+/// Errors returned by DescribeGroups
+#[derive(Debug, PartialEq)]
+pub enum DescribeGroupsError {
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
+    FailedDependency(String),
+    /// <p>One or more of the dependencies is unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The operation is not permitted.</p>
+    UnauthorizedOperation(String),
+    /// <p>The caller does not have access to perform the action on the resource.</p>
+    UnauthorizedResourceAccess(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeGroupsError {
+    pub fn from_body(body: &str) -> DescribeGroupsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "FailedDependencyException" => {
+                        DescribeGroupsError::FailedDependency(String::from(error_message))
+                    }
+                    "ServiceUnavailableException" => {
+                        DescribeGroupsError::ServiceUnavailable(String::from(error_message))
+                    }
+                    "UnauthorizedOperationException" => {
+                        DescribeGroupsError::UnauthorizedOperation(String::from(error_message))
+                    }
+                    "UnauthorizedResourceAccessException" => {
+                        DescribeGroupsError::UnauthorizedResourceAccess(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DescribeGroupsError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeGroupsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeGroupsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeGroupsError {
+    fn from(err: serde_json::error::Error) -> DescribeGroupsError {
+        DescribeGroupsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeGroupsError {
+    fn from(err: CredentialsError) -> DescribeGroupsError {
+        DescribeGroupsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeGroupsError {
+    fn from(err: HttpDispatchError) -> DescribeGroupsError {
+        DescribeGroupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeGroupsError {
+    fn from(err: io::Error) -> DescribeGroupsError {
+        DescribeGroupsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeGroupsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeGroupsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeGroupsError::FailedDependency(ref cause) => cause,
+            DescribeGroupsError::ServiceUnavailable(ref cause) => cause,
+            DescribeGroupsError::UnauthorizedOperation(ref cause) => cause,
+            DescribeGroupsError::UnauthorizedResourceAccess(ref cause) => cause,
+            DescribeGroupsError::Validation(ref cause) => cause,
+            DescribeGroupsError::Credentials(ref err) => err.description(),
+            DescribeGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DescribeGroupsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeNotificationSubscriptions
 #[derive(Debug, PartialEq)]
 pub enum DescribeNotificationSubscriptionsError {
@@ -4096,7 +4250,7 @@ impl Error for DescribeNotificationSubscriptionsError {
 /// Errors returned by DescribeResourcePermissions
 #[derive(Debug, PartialEq)]
 pub enum DescribeResourcePermissionsError {
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
     /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
@@ -4202,9 +4356,9 @@ impl Error for DescribeResourcePermissionsError {
 /// Errors returned by DescribeRootFolders
 #[derive(Debug, PartialEq)]
 pub enum DescribeRootFoldersError {
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
-    /// <p>The pagination marker and/or limit fields are not valid.</p>
+    /// <p>The pagination marker or limit fields are not valid.</p>
     InvalidArgument(String),
     /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
@@ -4308,9 +4462,9 @@ impl Error for DescribeRootFoldersError {
 /// Errors returned by DescribeUsers
 #[derive(Debug, PartialEq)]
 pub enum DescribeUsersError {
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
-    /// <p>The pagination marker and/or limit fields are not valid.</p>
+    /// <p>The pagination marker or limit fields are not valid.</p>
     InvalidArgument(String),
     /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
@@ -4412,7 +4566,7 @@ impl Error for DescribeUsersError {
 pub enum GetCurrentUserError {
     /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
     /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
@@ -4514,10 +4668,12 @@ impl Error for GetCurrentUserError {
 pub enum GetDocumentError {
     /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
-    /// <p>The pagination marker and/or limit fields are not valid.</p>
+    /// <p>The pagination marker or limit fields are not valid.</p>
     InvalidArgument(String),
+    /// <p>The password is invalid.</p>
+    InvalidPassword(String),
     /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
     /// <p>The operation is not permitted.</p>
@@ -4555,6 +4711,9 @@ impl GetDocumentError {
                     }
                     "InvalidArgumentException" => {
                         GetDocumentError::InvalidArgument(String::from(error_message))
+                    }
+                    "InvalidPasswordException" => {
+                        GetDocumentError::InvalidPassword(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         GetDocumentError::ServiceUnavailable(String::from(error_message))
@@ -4607,6 +4766,7 @@ impl Error for GetDocumentError {
             GetDocumentError::EntityNotExists(ref cause) => cause,
             GetDocumentError::FailedDependency(ref cause) => cause,
             GetDocumentError::InvalidArgument(ref cause) => cause,
+            GetDocumentError::InvalidPassword(ref cause) => cause,
             GetDocumentError::ServiceUnavailable(ref cause) => cause,
             GetDocumentError::UnauthorizedOperation(ref cause) => cause,
             GetDocumentError::UnauthorizedResourceAccess(ref cause) => cause,
@@ -4622,7 +4782,7 @@ impl Error for GetDocumentError {
 pub enum GetDocumentPathError {
     /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
     /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
@@ -4726,8 +4886,10 @@ impl Error for GetDocumentPathError {
 pub enum GetDocumentVersionError {
     /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
+    /// <p>The password is invalid.</p>
+    InvalidPassword(String),
     /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
     /// <p>One or more of the dependencies is unavailable.</p>
@@ -4764,6 +4926,9 @@ impl GetDocumentVersionError {
                     }
                     "FailedDependencyException" => {
                         GetDocumentVersionError::FailedDependency(String::from(error_message))
+                    }
+                    "InvalidPasswordException" => {
+                        GetDocumentVersionError::InvalidPassword(String::from(error_message))
                     }
                     "ProhibitedStateException" => {
                         GetDocumentVersionError::ProhibitedState(String::from(error_message))
@@ -4820,6 +4985,7 @@ impl Error for GetDocumentVersionError {
         match *self {
             GetDocumentVersionError::EntityNotExists(ref cause) => cause,
             GetDocumentVersionError::FailedDependency(ref cause) => cause,
+            GetDocumentVersionError::InvalidPassword(ref cause) => cause,
             GetDocumentVersionError::ProhibitedState(ref cause) => cause,
             GetDocumentVersionError::ServiceUnavailable(ref cause) => cause,
             GetDocumentVersionError::UnauthorizedOperation(ref cause) => cause,
@@ -4838,9 +5004,9 @@ impl Error for GetDocumentVersionError {
 pub enum GetFolderError {
     /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
-    /// <p>The pagination marker and/or limit fields are not valid.</p>
+    /// <p>The pagination marker or limit fields are not valid.</p>
     InvalidArgument(String),
     /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
@@ -4950,7 +5116,7 @@ impl Error for GetFolderError {
 pub enum GetFolderPathError {
     /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
     /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
@@ -5056,7 +5222,7 @@ pub enum InitiateDocumentVersionUploadError {
     EntityAlreadyExists(String),
     /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
     /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
@@ -5212,7 +5378,7 @@ impl Error for InitiateDocumentVersionUploadError {
 /// Errors returned by RemoveAllResourcePermissions
 #[derive(Debug, PartialEq)]
 pub enum RemoveAllResourcePermissionsError {
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
     /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
@@ -5318,7 +5484,7 @@ impl Error for RemoveAllResourcePermissionsError {
 /// Errors returned by RemoveResourcePermission
 #[derive(Debug, PartialEq)]
 pub enum RemoveResourcePermissionError {
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
     /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
@@ -5428,7 +5594,7 @@ pub enum UpdateDocumentError {
     EntityAlreadyExists(String),
     /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
     /// <p>The maximum of 100,000 folders under the parent folder has been exceeded.</p>
     LimitExceeded(String),
@@ -5552,7 +5718,7 @@ pub enum UpdateDocumentVersionError {
     ConcurrentModification(String),
     /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
     /// <p>The operation is invalid.</p>
     InvalidOperation(String),
@@ -5682,7 +5848,7 @@ pub enum UpdateFolderError {
     EntityAlreadyExists(String),
     /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
     /// <p>The maximum of 100,000 folders under the parent folder has been exceeded.</p>
     LimitExceeded(String),
@@ -5806,10 +5972,12 @@ pub enum UpdateUserError {
     DeactivatingLastSystemUser(String),
     /// <p>The resource does not exist.</p>
     EntityNotExists(String),
-    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected active directory.</p>
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
     /// <p>The user is undergoing transfer of ownership.</p>
     IllegalUserState(String),
+    /// <p>The pagination marker or limit fields are not valid.</p>
+    InvalidArgument(String),
     /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
     /// <p>The operation is not permitted.</p>
@@ -5850,6 +6018,9 @@ impl UpdateUserError {
                     }
                     "IllegalUserStateException" => {
                         UpdateUserError::IllegalUserState(String::from(error_message))
+                    }
+                    "InvalidArgumentException" => {
+                        UpdateUserError::InvalidArgument(String::from(error_message))
                     }
                     "ServiceUnavailableException" => {
                         UpdateUserError::ServiceUnavailable(String::from(error_message))
@@ -5901,6 +6072,7 @@ impl Error for UpdateUserError {
             UpdateUserError::EntityNotExists(ref cause) => cause,
             UpdateUserError::FailedDependency(ref cause) => cause,
             UpdateUserError::IllegalUserState(ref cause) => cause,
+            UpdateUserError::InvalidArgument(ref cause) => cause,
             UpdateUserError::ServiceUnavailable(ref cause) => cause,
             UpdateUserError::UnauthorizedOperation(ref cause) => cause,
             UpdateUserError::UnauthorizedResourceAccess(ref cause) => cause,
@@ -6028,6 +6200,12 @@ pub trait Workdocs {
         input: &DescribeFolderContentsRequest,
     ) -> Result<DescribeFolderContentsResponse, DescribeFolderContentsError>;
 
+    /// <p>Describes the groups specified by query.</p>
+    fn describe_groups(
+        &self,
+        input: &DescribeGroupsRequest,
+    ) -> Result<DescribeGroupsResponse, DescribeGroupsError>;
+
     /// <p>Lists the specified notification subscriptions.</p>
     fn describe_notification_subscriptions(
         &self,
@@ -6040,7 +6218,7 @@ pub trait Workdocs {
         input: &DescribeResourcePermissionsRequest,
     ) -> Result<DescribeResourcePermissionsResponse, DescribeResourcePermissionsError>;
 
-    /// <p>Describes the current user's special folders; the <code>RootFolder</code> and the <code>RecyleBin</code>. <code>RootFolder</code> is the root of user's files and folders and <code>RecyleBin</code> is the root of recycled items. This is not a valid action for SigV4 (administrative API) clients.</p>
+    /// <p>Describes the current user's special folders; the <code>RootFolder</code> and the <code>RecycleBin</code>. <code>RootFolder</code> is the root of user's files and folders and <code>RecycleBin</code> is the root of recycled items. This is not a valid action for SigV4 (administrative API) clients.</p>
     fn describe_root_folders(
         &self,
         input: &DescribeRootFoldersRequest,
@@ -7151,6 +7329,60 @@ where
         }
     }
 
+    /// <p>Describes the groups specified by query.</p>
+    fn describe_groups(
+        &self,
+        input: &DescribeGroupsRequest,
+    ) -> Result<DescribeGroupsResponse, DescribeGroupsError> {
+        let request_uri = "/api/v1/groups";
+
+        let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        if let Some(ref authentication_token) = input.authentication_token {
+            request.add_header("Authentication", &authentication_token.to_string());
+        }
+        let mut params = Params::new();
+        if let Some(ref x) = input.limit {
+            params.put("limit", x);
+        }
+        if let Some(ref x) = input.marker {
+            params.put("marker", x);
+        }
+        if let Some(ref x) = input.organization_id {
+            params.put("organizationId", x);
+        }
+        params.put("searchQuery", &input.search_query);
+        request.set_params(params);
+
+        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
+        let mut response = self.dispatcher.dispatch(&request)?;
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body == b"{}" {
+                    body = b"null".to_vec();
+                }
+
+                debug!("Response body: {:?}", body);
+                debug!("Response status: {}", response.status);
+                let result = serde_json::from_slice::<DescribeGroupsResponse>(&body).unwrap();
+
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeGroupsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Lists the specified notification subscriptions.</p>
     fn describe_notification_subscriptions(
         &self,
@@ -7227,6 +7459,9 @@ where
         if let Some(ref x) = input.marker {
             params.put("marker", x);
         }
+        if let Some(ref x) = input.principal_id {
+            params.put("principalId", x);
+        }
         request.set_params(params);
 
         request.sign_with_plus(&self.credentials_provider.credentials()?, true);
@@ -7258,7 +7493,7 @@ where
         }
     }
 
-    /// <p>Describes the current user's special folders; the <code>RootFolder</code> and the <code>RecyleBin</code>. <code>RootFolder</code> is the root of user's files and folders and <code>RecyleBin</code> is the root of recycled items. This is not a valid action for SigV4 (administrative API) clients.</p>
+    /// <p>Describes the current user's special folders; the <code>RootFolder</code> and the <code>RecycleBin</code>. <code>RootFolder</code> is the root of user's files and folders and <code>RecycleBin</code> is the root of recycled items. This is not a valid action for SigV4 (administrative API) clients.</p>
     fn describe_root_folders(
         &self,
         input: &DescribeRootFoldersRequest,

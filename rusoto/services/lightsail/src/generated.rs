@@ -43,6 +43,63 @@ pub struct AllocateStaticIpResult {
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct AttachDiskRequest {
+    /// <p>The unique Lightsail disk name (e.g., <code>my-disk</code>).</p>
+    #[serde(rename = "diskName")]
+    pub disk_name: String,
+    /// <p>The disk path to expose to the instance (e.g., <code>/dev/xvdf</code>).</p>
+    #[serde(rename = "diskPath")]
+    pub disk_path: String,
+    /// <p>The name of the Lightsail instance where you want to utilize the storage disk.</p>
+    #[serde(rename = "instanceName")]
+    pub instance_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct AttachDiskResult {
+    /// <p>An object describing the API operations.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct AttachInstancesToLoadBalancerRequest {
+    /// <p>An array of strings representing the instance name(s) you want to attach to your load balancer.</p>
+    #[serde(rename = "instanceNames")]
+    pub instance_names: Vec<String>,
+    /// <p>The name of the load balancer.</p>
+    #[serde(rename = "loadBalancerName")]
+    pub load_balancer_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct AttachInstancesToLoadBalancerResult {
+    /// <p>An object representing the API operations.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct AttachLoadBalancerTlsCertificateRequest {
+    /// <p>The name of your TLS/SSL certificate.</p>
+    #[serde(rename = "certificateName")]
+    pub certificate_name: String,
+    /// <p>The name of the load balancer to which you want to associate the TLS/SSL certificate.</p>
+    #[serde(rename = "loadBalancerName")]
+    pub load_balancer_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct AttachLoadBalancerTlsCertificateResult {
+    /// <p>An object representing the API operations.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AttachStaticIpRequest {
     /// <p>The instance name to which you want to attach the static IP address.</p>
     #[serde(rename = "instanceName")]
@@ -67,7 +124,7 @@ pub struct AvailabilityZone {
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
-    /// <p>The name of the Availability Zone. The format is <code>us-east-1a</code> (case-sensitive).</p>
+    /// <p>The name of the Availability Zone. The format is <code>us-east-2a</code> (case-sensitive).</p>
     #[serde(rename = "zoneName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub zone_name: Option<String>,
@@ -96,7 +153,7 @@ pub struct Blueprint {
     #[serde(rename = "licenseUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub license_url: Option<String>,
-    /// <p>The minimum machine size required to run this blueprint. <code>0</code> indicates that the blueprint runs on all instances.</p>
+    /// <p>The minimum bundle power required to run this blueprint. For example, you need a bundle with a power value of 500 or more to create an instance that uses a blueprint with a minimum power value of 500. <code>0</code> indicates that the blueprint runs on all instance sizes. </p>
     #[serde(rename = "minPower")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub min_power: Option<i64>,
@@ -104,6 +161,10 @@ pub struct Blueprint {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The operating system platform (either Linux/Unix-based or Windows Server-based) of the blueprint.</p>
+    #[serde(rename = "platform")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub platform: Option<String>,
     /// <p>The product URL to learn more about the image or blueprint.</p>
     #[serde(rename = "productUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -149,7 +210,7 @@ pub struct Bundle {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The power of the bundle (e.g., <code>500</code>).</p>
+    /// <p>A numeric value that represents the power of the bundle (e.g., <code>500</code>). You can use the bundle's power value in conjunction with a blueprint's minimum power value to determine whether the blueprint will run on the bundle. For example, you need a bundle with a power value of 500 or more to create an instance that uses a blueprint with a minimum power value of 500.</p>
     #[serde(rename = "power")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub power: Option<i64>,
@@ -161,6 +222,10 @@ pub struct Bundle {
     #[serde(rename = "ramSizeInGb")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ram_size_in_gb: Option<f32>,
+    /// <p>The operating system platform (Linux/Unix-based or Windows Server-based) that the bundle supports. You can only launch a <code>WINDOWS</code> bundle on a blueprint that supports the <code>WINDOWS</code> platform. <code>LINUX_UNIX</code> blueprints require a <code>LINUX_UNIX</code> bundle.</p>
+    #[serde(rename = "supportedPlatforms")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub supported_platforms: Option<Vec<String>>,
     /// <p>The data transfer rate per month in GB (e.g., <code>2000</code>).</p>
     #[serde(rename = "transferPerMonthInGb")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -183,6 +248,69 @@ pub struct CloseInstancePublicPortsResult {
     #[serde(rename = "operation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operation: Option<Operation>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateDiskFromSnapshotRequest {
+    /// <p>The Availability Zone where you want to create the disk (e.g., <code>us-east-2a</code>). Choose the same Availability Zone as the Lightsail instance where you want to create the disk.</p> <p>Use the GetRegions operation to list the Availability Zones where Lightsail is currently available.</p>
+    #[serde(rename = "availabilityZone")]
+    pub availability_zone: String,
+    /// <p>The unique Lightsail disk name (e.g., <code>my-disk</code>).</p>
+    #[serde(rename = "diskName")]
+    pub disk_name: String,
+    /// <p>The name of the disk snapshot (e.g., <code>my-snapshot</code>) from which to create the new storage disk.</p>
+    #[serde(rename = "diskSnapshotName")]
+    pub disk_snapshot_name: String,
+    /// <p>The size of the disk in GB (e.g., <code>32</code>).</p>
+    #[serde(rename = "sizeInGb")]
+    pub size_in_gb: i64,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CreateDiskFromSnapshotResult {
+    /// <p>An object describing the API operations.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateDiskRequest {
+    /// <p>The Availability Zone where you want to create the disk (e.g., <code>us-east-2a</code>). Choose the same Availability Zone as the Lightsail instance where you want to create the disk.</p> <p>Use the GetRegions operation to list the Availability Zones where Lightsail is currently available.</p>
+    #[serde(rename = "availabilityZone")]
+    pub availability_zone: String,
+    /// <p>The unique Lightsail disk name (e.g., <code>my-disk</code>).</p>
+    #[serde(rename = "diskName")]
+    pub disk_name: String,
+    /// <p>The size of the disk in GB (e.g., <code>32</code>).</p>
+    #[serde(rename = "sizeInGb")]
+    pub size_in_gb: i64,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CreateDiskResult {
+    /// <p>An object describing the API operations.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateDiskSnapshotRequest {
+    /// <p>The unique name of the source disk (e.g., <code>my-source-disk</code>).</p>
+    #[serde(rename = "diskName")]
+    pub disk_name: String,
+    /// <p>The name of the destination disk snapshot (e.g., <code>my-disk-snapshot</code>) based on the source disk.</p>
+    #[serde(rename = "diskSnapshotName")]
+    pub disk_snapshot_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CreateDiskSnapshotResult {
+    /// <p>An object describing the API operations.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
@@ -238,7 +366,11 @@ pub struct CreateInstanceSnapshotResult {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateInstancesFromSnapshotRequest {
-    /// <p>The Availability Zone where you want to create your instances. Use the following formatting: <code>us-east-1a</code> (case sensitive). You can get a list of availability zones by using the <a href="http://docs.aws.amazon.com/lightsail/2016-11-28/api-reference/API_GetRegions.html">get regions</a> operation. Be sure to add the <code>include availability zones</code> parameter to your request.</p>
+    /// <p>An object containing information about one or more disk mappings.</p>
+    #[serde(rename = "attachedDiskMapping")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attached_disk_mapping: Option<::std::collections::HashMap<String, Vec<DiskMap>>>,
+    /// <p>The Availability Zone where you want to create your instances. Use the following formatting: <code>us-east-2a</code> (case sensitive). You can get a list of availability zones by using the <a href="http://docs.aws.amazon.com/lightsail/2016-11-28/api-reference/API_GetRegions.html">get regions</a> operation. Be sure to add the <code>include availability zones</code> parameter to your request.</p>
     #[serde(rename = "availabilityZone")]
     pub availability_zone: String,
     /// <p>The bundle of specification information for your virtual private server (or <i>instance</i>), including the pricing plan (e.g., <code>micro_1_0</code>).</p>
@@ -254,7 +386,7 @@ pub struct CreateInstancesFromSnapshotRequest {
     #[serde(rename = "keyPairName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_pair_name: Option<String>,
-    /// <p><p>You can create a launch script that configures a server with additional user data. For example, <code>apt-get –y update</code>.</p> <note> <p>Depending on the machine image you choose, the command to get software on your instance varies. Amazon Linux and CentOS use <code>yum</code>, Debian and Ubuntu use <code>apt-get</code>, and FreeBSD uses <code>pkg</code>. For a complete list, see the <a href="http://lightsail.aws.amazon.com/ls/docs/getting-started/articles/pre-installed-apps">Dev Guide</a>.</p> </note></p>
+    /// <p><p>You can create a launch script that configures a server with additional user data. For example, <code>apt-get -y update</code>.</p> <note> <p>Depending on the machine image you choose, the command to get software on your instance varies. Amazon Linux and CentOS use <code>yum</code>, Debian and Ubuntu use <code>apt-get</code>, and FreeBSD uses <code>pkg</code>. For a complete list, see the <a href="http://lightsail.aws.amazon.com/ls/docs/getting-started/articles/pre-installed-apps">Dev Guide</a>.</p> </note></p>
     #[serde(rename = "userData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_data: Option<String>,
@@ -270,7 +402,7 @@ pub struct CreateInstancesFromSnapshotResult {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateInstancesRequest {
-    /// <p>The Availability Zone in which to create your instance. Use the following format: <code>us-east-1a</code> (case sensitive). You can get a list of availability zones by using the <a href="http://docs.aws.amazon.com/lightsail/2016-11-28/api-reference/API_GetRegions.html">get regions</a> operation. Be sure to add the <code>include availability zones</code> parameter to your request.</p>
+    /// <p>The Availability Zone in which to create your instance. Use the following format: <code>us-east-2a</code> (case sensitive). You can get a list of availability zones by using the <a href="http://docs.aws.amazon.com/lightsail/2016-11-28/api-reference/API_GetRegions.html">get regions</a> operation. Be sure to add the <code>include availability zones</code> parameter to your request.</p>
     #[serde(rename = "availabilityZone")]
     pub availability_zone: String,
     /// <p>The ID for a virtual private server image (e.g., <code>app_wordpress_4_4</code> or <code>app_lamp_7_0</code>). Use the get blueprints operation to return a list of available images (or <i>blueprints</i>).</p>
@@ -286,7 +418,7 @@ pub struct CreateInstancesRequest {
     #[serde(rename = "keyPairName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_pair_name: Option<String>,
-    /// <p><p>A launch script you can create that configures a server with additional user data. For example, you might want to run <code>apt-get –y update</code>.</p> <note> <p>Depending on the machine image you choose, the command to get software on your instance varies. Amazon Linux and CentOS use <code>yum</code>, Debian and Ubuntu use <code>apt-get</code>, and FreeBSD uses <code>pkg</code>. For a complete list, see the <a href="http://lightsail.aws.amazon.com/ls/docs/getting-started/articles/pre-installed-apps">Dev Guide</a>.</p> </note></p>
+    /// <p><p>A launch script you can create that configures a server with additional user data. For example, you might want to run <code>apt-get -y update</code>.</p> <note> <p>Depending on the machine image you choose, the command to get software on your instance varies. Amazon Linux and CentOS use <code>yum</code>, Debian and Ubuntu use <code>apt-get</code>, and FreeBSD uses <code>pkg</code>. For a complete list, see the <a href="https://lightsail.aws.amazon.com/ls/docs/getting-started/article/compare-options-choose-lightsail-instance-image">Dev Guide</a>.</p> </note></p>
     #[serde(rename = "userData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_data: Option<String>,
@@ -325,6 +457,95 @@ pub struct CreateKeyPairResult {
     #[serde(rename = "publicKeyBase64")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub public_key_base_64: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateLoadBalancerRequest {
+    /// <p>The alternative domain names to use with your TLS/SSL certificate (e.g., <code>www.example.com</code>, <code>www.ejemplo.com</code>, <code>ejemplo.com</code>).</p>
+    #[serde(rename = "certificateAlternativeNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_alternative_names: Option<Vec<String>>,
+    /// <p>The domain name with which your certificate is associated (e.g., <code>example.com</code>).</p> <p>If you specify <code>certificateDomainName</code>, then <code>certificateName</code> is required (and vice-versa).</p>
+    #[serde(rename = "certificateDomainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_domain_name: Option<String>,
+    /// <p>The name of the TLS/SSL certificate.</p> <p>If you specify <code>certificateName</code>, then <code>certificateDomainName</code> is required (and vice-versa).</p>
+    #[serde(rename = "certificateName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_name: Option<String>,
+    /// <p>The path you provided to perform the load balancer health check. If you didn't specify a health check path, Lightsail uses the root path of your website (e.g., <code>"/"</code>).</p>
+    #[serde(rename = "healthCheckPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub health_check_path: Option<String>,
+    /// <p>The instance port where you're creating your load balancer.</p>
+    #[serde(rename = "instancePort")]
+    pub instance_port: i64,
+    /// <p>The name of your load balancer.</p>
+    #[serde(rename = "loadBalancerName")]
+    pub load_balancer_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CreateLoadBalancerResult {
+    /// <p>An object containing information about the API operations.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateLoadBalancerTlsCertificateRequest {
+    /// <p>An array of strings listing alternative domain names for your TLS/SSL certificate.</p>
+    #[serde(rename = "certificateAlternativeNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_alternative_names: Option<Vec<String>>,
+    /// <p>The domain name (e.g., <code>example.com</code>) for your TLS/SSL certificate.</p>
+    #[serde(rename = "certificateDomainName")]
+    pub certificate_domain_name: String,
+    /// <p>The TLS/SSL certificate name.</p>
+    #[serde(rename = "certificateName")]
+    pub certificate_name: String,
+    /// <p>The load balancer name where you want to create the TLS/SSL certificate.</p>
+    #[serde(rename = "loadBalancerName")]
+    pub load_balancer_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CreateLoadBalancerTlsCertificateResult {
+    /// <p>An object containing information about the API operations.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteDiskRequest {
+    /// <p>The unique name of the disk you want to delete (e.g., <code>my-disk</code>).</p>
+    #[serde(rename = "diskName")]
+    pub disk_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteDiskResult {
+    /// <p>An object describing the API operations.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteDiskSnapshotRequest {
+    /// <p>The name of the disk snapshot you want to delete (e.g., <code>my-disk-snapshot</code>).</p>
+    #[serde(rename = "diskSnapshotName")]
+    pub disk_snapshot_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteDiskSnapshotResult {
+    /// <p>An object describing the API operations.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
@@ -406,6 +627,76 @@ pub struct DeleteKeyPairResult {
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteLoadBalancerRequest {
+    /// <p>The name of the load balancer you want to delete.</p>
+    #[serde(rename = "loadBalancerName")]
+    pub load_balancer_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteLoadBalancerResult {
+    /// <p>An object describing the API operations.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteLoadBalancerTlsCertificateRequest {
+    /// <p>The TLS/SSL certificate name.</p>
+    #[serde(rename = "certificateName")]
+    pub certificate_name: String,
+    /// <p>When <code>true</code>, forces the deletion of a TLS/SSL certificate.</p>
+    #[serde(rename = "force")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub force: Option<bool>,
+    /// <p>The load balancer name.</p>
+    #[serde(rename = "loadBalancerName")]
+    pub load_balancer_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteLoadBalancerTlsCertificateResult {
+    /// <p>An object describing the API operations.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DetachDiskRequest {
+    /// <p>The unique name of the disk you want to detach from your instance (e.g., <code>my-disk</code>).</p>
+    #[serde(rename = "diskName")]
+    pub disk_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DetachDiskResult {
+    /// <p>An object describing the API operations.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DetachInstancesFromLoadBalancerRequest {
+    /// <p>An array of strings containing the names of the instances you want to detach from the load balancer.</p>
+    #[serde(rename = "instanceNames")]
+    pub instance_names: Vec<String>,
+    /// <p>The name of the Lightsail load balancer.</p>
+    #[serde(rename = "loadBalancerName")]
+    pub load_balancer_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DetachInstancesFromLoadBalancerResult {
+    /// <p>An object describing the API operations.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DetachStaticIpRequest {
     /// <p>The name of the static IP to detach from the instance.</p>
     #[serde(rename = "staticIpName")]
@@ -420,7 +711,7 @@ pub struct DetachStaticIpResult {
     pub operations: Option<Vec<Operation>>,
 }
 
-/// <p>Describes the hard disk (an SSD).</p>
+/// <p>Describes a system disk or an block storage disk.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Disk {
     /// <p>The Amazon Resource Name (ARN) of the disk.</p>
@@ -431,18 +722,10 @@ pub struct Disk {
     #[serde(rename = "attachedTo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attached_to: Option<String>,
-    /// <p>The attachment state of the disk.</p>
-    #[serde(rename = "attachmentState")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub attachment_state: Option<String>,
     /// <p>The date when the disk was created.</p>
     #[serde(rename = "createdAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<f64>,
-    /// <p>The number of GB in use by the disk.</p>
-    #[serde(rename = "gbInUse")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub gb_in_use: Option<i64>,
     /// <p>The input/output operations per second (IOPS) of the disk.</p>
     #[serde(rename = "iops")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -455,11 +738,11 @@ pub struct Disk {
     #[serde(rename = "isSystemDisk")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_system_disk: Option<bool>,
-    /// <p>The region and Availability Zone where the disk is located.</p>
+    /// <p>The AWS Region and Availability Zone where the disk is located.</p>
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<ResourceLocation>,
-    /// <p>The name of the disk.</p>
+    /// <p>The unique name of the disk.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -467,7 +750,7 @@ pub struct Disk {
     #[serde(rename = "path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub path: Option<String>,
-    /// <p>The resource type of the disk. </p>
+    /// <p>The Lightsail resource type (e.g., <code>Disk</code>).</p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
@@ -475,6 +758,72 @@ pub struct Disk {
     #[serde(rename = "sizeInGb")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub size_in_gb: Option<i64>,
+    /// <p>Describes the status of the disk.</p>
+    #[serde(rename = "state")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// <p>The support code. Include this code in your email to support when you have questions about an instance or another resource in Lightsail. This code enables our support team to look up your Lightsail information more easily.</p>
+    #[serde(rename = "supportCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub support_code: Option<String>,
+}
+
+/// <p>Describes a block storage disk mapping.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DiskMap {
+    /// <p>The new disk name (e.g., <code>my-new-disk</code>).</p>
+    #[serde(rename = "newDiskName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub new_disk_name: Option<String>,
+    /// <p>The original disk path exposed to the instance (for example, <code>/dev/sdh</code>).</p>
+    #[serde(rename = "originalDiskPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub original_disk_path: Option<String>,
+}
+
+/// <p>Describes a block storage disk snapshot.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DiskSnapshot {
+    /// <p>The Amazon Resource Name (ARN) of the disk snapshot.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The date when the disk snapshot was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) of the source disk from which you are creating the disk snapshot.</p>
+    #[serde(rename = "fromDiskArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub from_disk_arn: Option<String>,
+    /// <p>The unique name of the source disk from which you are creating the disk snapshot.</p>
+    #[serde(rename = "fromDiskName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub from_disk_name: Option<String>,
+    /// <p>The AWS Region and Availability Zone where the disk snapshot was created.</p>
+    #[serde(rename = "location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location: Option<ResourceLocation>,
+    /// <p>The name of the disk snapshot (e.g., <code>my-disk-snapshot</code>).</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The progress of the disk snapshot operation.</p>
+    #[serde(rename = "progress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub progress: Option<String>,
+    /// <p>The Lightsail resource type (e.g., <code>DiskSnapshot</code>).</p>
+    #[serde(rename = "resourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+    /// <p>The size of the disk in GB.</p>
+    #[serde(rename = "sizeInGb")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub size_in_gb: Option<i64>,
+    /// <p>The status of the disk snapshot operation.</p>
+    #[serde(rename = "state")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
     /// <p>The support code. Include this code in your email to support when you have questions about an instance or another resource in Lightsail. This code enables our support team to look up your Lightsail information more easily.</p>
     #[serde(rename = "supportCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -521,14 +870,14 @@ pub struct DomainEntry {
     #[serde(rename = "id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// <p>When <code>true</code>, specifies whether the domain entry is an alias used by the Lightsail load balancer.</p>
+    #[serde(rename = "isAlias")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_alias: Option<bool>,
     /// <p>The name of the domain.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The options for the domain entry.</p>
-    #[serde(rename = "options")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub options: Option<::std::collections::HashMap<String, String>>,
     /// <p>The target AWS name server (e.g., <code>ns-111.awsdns-22.com.</code>).</p>
     #[serde(rename = "target")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -623,6 +972,76 @@ pub struct GetBundlesResult {
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct GetDiskRequest {
+    /// <p>The name of the disk (e.g., <code>my-disk</code>).</p>
+    #[serde(rename = "diskName")]
+    pub disk_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetDiskResult {
+    /// <p>An object containing information about the disk.</p>
+    #[serde(rename = "disk")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disk: Option<Disk>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetDiskSnapshotRequest {
+    /// <p>The name of the disk snapshot (e.g., <code>my-disk-snapshot</code>).</p>
+    #[serde(rename = "diskSnapshotName")]
+    pub disk_snapshot_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetDiskSnapshotResult {
+    /// <p>An object containing information about the disk snapshot.</p>
+    #[serde(rename = "diskSnapshot")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disk_snapshot: Option<DiskSnapshot>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetDiskSnapshotsRequest {
+    /// <p>A token used for advancing to the next page of results from your GetDiskSnapshots request.</p>
+    #[serde(rename = "pageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetDiskSnapshotsResult {
+    /// <p>An array of objects containing information about all block storage disk snapshots.</p>
+    #[serde(rename = "diskSnapshots")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disk_snapshots: Option<Vec<DiskSnapshot>>,
+    /// <p>A token used for advancing to the next page of results from your GetDiskSnapshots request.</p>
+    #[serde(rename = "nextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetDisksRequest {
+    /// <p>A token used for advancing to the next page of results from your GetDisks request.</p>
+    #[serde(rename = "pageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetDisksResult {
+    /// <p>An array of objects containing information about all block storage disks.</p>
+    #[serde(rename = "disks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disks: Option<Vec<Disk>>,
+    /// <p>A token used for advancing to the next page of results from your GetDisks request.</p>
+    #[serde(rename = "nextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDomainRequest {
     /// <p>The domain name for which your want to return information about.</p>
     #[serde(rename = "domainName")]
@@ -707,7 +1126,7 @@ pub struct GetInstanceMetricDataResult {
     #[serde(rename = "metricData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metric_data: Option<Vec<MetricDatapoint>>,
-    /// <p>The metric name to return data for. </p>
+    /// <p>The metric name to return data for.</p>
     #[serde(rename = "metricName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metric_name: Option<String>,
@@ -849,6 +1268,93 @@ pub struct GetKeyPairsResult {
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct GetLoadBalancerMetricDataRequest {
+    /// <p>The end time of the period.</p>
+    #[serde(rename = "endTime")]
+    pub end_time: f64,
+    /// <p>The name of the load balancer.</p>
+    #[serde(rename = "loadBalancerName")]
+    pub load_balancer_name: String,
+    /// <p><p>The metric about which you want to return information. Valid values are listed below, along with the most useful <code>statistics</code> to include in your request.</p> <ul> <li> <p> <b> <code>ClientTLSNegotiationErrorCount</code> </b> - The number of TLS connections initiated by the client that did not establish a session with the load balancer. Possible causes include a mismatch of ciphers or protocols.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> </li> <li> <p> <b> <code>HealthyHostCount</code> </b> - The number of target instances that are considered healthy.</p> <p> <code>Statistics</code>: The most useful statistic are <code>Average</code>, <code>Minimum</code>, and <code>Maximum</code>.</p> </li> <li> <p> <b> <code>UnhealthyHostCount</code> </b> - The number of target instances that are considered unhealthy.</p> <p> <code>Statistics</code>: The most useful statistic are <code>Average</code>, <code>Minimum</code>, and <code>Maximum</code>.</p> </li> <li> <p> <b> <code>HTTPCode<em>LB</em>4XX<em>Count</code> </b> - The number of HTTP 4XX client error codes that originate from the load balancer. Client errors are generated when requests are malformed or incomplete. These requests have not been received by the target instance. This count does not include any response codes generated by the target instances.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> </li> <li> <p> <b> <code>HTTPCode</em>LB<em>5XX</em>Count</code> </b> - The number of HTTP 5XX server error codes that originate from the load balancer. This count does not include any response codes generated by the target instances.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> </li> <li> <p> <b> <code>HTTPCode<em>Instance</em>2XX<em>Count</code> </b> - The number of HTTP response codes generated by the target instances. This does not include any response codes generated by the load balancer.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> </li> <li> <p> <b> <code>HTTPCode</em>Instance<em>3XX</em>Count</code> </b> - The number of HTTP response codes generated by the target instances. This does not include any response codes generated by the load balancer. </p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> </li> <li> <p> <b> <code>HTTPCode<em>Instance</em>4XX<em>Count</code> </b> - The number of HTTP response codes generated by the target instances. This does not include any response codes generated by the load balancer.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> </li> <li> <p> <b> <code>HTTPCode</em>Instance<em>5XX</em>Count</code> </b> - The number of HTTP response codes generated by the target instances. This does not include any response codes generated by the load balancer.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> </li> <li> <p> <b> <code>InstanceResponseTime</code> </b> - The time elapsed, in seconds, after the request leaves the load balancer until a response from the target instance is received.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Average</code>.</p> </li> <li> <p> <b> <code>RejectedConnectionCount</code> </b> - The number of connections that were rejected because the load balancer had reached its maximum number of connections.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> </li> <li> <p> <b> <code>RequestCount</code> </b> - The number of requests processed over IPv4. This count includes only the requests with a response generated by a target instance of the load balancer.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> </li> </ul></p>
+    #[serde(rename = "metricName")]
+    pub metric_name: String,
+    /// <p>The time period duration for your health data request.</p>
+    #[serde(rename = "period")]
+    pub period: i64,
+    /// <p>The start time of the period.</p>
+    #[serde(rename = "startTime")]
+    pub start_time: f64,
+    /// <p>An array of statistics that you want to request metrics for. Valid values are listed below.</p>
+    #[serde(rename = "statistics")]
+    pub statistics: Vec<String>,
+    /// <p>The unit for the time period request. Valid values are listed below.</p>
+    #[serde(rename = "unit")]
+    pub unit: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetLoadBalancerMetricDataResult {
+    /// <p>An array of metric datapoint objects.</p>
+    #[serde(rename = "metricData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metric_data: Option<Vec<MetricDatapoint>>,
+    /// <p>The metric about which you are receiving information. Valid values are listed below.</p>
+    #[serde(rename = "metricName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metric_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetLoadBalancerRequest {
+    /// <p>The name of the load balancer.</p>
+    #[serde(rename = "loadBalancerName")]
+    pub load_balancer_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetLoadBalancerResult {
+    /// <p>An object containing information about your load balancer.</p>
+    #[serde(rename = "loadBalancer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub load_balancer: Option<LoadBalancer>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetLoadBalancerTlsCertificatesRequest {
+    /// <p>The name of the load balancer where you stored your TLS/SSL certificate.</p>
+    #[serde(rename = "loadBalancerName")]
+    pub load_balancer_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetLoadBalancerTlsCertificatesResult {
+    /// <p>An array of LoadBalancerTlsCertificate objects describing your TLS/SSL certificates.</p>
+    #[serde(rename = "tlsCertificates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tls_certificates: Option<Vec<LoadBalancerTlsCertificate>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetLoadBalancersRequest {
+    /// <p>A token used for paginating the results from your GetLoadBalancers request.</p>
+    #[serde(rename = "pageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetLoadBalancersResult {
+    /// <p>An array of LoadBalancer objects describing your load balancers.</p>
+    #[serde(rename = "loadBalancers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub load_balancers: Option<Vec<LoadBalancer>>,
+    /// <p>A token used for advancing to the next page of results from your GetLoadBalancers request.</p>
+    #[serde(rename = "nextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct GetOperationRequest {
     /// <p>A GUID used to identify the operation.</p>
     #[serde(rename = "operationId")]
@@ -908,7 +1414,7 @@ pub struct GetOperationsResult {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetRegionsRequest {
-    /// <p>A Boolean value indicating whether to also include Availability Zones in your get regions request. Availability Zones are indicated with a letter: e.g., <code>us-east-1a</code>.</p>
+    /// <p>A Boolean value indicating whether to also include Availability Zones in your get regions request. Availability Zones are indicated with a letter: e.g., <code>us-east-2a</code>.</p>
     #[serde(rename = "includeAvailabilityZones")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_availability_zones: Option<bool>,
@@ -978,7 +1484,7 @@ pub struct ImportKeyPairResult {
 /// <p>Describes an instance (a virtual private server).</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Instance {
-    /// <p>The Amazon Resource Name (ARN) of the instance (e.g., <code>arn:aws:lightsail:us-east-1:123456789101:Instance/244ad76f-8aad-4741-809f-12345EXAMPLE</code>).</p>
+    /// <p>The Amazon Resource Name (ARN) of the instance (e.g., <code>arn:aws:lightsail:us-east-2:123456789101:Instance/244ad76f-8aad-4741-809f-12345EXAMPLE</code>).</p>
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
@@ -1014,7 +1520,7 @@ pub struct Instance {
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<ResourceLocation>,
-    /// <p>The name the user gave the instance (e.g., <code>Amazon_Linux-1GB-Virginia-1</code>).</p>
+    /// <p>The name the user gave the instance (e.g., <code>Amazon_Linux-1GB-Ohio-1</code>).</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -1071,10 +1577,14 @@ pub struct InstanceAccessDetails {
     #[serde(rename = "ipAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_address: Option<String>,
-    /// <p>For RDP access, the temporary password of the Amazon EC2 instance.</p>
+    /// <p><p>For RDP access, the password for your Amazon Lightsail instance. Password will be an empty string if the password for your new instance is not ready yet. When you create an instance, it can take up to 15 minutes for the instance to be ready.</p> <note> <p>If you create an instance using any key pair other than the default (<code>LightsailDefaultKeyPair</code>), <code>password</code> will always be an empty string.</p> <p>If you change the Administrator password on the instance, Lightsail will continue to return the original password value. When accessing the instance using RDP, you need to manually enter the Administrator password after changing it from the default.</p> </note></p>
     #[serde(rename = "password")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub password: Option<String>,
+    /// <p>For a Windows Server-based instance, an object with the data you can use to retrieve your password. This is only needed if <code>password</code> is empty and the instance is not new (and therefore the password is not ready yet). When you create an instance, it can take up to 15 minutes for the instance to be ready.</p>
+    #[serde(rename = "passwordData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub password_data: Option<PasswordData>,
     /// <p>For SSH access, the temporary private key. For OpenSSH clients (e.g., command line SSH), you should save this value to <code>tempkey</code>).</p>
     #[serde(rename = "privateKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1104,6 +1614,23 @@ pub struct InstanceHardware {
     #[serde(rename = "ramSizeInGb")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ram_size_in_gb: Option<f32>,
+}
+
+/// <p>Describes information about the health of the instance.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct InstanceHealthSummary {
+    /// <p>Describes the overall instance health. Valid values are below.</p>
+    #[serde(rename = "instanceHealth")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_health: Option<String>,
+    /// <p>More information about the instance health. Valid values are below.</p>
+    #[serde(rename = "instanceHealthReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_health_reason: Option<String>,
+    /// <p>The name of the Lightsail instance for which you are requesting health check data.</p>
+    #[serde(rename = "instanceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_name: Option<String>,
 }
 
 /// <p>Describes monthly data transfer rates and port information for an instance.</p>
@@ -1176,7 +1703,7 @@ pub struct InstancePortState {
 /// <p>Describes the snapshot of the virtual private server, or <i>instance</i>.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct InstanceSnapshot {
-    /// <p>The Amazon Resource Name (ARN) of the snapshot (e.g., <code>arn:aws:lightsail:us-east-1:123456789101:InstanceSnapshot/d23b5706-3322-4d83-81e5-12345EXAMPLE</code>).</p>
+    /// <p>The Amazon Resource Name (ARN) of the snapshot (e.g., <code>arn:aws:lightsail:us-east-2:123456789101:InstanceSnapshot/d23b5706-3322-4d83-81e5-12345EXAMPLE</code>).</p>
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
@@ -1184,6 +1711,10 @@ pub struct InstanceSnapshot {
     #[serde(rename = "createdAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<f64>,
+    /// <p>An array of disk objects containing information about all block storage disks.</p>
+    #[serde(rename = "fromAttachedDisks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub from_attached_disks: Option<Vec<Disk>>,
     /// <p>The blueprint ID from which you created the snapshot (e.g., <code>os_debian_8_3</code>). A blueprint is a virtual private server (or <i>instance</i>) image used to create instances quickly.</p>
     #[serde(rename = "fromBlueprintId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1192,7 +1723,7 @@ pub struct InstanceSnapshot {
     #[serde(rename = "fromBundleId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub from_bundle_id: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the instance from which the snapshot was created (e.g., <code>arn:aws:lightsail:us-east-1:123456789101:Instance/64b8404c-ccb1-430b-8daf-12345EXAMPLE</code>).</p>
+    /// <p>The Amazon Resource Name (ARN) of the instance from which the snapshot was created (e.g., <code>arn:aws:lightsail:us-east-2:123456789101:Instance/64b8404c-ccb1-430b-8daf-12345EXAMPLE</code>).</p>
     #[serde(rename = "fromInstanceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub from_instance_arn: Option<String>,
@@ -1257,7 +1788,7 @@ pub struct IsVpcPeeredResult {
 /// <p>Describes the SSH key pair.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct KeyPair {
-    /// <p>The Amazon Resource Name (ARN) of the key pair (e.g., <code>arn:aws:lightsail:us-east-1:123456789101:KeyPair/05859e3d-331d-48ba-9034-12345EXAMPLE</code>).</p>
+    /// <p>The Amazon Resource Name (ARN) of the key pair (e.g., <code>arn:aws:lightsail:us-east-2:123456789101:KeyPair/05859e3d-331d-48ba-9034-12345EXAMPLE</code>).</p>
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
@@ -1285,6 +1816,236 @@ pub struct KeyPair {
     #[serde(rename = "supportCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub support_code: Option<String>,
+}
+
+/// <p>Describes the Lightsail load balancer.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct LoadBalancer {
+    /// <p>The Amazon Resource Name (ARN) of the load balancer.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>A string to string map of the configuration options for your load balancer. Valid values are listed below.</p>
+    #[serde(rename = "configurationOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration_options: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The date when your load balancer was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>The DNS name of your Lightsail load balancer.</p>
+    #[serde(rename = "dnsName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dns_name: Option<String>,
+    /// <p>The path you specified to perform your health checks. If no path is specified, the load balancer tries to make a request to the default (root) page.</p>
+    #[serde(rename = "healthCheckPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub health_check_path: Option<String>,
+    /// <p>An array of InstanceHealthSummary objects describing the health of the load balancer.</p>
+    #[serde(rename = "instanceHealthSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_health_summary: Option<Vec<InstanceHealthSummary>>,
+    /// <p>The instance port where the load balancer is listening.</p>
+    #[serde(rename = "instancePort")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_port: Option<i64>,
+    /// <p>The AWS Region and Availability Zone where your load balancer was created (e.g., <code>us-east-2a</code>).</p>
+    #[serde(rename = "location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location: Option<ResourceLocation>,
+    /// <p>The name of the load balancer (e.g., <code>my-load-balancer</code>).</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The protocol you have enabled for your load balancer. Valid values are below.</p>
+    #[serde(rename = "protocol")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protocol: Option<String>,
+    /// <p>An array of public port settings for your load balancer.</p>
+    #[serde(rename = "publicPorts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub public_ports: Option<Vec<i64>>,
+    /// <p>The resource type (e.g., <code>LoadBalancer</code>.</p>
+    #[serde(rename = "resourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+    /// <p>The status of your load balancer. Valid values are below.</p>
+    #[serde(rename = "state")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// <p>The support code. Include this code in your email to support when you have questions about your Lightsail load balancer. This code enables our support team to look up your Lightsail information more easily.</p>
+    #[serde(rename = "supportCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub support_code: Option<String>,
+    /// <p>An array of LoadBalancerTlsCertificateSummary objects that provide additional information about the TLS/SSL certificates.</p>
+    #[serde(rename = "tlsCertificateSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tls_certificate_summaries: Option<Vec<LoadBalancerTlsCertificateSummary>>,
+}
+
+/// <p>Describes a load balancer TLS/SSL certificate.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct LoadBalancerTlsCertificate {
+    /// <p>The Amazon Resource Name (ARN) of the TLS/SSL certificate.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The time when you created your TLS/SSL certificate.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>The domain name for your TLS/SSL certificate.</p>
+    #[serde(rename = "domainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name: Option<String>,
+    /// <p>An array of LoadBalancerTlsCertificateDomainValidationRecord objects describing the records.</p>
+    #[serde(rename = "domainValidationRecords")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_validation_records: Option<Vec<LoadBalancerTlsCertificateDomainValidationRecord>>,
+    /// <p>The reason for the TLS/SSL certificate validation failure.</p>
+    #[serde(rename = "failureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>When <code>true</code>, the TLS/SSL certificate is attached to the Lightsail load balancer.</p>
+    #[serde(rename = "isAttached")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_attached: Option<bool>,
+    /// <p>The time when the TLS/SSL certificate was issued.</p>
+    #[serde(rename = "issuedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub issued_at: Option<f64>,
+    /// <p>The issuer of the certificate.</p>
+    #[serde(rename = "issuer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub issuer: Option<String>,
+    /// <p>The algorithm that was used to generate the key pair (the public and private key).</p>
+    #[serde(rename = "keyAlgorithm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key_algorithm: Option<String>,
+    /// <p>The load balancer name where your TLS/SSL certificate is attached.</p>
+    #[serde(rename = "loadBalancerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub load_balancer_name: Option<String>,
+    /// <p>The AWS Region and Availability Zone where you created your certificate.</p>
+    #[serde(rename = "location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location: Option<ResourceLocation>,
+    /// <p>The name of the TLS/SSL certificate (e.g., <code>my-certificate</code>).</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The timestamp when the TLS/SSL certificate expires.</p>
+    #[serde(rename = "notAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_after: Option<f64>,
+    /// <p>The timestamp when the TLS/SSL certificate is first valid.</p>
+    #[serde(rename = "notBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_before: Option<f64>,
+    /// <p>An object containing information about the status of Lightsail's managed renewal for the certificate.</p>
+    #[serde(rename = "renewalSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub renewal_summary: Option<LoadBalancerTlsCertificateRenewalSummary>,
+    /// <p>The resource type (e.g., <code>LoadBalancerTlsCertificate</code>.</p>
+    #[serde(rename = "resourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+    /// <p>The reason the certificate was revoked. Valid values are below.</p>
+    #[serde(rename = "revocationReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revocation_reason: Option<String>,
+    /// <p>The timestamp when the TLS/SSL certificate was revoked.</p>
+    #[serde(rename = "revokedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revoked_at: Option<f64>,
+    /// <p>The serial number of the certificate.</p>
+    #[serde(rename = "serial")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub serial: Option<String>,
+    /// <p>The algorithm that was used to sign the certificate.</p>
+    #[serde(rename = "signatureAlgorithm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub signature_algorithm: Option<String>,
+    /// <p>The status of the TLS/SSL certificate. Valid values are below.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The name of the entity that is associated with the public key contained in the certificate.</p>
+    #[serde(rename = "subject")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subject: Option<String>,
+    /// <p>One or more domain names (subject alternative names) included in the certificate. This list contains the domain names that are bound to the public key that is contained in the certificate. The subject alternative names include the canonical domain name (CN) of the certificate and additional domain names that can be used to connect to the website.</p>
+    #[serde(rename = "subjectAlternativeNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subject_alternative_names: Option<Vec<String>>,
+    /// <p>The support code. Include this code in your email to support when you have questions about your Lightsail load balancer or TLS/SSL certificate. This code enables our support team to look up your Lightsail information more easily.</p>
+    #[serde(rename = "supportCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub support_code: Option<String>,
+}
+
+/// <p>Contains information about the domain names on a TLS/SSL certificate that you will use to validate domain ownership.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct LoadBalancerTlsCertificateDomainValidationOption {
+    /// <p>A fully qualified domain name in the certificate request.</p>
+    #[serde(rename = "domainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name: Option<String>,
+    /// <p>The status of the domain validation. Valid values are listed below.</p>
+    #[serde(rename = "validationStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validation_status: Option<String>,
+}
+
+/// <p>Describes the validation record of each domain name in the TLS/SSL certificate.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct LoadBalancerTlsCertificateDomainValidationRecord {
+    /// <p>The domain name against which your TLS/SSL certificate was validated.</p>
+    #[serde(rename = "domainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name: Option<String>,
+    /// <p>A fully qualified domain name in the certificate. For example, <code>example.com</code>.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The type of validation record. For example, <code>CNAME</code> for domain validation.</p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+    /// <p>The validation status. Valid values are listed below.</p>
+    #[serde(rename = "validationStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validation_status: Option<String>,
+    /// <p>The value for that type.</p>
+    #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+
+/// <p>Contains information about the status of Lightsail's managed renewal for the certificate.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct LoadBalancerTlsCertificateRenewalSummary {
+    /// <p>Contains information about the validation of each domain name in the certificate, as it pertains to Lightsail's managed renewal. This is different from the initial validation that occurs as a result of the RequestCertificate request.</p>
+    #[serde(rename = "domainValidationOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_validation_options: Option<Vec<LoadBalancerTlsCertificateDomainValidationOption>>,
+    /// <p>The status of Lightsail's managed renewal of the certificate. Valid values are listed below.</p>
+    #[serde(rename = "renewalStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub renewal_status: Option<String>,
+}
+
+/// <p>Provides a summary of TLS/SSL certificate metadata.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct LoadBalancerTlsCertificateSummary {
+    /// <p>When <code>true</code>, the TLS/SSL certificate is attached to the Lightsail load balancer.</p>
+    #[serde(rename = "isAttached")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_attached: Option<bool>,
+    /// <p>The name of the TLS/SSL certificate.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
 }
 
 /// <p>Describes the metric data point.</p>
@@ -1374,7 +2135,7 @@ pub struct Operation {
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<ResourceLocation>,
-    /// <p>Details about the operation (e.g., <code>Debian-1GB-Virginia-1</code>).</p>
+    /// <p>Details about the operation (e.g., <code>Debian-1GB-Ohio-1</code>).</p>
     #[serde(rename = "operationDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operation_details: Option<String>,
@@ -1398,6 +2159,19 @@ pub struct Operation {
     #[serde(rename = "statusChangedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_changed_at: Option<f64>,
+}
+
+/// <p>The password data for the Windows Server-based instance, including the ciphertext and the key pair name.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct PasswordData {
+    /// <p><p>The encrypted password. Ciphertext will be an empty string if access to your new instance is not ready yet. When you create an instance, it can take up to 15 minutes for the instance to be ready.</p> <note> <p>If you use the default key pair (<code>LightsailDefaultKeyPair</code>), the decrypted password will be available in the password field.</p> <p>If you are using a custom key pair, you need to use your own means of decryption.</p> <p>If you change the Administrator password on the instance, Lightsail will continue to return the original ciphertext value. When accessing the instance using RDP, you need to manually enter the Administrator password after changing it from the default.</p> </note></p>
+    #[serde(rename = "ciphertext")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ciphertext: Option<String>,
+    /// <p>The name of the key pair that you used when creating your instance. If no key pair name was specified when creating the instance, Lightsail uses the default key pair (<code>LightsailDefaultKeyPair</code>).</p> <p>If you are using a custom key pair, you need to use your own means of decrypting your password using the <code>ciphertext</code>. Lightsail creates the ciphertext by encrypting your password with the public key part of this key pair.</p>
+    #[serde(rename = "keyPairName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key_pair_name: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
@@ -1464,7 +2238,7 @@ pub struct RebootInstanceResult {
 /// <p>Describes the AWS Region.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Region {
-    /// <p>The Availability Zones. Follows the format <code>us-east-1a</code> (case-sensitive).</p>
+    /// <p>The Availability Zones. Follows the format <code>us-east-2a</code> (case-sensitive).</p>
     #[serde(rename = "availabilityZones")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zones: Option<Vec<AvailabilityZone>>,
@@ -1476,11 +2250,11 @@ pub struct Region {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The display name (e.g., <code>Virginia</code>).</p>
+    /// <p>The display name (e.g., <code>Ohio</code>).</p>
     #[serde(rename = "displayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
-    /// <p>The region name (e.g., <code>us-east-1</code>).</p>
+    /// <p>The region name (e.g., <code>us-east-2</code>).</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -1504,7 +2278,7 @@ pub struct ReleaseStaticIpResult {
 /// <p>Describes the resource location.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ResourceLocation {
-    /// <p>The Availability Zone. Follows the format <code>us-east-1a</code> (case-sensitive).</p>
+    /// <p>The Availability Zone. Follows the format <code>us-east-2a</code> (case-sensitive).</p>
     #[serde(rename = "availabilityZone")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zone: Option<String>,
@@ -1532,11 +2306,11 @@ pub struct StartInstanceResult {
 /// <p>Describes the static IP.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct StaticIp {
-    /// <p>The Amazon Resource Name (ARN) of the static IP (e.g., <code>arn:aws:lightsail:us-east-1:123456789101:StaticIp/9cbb4a9e-f8e3-4dfe-b57e-12345EXAMPLE</code>).</p>
+    /// <p>The Amazon Resource Name (ARN) of the static IP (e.g., <code>arn:aws:lightsail:us-east-2:123456789101:StaticIp/9cbb4a9e-f8e3-4dfe-b57e-12345EXAMPLE</code>).</p>
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    /// <p>The instance where the static IP is attached (e.g., <code>Amazon_Linux-1GB-Virginia-1</code>).</p>
+    /// <p>The instance where the static IP is attached (e.g., <code>Amazon_Linux-1GB-Ohio-1</code>).</p>
     #[serde(rename = "attachedTo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attached_to: Option<String>,
@@ -1556,7 +2330,7 @@ pub struct StaticIp {
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<ResourceLocation>,
-    /// <p>The name of the static IP (e.g., <code>StaticIP-Virginia-EXAMPLE</code>).</p>
+    /// <p>The name of the static IP (e.g., <code>StaticIP-Ohio-EXAMPLE</code>).</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -1572,6 +2346,10 @@ pub struct StaticIp {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct StopInstanceRequest {
+    /// <p><p>When set to <code>True</code>, forces a Lightsail instance that is stuck in a <code>stopping</code> state to stop.</p> <important> <p>Only use the <code>force</code> parameter if your instance is stuck in the <code>stopping</code> state. In any other state, your instance should stop normally without adding this parameter to your API request.</p> </important></p>
+    #[serde(rename = "force")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub force: Option<bool>,
     /// <p>The name of the instance (a virtual private server) to stop.</p>
     #[serde(rename = "instanceName")]
     pub instance_name: String,
@@ -1609,6 +2387,27 @@ pub struct UpdateDomainEntryRequest {
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateDomainEntryResult {
     /// <p>An array of key-value pairs containing information about the request operation.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct UpdateLoadBalancerAttributeRequest {
+    /// <p>The name of the attribute you want to update. Valid values are below.</p>
+    #[serde(rename = "attributeName")]
+    pub attribute_name: String,
+    /// <p>The value that you want to specify for the attribute name.</p>
+    #[serde(rename = "attributeValue")]
+    pub attribute_value: String,
+    /// <p>The name of the load balancer that you want to modify.</p>
+    #[serde(rename = "loadBalancerName")]
+    pub load_balancer_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct UpdateLoadBalancerAttributeResult {
+    /// <p>An object describing the API operations.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -1725,6 +2524,362 @@ impl Error for AllocateStaticIpError {
             AllocateStaticIpError::Credentials(ref err) => err.description(),
             AllocateStaticIpError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             AllocateStaticIpError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by AttachDisk
+#[derive(Debug, PartialEq)]
+pub enum AttachDiskError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl AttachDiskError {
+    pub fn from_body(body: &str) -> AttachDiskError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        AttachDiskError::AccessDenied(String::from(error_message))
+                    }
+                    "AccountSetupInProgressException" => {
+                        AttachDiskError::AccountSetupInProgress(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        AttachDiskError::InvalidInput(String::from(error_message))
+                    }
+                    "NotFoundException" => AttachDiskError::NotFound(String::from(error_message)),
+                    "OperationFailureException" => {
+                        AttachDiskError::OperationFailure(String::from(error_message))
+                    }
+                    "ServiceException" => AttachDiskError::Service(String::from(error_message)),
+                    "UnauthenticatedException" => {
+                        AttachDiskError::Unauthenticated(String::from(error_message))
+                    }
+                    "ValidationException" => AttachDiskError::Validation(error_message.to_string()),
+                    _ => AttachDiskError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => AttachDiskError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for AttachDiskError {
+    fn from(err: serde_json::error::Error) -> AttachDiskError {
+        AttachDiskError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for AttachDiskError {
+    fn from(err: CredentialsError) -> AttachDiskError {
+        AttachDiskError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AttachDiskError {
+    fn from(err: HttpDispatchError) -> AttachDiskError {
+        AttachDiskError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AttachDiskError {
+    fn from(err: io::Error) -> AttachDiskError {
+        AttachDiskError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for AttachDiskError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AttachDiskError {
+    fn description(&self) -> &str {
+        match *self {
+            AttachDiskError::AccessDenied(ref cause) => cause,
+            AttachDiskError::AccountSetupInProgress(ref cause) => cause,
+            AttachDiskError::InvalidInput(ref cause) => cause,
+            AttachDiskError::NotFound(ref cause) => cause,
+            AttachDiskError::OperationFailure(ref cause) => cause,
+            AttachDiskError::Service(ref cause) => cause,
+            AttachDiskError::Unauthenticated(ref cause) => cause,
+            AttachDiskError::Validation(ref cause) => cause,
+            AttachDiskError::Credentials(ref err) => err.description(),
+            AttachDiskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            AttachDiskError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by AttachInstancesToLoadBalancer
+#[derive(Debug, PartialEq)]
+pub enum AttachInstancesToLoadBalancerError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl AttachInstancesToLoadBalancerError {
+    pub fn from_body(body: &str) -> AttachInstancesToLoadBalancerError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => AttachInstancesToLoadBalancerError::AccessDenied(
+                        String::from(error_message),
+                    ),
+                    "AccountSetupInProgressException" => {
+                        AttachInstancesToLoadBalancerError::AccountSetupInProgress(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidInputException" => AttachInstancesToLoadBalancerError::InvalidInput(
+                        String::from(error_message),
+                    ),
+                    "NotFoundException" => {
+                        AttachInstancesToLoadBalancerError::NotFound(String::from(error_message))
+                    }
+                    "OperationFailureException" => {
+                        AttachInstancesToLoadBalancerError::OperationFailure(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServiceException" => {
+                        AttachInstancesToLoadBalancerError::Service(String::from(error_message))
+                    }
+                    "UnauthenticatedException" => {
+                        AttachInstancesToLoadBalancerError::Unauthenticated(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        AttachInstancesToLoadBalancerError::Validation(error_message.to_string())
+                    }
+                    _ => AttachInstancesToLoadBalancerError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => AttachInstancesToLoadBalancerError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for AttachInstancesToLoadBalancerError {
+    fn from(err: serde_json::error::Error) -> AttachInstancesToLoadBalancerError {
+        AttachInstancesToLoadBalancerError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for AttachInstancesToLoadBalancerError {
+    fn from(err: CredentialsError) -> AttachInstancesToLoadBalancerError {
+        AttachInstancesToLoadBalancerError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AttachInstancesToLoadBalancerError {
+    fn from(err: HttpDispatchError) -> AttachInstancesToLoadBalancerError {
+        AttachInstancesToLoadBalancerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AttachInstancesToLoadBalancerError {
+    fn from(err: io::Error) -> AttachInstancesToLoadBalancerError {
+        AttachInstancesToLoadBalancerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for AttachInstancesToLoadBalancerError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AttachInstancesToLoadBalancerError {
+    fn description(&self) -> &str {
+        match *self {
+            AttachInstancesToLoadBalancerError::AccessDenied(ref cause) => cause,
+            AttachInstancesToLoadBalancerError::AccountSetupInProgress(ref cause) => cause,
+            AttachInstancesToLoadBalancerError::InvalidInput(ref cause) => cause,
+            AttachInstancesToLoadBalancerError::NotFound(ref cause) => cause,
+            AttachInstancesToLoadBalancerError::OperationFailure(ref cause) => cause,
+            AttachInstancesToLoadBalancerError::Service(ref cause) => cause,
+            AttachInstancesToLoadBalancerError::Unauthenticated(ref cause) => cause,
+            AttachInstancesToLoadBalancerError::Validation(ref cause) => cause,
+            AttachInstancesToLoadBalancerError::Credentials(ref err) => err.description(),
+            AttachInstancesToLoadBalancerError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            AttachInstancesToLoadBalancerError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by AttachLoadBalancerTlsCertificate
+#[derive(Debug, PartialEq)]
+pub enum AttachLoadBalancerTlsCertificateError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl AttachLoadBalancerTlsCertificateError {
+    pub fn from_body(body: &str) -> AttachLoadBalancerTlsCertificateError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        AttachLoadBalancerTlsCertificateError::AccessDenied(String::from(
+                            error_message,
+                        ))
+                    }
+                    "AccountSetupInProgressException" => {
+                        AttachLoadBalancerTlsCertificateError::AccountSetupInProgress(
+                            String::from(error_message),
+                        )
+                    }
+                    "InvalidInputException" => {
+                        AttachLoadBalancerTlsCertificateError::InvalidInput(String::from(
+                            error_message,
+                        ))
+                    }
+                    "NotFoundException" => {
+                        AttachLoadBalancerTlsCertificateError::NotFound(String::from(error_message))
+                    }
+                    "OperationFailureException" => {
+                        AttachLoadBalancerTlsCertificateError::OperationFailure(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServiceException" => {
+                        AttachLoadBalancerTlsCertificateError::Service(String::from(error_message))
+                    }
+                    "UnauthenticatedException" => {
+                        AttachLoadBalancerTlsCertificateError::Unauthenticated(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        AttachLoadBalancerTlsCertificateError::Validation(error_message.to_string())
+                    }
+                    _ => AttachLoadBalancerTlsCertificateError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => AttachLoadBalancerTlsCertificateError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for AttachLoadBalancerTlsCertificateError {
+    fn from(err: serde_json::error::Error) -> AttachLoadBalancerTlsCertificateError {
+        AttachLoadBalancerTlsCertificateError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for AttachLoadBalancerTlsCertificateError {
+    fn from(err: CredentialsError) -> AttachLoadBalancerTlsCertificateError {
+        AttachLoadBalancerTlsCertificateError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AttachLoadBalancerTlsCertificateError {
+    fn from(err: HttpDispatchError) -> AttachLoadBalancerTlsCertificateError {
+        AttachLoadBalancerTlsCertificateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AttachLoadBalancerTlsCertificateError {
+    fn from(err: io::Error) -> AttachLoadBalancerTlsCertificateError {
+        AttachLoadBalancerTlsCertificateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for AttachLoadBalancerTlsCertificateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AttachLoadBalancerTlsCertificateError {
+    fn description(&self) -> &str {
+        match *self {
+            AttachLoadBalancerTlsCertificateError::AccessDenied(ref cause) => cause,
+            AttachLoadBalancerTlsCertificateError::AccountSetupInProgress(ref cause) => cause,
+            AttachLoadBalancerTlsCertificateError::InvalidInput(ref cause) => cause,
+            AttachLoadBalancerTlsCertificateError::NotFound(ref cause) => cause,
+            AttachLoadBalancerTlsCertificateError::OperationFailure(ref cause) => cause,
+            AttachLoadBalancerTlsCertificateError::Service(ref cause) => cause,
+            AttachLoadBalancerTlsCertificateError::Unauthenticated(ref cause) => cause,
+            AttachLoadBalancerTlsCertificateError::Validation(ref cause) => cause,
+            AttachLoadBalancerTlsCertificateError::Credentials(ref err) => err.description(),
+            AttachLoadBalancerTlsCertificateError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            AttachLoadBalancerTlsCertificateError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -1955,6 +3110,348 @@ impl Error for CloseInstancePublicPortsError {
                 dispatch_error.description()
             }
             CloseInstancePublicPortsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateDisk
+#[derive(Debug, PartialEq)]
+pub enum CreateDiskError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateDiskError {
+    pub fn from_body(body: &str) -> CreateDiskError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        CreateDiskError::AccessDenied(String::from(error_message))
+                    }
+                    "AccountSetupInProgressException" => {
+                        CreateDiskError::AccountSetupInProgress(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        CreateDiskError::InvalidInput(String::from(error_message))
+                    }
+                    "NotFoundException" => CreateDiskError::NotFound(String::from(error_message)),
+                    "OperationFailureException" => {
+                        CreateDiskError::OperationFailure(String::from(error_message))
+                    }
+                    "ServiceException" => CreateDiskError::Service(String::from(error_message)),
+                    "UnauthenticatedException" => {
+                        CreateDiskError::Unauthenticated(String::from(error_message))
+                    }
+                    "ValidationException" => CreateDiskError::Validation(error_message.to_string()),
+                    _ => CreateDiskError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateDiskError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateDiskError {
+    fn from(err: serde_json::error::Error) -> CreateDiskError {
+        CreateDiskError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateDiskError {
+    fn from(err: CredentialsError) -> CreateDiskError {
+        CreateDiskError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateDiskError {
+    fn from(err: HttpDispatchError) -> CreateDiskError {
+        CreateDiskError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateDiskError {
+    fn from(err: io::Error) -> CreateDiskError {
+        CreateDiskError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateDiskError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateDiskError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateDiskError::AccessDenied(ref cause) => cause,
+            CreateDiskError::AccountSetupInProgress(ref cause) => cause,
+            CreateDiskError::InvalidInput(ref cause) => cause,
+            CreateDiskError::NotFound(ref cause) => cause,
+            CreateDiskError::OperationFailure(ref cause) => cause,
+            CreateDiskError::Service(ref cause) => cause,
+            CreateDiskError::Unauthenticated(ref cause) => cause,
+            CreateDiskError::Validation(ref cause) => cause,
+            CreateDiskError::Credentials(ref err) => err.description(),
+            CreateDiskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CreateDiskError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateDiskFromSnapshot
+#[derive(Debug, PartialEq)]
+pub enum CreateDiskFromSnapshotError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateDiskFromSnapshotError {
+    pub fn from_body(body: &str) -> CreateDiskFromSnapshotError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        CreateDiskFromSnapshotError::AccessDenied(String::from(error_message))
+                    }
+                    "AccountSetupInProgressException" => {
+                        CreateDiskFromSnapshotError::AccountSetupInProgress(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidInputException" => {
+                        CreateDiskFromSnapshotError::InvalidInput(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        CreateDiskFromSnapshotError::NotFound(String::from(error_message))
+                    }
+                    "OperationFailureException" => {
+                        CreateDiskFromSnapshotError::OperationFailure(String::from(error_message))
+                    }
+                    "ServiceException" => {
+                        CreateDiskFromSnapshotError::Service(String::from(error_message))
+                    }
+                    "UnauthenticatedException" => {
+                        CreateDiskFromSnapshotError::Unauthenticated(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CreateDiskFromSnapshotError::Validation(error_message.to_string())
+                    }
+                    _ => CreateDiskFromSnapshotError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateDiskFromSnapshotError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateDiskFromSnapshotError {
+    fn from(err: serde_json::error::Error) -> CreateDiskFromSnapshotError {
+        CreateDiskFromSnapshotError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateDiskFromSnapshotError {
+    fn from(err: CredentialsError) -> CreateDiskFromSnapshotError {
+        CreateDiskFromSnapshotError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateDiskFromSnapshotError {
+    fn from(err: HttpDispatchError) -> CreateDiskFromSnapshotError {
+        CreateDiskFromSnapshotError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateDiskFromSnapshotError {
+    fn from(err: io::Error) -> CreateDiskFromSnapshotError {
+        CreateDiskFromSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateDiskFromSnapshotError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateDiskFromSnapshotError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateDiskFromSnapshotError::AccessDenied(ref cause) => cause,
+            CreateDiskFromSnapshotError::AccountSetupInProgress(ref cause) => cause,
+            CreateDiskFromSnapshotError::InvalidInput(ref cause) => cause,
+            CreateDiskFromSnapshotError::NotFound(ref cause) => cause,
+            CreateDiskFromSnapshotError::OperationFailure(ref cause) => cause,
+            CreateDiskFromSnapshotError::Service(ref cause) => cause,
+            CreateDiskFromSnapshotError::Unauthenticated(ref cause) => cause,
+            CreateDiskFromSnapshotError::Validation(ref cause) => cause,
+            CreateDiskFromSnapshotError::Credentials(ref err) => err.description(),
+            CreateDiskFromSnapshotError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateDiskFromSnapshotError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateDiskSnapshot
+#[derive(Debug, PartialEq)]
+pub enum CreateDiskSnapshotError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateDiskSnapshotError {
+    pub fn from_body(body: &str) -> CreateDiskSnapshotError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        CreateDiskSnapshotError::AccessDenied(String::from(error_message))
+                    }
+                    "AccountSetupInProgressException" => {
+                        CreateDiskSnapshotError::AccountSetupInProgress(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        CreateDiskSnapshotError::InvalidInput(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        CreateDiskSnapshotError::NotFound(String::from(error_message))
+                    }
+                    "OperationFailureException" => {
+                        CreateDiskSnapshotError::OperationFailure(String::from(error_message))
+                    }
+                    "ServiceException" => {
+                        CreateDiskSnapshotError::Service(String::from(error_message))
+                    }
+                    "UnauthenticatedException" => {
+                        CreateDiskSnapshotError::Unauthenticated(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CreateDiskSnapshotError::Validation(error_message.to_string())
+                    }
+                    _ => CreateDiskSnapshotError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateDiskSnapshotError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateDiskSnapshotError {
+    fn from(err: serde_json::error::Error) -> CreateDiskSnapshotError {
+        CreateDiskSnapshotError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateDiskSnapshotError {
+    fn from(err: CredentialsError) -> CreateDiskSnapshotError {
+        CreateDiskSnapshotError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateDiskSnapshotError {
+    fn from(err: HttpDispatchError) -> CreateDiskSnapshotError {
+        CreateDiskSnapshotError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateDiskSnapshotError {
+    fn from(err: io::Error) -> CreateDiskSnapshotError {
+        CreateDiskSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateDiskSnapshotError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateDiskSnapshotError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateDiskSnapshotError::AccessDenied(ref cause) => cause,
+            CreateDiskSnapshotError::AccountSetupInProgress(ref cause) => cause,
+            CreateDiskSnapshotError::InvalidInput(ref cause) => cause,
+            CreateDiskSnapshotError::NotFound(ref cause) => cause,
+            CreateDiskSnapshotError::OperationFailure(ref cause) => cause,
+            CreateDiskSnapshotError::Service(ref cause) => cause,
+            CreateDiskSnapshotError::Unauthenticated(ref cause) => cause,
+            CreateDiskSnapshotError::Validation(ref cause) => cause,
+            CreateDiskSnapshotError::Credentials(ref err) => err.description(),
+            CreateDiskSnapshotError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateDiskSnapshotError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -2650,6 +4147,472 @@ impl Error for CreateKeyPairError {
         }
     }
 }
+/// Errors returned by CreateLoadBalancer
+#[derive(Debug, PartialEq)]
+pub enum CreateLoadBalancerError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateLoadBalancerError {
+    pub fn from_body(body: &str) -> CreateLoadBalancerError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        CreateLoadBalancerError::AccessDenied(String::from(error_message))
+                    }
+                    "AccountSetupInProgressException" => {
+                        CreateLoadBalancerError::AccountSetupInProgress(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        CreateLoadBalancerError::InvalidInput(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        CreateLoadBalancerError::NotFound(String::from(error_message))
+                    }
+                    "OperationFailureException" => {
+                        CreateLoadBalancerError::OperationFailure(String::from(error_message))
+                    }
+                    "ServiceException" => {
+                        CreateLoadBalancerError::Service(String::from(error_message))
+                    }
+                    "UnauthenticatedException" => {
+                        CreateLoadBalancerError::Unauthenticated(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CreateLoadBalancerError::Validation(error_message.to_string())
+                    }
+                    _ => CreateLoadBalancerError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateLoadBalancerError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateLoadBalancerError {
+    fn from(err: serde_json::error::Error) -> CreateLoadBalancerError {
+        CreateLoadBalancerError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateLoadBalancerError {
+    fn from(err: CredentialsError) -> CreateLoadBalancerError {
+        CreateLoadBalancerError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateLoadBalancerError {
+    fn from(err: HttpDispatchError) -> CreateLoadBalancerError {
+        CreateLoadBalancerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateLoadBalancerError {
+    fn from(err: io::Error) -> CreateLoadBalancerError {
+        CreateLoadBalancerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateLoadBalancerError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateLoadBalancerError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateLoadBalancerError::AccessDenied(ref cause) => cause,
+            CreateLoadBalancerError::AccountSetupInProgress(ref cause) => cause,
+            CreateLoadBalancerError::InvalidInput(ref cause) => cause,
+            CreateLoadBalancerError::NotFound(ref cause) => cause,
+            CreateLoadBalancerError::OperationFailure(ref cause) => cause,
+            CreateLoadBalancerError::Service(ref cause) => cause,
+            CreateLoadBalancerError::Unauthenticated(ref cause) => cause,
+            CreateLoadBalancerError::Validation(ref cause) => cause,
+            CreateLoadBalancerError::Credentials(ref err) => err.description(),
+            CreateLoadBalancerError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateLoadBalancerError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateLoadBalancerTlsCertificate
+#[derive(Debug, PartialEq)]
+pub enum CreateLoadBalancerTlsCertificateError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateLoadBalancerTlsCertificateError {
+    pub fn from_body(body: &str) -> CreateLoadBalancerTlsCertificateError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        CreateLoadBalancerTlsCertificateError::AccessDenied(String::from(
+                            error_message,
+                        ))
+                    }
+                    "AccountSetupInProgressException" => {
+                        CreateLoadBalancerTlsCertificateError::AccountSetupInProgress(
+                            String::from(error_message),
+                        )
+                    }
+                    "InvalidInputException" => {
+                        CreateLoadBalancerTlsCertificateError::InvalidInput(String::from(
+                            error_message,
+                        ))
+                    }
+                    "NotFoundException" => {
+                        CreateLoadBalancerTlsCertificateError::NotFound(String::from(error_message))
+                    }
+                    "OperationFailureException" => {
+                        CreateLoadBalancerTlsCertificateError::OperationFailure(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServiceException" => {
+                        CreateLoadBalancerTlsCertificateError::Service(String::from(error_message))
+                    }
+                    "UnauthenticatedException" => {
+                        CreateLoadBalancerTlsCertificateError::Unauthenticated(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        CreateLoadBalancerTlsCertificateError::Validation(error_message.to_string())
+                    }
+                    _ => CreateLoadBalancerTlsCertificateError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateLoadBalancerTlsCertificateError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateLoadBalancerTlsCertificateError {
+    fn from(err: serde_json::error::Error) -> CreateLoadBalancerTlsCertificateError {
+        CreateLoadBalancerTlsCertificateError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateLoadBalancerTlsCertificateError {
+    fn from(err: CredentialsError) -> CreateLoadBalancerTlsCertificateError {
+        CreateLoadBalancerTlsCertificateError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateLoadBalancerTlsCertificateError {
+    fn from(err: HttpDispatchError) -> CreateLoadBalancerTlsCertificateError {
+        CreateLoadBalancerTlsCertificateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateLoadBalancerTlsCertificateError {
+    fn from(err: io::Error) -> CreateLoadBalancerTlsCertificateError {
+        CreateLoadBalancerTlsCertificateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateLoadBalancerTlsCertificateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateLoadBalancerTlsCertificateError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateLoadBalancerTlsCertificateError::AccessDenied(ref cause) => cause,
+            CreateLoadBalancerTlsCertificateError::AccountSetupInProgress(ref cause) => cause,
+            CreateLoadBalancerTlsCertificateError::InvalidInput(ref cause) => cause,
+            CreateLoadBalancerTlsCertificateError::NotFound(ref cause) => cause,
+            CreateLoadBalancerTlsCertificateError::OperationFailure(ref cause) => cause,
+            CreateLoadBalancerTlsCertificateError::Service(ref cause) => cause,
+            CreateLoadBalancerTlsCertificateError::Unauthenticated(ref cause) => cause,
+            CreateLoadBalancerTlsCertificateError::Validation(ref cause) => cause,
+            CreateLoadBalancerTlsCertificateError::Credentials(ref err) => err.description(),
+            CreateLoadBalancerTlsCertificateError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateLoadBalancerTlsCertificateError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteDisk
+#[derive(Debug, PartialEq)]
+pub enum DeleteDiskError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteDiskError {
+    pub fn from_body(body: &str) -> DeleteDiskError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        DeleteDiskError::AccessDenied(String::from(error_message))
+                    }
+                    "AccountSetupInProgressException" => {
+                        DeleteDiskError::AccountSetupInProgress(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        DeleteDiskError::InvalidInput(String::from(error_message))
+                    }
+                    "NotFoundException" => DeleteDiskError::NotFound(String::from(error_message)),
+                    "OperationFailureException" => {
+                        DeleteDiskError::OperationFailure(String::from(error_message))
+                    }
+                    "ServiceException" => DeleteDiskError::Service(String::from(error_message)),
+                    "UnauthenticatedException" => {
+                        DeleteDiskError::Unauthenticated(String::from(error_message))
+                    }
+                    "ValidationException" => DeleteDiskError::Validation(error_message.to_string()),
+                    _ => DeleteDiskError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteDiskError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteDiskError {
+    fn from(err: serde_json::error::Error) -> DeleteDiskError {
+        DeleteDiskError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteDiskError {
+    fn from(err: CredentialsError) -> DeleteDiskError {
+        DeleteDiskError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteDiskError {
+    fn from(err: HttpDispatchError) -> DeleteDiskError {
+        DeleteDiskError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteDiskError {
+    fn from(err: io::Error) -> DeleteDiskError {
+        DeleteDiskError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteDiskError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteDiskError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteDiskError::AccessDenied(ref cause) => cause,
+            DeleteDiskError::AccountSetupInProgress(ref cause) => cause,
+            DeleteDiskError::InvalidInput(ref cause) => cause,
+            DeleteDiskError::NotFound(ref cause) => cause,
+            DeleteDiskError::OperationFailure(ref cause) => cause,
+            DeleteDiskError::Service(ref cause) => cause,
+            DeleteDiskError::Unauthenticated(ref cause) => cause,
+            DeleteDiskError::Validation(ref cause) => cause,
+            DeleteDiskError::Credentials(ref err) => err.description(),
+            DeleteDiskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteDiskError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteDiskSnapshot
+#[derive(Debug, PartialEq)]
+pub enum DeleteDiskSnapshotError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteDiskSnapshotError {
+    pub fn from_body(body: &str) -> DeleteDiskSnapshotError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        DeleteDiskSnapshotError::AccessDenied(String::from(error_message))
+                    }
+                    "AccountSetupInProgressException" => {
+                        DeleteDiskSnapshotError::AccountSetupInProgress(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        DeleteDiskSnapshotError::InvalidInput(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        DeleteDiskSnapshotError::NotFound(String::from(error_message))
+                    }
+                    "OperationFailureException" => {
+                        DeleteDiskSnapshotError::OperationFailure(String::from(error_message))
+                    }
+                    "ServiceException" => {
+                        DeleteDiskSnapshotError::Service(String::from(error_message))
+                    }
+                    "UnauthenticatedException" => {
+                        DeleteDiskSnapshotError::Unauthenticated(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteDiskSnapshotError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteDiskSnapshotError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteDiskSnapshotError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteDiskSnapshotError {
+    fn from(err: serde_json::error::Error) -> DeleteDiskSnapshotError {
+        DeleteDiskSnapshotError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteDiskSnapshotError {
+    fn from(err: CredentialsError) -> DeleteDiskSnapshotError {
+        DeleteDiskSnapshotError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteDiskSnapshotError {
+    fn from(err: HttpDispatchError) -> DeleteDiskSnapshotError {
+        DeleteDiskSnapshotError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteDiskSnapshotError {
+    fn from(err: io::Error) -> DeleteDiskSnapshotError {
+        DeleteDiskSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteDiskSnapshotError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteDiskSnapshotError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteDiskSnapshotError::AccessDenied(ref cause) => cause,
+            DeleteDiskSnapshotError::AccountSetupInProgress(ref cause) => cause,
+            DeleteDiskSnapshotError::InvalidInput(ref cause) => cause,
+            DeleteDiskSnapshotError::NotFound(ref cause) => cause,
+            DeleteDiskSnapshotError::OperationFailure(ref cause) => cause,
+            DeleteDiskSnapshotError::Service(ref cause) => cause,
+            DeleteDiskSnapshotError::Unauthenticated(ref cause) => cause,
+            DeleteDiskSnapshotError::Validation(ref cause) => cause,
+            DeleteDiskSnapshotError::Credentials(ref err) => err.description(),
+            DeleteDiskSnapshotError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteDiskSnapshotError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteDomain
 #[derive(Debug, PartialEq)]
 pub enum DeleteDomainError {
@@ -3218,6 +5181,478 @@ impl Error for DeleteKeyPairError {
         }
     }
 }
+/// Errors returned by DeleteLoadBalancer
+#[derive(Debug, PartialEq)]
+pub enum DeleteLoadBalancerError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteLoadBalancerError {
+    pub fn from_body(body: &str) -> DeleteLoadBalancerError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        DeleteLoadBalancerError::AccessDenied(String::from(error_message))
+                    }
+                    "AccountSetupInProgressException" => {
+                        DeleteLoadBalancerError::AccountSetupInProgress(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        DeleteLoadBalancerError::InvalidInput(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        DeleteLoadBalancerError::NotFound(String::from(error_message))
+                    }
+                    "OperationFailureException" => {
+                        DeleteLoadBalancerError::OperationFailure(String::from(error_message))
+                    }
+                    "ServiceException" => {
+                        DeleteLoadBalancerError::Service(String::from(error_message))
+                    }
+                    "UnauthenticatedException" => {
+                        DeleteLoadBalancerError::Unauthenticated(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteLoadBalancerError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteLoadBalancerError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteLoadBalancerError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteLoadBalancerError {
+    fn from(err: serde_json::error::Error) -> DeleteLoadBalancerError {
+        DeleteLoadBalancerError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteLoadBalancerError {
+    fn from(err: CredentialsError) -> DeleteLoadBalancerError {
+        DeleteLoadBalancerError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteLoadBalancerError {
+    fn from(err: HttpDispatchError) -> DeleteLoadBalancerError {
+        DeleteLoadBalancerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteLoadBalancerError {
+    fn from(err: io::Error) -> DeleteLoadBalancerError {
+        DeleteLoadBalancerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteLoadBalancerError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteLoadBalancerError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteLoadBalancerError::AccessDenied(ref cause) => cause,
+            DeleteLoadBalancerError::AccountSetupInProgress(ref cause) => cause,
+            DeleteLoadBalancerError::InvalidInput(ref cause) => cause,
+            DeleteLoadBalancerError::NotFound(ref cause) => cause,
+            DeleteLoadBalancerError::OperationFailure(ref cause) => cause,
+            DeleteLoadBalancerError::Service(ref cause) => cause,
+            DeleteLoadBalancerError::Unauthenticated(ref cause) => cause,
+            DeleteLoadBalancerError::Validation(ref cause) => cause,
+            DeleteLoadBalancerError::Credentials(ref err) => err.description(),
+            DeleteLoadBalancerError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteLoadBalancerError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteLoadBalancerTlsCertificate
+#[derive(Debug, PartialEq)]
+pub enum DeleteLoadBalancerTlsCertificateError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteLoadBalancerTlsCertificateError {
+    pub fn from_body(body: &str) -> DeleteLoadBalancerTlsCertificateError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        DeleteLoadBalancerTlsCertificateError::AccessDenied(String::from(
+                            error_message,
+                        ))
+                    }
+                    "AccountSetupInProgressException" => {
+                        DeleteLoadBalancerTlsCertificateError::AccountSetupInProgress(
+                            String::from(error_message),
+                        )
+                    }
+                    "InvalidInputException" => {
+                        DeleteLoadBalancerTlsCertificateError::InvalidInput(String::from(
+                            error_message,
+                        ))
+                    }
+                    "NotFoundException" => {
+                        DeleteLoadBalancerTlsCertificateError::NotFound(String::from(error_message))
+                    }
+                    "OperationFailureException" => {
+                        DeleteLoadBalancerTlsCertificateError::OperationFailure(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServiceException" => {
+                        DeleteLoadBalancerTlsCertificateError::Service(String::from(error_message))
+                    }
+                    "UnauthenticatedException" => {
+                        DeleteLoadBalancerTlsCertificateError::Unauthenticated(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        DeleteLoadBalancerTlsCertificateError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteLoadBalancerTlsCertificateError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteLoadBalancerTlsCertificateError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteLoadBalancerTlsCertificateError {
+    fn from(err: serde_json::error::Error) -> DeleteLoadBalancerTlsCertificateError {
+        DeleteLoadBalancerTlsCertificateError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteLoadBalancerTlsCertificateError {
+    fn from(err: CredentialsError) -> DeleteLoadBalancerTlsCertificateError {
+        DeleteLoadBalancerTlsCertificateError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteLoadBalancerTlsCertificateError {
+    fn from(err: HttpDispatchError) -> DeleteLoadBalancerTlsCertificateError {
+        DeleteLoadBalancerTlsCertificateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteLoadBalancerTlsCertificateError {
+    fn from(err: io::Error) -> DeleteLoadBalancerTlsCertificateError {
+        DeleteLoadBalancerTlsCertificateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteLoadBalancerTlsCertificateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteLoadBalancerTlsCertificateError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteLoadBalancerTlsCertificateError::AccessDenied(ref cause) => cause,
+            DeleteLoadBalancerTlsCertificateError::AccountSetupInProgress(ref cause) => cause,
+            DeleteLoadBalancerTlsCertificateError::InvalidInput(ref cause) => cause,
+            DeleteLoadBalancerTlsCertificateError::NotFound(ref cause) => cause,
+            DeleteLoadBalancerTlsCertificateError::OperationFailure(ref cause) => cause,
+            DeleteLoadBalancerTlsCertificateError::Service(ref cause) => cause,
+            DeleteLoadBalancerTlsCertificateError::Unauthenticated(ref cause) => cause,
+            DeleteLoadBalancerTlsCertificateError::Validation(ref cause) => cause,
+            DeleteLoadBalancerTlsCertificateError::Credentials(ref err) => err.description(),
+            DeleteLoadBalancerTlsCertificateError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteLoadBalancerTlsCertificateError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DetachDisk
+#[derive(Debug, PartialEq)]
+pub enum DetachDiskError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DetachDiskError {
+    pub fn from_body(body: &str) -> DetachDiskError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        DetachDiskError::AccessDenied(String::from(error_message))
+                    }
+                    "AccountSetupInProgressException" => {
+                        DetachDiskError::AccountSetupInProgress(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        DetachDiskError::InvalidInput(String::from(error_message))
+                    }
+                    "NotFoundException" => DetachDiskError::NotFound(String::from(error_message)),
+                    "OperationFailureException" => {
+                        DetachDiskError::OperationFailure(String::from(error_message))
+                    }
+                    "ServiceException" => DetachDiskError::Service(String::from(error_message)),
+                    "UnauthenticatedException" => {
+                        DetachDiskError::Unauthenticated(String::from(error_message))
+                    }
+                    "ValidationException" => DetachDiskError::Validation(error_message.to_string()),
+                    _ => DetachDiskError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DetachDiskError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DetachDiskError {
+    fn from(err: serde_json::error::Error) -> DetachDiskError {
+        DetachDiskError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DetachDiskError {
+    fn from(err: CredentialsError) -> DetachDiskError {
+        DetachDiskError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DetachDiskError {
+    fn from(err: HttpDispatchError) -> DetachDiskError {
+        DetachDiskError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DetachDiskError {
+    fn from(err: io::Error) -> DetachDiskError {
+        DetachDiskError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DetachDiskError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DetachDiskError {
+    fn description(&self) -> &str {
+        match *self {
+            DetachDiskError::AccessDenied(ref cause) => cause,
+            DetachDiskError::AccountSetupInProgress(ref cause) => cause,
+            DetachDiskError::InvalidInput(ref cause) => cause,
+            DetachDiskError::NotFound(ref cause) => cause,
+            DetachDiskError::OperationFailure(ref cause) => cause,
+            DetachDiskError::Service(ref cause) => cause,
+            DetachDiskError::Unauthenticated(ref cause) => cause,
+            DetachDiskError::Validation(ref cause) => cause,
+            DetachDiskError::Credentials(ref err) => err.description(),
+            DetachDiskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DetachDiskError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DetachInstancesFromLoadBalancer
+#[derive(Debug, PartialEq)]
+pub enum DetachInstancesFromLoadBalancerError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DetachInstancesFromLoadBalancerError {
+    pub fn from_body(body: &str) -> DetachInstancesFromLoadBalancerError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => DetachInstancesFromLoadBalancerError::AccessDenied(
+                        String::from(error_message),
+                    ),
+                    "AccountSetupInProgressException" => {
+                        DetachInstancesFromLoadBalancerError::AccountSetupInProgress(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidInputException" => DetachInstancesFromLoadBalancerError::InvalidInput(
+                        String::from(error_message),
+                    ),
+                    "NotFoundException" => {
+                        DetachInstancesFromLoadBalancerError::NotFound(String::from(error_message))
+                    }
+                    "OperationFailureException" => {
+                        DetachInstancesFromLoadBalancerError::OperationFailure(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServiceException" => {
+                        DetachInstancesFromLoadBalancerError::Service(String::from(error_message))
+                    }
+                    "UnauthenticatedException" => {
+                        DetachInstancesFromLoadBalancerError::Unauthenticated(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        DetachInstancesFromLoadBalancerError::Validation(error_message.to_string())
+                    }
+                    _ => DetachInstancesFromLoadBalancerError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DetachInstancesFromLoadBalancerError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DetachInstancesFromLoadBalancerError {
+    fn from(err: serde_json::error::Error) -> DetachInstancesFromLoadBalancerError {
+        DetachInstancesFromLoadBalancerError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DetachInstancesFromLoadBalancerError {
+    fn from(err: CredentialsError) -> DetachInstancesFromLoadBalancerError {
+        DetachInstancesFromLoadBalancerError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DetachInstancesFromLoadBalancerError {
+    fn from(err: HttpDispatchError) -> DetachInstancesFromLoadBalancerError {
+        DetachInstancesFromLoadBalancerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DetachInstancesFromLoadBalancerError {
+    fn from(err: io::Error) -> DetachInstancesFromLoadBalancerError {
+        DetachInstancesFromLoadBalancerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DetachInstancesFromLoadBalancerError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DetachInstancesFromLoadBalancerError {
+    fn description(&self) -> &str {
+        match *self {
+            DetachInstancesFromLoadBalancerError::AccessDenied(ref cause) => cause,
+            DetachInstancesFromLoadBalancerError::AccountSetupInProgress(ref cause) => cause,
+            DetachInstancesFromLoadBalancerError::InvalidInput(ref cause) => cause,
+            DetachInstancesFromLoadBalancerError::NotFound(ref cause) => cause,
+            DetachInstancesFromLoadBalancerError::OperationFailure(ref cause) => cause,
+            DetachInstancesFromLoadBalancerError::Service(ref cause) => cause,
+            DetachInstancesFromLoadBalancerError::Unauthenticated(ref cause) => cause,
+            DetachInstancesFromLoadBalancerError::Validation(ref cause) => cause,
+            DetachInstancesFromLoadBalancerError::Credentials(ref err) => err.description(),
+            DetachInstancesFromLoadBalancerError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DetachInstancesFromLoadBalancerError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DetachStaticIp
 #[derive(Debug, PartialEq)]
 pub enum DetachStaticIpError {
@@ -3777,6 +6212,450 @@ impl Error for GetBundlesError {
             GetBundlesError::Credentials(ref err) => err.description(),
             GetBundlesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             GetBundlesError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetDisk
+#[derive(Debug, PartialEq)]
+pub enum GetDiskError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetDiskError {
+    pub fn from_body(body: &str) -> GetDiskError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        GetDiskError::AccessDenied(String::from(error_message))
+                    }
+                    "AccountSetupInProgressException" => {
+                        GetDiskError::AccountSetupInProgress(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        GetDiskError::InvalidInput(String::from(error_message))
+                    }
+                    "NotFoundException" => GetDiskError::NotFound(String::from(error_message)),
+                    "OperationFailureException" => {
+                        GetDiskError::OperationFailure(String::from(error_message))
+                    }
+                    "ServiceException" => GetDiskError::Service(String::from(error_message)),
+                    "UnauthenticatedException" => {
+                        GetDiskError::Unauthenticated(String::from(error_message))
+                    }
+                    "ValidationException" => GetDiskError::Validation(error_message.to_string()),
+                    _ => GetDiskError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetDiskError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetDiskError {
+    fn from(err: serde_json::error::Error) -> GetDiskError {
+        GetDiskError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetDiskError {
+    fn from(err: CredentialsError) -> GetDiskError {
+        GetDiskError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetDiskError {
+    fn from(err: HttpDispatchError) -> GetDiskError {
+        GetDiskError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetDiskError {
+    fn from(err: io::Error) -> GetDiskError {
+        GetDiskError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetDiskError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetDiskError {
+    fn description(&self) -> &str {
+        match *self {
+            GetDiskError::AccessDenied(ref cause) => cause,
+            GetDiskError::AccountSetupInProgress(ref cause) => cause,
+            GetDiskError::InvalidInput(ref cause) => cause,
+            GetDiskError::NotFound(ref cause) => cause,
+            GetDiskError::OperationFailure(ref cause) => cause,
+            GetDiskError::Service(ref cause) => cause,
+            GetDiskError::Unauthenticated(ref cause) => cause,
+            GetDiskError::Validation(ref cause) => cause,
+            GetDiskError::Credentials(ref err) => err.description(),
+            GetDiskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetDiskError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetDiskSnapshot
+#[derive(Debug, PartialEq)]
+pub enum GetDiskSnapshotError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetDiskSnapshotError {
+    pub fn from_body(body: &str) -> GetDiskSnapshotError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        GetDiskSnapshotError::AccessDenied(String::from(error_message))
+                    }
+                    "AccountSetupInProgressException" => {
+                        GetDiskSnapshotError::AccountSetupInProgress(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        GetDiskSnapshotError::InvalidInput(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        GetDiskSnapshotError::NotFound(String::from(error_message))
+                    }
+                    "OperationFailureException" => {
+                        GetDiskSnapshotError::OperationFailure(String::from(error_message))
+                    }
+                    "ServiceException" => {
+                        GetDiskSnapshotError::Service(String::from(error_message))
+                    }
+                    "UnauthenticatedException" => {
+                        GetDiskSnapshotError::Unauthenticated(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetDiskSnapshotError::Validation(error_message.to_string())
+                    }
+                    _ => GetDiskSnapshotError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetDiskSnapshotError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetDiskSnapshotError {
+    fn from(err: serde_json::error::Error) -> GetDiskSnapshotError {
+        GetDiskSnapshotError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetDiskSnapshotError {
+    fn from(err: CredentialsError) -> GetDiskSnapshotError {
+        GetDiskSnapshotError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetDiskSnapshotError {
+    fn from(err: HttpDispatchError) -> GetDiskSnapshotError {
+        GetDiskSnapshotError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetDiskSnapshotError {
+    fn from(err: io::Error) -> GetDiskSnapshotError {
+        GetDiskSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetDiskSnapshotError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetDiskSnapshotError {
+    fn description(&self) -> &str {
+        match *self {
+            GetDiskSnapshotError::AccessDenied(ref cause) => cause,
+            GetDiskSnapshotError::AccountSetupInProgress(ref cause) => cause,
+            GetDiskSnapshotError::InvalidInput(ref cause) => cause,
+            GetDiskSnapshotError::NotFound(ref cause) => cause,
+            GetDiskSnapshotError::OperationFailure(ref cause) => cause,
+            GetDiskSnapshotError::Service(ref cause) => cause,
+            GetDiskSnapshotError::Unauthenticated(ref cause) => cause,
+            GetDiskSnapshotError::Validation(ref cause) => cause,
+            GetDiskSnapshotError::Credentials(ref err) => err.description(),
+            GetDiskSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetDiskSnapshotError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetDiskSnapshots
+#[derive(Debug, PartialEq)]
+pub enum GetDiskSnapshotsError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetDiskSnapshotsError {
+    pub fn from_body(body: &str) -> GetDiskSnapshotsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        GetDiskSnapshotsError::AccessDenied(String::from(error_message))
+                    }
+                    "AccountSetupInProgressException" => {
+                        GetDiskSnapshotsError::AccountSetupInProgress(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        GetDiskSnapshotsError::InvalidInput(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        GetDiskSnapshotsError::NotFound(String::from(error_message))
+                    }
+                    "OperationFailureException" => {
+                        GetDiskSnapshotsError::OperationFailure(String::from(error_message))
+                    }
+                    "ServiceException" => {
+                        GetDiskSnapshotsError::Service(String::from(error_message))
+                    }
+                    "UnauthenticatedException" => {
+                        GetDiskSnapshotsError::Unauthenticated(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetDiskSnapshotsError::Validation(error_message.to_string())
+                    }
+                    _ => GetDiskSnapshotsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetDiskSnapshotsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetDiskSnapshotsError {
+    fn from(err: serde_json::error::Error) -> GetDiskSnapshotsError {
+        GetDiskSnapshotsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetDiskSnapshotsError {
+    fn from(err: CredentialsError) -> GetDiskSnapshotsError {
+        GetDiskSnapshotsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetDiskSnapshotsError {
+    fn from(err: HttpDispatchError) -> GetDiskSnapshotsError {
+        GetDiskSnapshotsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetDiskSnapshotsError {
+    fn from(err: io::Error) -> GetDiskSnapshotsError {
+        GetDiskSnapshotsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetDiskSnapshotsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetDiskSnapshotsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetDiskSnapshotsError::AccessDenied(ref cause) => cause,
+            GetDiskSnapshotsError::AccountSetupInProgress(ref cause) => cause,
+            GetDiskSnapshotsError::InvalidInput(ref cause) => cause,
+            GetDiskSnapshotsError::NotFound(ref cause) => cause,
+            GetDiskSnapshotsError::OperationFailure(ref cause) => cause,
+            GetDiskSnapshotsError::Service(ref cause) => cause,
+            GetDiskSnapshotsError::Unauthenticated(ref cause) => cause,
+            GetDiskSnapshotsError::Validation(ref cause) => cause,
+            GetDiskSnapshotsError::Credentials(ref err) => err.description(),
+            GetDiskSnapshotsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetDiskSnapshotsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetDisks
+#[derive(Debug, PartialEq)]
+pub enum GetDisksError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetDisksError {
+    pub fn from_body(body: &str) -> GetDisksError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        GetDisksError::AccessDenied(String::from(error_message))
+                    }
+                    "AccountSetupInProgressException" => {
+                        GetDisksError::AccountSetupInProgress(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        GetDisksError::InvalidInput(String::from(error_message))
+                    }
+                    "NotFoundException" => GetDisksError::NotFound(String::from(error_message)),
+                    "OperationFailureException" => {
+                        GetDisksError::OperationFailure(String::from(error_message))
+                    }
+                    "ServiceException" => GetDisksError::Service(String::from(error_message)),
+                    "UnauthenticatedException" => {
+                        GetDisksError::Unauthenticated(String::from(error_message))
+                    }
+                    "ValidationException" => GetDisksError::Validation(error_message.to_string()),
+                    _ => GetDisksError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetDisksError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetDisksError {
+    fn from(err: serde_json::error::Error) -> GetDisksError {
+        GetDisksError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetDisksError {
+    fn from(err: CredentialsError) -> GetDisksError {
+        GetDisksError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetDisksError {
+    fn from(err: HttpDispatchError) -> GetDisksError {
+        GetDisksError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetDisksError {
+    fn from(err: io::Error) -> GetDisksError {
+        GetDisksError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetDisksError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetDisksError {
+    fn description(&self) -> &str {
+        match *self {
+            GetDisksError::AccessDenied(ref cause) => cause,
+            GetDisksError::AccountSetupInProgress(ref cause) => cause,
+            GetDisksError::InvalidInput(ref cause) => cause,
+            GetDisksError::NotFound(ref cause) => cause,
+            GetDisksError::OperationFailure(ref cause) => cause,
+            GetDisksError::Service(ref cause) => cause,
+            GetDisksError::Unauthenticated(ref cause) => cause,
+            GetDisksError::Validation(ref cause) => cause,
+            GetDisksError::Credentials(ref err) => err.description(),
+            GetDisksError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetDisksError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -5135,6 +8014,476 @@ impl Error for GetKeyPairsError {
             GetKeyPairsError::Credentials(ref err) => err.description(),
             GetKeyPairsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             GetKeyPairsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetLoadBalancer
+#[derive(Debug, PartialEq)]
+pub enum GetLoadBalancerError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetLoadBalancerError {
+    pub fn from_body(body: &str) -> GetLoadBalancerError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        GetLoadBalancerError::AccessDenied(String::from(error_message))
+                    }
+                    "AccountSetupInProgressException" => {
+                        GetLoadBalancerError::AccountSetupInProgress(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        GetLoadBalancerError::InvalidInput(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        GetLoadBalancerError::NotFound(String::from(error_message))
+                    }
+                    "OperationFailureException" => {
+                        GetLoadBalancerError::OperationFailure(String::from(error_message))
+                    }
+                    "ServiceException" => {
+                        GetLoadBalancerError::Service(String::from(error_message))
+                    }
+                    "UnauthenticatedException" => {
+                        GetLoadBalancerError::Unauthenticated(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetLoadBalancerError::Validation(error_message.to_string())
+                    }
+                    _ => GetLoadBalancerError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetLoadBalancerError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetLoadBalancerError {
+    fn from(err: serde_json::error::Error) -> GetLoadBalancerError {
+        GetLoadBalancerError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetLoadBalancerError {
+    fn from(err: CredentialsError) -> GetLoadBalancerError {
+        GetLoadBalancerError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetLoadBalancerError {
+    fn from(err: HttpDispatchError) -> GetLoadBalancerError {
+        GetLoadBalancerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetLoadBalancerError {
+    fn from(err: io::Error) -> GetLoadBalancerError {
+        GetLoadBalancerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetLoadBalancerError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetLoadBalancerError {
+    fn description(&self) -> &str {
+        match *self {
+            GetLoadBalancerError::AccessDenied(ref cause) => cause,
+            GetLoadBalancerError::AccountSetupInProgress(ref cause) => cause,
+            GetLoadBalancerError::InvalidInput(ref cause) => cause,
+            GetLoadBalancerError::NotFound(ref cause) => cause,
+            GetLoadBalancerError::OperationFailure(ref cause) => cause,
+            GetLoadBalancerError::Service(ref cause) => cause,
+            GetLoadBalancerError::Unauthenticated(ref cause) => cause,
+            GetLoadBalancerError::Validation(ref cause) => cause,
+            GetLoadBalancerError::Credentials(ref err) => err.description(),
+            GetLoadBalancerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetLoadBalancerError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetLoadBalancerMetricData
+#[derive(Debug, PartialEq)]
+pub enum GetLoadBalancerMetricDataError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetLoadBalancerMetricDataError {
+    pub fn from_body(body: &str) -> GetLoadBalancerMetricDataError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        GetLoadBalancerMetricDataError::AccessDenied(String::from(error_message))
+                    }
+                    "AccountSetupInProgressException" => {
+                        GetLoadBalancerMetricDataError::AccountSetupInProgress(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidInputException" => {
+                        GetLoadBalancerMetricDataError::InvalidInput(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        GetLoadBalancerMetricDataError::NotFound(String::from(error_message))
+                    }
+                    "OperationFailureException" => {
+                        GetLoadBalancerMetricDataError::OperationFailure(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServiceException" => {
+                        GetLoadBalancerMetricDataError::Service(String::from(error_message))
+                    }
+                    "UnauthenticatedException" => {
+                        GetLoadBalancerMetricDataError::Unauthenticated(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetLoadBalancerMetricDataError::Validation(error_message.to_string())
+                    }
+                    _ => GetLoadBalancerMetricDataError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetLoadBalancerMetricDataError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetLoadBalancerMetricDataError {
+    fn from(err: serde_json::error::Error) -> GetLoadBalancerMetricDataError {
+        GetLoadBalancerMetricDataError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetLoadBalancerMetricDataError {
+    fn from(err: CredentialsError) -> GetLoadBalancerMetricDataError {
+        GetLoadBalancerMetricDataError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetLoadBalancerMetricDataError {
+    fn from(err: HttpDispatchError) -> GetLoadBalancerMetricDataError {
+        GetLoadBalancerMetricDataError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetLoadBalancerMetricDataError {
+    fn from(err: io::Error) -> GetLoadBalancerMetricDataError {
+        GetLoadBalancerMetricDataError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetLoadBalancerMetricDataError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetLoadBalancerMetricDataError {
+    fn description(&self) -> &str {
+        match *self {
+            GetLoadBalancerMetricDataError::AccessDenied(ref cause) => cause,
+            GetLoadBalancerMetricDataError::AccountSetupInProgress(ref cause) => cause,
+            GetLoadBalancerMetricDataError::InvalidInput(ref cause) => cause,
+            GetLoadBalancerMetricDataError::NotFound(ref cause) => cause,
+            GetLoadBalancerMetricDataError::OperationFailure(ref cause) => cause,
+            GetLoadBalancerMetricDataError::Service(ref cause) => cause,
+            GetLoadBalancerMetricDataError::Unauthenticated(ref cause) => cause,
+            GetLoadBalancerMetricDataError::Validation(ref cause) => cause,
+            GetLoadBalancerMetricDataError::Credentials(ref err) => err.description(),
+            GetLoadBalancerMetricDataError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetLoadBalancerMetricDataError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetLoadBalancerTlsCertificates
+#[derive(Debug, PartialEq)]
+pub enum GetLoadBalancerTlsCertificatesError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetLoadBalancerTlsCertificatesError {
+    pub fn from_body(body: &str) -> GetLoadBalancerTlsCertificatesError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => GetLoadBalancerTlsCertificatesError::AccessDenied(
+                        String::from(error_message),
+                    ),
+                    "AccountSetupInProgressException" => {
+                        GetLoadBalancerTlsCertificatesError::AccountSetupInProgress(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidInputException" => GetLoadBalancerTlsCertificatesError::InvalidInput(
+                        String::from(error_message),
+                    ),
+                    "NotFoundException" => {
+                        GetLoadBalancerTlsCertificatesError::NotFound(String::from(error_message))
+                    }
+                    "OperationFailureException" => {
+                        GetLoadBalancerTlsCertificatesError::OperationFailure(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServiceException" => {
+                        GetLoadBalancerTlsCertificatesError::Service(String::from(error_message))
+                    }
+                    "UnauthenticatedException" => {
+                        GetLoadBalancerTlsCertificatesError::Unauthenticated(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        GetLoadBalancerTlsCertificatesError::Validation(error_message.to_string())
+                    }
+                    _ => GetLoadBalancerTlsCertificatesError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetLoadBalancerTlsCertificatesError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetLoadBalancerTlsCertificatesError {
+    fn from(err: serde_json::error::Error) -> GetLoadBalancerTlsCertificatesError {
+        GetLoadBalancerTlsCertificatesError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetLoadBalancerTlsCertificatesError {
+    fn from(err: CredentialsError) -> GetLoadBalancerTlsCertificatesError {
+        GetLoadBalancerTlsCertificatesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetLoadBalancerTlsCertificatesError {
+    fn from(err: HttpDispatchError) -> GetLoadBalancerTlsCertificatesError {
+        GetLoadBalancerTlsCertificatesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetLoadBalancerTlsCertificatesError {
+    fn from(err: io::Error) -> GetLoadBalancerTlsCertificatesError {
+        GetLoadBalancerTlsCertificatesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetLoadBalancerTlsCertificatesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetLoadBalancerTlsCertificatesError {
+    fn description(&self) -> &str {
+        match *self {
+            GetLoadBalancerTlsCertificatesError::AccessDenied(ref cause) => cause,
+            GetLoadBalancerTlsCertificatesError::AccountSetupInProgress(ref cause) => cause,
+            GetLoadBalancerTlsCertificatesError::InvalidInput(ref cause) => cause,
+            GetLoadBalancerTlsCertificatesError::NotFound(ref cause) => cause,
+            GetLoadBalancerTlsCertificatesError::OperationFailure(ref cause) => cause,
+            GetLoadBalancerTlsCertificatesError::Service(ref cause) => cause,
+            GetLoadBalancerTlsCertificatesError::Unauthenticated(ref cause) => cause,
+            GetLoadBalancerTlsCertificatesError::Validation(ref cause) => cause,
+            GetLoadBalancerTlsCertificatesError::Credentials(ref err) => err.description(),
+            GetLoadBalancerTlsCertificatesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetLoadBalancerTlsCertificatesError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetLoadBalancers
+#[derive(Debug, PartialEq)]
+pub enum GetLoadBalancersError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetLoadBalancersError {
+    pub fn from_body(body: &str) -> GetLoadBalancersError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        GetLoadBalancersError::AccessDenied(String::from(error_message))
+                    }
+                    "AccountSetupInProgressException" => {
+                        GetLoadBalancersError::AccountSetupInProgress(String::from(error_message))
+                    }
+                    "InvalidInputException" => {
+                        GetLoadBalancersError::InvalidInput(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        GetLoadBalancersError::NotFound(String::from(error_message))
+                    }
+                    "OperationFailureException" => {
+                        GetLoadBalancersError::OperationFailure(String::from(error_message))
+                    }
+                    "ServiceException" => {
+                        GetLoadBalancersError::Service(String::from(error_message))
+                    }
+                    "UnauthenticatedException" => {
+                        GetLoadBalancersError::Unauthenticated(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetLoadBalancersError::Validation(error_message.to_string())
+                    }
+                    _ => GetLoadBalancersError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetLoadBalancersError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetLoadBalancersError {
+    fn from(err: serde_json::error::Error) -> GetLoadBalancersError {
+        GetLoadBalancersError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetLoadBalancersError {
+    fn from(err: CredentialsError) -> GetLoadBalancersError {
+        GetLoadBalancersError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetLoadBalancersError {
+    fn from(err: HttpDispatchError) -> GetLoadBalancersError {
+        GetLoadBalancersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetLoadBalancersError {
+    fn from(err: io::Error) -> GetLoadBalancersError {
+        GetLoadBalancersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetLoadBalancersError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetLoadBalancersError {
+    fn description(&self) -> &str {
+        match *self {
+            GetLoadBalancersError::AccessDenied(ref cause) => cause,
+            GetLoadBalancersError::AccountSetupInProgress(ref cause) => cause,
+            GetLoadBalancersError::InvalidInput(ref cause) => cause,
+            GetLoadBalancersError::NotFound(ref cause) => cause,
+            GetLoadBalancersError::OperationFailure(ref cause) => cause,
+            GetLoadBalancersError::Service(ref cause) => cause,
+            GetLoadBalancersError::Unauthenticated(ref cause) => cause,
+            GetLoadBalancersError::Validation(ref cause) => cause,
+            GetLoadBalancersError::Credentials(ref err) => err.description(),
+            GetLoadBalancersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetLoadBalancersError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -7044,6 +10393,128 @@ impl Error for UpdateDomainEntryError {
         }
     }
 }
+/// Errors returned by UpdateLoadBalancerAttribute
+#[derive(Debug, PartialEq)]
+pub enum UpdateLoadBalancerAttributeError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateLoadBalancerAttributeError {
+    pub fn from_body(body: &str) -> UpdateLoadBalancerAttributeError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AccessDeniedException" => {
+                        UpdateLoadBalancerAttributeError::AccessDenied(String::from(error_message))
+                    }
+                    "AccountSetupInProgressException" => {
+                        UpdateLoadBalancerAttributeError::AccountSetupInProgress(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidInputException" => {
+                        UpdateLoadBalancerAttributeError::InvalidInput(String::from(error_message))
+                    }
+                    "NotFoundException" => {
+                        UpdateLoadBalancerAttributeError::NotFound(String::from(error_message))
+                    }
+                    "OperationFailureException" => {
+                        UpdateLoadBalancerAttributeError::OperationFailure(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ServiceException" => {
+                        UpdateLoadBalancerAttributeError::Service(String::from(error_message))
+                    }
+                    "UnauthenticatedException" => {
+                        UpdateLoadBalancerAttributeError::Unauthenticated(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        UpdateLoadBalancerAttributeError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateLoadBalancerAttributeError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateLoadBalancerAttributeError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateLoadBalancerAttributeError {
+    fn from(err: serde_json::error::Error) -> UpdateLoadBalancerAttributeError {
+        UpdateLoadBalancerAttributeError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateLoadBalancerAttributeError {
+    fn from(err: CredentialsError) -> UpdateLoadBalancerAttributeError {
+        UpdateLoadBalancerAttributeError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateLoadBalancerAttributeError {
+    fn from(err: HttpDispatchError) -> UpdateLoadBalancerAttributeError {
+        UpdateLoadBalancerAttributeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateLoadBalancerAttributeError {
+    fn from(err: io::Error) -> UpdateLoadBalancerAttributeError {
+        UpdateLoadBalancerAttributeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateLoadBalancerAttributeError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateLoadBalancerAttributeError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateLoadBalancerAttributeError::AccessDenied(ref cause) => cause,
+            UpdateLoadBalancerAttributeError::AccountSetupInProgress(ref cause) => cause,
+            UpdateLoadBalancerAttributeError::InvalidInput(ref cause) => cause,
+            UpdateLoadBalancerAttributeError::NotFound(ref cause) => cause,
+            UpdateLoadBalancerAttributeError::OperationFailure(ref cause) => cause,
+            UpdateLoadBalancerAttributeError::Service(ref cause) => cause,
+            UpdateLoadBalancerAttributeError::Unauthenticated(ref cause) => cause,
+            UpdateLoadBalancerAttributeError::Validation(ref cause) => cause,
+            UpdateLoadBalancerAttributeError::Credentials(ref err) => err.description(),
+            UpdateLoadBalancerAttributeError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateLoadBalancerAttributeError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the Amazon Lightsail API. Amazon Lightsail clients implement this trait.
 pub trait Lightsail {
     /// <p>Allocates a static IP address.</p>
@@ -7051,6 +10522,21 @@ pub trait Lightsail {
         &self,
         input: &AllocateStaticIpRequest,
     ) -> Result<AllocateStaticIpResult, AllocateStaticIpError>;
+
+    /// <p>Attaches a block storage disk to a running or stopped Lightsail instance and exposes it to the instance with the specified disk name.</p>
+    fn attach_disk(&self, input: &AttachDiskRequest) -> Result<AttachDiskResult, AttachDiskError>;
+
+    /// <p>Attaches one or more Lightsail instances to a load balancer.</p>
+    fn attach_instances_to_load_balancer(
+        &self,
+        input: &AttachInstancesToLoadBalancerRequest,
+    ) -> Result<AttachInstancesToLoadBalancerResult, AttachInstancesToLoadBalancerError>;
+
+    /// <p>Attaches a Transport Layer Security (TLS) certificate to your load balancer.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p>
+    fn attach_load_balancer_tls_certificate(
+        &self,
+        input: &AttachLoadBalancerTlsCertificateRequest,
+    ) -> Result<AttachLoadBalancerTlsCertificateResult, AttachLoadBalancerTlsCertificateError>;
 
     /// <p>Attaches a static IP address to a specific Amazon Lightsail instance.</p>
     fn attach_static_ip(
@@ -7063,6 +10549,21 @@ pub trait Lightsail {
         &self,
         input: &CloseInstancePublicPortsRequest,
     ) -> Result<CloseInstancePublicPortsResult, CloseInstancePublicPortsError>;
+
+    /// <p>Creates a block storage disk that can be attached to a Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>). The disk is created in the regional endpoint that you send the HTTP request to. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/overview/article/understanding-regions-and-availability-zones-in-amazon-lightsail">Regions and Availability Zones in Lightsail</a>.</p>
+    fn create_disk(&self, input: &CreateDiskRequest) -> Result<CreateDiskResult, CreateDiskError>;
+
+    /// <p>Creates a block storage disk from a disk snapshot that can be attached to a Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>). The disk is created in the regional endpoint that you send the HTTP request to. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/overview/article/understanding-regions-and-availability-zones-in-amazon-lightsail">Regions and Availability Zones in Lightsail</a>.</p>
+    fn create_disk_from_snapshot(
+        &self,
+        input: &CreateDiskFromSnapshotRequest,
+    ) -> Result<CreateDiskFromSnapshotResult, CreateDiskFromSnapshotError>;
+
+    /// <p>Creates a snapshot of a block storage disk. You can use snapshots for backups, to make copies of disks, and to save data before shutting down a Lightsail instance.</p> <p>You can take a snapshot of an attached disk that is in use; however, snapshots only capture data that has been written to your disk at the time the snapshot command is issued. This may exclude any data that has been cached by any applications or the operating system. If you can pause any file systems on the disk long enough to take a snapshot, your snapshot should be complete. Nevertheless, if you cannot pause all file writes to the disk, you should unmount the disk from within the Lightsail instance, issue the create disk snapshot command, and then remount the disk to ensure a consistent and complete snapshot. You may remount and use your disk while the snapshot status is pending.</p>
+    fn create_disk_snapshot(
+        &self,
+        input: &CreateDiskSnapshotRequest,
+    ) -> Result<CreateDiskSnapshotResult, CreateDiskSnapshotError>;
 
     /// <p>Creates a domain resource for the specified domain (e.g., example.com).</p>
     fn create_domain(
@@ -7100,6 +10601,27 @@ pub trait Lightsail {
         input: &CreateKeyPairRequest,
     ) -> Result<CreateKeyPairResult, CreateKeyPairError>;
 
+    /// <p>Creates a Lightsail load balancer.</p> <p>When you create a load balancer, you can specify certificates and port settings. You can create up to 5 load balancers per AWS Region in your account.</p>
+    fn create_load_balancer(
+        &self,
+        input: &CreateLoadBalancerRequest,
+    ) -> Result<CreateLoadBalancerResult, CreateLoadBalancerError>;
+
+    /// <p>Creates a Lightsail load balancer TLS certificate.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p>
+    fn create_load_balancer_tls_certificate(
+        &self,
+        input: &CreateLoadBalancerTlsCertificateRequest,
+    ) -> Result<CreateLoadBalancerTlsCertificateResult, CreateLoadBalancerTlsCertificateError>;
+
+    /// <p><p>Deletes the specified block storage disk. The disk must be in the <code>available</code> state (not attached to a Lightsail instance).</p> <note> <p>The disk may remain in the <code>deleting</code> state for several minutes.</p> </note></p>
+    fn delete_disk(&self, input: &DeleteDiskRequest) -> Result<DeleteDiskResult, DeleteDiskError>;
+
+    /// <p>Deletes the specified disk snapshot.</p> <p>When you make periodic snapshots of a disk, the snapshots are incremental, and only the blocks on the device that have changed since your last snapshot are saved in the new snapshot. When you delete a snapshot, only the data not needed for any other snapshot is removed. So regardless of which prior snapshots have been deleted, all active snapshots will have access to all the information needed to restore the disk.</p>
+    fn delete_disk_snapshot(
+        &self,
+        input: &DeleteDiskSnapshotRequest,
+    ) -> Result<DeleteDiskSnapshotResult, DeleteDiskSnapshotError>;
+
     /// <p>Deletes the specified domain recordset and all of its domain records.</p>
     fn delete_domain(
         &self,
@@ -7130,6 +10652,27 @@ pub trait Lightsail {
         input: &DeleteKeyPairRequest,
     ) -> Result<DeleteKeyPairResult, DeleteKeyPairError>;
 
+    /// <p>Deletes a Lightsail load balancer.</p>
+    fn delete_load_balancer(
+        &self,
+        input: &DeleteLoadBalancerRequest,
+    ) -> Result<DeleteLoadBalancerResult, DeleteLoadBalancerError>;
+
+    /// <p>Deletes a TLS/SSL certificate associated with a Lightsail load balancer.</p>
+    fn delete_load_balancer_tls_certificate(
+        &self,
+        input: &DeleteLoadBalancerTlsCertificateRequest,
+    ) -> Result<DeleteLoadBalancerTlsCertificateResult, DeleteLoadBalancerTlsCertificateError>;
+
+    /// <p>Detaches a stopped block storage disk from a Lightsail instance. Make sure to unmount any file systems on the device within your operating system before stopping the instance and detaching the disk.</p>
+    fn detach_disk(&self, input: &DetachDiskRequest) -> Result<DetachDiskResult, DetachDiskError>;
+
+    /// <p>Detaches the specified instances from a Lightsail load balancer.</p>
+    fn detach_instances_from_load_balancer(
+        &self,
+        input: &DetachInstancesFromLoadBalancerRequest,
+    ) -> Result<DetachInstancesFromLoadBalancerResult, DetachInstancesFromLoadBalancerError>;
+
     /// <p>Detaches a static IP from the Amazon Lightsail instance to which it is attached.</p>
     fn detach_static_ip(
         &self,
@@ -7155,6 +10698,24 @@ pub trait Lightsail {
 
     /// <p>Returns the list of bundles that are available for purchase. A bundle describes the specs for your virtual private server (or <i>instance</i>).</p>
     fn get_bundles(&self, input: &GetBundlesRequest) -> Result<GetBundlesResult, GetBundlesError>;
+
+    /// <p>Returns information about a specific block storage disk.</p>
+    fn get_disk(&self, input: &GetDiskRequest) -> Result<GetDiskResult, GetDiskError>;
+
+    /// <p>Returns information about a specific block storage disk snapshot.</p>
+    fn get_disk_snapshot(
+        &self,
+        input: &GetDiskSnapshotRequest,
+    ) -> Result<GetDiskSnapshotResult, GetDiskSnapshotError>;
+
+    /// <p>Returns information about all block storage disk snapshots in your AWS account and region.</p> <p>If you are describing a long list of disk snapshots, you can paginate the output to make the list more manageable. You can use the pageToken and nextPageToken values to retrieve the next items in the list.</p>
+    fn get_disk_snapshots(
+        &self,
+        input: &GetDiskSnapshotsRequest,
+    ) -> Result<GetDiskSnapshotsResult, GetDiskSnapshotsError>;
+
+    /// <p>Returns information about all block storage disks in your AWS account and region.</p> <p>If you are describing a long list of disks, you can paginate the output to make the list more manageable. You can use the pageToken and nextPageToken values to retrieve the next items in the list.</p>
+    fn get_disks(&self, input: &GetDisksRequest) -> Result<GetDisksResult, GetDisksError>;
 
     /// <p>Returns information about a specific domain recordset.</p>
     fn get_domain(&self, input: &GetDomainRequest) -> Result<GetDomainResult, GetDomainError>;
@@ -7218,6 +10779,30 @@ pub trait Lightsail {
         &self,
         input: &GetKeyPairsRequest,
     ) -> Result<GetKeyPairsResult, GetKeyPairsError>;
+
+    /// <p>Returns information about the specified Lightsail load balancer.</p>
+    fn get_load_balancer(
+        &self,
+        input: &GetLoadBalancerRequest,
+    ) -> Result<GetLoadBalancerResult, GetLoadBalancerError>;
+
+    /// <p>Returns information about health metrics for your Lightsail load balancer.</p>
+    fn get_load_balancer_metric_data(
+        &self,
+        input: &GetLoadBalancerMetricDataRequest,
+    ) -> Result<GetLoadBalancerMetricDataResult, GetLoadBalancerMetricDataError>;
+
+    /// <p>Returns information about the TLS certificates that are associated with the specified Lightsail load balancer.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p>
+    fn get_load_balancer_tls_certificates(
+        &self,
+        input: &GetLoadBalancerTlsCertificatesRequest,
+    ) -> Result<GetLoadBalancerTlsCertificatesResult, GetLoadBalancerTlsCertificatesError>;
+
+    /// <p>Returns information about all load balancers in an account.</p> <p>If you are describing a long list of load balancers, you can paginate the output to make the list more manageable. You can use the pageToken and nextPageToken values to retrieve the next items in the list.</p>
+    fn get_load_balancers(
+        &self,
+        input: &GetLoadBalancersRequest,
+    ) -> Result<GetLoadBalancersResult, GetLoadBalancersError>;
 
     /// <p>Returns information about a specific operation. Operations include events such as when you create an instance, allocate a static IP, attach a static IP, and so on.</p>
     fn get_operation(
@@ -7308,6 +10893,12 @@ pub trait Lightsail {
         &self,
         input: &UpdateDomainEntryRequest,
     ) -> Result<UpdateDomainEntryResult, UpdateDomainEntryError>;
+
+    /// <p>Updates the specified attribute for a load balancer.</p>
+    fn update_load_balancer_attribute(
+        &self,
+        input: &UpdateLoadBalancerAttributeRequest,
+    ) -> Result<UpdateLoadBalancerAttributeResult, UpdateLoadBalancerAttributeError>;
 }
 /// A client for the Amazon Lightsail API.
 pub struct LightsailClient<P, D>
@@ -7367,6 +10958,113 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(AllocateStaticIpError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Attaches a block storage disk to a running or stopped Lightsail instance and exposes it to the instance with the specified disk name.</p>
+    fn attach_disk(&self, input: &AttachDiskRequest) -> Result<AttachDiskResult, AttachDiskError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.AttachDisk");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AttachDiskResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AttachDiskError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Attaches one or more Lightsail instances to a load balancer.</p>
+    fn attach_instances_to_load_balancer(
+        &self,
+        input: &AttachInstancesToLoadBalancerRequest,
+    ) -> Result<AttachInstancesToLoadBalancerResult, AttachInstancesToLoadBalancerError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.AttachInstancesToLoadBalancer",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AttachInstancesToLoadBalancerResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AttachInstancesToLoadBalancerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Attaches a Transport Layer Security (TLS) certificate to your load balancer.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p>
+    fn attach_load_balancer_tls_certificate(
+        &self,
+        input: &AttachLoadBalancerTlsCertificateRequest,
+    ) -> Result<AttachLoadBalancerTlsCertificateResult, AttachLoadBalancerTlsCertificateError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.AttachLoadBalancerTlsCertificate",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(
+                    serde_json::from_str::<AttachLoadBalancerTlsCertificateResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AttachLoadBalancerTlsCertificateError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -7438,6 +11136,105 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(CloseInstancePublicPortsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Creates a block storage disk that can be attached to a Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>). The disk is created in the regional endpoint that you send the HTTP request to. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/overview/article/understanding-regions-and-availability-zones-in-amazon-lightsail">Regions and Availability Zones in Lightsail</a>.</p>
+    fn create_disk(&self, input: &CreateDiskRequest) -> Result<CreateDiskResult, CreateDiskError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.CreateDisk");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateDiskResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDiskError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Creates a block storage disk from a disk snapshot that can be attached to a Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>). The disk is created in the regional endpoint that you send the HTTP request to. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/overview/article/understanding-regions-and-availability-zones-in-amazon-lightsail">Regions and Availability Zones in Lightsail</a>.</p>
+    fn create_disk_from_snapshot(
+        &self,
+        input: &CreateDiskFromSnapshotRequest,
+    ) -> Result<CreateDiskFromSnapshotResult, CreateDiskFromSnapshotError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.CreateDiskFromSnapshot");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateDiskFromSnapshotResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDiskFromSnapshotError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Creates a snapshot of a block storage disk. You can use snapshots for backups, to make copies of disks, and to save data before shutting down a Lightsail instance.</p> <p>You can take a snapshot of an attached disk that is in use; however, snapshots only capture data that has been written to your disk at the time the snapshot command is issued. This may exclude any data that has been cached by any applications or the operating system. If you can pause any file systems on the disk long enough to take a snapshot, your snapshot should be complete. Nevertheless, if you cannot pause all file writes to the disk, you should unmount the disk from within the Lightsail instance, issue the create disk snapshot command, and then remount the disk to ensure a consistent and complete snapshot. You may remount and use your disk while the snapshot status is pending.</p>
+    fn create_disk_snapshot(
+        &self,
+        input: &CreateDiskSnapshotRequest,
+    ) -> Result<CreateDiskSnapshotResult, CreateDiskSnapshotError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.CreateDiskSnapshot");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateDiskSnapshotResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDiskSnapshotError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -7651,6 +11448,144 @@ where
         }
     }
 
+    /// <p>Creates a Lightsail load balancer.</p> <p>When you create a load balancer, you can specify certificates and port settings. You can create up to 5 load balancers per AWS Region in your account.</p>
+    fn create_load_balancer(
+        &self,
+        input: &CreateLoadBalancerRequest,
+    ) -> Result<CreateLoadBalancerResult, CreateLoadBalancerError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.CreateLoadBalancer");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateLoadBalancerResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateLoadBalancerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Creates a Lightsail load balancer TLS certificate.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p>
+    fn create_load_balancer_tls_certificate(
+        &self,
+        input: &CreateLoadBalancerTlsCertificateRequest,
+    ) -> Result<CreateLoadBalancerTlsCertificateResult, CreateLoadBalancerTlsCertificateError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.CreateLoadBalancerTlsCertificate",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(
+                    serde_json::from_str::<CreateLoadBalancerTlsCertificateResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateLoadBalancerTlsCertificateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p><p>Deletes the specified block storage disk. The disk must be in the <code>available</code> state (not attached to a Lightsail instance).</p> <note> <p>The disk may remain in the <code>deleting</code> state for several minutes.</p> </note></p>
+    fn delete_disk(&self, input: &DeleteDiskRequest) -> Result<DeleteDiskResult, DeleteDiskError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.DeleteDisk");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteDiskResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDiskError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Deletes the specified disk snapshot.</p> <p>When you make periodic snapshots of a disk, the snapshots are incremental, and only the blocks on the device that have changed since your last snapshot are saved in the new snapshot. When you delete a snapshot, only the data not needed for any other snapshot is removed. So regardless of which prior snapshots have been deleted, all active snapshots will have access to all the information needed to restore the disk.</p>
+    fn delete_disk_snapshot(
+        &self,
+        input: &DeleteDiskSnapshotRequest,
+    ) -> Result<DeleteDiskSnapshotResult, DeleteDiskSnapshotError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.DeleteDiskSnapshot");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteDiskSnapshotResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteDiskSnapshotError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Deletes the specified domain recordset and all of its domain records.</p>
     fn delete_domain(
         &self,
@@ -7821,6 +11756,149 @@ where
         }
     }
 
+    /// <p>Deletes a Lightsail load balancer.</p>
+    fn delete_load_balancer(
+        &self,
+        input: &DeleteLoadBalancerRequest,
+    ) -> Result<DeleteLoadBalancerResult, DeleteLoadBalancerError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.DeleteLoadBalancer");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteLoadBalancerResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteLoadBalancerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Deletes a TLS/SSL certificate associated with a Lightsail load balancer.</p>
+    fn delete_load_balancer_tls_certificate(
+        &self,
+        input: &DeleteLoadBalancerTlsCertificateRequest,
+    ) -> Result<DeleteLoadBalancerTlsCertificateResult, DeleteLoadBalancerTlsCertificateError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.DeleteLoadBalancerTlsCertificate",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(
+                    serde_json::from_str::<DeleteLoadBalancerTlsCertificateResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteLoadBalancerTlsCertificateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Detaches a stopped block storage disk from a Lightsail instance. Make sure to unmount any file systems on the device within your operating system before stopping the instance and detaching the disk.</p>
+    fn detach_disk(&self, input: &DetachDiskRequest) -> Result<DetachDiskResult, DetachDiskError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.DetachDisk");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DetachDiskResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DetachDiskError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Detaches the specified instances from a Lightsail load balancer.</p>
+    fn detach_instances_from_load_balancer(
+        &self,
+        input: &DetachInstancesFromLoadBalancerRequest,
+    ) -> Result<DetachInstancesFromLoadBalancerResult, DetachInstancesFromLoadBalancerError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.DetachInstancesFromLoadBalancer",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(
+                    serde_json::from_str::<DetachInstancesFromLoadBalancerResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DetachInstancesFromLoadBalancerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Detaches a static IP from the Amazon Lightsail instance to which it is attached.</p>
     fn detach_static_ip(
         &self,
@@ -7980,6 +12058,138 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(GetBundlesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Returns information about a specific block storage disk.</p>
+    fn get_disk(&self, input: &GetDiskRequest) -> Result<GetDiskResult, GetDiskError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.GetDisk");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(
+                    serde_json::from_str::<GetDiskResult>(String::from_utf8_lossy(&body).as_ref())
+                        .unwrap(),
+                )
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDiskError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Returns information about a specific block storage disk snapshot.</p>
+    fn get_disk_snapshot(
+        &self,
+        input: &GetDiskSnapshotRequest,
+    ) -> Result<GetDiskSnapshotResult, GetDiskSnapshotError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.GetDiskSnapshot");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetDiskSnapshotResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDiskSnapshotError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Returns information about all block storage disk snapshots in your AWS account and region.</p> <p>If you are describing a long list of disk snapshots, you can paginate the output to make the list more manageable. You can use the pageToken and nextPageToken values to retrieve the next items in the list.</p>
+    fn get_disk_snapshots(
+        &self,
+        input: &GetDiskSnapshotsRequest,
+    ) -> Result<GetDiskSnapshotsResult, GetDiskSnapshotsError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.GetDiskSnapshots");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetDiskSnapshotsResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDiskSnapshotsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Returns information about all block storage disks in your AWS account and region.</p> <p>If you are describing a long list of disks, you can paginate the output to make the list more manageable. You can use the pageToken and nextPageToken values to retrieve the next items in the list.</p>
+    fn get_disks(&self, input: &GetDisksRequest) -> Result<GetDisksResult, GetDisksError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.GetDisks");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(
+                    serde_json::from_str::<GetDisksResult>(String::from_utf8_lossy(&body).as_ref())
+                        .unwrap(),
+                )
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetDisksError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -8384,6 +12594,150 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(GetKeyPairsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Returns information about the specified Lightsail load balancer.</p>
+    fn get_load_balancer(
+        &self,
+        input: &GetLoadBalancerRequest,
+    ) -> Result<GetLoadBalancerResult, GetLoadBalancerError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.GetLoadBalancer");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetLoadBalancerResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetLoadBalancerError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Returns information about health metrics for your Lightsail load balancer.</p>
+    fn get_load_balancer_metric_data(
+        &self,
+        input: &GetLoadBalancerMetricDataRequest,
+    ) -> Result<GetLoadBalancerMetricDataResult, GetLoadBalancerMetricDataError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.GetLoadBalancerMetricData",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetLoadBalancerMetricDataResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetLoadBalancerMetricDataError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Returns information about the TLS certificates that are associated with the specified Lightsail load balancer.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p>
+    fn get_load_balancer_tls_certificates(
+        &self,
+        input: &GetLoadBalancerTlsCertificatesRequest,
+    ) -> Result<GetLoadBalancerTlsCertificatesResult, GetLoadBalancerTlsCertificatesError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.GetLoadBalancerTlsCertificates",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(
+                    serde_json::from_str::<GetLoadBalancerTlsCertificatesResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetLoadBalancerTlsCertificatesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Returns information about all load balancers in an account.</p> <p>If you are describing a long list of load balancers, you can paginate the output to make the list more manageable. You can use the pageToken and nextPageToken values to retrieve the next items in the list.</p>
+    fn get_load_balancers(
+        &self,
+        input: &GetLoadBalancersRequest,
+    ) -> Result<GetLoadBalancersResult, GetLoadBalancersError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.GetLoadBalancers");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetLoadBalancersResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetLoadBalancersError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -8953,6 +13307,43 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(UpdateDomainEntryError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Updates the specified attribute for a load balancer.</p>
+    fn update_load_balancer_attribute(
+        &self,
+        input: &UpdateLoadBalancerAttributeRequest,
+    ) -> Result<UpdateLoadBalancerAttributeResult, UpdateLoadBalancerAttributeError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.UpdateLoadBalancerAttribute",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateLoadBalancerAttributeResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateLoadBalancerAttributeError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }

@@ -2591,7 +2591,7 @@ pub struct CreateApplicationVersionMessage {
     pub build_configuration: Option<BuildConfiguration>,
     /// <p>Describes this version.</p>
     pub description: Option<String>,
-    /// <p>Preprocesses and validates the environment manifest and configuration files in the source bundle. Validating configuration files can identify issues prior to deploying the application version to an environment.</p>
+    /// <p><p>Preprocesses and validates the environment manifest (<code>env.yaml</code>) and configuration files (<code>*.config</code> files in the <code>.ebextensions</code> folder) in the source bundle. Validating configuration files can identify issues prior to deploying the application version to an environment.</p> <note> <p>The <code>Process</code> option validates Elastic Beanstalk configuration files. It doesn&#39;t validate your application&#39;s configuration files, like proxy server or Docker configuration.</p> </note></p>
     pub process: Option<bool>,
     /// <p>Specify a commit in an AWS CodeCommit Git repository to use as the source code for the application version.</p>
     pub source_build_information: Option<SourceBuildInformation>,
@@ -2671,7 +2671,7 @@ pub struct CreateConfigurationTemplateMessage {
     pub environment_id: Option<String>,
     /// <p>If specified, AWS Elastic Beanstalk sets the specified configuration option to the requested value. The new value overrides the value obtained from the solution stack or the source configuration template.</p>
     pub option_settings: Option<Vec<ConfigurationOptionSetting>>,
-    /// <p>The ARN of the custome platform.</p>
+    /// <p>The ARN of the custom platform.</p>
     pub platform_arn: Option<String>,
     /// <p>The name of the solution stack used by this configuration. The solution stack specifies the operating system, architecture, and application server for a configuration template. It determines the set of configuration options as well as the possible and default values.</p> <p> Use <a>ListAvailableSolutionStacks</a> to obtain a list of available solution stacks. </p> <p> A solution stack name or a source configuration parameter must be specified, otherwise AWS Elastic Beanstalk returns an <code>InvalidParameterValue</code> error. </p> <p>If a solution stack name is not specified and the source configuration parameter is specified, AWS Elastic Beanstalk uses the same solution stack as the source configuration template.</p>
     pub solution_stack_name: Option<String>,
@@ -6217,6 +6217,28 @@ impl ListPlatformVersionsResultDeserializer {
         Ok(obj)
     }
 }
+#[derive(Default, Debug, Clone)]
+pub struct ListTagsForResourceMessage {
+    /// <p>The Amazon Resource Name (ARN) of the resouce for which a tag list is requested.</p> <p>Must be the ARN of an Elastic Beanstalk environment.</p>
+    pub resource_arn: String,
+}
+
+/// Serialize `ListTagsForResourceMessage` contents to a `SignedRequest`.
+struct ListTagsForResourceMessageSerializer;
+impl ListTagsForResourceMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ListTagsForResourceMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "ResourceArn"),
+            &obj.resource_arn.replace("+", "%2B"),
+        );
+    }
+}
+
 /// <p>Describes the properties of a Listener for the LoadBalancer.</p>
 #[derive(Default, Debug, Clone)]
 pub struct Listener {
@@ -8138,6 +8160,20 @@ impl RequestIdDeserializer {
         Ok(obj)
     }
 }
+struct ResourceArnDeserializer;
+impl ResourceArnDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 struct ResourceIdDeserializer;
 impl ResourceIdDeserializer {
     #[allow(unused_variables)]
@@ -8161,6 +8197,62 @@ impl ResourceNameDeserializer {
     ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
+pub struct ResourceTagsDescriptionMessage {
+    /// <p>The Amazon Resource Name (ARN) of the resouce for which a tag list was requested.</p>
+    pub resource_arn: Option<String>,
+    /// <p>A list of tag key-value pairs.</p>
+    pub resource_tags: Option<Vec<Tag>>,
+}
+
+struct ResourceTagsDescriptionMessageDeserializer;
+impl ResourceTagsDescriptionMessageDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ResourceTagsDescriptionMessage, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ResourceTagsDescriptionMessage::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "ResourceArn" => {
+                        obj.resource_arn = Some(try!(ResourceArnDeserializer::deserialize(
+                            "ResourceArn",
+                            stack
+                        )));
+                    }
+                    "ResourceTags" => {
+                        obj.resource_tags = Some(try!(TagListDeserializer::deserialize(
+                            "ResourceTags",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -9111,6 +9203,49 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
+struct TagDeserializer;
+impl TagDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Tag, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = Tag::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Key" => {
+                        obj.key = Some(try!(TagKeyDeserializer::deserialize("Key", stack)));
+                    }
+                    "Value" => {
+                        obj.value = Some(try!(TagValueDeserializer::deserialize("Value", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+
 /// Serialize `Tag` contents to a `SignedRequest`.
 struct TagSerializer;
 impl TagSerializer {
@@ -9132,6 +9267,99 @@ impl TagSerializer {
                 &field_value.replace("+", "%2B"),
             );
         }
+    }
+}
+
+struct TagKeyDeserializer;
+impl TagKeyDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `TagKeyList` contents to a `SignedRequest`.
+struct TagKeyListSerializer;
+impl TagKeyListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
+struct TagListDeserializer;
+impl TagListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<Tag>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "member" {
+                        obj.push(try!(TagDeserializer::deserialize("member", stack)));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `TagList` contents to a `SignedRequest`.
+struct TagListSerializer;
+impl TagListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<Tag>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            TagSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+struct TagValueDeserializer;
+impl TagValueDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
     }
 }
 
@@ -9586,6 +9814,46 @@ impl UpdateEnvironmentMessageSerializer {
             params.put(
                 &format!("{}{}", prefix, "VersionLabel"),
                 &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct UpdateTagsForResourceMessage {
+    /// <p>The Amazon Resource Name (ARN) of the resouce to be updated.</p> <p>Must be the ARN of an Elastic Beanstalk environment.</p>
+    pub resource_arn: String,
+    /// <p>A list of tags to add or update.</p> <p>If a key of an existing tag is added, the tag's value is updated.</p>
+    pub tags_to_add: Option<Vec<Tag>>,
+    /// <p>A list of tag keys to remove.</p> <p>If a tag key doesn't exist, it is silently ignored.</p>
+    pub tags_to_remove: Option<Vec<String>>,
+}
+
+/// Serialize `UpdateTagsForResourceMessage` contents to a `SignedRequest`.
+struct UpdateTagsForResourceMessageSerializer;
+impl UpdateTagsForResourceMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &UpdateTagsForResourceMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "ResourceArn"),
+            &obj.resource_arn.replace("+", "%2B"),
+        );
+        if let Some(ref field_value) = obj.tags_to_add {
+            TagListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "TagsToAdd"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.tags_to_remove {
+            TagKeyListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "TagsToRemove"),
+                field_value,
             );
         }
     }
@@ -12106,6 +12374,93 @@ impl Error for ListPlatformVersionsError {
         }
     }
 }
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    InsufficientPrivileges(String),
+    /// <p>A resource doesn't exist for the specified Amazon Resource Name (ARN).</p>
+    ResourceNotFound(String),
+    /// <p>The type of the specified Amazon Resource Name (ARN) isn't supported for this operation.</p>
+    ResourceTypeNotSupported(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_body(body: &str) -> ListTagsForResourceError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "InsufficientPrivilegesException" => {
+                    ListTagsForResourceError::InsufficientPrivileges(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    ListTagsForResourceError::ResourceNotFound(String::from(parsed_error.message))
+                }
+                "ResourceTypeNotSupportedException" => {
+                    ListTagsForResourceError::ResourceTypeNotSupported(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                _ => ListTagsForResourceError::Unknown(String::from(body)),
+            },
+            Err(_) => ListTagsForResourceError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for ListTagsForResourceError {
+    fn from(err: XmlParseError) -> ListTagsForResourceError {
+        let XmlParseError(message) = err;
+        ListTagsForResourceError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for ListTagsForResourceError {
+    fn from(err: CredentialsError) -> ListTagsForResourceError {
+        ListTagsForResourceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListTagsForResourceError {
+    fn from(err: HttpDispatchError) -> ListTagsForResourceError {
+        ListTagsForResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTagsForResourceError {
+    fn from(err: io::Error) -> ListTagsForResourceError {
+        ListTagsForResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTagsForResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            ListTagsForResourceError::InsufficientPrivileges(ref cause) => cause,
+            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+            ListTagsForResourceError::ResourceTypeNotSupported(ref cause) => cause,
+            ListTagsForResourceError::Validation(ref cause) => cause,
+            ListTagsForResourceError::Credentials(ref err) => err.description(),
+            ListTagsForResourceError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListTagsForResourceError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by RebuildEnvironment
 #[derive(Debug, PartialEq)]
 pub enum RebuildEnvironmentError {
@@ -12871,6 +13226,105 @@ impl Error for UpdateEnvironmentError {
         }
     }
 }
+/// Errors returned by UpdateTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum UpdateTagsForResourceError {
+    /// <p>The specified account does not have sufficient privileges for one of more AWS services.</p>
+    InsufficientPrivileges(String),
+    /// <p>Unable to perform the specified operation because another operation that effects an element in this activity is already in progress.</p>
+    OperationInProgress(String),
+    /// <p>A resource doesn't exist for the specified Amazon Resource Name (ARN).</p>
+    ResourceNotFound(String),
+    /// <p>The type of the specified Amazon Resource Name (ARN) isn't supported for this operation.</p>
+    ResourceTypeNotSupported(String),
+    /// <p>The number of tags in the resource would exceed the number of tags that each resource can have.</p> <p>To calculate this, the operation considers both the number of tags the resource already has and the tags this operation would add if it succeeded.</p>
+    TooManyTags(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateTagsForResourceError {
+    pub fn from_body(body: &str) -> UpdateTagsForResourceError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                "InsufficientPrivilegesException" => {
+                    UpdateTagsForResourceError::InsufficientPrivileges(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "OperationInProgressException" => UpdateTagsForResourceError::OperationInProgress(
+                    String::from(parsed_error.message),
+                ),
+                "ResourceNotFoundException" => {
+                    UpdateTagsForResourceError::ResourceNotFound(String::from(parsed_error.message))
+                }
+                "ResourceTypeNotSupportedException" => {
+                    UpdateTagsForResourceError::ResourceTypeNotSupported(String::from(
+                        parsed_error.message,
+                    ))
+                }
+                "TooManyTagsException" => {
+                    UpdateTagsForResourceError::TooManyTags(String::from(parsed_error.message))
+                }
+                _ => UpdateTagsForResourceError::Unknown(String::from(body)),
+            },
+            Err(_) => UpdateTagsForResourceError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for UpdateTagsForResourceError {
+    fn from(err: XmlParseError) -> UpdateTagsForResourceError {
+        let XmlParseError(message) = err;
+        UpdateTagsForResourceError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for UpdateTagsForResourceError {
+    fn from(err: CredentialsError) -> UpdateTagsForResourceError {
+        UpdateTagsForResourceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateTagsForResourceError {
+    fn from(err: HttpDispatchError) -> UpdateTagsForResourceError {
+        UpdateTagsForResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateTagsForResourceError {
+    fn from(err: io::Error) -> UpdateTagsForResourceError {
+        UpdateTagsForResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateTagsForResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateTagsForResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateTagsForResourceError::InsufficientPrivileges(ref cause) => cause,
+            UpdateTagsForResourceError::OperationInProgress(ref cause) => cause,
+            UpdateTagsForResourceError::ResourceNotFound(ref cause) => cause,
+            UpdateTagsForResourceError::ResourceTypeNotSupported(ref cause) => cause,
+            UpdateTagsForResourceError::TooManyTags(ref cause) => cause,
+            UpdateTagsForResourceError::Validation(ref cause) => cause,
+            UpdateTagsForResourceError::Credentials(ref err) => err.description(),
+            UpdateTagsForResourceError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateTagsForResourceError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ValidateConfigurationSettings
 #[derive(Debug, PartialEq)]
 pub enum ValidateConfigurationSettingsError {
@@ -13006,7 +13460,7 @@ pub trait ElasticBeanstalk {
         input: &CreatePlatformVersionRequest,
     ) -> Result<CreatePlatformVersionResult, CreatePlatformVersionError>;
 
-    /// <p>Creates the Amazon S3 storage location for the account.</p> <p>This location is used to store user log files.</p>
+    /// <p>Creates a bucket in Amazon S3 to store application versions, logs, and other files used by Elastic Beanstalk environments. The Elastic Beanstalk console and EB CLI call this API the first time you create an environment in a region. If the storage location already exists, <code>CreateStorageLocation</code> still returns the bucket name but does not create a new bucket.</p>
     fn create_storage_location(
         &self,
     ) -> Result<CreateStorageLocationResultMessage, CreateStorageLocationError>;
@@ -13127,6 +13581,12 @@ pub trait ElasticBeanstalk {
         input: &ListPlatformVersionsRequest,
     ) -> Result<ListPlatformVersionsResult, ListPlatformVersionsError>;
 
+    /// <p>Returns the tags applied to an AWS Elastic Beanstalk resource. The response contains a list of tag key-value pairs.</p> <p>Currently, Elastic Beanstalk only supports tagging of Elastic Beanstalk environments. For details about environment tagging, see <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.tagging.html">Tagging Resources in Your Elastic Beanstalk Environment</a>.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: &ListTagsForResourceMessage,
+    ) -> Result<ResourceTagsDescriptionMessage, ListTagsForResourceError>;
+
     /// <p>Deletes and recreates all of the AWS resources (for example: the Auto Scaling group, load balancer, etc.) for a specified environment and forces a restart.</p>
     fn rebuild_environment(
         &self,
@@ -13195,6 +13655,12 @@ pub trait ElasticBeanstalk {
         &self,
         input: &UpdateEnvironmentMessage,
     ) -> Result<EnvironmentDescription, UpdateEnvironmentError>;
+
+    /// <p>Update the list of tags applied to an AWS Elastic Beanstalk resource. Two lists can be passed: <code>TagsToAdd</code> for tags to add or update, and <code>TagsToRemove</code>.</p> <p>Currently, Elastic Beanstalk only supports tagging of Elastic Beanstalk environments. For details about environment tagging, see <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.tagging.html">Tagging Resources in Your Elastic Beanstalk Environment</a>.</p> <p>If you create a custom IAM user policy to control permission to this operation, specify one of the following two virtual actions (or both) instead of the API operation name:</p> <dl> <dt>elasticbeanstalk:AddTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tags to add in the <code>TagsToAdd</code> parameter.</p> </dd> <dt>elasticbeanstalk:RemoveTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tag keys to remove in the <code>TagsToRemove</code> parameter.</p> </dd> </dl> <p>For details about creating a custom user policy, see <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/AWSHowTo.iam.managed-policies.html#AWSHowTo.iam.policies">Creating a Custom User Policy</a>.</p>
+    fn update_tags_for_resource(
+        &self,
+        input: &UpdateTagsForResourceMessage,
+    ) -> Result<(), UpdateTagsForResourceError>;
 
     /// <p>Takes a set of configuration settings and either a configuration template or environment, and determines whether those values are valid.</p> <p>This action returns a list of messages indicating any errors or warnings associated with the selection of option values.</p>
     fn validate_configuration_settings(
@@ -13674,7 +14140,7 @@ where
         }
     }
 
-    /// <p>Creates the Amazon S3 storage location for the account.</p> <p>This location is used to store user log files.</p>
+    /// <p>Creates a bucket in Amazon S3 to store application versions, logs, and other files used by Elastic Beanstalk environments. The Elastic Beanstalk console and EB CLI call this API the first time you create an environment in a region. If the storage location already exists, <code>CreateStorageLocation</code> still returns the bucket name but does not create a new bucket.</p>
     fn create_storage_location(
         &self,
     ) -> Result<CreateStorageLocationResultMessage, CreateStorageLocationError> {
@@ -14628,6 +15094,57 @@ where
         }
     }
 
+    /// <p>Returns the tags applied to an AWS Elastic Beanstalk resource. The response contains a list of tag key-value pairs.</p> <p>Currently, Elastic Beanstalk only supports tagging of Elastic Beanstalk environments. For details about environment tagging, see <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.tagging.html">Tagging Resources in Your Elastic Beanstalk Environment</a>.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: &ListTagsForResourceMessage,
+    ) -> Result<ResourceTagsDescriptionMessage, ListTagsForResourceError> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ListTagsForResource");
+        params.put("Version", "2010-12-01");
+        ListTagsForResourceMessageSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = ResourceTagsDescriptionMessage::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    try!(start_element(&actual_tag_name, &mut stack));
+                    result = try!(ResourceTagsDescriptionMessageDeserializer::deserialize(
+                        "ListTagsForResourceResult",
+                        &mut stack
+                    ));
+                    skip_tree(&mut stack);
+                    try!(end_element(&actual_tag_name, &mut stack));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTagsForResourceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Deletes and recreates all of the AWS resources (for example: the Auto Scaling group, load balancer, etc.) for a specified environment and forces a restart.</p>
     fn rebuild_environment(
         &self,
@@ -15108,6 +15625,36 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(UpdateEnvironmentError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Update the list of tags applied to an AWS Elastic Beanstalk resource. Two lists can be passed: <code>TagsToAdd</code> for tags to add or update, and <code>TagsToRemove</code>.</p> <p>Currently, Elastic Beanstalk only supports tagging of Elastic Beanstalk environments. For details about environment tagging, see <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.tagging.html">Tagging Resources in Your Elastic Beanstalk Environment</a>.</p> <p>If you create a custom IAM user policy to control permission to this operation, specify one of the following two virtual actions (or both) instead of the API operation name:</p> <dl> <dt>elasticbeanstalk:AddTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tags to add in the <code>TagsToAdd</code> parameter.</p> </dd> <dt>elasticbeanstalk:RemoveTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tag keys to remove in the <code>TagsToRemove</code> parameter.</p> </dd> </dl> <p>For details about creating a custom user policy, see <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/AWSHowTo.iam.managed-policies.html#AWSHowTo.iam.policies">Creating a Custom User Policy</a>.</p>
+    fn update_tags_for_resource(
+        &self,
+        input: &UpdateTagsForResourceMessage,
+    ) -> Result<(), UpdateTagsForResourceError> {
+        let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "UpdateTagsForResource");
+        params.put("Version", "2010-12-01");
+        UpdateTagsForResourceMessageSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result = ();
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateTagsForResourceError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }

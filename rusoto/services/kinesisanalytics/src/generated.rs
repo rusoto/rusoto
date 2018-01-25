@@ -43,6 +43,25 @@ pub struct AddApplicationCloudWatchLoggingOptionRequest {
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AddApplicationCloudWatchLoggingOptionResponse;
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct AddApplicationInputProcessingConfigurationRequest {
+    /// <p>Name of the application to which you want to add the input processing configuration.</p>
+    #[serde(rename = "ApplicationName")]
+    pub application_name: String,
+    /// <p>Version of the application to which you want to add the input processing configuration. You can use the <a>DescribeApplication</a> operation to get the current application version. If the version specified is not the current version, the <code>ConcurrentModificationException</code> is returned.</p>
+    #[serde(rename = "CurrentApplicationVersionId")]
+    pub current_application_version_id: i64,
+    /// <p>The ID of the input configuration to add the input processing configuration to. You can get a list of the input IDs for an application using the <a>DescribeApplication</a> operation.</p>
+    #[serde(rename = "InputId")]
+    pub input_id: String,
+    /// <p>The <a>InputProcessingConfiguration</a> to add to the application.</p>
+    #[serde(rename = "InputProcessingConfiguration")]
+    pub input_processing_configuration: InputProcessingConfiguration,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct AddApplicationInputProcessingConfigurationResponse;
+
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AddApplicationInputRequest {
@@ -52,7 +71,7 @@ pub struct AddApplicationInputRequest {
     /// <p>Current version of your Amazon Kinesis Analytics application. You can use the <a>DescribeApplication</a> operation to find the current application version.</p>
     #[serde(rename = "CurrentApplicationVersionId")]
     pub current_application_version_id: i64,
-    /// <p><p/></p>
+    /// <p>The <a>Input</a> to add.</p>
     #[serde(rename = "Input")]
     pub input: Input,
 }
@@ -67,10 +86,10 @@ pub struct AddApplicationOutputRequest {
     /// <p>Name of the application to which you want to add the output configuration.</p>
     #[serde(rename = "ApplicationName")]
     pub application_name: String,
-    /// <p>Version of the application to which you want add the output configuration. You can use the <a>DescribeApplication</a> operation to get the current application version. If the version specified is not the current version, the <code>ConcurrentModificationException</code> is returned. </p>
+    /// <p>Version of the application to which you want to add the output configuration. You can use the <a>DescribeApplication</a> operation to get the current application version. If the version specified is not the current version, the <code>ConcurrentModificationException</code> is returned. </p>
     #[serde(rename = "CurrentApplicationVersionId")]
     pub current_application_version_id: i64,
-    /// <p>An array of objects, each describing one output configuration. In the output configuration, you specify the name of an in-application stream, a destination (that is, an Amazon Kinesis stream or an Amazon Kinesis Firehose delivery stream), and record the formation to use when writing to the destination.</p>
+    /// <p>An array of objects, each describing one output configuration. In the output configuration, you specify the name of an in-application stream, a destination (that is, an Amazon Kinesis stream, an Amazon Kinesis Firehose delivery stream, or an Amazon Lambda function), and record the formation to use when writing to the destination.</p>
     #[serde(rename = "Output")]
     pub output: Output,
 }
@@ -124,7 +143,7 @@ pub struct ApplicationDetail {
     #[serde(rename = "CloudWatchLoggingOptionDescriptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cloud_watch_logging_option_descriptions: Option<Vec<CloudWatchLoggingOptionDescription>>,
-    /// <p>Timestamp when the application version was created.</p>
+    /// <p>Time stamp when the application version was created.</p>
     #[serde(rename = "CreateTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_timestamp: Option<f64>,
@@ -132,7 +151,7 @@ pub struct ApplicationDetail {
     #[serde(rename = "InputDescriptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_descriptions: Option<Vec<InputDescription>>,
-    /// <p>Timestamp when the application was last updated.</p>
+    /// <p>Time stamp when the application was last updated.</p>
     #[serde(rename = "LastUpdateTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_update_timestamp: Option<f64>,
@@ -241,7 +260,7 @@ pub struct CloudWatchLoggingOptionUpdate {
 /// <p>TBD</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateApplicationRequest {
-    /// <p>One or more SQL statements that read input data, transform it, and generate output. For example, you can write a SQL statement that reads data from one in-application stream, generates a running average of the number of advertisement clicks by vendor, and insert resulting rows in another in-application stream using pumps. For more inforamtion about the typical pattern, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-app-code.html">Application Code</a>. </p> <p>You can provide such series of SQL statements, where output of one statement can be used as the input for the next statement. You store intermediate results by creating in-application streams and pumps.</p> <p>Note that the application code must create the streams with names specified in the <code>Outputs</code>. For example, if your <code>Outputs</code> defines output streams named <code>ExampleOutputStream1</code> and <code>ExampleOutputStream2</code>, then your application code must create these streams. </p>
+    /// <p>One or more SQL statements that read input data, transform it, and generate output. For example, you can write a SQL statement that reads data from one in-application stream, generates a running average of the number of advertisement clicks by vendor, and insert resulting rows in another in-application stream using pumps. For more information about the typical pattern, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-app-code.html">Application Code</a>. </p> <p>You can provide such series of SQL statements, where output of one statement can be used as the input for the next statement. You store intermediate results by creating in-application streams and pumps.</p> <p>Note that the application code must create the streams with names specified in the <code>Outputs</code>. For example, if your <code>Outputs</code> defines output streams named <code>ExampleOutputStream1</code> and <code>ExampleOutputStream2</code>, then your application code must create these streams. </p>
     #[serde(rename = "ApplicationCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_code: Option<String>,
@@ -256,11 +275,11 @@ pub struct CreateApplicationRequest {
     #[serde(rename = "CloudWatchLoggingOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cloud_watch_logging_options: Option<Vec<CloudWatchLoggingOption>>,
-    /// <p>Use this parameter to configure the application input.</p> <p>You can configure your application to receive input from a single streaming source. In this configuration, you map this streaming source to an in-application stream that is created. Your application code can then query the in-application stream like a table (you can think of it as a constantly updating table).</p> <p>For the streaming source, you provide its Amazon Resource Name (ARN) and format of data on the stream (for example, JSON, CSV, etc). You also must provide an IAM role that Amazon Kinesis Analytics can assume to read this stream on your behalf.</p> <p>To create the in-application stream, you need to specify a schema to transform your data into a schematized version used in SQL. In the schema, you provide the necessary mapping of the data elements in the streaming source to record columns in the in-app stream.</p>
+    /// <p>Use this parameter to configure the application input.</p> <p>You can configure your application to receive input from a single streaming source. In this configuration, you map this streaming source to an in-application stream that is created. Your application code can then query the in-application stream like a table (you can think of it as a constantly updating table).</p> <p>For the streaming source, you provide its Amazon Resource Name (ARN) and format of data on the stream (for example, JSON, CSV, etc.). You also must provide an IAM role that Amazon Kinesis Analytics can assume to read this stream on your behalf.</p> <p>To create the in-application stream, you need to specify a schema to transform your data into a schematized version used in SQL. In the schema, you provide the necessary mapping of the data elements in the streaming source to record columns in the in-app stream.</p>
     #[serde(rename = "Inputs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inputs: Option<Vec<Input>>,
-    /// <p>You can configure application output to write data from any of the in-application streams to up to five destinations.</p> <p>These destinations can be Amazon Kinesis streams, Amazon Kinesis Firehose delivery streams, or both.</p> <p>In the configuration, you specify the in-application stream name, the destination stream Amazon Resource Name (ARN), and the format to use when writing data. You must also provide an IAM role that Amazon Kinesis Analytics can assume to write to the destination stream on your behalf.</p> <p>In the output configuration, you also provide the output stream Amazon Resource Name (ARN) and the format of data in the stream (for example, JSON, CSV). You also must provide an IAM role that Amazon Kinesis Analytics can assume to write to this stream on your behalf.</p>
+    /// <p>You can configure application output to write data from any of the in-application streams to up to three destinations.</p> <p>These destinations can be Amazon Kinesis streams, Amazon Kinesis Firehose delivery streams, Amazon Lambda destinations, or any combination of the three.</p> <p>In the configuration, you specify the in-application stream name, the destination stream or Lambda function Amazon Resource Name (ARN), and the format to use when writing data. You must also provide an IAM role that Amazon Kinesis Analytics can assume to write to the destination stream or Lambda function on your behalf.</p> <p>In the output configuration, you also provide the output stream or Lambda function ARN. For stream destinations, you provide the format of data in the stream (for example, JSON, CSV). You also must provide an IAM role that Amazon Kinesis Analytics can assume to write to the stream or Lambda function on your behalf.</p>
     #[serde(rename = "Outputs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub outputs: Option<Vec<Output>>,
@@ -279,7 +298,7 @@ pub struct DeleteApplicationCloudWatchLoggingOptionRequest {
     /// <p>The Kinesis Analytics application name.</p>
     #[serde(rename = "ApplicationName")]
     pub application_name: String,
-    /// <p>The <code>CloudWatchLoggingOptionId</code> of the CloudWatch logging option to delete. You can use the <a>DescribeApplication</a> operation to get the <code>CloudWatchLoggingOptionId</code>. </p>
+    /// <p>The <code>CloudWatchLoggingOptionId</code> of the CloudWatch logging option to delete. You can get the <code>CloudWatchLoggingOptionId</code> by using the <a>DescribeApplication</a> operation. </p>
     #[serde(rename = "CloudWatchLoggingOptionId")]
     pub cloud_watch_logging_option_id: String,
     /// <p>The version ID of the Kinesis Analytics application.</p>
@@ -289,6 +308,22 @@ pub struct DeleteApplicationCloudWatchLoggingOptionRequest {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DeleteApplicationCloudWatchLoggingOptionResponse;
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteApplicationInputProcessingConfigurationRequest {
+    /// <p>The Kinesis Analytics application name.</p>
+    #[serde(rename = "ApplicationName")]
+    pub application_name: String,
+    /// <p>The version ID of the Kinesis Analytics application.</p>
+    #[serde(rename = "CurrentApplicationVersionId")]
+    pub current_application_version_id: i64,
+    /// <p>The ID of the input configuration from which to delete the input processing configuration. You can get a list of the input IDs for an application by using the <a>DescribeApplication</a> operation.</p>
+    #[serde(rename = "InputId")]
+    pub input_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteApplicationInputProcessingConfigurationResponse;
 
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
@@ -364,18 +399,28 @@ pub struct DestinationSchema {
     pub record_format_type: Option<String>,
 }
 
-/// <p><p/></p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DiscoverInputSchemaRequest {
+    /// <p>The <a>InputProcessingConfiguration</a> to use to preprocess the records before discovering the schema of the records.</p>
+    #[serde(rename = "InputProcessingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_processing_configuration: Option<InputProcessingConfiguration>,
     /// <p>Point at which you want Amazon Kinesis Analytics to start reading records from the specified streaming source discovery purposes.</p>
     #[serde(rename = "InputStartingPositionConfiguration")]
-    pub input_starting_position_configuration: InputStartingPositionConfiguration,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_starting_position_configuration: Option<InputStartingPositionConfiguration>,
     /// <p>Amazon Resource Name (ARN) of the streaming source.</p>
     #[serde(rename = "ResourceARN")]
-    pub resource_arn: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_arn: Option<String>,
     /// <p>ARN of the IAM role that Amazon Kinesis Analytics can assume to access the stream on your behalf.</p>
     #[serde(rename = "RoleARN")]
-    pub role_arn: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+    /// <p>Specify this parameter to discover a schema from data in an S3 object.</p>
+    #[serde(rename = "S3Configuration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_configuration: Option<S3Configuration>,
 }
 
 /// <p><p/></p>
@@ -389,6 +434,10 @@ pub struct DiscoverInputSchemaResponse {
     #[serde(rename = "ParsedInputRecords")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parsed_input_records: Option<Vec<Vec<String>>>,
+    /// <p>Stream data that was modified by the processor specified in the <code>InputProcessingConfiguration</code> parameter.</p>
+    #[serde(rename = "ProcessedInputRecords")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub processed_input_records: Option<Vec<String>>,
     /// <p>Raw stream data that was sampled to infer the schema.</p>
     #[serde(rename = "RawInputRecords")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -398,14 +447,18 @@ pub struct DiscoverInputSchemaResponse {
 /// <p>When you configure the application input, you specify the streaming source, the in-application stream name that is created, and the mapping between the two. For more information, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-input.html">Configuring Application Input</a>. </p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct Input {
-    /// <p>Describes the number of in-application streams to create. </p> <p>Data from your source will be routed to these in-application input streams.</p> <p> (see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-input.html">Configuring Application Input</a>.</p>
+    /// <p>Describes the number of in-application streams to create. </p> <p>Data from your source is routed to these in-application input streams.</p> <p> (see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-input.html">Configuring Application Input</a>.</p>
     #[serde(rename = "InputParallelism")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_parallelism: Option<InputParallelism>,
+    /// <p>The <a>InputProcessingConfiguration</a> for the input. An input processor transforms records as they are received from the stream, before the application's SQL code executes. Currently, the only input processing configuration available is <a>InputLambdaProcessor</a>.</p>
+    #[serde(rename = "InputProcessingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_processing_configuration: Option<InputProcessingConfiguration>,
     /// <p>Describes the format of the data in the streaming source, and how each data element maps to corresponding columns in the in-application stream that is being created.</p> <p>Also used to describe the format of the reference data source.</p>
     #[serde(rename = "InputSchema")]
     pub input_schema: SourceSchema,
-    /// <p>If the streaming source is an Amazon Kinesis Firehose delivery stream, identifies the Firehose delivery stream's ARN and an IAM role that enables Amazon Kinesis Analytics to access the stream on your behalf.</p> <p>Note: Either <code>KinesisStreamsInput</code> or <code>KinesisFirehoseInput</code> is required.</p>
+    /// <p>If the streaming source is an Amazon Kinesis Firehose delivery stream, identifies the delivery stream's ARN and an IAM role that enables Amazon Kinesis Analytics to access the stream on your behalf.</p> <p>Note: Either <code>KinesisStreamsInput</code> or <code>KinesisFirehoseInput</code> is required.</p>
     #[serde(rename = "KinesisFirehoseInput")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kinesis_firehose_input: Option<KinesisFirehoseInput>,
@@ -413,7 +466,7 @@ pub struct Input {
     #[serde(rename = "KinesisStreamsInput")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kinesis_streams_input: Option<KinesisStreamsInput>,
-    /// <p>Name prefix to use when creating in-application stream. Suppose you specify a prefix "MyInApplicationStream". Amazon Kinesis Analytics will then create one or more (as per the <code>InputParallelism</code> count you specified) in-application streams with names "MyInApplicationStream_001", "MyInApplicationStream_002" and so on. </p>
+    /// <p>Name prefix to use when creating an in-application stream. Suppose that you specify a prefix "MyInApplicationStream." Amazon Kinesis Analytics then creates one or more (as per the <code>InputParallelism</code> count you specified) in-application streams with names "MyInApplicationStream_001," "MyInApplicationStream_002," and so on. </p>
     #[serde(rename = "NamePrefix")]
     pub name_prefix: String,
 }
@@ -444,6 +497,11 @@ pub struct InputDescription {
     #[serde(rename = "InputParallelism")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_parallelism: Option<InputParallelism>,
+    /// <p>The description of the preprocessor that executes on records in this input before the application's code is run.</p>
+    #[serde(rename = "InputProcessingConfigurationDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_processing_configuration_description: Option<InputProcessingConfigurationDescription>,
+    /// <p>Describes the format of the data in the streaming source, and how each data element maps to corresponding columns in the in-application stream that is being created. </p>
     #[serde(rename = "InputSchema")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_schema: Option<SourceSchema>,
@@ -451,11 +509,11 @@ pub struct InputDescription {
     #[serde(rename = "InputStartingPositionConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_starting_position_configuration: Option<InputStartingPositionConfiguration>,
-    /// <p>If an Amazon Kinesis Firehose delivery stream is configured as a streaming source, provides the Firehose delivery stream's Amazon Resource Name (ARN) and an IAM role that enables Amazon Kinesis Analytics to access the stream on your behalf.</p>
+    /// <p>If an Amazon Kinesis Firehose delivery stream is configured as a streaming source, provides the delivery stream's ARN and an IAM role that enables Amazon Kinesis Analytics to access the stream on your behalf.</p>
     #[serde(rename = "KinesisFirehoseInputDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kinesis_firehose_input_description: Option<KinesisFirehoseInputDescription>,
-    /// <p>If an Amazon Kinesis stream is configured as streaming source, provides Amazon Kinesis stream's ARN and an IAM role that enables Amazon Kinesis Analytics to access the stream on your behalf.</p>
+    /// <p>If an Amazon Kinesis stream is configured as streaming source, provides Amazon Kinesis stream's Amazon Resource Name (ARN) and an IAM role that enables Amazon Kinesis Analytics to access the stream on your behalf.</p>
     #[serde(rename = "KinesisStreamsInputDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kinesis_streams_input_description: Option<KinesisStreamsInputDescription>,
@@ -463,6 +521,43 @@ pub struct InputDescription {
     #[serde(rename = "NamePrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name_prefix: Option<String>,
+}
+
+/// <p>An object that contains the Amazon Resource Name (ARN) of the <a href="https://aws.amazon.com/documentation/lambda/">AWS Lambda</a> function that is used to preprocess records in the stream, and the ARN of the IAM role that is used to access the AWS Lambda function. </p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct InputLambdaProcessor {
+    /// <p>The ARN of the <a href="https://aws.amazon.com/documentation/lambda/">AWS Lambda</a> function that operates on records in the stream.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+    /// <p>The ARN of the IAM role that is used to access the AWS Lambda function.</p>
+    #[serde(rename = "RoleARN")]
+    pub role_arn: String,
+}
+
+/// <p>An object that contains the Amazon Resource Name (ARN) of the <a href="https://aws.amazon.com/documentation/lambda/">AWS Lambda</a> function that is used to preprocess records in the stream, and the ARN of the IAM role that is used to access the AWS Lambda expression.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct InputLambdaProcessorDescription {
+    /// <p>The ARN of the <a href="https://aws.amazon.com/documentation/lambda/">AWS Lambda</a> function that is used to preprocess the records in the stream.</p>
+    #[serde(rename = "ResourceARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_arn: Option<String>,
+    /// <p>The ARN of the IAM role that is used to access the AWS Lambda function.</p>
+    #[serde(rename = "RoleARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+}
+
+/// <p>Represents an update to the <a>InputLambdaProcessor</a> that is used to preprocess the records in the stream.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct InputLambdaProcessorUpdate {
+    /// <p>The Amazon Resource Name (ARN) of the new <a href="https://aws.amazon.com/documentation/lambda/">AWS Lambda</a> function that is used to preprocess the records in the stream.</p>
+    #[serde(rename = "ResourceARNUpdate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_arn_update: Option<String>,
+    /// <p>The ARN of the new IAM role that is used to access the AWS Lambda function.</p>
+    #[serde(rename = "RoleARNUpdate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn_update: Option<String>,
 }
 
 /// <p>Describes the number of in-application streams to create for a given streaming source. For information about parallelism, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-input.html">Configuring Application Input</a>. </p>
@@ -483,7 +578,32 @@ pub struct InputParallelismUpdate {
     pub count_update: Option<i64>,
 }
 
-/// <p> Describes updates for the application's input schema. </p>
+/// <p>Provides a description of a processor that is used to preprocess the records in the stream before being processed by your application code. Currently, the only input processor available is <a href="https://aws.amazon.com/documentation/lambda/">AWS Lambda</a>.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct InputProcessingConfiguration {
+    /// <p>The <a>InputLambdaProcessor</a> that is used to preprocess the records in the stream before being processed by your application code.</p>
+    #[serde(rename = "InputLambdaProcessor")]
+    pub input_lambda_processor: InputLambdaProcessor,
+}
+
+/// <p>Provides configuration information about an input processor. Currently, the only input processor available is <a href="https://aws.amazon.com/documentation/lambda/">AWS Lambda</a>.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct InputProcessingConfigurationDescription {
+    /// <p>Provides configuration information about the associated <a>InputLambdaProcessorDescription</a>.</p>
+    #[serde(rename = "InputLambdaProcessorDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_lambda_processor_description: Option<InputLambdaProcessorDescription>,
+}
+
+/// <p>Describes updates to an <a>InputProcessingConfiguration</a>. </p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct InputProcessingConfigurationUpdate {
+    /// <p>Provides update information for an <a>InputLambdaProcessor</a>.</p>
+    #[serde(rename = "InputLambdaProcessorUpdate")]
+    pub input_lambda_processor_update: InputLambdaProcessorUpdate,
+}
+
+/// <p>Describes updates for the application's input schema.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct InputSchemaUpdate {
     /// <p>A list of <code>RecordColumn</code> objects. Each object describes the mapping of the streaming source element to the corresponding column in the in-application stream. </p>
@@ -503,7 +623,7 @@ pub struct InputSchemaUpdate {
 /// <p>Describes the point at which the application reads from the streaming source.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct InputStartingPositionConfiguration {
-    /// <p><p>The starting position on the stream.</p> <ul> <li> <p> <code>NOW</code> - Start reading just after the most recent record in the stream, start at the request timestamp that the customer issued.</p> </li> <li> <p> <code>TRIM<em>HORIZON</code> - Start reading at the last untrimmed record in the stream, which is the oldest record available in the stream. This option is not available for an Amazon Kinesis Firehose delivery stream.</p> </li> <li> <p> <code>LAST</em>STOPPED_POINT</code> - Resume reading from where the application last stopped reading.</p> </li> </ul></p>
+    /// <p><p>The starting position on the stream.</p> <ul> <li> <p> <code>NOW</code> - Start reading just after the most recent record in the stream, start at the request time stamp that the customer issued.</p> </li> <li> <p> <code>TRIM<em>HORIZON</code> - Start reading at the last untrimmed record in the stream, which is the oldest record available in the stream. This option is not available for an Amazon Kinesis Firehose delivery stream.</p> </li> <li> <p> <code>LAST</em>STOPPED_POINT</code> - Resume reading from where the application last stopped reading.</p> </li> </ul></p>
     #[serde(rename = "InputStartingPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_starting_position: Option<String>,
@@ -519,15 +639,19 @@ pub struct InputUpdate {
     #[serde(rename = "InputParallelismUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_parallelism_update: Option<InputParallelismUpdate>,
+    /// <p>Describes updates for an input processing configuration.</p>
+    #[serde(rename = "InputProcessingConfigurationUpdate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_processing_configuration_update: Option<InputProcessingConfigurationUpdate>,
     /// <p>Describes the data format on the streaming source, and how record elements on the streaming source map to columns of the in-application stream that is created.</p>
     #[serde(rename = "InputSchemaUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_schema_update: Option<InputSchemaUpdate>,
-    /// <p>If an Amazon Kinesis Firehose delivery stream is the streaming source to be updated, provides an updated stream Amazon Resource Name (ARN) and IAM role ARN.</p>
+    /// <p>If an Amazon Kinesis Firehose delivery stream is the streaming source to be updated, provides an updated stream ARN and IAM role ARN.</p>
     #[serde(rename = "KinesisFirehoseInputUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kinesis_firehose_input_update: Option<KinesisFirehoseInputUpdate>,
-    /// <p>If a Amazon Kinesis stream is the streaming source to be updated, provides an updated stream ARN and IAM role ARN.</p>
+    /// <p>If an Amazon Kinesis stream is the streaming source to be updated, provides an updated stream Amazon Resource Name (ARN) and IAM role ARN.</p>
     #[serde(rename = "KinesisStreamsInputUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kinesis_streams_input_update: Option<KinesisStreamsInputUpdate>,
@@ -545,10 +669,10 @@ pub struct JSONMappingParameters {
     pub record_row_path: String,
 }
 
-/// <p> Identifies an Amazon Kinesis Firehose delivery stream as the streaming source. You provide the Firehose delivery stream's Amazon Resource Name (ARN) and an IAM role ARN that enables Amazon Kinesis Analytics to access the stream on your behalf.</p>
+/// <p> Identifies an Amazon Kinesis Firehose delivery stream as the streaming source. You provide the delivery stream's Amazon Resource Name (ARN) and an IAM role ARN that enables Amazon Kinesis Analytics to access the stream on your behalf.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct KinesisFirehoseInput {
-    /// <p>ARN of the input Firehose delivery stream.</p>
+    /// <p>ARN of the input delivery stream.</p>
     #[serde(rename = "ResourceARN")]
     pub resource_arn: String,
     /// <p>ARN of the IAM role that Amazon Kinesis Analytics can assume to access the stream on your behalf. You need to make sure the role has necessary permissions to access the stream.</p>
@@ -572,11 +696,11 @@ pub struct KinesisFirehoseInputDescription {
 /// <p>When updating application input configuration, provides information about an Amazon Kinesis Firehose delivery stream as the streaming source.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct KinesisFirehoseInputUpdate {
-    /// <p>ARN of the input Amazon Kinesis Firehose delivery stream to read.</p>
+    /// <p>Amazon Resource Name (ARN) of the input Amazon Kinesis Firehose delivery stream to read.</p>
     #[serde(rename = "ResourceARNUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_arn_update: Option<String>,
-    /// <p>Amazon Resource Name (ARN) of the IAM role that Amazon Kinesis Analytics can assume to access the stream on your behalf. You need to grant necessary permissions to this role.</p>
+    /// <p>ARN of the IAM role that Amazon Kinesis Analytics can assume to access the stream on your behalf. You need to grant necessary permissions to this role.</p>
     #[serde(rename = "RoleARNUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn_update: Option<String>,
@@ -619,7 +743,7 @@ pub struct KinesisFirehoseOutputUpdate {
     pub role_arn_update: Option<String>,
 }
 
-/// <p> Identifies an Amazon Kinesis stream as the streaming source. You provide the stream's ARN and an IAM role ARN that enables Amazon Kinesis Analytics to access the stream on your behalf.</p>
+/// <p> Identifies an Amazon Kinesis stream as the streaming source. You provide the stream's Amazon Resource Name (ARN) and an IAM role ARN that enables Amazon Kinesis Analytics to access the stream on your behalf.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct KinesisStreamsInput {
     /// <p>ARN of the input Amazon Kinesis stream to read.</p>
@@ -656,7 +780,7 @@ pub struct KinesisStreamsInputUpdate {
     pub role_arn_update: Option<String>,
 }
 
-/// <p>When configuring application output, identifies a Amazon Kinesis stream as the destination. You provide the stream Amazon Resource Name (ARN) and also an IAM role ARN that Amazon Kinesis Analytics can use to write to the stream on your behalf.</p>
+/// <p>When configuring application output, identifies an Amazon Kinesis stream as the destination. You provide the stream Amazon Resource Name (ARN) and also an IAM role ARN that Amazon Kinesis Analytics can use to write to the stream on your behalf.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct KinesisStreamsOutput {
     /// <p>ARN of the destination Amazon Kinesis stream to write to.</p>
@@ -688,6 +812,43 @@ pub struct KinesisStreamsOutputUpdate {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_arn_update: Option<String>,
     /// <p>ARN of the IAM role that Amazon Kinesis Analytics can assume to access the stream on your behalf. You need to grant the necessary permissions to this role.</p>
+    #[serde(rename = "RoleARNUpdate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn_update: Option<String>,
+}
+
+/// <p>When configuring application output, identifies an AWS Lambda function as the destination. You provide the function Amazon Resource Name (ARN) and also an IAM role ARN that Amazon Kinesis Analytics can use to write to the function on your behalf. </p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct LambdaOutput {
+    /// <p>Amazon Resource Name (ARN) of the destination Lambda function to write to.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+    /// <p>ARN of the IAM role that Amazon Kinesis Analytics can assume to write to the destination function on your behalf. You need to grant the necessary permissions to this role. </p>
+    #[serde(rename = "RoleARN")]
+    pub role_arn: String,
+}
+
+/// <p>For an application output, describes the AWS Lambda function configured as its destination. </p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct LambdaOutputDescription {
+    /// <p>Amazon Resource Name (ARN) of the destination Lambda function.</p>
+    #[serde(rename = "ResourceARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_arn: Option<String>,
+    /// <p>ARN of the IAM role that Amazon Kinesis Analytics can assume to write to the destination function.</p>
+    #[serde(rename = "RoleARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+}
+
+/// <p>When updating an output configuration using the <a>UpdateApplication</a> operation, provides information about an AWS Lambda function configured as the destination.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct LambdaOutputUpdate {
+    /// <p>Amazon Resource Name (ARN) of the destination Lambda function.</p>
+    #[serde(rename = "ResourceARNUpdate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_arn_update: Option<String>,
+    /// <p>ARN of the IAM role that Amazon Kinesis Analytics can assume to write to the destination function on your behalf. You need to grant the necessary permissions to this role. </p>
     #[serde(rename = "RoleARNUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn_update: Option<String>,
@@ -733,6 +894,7 @@ pub struct MappingParameters {
 /// <p> Describes application output configuration in which you identify an in-application stream and a destination where you want the in-application stream data to be written. The destination can be an Amazon Kinesis stream or an Amazon Kinesis Firehose delivery stream. </p> <p/> <p>For limits on how many destinations an application can write and other limitations, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/limits.html">Limits</a>. </p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct Output {
+    /// <p>Describes the data format when records are written to the destination. For more information, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-output.html">Configuring Application Output</a>.</p>
     #[serde(rename = "DestinationSchema")]
     pub destination_schema: DestinationSchema,
     /// <p>Identifies an Amazon Kinesis Firehose delivery stream as the destination.</p>
@@ -743,6 +905,10 @@ pub struct Output {
     #[serde(rename = "KinesisStreamsOutput")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kinesis_streams_output: Option<KinesisStreamsOutput>,
+    /// <p>Identifies an AWS Lambda function as the destination.</p>
+    #[serde(rename = "LambdaOutput")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lambda_output: Option<LambdaOutput>,
     /// <p>Name of the in-application stream.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -763,6 +929,10 @@ pub struct OutputDescription {
     #[serde(rename = "KinesisStreamsOutputDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kinesis_streams_output_description: Option<KinesisStreamsOutputDescription>,
+    /// <p>Describes the AWS Lambda function configured as the destination where output is written.</p>
+    #[serde(rename = "LambdaOutputDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lambda_output_description: Option<LambdaOutputDescription>,
     /// <p>Name of the in-application stream configured as output.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -776,10 +946,11 @@ pub struct OutputDescription {
 /// <p> Describes updates to the output configuration identified by the <code>OutputId</code>. </p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct OutputUpdate {
+    /// <p>Describes the data format when records are written to the destination. For more information, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-output.html">Configuring Application Output</a>.</p>
     #[serde(rename = "DestinationSchemaUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_schema_update: Option<DestinationSchema>,
-    /// <p>Describes a Amazon Kinesis Firehose delivery stream as the destination for the output.</p>
+    /// <p>Describes an Amazon Kinesis Firehose delivery stream as the destination for the output.</p>
     #[serde(rename = "KinesisFirehoseOutputUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kinesis_firehose_output_update: Option<KinesisFirehoseOutputUpdate>,
@@ -787,6 +958,10 @@ pub struct OutputUpdate {
     #[serde(rename = "KinesisStreamsOutputUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kinesis_streams_output_update: Option<KinesisStreamsOutputUpdate>,
+    /// <p>Describes an AWS Lambda function as the destination for the output.</p>
+    #[serde(rename = "LambdaOutputUpdate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lambda_output_update: Option<LambdaOutputUpdate>,
     /// <p>If you want to specify a different in-application stream for this output configuration, use this field to specify the new in-application stream name.</p>
     #[serde(rename = "NameUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -814,6 +989,7 @@ pub struct RecordColumn {
 /// <p> Describes the record format and relevant mapping information that should be applied to schematize the records on the stream. </p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct RecordFormat {
+    /// <p>When configuring application input at the time of creating or updating an application, provides additional mapping information specific to the record format (such as JSON, CSV, or record fields delimited by some delimiter) on the streaming source.</p>
     #[serde(rename = "MappingParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mapping_parameters: Option<MappingParameters>,
@@ -825,8 +1001,10 @@ pub struct RecordFormat {
 /// <p>Describes the reference data source by providing the source information (S3 bucket name and object key name), the resulting in-application table name that is created, and the necessary schema to map the data elements in the Amazon S3 object to the in-application table.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ReferenceDataSource {
+    /// <p>Describes the format of the data in the streaming source, and how each data element maps to corresponding columns created in the in-application stream.</p>
     #[serde(rename = "ReferenceSchema")]
     pub reference_schema: SourceSchema,
+    /// <p>Identifies the S3 bucket and object that contains the reference data. Also identifies the IAM role Amazon Kinesis Analytics can assume to read this object on your behalf. An Amazon Kinesis Analytics application loads reference data only once. If the data changes, you call the <a>UpdateApplication</a> operation to trigger reloading of data into your application. </p>
     #[serde(rename = "S3ReferenceDataSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_reference_data_source: Option<S3ReferenceDataSource>,
@@ -841,6 +1019,7 @@ pub struct ReferenceDataSourceDescription {
     /// <p>ID of the reference data source. This is the ID that Amazon Kinesis Analytics assigns when you add the reference data source to your application using the <a>AddApplicationReferenceDataSource</a> operation.</p>
     #[serde(rename = "ReferenceId")]
     pub reference_id: String,
+    /// <p>Describes the format of the data in the streaming source, and how each data element maps to corresponding columns created in the in-application stream.</p>
     #[serde(rename = "ReferenceSchema")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reference_schema: Option<SourceSchema>,
@@ -858,6 +1037,7 @@ pub struct ReferenceDataSourceUpdate {
     /// <p>ID of the reference data source being updated. You can use the <a>DescribeApplication</a> operation to get this value.</p>
     #[serde(rename = "ReferenceId")]
     pub reference_id: String,
+    /// <p>Describes the format of the data in the streaming source, and how each data element maps to corresponding columns created in the in-application stream. </p>
     #[serde(rename = "ReferenceSchemaUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reference_schema_update: Option<SourceSchema>,
@@ -869,6 +1049,20 @@ pub struct ReferenceDataSourceUpdate {
     #[serde(rename = "TableNameUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_name_update: Option<String>,
+}
+
+/// <p>Provides a description of an Amazon S3 data source, including the Amazon Resource Name (ARN) of the S3 bucket, the ARN of the IAM role that is used to access the bucket, and the name of the S3 object that contains the data.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct S3Configuration {
+    /// <p>ARN of the S3 bucket that contains the data.</p>
+    #[serde(rename = "BucketARN")]
+    pub bucket_arn: String,
+    /// <p>The name of the object that contains the data.</p>
+    #[serde(rename = "FileKey")]
+    pub file_key: String,
+    /// <p>IAM ARN of the role used to access the data.</p>
+    #[serde(rename = "RoleARN")]
+    pub role_arn: String,
 }
 
 /// <p>Identifies the S3 bucket and object that contains the reference data. Also identifies the IAM role Amazon Kinesis Analytics can assume to read this object on your behalf.</p> <p>An Amazon Kinesis Analytics application loads reference data only once. If the data changes, you call the <a>UpdateApplication</a> operation to trigger reloading of data into your application.</p>
@@ -1185,6 +1379,120 @@ impl Error for AddApplicationInputError {
                 dispatch_error.description()
             }
             AddApplicationInputError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by AddApplicationInputProcessingConfiguration
+#[derive(Debug, PartialEq)]
+pub enum AddApplicationInputProcessingConfigurationError {
+    /// <p>Exception thrown as a result of concurrent modification to an application. For example, two individuals attempting to edit the same application at the same time.</p>
+    ConcurrentModification(String),
+    /// <p>Specified input parameter value is invalid.</p>
+    InvalidArgument(String),
+    /// <p>Application is not available for this operation.</p>
+    ResourceInUse(String),
+    /// <p>Specified application can't be found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl AddApplicationInputProcessingConfigurationError {
+    pub fn from_body(body: &str) -> AddApplicationInputProcessingConfigurationError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ConcurrentModificationException" => {
+                        AddApplicationInputProcessingConfigurationError::ConcurrentModification(
+                            String::from(error_message),
+                        )
+                    }
+                    "InvalidArgumentException" => {
+                        AddApplicationInputProcessingConfigurationError::InvalidArgument(
+                            String::from(error_message),
+                        )
+                    }
+                    "ResourceInUseException" => {
+                        AddApplicationInputProcessingConfigurationError::ResourceInUse(
+                            String::from(error_message),
+                        )
+                    }
+                    "ResourceNotFoundException" => {
+                        AddApplicationInputProcessingConfigurationError::ResourceNotFound(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => {
+                        AddApplicationInputProcessingConfigurationError::Validation(
+                            error_message.to_string(),
+                        )
+                    }
+                    _ => {
+                        AddApplicationInputProcessingConfigurationError::Unknown(String::from(body))
+                    }
+                }
+            }
+            Err(_) => AddApplicationInputProcessingConfigurationError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for AddApplicationInputProcessingConfigurationError {
+    fn from(err: serde_json::error::Error) -> AddApplicationInputProcessingConfigurationError {
+        AddApplicationInputProcessingConfigurationError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for AddApplicationInputProcessingConfigurationError {
+    fn from(err: CredentialsError) -> AddApplicationInputProcessingConfigurationError {
+        AddApplicationInputProcessingConfigurationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AddApplicationInputProcessingConfigurationError {
+    fn from(err: HttpDispatchError) -> AddApplicationInputProcessingConfigurationError {
+        AddApplicationInputProcessingConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AddApplicationInputProcessingConfigurationError {
+    fn from(err: io::Error) -> AddApplicationInputProcessingConfigurationError {
+        AddApplicationInputProcessingConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for AddApplicationInputProcessingConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AddApplicationInputProcessingConfigurationError {
+    fn description(&self) -> &str {
+        match *self {
+            AddApplicationInputProcessingConfigurationError::ConcurrentModification(ref cause) => {
+                cause
+            }
+            AddApplicationInputProcessingConfigurationError::InvalidArgument(ref cause) => cause,
+            AddApplicationInputProcessingConfigurationError::ResourceInUse(ref cause) => cause,
+            AddApplicationInputProcessingConfigurationError::ResourceNotFound(ref cause) => cause,
+            AddApplicationInputProcessingConfigurationError::Validation(ref cause) => cause,
+            AddApplicationInputProcessingConfigurationError::Credentials(ref err) => {
+                err.description()
+            }
+            AddApplicationInputProcessingConfigurationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            AddApplicationInputProcessingConfigurationError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -1693,6 +2001,126 @@ impl Error for DeleteApplicationCloudWatchLoggingOptionError {
                 dispatch_error.description()
             }
             DeleteApplicationCloudWatchLoggingOptionError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteApplicationInputProcessingConfiguration
+#[derive(Debug, PartialEq)]
+pub enum DeleteApplicationInputProcessingConfigurationError {
+    /// <p>Exception thrown as a result of concurrent modification to an application. For example, two individuals attempting to edit the same application at the same time.</p>
+    ConcurrentModification(String),
+    /// <p>Specified input parameter value is invalid.</p>
+    InvalidArgument(String),
+    /// <p>Application is not available for this operation.</p>
+    ResourceInUse(String),
+    /// <p>Specified application can't be found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteApplicationInputProcessingConfigurationError {
+    pub fn from_body(body: &str) -> DeleteApplicationInputProcessingConfigurationError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ConcurrentModificationException" => {
+                        DeleteApplicationInputProcessingConfigurationError::ConcurrentModification(
+                            String::from(error_message),
+                        )
+                    }
+                    "InvalidArgumentException" => {
+                        DeleteApplicationInputProcessingConfigurationError::InvalidArgument(
+                            String::from(error_message),
+                        )
+                    }
+                    "ResourceInUseException" => {
+                        DeleteApplicationInputProcessingConfigurationError::ResourceInUse(
+                            String::from(error_message),
+                        )
+                    }
+                    "ResourceNotFoundException" => {
+                        DeleteApplicationInputProcessingConfigurationError::ResourceNotFound(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => {
+                        DeleteApplicationInputProcessingConfigurationError::Validation(
+                            error_message.to_string(),
+                        )
+                    }
+                    _ => DeleteApplicationInputProcessingConfigurationError::Unknown(
+                        String::from(body),
+                    ),
+                }
+            }
+            Err(_) => {
+                DeleteApplicationInputProcessingConfigurationError::Unknown(String::from(body))
+            }
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteApplicationInputProcessingConfigurationError {
+    fn from(err: serde_json::error::Error) -> DeleteApplicationInputProcessingConfigurationError {
+        DeleteApplicationInputProcessingConfigurationError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteApplicationInputProcessingConfigurationError {
+    fn from(err: CredentialsError) -> DeleteApplicationInputProcessingConfigurationError {
+        DeleteApplicationInputProcessingConfigurationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteApplicationInputProcessingConfigurationError {
+    fn from(err: HttpDispatchError) -> DeleteApplicationInputProcessingConfigurationError {
+        DeleteApplicationInputProcessingConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteApplicationInputProcessingConfigurationError {
+    fn from(err: io::Error) -> DeleteApplicationInputProcessingConfigurationError {
+        DeleteApplicationInputProcessingConfigurationError::HttpDispatch(HttpDispatchError::from(
+            err,
+        ))
+    }
+}
+impl fmt::Display for DeleteApplicationInputProcessingConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteApplicationInputProcessingConfigurationError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteApplicationInputProcessingConfigurationError::ConcurrentModification(
+                ref cause,
+            ) => cause,
+            DeleteApplicationInputProcessingConfigurationError::InvalidArgument(ref cause) => cause,
+            DeleteApplicationInputProcessingConfigurationError::ResourceInUse(ref cause) => cause,
+            DeleteApplicationInputProcessingConfigurationError::ResourceNotFound(ref cause) => {
+                cause
+            }
+            DeleteApplicationInputProcessingConfigurationError::Validation(ref cause) => cause,
+            DeleteApplicationInputProcessingConfigurationError::Credentials(ref err) => {
+                err.description()
+            }
+            DeleteApplicationInputProcessingConfigurationError::HttpDispatch(
+                ref dispatch_error,
+            ) => dispatch_error.description(),
+            DeleteApplicationInputProcessingConfigurationError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -2459,7 +2887,16 @@ pub trait KinesisAnalytics {
         input: &AddApplicationInputRequest,
     ) -> Result<AddApplicationInputResponse, AddApplicationInputError>;
 
-    /// <p>Adds an external destination to your Amazon Kinesis Analytics application.</p> <p>If you want Amazon Kinesis Analytics to deliver data from an in-application stream within your application to an external destination (such as an Amazon Kinesis stream or a Firehose delivery stream), you add the relevant configuration to your application using this operation. You can configure one or more outputs for your application. Each output configuration maps an in-application stream and an external destination.</p> <p> You can use one of the output configurations to deliver data from your in-application error stream to an external destination so that you can analyze the errors. For conceptual information, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-output.html">Understanding Application Output (Destination)</a>. </p> <p> Note that any configuration update, including adding a streaming source using this operation, results in a new version of the application. You can use the <a>DescribeApplication</a> operation to find the current application version.</p> <p>For the limits on the number of application inputs and outputs you can configure, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/limits.html">Limits</a>.</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:AddApplicationOutput</code> action.</p>
+    /// <p>Adds an <a>InputProcessingConfiguration</a> to an application. An input processor preprocesses records on the input stream before the application's SQL code executes. Currently, the only input processor available is <a href="https://aws.amazon.com/documentation/lambda/">AWS Lambda</a>.</p>
+    fn add_application_input_processing_configuration(
+        &self,
+        input: &AddApplicationInputProcessingConfigurationRequest,
+    ) -> Result<
+        AddApplicationInputProcessingConfigurationResponse,
+        AddApplicationInputProcessingConfigurationError,
+    >;
+
+    /// <p>Adds an external destination to your Amazon Kinesis Analytics application.</p> <p>If you want Amazon Kinesis Analytics to deliver data from an in-application stream within your application to an external destination (such as an Amazon Kinesis stream, an Amazon Kinesis Firehose delivery stream, or an Amazon Lambda function), you add the relevant configuration to your application using this operation. You can configure one or more outputs for your application. Each output configuration maps an in-application stream and an external destination.</p> <p> You can use one of the output configurations to deliver data from your in-application error stream to an external destination so that you can analyze the errors. For conceptual information, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-output.html">Understanding Application Output (Destination)</a>. </p> <p> Note that any configuration update, including adding a streaming source using this operation, results in a new version of the application. You can use the <a>DescribeApplication</a> operation to find the current application version.</p> <p>For the limits on the number of application inputs and outputs you can configure, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/limits.html">Limits</a>.</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:AddApplicationOutput</code> action.</p>
     fn add_application_output(
         &self,
         input: &AddApplicationOutputRequest,
@@ -2471,7 +2908,7 @@ pub trait KinesisAnalytics {
         input: &AddApplicationReferenceDataSourceRequest,
     ) -> Result<AddApplicationReferenceDataSourceResponse, AddApplicationReferenceDataSourceError>;
 
-    /// <p> Creates an Amazon Kinesis Analytics application. You can configure each application with one streaming source as input, application code to process the input, and up to five streaming destinations where you want Amazon Kinesis Analytics to write the output data from your application. For an overview, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works.html">How it Works</a>. </p> <p>In the input configuration, you map the streaming source to an in-application stream, which you can think of as a constantly updating table. In the mapping, you must provide a schema for the in-application stream and map each data column in the in-application stream to a data element in the streaming source.</p> <p>Your application code is one or more SQL statements that read input data, transform it, and generate output. Your application code can create one or more SQL artifacts like SQL streams or pumps.</p> <p>In the output configuration, you can configure the application to write data from in-application streams created in your applications to up to five streaming destinations.</p> <p> To read data from your source stream or write data to destination streams, Amazon Kinesis Analytics needs your permissions. You grant these permissions by creating IAM roles. This operation requires permissions to perform the <code>kinesisanalytics:CreateApplication</code> action. </p> <p> For introductory exercises to create an Amazon Kinesis Analytics application, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/getting-started.html">Getting Started</a>. </p>
+    /// <p> Creates an Amazon Kinesis Analytics application. You can configure each application with one streaming source as input, application code to process the input, and up to three destinations where you want Amazon Kinesis Analytics to write the output data from your application. For an overview, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works.html">How it Works</a>. </p> <p>In the input configuration, you map the streaming source to an in-application stream, which you can think of as a constantly updating table. In the mapping, you must provide a schema for the in-application stream and map each data column in the in-application stream to a data element in the streaming source.</p> <p>Your application code is one or more SQL statements that read input data, transform it, and generate output. Your application code can create one or more SQL artifacts like SQL streams or pumps.</p> <p>In the output configuration, you can configure the application to write data from in-application streams created in your applications to up to three destinations.</p> <p> To read data from your source stream or write data to destination streams, Amazon Kinesis Analytics needs your permissions. You grant these permissions by creating IAM roles. This operation requires permissions to perform the <code>kinesisanalytics:CreateApplication</code> action. </p> <p> For introductory exercises to create an Amazon Kinesis Analytics application, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/getting-started.html">Getting Started</a>. </p>
     fn create_application(
         &self,
         input: &CreateApplicationRequest,
@@ -2490,6 +2927,15 @@ pub trait KinesisAnalytics {
     ) -> Result<
         DeleteApplicationCloudWatchLoggingOptionResponse,
         DeleteApplicationCloudWatchLoggingOptionError,
+    >;
+
+    /// <p>Deletes an <a>InputProcessingConfiguration</a> from an input.</p>
+    fn delete_application_input_processing_configuration(
+        &self,
+        input: &DeleteApplicationInputProcessingConfigurationRequest,
+    ) -> Result<
+        DeleteApplicationInputProcessingConfigurationResponse,
+        DeleteApplicationInputProcessingConfigurationError,
     >;
 
     /// <p>Deletes output destination configuration from your application configuration. Amazon Kinesis Analytics will no longer write data from the corresponding in-application stream to the external output destination.</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:DeleteApplicationOutput</code> action.</p>
@@ -2513,7 +2959,7 @@ pub trait KinesisAnalytics {
         input: &DescribeApplicationRequest,
     ) -> Result<DescribeApplicationResponse, DescribeApplicationError>;
 
-    /// <p>Infers a schema by evaluating sample records on the specified streaming source (Amazon Kinesis stream or Amazon Kinesis Firehose delivery stream). In the response, the operation returns the inferred schema and also the sample records that the operation used to infer the schema.</p> <p> You can use the inferred schema when configuring a streaming source for your application. For conceptual information, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-input.html">Configuring Application Input</a>. Note that when you create an application using the Amazon Kinesis Analytics console, the console uses this operation to infer a schema and show it in the console user interface. </p> <p> This operation requires permissions to perform the <code>kinesisanalytics:DiscoverInputSchema</code> action. </p>
+    /// <p>Infers a schema by evaluating sample records on the specified streaming source (Amazon Kinesis stream or Amazon Kinesis Firehose delivery stream) or S3 object. In the response, the operation returns the inferred schema and also the sample records that the operation used to infer the schema.</p> <p> You can use the inferred schema when configuring a streaming source for your application. For conceptual information, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-input.html">Configuring Application Input</a>. Note that when you create an application using the Amazon Kinesis Analytics console, the console uses this operation to infer a schema and show it in the console user interface. </p> <p> This operation requires permissions to perform the <code>kinesisanalytics:DiscoverInputSchema</code> action. </p>
     fn discover_input_schema(
         &self,
         input: &DiscoverInputSchemaRequest,
@@ -2652,7 +3098,49 @@ where
         }
     }
 
-    /// <p>Adds an external destination to your Amazon Kinesis Analytics application.</p> <p>If you want Amazon Kinesis Analytics to deliver data from an in-application stream within your application to an external destination (such as an Amazon Kinesis stream or a Firehose delivery stream), you add the relevant configuration to your application using this operation. You can configure one or more outputs for your application. Each output configuration maps an in-application stream and an external destination.</p> <p> You can use one of the output configurations to deliver data from your in-application error stream to an external destination so that you can analyze the errors. For conceptual information, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-output.html">Understanding Application Output (Destination)</a>. </p> <p> Note that any configuration update, including adding a streaming source using this operation, results in a new version of the application. You can use the <a>DescribeApplication</a> operation to find the current application version.</p> <p>For the limits on the number of application inputs and outputs you can configure, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/limits.html">Limits</a>.</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:AddApplicationOutput</code> action.</p>
+    /// <p>Adds an <a>InputProcessingConfiguration</a> to an application. An input processor preprocesses records on the input stream before the application's SQL code executes. Currently, the only input processor available is <a href="https://aws.amazon.com/documentation/lambda/">AWS Lambda</a>.</p>
+    fn add_application_input_processing_configuration(
+        &self,
+        input: &AddApplicationInputProcessingConfigurationRequest,
+    ) -> Result<
+        AddApplicationInputProcessingConfigurationResponse,
+        AddApplicationInputProcessingConfigurationError,
+    > {
+        let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "KinesisAnalytics_20150814.AddApplicationInputProcessingConfiguration",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(
+                    serde_json::from_str::<AddApplicationInputProcessingConfigurationResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AddApplicationInputProcessingConfigurationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Adds an external destination to your Amazon Kinesis Analytics application.</p> <p>If you want Amazon Kinesis Analytics to deliver data from an in-application stream within your application to an external destination (such as an Amazon Kinesis stream, an Amazon Kinesis Firehose delivery stream, or an Amazon Lambda function), you add the relevant configuration to your application using this operation. You can configure one or more outputs for your application. Each output configuration maps an in-application stream and an external destination.</p> <p> You can use one of the output configurations to deliver data from your in-application error stream to an external destination so that you can analyze the errors. For conceptual information, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-output.html">Understanding Application Output (Destination)</a>. </p> <p> Note that any configuration update, including adding a streaming source using this operation, results in a new version of the application. You can use the <a>DescribeApplication</a> operation to find the current application version.</p> <p>For the limits on the number of application inputs and outputs you can configure, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/limits.html">Limits</a>.</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:AddApplicationOutput</code> action.</p>
     fn add_application_output(
         &self,
         input: &AddApplicationOutputRequest,
@@ -2729,7 +3217,7 @@ where
         }
     }
 
-    /// <p> Creates an Amazon Kinesis Analytics application. You can configure each application with one streaming source as input, application code to process the input, and up to five streaming destinations where you want Amazon Kinesis Analytics to write the output data from your application. For an overview, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works.html">How it Works</a>. </p> <p>In the input configuration, you map the streaming source to an in-application stream, which you can think of as a constantly updating table. In the mapping, you must provide a schema for the in-application stream and map each data column in the in-application stream to a data element in the streaming source.</p> <p>Your application code is one or more SQL statements that read input data, transform it, and generate output. Your application code can create one or more SQL artifacts like SQL streams or pumps.</p> <p>In the output configuration, you can configure the application to write data from in-application streams created in your applications to up to five streaming destinations.</p> <p> To read data from your source stream or write data to destination streams, Amazon Kinesis Analytics needs your permissions. You grant these permissions by creating IAM roles. This operation requires permissions to perform the <code>kinesisanalytics:CreateApplication</code> action. </p> <p> For introductory exercises to create an Amazon Kinesis Analytics application, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/getting-started.html">Getting Started</a>. </p>
+    /// <p> Creates an Amazon Kinesis Analytics application. You can configure each application with one streaming source as input, application code to process the input, and up to three destinations where you want Amazon Kinesis Analytics to write the output data from your application. For an overview, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works.html">How it Works</a>. </p> <p>In the input configuration, you map the streaming source to an in-application stream, which you can think of as a constantly updating table. In the mapping, you must provide a schema for the in-application stream and map each data column in the in-application stream to a data element in the streaming source.</p> <p>Your application code is one or more SQL statements that read input data, transform it, and generate output. Your application code can create one or more SQL artifacts like SQL streams or pumps.</p> <p>In the output configuration, you can configure the application to write data from in-application streams created in your applications to up to three destinations.</p> <p> To read data from your source stream or write data to destination streams, Amazon Kinesis Analytics needs your permissions. You grant these permissions by creating IAM roles. This operation requires permissions to perform the <code>kinesisanalytics:CreateApplication</code> action. </p> <p> For introductory exercises to create an Amazon Kinesis Analytics application, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/getting-started.html">Getting Started</a>. </p>
     fn create_application(
         &self,
         input: &CreateApplicationRequest,
@@ -2841,6 +3329,50 @@ where
                 Err(DeleteApplicationCloudWatchLoggingOptionError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
+            }
+        }
+    }
+
+    /// <p>Deletes an <a>InputProcessingConfiguration</a> from an input.</p>
+    fn delete_application_input_processing_configuration(
+        &self,
+        input: &DeleteApplicationInputProcessingConfigurationRequest,
+    ) -> Result<
+        DeleteApplicationInputProcessingConfigurationResponse,
+        DeleteApplicationInputProcessingConfigurationError,
+    > {
+        let mut request = SignedRequest::new("POST", "kinesisanalytics", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "KinesisAnalytics_20150814.DeleteApplicationInputProcessingConfiguration",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(
+                    serde_json::from_str::<DeleteApplicationInputProcessingConfigurationResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(
+                    DeleteApplicationInputProcessingConfigurationError::from_body(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ),
+                )
             }
         }
     }
@@ -2961,7 +3493,7 @@ where
         }
     }
 
-    /// <p>Infers a schema by evaluating sample records on the specified streaming source (Amazon Kinesis stream or Amazon Kinesis Firehose delivery stream). In the response, the operation returns the inferred schema and also the sample records that the operation used to infer the schema.</p> <p> You can use the inferred schema when configuring a streaming source for your application. For conceptual information, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-input.html">Configuring Application Input</a>. Note that when you create an application using the Amazon Kinesis Analytics console, the console uses this operation to infer a schema and show it in the console user interface. </p> <p> This operation requires permissions to perform the <code>kinesisanalytics:DiscoverInputSchema</code> action. </p>
+    /// <p>Infers a schema by evaluating sample records on the specified streaming source (Amazon Kinesis stream or Amazon Kinesis Firehose delivery stream) or S3 object. In the response, the operation returns the inferred schema and also the sample records that the operation used to infer the schema.</p> <p> You can use the inferred schema when configuring a streaming source for your application. For conceptual information, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-input.html">Configuring Application Input</a>. Note that when you create an application using the Amazon Kinesis Analytics console, the console uses this operation to infer a schema and show it in the console user interface. </p> <p> This operation requires permissions to perform the <code>kinesisanalytics:DiscoverInputSchema</code> action. </p>
     fn discover_input_schema(
         &self,
         input: &DiscoverInputSchemaRequest,

@@ -27,22 +27,22 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
-/// <p>An entry for a single application in the application catalog.</p>
+/// <p>Describes an application in the application catalog.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Application {
-    /// <p>The name of the application shown to the end users.</p>
+    /// <p>The application name for display.</p>
     #[serde(rename = "DisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
-    /// <p>If there is a problem, an application can be disabled after image creation.</p>
+    /// <p>If there is a problem, the application can be disabled after image creation.</p>
     #[serde(rename = "Enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    /// <p>The URL for the application icon. This URL may be time-limited.</p>
+    /// <p>The URL for the application icon. This URL might be time-limited.</p>
     #[serde(rename = "IconURL")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub icon_url: Option<String>,
-    /// <p>A list of arguments that are passed to the application at launch.</p>
+    /// <p>The arguments that are passed to the application at launch.</p>
     #[serde(rename = "LaunchParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub launch_parameters: Option<String>,
@@ -54,7 +54,7 @@ pub struct Application {
     #[serde(rename = "Metadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The unique identifier for the application.</p>
+    /// <p>The name of the application.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -62,10 +62,10 @@ pub struct Application {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AssociateFleetRequest {
-    /// <p>The name of the fleet to associate.</p>
+    /// <p>The name of the fleet.</p>
     #[serde(rename = "FleetName")]
     pub fleet_name: String,
-    /// <p>The name of the stack to which the fleet is associated.</p>
+    /// <p>The name of the stack.</p>
     #[serde(rename = "StackName")]
     pub stack_name: String,
 }
@@ -73,7 +73,7 @@ pub struct AssociateFleetRequest {
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AssociateFleetResult;
 
-/// <p>The capacity configuration for the fleet.</p>
+/// <p>Describes the capacity for a fleet.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ComputeCapacity {
     /// <p>The desired number of streaming instances.</p>
@@ -81,7 +81,7 @@ pub struct ComputeCapacity {
     pub desired_instances: i64,
 }
 
-/// <p>The capacity information for the fleet.</p>
+/// <p>Describes the capacity status for a fleet.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ComputeCapacityStatus {
     /// <p>The number of currently available instances that can be used to stream sessions.</p>
@@ -91,7 +91,7 @@ pub struct ComputeCapacityStatus {
     /// <p>The desired number of streaming instances.</p>
     #[serde(rename = "Desired")]
     pub desired: i64,
-    /// <p>The number of instances that are being used for streaming.</p>
+    /// <p>The number of instances in use for streaming.</p>
     #[serde(rename = "InUse")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub in_use: Option<i64>,
@@ -103,44 +103,43 @@ pub struct ComputeCapacityStatus {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateDirectoryConfigRequest {
-    /// <p>The fully qualified name of the directory, such as corp.example.com</p>
+    /// <p>The fully qualified name of the directory (for example, corp.example.com).</p>
     #[serde(rename = "DirectoryName")]
     pub directory_name: String,
-    /// <p>The list of the distinguished names of organizational units to place computer accounts in.</p>
+    /// <p>The distinguished names of the organizational units for computer accounts.</p>
     #[serde(rename = "OrganizationalUnitDistinguishedNames")]
     pub organizational_unit_distinguished_names: Vec<String>,
-    /// <p>The <i>AccountName</i> and <i>AccountPassword</i> values for the service account, which are used by the streaming instance to connect to the directory.</p>
+    /// <p>The credentials for the service account used by the streaming instance to connect to the directory.</p>
     #[serde(rename = "ServiceAccountCredentials")]
     pub service_account_credentials: ServiceAccountCredentials,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateDirectoryConfigResult {
-    /// <p>Directory configuration details.</p>
+    /// <p>Information about the directory configuration.</p>
     #[serde(rename = "DirectoryConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub directory_config: Option<DirectoryConfig>,
 }
 
-/// <p>Contains the parameters for the new fleet to create.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateFleetRequest {
-    /// <p>The parameters for the capacity allocated to the fleet.</p>
+    /// <p>The desired capacity for the fleet.</p>
     #[serde(rename = "ComputeCapacity")]
     pub compute_capacity: ComputeCapacity,
-    /// <p>The description of the fleet.</p>
+    /// <p>The description for display.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The time after disconnection when a session is considered to have ended. If a user who got disconnected reconnects within this timeout interval, the user is connected back to their previous session. The input can be any numeric value in seconds between 60 and 57600. </p>
+    /// <p>The time after disconnection when a session is considered to have ended, in seconds. If a user who was disconnected reconnects within this time interval, the user is connected to their previous session. Specify a value between 60 and 57600.</p>
     #[serde(rename = "DisconnectTimeoutInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disconnect_timeout_in_seconds: Option<i64>,
-    /// <p>The display name of the fleet.</p>
+    /// <p>The fleet name for display.</p>
     #[serde(rename = "DisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
-    /// <p>The <i>DirectoryName</i> and <i>OrganizationalUnitDistinguishedName</i> values, which are used to join domains for the AppStream 2.0 streaming instances.</p>
+    /// <p>The information needed to join a Microsoft Active Directory domain.</p>
     #[serde(rename = "DomainJoinInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_join_info: Option<DomainJoinInfo>,
@@ -148,17 +147,21 @@ pub struct CreateFleetRequest {
     #[serde(rename = "EnableDefaultInternetAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_default_internet_access: Option<bool>,
-    /// <p>Unique name of the image used by the fleet.</p>
+    /// <p><p>The fleet type.</p> <dl> <dt>ALWAYS<em>ON</dt> <dd> <p>Provides users with instant-on access to their apps. You are charged for all running instances in your fleet, even if no users are streaming apps.</p> </dd> <dt>ON</em>DEMAND</dt> <dd> <p>Provide users with access to applications after they connect, which takes one to two minutes. You are charged for instance streaming when users are connected and a small hourly fee for instances that are not streaming apps.</p> </dd> </dl></p>
+    #[serde(rename = "FleetType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fleet_type: Option<String>,
+    /// <p>The name of the image used to create the fleet.</p>
     #[serde(rename = "ImageName")]
     pub image_name: String,
-    /// <p><p>The instance type of compute resources for the fleet. Fleet instances are launched from this instance type. Available instance types are:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> </ul></p>
+    /// <p><p>The instance type to use when launching fleet instances. The following instance types are available:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.graphics-design.large</p> </li> <li> <p>stream.graphics-design.xlarge</p> </li> <li> <p>stream.graphics-design.2xlarge</p> </li> <li> <p>stream.graphics-design.4xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> </ul></p>
     #[serde(rename = "InstanceType")]
     pub instance_type: String,
-    /// <p>The maximum time for which a streaming session can run. The input can be any numeric value in seconds between 600 and 57600.</p>
+    /// <p>The maximum time that a streaming session can run, in seconds. Specify a value between 600 and 57600.</p>
     #[serde(rename = "MaxUserDurationInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_user_duration_in_seconds: Option<i64>,
-    /// <p>A unique identifier for the fleet.</p>
+    /// <p>A unique name for the fleet.</p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>The VPC configuration for the fleet.</p>
@@ -169,26 +172,94 @@ pub struct CreateFleetRequest {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateFleetResult {
-    /// <p>The details for the created fleet.</p>
+    /// <p>Information about the fleet.</p>
     #[serde(rename = "Fleet")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet: Option<Fleet>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
-pub struct CreateStackRequest {
-    /// <p>The description displayed to end users on the AppStream 2.0 portal.</p>
+pub struct CreateImageBuilderRequest {
+    /// <p>The version of the AppStream 2.0 agent to use for this image builder. To use the latest version of the AppStream 2.0 agent, specify [LATEST]. </p>
+    #[serde(rename = "AppstreamAgentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub appstream_agent_version: Option<String>,
+    /// <p>The description for display.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The name displayed to end users on the AppStream 2.0 portal.</p>
+    /// <p>The image builder name for display.</p>
     #[serde(rename = "DisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
-    /// <p>The unique identifier for this stack.</p>
+    /// <p>The information needed to join a Microsoft Active Directory domain.</p>
+    #[serde(rename = "DomainJoinInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_join_info: Option<DomainJoinInfo>,
+    /// <p>Enables or disables default internet access for the image builder.</p>
+    #[serde(rename = "EnableDefaultInternetAccess")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_default_internet_access: Option<bool>,
+    /// <p>The name of the image used to create the builder.</p>
+    #[serde(rename = "ImageName")]
+    pub image_name: String,
+    /// <p>The instance type to use when launching the image builder.</p>
+    #[serde(rename = "InstanceType")]
+    pub instance_type: String,
+    /// <p>A unique name for the image builder.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The storage connectors to be enabled for the stack.</p>
+    /// <p>The VPC configuration for the image builder. You can specify only one subnet.</p>
+    #[serde(rename = "VpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfig>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CreateImageBuilderResult {
+    /// <p>Information about the image builder.</p>
+    #[serde(rename = "ImageBuilder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_builder: Option<ImageBuilder>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateImageBuilderStreamingURLRequest {
+    /// <p>The name of the image builder.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The time that the streaming URL will be valid, in seconds. Specify a value between 1 and 604800 seconds. The default is 3600 seconds.</p>
+    #[serde(rename = "Validity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validity: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CreateImageBuilderStreamingURLResult {
+    /// <p>The elapsed time, in seconds after the Unix epoch, when this URL expires.</p>
+    #[serde(rename = "Expires")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expires: Option<f64>,
+    /// <p>The URL to start the AppStream 2.0 streaming session.</p>
+    #[serde(rename = "StreamingURL")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub streaming_url: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateStackRequest {
+    /// <p>The description for display.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The stack name for display.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p>The name of the stack.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The storage connectors to enable.</p>
     #[serde(rename = "StorageConnectors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_connectors: Option<Vec<StorageConnector>>,
@@ -196,7 +267,7 @@ pub struct CreateStackRequest {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateStackResult {
-    /// <p>The details for the created stack.</p>
+    /// <p>Information about the stack.</p>
     #[serde(rename = "Stack")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stack: Option<Stack>,
@@ -204,24 +275,24 @@ pub struct CreateStackResult {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateStreamingURLRequest {
-    /// <p>The ID of the application that must be launched after the session starts.</p>
+    /// <p>The name of the application to launch after the session starts. This is the name that you specified as <b>Name</b> in the Image Assistant.</p>
     #[serde(rename = "ApplicationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_id: Option<String>,
-    /// <p>The fleet for which the URL is generated.</p>
+    /// <p>The name of the fleet.</p>
     #[serde(rename = "FleetName")]
     pub fleet_name: String,
-    /// <p>The sessionContext of the streaming URL.</p>
+    /// <p>The session context. For more information, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/managing-stacks-fleets.html#managing-stacks-fleets-parameters">Session Context</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
     #[serde(rename = "SessionContext")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub session_context: Option<String>,
-    /// <p>The stack for which the URL is generated.</p>
+    /// <p>The name of the stack.</p>
     #[serde(rename = "StackName")]
     pub stack_name: String,
-    /// <p>A unique user ID for whom the URL is generated.</p>
+    /// <p>The ID of the user.</p>
     #[serde(rename = "UserId")]
     pub user_id: String,
-    /// <p>The duration up to which the URL returned by this action is valid. The input can be any numeric value in seconds between 1 and 604800 seconds.</p>
+    /// <p>The time that the streaming URL will be valid, in seconds. Specify a value between 1 and 604800 seconds. The default is 60 seconds.</p>
     #[serde(rename = "Validity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub validity: Option<i64>,
@@ -229,7 +300,7 @@ pub struct CreateStreamingURLRequest {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateStreamingURLResult {
-    /// <p>Elapsed seconds after the Unix epoch, when this URL expires.</p>
+    /// <p>The elapsed time, in seconds after the Unix epoch, when this URL expires.</p>
     #[serde(rename = "Expires")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expires: Option<f64>,
@@ -241,7 +312,7 @@ pub struct CreateStreamingURLResult {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteDirectoryConfigRequest {
-    /// <p>The name of the directory configuration to be deleted.</p>
+    /// <p>The name of the directory configuration.</p>
     #[serde(rename = "DirectoryName")]
     pub directory_name: String,
 }
@@ -251,7 +322,7 @@ pub struct DeleteDirectoryConfigResult;
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteFleetRequest {
-    /// <p>The name of the fleet to be deleted.</p>
+    /// <p>The name of the fleet.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
@@ -260,8 +331,38 @@ pub struct DeleteFleetRequest {
 pub struct DeleteFleetResult;
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteImageBuilderRequest {
+    /// <p>The name of the image builder.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteImageBuilderResult {
+    /// <p>Information about the image builder.</p>
+    #[serde(rename = "ImageBuilder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_builder: Option<ImageBuilder>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteImageRequest {
+    /// <p>The name of the image.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteImageResult {
+    /// <p>Information about the image.</p>
+    #[serde(rename = "Image")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image: Option<Image>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteStackRequest {
-    /// <p>The name of the stack to delete.</p>
+    /// <p>The name of the stack.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
@@ -271,15 +372,15 @@ pub struct DeleteStackResult;
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeDirectoryConfigsRequest {
-    /// <p>A specific list of directory names.</p>
+    /// <p>The directory names.</p>
     #[serde(rename = "DirectoryNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub directory_names: Option<Vec<String>>,
-    /// <p>The size of each page of results.</p>
+    /// <p>The maximum size of each page of results.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The DescribeDirectoryConfigsResult.NextToken from a previous call to DescribeDirectoryConfigs. If this is the first call, pass null.</p>
+    /// <p>The pagination token to use to retrieve the next page of results for this operation. If this value is null, it retrieves the first page.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -287,11 +388,11 @@ pub struct DescribeDirectoryConfigsRequest {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeDirectoryConfigsResult {
-    /// <p>The list of directory configurations.</p>
+    /// <p>Information about the directory configurations.</p>
     #[serde(rename = "DirectoryConfigs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub directory_configs: Option<Vec<DirectoryConfig>>,
-    /// <p>If not null, more results are available. To retrieve the next set of items, pass this value for the NextToken parameter in a subsequent call to DescribeDirectoryConfigs.</p>
+    /// <p>The pagination token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -299,7 +400,7 @@ pub struct DescribeDirectoryConfigsResult {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeFleetsRequest {
-    /// <p>The fleet names to describe. Use null to describe all the fleets for the AWS account.</p>
+    /// <p>The names of the fleets to describe.</p>
     #[serde(rename = "Names")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub names: Option<Vec<String>>,
@@ -311,7 +412,7 @@ pub struct DescribeFleetsRequest {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeFleetsResult {
-    /// <p>The list of fleet details.</p>
+    /// <p>Information about the fleets.</p>
     #[serde(rename = "Fleets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fleets: Option<Vec<Fleet>>,
@@ -322,8 +423,36 @@ pub struct DescribeFleetsResult {
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribeImageBuildersRequest {
+    /// <p>The maximum size of each page of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The names of the image builders to describe.</p>
+    #[serde(rename = "Names")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub names: Option<Vec<String>>,
+    /// <p>The pagination token to use to retrieve the next page of results for this operation. If this value is null, it retrieves the first page.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeImageBuildersResult {
+    /// <p>Information about the image builders.</p>
+    #[serde(rename = "ImageBuilders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_builders: Option<Vec<ImageBuilder>>,
+    /// <p>The pagination token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeImagesRequest {
-    /// <p>A specific list of images to describe.</p>
+    /// <p>The names of the images to describe.</p>
     #[serde(rename = "Names")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub names: Option<Vec<String>>,
@@ -331,7 +460,7 @@ pub struct DescribeImagesRequest {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeImagesResult {
-    /// <p>The list of images.</p>
+    /// <p>Information about the images.</p>
     #[serde(rename = "Images")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub images: Option<Vec<Image>>,
@@ -339,14 +468,14 @@ pub struct DescribeImagesResult {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeSessionsRequest {
-    /// <p>The authentication method of the user. It can be <code>API</code> for a user authenticated using a streaming URL, or <code>SAML</code> for a SAML federated user. If an authentication type is not provided, the operation defaults to users authenticated using a streaming URL.</p>
+    /// <p>The authentication method. Specify <code>API</code> for a user authenticated using a streaming URL or <code>SAML</code> for a SAML federated user. The default is to authenticate users using a streaming URL.</p>
     #[serde(rename = "AuthenticationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_type: Option<String>,
-    /// <p>The name of the fleet for which to list sessions.</p>
+    /// <p>The name of the fleet.</p>
     #[serde(rename = "FleetName")]
     pub fleet_name: String,
-    /// <p>The size of each page of results. The default value is 20 and the maximum supported value is 50.</p>
+    /// <p>The size of each page of results. The default value is 20 and the maximum value is 50.</p>
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
@@ -354,10 +483,10 @@ pub struct DescribeSessionsRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The name of the stack for which to list sessions.</p>
+    /// <p>The name of the stack.</p>
     #[serde(rename = "StackName")]
     pub stack_name: String,
-    /// <p>The user for whom to list sessions. Use null to describe all the sessions for the stack and fleet.</p>
+    /// <p>The user ID.</p>
     #[serde(rename = "UserId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_id: Option<String>,
@@ -369,7 +498,7 @@ pub struct DescribeSessionsResult {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The list of streaming sessions.</p>
+    /// <p>Information about the streaming sessions.</p>
     #[serde(rename = "Sessions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sessions: Option<Vec<Session>>,
@@ -377,7 +506,7 @@ pub struct DescribeSessionsResult {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeStacksRequest {
-    /// <p>The stack names to describe. Use null to describe all the stacks for the AWS account.</p>
+    /// <p>The names of the stacks to describe.</p>
     #[serde(rename = "Names")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub names: Option<Vec<String>>,
@@ -393,27 +522,27 @@ pub struct DescribeStacksResult {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The list of stack details.</p>
+    /// <p>Information about the stacks.</p>
     #[serde(rename = "Stacks")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stacks: Option<Vec<Stack>>,
 }
 
-/// <p>Full directory configuration details, which are used to join domains for the AppStream 2.0 streaming instances.</p>
+/// <p>Configuration information for the directory used to join domains.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DirectoryConfig {
-    /// <p>The time stamp when the directory configuration was created within AppStream 2.0.</p>
+    /// <p>The time the directory configuration was created.</p>
     #[serde(rename = "CreatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
-    /// <p>The fully qualified name of the directory, such as corp.example.com</p>
+    /// <p>The fully qualified name of the directory (for example, corp.example.com).</p>
     #[serde(rename = "DirectoryName")]
     pub directory_name: String,
-    /// <p>The list of the distinguished names of organizational units in which to place computer accounts.</p>
+    /// <p>The distinguished names of the organizational units for computer accounts.</p>
     #[serde(rename = "OrganizationalUnitDistinguishedNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub organizational_unit_distinguished_names: Option<Vec<String>>,
-    /// <p>The <i>AccountName</i> and <i>AccountPassword</i> of the service account, to be used by the streaming instance to connect to the directory.</p>
+    /// <p>The credentials for the service account used by the streaming instance to connect to the directory.</p>
     #[serde(rename = "ServiceAccountCredentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_account_credentials: Option<ServiceAccountCredentials>,
@@ -421,10 +550,10 @@ pub struct DirectoryConfig {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DisassociateFleetRequest {
-    /// <p>The name of the fleet to disassociate.</p>
+    /// <p>The name of the fleet.</p>
     #[serde(rename = "FleetName")]
     pub fleet_name: String,
-    /// <p>The name of the stack with which the fleet is associated.</p>
+    /// <p>The name of the stack.</p>
     #[serde(rename = "StackName")]
     pub stack_name: String,
 }
@@ -432,14 +561,14 @@ pub struct DisassociateFleetRequest {
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DisassociateFleetResult;
 
-/// <p>The <i>DirectoryName</i> and <i>OrganizationalUnitDistinguishedName</i> values, which are used to join domains for the AppStream 2.0 streaming instances.</p>
+/// <p>Contains the information needed to join a Microsoft Active Directory domain.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct DomainJoinInfo {
-    /// <p>The fully qualified name of the directory, such as corp.example.com</p>
+    /// <p>The fully qualified name of the directory (for example, corp.example.com).</p>
     #[serde(rename = "DirectoryName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub directory_name: Option<String>,
-    /// <p>The distinguished name of the organizational unit to place the computer account in.</p>
+    /// <p>The distinguished name of the organizational unit for computer accounts.</p>
     #[serde(rename = "OrganizationalUnitDistinguishedName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub organizational_unit_distinguished_name: Option<String>,
@@ -447,7 +576,7 @@ pub struct DomainJoinInfo {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ExpireSessionRequest {
-    /// <p>The unique identifier of the streaming session to be stopped.</p>
+    /// <p>The ID of the streaming session.</p>
     #[serde(rename = "SessionId")]
     pub session_id: String,
 }
@@ -461,44 +590,48 @@ pub struct Fleet {
     /// <p>The ARN for the fleet.</p>
     #[serde(rename = "Arn")]
     pub arn: String,
-    /// <p>The capacity information for the fleet.</p>
+    /// <p>The capacity status for the fleet.</p>
     #[serde(rename = "ComputeCapacityStatus")]
     pub compute_capacity_status: ComputeCapacityStatus,
-    /// <p>The time at which the fleet was created.</p>
+    /// <p>The time the fleet was created.</p>
     #[serde(rename = "CreatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
-    /// <p>The description displayed to end users on the AppStream 2.0 portal.</p>
+    /// <p>The description for display.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The time after disconnection when a session is considered to have ended. If a user who got disconnected reconnects within this timeout interval, the user is connected back to their previous session. The input can be any numeric value in seconds between 60 and 57600.</p>
+    /// <p>The time after disconnection when a session is considered to have ended, in seconds. If a user who was disconnected reconnects within this time interval, the user is connected to their previous session. Specify a value between 60 and 57600.</p>
     #[serde(rename = "DisconnectTimeoutInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disconnect_timeout_in_seconds: Option<i64>,
-    /// <p>The name displayed to end users on the AppStream 2.0 portal.</p>
+    /// <p>The fleet name for display.</p>
     #[serde(rename = "DisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
-    /// <p>The <i>DirectoryName</i> and <i>OrganizationalUnitDistinguishedName</i> values, which are used to join domains for the AppStream 2.0 streaming instances.</p>
+    /// <p>The information needed to join a Microsoft Active Directory domain.</p>
     #[serde(rename = "DomainJoinInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_join_info: Option<DomainJoinInfo>,
-    /// <p>Whether default internet access is enabled for the fleet. </p>
+    /// <p>Indicates whether default internet access is enabled for the fleet.</p>
     #[serde(rename = "EnableDefaultInternetAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_default_internet_access: Option<bool>,
-    /// <p>The list of fleet errors is appended to this list.</p>
+    /// <p>The fleet errors.</p>
     #[serde(rename = "FleetErrors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet_errors: Option<Vec<FleetError>>,
-    /// <p>The image used by the fleet.</p>
+    /// <p><p>The fleet type.</p> <dl> <dt>ALWAYS<em>ON</dt> <dd> <p>Provides users with instant-on access to their apps. You are charged for all running instances in your fleet, even if no users are streaming apps.</p> </dd> <dt>ON</em>DEMAND</dt> <dd> <p>Provide users with access to applications after they connect, which takes one to two minutes. You are charged for instance streaming when users are connected and a small hourly fee for instances that are not streaming apps.</p> </dd> </dl></p>
+    #[serde(rename = "FleetType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fleet_type: Option<String>,
+    /// <p>The name of the image used to create the fleet.</p>
     #[serde(rename = "ImageName")]
     pub image_name: String,
-    /// <p>The instance type of compute resources for the fleet. The fleet instances are launched from this instance type. </p>
+    /// <p>The instance type to use when launching fleet instances.</p>
     #[serde(rename = "InstanceType")]
     pub instance_type: String,
-    /// <p>The maximum time for which a streaming session can run. The value can be any numeric value in seconds between 600 and 57600.</p>
+    /// <p>The maximum time that a streaming session can run, in seconds. Specify a value between 600 and 57600.</p>
     #[serde(rename = "MaxUserDurationInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_user_duration_in_seconds: Option<i64>,
@@ -514,62 +647,66 @@ pub struct Fleet {
     pub vpc_config: Option<VpcConfig>,
 }
 
-/// <p>The details of the fleet error.</p>
+/// <p>Describes a fleet error.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct FleetError {
-    /// <p>The error code for the fleet error.</p>
+    /// <p>The error code.</p>
     #[serde(rename = "ErrorCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_code: Option<String>,
-    /// <p>The error message generated when the fleet has errors.</p>
+    /// <p>The error message.</p>
     #[serde(rename = "ErrorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
 }
 
-/// <p>New streaming instances are booted from images. The image stores the application catalog and is connected to fleets.</p>
+/// <p>Describes an image.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Image {
-    /// <p>The applications associated with an image.</p>
+    /// <p>The applications associated with the image.</p>
     #[serde(rename = "Applications")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub applications: Option<Vec<Application>>,
-    /// <p>The ARN for the image.</p>
+    /// <p>The version of the AppStream 2.0 agent to use for instances that are launched from this image. </p>
+    #[serde(rename = "AppstreamAgentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub appstream_agent_version: Option<String>,
+    /// <p>The ARN of the image.</p>
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    /// <p>The source image ARN from which this image was created.</p>
+    /// <p>The ARN of the image from which this image was created.</p>
     #[serde(rename = "BaseImageArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub base_image_arn: Option<String>,
-    /// <p>The time stamp when the image was created.</p>
+    /// <p>The time the image was created.</p>
     #[serde(rename = "CreatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
-    /// <p>A meaningful description for the image.</p>
+    /// <p>The description for display.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The display name for the image.</p>
+    /// <p>The image name for display.</p>
     #[serde(rename = "DisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
-    /// <p>Whether an image builder can be launched from this image.</p>
+    /// <p>Indicates whether an image builder can be launched from this image.</p>
     #[serde(rename = "ImageBuilderSupported")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_builder_supported: Option<bool>,
-    /// <p>The unique identifier for the image.</p>
+    /// <p>The name of the image.</p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>The operating system platform of the image.</p>
     #[serde(rename = "Platform")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub platform: Option<String>,
-    /// <p>The AWS release date of the public base image. For private images, this date is the release date of the base image from which the image was created.</p>
+    /// <p>The release date of the public base image. For private images, this date is the release date of the base image from which the image was created.</p>
     #[serde(rename = "PublicBaseImageReleasedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub public_base_image_released_date: Option<f64>,
-    /// <p>The image starts in the <b>PENDING</b> state. If image creation succeeds, it moves to <b>AVAILABLE</b>. If image creation fails, it moves to <b>FAILED</b>.</p>
+    /// <p>The image starts in the <code>PENDING</code> state. If image creation succeeds, the state is <code>AVAILABLE</code>. If image creation fails, the state is <code>FAILED</code>.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
@@ -577,20 +714,97 @@ pub struct Image {
     #[serde(rename = "StateChangeReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state_change_reason: Option<ImageStateChangeReason>,
-    /// <p>The visibility of an image to the user; images can be public or private.</p>
+    /// <p>Indicates whether the image is public or private.</p>
     #[serde(rename = "Visibility")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub visibility: Option<String>,
 }
 
-/// <p>The reason why the last state change occurred.</p>
+/// <p>Describes a streaming instance used for editing an image. New images are created from a snapshot through an image builder.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
-pub struct ImageStateChangeReason {
-    /// <p>The state change reason code of the image.</p>
+pub struct ImageBuilder {
+    /// <p>The version of the AppStream 2.0 agent that is currently being used by this image builder. </p>
+    #[serde(rename = "AppstreamAgentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub appstream_agent_version: Option<String>,
+    /// <p>The ARN for the image builder.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The time stamp when the image builder was created.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<f64>,
+    /// <p>The description for display.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The image builder name for display.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p>The information needed to join a Microsoft Active Directory domain.</p>
+    #[serde(rename = "DomainJoinInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_join_info: Option<DomainJoinInfo>,
+    /// <p>Enables or disables default internet access for the image builder.</p>
+    #[serde(rename = "EnableDefaultInternetAccess")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_default_internet_access: Option<bool>,
+    /// <p>The ARN of the image from which this builder was created.</p>
+    #[serde(rename = "ImageArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_arn: Option<String>,
+    /// <p>The image builder errors.</p>
+    #[serde(rename = "ImageBuilderErrors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_builder_errors: Option<Vec<ResourceError>>,
+    /// <p>The instance type for the image builder.</p>
+    #[serde(rename = "InstanceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_type: Option<String>,
+    /// <p>The name of the image builder.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The operating system platform of the image builder.</p>
+    #[serde(rename = "Platform")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub platform: Option<String>,
+    /// <p>The state of the image builder.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// <p>The reason why the last state change occurred.</p>
+    #[serde(rename = "StateChangeReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state_change_reason: Option<ImageBuilderStateChangeReason>,
+    /// <p>The VPC configuration of the image builder.</p>
+    #[serde(rename = "VpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<VpcConfig>,
+}
+
+/// <p>Describes the reason why the last image builder state change occurred.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ImageBuilderStateChangeReason {
+    /// <p>The state change reason code.</p>
     #[serde(rename = "Code")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub code: Option<String>,
-    /// <p>The state change reason message to the end user.</p>
+    /// <p>The state change reason message.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+}
+
+/// <p>Describes the reason why the last image state change occurred.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ImageStateChangeReason {
+    /// <p>The state change reason code.</p>
+    #[serde(rename = "Code")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code: Option<String>,
+    /// <p>The state change reason message.</p>
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
@@ -602,15 +816,14 @@ pub struct ListAssociatedFleetsRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The name of the stack whose associated fleets are listed.</p>
+    /// <p>The name of the stack.</p>
     #[serde(rename = "StackName")]
     pub stack_name: String,
 }
 
-/// <p>The response from a successful operation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListAssociatedFleetsResult {
-    /// <p>The names of associated fleets.</p>
+    /// <p>The names of the fleets.</p>
     #[serde(rename = "Names")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub names: Option<Vec<String>>,
@@ -622,7 +835,7 @@ pub struct ListAssociatedFleetsResult {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListAssociatedStacksRequest {
-    /// <p>The name of the fleet whose associated stacks are listed.</p>
+    /// <p>The name of the fleet.</p>
     #[serde(rename = "FleetName")]
     pub fleet_name: String,
     /// <p>The pagination token to use to retrieve the next page of results for this operation. If this value is null, it retrieves the first page.</p>
@@ -631,10 +844,9 @@ pub struct ListAssociatedStacksRequest {
     pub next_token: Option<String>,
 }
 
-/// <p>The response from a successful operation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListAssociatedStacksResult {
-    /// <p>The names of associated stacks.</p>
+    /// <p>The names of the stacks.</p>
     #[serde(rename = "Names")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub names: Option<Vec<String>>,
@@ -644,31 +856,63 @@ pub struct ListAssociatedStacksResult {
     pub next_token: Option<String>,
 }
 
-/// <p>The <i>AccountName</i> and <i>AccountPassword</i> of the service account, to be used by the streaming instance to connect to the directory.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ListTagsForResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the resource.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ListTagsForResourceResponse {
+    /// <p>The information about the tags.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>Describes a resource error.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ResourceError {
+    /// <p>The error code.</p>
+    #[serde(rename = "ErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<String>,
+    /// <p>The error message.</p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+    /// <p>The time the error occurred.</p>
+    #[serde(rename = "ErrorTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_timestamp: Option<f64>,
+}
+
+/// <p>Describes the credentials for the service account used by the streaming instance to connect to the directory.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct ServiceAccountCredentials {
-    /// <p>The user name of an account in the directory that is used by AppStream 2.0 streaming instances to connect to the directory. This account must have the following privileges: create computer objects, join computers to the domain, change/reset the password on descendant computer objects for the organizational units specified.</p>
+    /// <p>The user name of the account. This account must have the following privileges: create computer objects, join computers to the domain, and change/reset the password on descendant computer objects for the organizational units specified.</p>
     #[serde(rename = "AccountName")]
     pub account_name: String,
-    /// <p>The password for the user account for directory actions.</p>
+    /// <p>The password for the account.</p>
     #[serde(rename = "AccountPassword")]
     pub account_password: String,
 }
 
-/// <p>Contains the parameters for a streaming session.</p>
+/// <p>Describes a streaming session.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Session {
-    /// <p>The authentication method of the user for whom the session was created. It can be <code>API</code> for a user authenticated using a streaming URL or <code>SAML</code> for a SAML federated user.</p>
+    /// <p>The authentication method. The user is authenticated using a streaming URL (<code>API</code>) or SAML federation (<code>SAML</code>).</p>
     #[serde(rename = "AuthenticationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_type: Option<String>,
-    /// <p>The name of the fleet for which the streaming session was created.</p>
+    /// <p>The name of the fleet for the streaming session.</p>
     #[serde(rename = "FleetName")]
     pub fleet_name: String,
-    /// <p>The unique ID for a streaming session.</p>
+    /// <p>The ID of the streaming session.</p>
     #[serde(rename = "Id")]
     pub id: String,
-    /// <p>The name of the stack for which the streaming session was created.</p>
+    /// <p>The name of the stack for the streaming session.</p>
     #[serde(rename = "StackName")]
     pub stack_name: String,
     /// <p>The current state of the streaming session.</p>
@@ -679,46 +923,46 @@ pub struct Session {
     pub user_id: String,
 }
 
-/// <p>Details about a stack.</p>
+/// <p>Describes a stack.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Stack {
     /// <p>The ARN of the stack.</p>
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    /// <p>The time stamp when the stack was created.</p>
+    /// <p>The time the stack was created.</p>
     #[serde(rename = "CreatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
-    /// <p>A meaningful description for the stack.</p>
+    /// <p>The description for display.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>A display name for the stack.</p>
+    /// <p>The stack name for display.</p>
     #[serde(rename = "DisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
-    /// <p>The unique identifier of the stack.</p>
+    /// <p>The name of the stack.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The list of errors associated with the stack.</p>
+    /// <p>The errors for the stack.</p>
     #[serde(rename = "StackErrors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stack_errors: Option<Vec<StackError>>,
-    /// <p>The storage connectors to be enabled for the stack.</p>
+    /// <p>The storage connectors to enable.</p>
     #[serde(rename = "StorageConnectors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_connectors: Option<Vec<StorageConnector>>,
 }
 
-/// <p>Contains the parameters for a stack error.</p>
+/// <p>Describes a stack error.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct StackError {
-    /// <p>The error code of a stack error.</p>
+    /// <p>The error code.</p>
     #[serde(rename = "ErrorCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_code: Option<String>,
-    /// <p>The error message of a stack error.</p>
+    /// <p>The error message.</p>
     #[serde(rename = "ErrorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
@@ -726,7 +970,7 @@ pub struct StackError {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct StartFleetRequest {
-    /// <p>The name of the fleet to start.</p>
+    /// <p>The name of the fleet.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
@@ -735,8 +979,27 @@ pub struct StartFleetRequest {
 pub struct StartFleetResult;
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct StartImageBuilderRequest {
+    /// <p>The version of the AppStream 2.0 agent to use for this image builder. To use the latest version of the AppStream 2.0 agent, specify [LATEST]. </p>
+    #[serde(rename = "AppstreamAgentVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub appstream_agent_version: Option<String>,
+    /// <p>The name of the image builder.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct StartImageBuilderResult {
+    /// <p>Information about the image builder.</p>
+    #[serde(rename = "ImageBuilder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_builder: Option<ImageBuilder>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct StopFleetRequest {
-    /// <p>The name of the fleet to stop.</p>
+    /// <p>The name of the fleet.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
@@ -744,28 +1007,69 @@ pub struct StopFleetRequest {
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct StopFleetResult;
 
-/// <p>Contains the parameters for a storage connector.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct StopImageBuilderRequest {
+    /// <p>The name of the image builder.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct StopImageBuilderResult {
+    /// <p>Information about the image builder.</p>
+    #[serde(rename = "ImageBuilder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_builder: Option<ImageBuilder>,
+}
+
+/// <p>Describes a storage connector.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct StorageConnector {
-    /// <p>The type of storage connector. The possible values include: HOMEFOLDERS.</p>
+    /// <p>The type of storage connector.</p>
     #[serde(rename = "ConnectorType")]
     pub connector_type: String,
-    /// <p>The ARN associated with the storage connector.</p>
+    /// <p>The ARN of the storage connector.</p>
     #[serde(rename = "ResourceIdentifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_identifier: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct TagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the resource.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>The tags to associate. A tag is a key-value pair (the value is optional). For example, <code>Environment=Test</code>, or, if you do not specify a value, <code>Environment=</code>. </p> <p>If you do not specify a value, we set the value to an empty string.</p>
+    #[serde(rename = "Tags")]
+    pub tags: ::std::collections::HashMap<String, String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct TagResourceResponse;
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct UntagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the resource.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>The tag keys for the tags to disassociate.</p>
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct UntagResourceResponse;
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateDirectoryConfigRequest {
-    /// <p>The name of the existing directory configuration to be updated.</p>
+    /// <p>The name of the directory configuration.</p>
     #[serde(rename = "DirectoryName")]
     pub directory_name: String,
-    /// <p>The list of the distinguished names of organizational units to place computer accounts in.</p>
+    /// <p>The distinguished names of the organizational units for computer accounts.</p>
     #[serde(rename = "OrganizationalUnitDistinguishedNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub organizational_unit_distinguished_names: Option<Vec<String>>,
-    /// <p>The <i>AccountName</i> and <i>AccountPassword</i> values for the service account, which are used by the streaming instance to connect to the directory</p>
+    /// <p>The credentials for the service account used by the streaming instance to connect to the directory.</p>
     #[serde(rename = "ServiceAccountCredentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_account_credentials: Option<ServiceAccountCredentials>,
@@ -773,7 +1077,7 @@ pub struct UpdateDirectoryConfigRequest {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateDirectoryConfigResult {
-    /// <p>The updated directory configuration details.</p>
+    /// <p>Information about the directory configuration.</p>
     #[serde(rename = "DirectoryConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub directory_config: Option<DirectoryConfig>,
@@ -781,27 +1085,27 @@ pub struct UpdateDirectoryConfigResult {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateFleetRequest {
-    /// <p>Fleet attributes to be deleted.</p>
+    /// <p>The fleet attributes to delete.</p>
     #[serde(rename = "AttributesToDelete")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attributes_to_delete: Option<Vec<String>>,
-    /// <p>The parameters for the capacity allocated to the fleet. </p>
+    /// <p>The desired capacity for the fleet.</p>
     #[serde(rename = "ComputeCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compute_capacity: Option<ComputeCapacity>,
-    /// <p>The description displayed to end users on the AppStream 2.0 portal.</p>
+    /// <p>The description for display.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The time after disconnection when a session is considered to have ended. If a user who got disconnected reconnects within this timeout interval, the user is connected back to their previous session. The input can be any numeric value in seconds between 60 and 57600.</p>
+    /// <p>The time after disconnection when a session is considered to have ended, in seconds. If a user who was disconnected reconnects within this time interval, the user is connected to their previous session. Specify a value between 60 and 57600.</p>
     #[serde(rename = "DisconnectTimeoutInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disconnect_timeout_in_seconds: Option<i64>,
-    /// <p>The name displayed to end users on the AppStream 2.0 portal.</p>
+    /// <p>The fleet name for display.</p>
     #[serde(rename = "DisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
-    /// <p>The <i>DirectoryName</i> and <i>OrganizationalUnitDistinguishedName</i> values, which are used to join domains for the AppStream 2.0 streaming instances.</p>
+    /// <p>The information needed to join a Microsoft Active Directory domain.</p>
     #[serde(rename = "DomainJoinInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_join_info: Option<DomainJoinInfo>,
@@ -809,19 +1113,19 @@ pub struct UpdateFleetRequest {
     #[serde(rename = "EnableDefaultInternetAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_default_internet_access: Option<bool>,
-    /// <p>The image name from which a fleet is created.</p>
+    /// <p>The name of the image used to create the fleet.</p>
     #[serde(rename = "ImageName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_name: Option<String>,
-    /// <p><p>The instance type of compute resources for the fleet. Fleet instances are launched from this instance type. Available instance types are:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> </ul></p>
+    /// <p><p>The instance type to use when launching fleet instances. The following instance types are available:</p> <ul> <li> <p>stream.standard.medium</p> </li> <li> <p>stream.standard.large</p> </li> <li> <p>stream.compute.large</p> </li> <li> <p>stream.compute.xlarge</p> </li> <li> <p>stream.compute.2xlarge</p> </li> <li> <p>stream.compute.4xlarge</p> </li> <li> <p>stream.compute.8xlarge</p> </li> <li> <p>stream.memory.large</p> </li> <li> <p>stream.memory.xlarge</p> </li> <li> <p>stream.memory.2xlarge</p> </li> <li> <p>stream.memory.4xlarge</p> </li> <li> <p>stream.memory.8xlarge</p> </li> <li> <p>stream.graphics-design.large</p> </li> <li> <p>stream.graphics-design.xlarge</p> </li> <li> <p>stream.graphics-design.2xlarge</p> </li> <li> <p>stream.graphics-design.4xlarge</p> </li> <li> <p>stream.graphics-desktop.2xlarge</p> </li> <li> <p>stream.graphics-pro.4xlarge</p> </li> <li> <p>stream.graphics-pro.8xlarge</p> </li> <li> <p>stream.graphics-pro.16xlarge</p> </li> </ul></p>
     #[serde(rename = "InstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_type: Option<String>,
-    /// <p>The maximum time for which a streaming session can run. The input can be any numeric value in seconds between 600 and 57600.</p>
+    /// <p>The maximum time that a streaming session can run, in seconds. Specify a value between 600 and 57600.</p>
     #[serde(rename = "MaxUserDurationInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_user_duration_in_seconds: Option<i64>,
-    /// <p>The name of the fleet.</p>
+    /// <p>A unique name for the fleet.</p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>The VPC configuration for the fleet.</p>
@@ -832,7 +1136,7 @@ pub struct UpdateFleetRequest {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateFleetResult {
-    /// <p>A list of fleet details.</p>
+    /// <p>Information about the fleet.</p>
     #[serde(rename = "Fleet")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fleet: Option<Fleet>,
@@ -840,22 +1144,22 @@ pub struct UpdateFleetResult {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateStackRequest {
-    /// <p>Remove all the storage connectors currently enabled for the stack.</p>
+    /// <p>Deletes the storage connectors currently enabled for the stack.</p>
     #[serde(rename = "DeleteStorageConnectors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub delete_storage_connectors: Option<bool>,
-    /// <p>The description displayed to end users on the AppStream 2.0 portal.</p>
+    /// <p>The description for display.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The name displayed to end users on the AppStream 2.0 portal.</p>
+    /// <p>The stack name for display.</p>
     #[serde(rename = "DisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
-    /// <p>The name of the stack to update.</p>
+    /// <p>The name of the stack.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The storage connectors to be enabled for the stack.</p>
+    /// <p>The storage connectors to enable.</p>
     #[serde(rename = "StorageConnectors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_connectors: Option<Vec<StorageConnector>>,
@@ -863,20 +1167,20 @@ pub struct UpdateStackRequest {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateStackResult {
-    /// <p>A list of stack details.</p>
+    /// <p>Information about the stack.</p>
     #[serde(rename = "Stack")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stack: Option<Stack>,
 }
 
-/// <p>VPC configuration information.</p>
+/// <p>Describes VPC configuration information.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct VpcConfig {
-    /// <p>Security groups associated with the fleet.</p>
+    /// <p>The security groups for the fleet.</p>
     #[serde(rename = "SecurityGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
-    /// <p>The list of subnets to which a network interface is established from the fleet instance.</p>
+    /// <p>The subnets to which a network interface is established from the fleet instance.</p>
     #[serde(rename = "SubnetIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_ids: Option<Vec<String>>,
@@ -1189,6 +1493,220 @@ impl Error for CreateFleetError {
             CreateFleetError::Credentials(ref err) => err.description(),
             CreateFleetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             CreateFleetError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateImageBuilder
+#[derive(Debug, PartialEq)]
+pub enum CreateImageBuilderError {
+    /// <p>An API error occurred. Wait a few minutes and try again.</p>
+    ConcurrentModification(String),
+    /// <p>The image does not support storage connectors.</p>
+    IncompatibleImage(String),
+    /// <p>Indicates an incorrect combination of parameters, or a missing parameter.</p>
+    InvalidParameterCombination(String),
+    /// <p>The specified role is invalid.</p>
+    InvalidRole(String),
+    /// <p>The requested limit exceeds the permitted limit for an account.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>The specified resource exists and is not in use, but isn't available.</p>
+    ResourceNotAvailable(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateImageBuilderError {
+    pub fn from_body(body: &str) -> CreateImageBuilderError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ConcurrentModificationException" => {
+                        CreateImageBuilderError::ConcurrentModification(String::from(error_message))
+                    }
+                    "IncompatibleImageException" => {
+                        CreateImageBuilderError::IncompatibleImage(String::from(error_message))
+                    }
+                    "InvalidParameterCombinationException" => {
+                        CreateImageBuilderError::InvalidParameterCombination(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidRoleException" => {
+                        CreateImageBuilderError::InvalidRole(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        CreateImageBuilderError::LimitExceeded(String::from(error_message))
+                    }
+                    "ResourceAlreadyExistsException" => {
+                        CreateImageBuilderError::ResourceAlreadyExists(String::from(error_message))
+                    }
+                    "ResourceNotAvailableException" => {
+                        CreateImageBuilderError::ResourceNotAvailable(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        CreateImageBuilderError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CreateImageBuilderError::Validation(error_message.to_string())
+                    }
+                    _ => CreateImageBuilderError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateImageBuilderError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateImageBuilderError {
+    fn from(err: serde_json::error::Error) -> CreateImageBuilderError {
+        CreateImageBuilderError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateImageBuilderError {
+    fn from(err: CredentialsError) -> CreateImageBuilderError {
+        CreateImageBuilderError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateImageBuilderError {
+    fn from(err: HttpDispatchError) -> CreateImageBuilderError {
+        CreateImageBuilderError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateImageBuilderError {
+    fn from(err: io::Error) -> CreateImageBuilderError {
+        CreateImageBuilderError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateImageBuilderError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateImageBuilderError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateImageBuilderError::ConcurrentModification(ref cause) => cause,
+            CreateImageBuilderError::IncompatibleImage(ref cause) => cause,
+            CreateImageBuilderError::InvalidParameterCombination(ref cause) => cause,
+            CreateImageBuilderError::InvalidRole(ref cause) => cause,
+            CreateImageBuilderError::LimitExceeded(ref cause) => cause,
+            CreateImageBuilderError::ResourceAlreadyExists(ref cause) => cause,
+            CreateImageBuilderError::ResourceNotAvailable(ref cause) => cause,
+            CreateImageBuilderError::ResourceNotFound(ref cause) => cause,
+            CreateImageBuilderError::Validation(ref cause) => cause,
+            CreateImageBuilderError::Credentials(ref err) => err.description(),
+            CreateImageBuilderError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateImageBuilderError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateImageBuilderStreamingURL
+#[derive(Debug, PartialEq)]
+pub enum CreateImageBuilderStreamingURLError {
+    /// <p>The attempted operation is not permitted.</p>
+    OperationNotPermitted(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateImageBuilderStreamingURLError {
+    pub fn from_body(body: &str) -> CreateImageBuilderStreamingURLError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "OperationNotPermittedException" => {
+                        CreateImageBuilderStreamingURLError::OperationNotPermitted(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        CreateImageBuilderStreamingURLError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        CreateImageBuilderStreamingURLError::Validation(error_message.to_string())
+                    }
+                    _ => CreateImageBuilderStreamingURLError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreateImageBuilderStreamingURLError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreateImageBuilderStreamingURLError {
+    fn from(err: serde_json::error::Error) -> CreateImageBuilderStreamingURLError {
+        CreateImageBuilderStreamingURLError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateImageBuilderStreamingURLError {
+    fn from(err: CredentialsError) -> CreateImageBuilderStreamingURLError {
+        CreateImageBuilderStreamingURLError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateImageBuilderStreamingURLError {
+    fn from(err: HttpDispatchError) -> CreateImageBuilderStreamingURLError {
+        CreateImageBuilderStreamingURLError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateImageBuilderStreamingURLError {
+    fn from(err: io::Error) -> CreateImageBuilderStreamingURLError {
+        CreateImageBuilderStreamingURLError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateImageBuilderStreamingURLError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateImageBuilderStreamingURLError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateImageBuilderStreamingURLError::OperationNotPermitted(ref cause) => cause,
+            CreateImageBuilderStreamingURLError::ResourceNotFound(ref cause) => cause,
+            CreateImageBuilderStreamingURLError::Validation(ref cause) => cause,
+            CreateImageBuilderStreamingURLError::Credentials(ref err) => err.description(),
+            CreateImageBuilderStreamingURLError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateImageBuilderStreamingURLError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -1576,6 +2094,194 @@ impl Error for DeleteFleetError {
         }
     }
 }
+/// Errors returned by DeleteImage
+#[derive(Debug, PartialEq)]
+pub enum DeleteImageError {
+    /// <p>An API error occurred. Wait a few minutes and try again.</p>
+    ConcurrentModification(String),
+    /// <p>The attempted operation is not permitted.</p>
+    OperationNotPermitted(String),
+    /// <p>The specified resource is in use.</p>
+    ResourceInUse(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteImageError {
+    pub fn from_body(body: &str) -> DeleteImageError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ConcurrentModificationException" => {
+                        DeleteImageError::ConcurrentModification(String::from(error_message))
+                    }
+                    "OperationNotPermittedException" => {
+                        DeleteImageError::OperationNotPermitted(String::from(error_message))
+                    }
+                    "ResourceInUseException" => {
+                        DeleteImageError::ResourceInUse(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DeleteImageError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteImageError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteImageError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteImageError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteImageError {
+    fn from(err: serde_json::error::Error) -> DeleteImageError {
+        DeleteImageError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteImageError {
+    fn from(err: CredentialsError) -> DeleteImageError {
+        DeleteImageError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteImageError {
+    fn from(err: HttpDispatchError) -> DeleteImageError {
+        DeleteImageError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteImageError {
+    fn from(err: io::Error) -> DeleteImageError {
+        DeleteImageError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteImageError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteImageError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteImageError::ConcurrentModification(ref cause) => cause,
+            DeleteImageError::OperationNotPermitted(ref cause) => cause,
+            DeleteImageError::ResourceInUse(ref cause) => cause,
+            DeleteImageError::ResourceNotFound(ref cause) => cause,
+            DeleteImageError::Validation(ref cause) => cause,
+            DeleteImageError::Credentials(ref err) => err.description(),
+            DeleteImageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteImageError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteImageBuilder
+#[derive(Debug, PartialEq)]
+pub enum DeleteImageBuilderError {
+    /// <p>An API error occurred. Wait a few minutes and try again.</p>
+    ConcurrentModification(String),
+    /// <p>The attempted operation is not permitted.</p>
+    OperationNotPermitted(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteImageBuilderError {
+    pub fn from_body(body: &str) -> DeleteImageBuilderError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ConcurrentModificationException" => {
+                        DeleteImageBuilderError::ConcurrentModification(String::from(error_message))
+                    }
+                    "OperationNotPermittedException" => {
+                        DeleteImageBuilderError::OperationNotPermitted(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DeleteImageBuilderError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteImageBuilderError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteImageBuilderError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteImageBuilderError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteImageBuilderError {
+    fn from(err: serde_json::error::Error) -> DeleteImageBuilderError {
+        DeleteImageBuilderError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteImageBuilderError {
+    fn from(err: CredentialsError) -> DeleteImageBuilderError {
+        DeleteImageBuilderError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteImageBuilderError {
+    fn from(err: HttpDispatchError) -> DeleteImageBuilderError {
+        DeleteImageBuilderError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteImageBuilderError {
+    fn from(err: io::Error) -> DeleteImageBuilderError {
+        DeleteImageBuilderError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteImageBuilderError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteImageBuilderError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteImageBuilderError::ConcurrentModification(ref cause) => cause,
+            DeleteImageBuilderError::OperationNotPermitted(ref cause) => cause,
+            DeleteImageBuilderError::ResourceNotFound(ref cause) => cause,
+            DeleteImageBuilderError::Validation(ref cause) => cause,
+            DeleteImageBuilderError::Credentials(ref err) => err.description(),
+            DeleteImageBuilderError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteImageBuilderError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteStack
 #[derive(Debug, PartialEq)]
 pub enum DeleteStackError {
@@ -1821,6 +2527,86 @@ impl Error for DescribeFleetsError {
             DescribeFleetsError::Credentials(ref err) => err.description(),
             DescribeFleetsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             DescribeFleetsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeImageBuilders
+#[derive(Debug, PartialEq)]
+pub enum DescribeImageBuildersError {
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeImageBuildersError {
+    pub fn from_body(body: &str) -> DescribeImageBuildersError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ResourceNotFoundException" => {
+                        DescribeImageBuildersError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DescribeImageBuildersError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeImageBuildersError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeImageBuildersError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeImageBuildersError {
+    fn from(err: serde_json::error::Error) -> DescribeImageBuildersError {
+        DescribeImageBuildersError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeImageBuildersError {
+    fn from(err: CredentialsError) -> DescribeImageBuildersError {
+        DescribeImageBuildersError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeImageBuildersError {
+    fn from(err: HttpDispatchError) -> DescribeImageBuildersError {
+        DescribeImageBuildersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeImageBuildersError {
+    fn from(err: io::Error) -> DescribeImageBuildersError {
+        DescribeImageBuildersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeImageBuildersError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeImageBuildersError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeImageBuildersError::ResourceNotFound(ref cause) => cause,
+            DescribeImageBuildersError::Validation(ref cause) => cause,
+            DescribeImageBuildersError::Credentials(ref err) => err.description(),
+            DescribeImageBuildersError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeImageBuildersError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -2372,6 +3158,86 @@ impl Error for ListAssociatedStacksError {
         }
     }
 }
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_body(body: &str) -> ListTagsForResourceError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ResourceNotFoundException" => {
+                        ListTagsForResourceError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListTagsForResourceError::Validation(error_message.to_string())
+                    }
+                    _ => ListTagsForResourceError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListTagsForResourceError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListTagsForResourceError {
+    fn from(err: serde_json::error::Error) -> ListTagsForResourceError {
+        ListTagsForResourceError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListTagsForResourceError {
+    fn from(err: CredentialsError) -> ListTagsForResourceError {
+        ListTagsForResourceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListTagsForResourceError {
+    fn from(err: HttpDispatchError) -> ListTagsForResourceError {
+        ListTagsForResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTagsForResourceError {
+    fn from(err: io::Error) -> ListTagsForResourceError {
+        ListTagsForResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTagsForResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+            ListTagsForResourceError::Validation(ref cause) => cause,
+            ListTagsForResourceError::Credentials(ref err) => err.description(),
+            ListTagsForResourceError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListTagsForResourceError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by StartFleet
 #[derive(Debug, PartialEq)]
 pub enum StartFleetError {
@@ -2466,6 +3332,104 @@ impl Error for StartFleetError {
         }
     }
 }
+/// Errors returned by StartImageBuilder
+#[derive(Debug, PartialEq)]
+pub enum StartImageBuilderError {
+    /// <p>An API error occurred. Wait a few minutes and try again.</p>
+    ConcurrentModification(String),
+    /// <p>The image does not support storage connectors.</p>
+    IncompatibleImage(String),
+    /// <p>The specified resource exists and is not in use, but isn't available.</p>
+    ResourceNotAvailable(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl StartImageBuilderError {
+    pub fn from_body(body: &str) -> StartImageBuilderError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ConcurrentModificationException" => {
+                        StartImageBuilderError::ConcurrentModification(String::from(error_message))
+                    }
+                    "IncompatibleImageException" => {
+                        StartImageBuilderError::IncompatibleImage(String::from(error_message))
+                    }
+                    "ResourceNotAvailableException" => {
+                        StartImageBuilderError::ResourceNotAvailable(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        StartImageBuilderError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        StartImageBuilderError::Validation(error_message.to_string())
+                    }
+                    _ => StartImageBuilderError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => StartImageBuilderError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for StartImageBuilderError {
+    fn from(err: serde_json::error::Error) -> StartImageBuilderError {
+        StartImageBuilderError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for StartImageBuilderError {
+    fn from(err: CredentialsError) -> StartImageBuilderError {
+        StartImageBuilderError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for StartImageBuilderError {
+    fn from(err: HttpDispatchError) -> StartImageBuilderError {
+        StartImageBuilderError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StartImageBuilderError {
+    fn from(err: io::Error) -> StartImageBuilderError {
+        StartImageBuilderError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for StartImageBuilderError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartImageBuilderError {
+    fn description(&self) -> &str {
+        match *self {
+            StartImageBuilderError::ConcurrentModification(ref cause) => cause,
+            StartImageBuilderError::IncompatibleImage(ref cause) => cause,
+            StartImageBuilderError::ResourceNotAvailable(ref cause) => cause,
+            StartImageBuilderError::ResourceNotFound(ref cause) => cause,
+            StartImageBuilderError::Validation(ref cause) => cause,
+            StartImageBuilderError::Credentials(ref err) => err.description(),
+            StartImageBuilderError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            StartImageBuilderError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by StopFleet
 #[derive(Debug, PartialEq)]
 pub enum StopFleetError {
@@ -2545,6 +3509,258 @@ impl Error for StopFleetError {
             StopFleetError::Credentials(ref err) => err.description(),
             StopFleetError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             StopFleetError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by StopImageBuilder
+#[derive(Debug, PartialEq)]
+pub enum StopImageBuilderError {
+    /// <p>An API error occurred. Wait a few minutes and try again.</p>
+    ConcurrentModification(String),
+    /// <p>The attempted operation is not permitted.</p>
+    OperationNotPermitted(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl StopImageBuilderError {
+    pub fn from_body(body: &str) -> StopImageBuilderError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ConcurrentModificationException" => {
+                        StopImageBuilderError::ConcurrentModification(String::from(error_message))
+                    }
+                    "OperationNotPermittedException" => {
+                        StopImageBuilderError::OperationNotPermitted(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        StopImageBuilderError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        StopImageBuilderError::Validation(error_message.to_string())
+                    }
+                    _ => StopImageBuilderError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => StopImageBuilderError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for StopImageBuilderError {
+    fn from(err: serde_json::error::Error) -> StopImageBuilderError {
+        StopImageBuilderError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for StopImageBuilderError {
+    fn from(err: CredentialsError) -> StopImageBuilderError {
+        StopImageBuilderError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for StopImageBuilderError {
+    fn from(err: HttpDispatchError) -> StopImageBuilderError {
+        StopImageBuilderError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StopImageBuilderError {
+    fn from(err: io::Error) -> StopImageBuilderError {
+        StopImageBuilderError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for StopImageBuilderError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StopImageBuilderError {
+    fn description(&self) -> &str {
+        match *self {
+            StopImageBuilderError::ConcurrentModification(ref cause) => cause,
+            StopImageBuilderError::OperationNotPermitted(ref cause) => cause,
+            StopImageBuilderError::ResourceNotFound(ref cause) => cause,
+            StopImageBuilderError::Validation(ref cause) => cause,
+            StopImageBuilderError::Credentials(ref err) => err.description(),
+            StopImageBuilderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            StopImageBuilderError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>The requested limit exceeds the permitted limit for an account.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl TagResourceError {
+    pub fn from_body(body: &str) -> TagResourceError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "LimitExceededException" => {
+                        TagResourceError::LimitExceeded(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        TagResourceError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        TagResourceError::Validation(error_message.to_string())
+                    }
+                    _ => TagResourceError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => TagResourceError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for TagResourceError {
+    fn from(err: serde_json::error::Error) -> TagResourceError {
+        TagResourceError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for TagResourceError {
+    fn from(err: CredentialsError) -> TagResourceError {
+        TagResourceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for TagResourceError {
+    fn from(err: HttpDispatchError) -> TagResourceError {
+        TagResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for TagResourceError {
+    fn from(err: io::Error) -> TagResourceError {
+        TagResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for TagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            TagResourceError::LimitExceeded(ref cause) => cause,
+            TagResourceError::ResourceNotFound(ref cause) => cause,
+            TagResourceError::Validation(ref cause) => cause,
+            TagResourceError::Credentials(ref err) => err.description(),
+            TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            TagResourceError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UntagResourceError {
+    pub fn from_body(body: &str) -> UntagResourceError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ResourceNotFoundException" => {
+                        UntagResourceError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UntagResourceError::Validation(error_message.to_string())
+                    }
+                    _ => UntagResourceError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UntagResourceError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UntagResourceError {
+    fn from(err: serde_json::error::Error) -> UntagResourceError {
+        UntagResourceError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UntagResourceError {
+    fn from(err: CredentialsError) -> UntagResourceError {
+        UntagResourceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UntagResourceError {
+    fn from(err: HttpDispatchError) -> UntagResourceError {
+        UntagResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UntagResourceError {
+    fn from(err: io::Error) -> UntagResourceError {
+        UntagResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UntagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UntagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            UntagResourceError::ResourceNotFound(ref cause) => cause,
+            UntagResourceError::Validation(ref cause) => cause,
+            UntagResourceError::Credentials(ref err) => err.description(),
+            UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UntagResourceError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -2878,127 +4094,187 @@ impl Error for UpdateStackError {
 }
 /// Trait representing the capabilities of the Amazon AppStream API. Amazon AppStream clients implement this trait.
 pub trait AppStream {
-    /// <p>Associate a fleet to a stack.</p>
+    /// <p>Associates the specified fleet with the specified stack.</p>
     fn associate_fleet(
         &self,
         input: &AssociateFleetRequest,
     ) -> Result<AssociateFleetResult, AssociateFleetError>;
 
-    /// <p>Creates a directory configuration with the given parameters.</p>
+    /// <p>Creates a directory configuration.</p>
     fn create_directory_config(
         &self,
         input: &CreateDirectoryConfigRequest,
     ) -> Result<CreateDirectoryConfigResult, CreateDirectoryConfigError>;
 
-    /// <p>Creates a new fleet.</p>
+    /// <p>Creates a fleet.</p>
     fn create_fleet(
         &self,
         input: &CreateFleetRequest,
     ) -> Result<CreateFleetResult, CreateFleetError>;
 
-    /// <p>Create a new stack.</p>
+    /// <p>Creates an image builder.</p> <p>The initial state of the builder is <code>PENDING</code>. When it is ready, the state is <code>RUNNING</code>.</p>
+    fn create_image_builder(
+        &self,
+        input: &CreateImageBuilderRequest,
+    ) -> Result<CreateImageBuilderResult, CreateImageBuilderError>;
+
+    /// <p>Creates a URL to start an image builder streaming session.</p>
+    fn create_image_builder_streaming_url(
+        &self,
+        input: &CreateImageBuilderStreamingURLRequest,
+    ) -> Result<CreateImageBuilderStreamingURLResult, CreateImageBuilderStreamingURLError>;
+
+    /// <p>Creates a stack.</p>
     fn create_stack(
         &self,
         input: &CreateStackRequest,
     ) -> Result<CreateStackResult, CreateStackError>;
 
-    /// <p>Creates a URL to start an AppStream 2.0 streaming session for a user. By default, the URL is valid only for 1 minute from the time that it is generated.</p>
+    /// <p>Creates a URL to start a streaming session for the specified user.</p>
     fn create_streaming_url(
         &self,
         input: &CreateStreamingURLRequest,
     ) -> Result<CreateStreamingURLResult, CreateStreamingURLError>;
 
-    /// <p>Deletes the directory configuration with the given parameters.</p>
+    /// <p>Deletes the specified directory configuration.</p>
     fn delete_directory_config(
         &self,
         input: &DeleteDirectoryConfigRequest,
     ) -> Result<DeleteDirectoryConfigResult, DeleteDirectoryConfigError>;
 
-    /// <p>Deletes a fleet.</p>
+    /// <p>Deletes the specified fleet.</p>
     fn delete_fleet(
         &self,
         input: &DeleteFleetRequest,
     ) -> Result<DeleteFleetResult, DeleteFleetError>;
 
-    /// <p>Deletes the stack. After this operation completes, the environment can no longer be activated, and any reservations made for the stack are released.</p>
+    /// <p>Deletes the specified image. You cannot delete an image that is currently in use. After you delete an image, you cannot provision new capacity using the image.</p>
+    fn delete_image(
+        &self,
+        input: &DeleteImageRequest,
+    ) -> Result<DeleteImageResult, DeleteImageError>;
+
+    /// <p>Deletes the specified image builder and releases the capacity.</p>
+    fn delete_image_builder(
+        &self,
+        input: &DeleteImageBuilderRequest,
+    ) -> Result<DeleteImageBuilderResult, DeleteImageBuilderError>;
+
+    /// <p>Deletes the specified stack. After this operation completes, the environment can no longer be activated and any reservations made for the stack are released.</p>
     fn delete_stack(
         &self,
         input: &DeleteStackRequest,
     ) -> Result<DeleteStackResult, DeleteStackError>;
 
-    /// <p>Returns a list describing the specified directory configurations.</p>
+    /// <p>Describes the specified directory configurations.</p>
     fn describe_directory_configs(
         &self,
         input: &DescribeDirectoryConfigsRequest,
     ) -> Result<DescribeDirectoryConfigsResult, DescribeDirectoryConfigsError>;
 
-    /// <p>If fleet names are provided, this operation describes the specified fleets; otherwise, all the fleets in the account are described.</p>
+    /// <p>Describes the specified fleets or all fleets in the account.</p>
     fn describe_fleets(
         &self,
         input: &DescribeFleetsRequest,
     ) -> Result<DescribeFleetsResult, DescribeFleetsError>;
 
-    /// <p>Describes the images. If a list of names is not provided, all images in your account are returned. This operation does not return a paginated result.</p>
+    /// <p>Describes the specified image builders or all image builders in the account.</p>
+    fn describe_image_builders(
+        &self,
+        input: &DescribeImageBuildersRequest,
+    ) -> Result<DescribeImageBuildersResult, DescribeImageBuildersError>;
+
+    /// <p>Describes the specified images or all images in the account.</p>
     fn describe_images(
         &self,
         input: &DescribeImagesRequest,
     ) -> Result<DescribeImagesResult, DescribeImagesError>;
 
-    /// <p>Describes the streaming sessions for a stack and a fleet. If a user ID is provided, this operation returns streaming sessions for only that user. To retrieve the next set of items, pass this value for the <code>nextToken</code> parameter in a subsequent call to this operation. If an authentication type is not provided, the operation defaults to users authenticated using a streaming URL.</p>
+    /// <p>Describes the streaming sessions for the specified stack and fleet. If a user ID is provided, only the streaming sessions for only that user are returned. If an authentication type is not provided, the default is to authenticate users using a streaming URL.</p>
     fn describe_sessions(
         &self,
         input: &DescribeSessionsRequest,
     ) -> Result<DescribeSessionsResult, DescribeSessionsError>;
 
-    /// <p>If stack names are not provided, this operation describes the specified stacks; otherwise, all stacks in the account are described. To retrieve the next set of items, pass the <code>nextToken</code> value in a subsequent call to this operation.</p>
+    /// <p>Describes the specified stacks or all stacks in the account.</p>
     fn describe_stacks(
         &self,
         input: &DescribeStacksRequest,
     ) -> Result<DescribeStacksResult, DescribeStacksError>;
 
-    /// <p>Disassociates a fleet from a stack.</p>
+    /// <p>Disassociates the specified fleet from the specified stack.</p>
     fn disassociate_fleet(
         &self,
         input: &DisassociateFleetRequest,
     ) -> Result<DisassociateFleetResult, DisassociateFleetError>;
 
-    /// <p>This operation immediately stops a streaming session.</p>
+    /// <p>Stops the specified streaming session.</p>
     fn expire_session(
         &self,
         input: &ExpireSessionRequest,
     ) -> Result<ExpireSessionResult, ExpireSessionError>;
 
-    /// <p>Lists all fleets associated with the stack.</p>
+    /// <p>Lists the fleets associated with the specified stack.</p>
     fn list_associated_fleets(
         &self,
         input: &ListAssociatedFleetsRequest,
     ) -> Result<ListAssociatedFleetsResult, ListAssociatedFleetsError>;
 
-    /// <p>Lists all stacks to which the specified fleet is associated.</p>
+    /// <p>Lists the stacks associated with the specified fleet.</p>
     fn list_associated_stacks(
         &self,
         input: &ListAssociatedStacksRequest,
     ) -> Result<ListAssociatedStacksResult, ListAssociatedStacksError>;
 
-    /// <p>Starts a fleet.</p>
+    /// <p>Lists the tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: &ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, ListTagsForResourceError>;
+
+    /// <p>Starts the specified fleet.</p>
     fn start_fleet(&self, input: &StartFleetRequest) -> Result<StartFleetResult, StartFleetError>;
 
-    /// <p>Stops a fleet.</p>
+    /// <p>Starts the specified image builder.</p>
+    fn start_image_builder(
+        &self,
+        input: &StartImageBuilderRequest,
+    ) -> Result<StartImageBuilderResult, StartImageBuilderError>;
+
+    /// <p>Stops the specified fleet.</p>
     fn stop_fleet(&self, input: &StopFleetRequest) -> Result<StopFleetResult, StopFleetError>;
 
-    /// <p>Updates the directory configuration with the given parameters.</p>
+    /// <p>Stops the specified image builder.</p>
+    fn stop_image_builder(
+        &self,
+        input: &StopImageBuilderRequest,
+    ) -> Result<StopImageBuilderResult, StopImageBuilderError>;
+
+    /// <p>Adds or overwrites one or more tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, this operation updates its value.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>. To disassociate tags from your resources, use <a>UntagResource</a>.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    fn tag_resource(
+        &self,
+        input: &TagResourceRequest,
+    ) -> Result<TagResourceResponse, TagResourceError>;
+
+    /// <p>Disassociates the specified tags from the specified AppStream 2.0 resource.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    fn untag_resource(
+        &self,
+        input: &UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, UntagResourceError>;
+
+    /// <p>Updates the specified directory configuration.</p>
     fn update_directory_config(
         &self,
         input: &UpdateDirectoryConfigRequest,
     ) -> Result<UpdateDirectoryConfigResult, UpdateDirectoryConfigError>;
 
-    /// <p>Updates an existing fleet. All the attributes except the fleet name can be updated in the <b>STOPPED</b> state. When a fleet is in the <b>RUNNING</b> state, only <code>DisplayName</code> and <code>ComputeCapacity</code> can be updated. A fleet cannot be updated in a status of <b>STARTING</b> or <b>STOPPING</b>.</p>
+    /// <p>Updates the specified fleet.</p> <p>If the fleet is in the <code>STOPPED</code> state, you can update any attribute except the fleet name. If the fleet is in the <code>RUNNING</code> state, you can update the <code>DisplayName</code> and <code>ComputeCapacity</code> attributes. If the fleet is in the <code>STARTING</code> or <code>STOPPING</code> state, you can't update it.</p>
     fn update_fleet(
         &self,
         input: &UpdateFleetRequest,
     ) -> Result<UpdateFleetResult, UpdateFleetError>;
 
-    /// <p>Updates the specified fields in the stack with the specified name.</p>
+    /// <p>Updates the specified stack.</p>
     fn update_stack(
         &self,
         input: &UpdateStackRequest,
@@ -3034,7 +4310,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    /// <p>Associate a fleet to a stack.</p>
+    /// <p>Associates the specified fleet with the specified stack.</p>
     fn associate_fleet(
         &self,
         input: &AssociateFleetRequest,
@@ -3068,7 +4344,7 @@ where
         }
     }
 
-    /// <p>Creates a directory configuration with the given parameters.</p>
+    /// <p>Creates a directory configuration.</p>
     fn create_directory_config(
         &self,
         input: &CreateDirectoryConfigRequest,
@@ -3105,7 +4381,7 @@ where
         }
     }
 
-    /// <p>Creates a new fleet.</p>
+    /// <p>Creates a fleet.</p>
     fn create_fleet(
         &self,
         input: &CreateFleetRequest,
@@ -3139,7 +4415,80 @@ where
         }
     }
 
-    /// <p>Create a new stack.</p>
+    /// <p>Creates an image builder.</p> <p>The initial state of the builder is <code>PENDING</code>. When it is ready, the state is <code>RUNNING</code>.</p>
+    fn create_image_builder(
+        &self,
+        input: &CreateImageBuilderRequest,
+    ) -> Result<CreateImageBuilderResult, CreateImageBuilderError> {
+        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        request.set_endpoint_prefix("appstream2".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "PhotonAdminProxyService.CreateImageBuilder");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreateImageBuilderResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateImageBuilderError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Creates a URL to start an image builder streaming session.</p>
+    fn create_image_builder_streaming_url(
+        &self,
+        input: &CreateImageBuilderStreamingURLRequest,
+    ) -> Result<CreateImageBuilderStreamingURLResult, CreateImageBuilderStreamingURLError> {
+        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        request.set_endpoint_prefix("appstream2".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "PhotonAdminProxyService.CreateImageBuilderStreamingURL",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(
+                    serde_json::from_str::<CreateImageBuilderStreamingURLResult>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateImageBuilderStreamingURLError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Creates a stack.</p>
     fn create_stack(
         &self,
         input: &CreateStackRequest,
@@ -3173,7 +4522,7 @@ where
         }
     }
 
-    /// <p>Creates a URL to start an AppStream 2.0 streaming session for a user. By default, the URL is valid only for 1 minute from the time that it is generated.</p>
+    /// <p>Creates a URL to start a streaming session for the specified user.</p>
     fn create_streaming_url(
         &self,
         input: &CreateStreamingURLRequest,
@@ -3207,7 +4556,7 @@ where
         }
     }
 
-    /// <p>Deletes the directory configuration with the given parameters.</p>
+    /// <p>Deletes the specified directory configuration.</p>
     fn delete_directory_config(
         &self,
         input: &DeleteDirectoryConfigRequest,
@@ -3244,7 +4593,7 @@ where
         }
     }
 
-    /// <p>Deletes a fleet.</p>
+    /// <p>Deletes the specified fleet.</p>
     fn delete_fleet(
         &self,
         input: &DeleteFleetRequest,
@@ -3278,7 +4627,75 @@ where
         }
     }
 
-    /// <p>Deletes the stack. After this operation completes, the environment can no longer be activated, and any reservations made for the stack are released.</p>
+    /// <p>Deletes the specified image. You cannot delete an image that is currently in use. After you delete an image, you cannot provision new capacity using the image.</p>
+    fn delete_image(
+        &self,
+        input: &DeleteImageRequest,
+    ) -> Result<DeleteImageResult, DeleteImageError> {
+        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        request.set_endpoint_prefix("appstream2".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "PhotonAdminProxyService.DeleteImage");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteImageResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteImageError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Deletes the specified image builder and releases the capacity.</p>
+    fn delete_image_builder(
+        &self,
+        input: &DeleteImageBuilderRequest,
+    ) -> Result<DeleteImageBuilderResult, DeleteImageBuilderError> {
+        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        request.set_endpoint_prefix("appstream2".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "PhotonAdminProxyService.DeleteImageBuilder");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteImageBuilderResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteImageBuilderError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Deletes the specified stack. After this operation completes, the environment can no longer be activated and any reservations made for the stack are released.</p>
     fn delete_stack(
         &self,
         input: &DeleteStackRequest,
@@ -3312,7 +4729,7 @@ where
         }
     }
 
-    /// <p>Returns a list describing the specified directory configurations.</p>
+    /// <p>Describes the specified directory configurations.</p>
     fn describe_directory_configs(
         &self,
         input: &DescribeDirectoryConfigsRequest,
@@ -3349,7 +4766,7 @@ where
         }
     }
 
-    /// <p>If fleet names are provided, this operation describes the specified fleets; otherwise, all the fleets in the account are described.</p>
+    /// <p>Describes the specified fleets or all fleets in the account.</p>
     fn describe_fleets(
         &self,
         input: &DescribeFleetsRequest,
@@ -3383,7 +4800,44 @@ where
         }
     }
 
-    /// <p>Describes the images. If a list of names is not provided, all images in your account are returned. This operation does not return a paginated result.</p>
+    /// <p>Describes the specified image builders or all image builders in the account.</p>
+    fn describe_image_builders(
+        &self,
+        input: &DescribeImageBuildersRequest,
+    ) -> Result<DescribeImageBuildersResult, DescribeImageBuildersError> {
+        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        request.set_endpoint_prefix("appstream2".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "PhotonAdminProxyService.DescribeImageBuilders",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeImageBuildersResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeImageBuildersError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Describes the specified images or all images in the account.</p>
     fn describe_images(
         &self,
         input: &DescribeImagesRequest,
@@ -3417,7 +4871,7 @@ where
         }
     }
 
-    /// <p>Describes the streaming sessions for a stack and a fleet. If a user ID is provided, this operation returns streaming sessions for only that user. To retrieve the next set of items, pass this value for the <code>nextToken</code> parameter in a subsequent call to this operation. If an authentication type is not provided, the operation defaults to users authenticated using a streaming URL.</p>
+    /// <p>Describes the streaming sessions for the specified stack and fleet. If a user ID is provided, only the streaming sessions for only that user are returned. If an authentication type is not provided, the default is to authenticate users using a streaming URL.</p>
     fn describe_sessions(
         &self,
         input: &DescribeSessionsRequest,
@@ -3451,7 +4905,7 @@ where
         }
     }
 
-    /// <p>If stack names are not provided, this operation describes the specified stacks; otherwise, all stacks in the account are described. To retrieve the next set of items, pass the <code>nextToken</code> value in a subsequent call to this operation.</p>
+    /// <p>Describes the specified stacks or all stacks in the account.</p>
     fn describe_stacks(
         &self,
         input: &DescribeStacksRequest,
@@ -3485,7 +4939,7 @@ where
         }
     }
 
-    /// <p>Disassociates a fleet from a stack.</p>
+    /// <p>Disassociates the specified fleet from the specified stack.</p>
     fn disassociate_fleet(
         &self,
         input: &DisassociateFleetRequest,
@@ -3519,7 +4973,7 @@ where
         }
     }
 
-    /// <p>This operation immediately stops a streaming session.</p>
+    /// <p>Stops the specified streaming session.</p>
     fn expire_session(
         &self,
         input: &ExpireSessionRequest,
@@ -3553,7 +5007,7 @@ where
         }
     }
 
-    /// <p>Lists all fleets associated with the stack.</p>
+    /// <p>Lists the fleets associated with the specified stack.</p>
     fn list_associated_fleets(
         &self,
         input: &ListAssociatedFleetsRequest,
@@ -3590,7 +5044,7 @@ where
         }
     }
 
-    /// <p>Lists all stacks to which the specified fleet is associated.</p>
+    /// <p>Lists the stacks associated with the specified fleet.</p>
     fn list_associated_stacks(
         &self,
         input: &ListAssociatedStacksRequest,
@@ -3627,7 +5081,44 @@ where
         }
     }
 
-    /// <p>Starts a fleet.</p>
+    /// <p>Lists the tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: &ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, ListTagsForResourceError> {
+        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        request.set_endpoint_prefix("appstream2".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "PhotonAdminProxyService.ListTagsForResource",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListTagsForResourceResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTagsForResourceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Starts the specified fleet.</p>
     fn start_fleet(&self, input: &StartFleetRequest) -> Result<StartFleetResult, StartFleetError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
@@ -3658,7 +5149,41 @@ where
         }
     }
 
-    /// <p>Stops a fleet.</p>
+    /// <p>Starts the specified image builder.</p>
+    fn start_image_builder(
+        &self,
+        input: &StartImageBuilderRequest,
+    ) -> Result<StartImageBuilderResult, StartImageBuilderError> {
+        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        request.set_endpoint_prefix("appstream2".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "PhotonAdminProxyService.StartImageBuilder");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StartImageBuilderResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StartImageBuilderError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Stops the specified fleet.</p>
     fn stop_fleet(&self, input: &StopFleetRequest) -> Result<StopFleetResult, StopFleetError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
@@ -3691,7 +5216,109 @@ where
         }
     }
 
-    /// <p>Updates the directory configuration with the given parameters.</p>
+    /// <p>Stops the specified image builder.</p>
+    fn stop_image_builder(
+        &self,
+        input: &StopImageBuilderRequest,
+    ) -> Result<StopImageBuilderResult, StopImageBuilderError> {
+        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        request.set_endpoint_prefix("appstream2".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "PhotonAdminProxyService.StopImageBuilder");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<StopImageBuilderResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(StopImageBuilderError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Adds or overwrites one or more tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, this operation updates its value.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>. To disassociate tags from your resources, use <a>UntagResource</a>.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    fn tag_resource(
+        &self,
+        input: &TagResourceRequest,
+    ) -> Result<TagResourceResponse, TagResourceError> {
+        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        request.set_endpoint_prefix("appstream2".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "PhotonAdminProxyService.TagResource");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<TagResourceResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(TagResourceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Disassociates the specified tags from the specified AppStream 2.0 resource.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
+    fn untag_resource(
+        &self,
+        input: &UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, UntagResourceError> {
+        let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
+        request.set_endpoint_prefix("appstream2".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "PhotonAdminProxyService.UntagResource");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UntagResourceResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UntagResourceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Updates the specified directory configuration.</p>
     fn update_directory_config(
         &self,
         input: &UpdateDirectoryConfigRequest,
@@ -3728,7 +5355,7 @@ where
         }
     }
 
-    /// <p>Updates an existing fleet. All the attributes except the fleet name can be updated in the <b>STOPPED</b> state. When a fleet is in the <b>RUNNING</b> state, only <code>DisplayName</code> and <code>ComputeCapacity</code> can be updated. A fleet cannot be updated in a status of <b>STARTING</b> or <b>STOPPING</b>.</p>
+    /// <p>Updates the specified fleet.</p> <p>If the fleet is in the <code>STOPPED</code> state, you can update any attribute except the fleet name. If the fleet is in the <code>RUNNING</code> state, you can update the <code>DisplayName</code> and <code>ComputeCapacity</code> attributes. If the fleet is in the <code>STARTING</code> or <code>STOPPING</code> state, you can't update it.</p>
     fn update_fleet(
         &self,
         input: &UpdateFleetRequest,
@@ -3762,7 +5389,7 @@ where
         }
     }
 
-    /// <p>Updates the specified fields in the stack with the specified name.</p>
+    /// <p>Updates the specified stack.</p>
     fn update_stack(
         &self,
         input: &UpdateStackRequest,

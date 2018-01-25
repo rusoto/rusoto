@@ -516,8 +516,7 @@ pub struct TelemetryRecord {
     pub segments_spillover_count: Option<i64>,
     /// <p><p/></p>
     #[serde(rename = "Timestamp")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub timestamp: Option<f64>,
+    pub timestamp: f64,
 }
 
 /// <p>A collection of segment documents with matching trace IDs.</p>

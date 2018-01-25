@@ -26,7 +26,7 @@ pub fn filter_types(service: &Service) -> (BTreeSet<String>, BTreeSet<String>) {
 }
 
 fn recurse_find_shapes(service: &Service, types: &mut BTreeSet<String>, shape_name: &str) {
-    types.insert(mutate_type_name(shape_name).to_owned());
+    types.insert(mutate_type_name(service, shape_name).to_owned());
     let shape = service.get_shape(shape_name).expect("Shape type missing from service definition");
     match shape.shape_type {
         ShapeType::Structure => {

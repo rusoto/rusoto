@@ -29,7 +29,7 @@ use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AcceptPortfolioShareInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
@@ -41,14 +41,14 @@ pub struct AcceptPortfolioShareInput {
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AcceptPortfolioShareOutput;
 
-/// <p>The access level to limit results.</p>
+/// <p>The access level to use to filter results.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AccessLevelFilter {
-    /// <p>Specifies the access level.</p> <p> <code>Account</code> allows results at the account level. </p> <p> <code>Role</code> allows results based on the federated role of the specified user.</p> <p> <code>User</code> allows results limited to the specified user. </p>
+    /// <p><p>The access level.</p> <ul> <li> <p> <code>Account</code> - Filter results based on the account.</p> </li> <li> <p> <code>Role</code> - Filter results based on the federated role of the specified user.</p> </li> <li> <p> <code>User</code> - Filter results based on the specified user.</p> </li> </ul></p>
     #[serde(rename = "Key")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    /// <p>Specifies the user to which the access level applies. A value of <code>Self</code> is currently supported.</p>
+    /// <p>The user to which the access level applies. The only supported value is <code>Self</code>.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
@@ -56,17 +56,17 @@ pub struct AccessLevelFilter {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AssociatePrincipalWithPortfolioInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
     /// <p>The portfolio identifier.</p>
     #[serde(rename = "PortfolioId")]
     pub portfolio_id: String,
-    /// <p>The ARN representing the principal (IAM user, role, or group).</p>
+    /// <p>The ARN of the principal (IAM user, role, or group).</p>
     #[serde(rename = "PrincipalARN")]
     pub principal_arn: String,
-    /// <p>The principal type. Must be <code>IAM</code> </p>
+    /// <p>The principal type. The supported value is <code>IAM</code>.</p>
     #[serde(rename = "PrincipalType")]
     pub principal_type: String,
 }
@@ -76,7 +76,7 @@ pub struct AssociatePrincipalWithPortfolioOutput;
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AssociateProductWithPortfolioInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
@@ -86,7 +86,7 @@ pub struct AssociateProductWithPortfolioInput {
     /// <p>The product identifier.</p>
     #[serde(rename = "ProductId")]
     pub product_id: String,
-    /// <p>The identifier of the source portfolio to use with this association.</p>
+    /// <p>The identifier of the source portfolio.</p>
     #[serde(rename = "SourcePortfolioId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_portfolio_id: Option<String>,
@@ -108,14 +108,14 @@ pub struct AssociateTagOptionWithResourceInput {
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AssociateTagOptionWithResourceOutput;
 
-/// <p>Detailed constraint information.</p>
+/// <p>Information about a constraint.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ConstraintDetail {
     /// <p>The identifier of the constraint.</p>
     #[serde(rename = "ConstraintId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub constraint_id: Option<String>,
-    /// <p>The text description of the constraint.</p>
+    /// <p>The description of the constraint.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -123,39 +123,78 @@ pub struct ConstraintDetail {
     #[serde(rename = "Owner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
-    /// <p>The type of the constraint.</p>
+    /// <p><p>The type of constraint.</p> <ul> <li> <p> <code>LAUNCH</code> </p> </li> <li> <p> <code>NOTIFICATION</code> </p> </li> <li> <p> <code>TEMPLATE</code> </p> </li> </ul></p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-/// <p>An administrator-specified constraint to apply when provisioning a product.</p>
+/// <p>Summary information about a constraint.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ConstraintSummary {
-    /// <p>The text description of the constraint.</p>
+    /// <p>The description of the constraint.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The type of the constraint. </p>
+    /// <p><p>The type of constraint.</p> <ul> <li> <p> <code>LAUNCH</code> </p> </li> <li> <p> <code>NOTIFICATION</code> </p> </li> <li> <p> <code>TEMPLATE</code> </p> </li> </ul></p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
-pub struct CreateConstraintInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+pub struct CopyProductInput {
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>The text description of the constraint.</p>
+    /// <p>The copy options. If the value is <code>CopyTags</code>, the tags from the source product are copied to the target product.</p>
+    #[serde(rename = "CopyOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub copy_options: Option<Vec<String>>,
+    /// <p> A unique identifier that you provide to ensure idempotency. If multiple requests differ only by the idempotency token, the same response is returned for each repeated request. </p>
+    #[serde(rename = "IdempotencyToken")]
+    pub idempotency_token: String,
+    /// <p>The Amazon Resource Name (ARN) of the source product.</p>
+    #[serde(rename = "SourceProductArn")]
+    pub source_product_arn: String,
+    /// <p>The identifiers of the provisioning artifacts (also known as versions) of the product to copy. By default, all provisioning artifacts are copied.</p>
+    #[serde(rename = "SourceProvisioningArtifactIdentifiers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_provisioning_artifact_identifiers:
+        Option<Vec<::std::collections::HashMap<String, String>>>,
+    /// <p>The identifier of the target product. By default, a new product is created.</p>
+    #[serde(rename = "TargetProductId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_product_id: Option<String>,
+    /// <p>A name for the target product. The default is the name of the source product.</p>
+    #[serde(rename = "TargetProductName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_product_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CopyProductOutput {
+    /// <p>The token to use to track the progress of the operation.</p>
+    #[serde(rename = "CopyProductToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub copy_product_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CreateConstraintInput {
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accept_language: Option<String>,
+    /// <p>The description of the constraint.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>A token to disambiguate duplicate requests. You can create multiple resources using the same input in multiple requests, provided that you also specify a different idempotency token for each request.</p>
+    /// <p>A unique identifier that you provide to ensure idempotency. If multiple requests differ only by the idempotency token, the same response is returned for each repeated request.</p>
     #[serde(rename = "IdempotencyToken")]
     pub idempotency_token: String,
-    /// <p>The constraint parameters. Expected values vary depending on which <b>Type</b> is specified. For examples, see the bottom of this topic.</p> <p>For Type <code>LAUNCH</code>, the <code>RoleArn</code> property is required. </p> <p>For Type <code>NOTIFICATION</code>, the <code>NotificationArns</code> property is required.</p> <p>For Type <code>TEMPLATE</code>, the <code>Rules</code> property is required.</p>
+    /// <p><p>The constraint parameters, in JSON format. The syntax depends on the constraint type as follows:</p> <dl> <dt>LAUNCH</dt> <dd> <p>Specify the <code>RoleArn</code> property as follows:</p> <p>&quot;RoleArn&quot; : &quot;arn:aws:iam::123456789012:role/LaunchRole&quot;</p> </dd> <dt>NOTIFICATION</dt> <dd> <p>Specify the <code>NotificationArns</code> property as follows:</p> <p>&quot;NotificationArns&quot; : [&quot;arn:aws:sns:us-east-1:123456789012:Topic&quot;]</p> </dd> <dt>TEMPLATE</dt> <dd> <p>Specify the <code>Rules</code> property. For more information, see <a href="http://docs.aws.amazon.com/servicecatalog/latest/adminguide/reference-template_constraint_rules.html">Template Constraint Rules</a>.</p> </dd> </dl></p>
     #[serde(rename = "Parameters")]
     pub parameters: String,
     /// <p>The portfolio identifier.</p>
@@ -164,18 +203,18 @@ pub struct CreateConstraintInput {
     /// <p>The product identifier.</p>
     #[serde(rename = "ProductId")]
     pub product_id: String,
-    /// <p>The type of the constraint. Case-sensitive valid values are: <code>LAUNCH</code>, <code>NOTIFICATION</code>, or <code>TEMPLATE</code>. </p>
+    /// <p><p>The type of constraint.</p> <ul> <li> <p> <code>LAUNCH</code> </p> </li> <li> <p> <code>NOTIFICATION</code> </p> </li> <li> <p> <code>TEMPLATE</code> </p> </li> </ul></p>
     #[serde(rename = "Type")]
     pub type_: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateConstraintOutput {
-    /// <p>The resulting detailed constraint information.</p>
+    /// <p>Information about the constraint.</p>
     #[serde(rename = "ConstraintDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub constraint_detail: Option<ConstraintDetail>,
-    /// <p>The resulting constraint parameters.</p>
+    /// <p>The constraint parameters.</p>
     #[serde(rename = "ConstraintParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub constraint_parameters: Option<String>,
@@ -187,24 +226,24 @@ pub struct CreateConstraintOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreatePortfolioInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>The text description of the portfolio.</p>
+    /// <p>The description of the portfolio.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// <p>The name to use for display purposes.</p>
     #[serde(rename = "DisplayName")]
     pub display_name: String,
-    /// <p>A token to disambiguate duplicate requests. You can create multiple resources using the same input in multiple requests, provided that you also specify a different idempotency token for each request.</p>
+    /// <p>A unique identifier that you provide to ensure idempotency. If multiple requests differ only by the idempotency token, the same response is returned for each repeated request.</p>
     #[serde(rename = "IdempotencyToken")]
     pub idempotency_token: String,
     /// <p>The name of the portfolio provider.</p>
     #[serde(rename = "ProviderName")]
     pub provider_name: String,
-    /// <p>Tags to associate with the new portfolio.</p>
+    /// <p>The tags to associate with the portfolio.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -212,11 +251,11 @@ pub struct CreatePortfolioInput {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreatePortfolioOutput {
-    /// <p>The resulting detailed portfolio information.</p>
+    /// <p>Information about the portfolio.</p>
     #[serde(rename = "PortfolioDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub portfolio_detail: Option<PortfolioDetail>,
-    /// <p>Tags successfully associated with the new portfolio.</p>
+    /// <p>Information about the tags associated with the portfolio.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -224,11 +263,11 @@ pub struct CreatePortfolioOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreatePortfolioShareInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>The account ID with which to share the portfolio.</p>
+    /// <p>The AWS account ID.</p>
     #[serde(rename = "AccountId")]
     pub account_id: String,
     /// <p>The portfolio identifier.</p>
@@ -241,11 +280,11 @@ pub struct CreatePortfolioShareOutput;
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateProductInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>The text description of the product.</p>
+    /// <p>The description of the product.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -253,7 +292,7 @@ pub struct CreateProductInput {
     #[serde(rename = "Distributor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub distributor: Option<String>,
-    /// <p>A token to disambiguate duplicate requests. You can create multiple resources using the same input in multiple requests, provided that you also specify a different idempotency token for each request.</p>
+    /// <p>A unique identifier that you provide to ensure idempotency. If multiple requests differ only by the idempotency token, the same response is returned for each repeated request.</p>
     #[serde(rename = "IdempotencyToken")]
     pub idempotency_token: String,
     /// <p>The name of the product.</p>
@@ -262,25 +301,25 @@ pub struct CreateProductInput {
     /// <p>The owner of the product.</p>
     #[serde(rename = "Owner")]
     pub owner: String,
-    /// <p>The type of the product to create.</p>
+    /// <p>The type of product.</p>
     #[serde(rename = "ProductType")]
     pub product_type: String,
-    /// <p>Parameters for the provisioning artifact.</p>
+    /// <p>The configuration of the provisioning artifact.</p>
     #[serde(rename = "ProvisioningArtifactParameters")]
     pub provisioning_artifact_parameters: ProvisioningArtifactProperties,
-    /// <p>Support information about the product.</p>
+    /// <p>The support information about the product.</p>
     #[serde(rename = "SupportDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub support_description: Option<String>,
-    /// <p>Contact email for product support.</p>
+    /// <p>The contact email for product support.</p>
     #[serde(rename = "SupportEmail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub support_email: Option<String>,
-    /// <p>Contact URL for product support.</p>
+    /// <p>The contact URL for product support.</p>
     #[serde(rename = "SupportUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub support_url: Option<String>,
-    /// <p>Tags to associate with the new product.</p>
+    /// <p>The tags to associate with the product.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -288,15 +327,15 @@ pub struct CreateProductInput {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateProductOutput {
-    /// <p>The resulting detailed product view information.</p>
+    /// <p>Information about the product view.</p>
     #[serde(rename = "ProductViewDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub product_view_detail: Option<ProductViewDetail>,
-    /// <p>The resulting detailed provisioning artifact information.</p>
+    /// <p>Information about the provisioning artifact.</p>
     #[serde(rename = "ProvisioningArtifactDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_artifact_detail: Option<ProvisioningArtifactDetail>,
-    /// <p>Tags successfully associated with the new product.</p>
+    /// <p>Information about the tags associated with the product.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -304,14 +343,14 @@ pub struct CreateProductOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateProvisioningArtifactInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>A token to disambiguate duplicate requests. You can create multiple resources using the same input in multiple requests, provided that you also specify a different idempotency token for each request.</p>
+    /// <p>A unique identifier that you provide to ensure idempotency. If multiple requests differ only by the idempotency token, the same response is returned for each repeated request.</p>
     #[serde(rename = "IdempotencyToken")]
     pub idempotency_token: String,
-    /// <p>The parameters to use when creating the new provisioning artifact.</p>
+    /// <p>The configuration for the provisioning artifact.</p>
     #[serde(rename = "Parameters")]
     pub parameters: ProvisioningArtifactProperties,
     /// <p>The product identifier.</p>
@@ -321,11 +360,11 @@ pub struct CreateProvisioningArtifactInput {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateProvisioningArtifactOutput {
-    /// <p>Additional information about the creation request for the provisioning artifact.</p>
+    /// <p>The URL of the CloudFormation template in Amazon S3, in JSON format.</p>
     #[serde(rename = "Info")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub info: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The resulting detailed provisioning artifact information.</p>
+    /// <p>Information about the provisioning artifact.</p>
     #[serde(rename = "ProvisioningArtifactDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_artifact_detail: Option<ProvisioningArtifactDetail>,
@@ -347,7 +386,7 @@ pub struct CreateTagOptionInput {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateTagOptionOutput {
-    /// <p>The resulting detailed TagOption information.</p>
+    /// <p>Information about the TagOption.</p>
     #[serde(rename = "TagOptionDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_option_detail: Option<TagOptionDetail>,
@@ -355,11 +394,11 @@ pub struct CreateTagOptionOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteConstraintInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>The identifier of the constraint to delete.</p>
+    /// <p>The identifier of the constraint.</p>
     #[serde(rename = "Id")]
     pub id: String,
 }
@@ -369,11 +408,11 @@ pub struct DeleteConstraintOutput;
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeletePortfolioInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>The identifier of the portfolio for the delete request.</p>
+    /// <p>The portfolio identifier.</p>
     #[serde(rename = "Id")]
     pub id: String,
 }
@@ -383,11 +422,11 @@ pub struct DeletePortfolioOutput;
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeletePortfolioShareInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>The account ID associated with the share to delete.</p>
+    /// <p>The AWS account ID.</p>
     #[serde(rename = "AccountId")]
     pub account_id: String,
     /// <p>The portfolio identifier.</p>
@@ -400,11 +439,11 @@ pub struct DeletePortfolioShareOutput;
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteProductInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>The identifier of the product for the delete request.</p>
+    /// <p>The product identifier.</p>
     #[serde(rename = "Id")]
     pub id: String,
 }
@@ -414,14 +453,14 @@ pub struct DeleteProductOutput;
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteProvisioningArtifactInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
     /// <p>The product identifier.</p>
     #[serde(rename = "ProductId")]
     pub product_id: String,
-    /// <p>The identifier of the provisioning artifact for the delete request. This is sometimes referred to as the product version.</p>
+    /// <p>The identifier of the provisioning artifact.</p>
     #[serde(rename = "ProvisioningArtifactId")]
     pub provisioning_artifact_id: String,
 }
@@ -431,7 +470,7 @@ pub struct DeleteProvisioningArtifactOutput;
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeConstraintInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
@@ -442,11 +481,11 @@ pub struct DescribeConstraintInput {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeConstraintOutput {
-    /// <p>Detailed constraint information.</p>
+    /// <p>Information about the constraint.</p>
     #[serde(rename = "ConstraintDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub constraint_detail: Option<ConstraintDetail>,
-    /// <p>The current parameters associated with the specified constraint.</p>
+    /// <p>The constraint parameters.</p>
     #[serde(rename = "ConstraintParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub constraint_parameters: Option<String>,
@@ -457,27 +496,54 @@ pub struct DescribeConstraintOutput {
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
-pub struct DescribePortfolioInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+pub struct DescribeCopyProductStatusInput {
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>The identifier of the portfolio for which to retrieve information.</p>
+    /// <p>The token for the copy product operation. This token is returned by <a>CopyProduct</a>.</p>
+    #[serde(rename = "CopyProductToken")]
+    pub copy_product_token: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeCopyProductStatusOutput {
+    /// <p>The status of the copy product operation.</p>
+    #[serde(rename = "CopyProductStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub copy_product_status: Option<String>,
+    /// <p>The status message.</p>
+    #[serde(rename = "StatusDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_detail: Option<String>,
+    /// <p>The identifier of the copied product.</p>
+    #[serde(rename = "TargetProductId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_product_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribePortfolioInput {
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accept_language: Option<String>,
+    /// <p>The portfolio identifier.</p>
     #[serde(rename = "Id")]
     pub id: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribePortfolioOutput {
-    /// <p>Detailed portfolio information.</p>
+    /// <p>Information about the portfolio.</p>
     #[serde(rename = "PortfolioDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub portfolio_detail: Option<PortfolioDetail>,
-    /// <p>TagOptions associated with the portfolio.</p>
+    /// <p>Information about the TagOptions associated with the portfolio.</p>
     #[serde(rename = "TagOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_options: Option<Vec<TagOptionDetail>>,
-    /// <p>Tags associated with the portfolio.</p>
+    /// <p>Information about the tags associated with the portfolio.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -485,30 +551,30 @@ pub struct DescribePortfolioOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeProductAsAdminInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>The identifier of the product for which to retrieve information.</p>
+    /// <p>The product identifier.</p>
     #[serde(rename = "Id")]
     pub id: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeProductAsAdminOutput {
-    /// <p>Detailed product view information.</p>
+    /// <p>Information about the product view.</p>
     #[serde(rename = "ProductViewDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub product_view_detail: Option<ProductViewDetail>,
-    /// <p>A list of provisioning artifact summaries for the product.</p>
+    /// <p>Information about the provisioning artifacts (also known as versions) for the specified product.</p>
     #[serde(rename = "ProvisioningArtifactSummaries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_artifact_summaries: Option<Vec<ProvisioningArtifactSummary>>,
-    /// <p>List of TagOptions associated with the product.</p>
+    /// <p>Information about the TagOptions associated with the product.</p>
     #[serde(rename = "TagOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_options: Option<Vec<TagOptionDetail>>,
-    /// <p>Tags associated with the product.</p>
+    /// <p>Information about the tags associated with the product.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -516,22 +582,22 @@ pub struct DescribeProductAsAdminOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeProductInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>The <code>ProductId</code> of the product to describe.</p>
+    /// <p>The product identifier.</p>
     #[serde(rename = "Id")]
     pub id: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeProductOutput {
-    /// <p>The summary metadata about the specified product.</p>
+    /// <p>Summary information about the product view.</p>
     #[serde(rename = "ProductViewSummary")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub product_view_summary: Option<ProductViewSummary>,
-    /// <p>A list of provisioning artifact objects for the specified product. The <code>ProvisioningArtifacts</code> parameter represent the ways the specified product can be provisioned.</p>
+    /// <p>Information about the provisioning artifacts for the specified product.</p>
     #[serde(rename = "ProvisioningArtifacts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_artifacts: Option<Vec<ProvisioningArtifact>>,
@@ -539,22 +605,22 @@ pub struct DescribeProductOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeProductViewInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>The <code>ProductViewId</code> of the product to describe.</p>
+    /// <p>The product view identifier.</p>
     #[serde(rename = "Id")]
     pub id: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeProductViewOutput {
-    /// <p>The summary metadata about the specified product.</p>
+    /// <p>Summary information about the product.</p>
     #[serde(rename = "ProductViewSummary")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub product_view_summary: Option<ProductViewSummary>,
-    /// <p>A list of provisioning artifact objects for the specified product. The <code>ProvisioningArtifacts</code> represent the ways in which the specified product can be provisioned.</p>
+    /// <p>Information about the provisioning artifacts for the product.</p>
     #[serde(rename = "ProvisioningArtifacts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_artifacts: Option<Vec<ProvisioningArtifact>>,
@@ -562,7 +628,7 @@ pub struct DescribeProductViewOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeProvisionedProductInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
@@ -573,7 +639,7 @@ pub struct DescribeProvisionedProductInput {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeProvisionedProductOutput {
-    /// <p>Detailed provisioned product information.</p>
+    /// <p>Information about the provisioned product.</p>
     #[serde(rename = "ProvisionedProductDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_product_detail: Option<ProvisionedProductDetail>,
@@ -581,17 +647,17 @@ pub struct DescribeProvisionedProductOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeProvisioningArtifactInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
     /// <p>The product identifier.</p>
     #[serde(rename = "ProductId")]
     pub product_id: String,
-    /// <p>The identifier of the provisioning artifact. This is sometimes referred to as the product version.</p>
+    /// <p>The identifier of the provisioning artifact.</p>
     #[serde(rename = "ProvisioningArtifactId")]
     pub provisioning_artifact_id: String,
-    /// <p>Enable a verbose level of details for the provisioning artifact.</p>
+    /// <p>Indicates whether a verbose level of detail is enabled.</p>
     #[serde(rename = "Verbose")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub verbose: Option<bool>,
@@ -599,11 +665,11 @@ pub struct DescribeProvisioningArtifactInput {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeProvisioningArtifactOutput {
-    /// <p>Additional information about the provisioning artifact.</p>
+    /// <p>The URL of the CloudFormation template in Amazon S3.</p>
     #[serde(rename = "Info")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub info: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Detailed provisioning artifact information.</p>
+    /// <p>Information about the provisioning artifact.</p>
     #[serde(rename = "ProvisioningArtifactDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_artifact_detail: Option<ProvisioningArtifactDetail>,
@@ -615,33 +681,33 @@ pub struct DescribeProvisioningArtifactOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeProvisioningParametersInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>The identifier of the path for this product's provisioning. This value is optional if the product has a default path, and is required if there is more than one path for the specified product.</p>
+    /// <p>The path identifier of the product. This value is optional if the product has a default path, and required if the product has more than one path. To list the paths for a product, use <a>ListLaunchPaths</a>.</p>
     #[serde(rename = "PathId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub path_id: Option<String>,
     /// <p>The product identifier.</p>
     #[serde(rename = "ProductId")]
     pub product_id: String,
-    /// <p>The provisioning artifact identifier for this product. This is sometimes referred to as the product version.</p>
+    /// <p>The identifier of the provisioning artifact.</p>
     #[serde(rename = "ProvisioningArtifactId")]
     pub provisioning_artifact_id: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeProvisioningParametersOutput {
-    /// <p>The list of constraint summaries that apply to provisioning this product.</p>
+    /// <p>Information about the constraints used to provision the product.</p>
     #[serde(rename = "ConstraintSummaries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub constraint_summaries: Option<Vec<ConstraintSummary>>,
-    /// <p>The list of parameters used to successfully provision the product. Each parameter includes a list of allowable values and additional metadata about each parameter.</p>
+    /// <p>Information about the parameters used to provision the product.</p>
     #[serde(rename = "ProvisioningArtifactParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_artifact_parameters: Option<Vec<ProvisioningArtifactParameter>>,
-    /// <p>List of TagOptions associated with the provisioned provisioning parameters.</p>
+    /// <p>Information about the TagOptions associated with the resource.</p>
     #[serde(rename = "TagOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_options: Option<Vec<TagOptionSummary>>,
@@ -653,18 +719,18 @@ pub struct DescribeProvisioningParametersOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeRecordInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>The record identifier of the ProvisionedProduct object for which to retrieve output information. This is the <code>RecordDetail.RecordId</code> obtained from the request operation's response.</p>
+    /// <p>The record identifier of the provisioned product. This identifier is returned by the request operation.</p>
     #[serde(rename = "Id")]
     pub id: String,
-    /// <p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>
+    /// <p>The maximum number of items to return with this call.</p>
     #[serde(rename = "PageSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
-    /// <p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>
+    /// <p>The page token for the next set of results. To retrieve the first set of results, use null.</p>
     #[serde(rename = "PageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -672,15 +738,15 @@ pub struct DescribeRecordInput {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeRecordOutput {
-    /// <p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
+    /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
-    /// <p>Detailed record information for the specified product. </p>
+    /// <p>Information about the product.</p>
     #[serde(rename = "RecordDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub record_detail: Option<RecordDetail>,
-    /// <p>A list of outputs for the specified Product object created as the result of a request. For example, a CloudFormation-backed product that creates an S3 bucket would have an output for the S3 bucket URL.</p>
+    /// <p>Information about the product created as the result of a request. For example, the output for a CloudFormation-backed product that creates an S3 bucket would include the S3 bucket URL.</p>
     #[serde(rename = "RecordOutputs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub record_outputs: Option<Vec<RecordOutput>>,
@@ -688,14 +754,14 @@ pub struct DescribeRecordOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeTagOptionInput {
-    /// <p>The identifier of the TagOption.</p>
+    /// <p>The TagOption identifier.</p>
     #[serde(rename = "Id")]
     pub id: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DescribeTagOptionOutput {
-    /// <p>The resulting detailed TagOption information.</p>
+    /// <p>Information about the TagOption.</p>
     #[serde(rename = "TagOptionDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_option_detail: Option<TagOptionDetail>,
@@ -703,14 +769,14 @@ pub struct DescribeTagOptionOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DisassociatePrincipalFromPortfolioInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
     /// <p>The portfolio identifier.</p>
     #[serde(rename = "PortfolioId")]
     pub portfolio_id: String,
-    /// <p>The ARN representing the principal (IAM user, role, or group).</p>
+    /// <p>The ARN of the principal (IAM user, role, or group).</p>
     #[serde(rename = "PrincipalARN")]
     pub principal_arn: String,
 }
@@ -720,7 +786,7 @@ pub struct DisassociatePrincipalFromPortfolioOutput;
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DisassociateProductFromPortfolioInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
@@ -737,10 +803,10 @@ pub struct DisassociateProductFromPortfolioOutput;
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DisassociateTagOptionFromResourceInput {
-    /// <p>Identifier of the resource from which to disassociate the TagOption.</p>
+    /// <p>The resource identifier.</p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
-    /// <p>Identifier of the TagOption to disassociate from the resource.</p>
+    /// <p>The TagOption identifier.</p>
     #[serde(rename = "TagOptionId")]
     pub tag_option_id: String,
 }
@@ -748,22 +814,22 @@ pub struct DisassociateTagOptionFromResourceInput {
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct DisassociateTagOptionFromResourceOutput;
 
-/// <p>Summary information about a path for a user to have access to a specified product.</p>
+/// <p>Summary information about a product path for a user.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct LaunchPathSummary {
-    /// <p>List of constraints on the portfolio-product relationship.</p>
+    /// <p>The constraints on the portfolio-product relationship.</p>
     #[serde(rename = "ConstraintSummaries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub constraint_summaries: Option<Vec<ConstraintSummary>>,
-    /// <p>The unique identifier of the product path.</p>
+    /// <p>The identifier of the product path.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>Corresponds to the name of the portfolio to which the user was assigned.</p>
+    /// <p>The name of the portfolio to which the user was assigned.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>List of tags used by this launch path.</p>
+    /// <p>The tags associated with this product path.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -771,15 +837,15 @@ pub struct LaunchPathSummary {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListAcceptedPortfolioSharesInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>
+    /// <p>The maximum number of items to return with this call.</p>
     #[serde(rename = "PageSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
-    /// <p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>
+    /// <p>The page token for the next set of results. To retrieve the first set of results, use null.</p>
     #[serde(rename = "PageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -787,11 +853,11 @@ pub struct ListAcceptedPortfolioSharesInput {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListAcceptedPortfolioSharesOutput {
-    /// <p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
+    /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
-    /// <p>List of detailed portfolio information objects.</p>
+    /// <p>Information about the portfolios.</p>
     #[serde(rename = "PortfolioDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub portfolio_details: Option<Vec<PortfolioDetail>>,
@@ -799,15 +865,15 @@ pub struct ListAcceptedPortfolioSharesOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListConstraintsForPortfolioInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>
+    /// <p>The maximum number of items to return with this call.</p>
     #[serde(rename = "PageSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
-    /// <p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>
+    /// <p>The page token for the next set of results. To retrieve the first set of results, use null.</p>
     #[serde(rename = "PageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -822,11 +888,11 @@ pub struct ListConstraintsForPortfolioInput {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListConstraintsForPortfolioOutput {
-    /// <p>List of detailed constraint information objects.</p>
+    /// <p>Information about the constraints.</p>
     #[serde(rename = "ConstraintDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub constraint_details: Option<Vec<ConstraintDetail>>,
-    /// <p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
+    /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
@@ -834,30 +900,30 @@ pub struct ListConstraintsForPortfolioOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListLaunchPathsInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>
+    /// <p>The maximum number of items to return with this call.</p>
     #[serde(rename = "PageSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
-    /// <p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>
+    /// <p>The page token for the next set of results. To retrieve the first set of results, use null.</p>
     #[serde(rename = "PageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-    /// <p>The product identifier. Identifies the product for which to retrieve <code>LaunchPathSummaries</code> information.</p>
+    /// <p>The product identifier.</p>
     #[serde(rename = "ProductId")]
     pub product_id: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListLaunchPathsOutput {
-    /// <p>List of launch path information summaries for the specified <code>PageToken</code>.</p>
+    /// <p>Information about the launch path.</p>
     #[serde(rename = "LaunchPathSummaries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub launch_path_summaries: Option<Vec<LaunchPathSummary>>,
-    /// <p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
+    /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
@@ -865,7 +931,7 @@ pub struct ListLaunchPathsOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListPortfolioAccessInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
@@ -876,11 +942,11 @@ pub struct ListPortfolioAccessInput {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListPortfolioAccessOutput {
-    /// <p>List of account IDs associated with access to the portfolio.</p>
+    /// <p>Information about the AWS accounts with access to the portfolio.</p>
     #[serde(rename = "AccountIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_ids: Option<Vec<String>>,
-    /// <p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
+    /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
@@ -888,15 +954,15 @@ pub struct ListPortfolioAccessOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListPortfoliosForProductInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>
+    /// <p>The maximum number of items to return with this call.</p>
     #[serde(rename = "PageSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
-    /// <p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>
+    /// <p>The page token for the next set of results. To retrieve the first set of results, use null.</p>
     #[serde(rename = "PageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -907,11 +973,11 @@ pub struct ListPortfoliosForProductInput {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListPortfoliosForProductOutput {
-    /// <p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
+    /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
-    /// <p>List of detailed portfolio information objects.</p>
+    /// <p>Information about the portfolios.</p>
     #[serde(rename = "PortfolioDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub portfolio_details: Option<Vec<PortfolioDetail>>,
@@ -919,15 +985,15 @@ pub struct ListPortfoliosForProductOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListPortfoliosInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>
+    /// <p>The maximum number of items to return with this call.</p>
     #[serde(rename = "PageSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
-    /// <p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>
+    /// <p>The page token for the next set of results. To retrieve the first set of results, use null.</p>
     #[serde(rename = "PageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -935,11 +1001,11 @@ pub struct ListPortfoliosInput {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListPortfoliosOutput {
-    /// <p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
+    /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
-    /// <p>List of detailed portfolio information objects.</p>
+    /// <p>Information about the portfolios.</p>
     #[serde(rename = "PortfolioDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub portfolio_details: Option<Vec<PortfolioDetail>>,
@@ -947,15 +1013,15 @@ pub struct ListPortfoliosOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListPrincipalsForPortfolioInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>
+    /// <p>The maximum number of items to return with this call.</p>
     #[serde(rename = "PageSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
-    /// <p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>
+    /// <p>The page token for the next set of results. To retrieve the first set of results, use null.</p>
     #[serde(rename = "PageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -966,7 +1032,7 @@ pub struct ListPrincipalsForPortfolioInput {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListPrincipalsForPortfolioOutput {
-    /// <p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
+    /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
@@ -978,7 +1044,7 @@ pub struct ListPrincipalsForPortfolioOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListProvisioningArtifactsInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
@@ -989,11 +1055,11 @@ pub struct ListProvisioningArtifactsInput {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListProvisioningArtifactsOutput {
-    /// <p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
+    /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
-    /// <p>List of detailed provisioning artifact information objects.</p>
+    /// <p>Information about the provisioning artifacts.</p>
     #[serde(rename = "ProvisioningArtifactDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_artifact_details: Option<Vec<ProvisioningArtifactDetail>>,
@@ -1001,23 +1067,23 @@ pub struct ListProvisioningArtifactsOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListRecordHistoryInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>The access level for obtaining results. If left unspecified, <code>User</code> level access is used.</p>
+    /// <p>The access level to use to obtain results. The default is <code>User</code>.</p>
     #[serde(rename = "AccessLevelFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub access_level_filter: Option<AccessLevelFilter>,
-    /// <p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>
+    /// <p>The maximum number of items to return with this call.</p>
     #[serde(rename = "PageSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
-    /// <p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>
+    /// <p>The page token for the next set of results. To retrieve the first set of results, use null.</p>
     #[serde(rename = "PageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-    /// <p>The filter to limit search results. </p>
+    /// <p>The search filter to scope the results.</p>
     #[serde(rename = "SearchFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub search_filter: Option<ListRecordHistorySearchFilter>,
@@ -1025,24 +1091,24 @@ pub struct ListRecordHistoryInput {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListRecordHistoryOutput {
-    /// <p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
+    /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
-    /// <p>A list of record detail objects, listed in reverse chronological order.</p>
+    /// <p>The records, in reverse chronological order.</p>
     #[serde(rename = "RecordDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub record_details: Option<Vec<RecordDetail>>,
 }
 
-/// <p>The search filter to limit results when listing request history records.</p>
+/// <p>The search filter to use when listing history records.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListRecordHistorySearchFilter {
-    /// <p>The filter key.</p>
+    /// <p><p>The filter key.</p> <ul> <li> <p> <code>product</code> - Filter results based on the specified product identifier.</p> </li> <li> <p> <code>provisionedproduct</code> - Filter results based on the provisioned product identifier.</p> </li> </ul></p>
     #[serde(rename = "Key")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    /// <p>The filter value for <code>Key</code>.</p>
+    /// <p>The filter value.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
@@ -1050,47 +1116,47 @@ pub struct ListRecordHistorySearchFilter {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListResourcesForTagOptionInput {
-    /// <p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>
+    /// <p>The maximum number of items to return with this call.</p>
     #[serde(rename = "PageSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
-    /// <p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>
+    /// <p>The page token for the next set of results. To retrieve the first set of results, use null.</p>
     #[serde(rename = "PageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-    /// <p>Resource type.</p>
+    /// <p><p>The resource type.</p> <ul> <li> <p> <code>Portfolio</code> </p> </li> <li> <p> <code>Product</code> </p> </li> </ul></p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
-    /// <p>Identifier of the TagOption.</p>
+    /// <p>The TagOption identifier.</p>
     #[serde(rename = "TagOptionId")]
     pub tag_option_id: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListResourcesForTagOptionOutput {
-    /// <p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>
+    /// <p>The page token for the next set of results. To retrieve the first set of results, use null.</p>
     #[serde(rename = "PageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-    /// <p>The resulting detailed resource information.</p>
+    /// <p>Information about the resources.</p>
     #[serde(rename = "ResourceDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_details: Option<Vec<ResourceDetail>>,
 }
 
-/// <p>The ListTagOptions filters.</p>
+/// <p>Filters to use when listing TagOptions.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListTagOptionsFilters {
-    /// <p>The ListTagOptionsFilters active state.</p>
+    /// <p>The active state.</p>
     #[serde(rename = "Active")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub active: Option<bool>,
-    /// <p>The ListTagOptionsFilters key.</p>
+    /// <p>The TagOption key.</p>
     #[serde(rename = "Key")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    /// <p>The ListTagOptionsFilters value.</p>
+    /// <p>The TagOption value.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
@@ -1098,15 +1164,15 @@ pub struct ListTagOptionsFilters {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListTagOptionsInput {
-    /// <p>The list of filters with which to limit search results. If no search filters are specified, the output is all TagOptions. </p>
+    /// <p>The search filters. If no search filters are specified, the output includes all TagOptions.</p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<ListTagOptionsFilters>,
-    /// <p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>
+    /// <p>The maximum number of items to return with this call.</p>
     #[serde(rename = "PageSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
-    /// <p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>
+    /// <p>The page token for the next set of results. To retrieve the first set of results, use null.</p>
     #[serde(rename = "PageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -1114,11 +1180,11 @@ pub struct ListTagOptionsInput {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListTagOptionsOutput {
-    /// <p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>
+    /// <p>The page token for the next set of results. To retrieve the first set of results, use null.</p>
     #[serde(rename = "PageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-    /// <p>The resulting detailed TagOption information.</p>
+    /// <p>Information about the TagOptions.</p>
     #[serde(rename = "TagOptionDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_option_details: Option<Vec<TagOptionDetail>>,
@@ -1133,7 +1199,7 @@ pub struct ParameterConstraints {
     pub allowed_values: Option<Vec<String>>,
 }
 
-/// <p>Detailed portfolio information.</p>
+/// <p>Information about a portfolio.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct PortfolioDetail {
     /// <p>The ARN assigned to the portfolio.</p>
@@ -1144,7 +1210,7 @@ pub struct PortfolioDetail {
     #[serde(rename = "CreatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
-    /// <p>The text description of the portfolio.</p>
+    /// <p>The description of the portfolio.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -1152,7 +1218,7 @@ pub struct PortfolioDetail {
     #[serde(rename = "DisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
-    /// <p>The identifier for the portfolio.</p>
+    /// <p>The portfolio identifier.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
@@ -1162,14 +1228,14 @@ pub struct PortfolioDetail {
     pub provider_name: Option<String>,
 }
 
-/// <p>A principal's ARN and type.</p>
+/// <p>Information about a principal.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Principal {
-    /// <p>The ARN representing the principal (IAM user, role, or group).</p>
+    /// <p>The ARN of the principal (IAM user, role, or group).</p>
     #[serde(rename = "PrincipalARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub principal_arn: Option<String>,
-    /// <p>The principal type. Must be <code>IAM</code> </p>
+    /// <p>The principal type. The supported value is <code>IAM</code>.</p>
     #[serde(rename = "PrincipalType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub principal_type: Option<String>,
@@ -1188,35 +1254,35 @@ pub struct ProductViewAggregationValue {
     pub value: Option<String>,
 }
 
-/// <p>Detailed product view information.</p>
+/// <p>Information about a product view.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ProductViewDetail {
     /// <p>The UTC timestamp of the creation time.</p>
     #[serde(rename = "CreatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
-    /// <p>The ARN associated with the product.</p>
+    /// <p>The ARN of the product.</p>
     #[serde(rename = "ProductARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub product_arn: Option<String>,
-    /// <p>The summary metadata about the specified product view.</p>
+    /// <p>Summary information about the product view.</p>
     #[serde(rename = "ProductViewSummary")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub product_view_summary: Option<ProductViewSummary>,
-    /// <p>Current status of the product.</p> <p> <code>AVAILABLE</code> - Product is available for use.</p> <p> <code>CREATING</code> - Creation of product started, not ready for use.</p> <p> <code>FAILED</code> - Action on product failed.</p>
+    /// <p><p>The status of the product.</p> <ul> <li> <p> <code>AVAILABLE</code> - The product is ready for use.</p> </li> <li> <p> <code>CREATING</code> - Product creation has started; the product is not ready for use.</p> </li> <li> <p> <code>FAILED</code> - An action failed.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
 
-/// <p>The summary metadata about the specified product.</p>
+/// <p>Summary information about a product view.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ProductViewSummary {
     /// <p>The distributor of the product. Contact the product administrator for the significance of this value.</p>
     #[serde(rename = "Distributor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub distributor: Option<String>,
-    /// <p>A value of <code>false</code> indicates that the product does not have a default path, while a value of <code>true</code> indicates that it does. If it's false, call <a>ListLaunchPaths</a> to disambiguate between paths. If true, <a>ListLaunchPaths</a> is not required, and the output of the <a>ProductViewSummary</a> operation can be used directly with <a>DescribeProvisioningParameters</a>.</p>
+    /// <p>Indicates whether the product has a default path. If the product does not have a default path, call <a>ListLaunchPaths</a> to disambiguate between paths. Otherwise, <a>ListLaunchPaths</a> is not required, and the output of <a>ProductViewSummary</a> can be used directly with <a>DescribeProvisioningParameters</a>.</p>
     #[serde(rename = "HasDefaultPath")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub has_default_path: Option<bool>,
@@ -1260,7 +1326,7 @@ pub struct ProductViewSummary {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ProvisionProductInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
@@ -1268,27 +1334,27 @@ pub struct ProvisionProductInput {
     #[serde(rename = "NotificationArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_arns: Option<Vec<String>>,
-    /// <p>The identifier of the path for this product's provisioning. This value is optional if the product has a default path, and is required if there is more than one path for the specified product.</p>
+    /// <p>The path identifier of the product. This value is optional if the product has a default path, and required if the product has more than one path. To list the paths for a product, use <a>ListLaunchPaths</a>.</p>
     #[serde(rename = "PathId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub path_id: Option<String>,
     /// <p>The product identifier.</p>
     #[serde(rename = "ProductId")]
     pub product_id: String,
-    /// <p>An idempotency token that uniquely identifies the provisioning request. </p>
+    /// <p>An idempotency token that uniquely identifies the provisioning request.</p>
     #[serde(rename = "ProvisionToken")]
     pub provision_token: String,
-    /// <p>A user-friendly name to identify the ProvisionedProduct object. This value must be unique for the AWS account and cannot be updated after the product is provisioned.</p>
+    /// <p>A user-friendly name for the provisioned product. This value must be unique for the AWS account and cannot be updated after the product is provisioned.</p>
     #[serde(rename = "ProvisionedProductName")]
     pub provisioned_product_name: String,
-    /// <p>The provisioning artifact identifier for this product. This is sometimes referred to as the product version.</p>
+    /// <p>The identifier of the provisioning artifact.</p>
     #[serde(rename = "ProvisioningArtifactId")]
     pub provisioning_artifact_id: String,
     /// <p>Parameters specified by the administrator that are required for provisioning the product.</p>
     #[serde(rename = "ProvisioningParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_parameters: Option<Vec<ProvisioningParameter>>,
-    /// <p>A list of tags to use as provisioning options.</p>
+    /// <p>The tags to use as provisioning options.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1296,16 +1362,16 @@ pub struct ProvisionProductInput {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ProvisionProductOutput {
-    /// <p>The detailed result of the <a>ProvisionProduct</a> request, containing the inputs made to that request, the current state of the request, a pointer to the ProvisionedProduct object of the request, and a list of any errors that the request encountered. </p>
+    /// <p>Information about the result of <a>ProvisionProduct</a>.</p>
     #[serde(rename = "RecordDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub record_detail: Option<RecordDetail>,
 }
 
-/// <p>Detailed information about a ProvisionedProduct object.</p>
+/// <p>Information about a provisioned product.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ProvisionedProductDetail {
-    /// <p>The ARN associated with the ProvisionedProduct object.</p>
+    /// <p>The ARN of the provisioned product.</p>
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
@@ -1313,90 +1379,94 @@ pub struct ProvisionedProductDetail {
     #[serde(rename = "CreatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
-    /// <p>The identifier of the ProvisionedProduct object.</p>
+    /// <p>The identifier of the provisioned product.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>A token to disambiguate duplicate requests. You can create multiple resources using the same input in multiple requests, provided that you also specify a different idempotency token for each request.</p>
+    /// <p>A unique identifier that you provide to ensure idempotency. If multiple requests differ only by the idempotency token, the same response is returned for each repeated request.</p>
     #[serde(rename = "IdempotencyToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub idempotency_token: Option<String>,
-    /// <p>The record identifier of the last request performed on this ProvisionedProduct object.</p>
+    /// <p>The record identifier of the last request performed on this provisioned product.</p>
     #[serde(rename = "LastRecordId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_record_id: Option<String>,
-    /// <p>The user-friendly name of the ProvisionedProduct object.</p>
+    /// <p>The user-friendly name of the provisioned product.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The current status of the ProvisionedProduct.</p> <p> <code>AVAILABLE</code> - Stable state, ready to perform any operation. The most recent action request succeeded and completed.</p> <p> <code>UNDER_CHANGE</code> - Transitive state, operations performed may or may not have valid results. Wait for an <code>AVAILABLE</code> status before performing operations.</p> <p> <code>TAINTED</code> - Stable state, ready to perform any operation. The stack has completed the requested operation but is not exactly what was requested. For example, a request to update to a new version failed and the stack rolled back to the current version. </p> <p> <code>ERROR</code> - Something unexpected happened such that the provisioned product exists but the stack is not running. For example, CloudFormation received an invalid parameter value and could not launch the stack.</p>
+    /// <p><p>The current status of the provisioned product.</p> <ul> <li> <p> <code>AVAILABLE</code> - Stable state, ready to perform any operation. The most recent operation succeeded and completed.</p> </li> <li> <p> <code>UNDER_CHANGE</code> - Transitive state, operations performed might not have valid results. Wait for an <code>AVAILABLE</code> status before performing operations.</p> </li> <li> <p> <code>TAINTED</code> - Stable state, ready to perform any operation. The stack has completed the requested operation but is not exactly what was requested. For example, a request to update to a new version failed and the stack rolled back to the current version.</p> </li> <li> <p> <code>ERROR</code> - An unexpected error occurred, the provisioned product exists but the stack is not running. For example, CloudFormation received a parameter value that was not valid and could not launch the stack.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>The current status message of the ProvisionedProduct.</p>
+    /// <p>The current status message of the provisioned product.</p>
     #[serde(rename = "StatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_message: Option<String>,
-    /// <p>The type of the ProvisionedProduct object.</p>
+    /// <p>The type of provisioned product. The supported value is <code>CFN_STACK</code>.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-/// <p>Contains information indicating the ways in which a product can be provisioned.</p>
+/// <p>Information about a provisioning artifact. A provisioning artifact is also known as a product version.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ProvisioningArtifact {
     /// <p>The UTC timestamp of the creation time.</p>
     #[serde(rename = "CreatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
-    /// <p>The text description of the artifact.</p>
+    /// <p>The description of the provisioning artifact.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The identifier for the artifact. This is sometimes referred to as the product version.</p>
+    /// <p>The identifier of the provisioning artifact.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The name of the artifact.</p>
+    /// <p>The name of the provisioning artifact.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-/// <p>Detailed provisioning artifact information.</p>
+/// <p>Information about a provisioning artifact (also known as a version) for a product.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ProvisioningArtifactDetail {
+    /// <p>Indicates whether the product version is active.</p>
+    #[serde(rename = "Active")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active: Option<bool>,
     /// <p>The UTC timestamp of the creation time.</p>
     #[serde(rename = "CreatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
-    /// <p>The text description of the provisioning artifact.</p>
+    /// <p>The description of the provisioning artifact.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The identifier of the provisioning artifact. This is sometimes referred to as the product version.</p>
+    /// <p>The identifier of the provisioning artifact.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The name assigned to the provisioning artifact.</p>
+    /// <p>The name of the provisioning artifact.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The type of the provisioning artifact. The following provisioning artifact types are used by AWS Marketplace products:</p> <p> <code>MARKETPLACE_AMI</code> - AMI products.</p> <p> <code>MARKETPLACE_CAR</code> - CAR (Cluster and AWS Resources) products.</p>
+    /// <p><p>The type of provisioning artifact.</p> <ul> <li> <p> <code>CLOUD<em>FORMATION</em>TEMPLATE</code> - AWS CloudFormation template</p> </li> <li> <p> <code>MARKETPLACE<em>AMI</code> - AWS Marketplace AMI</p> </li> <li> <p> <code>MARKETPLACE</em>CAR</code> - AWS Marketplace Clusters and AWS Resources</p> </li> </ul></p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-/// <p>A parameter used to successfully provision the product. This value includes a list of allowable values and additional metadata. </p>
+/// <p>Information about a parameter used to provision a product.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ProvisioningArtifactParameter {
-    /// <p>The default value for this parameter.</p>
+    /// <p>The default value.</p>
     #[serde(rename = "DefaultValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_value: Option<String>,
-    /// <p>The text description of the parameter.</p>
+    /// <p>The description of the parameter.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -1404,11 +1474,11 @@ pub struct ProvisioningArtifactParameter {
     #[serde(rename = "IsNoEcho")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_no_echo: Option<bool>,
-    /// <p>The list of constraints that the administrator has put on the parameter.</p>
+    /// <p>Constraints that the administrator has put on a parameter.</p>
     #[serde(rename = "ParameterConstraints")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_constraints: Option<ParameterConstraints>,
-    /// <p>The parameter key. </p>
+    /// <p>The parameter key.</p>
     #[serde(rename = "ParameterKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_key: Option<String>,
@@ -1418,27 +1488,27 @@ pub struct ProvisioningArtifactParameter {
     pub parameter_type: Option<String>,
 }
 
-/// <p>Provisioning artifact properties. For example request JSON, see <a>CreateProvisioningArtifact</a>.</p>
+/// <p>Information about a provisioning artifact (also known as a version) for a product.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ProvisioningArtifactProperties {
-    /// <p>The text description of the provisioning artifact properties.</p>
+    /// <p>The description of the provisioning artifact, including how it differs from the previous provisioning artifact.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Additional information about the provisioning artifact properties. When using this element in a request, you must specify <code>LoadTemplateFromURL</code>. For more information, see <a>CreateProvisioningArtifact</a>.</p>
+    /// <p>The URL of the CloudFormation template in Amazon S3. Specify the URL in JSON format as follows:</p> <p> <code>"LoadTemplateFromURL": "https://s3.amazonaws.com/cf-templates-ozkq9d3hgiq2-us-east-1/..."</code> </p>
     #[serde(rename = "Info")]
     pub info: ::std::collections::HashMap<String, String>,
-    /// <p>The name assigned to the provisioning artifact properties.</p>
+    /// <p>The name of the provisioning artifact (for example, v1 v2beta). No spaces are allowed.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The type of the provisioning artifact properties. The following provisioning artifact property types are used by AWS Marketplace products:</p> <p> <code>MARKETPLACE_AMI</code> - AMI products.</p> <p> <code>MARKETPLACE_CAR</code> - CAR (Cluster and AWS Resources) products.</p>
+    /// <p><p>The type of provisioning artifact.</p> <ul> <li> <p> <code>CLOUD<em>FORMATION</em>TEMPLATE</code> - AWS CloudFormation template</p> </li> <li> <p> <code>MARKETPLACE<em>AMI</code> - AWS Marketplace AMI</p> </li> <li> <p> <code>MARKETPLACE</em>CAR</code> - AWS Marketplace Clusters and AWS Resources</p> </li> </ul></p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-/// <p>Stores summary information about a provisioning artifact.</p>
+/// <p>Summary information about a provisioning artifact (also known as a version) for a product.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ProvisioningArtifactSummary {
     /// <p>The UTC timestamp of the creation time.</p>
@@ -1457,33 +1527,33 @@ pub struct ProvisioningArtifactSummary {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The provisioning artifact metadata. This data is used with products created by AWS Marketplace.</p>
+    /// <p>The metadata for the provisioning artifact. This is used with AWS Marketplace products.</p>
     #[serde(rename = "ProvisioningArtifactMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_artifact_metadata: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p>The parameter key-value pairs used to provision a product.</p>
+/// <p>Information about a parameter used to provision a product.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ProvisioningParameter {
-    /// <p>The <code>ProvisioningArtifactParameter.ParameterKey</code> parameter from <a>DescribeProvisioningParameters</a>.</p>
+    /// <p>The parameter key.</p>
     #[serde(rename = "Key")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    /// <p>The value to use for provisioning. Any constraints on this value can be found in <code>ProvisioningArtifactParameter</code> for <code>Key</code>.</p>
+    /// <p>The parameter value.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-/// <p>The full details of a specific ProvisionedProduct object.</p>
+/// <p>Information about a request operation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct RecordDetail {
     /// <p>The UTC timestamp of the creation time.</p>
     #[serde(rename = "CreatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
-    /// <p>The identifier of the path for this product's provisioning.</p>
+    /// <p>The path identifier.</p>
     #[serde(rename = "PathId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub path_id: Option<String>,
@@ -1491,43 +1561,43 @@ pub struct RecordDetail {
     #[serde(rename = "ProductId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub product_id: Option<String>,
-    /// <p>The identifier of the ProvisionedProduct object.</p>
+    /// <p>The identifier of the provisioned product.</p>
     #[serde(rename = "ProvisionedProductId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_product_id: Option<String>,
-    /// <p>The user-friendly name of the ProvisionedProduct object.</p>
+    /// <p>The user-friendly name of the provisioned product.</p>
     #[serde(rename = "ProvisionedProductName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_product_name: Option<String>,
-    /// <p>The type of the ProvisionedProduct object.</p>
+    /// <p>The type of provisioned product. The supported value is <code>CFN_STACK</code>.</p>
     #[serde(rename = "ProvisionedProductType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_product_type: Option<String>,
-    /// <p>The provisioning artifact identifier for this product. This is sometimes referred to as the product version.</p>
+    /// <p>The identifier of the provisioning artifact.</p>
     #[serde(rename = "ProvisioningArtifactId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_artifact_id: Option<String>,
-    /// <p>A list of errors that occurred while processing the request.</p>
+    /// <p>The errors that occurred while processing the request.</p>
     #[serde(rename = "RecordErrors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub record_errors: Option<Vec<RecordError>>,
-    /// <p>The identifier of the ProvisionedProduct object record.</p>
+    /// <p>The identifier of the record.</p>
     #[serde(rename = "RecordId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub record_id: Option<String>,
-    /// <p>List of tags associated with this record.</p>
+    /// <p>The tags associated with this record.</p>
     #[serde(rename = "RecordTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub record_tags: Option<Vec<RecordTag>>,
-    /// <p>The record type for this record.</p>
+    /// <p><p>The record type for this record.</p> <ul> <li> <p> <code>PROVISION<em>PRODUCT</code> </p> </li> <li> <p> <code>UPDATE</em>PROVISIONED<em>PRODUCT</code> </p> </li> <li> <p> <code>TERMINATE</em>PROVISIONED_PRODUCT</code> </p> </li> </ul></p>
     #[serde(rename = "RecordType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub record_type: Option<String>,
-    /// <p>The status of the ProvisionedProduct object.</p> <p> <code>CREATED</code> - Request created but the operation has not yet started.</p> <p> <code>IN_PROGRESS</code> - The requested operation is in-progress.</p> <p> <code>IN_PROGRESS_IN_ERROR</code> - The provisioned product is under change but the requested operation failed and some remediation is occurring. For example, a rollback.</p> <p> <code>SUCCEEDED</code> - The requested operation has successfully completed.</p> <p> <code>FAILED</code> - The requested operation has completed but has failed. Investigate using the error messages returned.</p>
+    /// <p><p>The status of the provisioned product.</p> <ul> <li> <p> <code>CREATED</code> - The request was created but the operation has not started.</p> </li> <li> <p> <code>IN<em>PROGRESS</code> - The requested operation is in progress.</p> </li> <li> <p> <code>IN</em>PROGRESS<em>IN</em>ERROR</code> - The provisioned product is under change but the requested operation failed and some remediation is occurring. For example, a rollback.</p> </li> <li> <p> <code>SUCCEEDED</code> - The requested operation has successfully completed.</p> </li> <li> <p> <code>FAILED</code> - The requested operation has unsuccessfully completed. Investigate using the error messages returned.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>The time when the record for the ProvisionedProduct object was last updated.</p>
+    /// <p>The time when the record was last updated.</p>
     #[serde(rename = "UpdatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_time: Option<f64>,
@@ -1540,16 +1610,16 @@ pub struct RecordError {
     #[serde(rename = "Code")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub code: Option<String>,
-    /// <p>The text description of the error.</p>
+    /// <p>The description of the error.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
 }
 
-/// <p>An output for the specified Product object created as the result of a request. For example, a CloudFormation-backed product that creates an S3 bucket would have an output for the S3 bucket URL.</p>
+/// <p>The output for the product created as the result of a request. For example, the output for a CloudFormation-backed product that creates an S3 bucket would include the S3 bucket URL.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct RecordOutput {
-    /// <p>The text description of the output.</p>
+    /// <p>The description of the output.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -1578,7 +1648,7 @@ pub struct RecordTag {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct RejectPortfolioShareInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
@@ -1590,26 +1660,26 @@ pub struct RejectPortfolioShareInput {
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct RejectPortfolioShareOutput;
 
-/// <p>Detailed resource information.</p>
+/// <p>Information about a resource.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ResourceDetail {
-    /// <p>ARN of the resource.</p>
+    /// <p>The ARN of the resource.</p>
     #[serde(rename = "ARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    /// <p>Creation time of the resource.</p>
+    /// <p>The creation time of the resource.</p>
     #[serde(rename = "CreatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
-    /// <p>Description of the resource.</p>
+    /// <p>The description of the resource.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Identifier of the resource.</p>
+    /// <p>The identifier of the resource.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>Name of the resource.</p>
+    /// <p>The name of the resource.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -1617,19 +1687,19 @@ pub struct ResourceDetail {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ScanProvisionedProductsInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>The access level for obtaining results. If left unspecified, <code>User</code> level access is used.</p>
+    /// <p>The access level to use to obtain results. The default is <code>User</code>.</p>
     #[serde(rename = "AccessLevelFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub access_level_filter: Option<AccessLevelFilter>,
-    /// <p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>
+    /// <p>The maximum number of items to return with this call.</p>
     #[serde(rename = "PageSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
-    /// <p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>
+    /// <p>The page token for the next set of results. To retrieve the first set of results, use null.</p>
     #[serde(rename = "PageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -1637,11 +1707,11 @@ pub struct ScanProvisionedProductsInput {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ScanProvisionedProductsOutput {
-    /// <p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
+    /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
-    /// <p>A list of ProvisionedProduct detail objects.</p>
+    /// <p>Information about the provisioned products.</p>
     #[serde(rename = "ProvisionedProducts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_products: Option<Vec<ProvisionedProductDetail>>,
@@ -1649,19 +1719,19 @@ pub struct ScanProvisionedProductsOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct SearchProductsAsAdminInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>The list of filters with which to limit search results. If no search filters are specified, the output is all the products to which the administrator has access.</p>
+    /// <p>The search filters. If no search filters are specified, the output includes all products to which the administrator has access.</p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<::std::collections::HashMap<String, Vec<String>>>,
-    /// <p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>
+    /// <p>The maximum number of items to return with this call.</p>
     #[serde(rename = "PageSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
-    /// <p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>
+    /// <p>The page token for the next set of results. To retrieve the first set of results, use null.</p>
     #[serde(rename = "PageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
@@ -1673,11 +1743,11 @@ pub struct SearchProductsAsAdminInput {
     #[serde(rename = "ProductSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub product_source: Option<String>,
-    /// <p>The sort field specifier. If no value is specified, results are not sorted.</p>
+    /// <p>The sort field. If no value is specified, the results are not sorted.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sort_by: Option<String>,
-    /// <p>The sort order specifier. If no value is specified, results are not sorted.</p>
+    /// <p>The sort order. If no value is specified, the results are not sorted.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sort_order: Option<String>,
@@ -1685,11 +1755,11 @@ pub struct SearchProductsAsAdminInput {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct SearchProductsAsAdminOutput {
-    /// <p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
+    /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
-    /// <p>List of detailed product view information objects.</p>
+    /// <p>Information about the product views.</p>
     #[serde(rename = "ProductViewDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub product_view_details: Option<Vec<ProductViewDetail>>,
@@ -1697,27 +1767,27 @@ pub struct SearchProductsAsAdminOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct SearchProductsInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>The list of filters with which to limit search results. If no search filters are specified, the output is all the products to which the calling user has access. </p>
+    /// <p>The search filters. If no search filters are specified, the output includes all products to which the caller has access.</p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<::std::collections::HashMap<String, Vec<String>>>,
-    /// <p>The maximum number of items to return in the results. If more results exist than fit in the specified <code>PageSize</code>, the value of <code>NextPageToken</code> in the response is non-null.</p>
+    /// <p>The maximum number of items to return with this call.</p>
     #[serde(rename = "PageSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_size: Option<i64>,
-    /// <p>The page token of the first page retrieved. If null, this retrieves the first page of size <code>PageSize</code>.</p>
+    /// <p>The page token for the next set of results. To retrieve the first set of results, use null.</p>
     #[serde(rename = "PageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-    /// <p>The sort field specifier. If no value is specified, results are not sorted.</p>
+    /// <p>The sort field. If no value is specified, the results are not sorted.</p>
     #[serde(rename = "SortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sort_by: Option<String>,
-    /// <p>The sort order specifier. If no value is specified, results are not sorted.</p>
+    /// <p>The sort order. If no value is specified, the results are not sorted.</p>
     #[serde(rename = "SortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sort_order: Option<String>,
@@ -1725,61 +1795,61 @@ pub struct SearchProductsInput {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct SearchProductsOutput {
-    /// <p>The page token to use to retrieve the next page of results for this operation. If there are no more pages, this value is null.</p>
+    /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
     #[serde(rename = "NextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
-    /// <p>A list of the product view aggregation value objects.</p>
+    /// <p>The product view aggregations.</p>
     #[serde(rename = "ProductViewAggregations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub product_view_aggregations:
         Option<::std::collections::HashMap<String, Vec<ProductViewAggregationValue>>>,
-    /// <p>A list of the product view summary objects.</p>
+    /// <p>Information about the product views.</p>
     #[serde(rename = "ProductViewSummaries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub product_view_summaries: Option<Vec<ProductViewSummary>>,
 }
 
-/// <p>Key-value pairs to associate with this provisioning. These tags are entirely discretionary and are propagated to the resources created in the provisioning.</p>
+/// <p>Information about a tag. A tag is a key-value pair. Tags are entirely discretionary and are propagated to the resources created when provisioning a product.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct Tag {
-    /// <p>The <code>ProvisioningArtifactParameter.TagKey</code> parameter from <a>DescribeProvisioningParameters</a>.</p>
+    /// <p>The tag key.</p>
     #[serde(rename = "Key")]
     pub key: String,
-    /// <p>The desired value for this key.</p>
+    /// <p>The value for this key.</p>
     #[serde(rename = "Value")]
     pub value: String,
 }
 
-/// <p>The TagOption details.</p>
+/// <p>Information about a TagOption.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct TagOptionDetail {
-    /// <p>The TagOptionDetail active state.</p>
+    /// <p>The TagOption active state.</p>
     #[serde(rename = "Active")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub active: Option<bool>,
-    /// <p>The TagOptionDetail identifier.</p>
+    /// <p>The TagOption identifier.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The TagOptionDetail key.</p>
+    /// <p>The TagOption key.</p>
     #[serde(rename = "Key")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    /// <p>The TagOptionDetail value.</p>
+    /// <p>The TagOption value.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-/// <p>The TagOption summary key-value pair.</p>
+/// <p>Summary information about a TagOption.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct TagOptionSummary {
-    /// <p>The TagOptionSummary key.</p>
+    /// <p>The TagOption key.</p>
     #[serde(rename = "Key")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    /// <p>The TagOptionSummary value.</p>
+    /// <p>The TagOption value.</p>
     #[serde(rename = "Values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
@@ -1787,30 +1857,30 @@ pub struct TagOptionSummary {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct TerminateProvisionedProductInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>If set to true, AWS Service Catalog stops managing the specified ProvisionedProduct object even if it cannot delete the underlying resources.</p>
+    /// <p>If set to true, AWS Service Catalog stops managing the specified provisioned product even if it cannot delete the underlying resources.</p>
     #[serde(rename = "IgnoreErrors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ignore_errors: Option<bool>,
-    /// <p>The identifier of the ProvisionedProduct object to terminate. Specify either <code>ProvisionedProductName</code> or <code>ProvisionedProductId</code>, but not both.</p>
+    /// <p>The identifier of the provisioned product. You cannot specify both <code>ProvisionedProductName</code> and <code>ProvisionedProductId</code>.</p>
     #[serde(rename = "ProvisionedProductId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_product_id: Option<String>,
-    /// <p>The name of the ProvisionedProduct object to terminate. Specify either <code>ProvisionedProductName</code> or <code>ProvisionedProductId</code>, but not both.</p>
+    /// <p>The name of the provisioned product. You cannot specify both <code>ProvisionedProductName</code> and <code>ProvisionedProductId</code>.</p>
     #[serde(rename = "ProvisionedProductName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_product_name: Option<String>,
-    /// <p>An idempotency token that uniquely identifies the termination request. This token is only valid during the termination process. After the ProvisionedProduct object is terminated, further requests to terminate the same ProvisionedProduct object always return <b>ResourceNotFound</b> regardless of the value of <code>TerminateToken</code>.</p>
+    /// <p>An idempotency token that uniquely identifies the termination request. This token is only valid during the termination process. After the provisioned product is terminated, subsequent requests to terminate the same provisioned product always return <b>ResourceNotFound</b>.</p>
     #[serde(rename = "TerminateToken")]
     pub terminate_token: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct TerminateProvisionedProductOutput {
-    /// <p>The detailed result of the <a>TerminateProvisionedProduct</a> request, containing the inputs made to that request, the current state of the request, a pointer to the ProvisionedProduct object that the request is modifying, and a list of any errors that the request encountered.</p>
+    /// <p>Information about the result of this request.</p>
     #[serde(rename = "RecordDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub record_detail: Option<RecordDetail>,
@@ -1818,26 +1888,26 @@ pub struct TerminateProvisionedProductOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateConstraintInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>The updated text description of the constraint.</p>
+    /// <p>The updated description of the constraint.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The identifier of the constraint to update.</p>
+    /// <p>The identifier of the constraint.</p>
     #[serde(rename = "Id")]
     pub id: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateConstraintOutput {
-    /// <p>The resulting detailed constraint information.</p>
+    /// <p>Information about the constraint.</p>
     #[serde(rename = "ConstraintDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub constraint_detail: Option<ConstraintDetail>,
-    /// <p>The resulting updated constraint parameters.</p>
+    /// <p>The constraint parameters.</p>
     #[serde(rename = "ConstraintParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub constraint_parameters: Option<String>,
@@ -1849,15 +1919,15 @@ pub struct UpdateConstraintOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdatePortfolioInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>Tags to add to the existing list of tags associated with the portfolio.</p>
+    /// <p>The tags to add.</p>
     #[serde(rename = "AddTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub add_tags: Option<Vec<Tag>>,
-    /// <p>The updated text description of the portfolio.</p>
+    /// <p>The updated description of the portfolio.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -1865,14 +1935,14 @@ pub struct UpdatePortfolioInput {
     #[serde(rename = "DisplayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
-    /// <p>The identifier of the portfolio for the update request.</p>
+    /// <p>The portfolio identifier.</p>
     #[serde(rename = "Id")]
     pub id: String,
     /// <p>The updated name of the portfolio provider.</p>
     #[serde(rename = "ProviderName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_name: Option<String>,
-    /// <p>Tags to remove from the existing list of tags associated with the portfolio.</p>
+    /// <p>The tags to remove.</p>
     #[serde(rename = "RemoveTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remove_tags: Option<Vec<String>>,
@@ -1880,11 +1950,11 @@ pub struct UpdatePortfolioInput {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdatePortfolioOutput {
-    /// <p>The resulting detailed portfolio information.</p>
+    /// <p>Information about the portfolio.</p>
     #[serde(rename = "PortfolioDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub portfolio_detail: Option<PortfolioDetail>,
-    /// <p>Tags associated with the portfolio.</p>
+    /// <p>Information about the tags associated with the portfolio.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1892,15 +1962,15 @@ pub struct UpdatePortfolioOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateProductInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>Tags to add to the existing list of tags associated with the product.</p>
+    /// <p>The tags to add to the product.</p>
     #[serde(rename = "AddTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub add_tags: Option<Vec<Tag>>,
-    /// <p>The updated text description of the product.</p>
+    /// <p>The updated description of the product.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -1908,7 +1978,7 @@ pub struct UpdateProductInput {
     #[serde(rename = "Distributor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub distributor: Option<String>,
-    /// <p>The identifier of the product for the update request.</p>
+    /// <p>The product identifier.</p>
     #[serde(rename = "Id")]
     pub id: String,
     /// <p>The updated product name.</p>
@@ -1919,7 +1989,7 @@ pub struct UpdateProductInput {
     #[serde(rename = "Owner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
-    /// <p>Tags to remove from the existing list of tags associated with the product.</p>
+    /// <p>The tags to remove from the product.</p>
     #[serde(rename = "RemoveTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remove_tags: Option<Vec<String>>,
@@ -1939,11 +2009,11 @@ pub struct UpdateProductInput {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateProductOutput {
-    /// <p>The resulting detailed product view information.</p>
+    /// <p>Information about the product view.</p>
     #[serde(rename = "ProductViewDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub product_view_detail: Option<ProductViewDetail>,
-    /// <p>Tags associated with the product.</p>
+    /// <p>Information about the tags associated with the product.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1951,42 +2021,42 @@ pub struct UpdateProductOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateProvisionedProductInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>The identifier of the path to use in the updated ProvisionedProduct object. This value is optional if the product has a default path, and is required if there is more than one path for the specified product.</p>
+    /// <p>The new path identifier. This value is optional if the product has a default path, and required if the product has more than one path.</p>
     #[serde(rename = "PathId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub path_id: Option<String>,
-    /// <p>The identifier of the ProvisionedProduct object.</p>
+    /// <p>The identifier of the provisioned product.</p>
     #[serde(rename = "ProductId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub product_id: Option<String>,
-    /// <p>The identifier of the ProvisionedProduct object to update. Specify either <code>ProvisionedProductName</code> or <code>ProvisionedProductId</code>, but not both.</p>
+    /// <p>The identifier of the provisioned product. You cannot specify both <code>ProvisionedProductName</code> and <code>ProvisionedProductId</code>.</p>
     #[serde(rename = "ProvisionedProductId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_product_id: Option<String>,
-    /// <p>The updated name of the ProvisionedProduct object. Specify either <code>ProvisionedProductName</code> or <code>ProvisionedProductId</code>, but not both.</p>
+    /// <p>The updated name of the provisioned product. You cannot specify both <code>ProvisionedProductName</code> and <code>ProvisionedProductId</code>.</p>
     #[serde(rename = "ProvisionedProductName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_product_name: Option<String>,
-    /// <p>The provisioning artifact identifier for this product. This is sometimes referred to as the product version.</p>
+    /// <p>The identifier of the provisioning artifact.</p>
     #[serde(rename = "ProvisioningArtifactId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_artifact_id: Option<String>,
-    /// <p>A list of <code>ProvisioningParameter</code> objects used to update the ProvisionedProduct object.</p>
+    /// <p>The new parameters.</p>
     #[serde(rename = "ProvisioningParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_parameters: Option<Vec<UpdateProvisioningParameter>>,
-    /// <p>The idempotency token that uniquely identifies the provisioning update request.</p>
+    /// <p>The idempotency token that uniquely identifies the provisioning update rquest.</p>
     #[serde(rename = "UpdateToken")]
     pub update_token: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateProvisionedProductOutput {
-    /// <p>The detailed result of the <a>UpdateProvisionedProduct</a> request, containing the inputs made to that request, the current state of the request, a pointer to the ProvisionedProduct object that the request is modifying, and a list of any errors that the request encountered.</p>
+    /// <p>Information about the result of the request.</p>
     #[serde(rename = "RecordDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub record_detail: Option<RecordDetail>,
@@ -1994,11 +2064,15 @@ pub struct UpdateProvisionedProductOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateProvisioningArtifactInput {
-    /// <p>The language code to use for this operation. Supported language codes are as follows:</p> <p>"en" (English)</p> <p>"jp" (Japanese)</p> <p>"zh" (Chinese)</p> <p>If no code is specified, "en" is used as the default.</p>
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>The updated text description of the provisioning artifact.</p>
+    /// <p>Indicates whether the product version is active.</p>
+    #[serde(rename = "Active")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active: Option<bool>,
+    /// <p>The updated description of the provisioning artifact.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
@@ -2009,18 +2083,18 @@ pub struct UpdateProvisioningArtifactInput {
     /// <p>The product identifier.</p>
     #[serde(rename = "ProductId")]
     pub product_id: String,
-    /// <p>The identifier of the provisioning artifact for the update request. This is sometimes referred to as the product version.</p>
+    /// <p>The identifier of the provisioning artifact.</p>
     #[serde(rename = "ProvisioningArtifactId")]
     pub provisioning_artifact_id: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateProvisioningArtifactOutput {
-    /// <p>Additional information about the provisioning artifact update request.</p>
+    /// <p>The URL of the CloudFormation template in Amazon S3.</p>
     #[serde(rename = "Info")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub info: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The resulting detailed provisioning artifact information.</p>
+    /// <p>Information about the provisioning artifact.</p>
     #[serde(rename = "ProvisioningArtifactDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_artifact_detail: Option<ProvisioningArtifactDetail>,
@@ -2030,18 +2104,18 @@ pub struct UpdateProvisioningArtifactOutput {
     pub status: Option<String>,
 }
 
-/// <p>The parameter key-value pair used to update a ProvisionedProduct object. If <code>UsePreviousValue</code> is set to true, <code>Value</code> is ignored and the value for <code>Key</code> is kept as previously set (current value).</p>
+/// <p>The parameter key-value pair used to update a provisioned product.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateProvisioningParameter {
-    /// <p>The <code>ProvisioningArtifactParameter.ParameterKey</code> parameter from <a>DescribeProvisioningParameters</a>.</p>
+    /// <p>The parameter key.</p>
     #[serde(rename = "Key")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    /// <p>If true, uses the currently set value for <code>Key</code>, ignoring <code>UpdateProvisioningParameter.Value</code>.</p>
+    /// <p>If set to true, <code>Value</code> is ignored and the previous parameter value is kept.</p>
     #[serde(rename = "UsePreviousValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub use_previous_value: Option<bool>,
-    /// <p>The value to use for updating the product provisioning. Any constraints on this value can be found in the <code>ProvisioningArtifactParameter</code> parameter for <code>Key</code>.</p>
+    /// <p>The parameter value.</p>
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
@@ -2053,7 +2127,7 @@ pub struct UpdateTagOptionInput {
     #[serde(rename = "Active")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub active: Option<bool>,
-    /// <p>The identifier of the constraint to update.</p>
+    /// <p>The TagOption identifier.</p>
     #[serde(rename = "Id")]
     pub id: String,
     /// <p>The updated value.</p>
@@ -2064,7 +2138,7 @@ pub struct UpdateTagOptionInput {
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateTagOptionOutput {
-    /// <p>The resulting detailed TagOption information.</p>
+    /// <p>Information about the TagOption.</p>
     #[serde(rename = "TagOptionDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_option_detail: Option<TagOptionDetail>,
@@ -2086,9 +2160,9 @@ pub struct UsageInstruction {
 /// Errors returned by AcceptPortfolioShare
 #[derive(Debug, PartialEq)]
 pub enum AcceptPortfolioShareError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
-    /// <p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
+    /// <p>The current limits of the service would have been exceeded by this operation. Decrease your resource use or increase your service limits and retry the operation.</p>
     LimitExceeded(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -2178,9 +2252,9 @@ impl Error for AcceptPortfolioShareError {
 /// Errors returned by AssociatePrincipalWithPortfolio
 #[derive(Debug, PartialEq)]
 pub enum AssociatePrincipalWithPortfolioError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
-    /// <p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
+    /// <p>The current limits of the service would have been exceeded by this operation. Decrease your resource use or increase your service limits and retry the operation.</p>
     LimitExceeded(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -2276,9 +2350,9 @@ impl Error for AssociatePrincipalWithPortfolioError {
 /// Errors returned by AssociateProductWithPortfolio
 #[derive(Debug, PartialEq)]
 pub enum AssociateProductWithPortfolioError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
-    /// <p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
+    /// <p>The current limits of the service would have been exceeded by this operation. Decrease your resource use or increase your service limits and retry the operation.</p>
     LimitExceeded(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -2374,11 +2448,11 @@ impl Error for AssociateProductWithPortfolioError {
 pub enum AssociateTagOptionWithResourceError {
     /// <p>The specified resource is a duplicate.</p>
     DuplicateResource(String),
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
-    /// <p>An attempt was made to modify a resource that is in an invalid state. Inspect the resource you are using for this operation to ensure that all resource states are valid before retrying the operation.</p>
+    /// <p>An attempt was made to modify a resource that is in a state that is not valid. Check your resources to ensure that they are in valid states before retrying the operation.</p>
     InvalidState(String),
-    /// <p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
+    /// <p>The current limits of the service would have been exceeded by this operation. Decrease your resource use or increase your service limits and retry the operation.</p>
     LimitExceeded(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -2489,14 +2563,98 @@ impl Error for AssociateTagOptionWithResourceError {
         }
     }
 }
+/// Errors returned by CopyProduct
+#[derive(Debug, PartialEq)]
+pub enum CopyProductError {
+    /// <p>One or more parameters provided to the operation are not valid.</p>
+    InvalidParameters(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CopyProductError {
+    pub fn from_body(body: &str) -> CopyProductError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidParametersException" => {
+                        CopyProductError::InvalidParameters(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        CopyProductError::ResourceNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CopyProductError::Validation(error_message.to_string())
+                    }
+                    _ => CopyProductError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CopyProductError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CopyProductError {
+    fn from(err: serde_json::error::Error) -> CopyProductError {
+        CopyProductError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CopyProductError {
+    fn from(err: CredentialsError) -> CopyProductError {
+        CopyProductError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CopyProductError {
+    fn from(err: HttpDispatchError) -> CopyProductError {
+        CopyProductError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CopyProductError {
+    fn from(err: io::Error) -> CopyProductError {
+        CopyProductError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CopyProductError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CopyProductError {
+    fn description(&self) -> &str {
+        match *self {
+            CopyProductError::InvalidParameters(ref cause) => cause,
+            CopyProductError::ResourceNotFound(ref cause) => cause,
+            CopyProductError::Validation(ref cause) => cause,
+            CopyProductError::Credentials(ref err) => err.description(),
+            CopyProductError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CopyProductError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateConstraint
 #[derive(Debug, PartialEq)]
 pub enum CreateConstraintError {
     /// <p>The specified resource is a duplicate.</p>
     DuplicateResource(String),
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
-    /// <p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
+    /// <p>The current limits of the service would have been exceeded by this operation. Decrease your resource use or increase your service limits and retry the operation.</p>
     LimitExceeded(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -2588,9 +2746,9 @@ impl Error for CreateConstraintError {
 /// Errors returned by CreatePortfolio
 #[derive(Debug, PartialEq)]
 pub enum CreatePortfolioError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
-    /// <p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
+    /// <p>The current limits of the service would have been exceeded by this operation. Decrease your resource use or increase your service limits and retry the operation.</p>
     LimitExceeded(String),
     /// <p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
     TagOptionNotMigrated(String),
@@ -2678,9 +2836,9 @@ impl Error for CreatePortfolioError {
 /// Errors returned by CreatePortfolioShare
 #[derive(Debug, PartialEq)]
 pub enum CreatePortfolioShareError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
-    /// <p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
+    /// <p>The current limits of the service would have been exceeded by this operation. Decrease your resource use or increase your service limits and retry the operation.</p>
     LimitExceeded(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -2770,9 +2928,9 @@ impl Error for CreatePortfolioShareError {
 /// Errors returned by CreateProduct
 #[derive(Debug, PartialEq)]
 pub enum CreateProductError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
-    /// <p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
+    /// <p>The current limits of the service would have been exceeded by this operation. Decrease your resource use or increase your service limits and retry the operation.</p>
     LimitExceeded(String),
     /// <p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
     TagOptionNotMigrated(String),
@@ -2860,9 +3018,9 @@ impl Error for CreateProductError {
 /// Errors returned by CreateProvisioningArtifact
 #[derive(Debug, PartialEq)]
 pub enum CreateProvisioningArtifactError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
-    /// <p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
+    /// <p>The current limits of the service would have been exceeded by this operation. Decrease your resource use or increase your service limits and retry the operation.</p>
     LimitExceeded(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -2958,7 +3116,7 @@ impl Error for CreateProvisioningArtifactError {
 pub enum CreateTagOptionError {
     /// <p>The specified resource is a duplicate.</p>
     DuplicateResource(String),
-    /// <p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
+    /// <p>The current limits of the service would have been exceeded by this operation. Decrease your resource use or increase your service limits and retry the operation.</p>
     LimitExceeded(String),
     /// <p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
     TagOptionNotMigrated(String),
@@ -3046,7 +3204,7 @@ impl Error for CreateTagOptionError {
 /// Errors returned by DeleteConstraint
 #[derive(Debug, PartialEq)]
 pub enum DeleteConstraintError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -3130,9 +3288,9 @@ impl Error for DeleteConstraintError {
 /// Errors returned by DeletePortfolio
 #[derive(Debug, PartialEq)]
 pub enum DeletePortfolioError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
-    /// <p>The operation was requested against a resource that is currently in use. Free the resource from use and retry the operation.</p>
+    /// <p>A resource that is currently in use. Ensure the resource is not in use and retry the operation.</p>
     ResourceInUse(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -3306,9 +3464,9 @@ impl Error for DeletePortfolioShareError {
 /// Errors returned by DeleteProduct
 #[derive(Debug, PartialEq)]
 pub enum DeleteProductError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
-    /// <p>The operation was requested against a resource that is currently in use. Free the resource from use and retry the operation.</p>
+    /// <p>A resource that is currently in use. Ensure the resource is not in use and retry the operation.</p>
     ResourceInUse(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -3402,9 +3560,9 @@ impl Error for DeleteProductError {
 /// Errors returned by DeleteProvisioningArtifact
 #[derive(Debug, PartialEq)]
 pub enum DeleteProvisioningArtifactError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
-    /// <p>The operation was requested against a resource that is currently in use. Free the resource from use and retry the operation.</p>
+    /// <p>A resource that is currently in use. Ensure the resource is not in use and retry the operation.</p>
     ResourceInUse(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -3575,6 +3733,88 @@ impl Error for DescribeConstraintError {
         }
     }
 }
+/// Errors returned by DescribeCopyProductStatus
+#[derive(Debug, PartialEq)]
+pub enum DescribeCopyProductStatusError {
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeCopyProductStatusError {
+    pub fn from_body(body: &str) -> DescribeCopyProductStatusError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ResourceNotFoundException" => {
+                        DescribeCopyProductStatusError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        DescribeCopyProductStatusError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeCopyProductStatusError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeCopyProductStatusError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeCopyProductStatusError {
+    fn from(err: serde_json::error::Error) -> DescribeCopyProductStatusError {
+        DescribeCopyProductStatusError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeCopyProductStatusError {
+    fn from(err: CredentialsError) -> DescribeCopyProductStatusError {
+        DescribeCopyProductStatusError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeCopyProductStatusError {
+    fn from(err: HttpDispatchError) -> DescribeCopyProductStatusError {
+        DescribeCopyProductStatusError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeCopyProductStatusError {
+    fn from(err: io::Error) -> DescribeCopyProductStatusError {
+        DescribeCopyProductStatusError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeCopyProductStatusError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeCopyProductStatusError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeCopyProductStatusError::ResourceNotFound(ref cause) => cause,
+            DescribeCopyProductStatusError::Validation(ref cause) => cause,
+            DescribeCopyProductStatusError::Credentials(ref err) => err.description(),
+            DescribeCopyProductStatusError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeCopyProductStatusError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribePortfolio
 #[derive(Debug, PartialEq)]
 pub enum DescribePortfolioError {
@@ -3658,7 +3898,7 @@ impl Error for DescribePortfolioError {
 /// Errors returned by DescribeProduct
 #[derive(Debug, PartialEq)]
 pub enum DescribeProductError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -3822,7 +4062,7 @@ impl Error for DescribeProductAsAdminError {
 /// Errors returned by DescribeProductView
 #[derive(Debug, PartialEq)]
 pub enum DescribeProductViewError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -4072,7 +4312,7 @@ impl Error for DescribeProvisioningArtifactError {
 /// Errors returned by DescribeProvisioningParameters
 #[derive(Debug, PartialEq)]
 pub enum DescribeProvisioningParametersError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -4326,7 +4566,7 @@ impl Error for DescribeTagOptionError {
 /// Errors returned by DisassociatePrincipalFromPortfolio
 #[derive(Debug, PartialEq)]
 pub enum DisassociatePrincipalFromPortfolioError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -4416,9 +4656,9 @@ impl Error for DisassociatePrincipalFromPortfolioError {
 /// Errors returned by DisassociateProductFromPortfolio
 #[derive(Debug, PartialEq)]
 pub enum DisassociateProductFromPortfolioError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
-    /// <p>The operation was requested against a resource that is currently in use. Free the resource from use and retry the operation.</p>
+    /// <p>A resource that is currently in use. Ensure the resource is not in use and retry the operation.</p>
     ResourceInUse(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -4604,7 +4844,7 @@ impl Error for DisassociateTagOptionFromResourceError {
 /// Errors returned by ListAcceptedPortfolioShares
 #[derive(Debug, PartialEq)]
 pub enum ListAcceptedPortfolioSharesError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4686,7 +4926,7 @@ impl Error for ListAcceptedPortfolioSharesError {
 /// Errors returned by ListConstraintsForPortfolio
 #[derive(Debug, PartialEq)]
 pub enum ListConstraintsForPortfolioError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -4776,7 +5016,7 @@ impl Error for ListConstraintsForPortfolioError {
 /// Errors returned by ListLaunchPaths
 #[derive(Debug, PartialEq)]
 pub enum ListLaunchPathsError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -4940,7 +5180,7 @@ impl Error for ListPortfolioAccessError {
 /// Errors returned by ListPortfolios
 #[derive(Debug, PartialEq)]
 pub enum ListPortfoliosError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5018,7 +5258,7 @@ impl Error for ListPortfoliosError {
 /// Errors returned by ListPortfoliosForProduct
 #[derive(Debug, PartialEq)]
 pub enum ListPortfoliosForProductError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -5106,7 +5346,7 @@ impl Error for ListPortfoliosForProductError {
 /// Errors returned by ListPrincipalsForPortfolio
 #[derive(Debug, PartialEq)]
 pub enum ListPrincipalsForPortfolioError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -5196,7 +5436,7 @@ impl Error for ListPrincipalsForPortfolioError {
 /// Errors returned by ListProvisioningArtifacts
 #[derive(Debug, PartialEq)]
 pub enum ListProvisioningArtifactsError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -5286,7 +5526,7 @@ impl Error for ListProvisioningArtifactsError {
 /// Errors returned by ListRecordHistory
 #[derive(Debug, PartialEq)]
 pub enum ListRecordHistoryError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5366,7 +5606,7 @@ impl Error for ListRecordHistoryError {
 /// Errors returned by ListResourcesForTagOption
 #[derive(Debug, PartialEq)]
 pub enum ListResourcesForTagOptionError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -5464,7 +5704,7 @@ impl Error for ListResourcesForTagOptionError {
 /// Errors returned by ListTagOptions
 #[derive(Debug, PartialEq)]
 pub enum ListTagOptionsError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
     /// <p>An operation requiring TagOptions failed because the TagOptions migration process has not been performed for this account. Please use the AWS console to perform the migration process before retrying the operation.</p>
     TagOptionNotMigrated(String),
@@ -5550,7 +5790,7 @@ impl Error for ListTagOptionsError {
 pub enum ProvisionProductError {
     /// <p>The specified resource is a duplicate.</p>
     DuplicateResource(String),
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -5718,7 +5958,7 @@ impl Error for RejectPortfolioShareError {
 /// Errors returned by ScanProvisionedProducts
 #[derive(Debug, PartialEq)]
 pub enum ScanProvisionedProductsError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5798,7 +6038,7 @@ impl Error for ScanProvisionedProductsError {
 /// Errors returned by SearchProducts
 #[derive(Debug, PartialEq)]
 pub enum SearchProductsError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5876,7 +6116,7 @@ impl Error for SearchProductsError {
 /// Errors returned by SearchProductsAsAdmin
 #[derive(Debug, PartialEq)]
 pub enum SearchProductsAsAdminError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -6044,7 +6284,7 @@ impl Error for TerminateProvisionedProductError {
 /// Errors returned by UpdateConstraint
 #[derive(Debug, PartialEq)]
 pub enum UpdateConstraintError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -6128,9 +6368,9 @@ impl Error for UpdateConstraintError {
 /// Errors returned by UpdatePortfolio
 #[derive(Debug, PartialEq)]
 pub enum UpdatePortfolioError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
-    /// <p>The current limits of the service would have been exceeded by this operation. Reduce the resource use or increase the service limits and retry the operation.</p>
+    /// <p>The current limits of the service would have been exceeded by this operation. Decrease your resource use or increase your service limits and retry the operation.</p>
     LimitExceeded(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -6224,7 +6464,7 @@ impl Error for UpdatePortfolioError {
 /// Errors returned by UpdateProduct
 #[derive(Debug, PartialEq)]
 pub enum UpdateProductError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -6314,7 +6554,7 @@ impl Error for UpdateProductError {
 /// Errors returned by UpdateProvisionedProduct
 #[derive(Debug, PartialEq)]
 pub enum UpdateProvisionedProductError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -6402,7 +6642,7 @@ impl Error for UpdateProvisionedProductError {
 /// Errors returned by UpdateProvisioningArtifact
 #[derive(Debug, PartialEq)]
 pub enum UpdateProvisioningArtifactError {
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -6494,7 +6734,7 @@ impl Error for UpdateProvisioningArtifactError {
 pub enum UpdateTagOptionError {
     /// <p>The specified resource is a duplicate.</p>
     DuplicateResource(String),
-    /// <p>One or more parameters provided to the operation are invalid.</p>
+    /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -6587,7 +6827,7 @@ impl Error for UpdateTagOptionError {
 }
 /// Trait representing the capabilities of the AWS Service Catalog API. AWS Service Catalog clients implement this trait.
 pub trait ServiceCatalog {
-    /// <p>Accepts an offer to share a portfolio.</p>
+    /// <p>Accepts an offer to share the specified portfolio.</p>
     fn accept_portfolio_share(
         &self,
         input: &AcceptPortfolioShareInput,
@@ -6599,49 +6839,53 @@ pub trait ServiceCatalog {
         input: &AssociatePrincipalWithPortfolioInput,
     ) -> Result<AssociatePrincipalWithPortfolioOutput, AssociatePrincipalWithPortfolioError>;
 
-    /// <p>Associates a product with a portfolio.</p>
+    /// <p>Associates the specified product with the specified portfolio.</p>
     fn associate_product_with_portfolio(
         &self,
         input: &AssociateProductWithPortfolioInput,
     ) -> Result<AssociateProductWithPortfolioOutput, AssociateProductWithPortfolioError>;
 
-    /// <p>Associate a TagOption identifier with a resource identifier.</p>
+    /// <p>Associate the specified TagOption with the specified portfolio or product.</p>
     fn associate_tag_option_with_resource(
         &self,
         input: &AssociateTagOptionWithResourceInput,
     ) -> Result<AssociateTagOptionWithResourceOutput, AssociateTagOptionWithResourceError>;
 
-    /// <p>Creates a new constraint. For more information, see <a href="http://docs.aws.amazon.com/servicecatalog/latest/adminguide/constraints.html">Using Constraints</a>.</p>
+    /// <p>Copies the specified source product to the specified target product or a new product.</p> <p>You can copy a product to the same account or another account. You can copy a product to the same region or another region.</p> <p>This operation is performed asynchronously. To track the progress of the operation, use <a>DescribeCopyProductStatus</a>.</p>
+    fn copy_product(&self, input: &CopyProductInput)
+        -> Result<CopyProductOutput, CopyProductError>;
+
+    /// <p>Creates a constraint.</p>
     fn create_constraint(
         &self,
         input: &CreateConstraintInput,
     ) -> Result<CreateConstraintOutput, CreateConstraintError>;
 
-    /// <p>Creates a new portfolio.</p>
+    /// <p>Creates a portfolio.</p>
     fn create_portfolio(
         &self,
         input: &CreatePortfolioInput,
     ) -> Result<CreatePortfolioOutput, CreatePortfolioError>;
 
-    /// <p>Creates a new portfolio share.</p>
+    /// <p>Shares the specified portfolio with the specified account.</p>
     fn create_portfolio_share(
         &self,
         input: &CreatePortfolioShareInput,
     ) -> Result<CreatePortfolioShareOutput, CreatePortfolioShareError>;
 
-    /// <p>Creates a new product.</p>
+    /// <p>Creates a product.</p>
     fn create_product(
         &self,
         input: &CreateProductInput,
     ) -> Result<CreateProductOutput, CreateProductError>;
 
-    /// <p>Create a new provisioning artifact for the specified product. This operation does not work with a product that has been shared with you.</p> <p>See the bottom of this topic for an example JSON request.</p>
+    /// <p>Creates a provisioning artifact (also known as a version) for the specified product.</p> <p>You cannot create a provisioning artifact for a product that was shared with you.</p>
     fn create_provisioning_artifact(
         &self,
         input: &CreateProvisioningArtifactInput,
     ) -> Result<CreateProvisioningArtifactOutput, CreateProvisioningArtifactError>;
 
-    /// <p>Create a new TagOption.</p>
+    /// <p>Creates a TagOption.</p>
     fn create_tag_option(
         &self,
         input: &CreateTagOptionInput,
@@ -6653,85 +6897,91 @@ pub trait ServiceCatalog {
         input: &DeleteConstraintInput,
     ) -> Result<DeleteConstraintOutput, DeleteConstraintError>;
 
-    /// <p>Deletes the specified portfolio. This operation does not work with a portfolio that has been shared with you or if it has products, users, constraints, or shared accounts associated with it.</p>
+    /// <p>Deletes the specified portfolio.</p> <p>You cannot delete a portfolio if it was shared with you or if it has associated products, users, constraints, or shared accounts.</p>
     fn delete_portfolio(
         &self,
         input: &DeletePortfolioInput,
     ) -> Result<DeletePortfolioOutput, DeletePortfolioError>;
 
-    /// <p>Deletes the specified portfolio share.</p>
+    /// <p>Stops sharing the specified portfolio with the specified account.</p>
     fn delete_portfolio_share(
         &self,
         input: &DeletePortfolioShareInput,
     ) -> Result<DeletePortfolioShareOutput, DeletePortfolioShareError>;
 
-    /// <p>Deletes the specified product. This operation does not work with a product that has been shared with you or is associated with a portfolio. </p>
+    /// <p>Deletes the specified product.</p> <p>You cannot delete a product if it was shared with you or is associated with a portfolio.</p>
     fn delete_product(
         &self,
         input: &DeleteProductInput,
     ) -> Result<DeleteProductOutput, DeleteProductError>;
 
-    /// <p>Deletes the specified provisioning artifact. This operation does not work on a provisioning artifact associated with a product that has been shared with you, or on the last provisioning artifact associated with a product (a product must have at least one provisioning artifact).</p>
+    /// <p>Deletes the specified provisioning artifact (also known as a version) for the specified product.</p> <p>You cannot delete a provisioning artifact associated with a product that was shared with you. You cannot delete the last provisioning artifact for a product, because a product must have at least one provisioning artifact.</p>
     fn delete_provisioning_artifact(
         &self,
         input: &DeleteProvisioningArtifactInput,
     ) -> Result<DeleteProvisioningArtifactOutput, DeleteProvisioningArtifactError>;
 
-    /// <p>Retrieves detailed information for a specified constraint.</p>
+    /// <p>Gets information about the specified constraint.</p>
     fn describe_constraint(
         &self,
         input: &DescribeConstraintInput,
     ) -> Result<DescribeConstraintOutput, DescribeConstraintError>;
 
-    /// <p>Retrieves detailed information and any tags associated with the specified portfolio.</p>
+    /// <p>Gets the status of the specified copy product operation.</p>
+    fn describe_copy_product_status(
+        &self,
+        input: &DescribeCopyProductStatusInput,
+    ) -> Result<DescribeCopyProductStatusOutput, DescribeCopyProductStatusError>;
+
+    /// <p>Gets information about the specified portfolio.</p>
     fn describe_portfolio(
         &self,
         input: &DescribePortfolioInput,
     ) -> Result<DescribePortfolioOutput, DescribePortfolioError>;
 
-    /// <p>Retrieves information about a specified product.</p> <p>This operation is functionally identical to <a>DescribeProductView</a> except that it takes as input <code>ProductId</code> instead of <code>ProductViewId</code>.</p>
+    /// <p>Gets information about the specified product.</p>
     fn describe_product(
         &self,
         input: &DescribeProductInput,
     ) -> Result<DescribeProductOutput, DescribeProductError>;
 
-    /// <p>Retrieves information about a specified product, run with administrator access.</p>
+    /// <p>Gets information about the specified product. This operation is run with administrator access.</p>
     fn describe_product_as_admin(
         &self,
         input: &DescribeProductAsAdminInput,
     ) -> Result<DescribeProductAsAdminOutput, DescribeProductAsAdminError>;
 
-    /// <p>Retrieves information about a specified product.</p> <p>This operation is functionally identical to <a>DescribeProduct</a> except that it takes as input <code>ProductViewId</code> instead of <code>ProductId</code>.</p>
+    /// <p>Gets information about the specified product.</p>
     fn describe_product_view(
         &self,
         input: &DescribeProductViewInput,
     ) -> Result<DescribeProductViewOutput, DescribeProductViewError>;
 
-    /// <p>Retrieve detailed information about the provisioned product.</p>
+    /// <p>Gets information about the specified provisioned product.</p>
     fn describe_provisioned_product(
         &self,
         input: &DescribeProvisionedProductInput,
     ) -> Result<DescribeProvisionedProductOutput, DescribeProvisionedProductError>;
 
-    /// <p>Retrieves detailed information about the specified provisioning artifact.</p>
+    /// <p>Gets information about the specified provisioning artifact (also known as a version) for the specified product.</p>
     fn describe_provisioning_artifact(
         &self,
         input: &DescribeProvisioningArtifactInput,
     ) -> Result<DescribeProvisioningArtifactOutput, DescribeProvisioningArtifactError>;
 
-    /// <p>Provides information about parameters required to provision a specified product in a specified manner. Use this operation to obtain the list of <code>ProvisioningArtifactParameters</code> parameters available to call the <a>ProvisionProduct</a> operation for the specified product.</p> <p>If the output contains a TagOption key with an empty list of values, there is a TagOption conflict for that key. The end user cannot take action to fix the conflict, and launch is not blocked. In subsequent calls to the <code>ProvisionProduct</code> operation, do not include conflicted TagOption keys as tags. Calls to <code>ProvisionProduct</code> with empty TagOption values cause the error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i> ". Calls to <code>ProvisionProduct</code> with conflicted TagOption keys automatically tag the provisioned product with the conflicted keys with the value "<code>sc-tagoption-conflict-portfolioId-productId</code>".</p>
+    /// <p>Gets information about the configuration required to provision the specified product using the specified provisioning artifact.</p> <p>If the output contains a TagOption key with an empty list of values, there is a TagOption conflict for that key. The end user cannot take action to fix the conflict, and launch is not blocked. In subsequent calls to <a>ProvisionProduct</a>, do not include conflicted TagOption keys as tags, or this will cause the error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>" and tag the provisioned product with the value <code>sc-tagoption-conflict-portfolioId-productId</code>.</p>
     fn describe_provisioning_parameters(
         &self,
         input: &DescribeProvisioningParametersInput,
     ) -> Result<DescribeProvisioningParametersOutput, DescribeProvisioningParametersError>;
 
-    /// <p>Retrieves a paginated list of the full details of a specific request. Use this operation after calling a request operation (<a>ProvisionProduct</a>, <a>TerminateProvisionedProduct</a>, or <a>UpdateProvisionedProduct</a>). </p>
+    /// <p>Gets information about the specified request operation.</p> <p>Use this operation after calling a request operation (for example, <a>ProvisionProduct</a>, <a>TerminateProvisionedProduct</a>, or <a>UpdateProvisionedProduct</a>). </p>
     fn describe_record(
         &self,
         input: &DescribeRecordInput,
     ) -> Result<DescribeRecordOutput, DescribeRecordError>;
 
-    /// <p>Describes a TagOption.</p>
+    /// <p>Gets information about the specified TagOption.</p>
     fn describe_tag_option(
         &self,
         input: &DescribeTagOptionInput,
@@ -6749,31 +6999,31 @@ pub trait ServiceCatalog {
         input: &DisassociateProductFromPortfolioInput,
     ) -> Result<DisassociateProductFromPortfolioOutput, DisassociateProductFromPortfolioError>;
 
-    /// <p>Disassociates a TagOption from a resource.</p>
+    /// <p>Disassociates the specified TagOption from the specified resource.</p>
     fn disassociate_tag_option_from_resource(
         &self,
         input: &DisassociateTagOptionFromResourceInput,
     ) -> Result<DisassociateTagOptionFromResourceOutput, DisassociateTagOptionFromResourceError>;
 
-    /// <p>Lists details of all portfolios for which sharing was accepted by this account.</p>
+    /// <p>Lists all portfolios for which sharing was accepted by this account.</p>
     fn list_accepted_portfolio_shares(
         &self,
         input: &ListAcceptedPortfolioSharesInput,
     ) -> Result<ListAcceptedPortfolioSharesOutput, ListAcceptedPortfolioSharesError>;
 
-    /// <p>Retrieves detailed constraint information for the specified portfolio and product.</p>
+    /// <p>Lists the constraints for the specified portfolio and product.</p>
     fn list_constraints_for_portfolio(
         &self,
         input: &ListConstraintsForPortfolioInput,
     ) -> Result<ListConstraintsForPortfolioOutput, ListConstraintsForPortfolioError>;
 
-    /// <p>Returns a paginated list of all paths to a specified product. A path is how the user has access to a specified product, and is necessary when provisioning a product. A path also determines the constraints put on the product.</p>
+    /// <p>Lists the paths to the specified product. A path is how the user has access to a specified product, and is necessary when provisioning a product. A path also determines the constraints put on the product.</p>
     fn list_launch_paths(
         &self,
         input: &ListLaunchPathsInput,
     ) -> Result<ListLaunchPathsOutput, ListLaunchPathsError>;
 
-    /// <p>Lists the account IDs that have been authorized sharing of the specified portfolio.</p>
+    /// <p>Lists the account IDs that have access to the specified portfolio.</p>
     fn list_portfolio_access(
         &self,
         input: &ListPortfolioAccessInput,
@@ -6797,97 +7047,97 @@ pub trait ServiceCatalog {
         input: &ListPrincipalsForPortfolioInput,
     ) -> Result<ListPrincipalsForPortfolioOutput, ListPrincipalsForPortfolioError>;
 
-    /// <p>Lists all provisioning artifacts associated with the specified product.</p>
+    /// <p>Lists all provisioning artifacts (also known as versions) for the specified product.</p>
     fn list_provisioning_artifacts(
         &self,
         input: &ListProvisioningArtifactsInput,
     ) -> Result<ListProvisioningArtifactsOutput, ListProvisioningArtifactsError>;
 
-    /// <p>Returns a paginated list of all performed requests, in the form of RecordDetails objects that are filtered as specified.</p>
+    /// <p>Lists the specified requests or all performed requests.</p>
     fn list_record_history(
         &self,
         input: &ListRecordHistoryInput,
     ) -> Result<ListRecordHistoryOutput, ListRecordHistoryError>;
 
-    /// <p>Lists resources associated with a TagOption.</p>
+    /// <p>Lists the resources associated with the specified TagOption.</p>
     fn list_resources_for_tag_option(
         &self,
         input: &ListResourcesForTagOptionInput,
     ) -> Result<ListResourcesForTagOptionOutput, ListResourcesForTagOptionError>;
 
-    /// <p>Lists detailed TagOptions information.</p>
+    /// <p>Lists the specified TagOptions or all TagOptions.</p>
     fn list_tag_options(
         &self,
         input: &ListTagOptionsInput,
     ) -> Result<ListTagOptionsOutput, ListTagOptionsError>;
 
-    /// <p>Requests a <i>provision</i> of a specified product. A <i>provisioned product</i> is a resourced instance for a product. For example, provisioning a CloudFormation-template-backed product results in launching a CloudFormation stack and all the underlying resources that come with it. </p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation. The error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>" indicates that your request contains a tag which has a tag key but no corresponding tag value (value is empty or null). Your call may have included values returned from a <code>DescribeProvisioningParameters</code> call that resulted in a TagOption key with an empty list. This happens when TagOption keys are in conflict. For more information, see <a>DescribeProvisioningParameters</a>.</p>
+    /// <p>Provisions the specified product.</p> <p>A provisioned product is a resourced instance of a product. For example, provisioning a product based on a CloudFormation template launches a CloudFormation stack and its underlying resources. You can check the status of this request using <a>DescribeRecord</a>.</p> <p>If the request contains a tag key with an empty list of values, there is a tag conflict for that key. Do not include conflicted keys as tags, or this will cause the error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>".</p>
     fn provision_product(
         &self,
         input: &ProvisionProductInput,
     ) -> Result<ProvisionProductOutput, ProvisionProductError>;
 
-    /// <p>Rejects an offer to share a portfolio.</p>
+    /// <p>Rejects an offer to share the specified portfolio.</p>
     fn reject_portfolio_share(
         &self,
         input: &RejectPortfolioShareInput,
     ) -> Result<RejectPortfolioShareOutput, RejectPortfolioShareError>;
 
-    /// <p>Returns a paginated list of all the ProvisionedProduct objects that are currently available (not terminated). </p>
+    /// <p>Lists the provisioned products that are available (not terminated).</p>
     fn scan_provisioned_products(
         &self,
         input: &ScanProvisionedProductsInput,
     ) -> Result<ScanProvisionedProductsOutput, ScanProvisionedProductsError>;
 
-    /// <p>Returns a paginated list all of the <code>Products</code> objects to which the caller has access. </p> <p>The output of this operation can be used as input for other operations, such as <a>DescribeProductView</a>.</p>
+    /// <p>Gets information about the products to which the caller has access.</p>
     fn search_products(
         &self,
         input: &SearchProductsInput,
     ) -> Result<SearchProductsOutput, SearchProductsError>;
 
-    /// <p>Retrieves summary and status information about all products created within the caller's account. If a portfolio ID is provided, this operation retrieves information for only those products that are associated with the specified portfolio.</p>
+    /// <p>Gets information about the products for the specified portfolio or all products.</p>
     fn search_products_as_admin(
         &self,
         input: &SearchProductsAsAdminInput,
     ) -> Result<SearchProductsAsAdminOutput, SearchProductsAsAdminError>;
 
-    /// <p>Requests termination of an existing ProvisionedProduct object. If there are <code>Tags</code> associated with the object, they are terminated when the ProvisionedProduct object is terminated. </p> <p>This operation does not delete any records associated with the ProvisionedProduct object.</p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation.</p>
+    /// <p>Terminates the specified provisioned product.</p> <p>This operation does not delete any records associated with the provisioned product.</p> <p>You can check the status of this request using <a>DescribeRecord</a>.</p>
     fn terminate_provisioned_product(
         &self,
         input: &TerminateProvisionedProductInput,
     ) -> Result<TerminateProvisionedProductOutput, TerminateProvisionedProductError>;
 
-    /// <p>Updates an existing constraint.</p>
+    /// <p>Updates the specified constraint.</p>
     fn update_constraint(
         &self,
         input: &UpdateConstraintInput,
     ) -> Result<UpdateConstraintOutput, UpdateConstraintError>;
 
-    /// <p>Updates the specified portfolio's details. This operation does not work with a product that has been shared with you.</p>
+    /// <p>Updates the specified portfolio.</p> <p>You cannot update a product that was shared with you.</p>
     fn update_portfolio(
         &self,
         input: &UpdatePortfolioInput,
     ) -> Result<UpdatePortfolioOutput, UpdatePortfolioError>;
 
-    /// <p>Updates an existing product.</p>
+    /// <p>Updates the specified product.</p>
     fn update_product(
         &self,
         input: &UpdateProductInput,
     ) -> Result<UpdateProductOutput, UpdateProductError>;
 
-    /// <p>Requests updates to the configuration of an existing ProvisionedProduct object. If there are tags associated with the object, they cannot be updated or added with this operation. Depending on the specific updates requested, this operation may update with no interruption, with some interruption, or replace the ProvisionedProduct object entirely. </p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation.</p>
+    /// <p>Requests updates to the configuration of the specified provisioned product.</p> <p>If there are tags associated with the object, they cannot be updated or added. Depending on the specific updates requested, this operation can update with no interruption, with some interruption, or replace the provisioned product entirely.</p> <p>You can check the status of this request using <a>DescribeRecord</a>.</p>
     fn update_provisioned_product(
         &self,
         input: &UpdateProvisionedProductInput,
     ) -> Result<UpdateProvisionedProductOutput, UpdateProvisionedProductError>;
 
-    /// <p>Updates an existing provisioning artifact's information. This operation does not work on a provisioning artifact associated with a product that has been shared with you.</p>
+    /// <p>Updates the specified provisioning artifact (also known as a version) for the specified product.</p> <p>You cannot update a provisioning artifact for a product that was shared with you.</p>
     fn update_provisioning_artifact(
         &self,
         input: &UpdateProvisioningArtifactInput,
     ) -> Result<UpdateProvisioningArtifactOutput, UpdateProvisioningArtifactError>;
 
-    /// <p>Updates an existing TagOption.</p>
+    /// <p>Updates the specified TagOption.</p>
     fn update_tag_option(
         &self,
         input: &UpdateTagOptionInput,
@@ -6923,7 +7173,7 @@ where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    /// <p>Accepts an offer to share a portfolio.</p>
+    /// <p>Accepts an offer to share the specified portfolio.</p>
     fn accept_portfolio_share(
         &self,
         input: &AcceptPortfolioShareInput,
@@ -6999,7 +7249,7 @@ where
         }
     }
 
-    /// <p>Associates a product with a portfolio.</p>
+    /// <p>Associates the specified product with the specified portfolio.</p>
     fn associate_product_with_portfolio(
         &self,
         input: &AssociateProductWithPortfolioInput,
@@ -7036,7 +7286,7 @@ where
         }
     }
 
-    /// <p>Associate a TagOption identifier with a resource identifier.</p>
+    /// <p>Associate the specified TagOption with the specified portfolio or product.</p>
     fn associate_tag_option_with_resource(
         &self,
         input: &AssociateTagOptionWithResourceInput,
@@ -7075,7 +7325,41 @@ where
         }
     }
 
-    /// <p>Creates a new constraint. For more information, see <a href="http://docs.aws.amazon.com/servicecatalog/latest/adminguide/constraints.html">Using Constraints</a>.</p>
+    /// <p>Copies the specified source product to the specified target product or a new product.</p> <p>You can copy a product to the same account or another account. You can copy a product to the same region or another region.</p> <p>This operation is performed asynchronously. To track the progress of the operation, use <a>DescribeCopyProductStatus</a>.</p>
+    fn copy_product(
+        &self,
+        input: &CopyProductInput,
+    ) -> Result<CopyProductOutput, CopyProductError> {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWS242ServiceCatalogService.CopyProduct");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CopyProductOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CopyProductError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Creates a constraint.</p>
     fn create_constraint(
         &self,
         input: &CreateConstraintInput,
@@ -7112,7 +7396,7 @@ where
         }
     }
 
-    /// <p>Creates a new portfolio.</p>
+    /// <p>Creates a portfolio.</p>
     fn create_portfolio(
         &self,
         input: &CreatePortfolioInput,
@@ -7149,7 +7433,7 @@ where
         }
     }
 
-    /// <p>Creates a new portfolio share.</p>
+    /// <p>Shares the specified portfolio with the specified account.</p>
     fn create_portfolio_share(
         &self,
         input: &CreatePortfolioShareInput,
@@ -7186,7 +7470,7 @@ where
         }
     }
 
-    /// <p>Creates a new product.</p>
+    /// <p>Creates a product.</p>
     fn create_product(
         &self,
         input: &CreateProductInput,
@@ -7220,7 +7504,7 @@ where
         }
     }
 
-    /// <p>Create a new provisioning artifact for the specified product. This operation does not work with a product that has been shared with you.</p> <p>See the bottom of this topic for an example JSON request.</p>
+    /// <p>Creates a provisioning artifact (also known as a version) for the specified product.</p> <p>You cannot create a provisioning artifact for a product that was shared with you.</p>
     fn create_provisioning_artifact(
         &self,
         input: &CreateProvisioningArtifactInput,
@@ -7257,7 +7541,7 @@ where
         }
     }
 
-    /// <p>Create a new TagOption.</p>
+    /// <p>Creates a TagOption.</p>
     fn create_tag_option(
         &self,
         input: &CreateTagOptionInput,
@@ -7331,7 +7615,7 @@ where
         }
     }
 
-    /// <p>Deletes the specified portfolio. This operation does not work with a portfolio that has been shared with you or if it has products, users, constraints, or shared accounts associated with it.</p>
+    /// <p>Deletes the specified portfolio.</p> <p>You cannot delete a portfolio if it was shared with you or if it has associated products, users, constraints, or shared accounts.</p>
     fn delete_portfolio(
         &self,
         input: &DeletePortfolioInput,
@@ -7368,7 +7652,7 @@ where
         }
     }
 
-    /// <p>Deletes the specified portfolio share.</p>
+    /// <p>Stops sharing the specified portfolio with the specified account.</p>
     fn delete_portfolio_share(
         &self,
         input: &DeletePortfolioShareInput,
@@ -7405,7 +7689,7 @@ where
         }
     }
 
-    /// <p>Deletes the specified product. This operation does not work with a product that has been shared with you or is associated with a portfolio. </p>
+    /// <p>Deletes the specified product.</p> <p>You cannot delete a product if it was shared with you or is associated with a portfolio.</p>
     fn delete_product(
         &self,
         input: &DeleteProductInput,
@@ -7439,7 +7723,7 @@ where
         }
     }
 
-    /// <p>Deletes the specified provisioning artifact. This operation does not work on a provisioning artifact associated with a product that has been shared with you, or on the last provisioning artifact associated with a product (a product must have at least one provisioning artifact).</p>
+    /// <p>Deletes the specified provisioning artifact (also known as a version) for the specified product.</p> <p>You cannot delete a provisioning artifact associated with a product that was shared with you. You cannot delete the last provisioning artifact for a product, because a product must have at least one provisioning artifact.</p>
     fn delete_provisioning_artifact(
         &self,
         input: &DeleteProvisioningArtifactInput,
@@ -7476,7 +7760,7 @@ where
         }
     }
 
-    /// <p>Retrieves detailed information for a specified constraint.</p>
+    /// <p>Gets information about the specified constraint.</p>
     fn describe_constraint(
         &self,
         input: &DescribeConstraintInput,
@@ -7513,7 +7797,44 @@ where
         }
     }
 
-    /// <p>Retrieves detailed information and any tags associated with the specified portfolio.</p>
+    /// <p>Gets the status of the specified copy product operation.</p>
+    fn describe_copy_product_status(
+        &self,
+        input: &DescribeCopyProductStatusInput,
+    ) -> Result<DescribeCopyProductStatusOutput, DescribeCopyProductStatusError> {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.DescribeCopyProductStatus",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeCopyProductStatusOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeCopyProductStatusError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Gets information about the specified portfolio.</p>
     fn describe_portfolio(
         &self,
         input: &DescribePortfolioInput,
@@ -7550,7 +7871,7 @@ where
         }
     }
 
-    /// <p>Retrieves information about a specified product.</p> <p>This operation is functionally identical to <a>DescribeProductView</a> except that it takes as input <code>ProductId</code> instead of <code>ProductViewId</code>.</p>
+    /// <p>Gets information about the specified product.</p>
     fn describe_product(
         &self,
         input: &DescribeProductInput,
@@ -7587,7 +7908,7 @@ where
         }
     }
 
-    /// <p>Retrieves information about a specified product, run with administrator access.</p>
+    /// <p>Gets information about the specified product. This operation is run with administrator access.</p>
     fn describe_product_as_admin(
         &self,
         input: &DescribeProductAsAdminInput,
@@ -7624,7 +7945,7 @@ where
         }
     }
 
-    /// <p>Retrieves information about a specified product.</p> <p>This operation is functionally identical to <a>DescribeProduct</a> except that it takes as input <code>ProductViewId</code> instead of <code>ProductId</code>.</p>
+    /// <p>Gets information about the specified product.</p>
     fn describe_product_view(
         &self,
         input: &DescribeProductViewInput,
@@ -7661,7 +7982,7 @@ where
         }
     }
 
-    /// <p>Retrieve detailed information about the provisioned product.</p>
+    /// <p>Gets information about the specified provisioned product.</p>
     fn describe_provisioned_product(
         &self,
         input: &DescribeProvisionedProductInput,
@@ -7698,7 +8019,7 @@ where
         }
     }
 
-    /// <p>Retrieves detailed information about the specified provisioning artifact.</p>
+    /// <p>Gets information about the specified provisioning artifact (also known as a version) for the specified product.</p>
     fn describe_provisioning_artifact(
         &self,
         input: &DescribeProvisioningArtifactInput,
@@ -7735,7 +8056,7 @@ where
         }
     }
 
-    /// <p>Provides information about parameters required to provision a specified product in a specified manner. Use this operation to obtain the list of <code>ProvisioningArtifactParameters</code> parameters available to call the <a>ProvisionProduct</a> operation for the specified product.</p> <p>If the output contains a TagOption key with an empty list of values, there is a TagOption conflict for that key. The end user cannot take action to fix the conflict, and launch is not blocked. In subsequent calls to the <code>ProvisionProduct</code> operation, do not include conflicted TagOption keys as tags. Calls to <code>ProvisionProduct</code> with empty TagOption values cause the error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i> ". Calls to <code>ProvisionProduct</code> with conflicted TagOption keys automatically tag the provisioned product with the conflicted keys with the value "<code>sc-tagoption-conflict-portfolioId-productId</code>".</p>
+    /// <p>Gets information about the configuration required to provision the specified product using the specified provisioning artifact.</p> <p>If the output contains a TagOption key with an empty list of values, there is a TagOption conflict for that key. The end user cannot take action to fix the conflict, and launch is not blocked. In subsequent calls to <a>ProvisionProduct</a>, do not include conflicted TagOption keys as tags, or this will cause the error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>" and tag the provisioned product with the value <code>sc-tagoption-conflict-portfolioId-productId</code>.</p>
     fn describe_provisioning_parameters(
         &self,
         input: &DescribeProvisioningParametersInput,
@@ -7774,7 +8095,7 @@ where
         }
     }
 
-    /// <p>Retrieves a paginated list of the full details of a specific request. Use this operation after calling a request operation (<a>ProvisionProduct</a>, <a>TerminateProvisionedProduct</a>, or <a>UpdateProvisionedProduct</a>). </p>
+    /// <p>Gets information about the specified request operation.</p> <p>Use this operation after calling a request operation (for example, <a>ProvisionProduct</a>, <a>TerminateProvisionedProduct</a>, or <a>UpdateProvisionedProduct</a>). </p>
     fn describe_record(
         &self,
         input: &DescribeRecordInput,
@@ -7808,7 +8129,7 @@ where
         }
     }
 
-    /// <p>Describes a TagOption.</p>
+    /// <p>Gets information about the specified TagOption.</p>
     fn describe_tag_option(
         &self,
         input: &DescribeTagOptionInput,
@@ -7924,7 +8245,7 @@ where
         }
     }
 
-    /// <p>Disassociates a TagOption from a resource.</p>
+    /// <p>Disassociates the specified TagOption from the specified resource.</p>
     fn disassociate_tag_option_from_resource(
         &self,
         input: &DisassociateTagOptionFromResourceInput,
@@ -7964,7 +8285,7 @@ where
         }
     }
 
-    /// <p>Lists details of all portfolios for which sharing was accepted by this account.</p>
+    /// <p>Lists all portfolios for which sharing was accepted by this account.</p>
     fn list_accepted_portfolio_shares(
         &self,
         input: &ListAcceptedPortfolioSharesInput,
@@ -8001,7 +8322,7 @@ where
         }
     }
 
-    /// <p>Retrieves detailed constraint information for the specified portfolio and product.</p>
+    /// <p>Lists the constraints for the specified portfolio and product.</p>
     fn list_constraints_for_portfolio(
         &self,
         input: &ListConstraintsForPortfolioInput,
@@ -8038,7 +8359,7 @@ where
         }
     }
 
-    /// <p>Returns a paginated list of all paths to a specified product. A path is how the user has access to a specified product, and is necessary when provisioning a product. A path also determines the constraints put on the product.</p>
+    /// <p>Lists the paths to the specified product. A path is how the user has access to a specified product, and is necessary when provisioning a product. A path also determines the constraints put on the product.</p>
     fn list_launch_paths(
         &self,
         input: &ListLaunchPathsInput,
@@ -8075,7 +8396,7 @@ where
         }
     }
 
-    /// <p>Lists the account IDs that have been authorized sharing of the specified portfolio.</p>
+    /// <p>Lists the account IDs that have access to the specified portfolio.</p>
     fn list_portfolio_access(
         &self,
         input: &ListPortfolioAccessInput,
@@ -8220,7 +8541,7 @@ where
         }
     }
 
-    /// <p>Lists all provisioning artifacts associated with the specified product.</p>
+    /// <p>Lists all provisioning artifacts (also known as versions) for the specified product.</p>
     fn list_provisioning_artifacts(
         &self,
         input: &ListProvisioningArtifactsInput,
@@ -8257,7 +8578,7 @@ where
         }
     }
 
-    /// <p>Returns a paginated list of all performed requests, in the form of RecordDetails objects that are filtered as specified.</p>
+    /// <p>Lists the specified requests or all performed requests.</p>
     fn list_record_history(
         &self,
         input: &ListRecordHistoryInput,
@@ -8294,7 +8615,7 @@ where
         }
     }
 
-    /// <p>Lists resources associated with a TagOption.</p>
+    /// <p>Lists the resources associated with the specified TagOption.</p>
     fn list_resources_for_tag_option(
         &self,
         input: &ListResourcesForTagOptionInput,
@@ -8331,7 +8652,7 @@ where
         }
     }
 
-    /// <p>Lists detailed TagOptions information.</p>
+    /// <p>Lists the specified TagOptions or all TagOptions.</p>
     fn list_tag_options(
         &self,
         input: &ListTagOptionsInput,
@@ -8365,7 +8686,7 @@ where
         }
     }
 
-    /// <p>Requests a <i>provision</i> of a specified product. A <i>provisioned product</i> is a resourced instance for a product. For example, provisioning a CloudFormation-template-backed product results in launching a CloudFormation stack and all the underlying resources that come with it. </p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation. The error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>" indicates that your request contains a tag which has a tag key but no corresponding tag value (value is empty or null). Your call may have included values returned from a <code>DescribeProvisioningParameters</code> call that resulted in a TagOption key with an empty list. This happens when TagOption keys are in conflict. For more information, see <a>DescribeProvisioningParameters</a>.</p>
+    /// <p>Provisions the specified product.</p> <p>A provisioned product is a resourced instance of a product. For example, provisioning a product based on a CloudFormation template launches a CloudFormation stack and its underlying resources. You can check the status of this request using <a>DescribeRecord</a>.</p> <p>If the request contains a tag key with an empty list of values, there is a tag conflict for that key. Do not include conflicted keys as tags, or this will cause the error "Parameter validation failed: Missing required parameter in Tags[<i>N</i>]:<i>Value</i>".</p>
     fn provision_product(
         &self,
         input: &ProvisionProductInput,
@@ -8402,7 +8723,7 @@ where
         }
     }
 
-    /// <p>Rejects an offer to share a portfolio.</p>
+    /// <p>Rejects an offer to share the specified portfolio.</p>
     fn reject_portfolio_share(
         &self,
         input: &RejectPortfolioShareInput,
@@ -8439,7 +8760,7 @@ where
         }
     }
 
-    /// <p>Returns a paginated list of all the ProvisionedProduct objects that are currently available (not terminated). </p>
+    /// <p>Lists the provisioned products that are available (not terminated).</p>
     fn scan_provisioned_products(
         &self,
         input: &ScanProvisionedProductsInput,
@@ -8476,7 +8797,7 @@ where
         }
     }
 
-    /// <p>Returns a paginated list all of the <code>Products</code> objects to which the caller has access. </p> <p>The output of this operation can be used as input for other operations, such as <a>DescribeProductView</a>.</p>
+    /// <p>Gets information about the products to which the caller has access.</p>
     fn search_products(
         &self,
         input: &SearchProductsInput,
@@ -8510,7 +8831,7 @@ where
         }
     }
 
-    /// <p>Retrieves summary and status information about all products created within the caller's account. If a portfolio ID is provided, this operation retrieves information for only those products that are associated with the specified portfolio.</p>
+    /// <p>Gets information about the products for the specified portfolio or all products.</p>
     fn search_products_as_admin(
         &self,
         input: &SearchProductsAsAdminInput,
@@ -8547,7 +8868,7 @@ where
         }
     }
 
-    /// <p>Requests termination of an existing ProvisionedProduct object. If there are <code>Tags</code> associated with the object, they are terminated when the ProvisionedProduct object is terminated. </p> <p>This operation does not delete any records associated with the ProvisionedProduct object.</p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation.</p>
+    /// <p>Terminates the specified provisioned product.</p> <p>This operation does not delete any records associated with the provisioned product.</p> <p>You can check the status of this request using <a>DescribeRecord</a>.</p>
     fn terminate_provisioned_product(
         &self,
         input: &TerminateProvisionedProductInput,
@@ -8584,7 +8905,7 @@ where
         }
     }
 
-    /// <p>Updates an existing constraint.</p>
+    /// <p>Updates the specified constraint.</p>
     fn update_constraint(
         &self,
         input: &UpdateConstraintInput,
@@ -8621,7 +8942,7 @@ where
         }
     }
 
-    /// <p>Updates the specified portfolio's details. This operation does not work with a product that has been shared with you.</p>
+    /// <p>Updates the specified portfolio.</p> <p>You cannot update a product that was shared with you.</p>
     fn update_portfolio(
         &self,
         input: &UpdatePortfolioInput,
@@ -8658,7 +8979,7 @@ where
         }
     }
 
-    /// <p>Updates an existing product.</p>
+    /// <p>Updates the specified product.</p>
     fn update_product(
         &self,
         input: &UpdateProductInput,
@@ -8692,7 +9013,7 @@ where
         }
     }
 
-    /// <p>Requests updates to the configuration of an existing ProvisionedProduct object. If there are tags associated with the object, they cannot be updated or added with this operation. Depending on the specific updates requested, this operation may update with no interruption, with some interruption, or replace the ProvisionedProduct object entirely. </p> <p>You can check the status of this request using the <a>DescribeRecord</a> operation.</p>
+    /// <p>Requests updates to the configuration of the specified provisioned product.</p> <p>If there are tags associated with the object, they cannot be updated or added. Depending on the specific updates requested, this operation can update with no interruption, with some interruption, or replace the provisioned product entirely.</p> <p>You can check the status of this request using <a>DescribeRecord</a>.</p>
     fn update_provisioned_product(
         &self,
         input: &UpdateProvisionedProductInput,
@@ -8729,7 +9050,7 @@ where
         }
     }
 
-    /// <p>Updates an existing provisioning artifact's information. This operation does not work on a provisioning artifact associated with a product that has been shared with you.</p>
+    /// <p>Updates the specified provisioning artifact (also known as a version) for the specified product.</p> <p>You cannot update a provisioning artifact for a product that was shared with you.</p>
     fn update_provisioning_artifact(
         &self,
         input: &UpdateProvisioningArtifactInput,
@@ -8766,7 +9087,7 @@ where
         }
     }
 
-    /// <p>Updates an existing TagOption.</p>
+    /// <p>Updates the specified TagOption.</p>
     fn update_tag_option(
         &self,
         input: &UpdateTagOptionInput,

@@ -27,6 +27,46 @@ use serde_json;
 use rusoto_core::signature::SignedRequest;
 use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
+/// <p>Account takeover action type.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct AccountTakeoverActionType {
+    /// <p><p>The event action.</p> <ul> <li> <p> <code>BLOCK</code> Choosing this action will block the request.</p> </li> <li> <p> <code>MFA<em>IF</em>CONFIGURED</code> Throw MFA challenge if user has configured it, else allow the request.</p> </li> <li> <p> <code>MFA<em>REQUIRED</code> Throw MFA challenge if user has configured it, else block the request.</p> </li> <li> <p> <code>NO</em>ACTION</code> Allow the user sign-in.</p> </li> </ul></p>
+    #[serde(rename = "EventAction")]
+    pub event_action: String,
+    /// <p>Flag specifying whether to send a notification.</p>
+    #[serde(rename = "Notify")]
+    pub notify: bool,
+}
+
+/// <p>Account takeover actions type.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct AccountTakeoverActionsType {
+    /// <p>Action to take for a high risk.</p>
+    #[serde(rename = "HighAction")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub high_action: Option<AccountTakeoverActionType>,
+    /// <p>Action to take for a low risk.</p>
+    #[serde(rename = "LowAction")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub low_action: Option<AccountTakeoverActionType>,
+    /// <p>Action to take for a medium risk.</p>
+    #[serde(rename = "MediumAction")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub medium_action: Option<AccountTakeoverActionType>,
+}
+
+/// <p>Configuration for mitigation actions and notification for different levels of risk detected for a potential account takeover.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct AccountTakeoverRiskConfigurationType {
+    /// <p>Account takeover risk configuration actions</p>
+    #[serde(rename = "Actions")]
+    pub actions: AccountTakeoverActionsType,
+    /// <p>The notify configuration used to construct email notifications.</p>
+    #[serde(rename = "NotifyConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notify_configuration: Option<NotifyConfigurationType>,
+}
+
 /// <p>Represents the request to add custom attributes.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AddCustomAttributesRequest {
@@ -70,14 +110,14 @@ pub struct AdminConfirmSignUpRequest {
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AdminConfirmSignUpResponse;
 
-/// <p>The type of configuration for creating a new user profile.</p>
+/// <p>The configuration for creating a new user profile.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct AdminCreateUserConfigType {
     /// <p>Set to <code>True</code> if only the administrator is allowed to create user profiles. Set to <code>False</code> if users can sign themselves up via an app.</p>
     #[serde(rename = "AllowAdminCreateUserOnly")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allow_admin_create_user_only: Option<bool>,
-    /// <p>The message template to be used for the welcome message to new users.</p>
+    /// <p>The message template to be used for the welcome message to new users.</p> <p>See also <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pool-settings-message-customizations.html#cognito-user-pool-settings-user-invitation-message-customization">Customizing User Invitation Messages</a>.</p>
     #[serde(rename = "InviteMessageTemplate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub invite_message_template: Option<MessageTemplateType>,
@@ -106,7 +146,7 @@ pub struct AdminCreateUserRequest {
     #[serde(rename = "TemporaryPassword")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub temporary_password: Option<String>,
-    /// <p><p>An array of name-value pairs that contain user attributes and attribute values to be set for the user to be created. You can create a user without specifying any attributes other than <code>Username</code>. However, any attributes that you specify as required (in <a href="API_CreateUserPool.html">CreateUserPool</a> or in the <b>Attributes</b> tab of the console) must be supplied either by you (in your call to <code>AdminCreateUser</code>) or by the user (when he or she signs up in response to your welcome message).</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p> <p>To send a message inviting the user to sign up, you must specify the user&#39;s email address or phone number. This can be done in your call to AdminCreateUser or in the <b>Users</b> tab of the Amazon Cognito console for managing your user pools.</p> <p>In your call to <code>AdminCreateUser</code>, you can set the <code>email<em>verified</code> attribute to <code>True</code>, and you can set the <code>phone</em>number<em>verified</code> attribute to <code>True</code>. (You can also do this by calling &lt;a href=&quot;API</em>AdminUpdateUserAttributes.html&quot;&gt;AdminUpdateUserAttributes</a>.)</p> <ul> <li> <p> <b>email</b>: The email address of the user to whom the message that contains the code and username will be sent. Required if the <code>email<em>verified</code> attribute is set to <code>True</code>, or if <code>&quot;EMAIL&quot;</code> is specified in the <code>DesiredDeliveryMediums</code> parameter.</p> </li> <li> <p> <b>phone</em>number</b>: The phone number of the user to whom the message that contains the code and username will be sent. Required if the <code>phone<em>number</em>verified</code> attribute is set to <code>True</code>, or if <code>&quot;SMS&quot;</code> is specified in the <code>DesiredDeliveryMediums</code> parameter.</p> </li> </ul></p>
+    /// <p><p>An array of name-value pairs that contain user attributes and attribute values to be set for the user to be created. You can create a user without specifying any attributes other than <code>Username</code>. However, any attributes that you specify as required (in or in the <b>Attributes</b> tab of the console) must be supplied either by you (in your call to <code>AdminCreateUser</code>) or by the user (when he or she signs up in response to your welcome message).</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p> <p>To send a message inviting the user to sign up, you must specify the user&#39;s email address or phone number. This can be done in your call to AdminCreateUser or in the <b>Users</b> tab of the Amazon Cognito console for managing your user pools.</p> <p>In your call to <code>AdminCreateUser</code>, you can set the <code>email<em>verified</code> attribute to <code>True</code>, and you can set the <code>phone</em>number<em>verified</code> attribute to <code>True</code>. (You can also do this by calling .)</p> <ul> <li> <p> <b>email</b>: The email address of the user to whom the message that contains the code and username will be sent. Required if the <code>email</em>verified</code> attribute is set to <code>True</code>, or if <code>&quot;EMAIL&quot;</code> is specified in the <code>DesiredDeliveryMediums</code> parameter.</p> </li> <li> <p> <b>phone<em>number</b>: The phone number of the user to whom the message that contains the code and username will be sent. Required if the <code>phone</em>number_verified</code> attribute is set to <code>True</code>, or if <code>&quot;SMS&quot;</code> is specified in the <code>DesiredDeliveryMediums</code> parameter.</p> </li> </ul></p>
     #[serde(rename = "UserAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_attributes: Option<Vec<AttributeType>>,
@@ -261,6 +301,10 @@ pub struct AdminGetUserResponse {
     #[serde(rename = "MFAOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mfa_options: Option<Vec<MFAOptionType>>,
+    /// <p>The user's preferred MFA setting.</p>
+    #[serde(rename = "PreferredMfaSetting")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preferred_mfa_setting: Option<String>,
     /// <p>An array of name-value pairs representing user attributes.</p>
     #[serde(rename = "UserAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -273,6 +317,10 @@ pub struct AdminGetUserResponse {
     #[serde(rename = "UserLastModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_last_modified_date: Option<f64>,
+    /// <p>The list of the user's MFA settings.</p>
+    #[serde(rename = "UserMFASettingList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_mfa_setting_list: Option<Vec<String>>,
     /// <p><p>The user status. Can be one of the following:</p> <ul> <li> <p>UNCONFIRMED - User has been created but not confirmed.</p> </li> <li> <p>CONFIRMED - User has been confirmed.</p> </li> <li> <p>ARCHIVED - User is no longer active.</p> </li> <li> <p>COMPROMISED - User is disabled due to a potential security threat.</p> </li> <li> <p>UNKNOWN - User status is not known.</p> </li> </ul></p>
     #[serde(rename = "UserStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -285,6 +333,10 @@ pub struct AdminGetUserResponse {
 /// <p>Initiates the authorization request, as an administrator.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AdminInitiateAuthRequest {
+    /// <p>The analytics metadata for collecting Amazon Pinpoint metrics for <code>AdminInitiateAuth</code> calls.</p>
+    #[serde(rename = "AnalyticsMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub analytics_metadata: Option<AnalyticsMetadataType>,
     /// <p><p>The authentication flow for this call to execute. The API action will depend on this value. For example:</p> <ul> <li> <p> <code>REFRESH<em>TOKEN</em>AUTH</code> will take in a valid refresh token and return new tokens.</p> </li> <li> <p> <code>USER<em>SRP</em>AUTH</code> will take in <code>USERNAME</code> and <code>SRP<em>A</code> and return the SRP variables to be used for next challenge execution.</p> </li> </ul> <p>Valid values include:</p> <ul> <li> <p> <code>USER</em>SRP<em>AUTH</code>: Authentication flow for the Secure Remote Password (SRP) protocol.</p> </li> <li> <p> <code>REFRESH</em>TOKEN<em>AUTH</code>/<code>REFRESH</em>TOKEN</code>: Authentication flow for refreshing the access token and ID token by supplying a valid refresh token.</p> </li> <li> <p> <code>CUSTOM<em>AUTH</code>: Custom authentication flow.</p> </li> <li> <p> <code>ADMIN</em>NO<em>SRP</em>AUTH</code>: Non-SRP authentication flow; you can pass in the USERNAME and PASSWORD directly if the flow is enabled for calling the app client.</p> </li> </ul></p>
     #[serde(rename = "AuthFlow")]
     pub auth_flow: String,
@@ -299,6 +351,10 @@ pub struct AdminInitiateAuthRequest {
     #[serde(rename = "ClientMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_metadata: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Contextual data such as the user's device fingerprint, IP address, or location used for evaluating the risk of an unexpected event by Amazon Cognito advanced security.</p>
+    #[serde(rename = "ContextData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub context_data: Option<ContextDataType>,
     /// <p>The ID of the Amazon Cognito user pool.</p>
     #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
@@ -327,7 +383,7 @@ pub struct AdminInitiateAuthResponse {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AdminLinkProviderForUserRequest {
-    /// <p>The existing user in the user pool to be linked to the external identity provider user account. Can be a native (Username + Password) Cognito User Pools user or a federated user (for example, a SAML or Facebook user). If the user doesn't exist, an exception is thrown. This is the user that is returned when the new user (with the linked identity provider attribute) signs in.</p> <p>The <code>ProviderAttributeValue</code> for the <code>DestinationUser</code> must match the username for the user in the user pool. The <code>ProviderAttributeName</code> will always be ignored.</p>
+    /// <p>The existing user in the user pool to be linked to the external identity provider user account. Can be a native (Username + Password) Cognito User Pools user or a federated user (for example, a SAML or Facebook user). If the user doesn't exist, an exception is thrown. This is the user that is returned when the new user (with the linked identity provider attribute) signs in.</p> <p>For a native username + password user, the <code>ProviderAttributeValue</code> for the <code>DestinationUser</code> should be the username in the user pool. For a federated user, it should be the provider-specific <code>user_id</code>.</p> <p>The <code>ProviderAttributeName</code> of the <code>DestinationUser</code> is ignored.</p> <p>The <code>ProviderName</code> should be set to <code>Cognito</code> for users in Cognito user pools.</p>
     #[serde(rename = "DestinationUser")]
     pub destination_user: ProviderUserIdentifierType,
     /// <p>An external identity provider account for a user who does not currently exist yet in the user pool. This user must be a federated user (for example, a SAML or Facebook user), not another native user.</p> <p>If the <code>SourceUser</code> is a federated social identity provider user (Facebook, Google, or Login with Amazon), you must set the <code>ProviderAttributeName</code> to <code>Cognito_Subject</code>. For social identity providers, the <code>ProviderName</code> will be <code>Facebook</code>, <code>Google</code>, or <code>LoginWithAmazon</code>, and Cognito will automatically parse the Facebook, Google, and Login with Amazon tokens for <code>id</code>, <code>sub</code>, and <code>user_id</code>, respectively. The <code>ProviderAttributeValue</code> for the user must be the same value as the <code>id</code>, <code>sub</code>, or <code>user_id</code> value found in the social identity provider token.</p> <p/> <p>For SAML, the <code>ProviderAttributeName</code> can be any value that matches a claim in the SAML assertion. If you wish to link SAML users based on the subject of the SAML assertion, you should map the subject to a claim through the SAML identity provider and submit that claim name as the <code>ProviderAttributeName</code>. If you set <code>ProviderAttributeName</code> to <code>Cognito_Subject</code>, Cognito will automatically parse the default unique identifier found in the subject from the SAML token.</p>
@@ -404,6 +460,36 @@ pub struct AdminListGroupsForUserResponse {
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct AdminListUserAuthEventsRequest {
+    /// <p>The maximum number of authentication events to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A pagination token.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The user pool ID.</p>
+    #[serde(rename = "UserPoolId")]
+    pub user_pool_id: String,
+    /// <p>The user pool username.</p>
+    #[serde(rename = "Username")]
+    pub username: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct AdminListUserAuthEventsResponse {
+    /// <p>The response object. It includes the <code>EventID</code>, <code>EventType</code>, <code>CreationDate</code>, <code>EventRisk</code>, and <code>EventResponse</code>.</p>
+    #[serde(rename = "AuthEvents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auth_events: Option<Vec<AuthEventType>>,
+    /// <p>A pagination token.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct AdminRemoveUserFromGroupRequest {
     /// <p>The group name.</p>
     #[serde(rename = "GroupName")]
@@ -434,7 +520,11 @@ pub struct AdminResetUserPasswordResponse;
 /// <p>The request to respond to the authentication challenge, as an administrator.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AdminRespondToAuthChallengeRequest {
-    /// <p>The challenge name. For more information, see <a href="API_AdminInitiateAuth.html">AdminInitiateAuth</a>.</p>
+    /// <p>The analytics metadata for collecting Amazon Pinpoint metrics for <code>AdminRespondToAuthChallenge</code> calls.</p>
+    #[serde(rename = "AnalyticsMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub analytics_metadata: Option<AnalyticsMetadataType>,
+    /// <p>The challenge name. For more information, see .</p>
     #[serde(rename = "ChallengeName")]
     pub challenge_name: String,
     /// <p>The challenge responses. These are inputs corresponding to the value of <code>ChallengeName</code>, for example:</p> <ul> <li> <p> <code>SMS_MFA</code>: <code>SMS_MFA_CODE</code>, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret).</p> </li> <li> <p> <code>PASSWORD_VERIFIER</code>: <code>PASSWORD_CLAIM_SIGNATURE</code>, <code>PASSWORD_CLAIM_SECRET_BLOCK</code>, <code>TIMESTAMP</code>, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret).</p> </li> <li> <p> <code>ADMIN_NO_SRP_AUTH</code>: <code>PASSWORD</code>, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret). </p> </li> <li> <p> <code>NEW_PASSWORD_REQUIRED</code>: <code>NEW_PASSWORD</code>, any other required attributes, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret). </p> </li> </ul> <p>The value of the <code>USERNAME</code> attribute must be the user's actual username, not an alias (such as email address or phone number). To make this easier, the <code>AdminInitiateAuth</code> response includes the actual username value in the <code>USERNAMEUSER_ID_FOR_SRP</code> attribute, even if you specified an alias in your call to <code>AdminInitiateAuth</code>.</p>
@@ -444,6 +534,10 @@ pub struct AdminRespondToAuthChallengeRequest {
     /// <p>The app client ID.</p>
     #[serde(rename = "ClientId")]
     pub client_id: String,
+    /// <p>Contextual data such as the user's device fingerprint, IP address, or location used for evaluating the risk of an unexpected event by Amazon Cognito advanced security.</p>
+    #[serde(rename = "ContextData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub context_data: Option<ContextDataType>,
     /// <p>The session which should be passed both ways in challenge-response calls to the service. If <code>InitiateAuth</code> or <code>RespondToAuthChallenge</code> API call determines that the caller needs to go through another challenge, they return a session with other challenge parameters. This session should be passed as it is to the next <code>RespondToAuthChallenge</code> API call.</p>
     #[serde(rename = "Session")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -460,19 +554,40 @@ pub struct AdminRespondToAuthChallengeResponse {
     #[serde(rename = "AuthenticationResult")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_result: Option<AuthenticationResultType>,
-    /// <p>The name of the challenge. For more information, see <a href="API_AdminInitiateAuth.html">AdminInitiateAuth</a>.</p>
+    /// <p>The name of the challenge. For more information, see .</p>
     #[serde(rename = "ChallengeName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub challenge_name: Option<String>,
-    /// <p>The challenge parameters. For more information, see <a href="API_AdminInitiateAuth.html">AdminInitiateAuth</a>.</p>
+    /// <p>The challenge parameters. For more information, see .</p>
     #[serde(rename = "ChallengeParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub challenge_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The session which should be passed both ways in challenge-response calls to the service. If the <a href="API_InitiateAuth.html">InitiateAuth</a> or <a href="API_RespondToAuthChallenge.html">RespondToAuthChallenge</a> API call determines that the caller needs to go through another challenge, they return a session with other challenge parameters. This session should be passed as it is to the next <code>RespondToAuthChallenge</code> API call.</p>
+    /// <p>The session which should be passed both ways in challenge-response calls to the service. If the or API call determines that the caller needs to go through another challenge, they return a session with other challenge parameters. This session should be passed as it is to the next <code>RespondToAuthChallenge</code> API call.</p>
     #[serde(rename = "Session")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub session: Option<String>,
 }
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct AdminSetUserMFAPreferenceRequest {
+    /// <p>The SMS text message MFA settings.</p>
+    #[serde(rename = "SMSMfaSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sms_mfa_settings: Option<SMSMfaSettingsType>,
+    /// <p>The time-based one-time password software token MFA settings.</p>
+    #[serde(rename = "SoftwareTokenMfaSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub software_token_mfa_settings: Option<SoftwareTokenMfaSettingsType>,
+    /// <p>The user pool ID.</p>
+    #[serde(rename = "UserPoolId")]
+    pub user_pool_id: String,
+    /// <p>The user pool username.</p>
+    #[serde(rename = "Username")]
+    pub username: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct AdminSetUserMFAPreferenceResponse;
 
 /// <p>Represents the request to set user settings as an administrator.</p>
 #[derive(Default, Debug, Clone, Serialize)]
@@ -491,6 +606,25 @@ pub struct AdminSetUserSettingsRequest {
 /// <p>Represents the response from the server to set user settings as an administrator.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AdminSetUserSettingsResponse;
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct AdminUpdateAuthEventFeedbackRequest {
+    /// <p>The authentication event ID.</p>
+    #[serde(rename = "EventId")]
+    pub event_id: String,
+    /// <p>The authentication event feedback value.</p>
+    #[serde(rename = "FeedbackValue")]
+    pub feedback_value: String,
+    /// <p>The user pool ID.</p>
+    #[serde(rename = "UserPoolId")]
+    pub user_pool_id: String,
+    /// <p>The user pool username.</p>
+    #[serde(rename = "Username")]
+    pub username: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct AdminUpdateAuthEventFeedbackResponse;
 
 /// <p>The request to update the device status, as an administrator.</p>
 #[derive(Default, Debug, Clone, Serialize)]
@@ -547,6 +681,57 @@ pub struct AdminUserGlobalSignOutRequest {
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AdminUserGlobalSignOutResponse;
 
+/// <p>The Amazon Pinpoint analytics configuration for collecting metrics for a user pool.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct AnalyticsConfigurationType {
+    /// <p>The application ID for an Amazon Pinpoint application.</p>
+    #[serde(rename = "ApplicationId")]
+    pub application_id: String,
+    /// <p>The external ID.</p>
+    #[serde(rename = "ExternalId")]
+    pub external_id: String,
+    /// <p>The ARN of an IAM role that authorizes Amazon Cognito to publish events to Amazon Pinpoint analytics.</p>
+    #[serde(rename = "RoleArn")]
+    pub role_arn: String,
+    /// <p>If <code>UserDataShared</code> is <code>true</code>, Amazon Cognito will include user data in the events it publishes to Amazon Pinpoint analytics.</p>
+    #[serde(rename = "UserDataShared")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_data_shared: Option<bool>,
+}
+
+/// <p>An Amazon Pinpoint analytics endpoint.</p> <p>An endpoint uniquely identifies a mobile device, email address, or phone number that can receive messages from Amazon Pinpoint analytics.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct AnalyticsMetadataType {
+    /// <p>The endpoint ID.</p>
+    #[serde(rename = "AnalyticsEndpointId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub analytics_endpoint_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct AssociateSoftwareTokenRequest {
+    /// <p>The access token.</p>
+    #[serde(rename = "AccessToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_token: Option<String>,
+    /// <p>The session which should be passed both ways in challenge-response calls to the service. This allows authentication of the user as part of the MFA setup process.</p>
+    #[serde(rename = "Session")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub session: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct AssociateSoftwareTokenResponse {
+    /// <p>A unique generated shared secret code that is used in the TOTP algorithm to generate a one time code.</p>
+    #[serde(rename = "SecretCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub secret_code: Option<String>,
+    /// <p>The session which should be passed both ways in challenge-response calls to the service. This allows authentication of the user as part of the MFA setup process.</p>
+    #[serde(rename = "Session")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub session: Option<String>,
+}
+
 /// <p>Specifies whether the attribute is standard or custom.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct AttributeType {
@@ -559,10 +744,47 @@ pub struct AttributeType {
     pub value: Option<String>,
 }
 
-/// <p>The result type of the authentication result.</p>
+/// <p>The authentication event type.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct AuthEventType {
+    /// <p>The challenge responses.</p>
+    #[serde(rename = "ChallengeResponses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub challenge_responses: Option<Vec<ChallengeResponseType>>,
+    /// <p>The creation date</p>
+    #[serde(rename = "CreationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<f64>,
+    /// <p>The user context data captured at the time of an event request. It provides additional information about the client from which event the request is received.</p>
+    #[serde(rename = "EventContextData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_context_data: Option<EventContextDataType>,
+    /// <p>A flag specifying the user feedback captured at the time of an event request is good or bad. </p>
+    #[serde(rename = "EventFeedback")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_feedback: Option<EventFeedbackType>,
+    /// <p>The event ID.</p>
+    #[serde(rename = "EventId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_id: Option<String>,
+    /// <p>The event response.</p>
+    #[serde(rename = "EventResponse")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_response: Option<String>,
+    /// <p>The event risk.</p>
+    #[serde(rename = "EventRisk")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_risk: Option<EventRiskType>,
+    /// <p>The event type.</p>
+    #[serde(rename = "EventType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_type: Option<String>,
+}
+
+/// <p>The authentication result.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AuthenticationResultType {
-    /// <p>The access token of the authentication result.</p>
+    /// <p>The access token.</p>
     #[serde(rename = "AccessToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub access_token: Option<String>,
@@ -570,7 +792,7 @@ pub struct AuthenticationResultType {
     #[serde(rename = "ExpiresIn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expires_in: Option<i64>,
-    /// <p>The ID token of the authentication result.</p>
+    /// <p>The ID token.</p>
     #[serde(rename = "IdToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id_token: Option<String>,
@@ -578,26 +800,39 @@ pub struct AuthenticationResultType {
     #[serde(rename = "NewDeviceMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub new_device_metadata: Option<NewDeviceMetadataType>,
-    /// <p>The refresh token of the authentication result.</p>
+    /// <p>The refresh token.</p>
     #[serde(rename = "RefreshToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub refresh_token: Option<String>,
-    /// <p>The token type of the authentication result.</p>
+    /// <p>The token type.</p>
     #[serde(rename = "TokenType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub token_type: Option<String>,
 }
 
+/// <p>The challenge response type.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ChallengeResponseType {
+    /// <p>The challenge name</p>
+    #[serde(rename = "ChallengeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub challenge_name: Option<String>,
+    /// <p>The challenge response.</p>
+    #[serde(rename = "ChallengeResponse")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub challenge_response: Option<String>,
+}
+
 /// <p>Represents the request to change a user password.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ChangePasswordRequest {
-    /// <p>The access token in the change password request.</p>
+    /// <p>The access token.</p>
     #[serde(rename = "AccessToken")]
     pub access_token: String,
-    /// <p>The old password in the change password request.</p>
+    /// <p>The old password.</p>
     #[serde(rename = "PreviousPassword")]
     pub previous_password: String,
-    /// <p>The new password in the change password request.</p>
+    /// <p>The new password.</p>
     #[serde(rename = "ProposedPassword")]
     pub proposed_password: String,
 }
@@ -606,10 +841,10 @@ pub struct ChangePasswordRequest {
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ChangePasswordResponse;
 
-/// <p>The type of code delivery details being returned from the server.</p>
+/// <p>The code delivery details being returned from the server.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct CodeDeliveryDetailsType {
-    /// <p>The name of the attribute in the code delivery details type.</p>
+    /// <p>The attribute name.</p>
     #[serde(rename = "AttributeName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attribute_name: Option<String>,
@@ -621,6 +856,26 @@ pub struct CodeDeliveryDetailsType {
     #[serde(rename = "Destination")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination: Option<String>,
+}
+
+/// <p>The compromised credentials actions type</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct CompromisedCredentialsActionsType {
+    /// <p>The event action.</p>
+    #[serde(rename = "EventAction")]
+    pub event_action: String,
+}
+
+/// <p>The compromised credentials risk configuration type.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct CompromisedCredentialsRiskConfigurationType {
+    /// <p>The compromised credentials risk configuration actions.</p>
+    #[serde(rename = "Actions")]
+    pub actions: CompromisedCredentialsActionsType,
+    /// <p>Perform the action for these events. The default is to perform all events if no event filter is specified.</p>
+    #[serde(rename = "EventFilter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_filter: Option<Vec<String>>,
 }
 
 /// <p>Confirms the device request.</p>
@@ -654,10 +909,14 @@ pub struct ConfirmDeviceResponse {
 /// <p>The request representing the confirmation for a password reset.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ConfirmForgotPasswordRequest {
+    /// <p>The Amazon Pinpoint analytics metadata for collecting metrics for <code>ConfirmForgotPassword</code> calls.</p>
+    #[serde(rename = "AnalyticsMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub analytics_metadata: Option<AnalyticsMetadataType>,
     /// <p>The app client ID of the app associated with the user pool.</p>
     #[serde(rename = "ClientId")]
     pub client_id: String,
-    /// <p>The confirmation code sent by a user's request to retrieve a forgotten password. For more information, see <a href="API_ForgotPassword.html">ForgotPassword</a> </p>
+    /// <p>The confirmation code sent by a user's request to retrieve a forgotten password. For more information, see </p>
     #[serde(rename = "ConfirmationCode")]
     pub confirmation_code: String,
     /// <p>The password sent by a user's request to retrieve a forgotten password.</p>
@@ -667,6 +926,10 @@ pub struct ConfirmForgotPasswordRequest {
     #[serde(rename = "SecretHash")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secret_hash: Option<String>,
+    /// <p>Contextual data such as the user's device fingerprint, IP address, or location used for evaluating the risk of an unexpected event by Amazon Cognito advanced security.</p>
+    #[serde(rename = "UserContextData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_context_data: Option<UserContextDataType>,
     /// <p>The user name of the user for whom you want to enter a code to retrieve a forgotten password.</p>
     #[serde(rename = "Username")]
     pub username: String,
@@ -679,6 +942,10 @@ pub struct ConfirmForgotPasswordResponse;
 /// <p>Represents the request to confirm registration of a user.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ConfirmSignUpRequest {
+    /// <p>The Amazon Pinpoint analytics metadata for collecting metrics for <code>ConfirmSignUp</code> calls.</p>
+    #[serde(rename = "AnalyticsMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub analytics_metadata: Option<AnalyticsMetadataType>,
     /// <p>The ID of the app client associated with the user pool.</p>
     #[serde(rename = "ClientId")]
     pub client_id: String,
@@ -693,6 +960,10 @@ pub struct ConfirmSignUpRequest {
     #[serde(rename = "SecretHash")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secret_hash: Option<String>,
+    /// <p>Contextual data such as the user's device fingerprint, IP address, or location used for evaluating the risk of an unexpected event by Amazon Cognito advanced security.</p>
+    #[serde(rename = "UserContextData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_context_data: Option<UserContextDataType>,
     /// <p>The user name of the user whose registration you wish to confirm.</p>
     #[serde(rename = "Username")]
     pub username: String,
@@ -701,6 +972,27 @@ pub struct ConfirmSignUpRequest {
 /// <p>Represents the response from the server for the registration confirmation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ConfirmSignUpResponse;
+
+/// <p>Contextual user data type used for evaluating the risk of an unexpected event by Amazon Cognito advanced security.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ContextDataType {
+    /// <p>Encoded data containing device fingerprinting details, collected using the Amazon Cognito context data collection library.</p>
+    #[serde(rename = "EncodedData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encoded_data: Option<String>,
+    /// <p>HttpHeaders received on your server in same order.</p>
+    #[serde(rename = "HttpHeaders")]
+    pub http_headers: Vec<HttpHeader>,
+    /// <p>Source IP address of your user.</p>
+    #[serde(rename = "IpAddress")]
+    pub ip_address: String,
+    /// <p>Your server endpoint where this API is invoked.</p>
+    #[serde(rename = "ServerName")]
+    pub server_name: String,
+    /// <p>Your server path where this API is invoked. </p>
+    #[serde(rename = "ServerPath")]
+    pub server_path: String,
+}
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateGroupRequest {
@@ -825,6 +1117,10 @@ pub struct CreateUserPoolClientRequest {
     #[serde(rename = "AllowedOAuthScopes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_o_auth_scopes: Option<Vec<String>>,
+    /// <p>The Amazon Pinpoint analytics configuration for collecting metrics for this user pool.</p>
+    #[serde(rename = "AnalyticsConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub analytics_configuration: Option<AnalyticsConfigurationType>,
     /// <p>A list of allowed callback URLs for the identity providers.</p>
     #[serde(rename = "CallbackURLs")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -953,6 +1249,10 @@ pub struct CreateUserPoolRequest {
     #[serde(rename = "SmsVerificationMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sms_verification_message: Option<String>,
+    /// <p>Used to enable advanced security risk detection. Set the key <code>AdvancedSecurityMode</code> to the value "AUDIT".</p>
+    #[serde(rename = "UserPoolAddOns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_pool_add_ons: Option<UserPoolAddOnsType>,
     /// <p>The cost allocation tags for the user pool. For more information, see <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-cost-allocation-tagging.html">Adding Cost Allocation Tags to Your User Pool</a> </p>
     #[serde(rename = "UserPoolTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1095,6 +1395,24 @@ pub struct DescribeResourceServerResponse {
     pub resource_server: ResourceServerType,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribeRiskConfigurationRequest {
+    /// <p>The app client ID.</p>
+    #[serde(rename = "ClientId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_id: Option<String>,
+    /// <p>The user pool ID.</p>
+    #[serde(rename = "UserPoolId")]
+    pub user_pool_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribeRiskConfigurationResponse {
+    /// <p>The risk configuration.</p>
+    #[serde(rename = "RiskConfiguration")]
+    pub risk_configuration: RiskConfigurationType,
+}
+
 /// <p>Represents the request to describe the user import job.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DescribeUserImportJobRequest {
@@ -1167,7 +1485,7 @@ pub struct DescribeUserPoolResponse {
     pub user_pool: Option<UserPoolType>,
 }
 
-/// <p>The type of configuration for the user pool's device tracking.</p>
+/// <p>The configuration for the user pool's device tracking.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct DeviceConfigurationType {
     /// <p>Indicates whether a challenge is required on a new device. Only applicable to a new device.</p>
@@ -1254,7 +1572,7 @@ pub struct DomainDescriptionType {
 /// <p>The email configuration type.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct EmailConfigurationType {
-    /// <p>The REPLY-TO email address.</p>
+    /// <p>The destination to which the receiver of the email should reply to.</p>
     #[serde(rename = "ReplyToEmailAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reply_to_email_address: Option<String>,
@@ -1262,6 +1580,59 @@ pub struct EmailConfigurationType {
     #[serde(rename = "SourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_arn: Option<String>,
+}
+
+/// <p>Specifies the user context data captured at the time of an event request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct EventContextDataType {
+    /// <p>The user's city.</p>
+    #[serde(rename = "City")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub city: Option<String>,
+    /// <p>The user's country.</p>
+    #[serde(rename = "Country")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub country: Option<String>,
+    /// <p>The user's device name.</p>
+    #[serde(rename = "DeviceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_name: Option<String>,
+    /// <p>The user's IP address.</p>
+    #[serde(rename = "IpAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ip_address: Option<String>,
+    /// <p>The user's time zone.</p>
+    #[serde(rename = "Timezone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timezone: Option<String>,
+}
+
+/// <p>Specifies the event feedback type.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct EventFeedbackType {
+    /// <p>The event feedback date.</p>
+    #[serde(rename = "FeedbackDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub feedback_date: Option<f64>,
+    /// <p>The event feedback value.</p>
+    #[serde(rename = "FeedbackValue")]
+    pub feedback_value: String,
+    /// <p>The provider.</p>
+    #[serde(rename = "Provider")]
+    pub provider: String,
+}
+
+/// <p>The event risk type.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct EventRiskType {
+    /// <p>The risk decision.</p>
+    #[serde(rename = "RiskDecision")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub risk_decision: Option<String>,
+    /// <p>The risk level.</p>
+    #[serde(rename = "RiskLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub risk_level: Option<String>,
 }
 
 /// <p>Represents the request to forget the device.</p>
@@ -1279,6 +1650,10 @@ pub struct ForgetDeviceRequest {
 /// <p>Represents the request to reset a user's password.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ForgotPasswordRequest {
+    /// <p>The Amazon Pinpoint analytics metadata for collecting metrics for <code>ForgotPassword</code> calls.</p>
+    #[serde(rename = "AnalyticsMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub analytics_metadata: Option<AnalyticsMetadataType>,
     /// <p>The ID of the client associated with the user pool.</p>
     #[serde(rename = "ClientId")]
     pub client_id: String,
@@ -1286,6 +1661,10 @@ pub struct ForgotPasswordRequest {
     #[serde(rename = "SecretHash")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secret_hash: Option<String>,
+    /// <p>Contextual data such as the user's device fingerprint, IP address, or location used for evaluating the risk of an unexpected event by Amazon Cognito advanced security.</p>
+    #[serde(rename = "UserContextData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_context_data: Option<UserContextDataType>,
     /// <p>The user name of the user for whom you want to enter a code to reset a forgotten password.</p>
     #[serde(rename = "Username")]
     pub username: String,
@@ -1414,6 +1793,29 @@ pub struct GetUserAttributeVerificationCodeResponse {
     pub code_delivery_details: Option<CodeDeliveryDetailsType>,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetUserPoolMfaConfigRequest {
+    /// <p>The user pool ID.</p>
+    #[serde(rename = "UserPoolId")]
+    pub user_pool_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetUserPoolMfaConfigResponse {
+    /// <p>The multi-factor (MFA) configuration.</p>
+    #[serde(rename = "MfaConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mfa_configuration: Option<String>,
+    /// <p>The SMS text message multi-factor (MFA) configuration.</p>
+    #[serde(rename = "SmsMfaConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sms_mfa_configuration: Option<SmsMfaConfigType>,
+    /// <p>The software token multi-factor (MFA) configuration.</p>
+    #[serde(rename = "SoftwareTokenMfaConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub software_token_mfa_configuration: Option<SoftwareTokenMfaConfigType>,
+}
+
 /// <p>Represents the request to get information about the user.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetUserRequest {
@@ -1429,9 +1831,17 @@ pub struct GetUserResponse {
     #[serde(rename = "MFAOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mfa_options: Option<Vec<MFAOptionType>>,
+    /// <p>The user's preferred MFA setting.</p>
+    #[serde(rename = "PreferredMfaSetting")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preferred_mfa_setting: Option<String>,
     /// <p>An array of name-value pairs representing user attributes.</p> <p>For custom attributes, you must prepend the <code>custom:</code> prefix to the attribute name.</p>
     #[serde(rename = "UserAttributes")]
     pub user_attributes: Vec<AttributeType>,
+    /// <p>The list of the user's MFA settings.</p>
+    #[serde(rename = "UserMFASettingList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_mfa_setting_list: Option<Vec<String>>,
     /// <p>The user name of the user you wish to retrieve from the get user request.</p>
     #[serde(rename = "Username")]
     pub username: String,
@@ -1482,6 +1892,19 @@ pub struct GroupType {
     pub user_pool_id: Option<String>,
 }
 
+/// <p>The HTTP header.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct HttpHeader {
+    /// <p>The header name</p>
+    #[serde(rename = "headerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub header_name: Option<String>,
+    /// <p>The header value.</p>
+    #[serde(rename = "headerValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub header_value: Option<String>,
+}
+
 /// <p>A container for information about an identity provider.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct IdentityProviderType {
@@ -1522,6 +1945,10 @@ pub struct IdentityProviderType {
 /// <p>Initiates the authentication request.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct InitiateAuthRequest {
+    /// <p>The Amazon Pinpoint analytics metadata for collecting metrics for <code>InitiateAuth</code> calls.</p>
+    #[serde(rename = "AnalyticsMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub analytics_metadata: Option<AnalyticsMetadataType>,
     /// <p>The authentication flow for this call to execute. The API action will depend on this value. For example: </p> <ul> <li> <p> <code>REFRESH_TOKEN_AUTH</code> will take in a valid refresh token and return new tokens.</p> </li> <li> <p> <code>USER_SRP_AUTH</code> will take in <code>USERNAME</code> and <code>SRP_A</code> and return the SRP variables to be used for next challenge execution.</p> </li> </ul> <p>Valid values include:</p> <ul> <li> <p> <code>USER_SRP_AUTH</code>: Authentication flow for the Secure Remote Password (SRP) protocol.</p> </li> <li> <p> <code>REFRESH_TOKEN_AUTH</code>/<code>REFRESH_TOKEN</code>: Authentication flow for refreshing the access token and ID token by supplying a valid refresh token.</p> </li> <li> <p> <code>CUSTOM_AUTH</code>: Custom authentication flow.</p> </li> </ul> <p> <code>ADMIN_NO_SRP_AUTH</code> is not a valid value.</p>
     #[serde(rename = "AuthFlow")]
     pub auth_flow: String,
@@ -1536,6 +1963,10 @@ pub struct InitiateAuthRequest {
     #[serde(rename = "ClientMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_metadata: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Contextual data such as the user's device fingerprint, IP address, or location used for evaluating the risk of an unexpected event by Amazon Cognito advanced security.</p>
+    #[serde(rename = "UserContextData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_context_data: Option<UserContextDataType>,
 }
 
 /// <p>Initiates the authentication response.</p>
@@ -1553,13 +1984,13 @@ pub struct InitiateAuthResponse {
     #[serde(rename = "ChallengeParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub challenge_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The session which should be passed both ways in challenge-response calls to the service. If the <a href="API_InitiateAuth.html">InitiateAuth</a> or <a href="API_RespondToAuthChallenge.html">RespondToAuthChallenge</a> API call determines that the caller needs to go through another challenge, they return a session with other challenge parameters. This session should be passed as it is to the next <code>RespondToAuthChallenge</code> API call.</p>
+    /// <p>The session which should be passed both ways in challenge-response calls to the service. If the or API call determines that the caller needs to go through another challenge, they return a session with other challenge parameters. This session should be passed as it is to the next <code>RespondToAuthChallenge</code> API call.</p>
     #[serde(rename = "Session")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub session: Option<String>,
 }
 
-/// <p>Specifies the type of configuration for AWS Lambda triggers.</p>
+/// <p>Specifies the configuration for AWS Lambda triggers.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct LambdaConfigType {
     /// <p>Creates an authentication challenge.</p>
@@ -1590,6 +2021,10 @@ pub struct LambdaConfigType {
     #[serde(rename = "PreSignUp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pre_sign_up: Option<String>,
+    /// <p>A Lambda trigger that is invoked before token generation.</p>
+    #[serde(rename = "PreTokenGeneration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pre_token_generation: Option<String>,
     /// <p>Verifies the authentication challenge response.</p>
     #[serde(rename = "VerifyAuthChallengeResponse")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1819,11 +2254,11 @@ pub struct ListUsersInGroupResponse {
 /// <p>Represents the request to list users.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListUsersRequest {
-    /// <p>An array of strings, where each string is the name of a user attribute to be returned for each user in the search results. If the array is empty, all attributes are returned.</p>
+    /// <p>An array of strings, where each string is the name of a user attribute to be returned for each user in the search results. If the array is null, all attributes are returned.</p>
     #[serde(rename = "AttributesToGet")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attributes_to_get: Option<Vec<String>>,
-    /// <p>A filter string of the form "<i>AttributeName</i> <i>Filter-Type</i> "<i>AttributeValue</i>"". Quotation marks within the filter string must be escaped using the backslash (\) character. For example, "<code>family_name</code> = \"Reddy\"".</p> <ul> <li> <p> <i>AttributeName</i>: The name of the attribute to search for. You can only search for one attribute at a time.</p> </li> <li> <p> <i>Filter-Type</i>: For an exact match, use =, for example, "<code>given_name</code> = \"Jon\"". For a prefix ("starts with") match, use ^=, for example, "<code>given_name</code> ^= \"Jon\"". </p> </li> <li> <p> <i>AttributeValue</i>: The attribute value that must be matched for each user.</p> </li> </ul> <p>If the filter string is empty, <code>ListUsers</code> returns all users in the user pool.</p> <p>You can only search for the following standard attributes:</p> <ul> <li> <p> <code>username</code> (case-sensitive)</p> </li> <li> <p> <code>email</code> </p> </li> <li> <p> <code>phone_number</code> </p> </li> <li> <p> <code>name</code> </p> </li> <li> <p> <code>given_name</code> </p> </li> <li> <p> <code>family_name</code> </p> </li> <li> <p> <code>preferred_username</code> </p> </li> <li> <p> <code>cognito:user_status</code> (called <b>Enabled</b> in the Console) (case-sensitive)</p> </li> <li> <p> <code>status</code> (case-insensitive)</p> </li> </ul> <p>Custom attributes are not searchable.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/how-to-manage-user-accounts.html#cognito-user-pools-searching-for-users-using-listusers-api">Searching for Users Using the ListUsers API</a> and <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/how-to-manage-user-accounts.html#cognito-user-pools-searching-for-users-listusers-api-examples">Examples of Using the ListUsers API</a> in the <i>Amazon Cognito Developer Guide</i>.</p>
+    /// <p>A filter string of the form "<i>AttributeName</i> <i>Filter-Type</i> "<i>AttributeValue</i>"". Quotation marks within the filter string must be escaped using the backslash (\) character. For example, "<code>family_name</code> = \"Reddy\"".</p> <ul> <li> <p> <i>AttributeName</i>: The name of the attribute to search for. You can only search for one attribute at a time.</p> </li> <li> <p> <i>Filter-Type</i>: For an exact match, use =, for example, "<code>given_name</code> = \"Jon\"". For a prefix ("starts with") match, use ^=, for example, "<code>given_name</code> ^= \"Jon\"". </p> </li> <li> <p> <i>AttributeValue</i>: The attribute value that must be matched for each user.</p> </li> </ul> <p>If the filter string is empty, <code>ListUsers</code> returns all users in the user pool.</p> <p>You can only search for the following standard attributes:</p> <ul> <li> <p> <code>username</code> (case-sensitive)</p> </li> <li> <p> <code>email</code> </p> </li> <li> <p> <code>phone_number</code> </p> </li> <li> <p> <code>name</code> </p> </li> <li> <p> <code>given_name</code> </p> </li> <li> <p> <code>family_name</code> </p> </li> <li> <p> <code>preferred_username</code> </p> </li> <li> <p> <code>cognito:user_status</code> (called <b>Enabled</b> in the Console) (case-sensitive)</p> </li> <li> <p> <code>status</code> (case-insensitive)</p> </li> <li> <p> <code>sub</code> </p> </li> </ul> <p>Custom attributes are not searchable.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/how-to-manage-user-accounts.html#cognito-user-pools-searching-for-users-using-listusers-api">Searching for Users Using the ListUsers API</a> and <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/how-to-manage-user-accounts.html#cognito-user-pools-searching-for-users-listusers-api-examples">Examples of Using the ListUsers API</a> in the <i>Amazon Cognito Developer Guide</i>.</p>
     #[serde(rename = "Filter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<String>,
@@ -1894,6 +2329,50 @@ pub struct NewDeviceMetadataType {
     #[serde(rename = "DeviceKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub device_key: Option<String>,
+}
+
+/// <p>The notify configuration type.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct NotifyConfigurationType {
+    /// <p>Email template used when a detected risk event is blocked.</p>
+    #[serde(rename = "BlockEmail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub block_email: Option<NotifyEmailType>,
+    /// <p>The email address that is sending the email. It must be either individually verified with Amazon SES, or from a domain that has been verified with Amazon SES.</p>
+    #[serde(rename = "From")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub from: Option<String>,
+    /// <p>The MFA email template used when MFA is challenged as part of a detected risk.</p>
+    #[serde(rename = "MfaEmail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mfa_email: Option<NotifyEmailType>,
+    /// <p>The email template used when a detected risk event is allowed.</p>
+    #[serde(rename = "NoActionEmail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub no_action_email: Option<NotifyEmailType>,
+    /// <p>The destination to which the receiver of an email should reply to.</p>
+    #[serde(rename = "ReplyTo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reply_to: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the identity that is associated with the sending authorization policy. It permits Amazon Cognito to send for the email address specified in the <code>From</code> parameter.</p>
+    #[serde(rename = "SourceArn")]
+    pub source_arn: String,
+}
+
+/// <p>The notify email type.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct NotifyEmailType {
+    /// <p>The HTML body.</p>
+    #[serde(rename = "HtmlBody")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub html_body: Option<String>,
+    /// <p>The subject.</p>
+    #[serde(rename = "Subject")]
+    pub subject: String,
+    /// <p>The text body.</p>
+    #[serde(rename = "TextBody")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub text_body: Option<String>,
 }
 
 /// <p>The minimum and maximum value of an attribute that is of the number data type.</p>
@@ -1975,6 +2454,10 @@ pub struct ProviderUserIdentifierType {
 /// <p>Represents the request to resend the confirmation code.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ResendConfirmationCodeRequest {
+    /// <p>The Amazon Pinpoint analytics metadata for collecting metrics for <code>ResendConfirmationCode</code> calls.</p>
+    #[serde(rename = "AnalyticsMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub analytics_metadata: Option<AnalyticsMetadataType>,
     /// <p>The ID of the client associated with the user pool.</p>
     #[serde(rename = "ClientId")]
     pub client_id: String,
@@ -1982,6 +2465,10 @@ pub struct ResendConfirmationCodeRequest {
     #[serde(rename = "SecretHash")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secret_hash: Option<String>,
+    /// <p>Contextual data such as the user's device fingerprint, IP address, or location used for evaluating the risk of an unexpected event by Amazon Cognito advanced security.</p>
+    #[serde(rename = "UserContextData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_context_data: Option<UserContextDataType>,
     /// <p>The user name of the user to whom you wish to resend a confirmation code.</p>
     #[serde(rename = "Username")]
     pub username: String,
@@ -2031,7 +2518,11 @@ pub struct ResourceServerType {
 /// <p>The request to respond to an authentication challenge.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct RespondToAuthChallengeRequest {
-    /// <p>The challenge name. For more information, see <a href="API_InitiateAuth.html">InitiateAuth</a>.</p> <p> <code>ADMIN_NO_SRP_AUTH</code> is not a valid value.</p>
+    /// <p>The Amazon Pinpoint analytics metadata for collecting metrics for <code>RespondToAuthChallenge</code> calls.</p>
+    #[serde(rename = "AnalyticsMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub analytics_metadata: Option<AnalyticsMetadataType>,
+    /// <p>The challenge name. For more information, see .</p> <p> <code>ADMIN_NO_SRP_AUTH</code> is not a valid value.</p>
     #[serde(rename = "ChallengeName")]
     pub challenge_name: String,
     /// <p><p>The challenge responses. These are inputs corresponding to the value of <code>ChallengeName</code>, for example:</p> <ul> <li> <p> <code>SMS<em>MFA</code>: <code>SMS</em>MFA<em>CODE</code>, <code>USERNAME</code>, <code>SECRET</em>HASH</code> (if app client is configured with client secret).</p> </li> <li> <p> <code>PASSWORD<em>VERIFIER</code>: <code>PASSWORD</em>CLAIM<em>SIGNATURE</code>, <code>PASSWORD</em>CLAIM<em>SECRET</em>BLOCK</code>, <code>TIMESTAMP</code>, <code>USERNAME</code>, <code>SECRET<em>HASH</code> (if app client is configured with client secret).</p> </li> <li> <p> <code>NEW</em>PASSWORD<em>REQUIRED</code>: <code>NEW</em>PASSWORD</code>, any other required attributes, <code>USERNAME</code>, <code>SECRET_HASH</code> (if app client is configured with client secret). </p> </li> </ul></p>
@@ -2045,6 +2536,10 @@ pub struct RespondToAuthChallengeRequest {
     #[serde(rename = "Session")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub session: Option<String>,
+    /// <p>Contextual data such as the user's device fingerprint, IP address, or location used for evaluating the risk of an unexpected event by Amazon Cognito advanced security.</p>
+    #[serde(rename = "UserContextData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_context_data: Option<UserContextDataType>,
 }
 
 /// <p>The response to respond to the authentication challenge.</p>
@@ -2054,18 +2549,74 @@ pub struct RespondToAuthChallengeResponse {
     #[serde(rename = "AuthenticationResult")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_result: Option<AuthenticationResultType>,
-    /// <p>The challenge name. For more information, see <a href="API_InitiateAuth.html">InitiateAuth</a>.</p>
+    /// <p>The challenge name. For more information, see .</p>
     #[serde(rename = "ChallengeName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub challenge_name: Option<String>,
-    /// <p>The challenge parameters. For more information, see <a href="API_InitiateAuth.html">InitiateAuth</a>.</p>
+    /// <p>The challenge parameters. For more information, see .</p>
     #[serde(rename = "ChallengeParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub challenge_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The session which should be passed both ways in challenge-response calls to the service. If the <a href="API_InitiateAuth.html">InitiateAuth</a> or <a href="API_RespondToAuthChallenge.html">RespondToAuthChallenge</a> API call determines that the caller needs to go through another challenge, they return a session with other challenge parameters. This session should be passed as it is to the next <code>RespondToAuthChallenge</code> API call.</p>
+    /// <p>The session which should be passed both ways in challenge-response calls to the service. If the or API call determines that the caller needs to go through another challenge, they return a session with other challenge parameters. This session should be passed as it is to the next <code>RespondToAuthChallenge</code> API call.</p>
     #[serde(rename = "Session")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub session: Option<String>,
+}
+
+/// <p>The risk configuration type.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct RiskConfigurationType {
+    /// <p>The account takeover risk configuration object including the <code>NotifyConfiguration</code> object and <code>Actions</code> to take in the case of an account takeover.</p>
+    #[serde(rename = "AccountTakeoverRiskConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_takeover_risk_configuration: Option<AccountTakeoverRiskConfigurationType>,
+    /// <p>The app client ID.</p>
+    #[serde(rename = "ClientId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_id: Option<String>,
+    /// <p>The compromised credentials risk configuration object including the <code>EventFilter</code> and the <code>EventAction</code> </p>
+    #[serde(rename = "CompromisedCredentialsRiskConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compromised_credentials_risk_configuration:
+        Option<CompromisedCredentialsRiskConfigurationType>,
+    /// <p>The last modified date.</p>
+    #[serde(rename = "LastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_date: Option<f64>,
+    /// <p>The configuration to override the risk decision.</p>
+    #[serde(rename = "RiskExceptionConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub risk_exception_configuration: Option<RiskExceptionConfigurationType>,
+    /// <p>The user pool ID.</p>
+    #[serde(rename = "UserPoolId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_pool_id: Option<String>,
+}
+
+/// <p>The type of the configuration to override the risk decision.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct RiskExceptionConfigurationType {
+    /// <p>Overrides the risk decision to always block the pre-authentication requests. The IP range is in CIDR notation: a compact representation of an IP address and its associated routing prefix.</p>
+    #[serde(rename = "BlockedIPRangeList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub blocked_ip_range_list: Option<Vec<String>>,
+    /// <p>Risk detection is not performed on the IP addresses in the range list. The IP range is in CIDR notation.</p>
+    #[serde(rename = "SkippedIPRangeList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub skipped_ip_range_list: Option<Vec<String>>,
+}
+
+/// <p>The SMS multi-factor authentication (MFA) settings type.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct SMSMfaSettingsType {
+    /// <p>Specifies whether SMS text message MFA is enabled.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// <p>The preferred MFA method.</p>
+    #[serde(rename = "PreferredMfa")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preferred_mfa: Option<bool>,
 }
 
 /// <p>Contains information about the schema attribute.</p>
@@ -2102,6 +2653,37 @@ pub struct SchemaAttributeType {
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
+pub struct SetRiskConfigurationRequest {
+    /// <p>The account takeover risk configuration.</p>
+    #[serde(rename = "AccountTakeoverRiskConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_takeover_risk_configuration: Option<AccountTakeoverRiskConfigurationType>,
+    /// <p>The app client ID. If <code>ClientId</code> is null, then the risk configuration is mapped to <code>userPoolId</code>. When the client ID is null, the same risk configuration is applied to all the clients in the userPool.</p> <p>Otherwise, <code>ClientId</code> is mapped to the client. When the client ID is not null, the user pool configuration is overridden and the risk configuration for the client is used instead.</p>
+    #[serde(rename = "ClientId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_id: Option<String>,
+    /// <p>The compromised credentials risk configuration.</p>
+    #[serde(rename = "CompromisedCredentialsRiskConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compromised_credentials_risk_configuration:
+        Option<CompromisedCredentialsRiskConfigurationType>,
+    /// <p>The configuration to override the risk decision.</p>
+    #[serde(rename = "RiskExceptionConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub risk_exception_configuration: Option<RiskExceptionConfigurationType>,
+    /// <p>The user pool ID. </p>
+    #[serde(rename = "UserPoolId")]
+    pub user_pool_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct SetRiskConfigurationResponse {
+    /// <p>The risk configuration.</p>
+    #[serde(rename = "RiskConfiguration")]
+    pub risk_configuration: RiskConfigurationType,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
 pub struct SetUICustomizationRequest {
     /// <p>The CSS values in the UI customization.</p>
     #[serde(rename = "CSS")]
@@ -2128,6 +2710,59 @@ pub struct SetUICustomizationResponse {
     pub ui_customization: UICustomizationType,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct SetUserMFAPreferenceRequest {
+    /// <p>The access token.</p>
+    #[serde(rename = "AccessToken")]
+    pub access_token: String,
+    /// <p>The SMS text message multi-factor authentication (MFA) settings.</p>
+    #[serde(rename = "SMSMfaSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sms_mfa_settings: Option<SMSMfaSettingsType>,
+    /// <p>The time-based one-time password software token MFA settings.</p>
+    #[serde(rename = "SoftwareTokenMfaSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub software_token_mfa_settings: Option<SoftwareTokenMfaSettingsType>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct SetUserMFAPreferenceResponse;
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct SetUserPoolMfaConfigRequest {
+    /// <p>The MFA configuration.</p>
+    #[serde(rename = "MfaConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mfa_configuration: Option<String>,
+    /// <p>The SMS text message MFA configuration.</p>
+    #[serde(rename = "SmsMfaConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sms_mfa_configuration: Option<SmsMfaConfigType>,
+    /// <p>The software token MFA configuration.</p>
+    #[serde(rename = "SoftwareTokenMfaConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub software_token_mfa_configuration: Option<SoftwareTokenMfaConfigType>,
+    /// <p>The user pool ID.</p>
+    #[serde(rename = "UserPoolId")]
+    pub user_pool_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct SetUserPoolMfaConfigResponse {
+    /// <p>The MFA configuration.</p>
+    #[serde(rename = "MfaConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mfa_configuration: Option<String>,
+    /// <p>The SMS text message MFA configuration.</p>
+    #[serde(rename = "SmsMfaConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sms_mfa_configuration: Option<SmsMfaConfigType>,
+    /// <p>The software token MFA configuration.</p>
+    #[serde(rename = "SoftwareTokenMfaConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub software_token_mfa_configuration: Option<SoftwareTokenMfaConfigType>,
+}
+
 /// <p>Represents the request to set user settings.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct SetUserSettingsRequest {
@@ -2146,6 +2781,10 @@ pub struct SetUserSettingsResponse;
 /// <p>Represents the request to register a user.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct SignUpRequest {
+    /// <p>The Amazon Pinpoint analytics metadata for collecting metrics for <code>SignUp</code> calls.</p>
+    #[serde(rename = "AnalyticsMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub analytics_metadata: Option<AnalyticsMetadataType>,
     /// <p>The ID of the client associated with the user pool.</p>
     #[serde(rename = "ClientId")]
     pub client_id: String,
@@ -2160,6 +2799,10 @@ pub struct SignUpRequest {
     #[serde(rename = "UserAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_attributes: Option<Vec<AttributeType>>,
+    /// <p>Contextual data such as the user's device fingerprint, IP address, or location used for evaluating the risk of an unexpected event by Amazon Cognito advanced security.</p>
+    #[serde(rename = "UserContextData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_context_data: Option<UserContextDataType>,
     /// <p>The user name of the user you wish to register.</p>
     #[serde(rename = "Username")]
     pub username: String,
@@ -2194,6 +2837,41 @@ pub struct SmsConfigurationType {
     /// <p>The Amazon Resource Name (ARN) of the Amazon Simple Notification Service (SNS) caller.</p>
     #[serde(rename = "SnsCallerArn")]
     pub sns_caller_arn: String,
+}
+
+/// <p>The SMS text message multi-factor authentication (MFA) configuration type.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct SmsMfaConfigType {
+    /// <p>The SMS authentication message.</p>
+    #[serde(rename = "SmsAuthenticationMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sms_authentication_message: Option<String>,
+    /// <p>The SMS configuration.</p>
+    #[serde(rename = "SmsConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sms_configuration: Option<SmsConfigurationType>,
+}
+
+/// <p>The type used for enabling software token MFA at the user pool level.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct SoftwareTokenMfaConfigType {
+    /// <p>Specifies whether software token MFA is enabled.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+}
+
+/// <p>The type used for enabling software token MFA at the user level.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct SoftwareTokenMfaSettingsType {
+    /// <p>Specifies whether software token MFA is enabled.</p>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// <p>The preferred MFA method.</p>
+    #[serde(rename = "PreferredMfa")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preferred_mfa: Option<bool>,
 }
 
 /// <p>Represents the request to start the user import job.</p>
@@ -2236,14 +2914,14 @@ pub struct StopUserImportJobResponse {
     pub user_import_job: Option<UserImportJobType>,
 }
 
-/// <p>The type of constraints associated with an attribute of the string type.</p>
+/// <p>The constraints associated with a string attribute.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct StringAttributeConstraintsType {
-    /// <p>The maximum length of an attribute value of the string type.</p>
+    /// <p>The maximum length.</p>
     #[serde(rename = "MaxLength")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_length: Option<String>,
-    /// <p>The minimum length of an attribute value of the string type.</p>
+    /// <p>The minimum length.</p>
     #[serde(rename = "MinLength")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub min_length: Option<String>,
@@ -2282,6 +2960,28 @@ pub struct UICustomizationType {
     pub user_pool_id: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct UpdateAuthEventFeedbackRequest {
+    /// <p>The event ID.</p>
+    #[serde(rename = "EventId")]
+    pub event_id: String,
+    /// <p>The feedback token.</p>
+    #[serde(rename = "FeedbackToken")]
+    pub feedback_token: String,
+    /// <p>The authentication event feedback value.</p>
+    #[serde(rename = "FeedbackValue")]
+    pub feedback_value: String,
+    /// <p>The user pool ID.</p>
+    #[serde(rename = "UserPoolId")]
+    pub user_pool_id: String,
+    /// <p>The user pool username.</p>
+    #[serde(rename = "Username")]
+    pub username: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct UpdateAuthEventFeedbackResponse;
+
 /// <p>Represents the request to update the device status.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateDeviceStatusRequest {
@@ -2310,7 +3010,7 @@ pub struct UpdateGroupRequest {
     /// <p>The name of the group.</p>
     #[serde(rename = "GroupName")]
     pub group_name: String,
-    /// <p>The new precedence value for the group. For more information about this parameter, see <a href="API_CreateGroup.html">CreateGroup</a>.</p>
+    /// <p>The new precedence value for the group. For more information about this parameter, see .</p>
     #[serde(rename = "Precedence")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub precedence: Option<i64>,
@@ -2419,6 +3119,10 @@ pub struct UpdateUserPoolClientRequest {
     #[serde(rename = "AllowedOAuthScopes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_o_auth_scopes: Option<Vec<String>>,
+    /// <p>The Amazon Pinpoint analytics configuration for collecting metrics for this user pool.</p>
+    #[serde(rename = "AnalyticsConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub analytics_configuration: Option<AnalyticsConfigurationType>,
     /// <p>A list of allowed callback URLs for the identity providers.</p>
     #[serde(rename = "CallbackURLs")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2523,6 +3227,10 @@ pub struct UpdateUserPoolRequest {
     #[serde(rename = "SmsVerificationMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sms_verification_message: Option<String>,
+    /// <p>Used to enable advanced security risk detection. Set the key <code>AdvancedSecurityMode</code> to the value "AUDIT".</p>
+    #[serde(rename = "UserPoolAddOns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_pool_add_ons: Option<UserPoolAddOnsType>,
     /// <p>The user pool ID for the user pool you want to update.</p>
     #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
@@ -2539,6 +3247,15 @@ pub struct UpdateUserPoolRequest {
 /// <p>Represents the response from the server when you make a request to update the user pool.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdateUserPoolResponse;
+
+/// <p>Contextual data such as the user's device fingerprint, IP address, or location used for evaluating the risk of an unexpected event by Amazon Cognito advanced security.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct UserContextDataType {
+    /// <p>Contextual data such as the user's device fingerprint, IP address, or location used for evaluating the risk of an unexpected event by Amazon Cognito advanced security.</p>
+    #[serde(rename = "EncodedData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encoded_data: Option<String>,
+}
 
 /// <p>The user import job type.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -2597,6 +3314,14 @@ pub struct UserImportJobType {
     pub user_pool_id: Option<String>,
 }
 
+/// <p>The user pool add-ons type.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct UserPoolAddOnsType {
+    /// <p>The advanced security mode.</p>
+    #[serde(rename = "AdvancedSecurityMode")]
+    pub advanced_security_mode: String,
+}
+
 /// <p>The description of the user pool client.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UserPoolClientDescription {
@@ -2629,6 +3354,10 @@ pub struct UserPoolClientType {
     #[serde(rename = "AllowedOAuthScopes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_o_auth_scopes: Option<Vec<String>>,
+    /// <p>The Amazon Pinpoint analytics configuration for the user pool client.</p>
+    #[serde(rename = "AnalyticsConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub analytics_configuration: Option<AnalyticsConfigurationType>,
     /// <p>A list of allowed callback URLs for the identity providers.</p>
     #[serde(rename = "CallbackURLs")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2716,16 +3445,16 @@ pub struct UserPoolDescriptionType {
     pub status: Option<String>,
 }
 
-/// <p>The type of policy in a user pool.</p>
+/// <p>The policy associated with a user pool.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct UserPoolPolicyType {
-    /// <p>A container for information about the user pool password policy.</p>
+    /// <p>The password policy.</p>
     #[serde(rename = "PasswordPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub password_policy: Option<PasswordPolicyType>,
 }
 
-/// <p>A container for information about the user pool type.</p>
+/// <p>A container for information about the user pool.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UserPoolType {
     /// <p>The configuration for <code>AdminCreateUser</code> requests.</p>
@@ -2748,6 +3477,10 @@ pub struct UserPoolType {
     #[serde(rename = "DeviceConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub device_configuration: Option<DeviceConfigurationType>,
+    /// <p>Holds the domain prefix if the user pool has a domain associated with it.</p>
+    #[serde(rename = "Domain")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain: Option<String>,
     /// <p>The email configuration.</p>
     #[serde(rename = "EmailConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2772,7 +3505,7 @@ pub struct UserPoolType {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>A container for the AWS Lambda triggers associated with a user pool.</p>
+    /// <p>The AWS Lambda triggers associated with tue user pool.</p>
     #[serde(rename = "LambdaConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lambda_config: Option<LambdaConfigType>,
@@ -2788,7 +3521,7 @@ pub struct UserPoolType {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>A container for the policies associated with a user pool.</p>
+    /// <p>The policies associated with the user pool.</p>
     #[serde(rename = "Policies")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policies: Option<UserPoolPolicyType>,
@@ -2816,6 +3549,10 @@ pub struct UserPoolType {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+    /// <p>The user pool add-ons.</p>
+    #[serde(rename = "UserPoolAddOns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_pool_add_ons: Option<UserPoolAddOnsType>,
     /// <p>The cost allocation tags for the user pool. For more information, see <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-cost-allocation-tagging.html">Adding Cost Allocation Tags to Your User Pool</a> </p>
     #[serde(rename = "UserPoolTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2890,6 +3627,37 @@ pub struct VerificationMessageTemplateType {
     #[serde(rename = "SmsMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sms_message: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct VerifySoftwareTokenRequest {
+    /// <p>The access token.</p>
+    #[serde(rename = "AccessToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_token: Option<String>,
+    /// <p>The friendly device name.</p>
+    #[serde(rename = "FriendlyDeviceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub friendly_device_name: Option<String>,
+    /// <p>The session which should be passed both ways in challenge-response calls to the service.</p>
+    #[serde(rename = "Session")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub session: Option<String>,
+    /// <p>The one time password computed using the secret code returned by </p>
+    #[serde(rename = "UserCode")]
+    pub user_code: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct VerifySoftwareTokenResponse {
+    /// <p>The session which should be passed both ways in challenge-response calls to the service.</p>
+    #[serde(rename = "Session")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub session: Option<String>,
+    /// <p>The status of the verify software token.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
 }
 
 /// <p>Represents the request to verify user attributes.</p>
@@ -4844,6 +5612,124 @@ impl Error for AdminListGroupsForUserError {
         }
     }
 }
+/// Errors returned by AdminListUserAuthEvents
+#[derive(Debug, PartialEq)]
+pub enum AdminListUserAuthEventsError {
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    InternalError(String),
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    InvalidParameter(String),
+    /// <p>This exception is thrown when a user is not authorized.</p>
+    NotAuthorized(String),
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    ResourceNotFound(String),
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    TooManyRequests(String),
+    /// <p>This exception is thrown when a user is not found.</p>
+    UserNotFound(String),
+    /// <p>This exception is thrown when user pool add-ons are not enabled.</p>
+    UserPoolAddOnNotEnabled(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl AdminListUserAuthEventsError {
+    pub fn from_body(body: &str) -> AdminListUserAuthEventsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalErrorException" => {
+                        AdminListUserAuthEventsError::InternalError(String::from(error_message))
+                    }
+                    "InvalidParameterException" => {
+                        AdminListUserAuthEventsError::InvalidParameter(String::from(error_message))
+                    }
+                    "NotAuthorizedException" => {
+                        AdminListUserAuthEventsError::NotAuthorized(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        AdminListUserAuthEventsError::ResourceNotFound(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        AdminListUserAuthEventsError::TooManyRequests(String::from(error_message))
+                    }
+                    "UserNotFoundException" => {
+                        AdminListUserAuthEventsError::UserNotFound(String::from(error_message))
+                    }
+                    "UserPoolAddOnNotEnabledException" => {
+                        AdminListUserAuthEventsError::UserPoolAddOnNotEnabled(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        AdminListUserAuthEventsError::Validation(error_message.to_string())
+                    }
+                    _ => AdminListUserAuthEventsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => AdminListUserAuthEventsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for AdminListUserAuthEventsError {
+    fn from(err: serde_json::error::Error) -> AdminListUserAuthEventsError {
+        AdminListUserAuthEventsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for AdminListUserAuthEventsError {
+    fn from(err: CredentialsError) -> AdminListUserAuthEventsError {
+        AdminListUserAuthEventsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AdminListUserAuthEventsError {
+    fn from(err: HttpDispatchError) -> AdminListUserAuthEventsError {
+        AdminListUserAuthEventsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AdminListUserAuthEventsError {
+    fn from(err: io::Error) -> AdminListUserAuthEventsError {
+        AdminListUserAuthEventsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for AdminListUserAuthEventsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AdminListUserAuthEventsError {
+    fn description(&self) -> &str {
+        match *self {
+            AdminListUserAuthEventsError::InternalError(ref cause) => cause,
+            AdminListUserAuthEventsError::InvalidParameter(ref cause) => cause,
+            AdminListUserAuthEventsError::NotAuthorized(ref cause) => cause,
+            AdminListUserAuthEventsError::ResourceNotFound(ref cause) => cause,
+            AdminListUserAuthEventsError::TooManyRequests(ref cause) => cause,
+            AdminListUserAuthEventsError::UserNotFound(ref cause) => cause,
+            AdminListUserAuthEventsError::UserPoolAddOnNotEnabled(ref cause) => cause,
+            AdminListUserAuthEventsError::Validation(ref cause) => cause,
+            AdminListUserAuthEventsError::Credentials(ref err) => err.description(),
+            AdminListUserAuthEventsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            AdminListUserAuthEventsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by AdminRemoveUserFromGroup
 #[derive(Debug, PartialEq)]
 pub enum AdminRemoveUserFromGroupError {
@@ -5147,6 +6033,8 @@ pub enum AdminRespondToAuthChallengeError {
     PasswordResetRequired(String),
     /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
+    /// <p>This exception is thrown when the software token TOTP multi-factor authentication (MFA) is not enabled for the user pool.</p>
+    SoftwareTokenMFANotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// <p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
@@ -5240,6 +6128,11 @@ impl AdminRespondToAuthChallengeError {
                             error_message,
                         ))
                     }
+                    "SoftwareTokenMFANotFoundException" => {
+                        AdminRespondToAuthChallengeError::SoftwareTokenMFANotFound(String::from(
+                            error_message,
+                        ))
+                    }
                     "TooManyRequestsException" => {
                         AdminRespondToAuthChallengeError::TooManyRequests(String::from(
                             error_message,
@@ -5316,6 +6209,7 @@ impl Error for AdminRespondToAuthChallengeError {
             AdminRespondToAuthChallengeError::NotAuthorized(ref cause) => cause,
             AdminRespondToAuthChallengeError::PasswordResetRequired(ref cause) => cause,
             AdminRespondToAuthChallengeError::ResourceNotFound(ref cause) => cause,
+            AdminRespondToAuthChallengeError::SoftwareTokenMFANotFound(ref cause) => cause,
             AdminRespondToAuthChallengeError::TooManyRequests(ref cause) => cause,
             AdminRespondToAuthChallengeError::UnexpectedLambda(ref cause) => cause,
             AdminRespondToAuthChallengeError::UserLambdaValidation(ref cause) => cause,
@@ -5327,6 +6221,130 @@ impl Error for AdminRespondToAuthChallengeError {
                 dispatch_error.description()
             }
             AdminRespondToAuthChallengeError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by AdminSetUserMFAPreference
+#[derive(Debug, PartialEq)]
+pub enum AdminSetUserMFAPreferenceError {
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    InternalError(String),
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    InvalidParameter(String),
+    /// <p>This exception is thrown when a user is not authorized.</p>
+    NotAuthorized(String),
+    /// <p>This exception is thrown when a password reset is required.</p>
+    PasswordResetRequired(String),
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    ResourceNotFound(String),
+    /// <p>This exception is thrown when a user is not confirmed successfully.</p>
+    UserNotConfirmed(String),
+    /// <p>This exception is thrown when a user is not found.</p>
+    UserNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl AdminSetUserMFAPreferenceError {
+    pub fn from_body(body: &str) -> AdminSetUserMFAPreferenceError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalErrorException" => {
+                        AdminSetUserMFAPreferenceError::InternalError(String::from(error_message))
+                    }
+                    "InvalidParameterException" => {
+                        AdminSetUserMFAPreferenceError::InvalidParameter(String::from(
+                            error_message,
+                        ))
+                    }
+                    "NotAuthorizedException" => {
+                        AdminSetUserMFAPreferenceError::NotAuthorized(String::from(error_message))
+                    }
+                    "PasswordResetRequiredException" => {
+                        AdminSetUserMFAPreferenceError::PasswordResetRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        AdminSetUserMFAPreferenceError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UserNotConfirmedException" => {
+                        AdminSetUserMFAPreferenceError::UserNotConfirmed(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UserNotFoundException" => {
+                        AdminSetUserMFAPreferenceError::UserNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        AdminSetUserMFAPreferenceError::Validation(error_message.to_string())
+                    }
+                    _ => AdminSetUserMFAPreferenceError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => AdminSetUserMFAPreferenceError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for AdminSetUserMFAPreferenceError {
+    fn from(err: serde_json::error::Error) -> AdminSetUserMFAPreferenceError {
+        AdminSetUserMFAPreferenceError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for AdminSetUserMFAPreferenceError {
+    fn from(err: CredentialsError) -> AdminSetUserMFAPreferenceError {
+        AdminSetUserMFAPreferenceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AdminSetUserMFAPreferenceError {
+    fn from(err: HttpDispatchError) -> AdminSetUserMFAPreferenceError {
+        AdminSetUserMFAPreferenceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AdminSetUserMFAPreferenceError {
+    fn from(err: io::Error) -> AdminSetUserMFAPreferenceError {
+        AdminSetUserMFAPreferenceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for AdminSetUserMFAPreferenceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AdminSetUserMFAPreferenceError {
+    fn description(&self) -> &str {
+        match *self {
+            AdminSetUserMFAPreferenceError::InternalError(ref cause) => cause,
+            AdminSetUserMFAPreferenceError::InvalidParameter(ref cause) => cause,
+            AdminSetUserMFAPreferenceError::NotAuthorized(ref cause) => cause,
+            AdminSetUserMFAPreferenceError::PasswordResetRequired(ref cause) => cause,
+            AdminSetUserMFAPreferenceError::ResourceNotFound(ref cause) => cause,
+            AdminSetUserMFAPreferenceError::UserNotConfirmed(ref cause) => cause,
+            AdminSetUserMFAPreferenceError::UserNotFound(ref cause) => cause,
+            AdminSetUserMFAPreferenceError::Validation(ref cause) => cause,
+            AdminSetUserMFAPreferenceError::Credentials(ref err) => err.description(),
+            AdminSetUserMFAPreferenceError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            AdminSetUserMFAPreferenceError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -5431,6 +6449,130 @@ impl Error for AdminSetUserSettingsError {
                 dispatch_error.description()
             }
             AdminSetUserSettingsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by AdminUpdateAuthEventFeedback
+#[derive(Debug, PartialEq)]
+pub enum AdminUpdateAuthEventFeedbackError {
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    InternalError(String),
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    InvalidParameter(String),
+    /// <p>This exception is thrown when a user is not authorized.</p>
+    NotAuthorized(String),
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    ResourceNotFound(String),
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    TooManyRequests(String),
+    /// <p>This exception is thrown when a user is not found.</p>
+    UserNotFound(String),
+    /// <p>This exception is thrown when user pool add-ons are not enabled.</p>
+    UserPoolAddOnNotEnabled(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl AdminUpdateAuthEventFeedbackError {
+    pub fn from_body(body: &str) -> AdminUpdateAuthEventFeedbackError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalErrorException" => AdminUpdateAuthEventFeedbackError::InternalError(
+                        String::from(error_message),
+                    ),
+                    "InvalidParameterException" => {
+                        AdminUpdateAuthEventFeedbackError::InvalidParameter(String::from(
+                            error_message,
+                        ))
+                    }
+                    "NotAuthorizedException" => AdminUpdateAuthEventFeedbackError::NotAuthorized(
+                        String::from(error_message),
+                    ),
+                    "ResourceNotFoundException" => {
+                        AdminUpdateAuthEventFeedbackError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "TooManyRequestsException" => {
+                        AdminUpdateAuthEventFeedbackError::TooManyRequests(String::from(
+                            error_message,
+                        ))
+                    }
+                    "UserNotFoundException" => {
+                        AdminUpdateAuthEventFeedbackError::UserNotFound(String::from(error_message))
+                    }
+                    "UserPoolAddOnNotEnabledException" => {
+                        AdminUpdateAuthEventFeedbackError::UserPoolAddOnNotEnabled(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        AdminUpdateAuthEventFeedbackError::Validation(error_message.to_string())
+                    }
+                    _ => AdminUpdateAuthEventFeedbackError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => AdminUpdateAuthEventFeedbackError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for AdminUpdateAuthEventFeedbackError {
+    fn from(err: serde_json::error::Error) -> AdminUpdateAuthEventFeedbackError {
+        AdminUpdateAuthEventFeedbackError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for AdminUpdateAuthEventFeedbackError {
+    fn from(err: CredentialsError) -> AdminUpdateAuthEventFeedbackError {
+        AdminUpdateAuthEventFeedbackError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AdminUpdateAuthEventFeedbackError {
+    fn from(err: HttpDispatchError) -> AdminUpdateAuthEventFeedbackError {
+        AdminUpdateAuthEventFeedbackError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AdminUpdateAuthEventFeedbackError {
+    fn from(err: io::Error) -> AdminUpdateAuthEventFeedbackError {
+        AdminUpdateAuthEventFeedbackError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for AdminUpdateAuthEventFeedbackError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AdminUpdateAuthEventFeedbackError {
+    fn description(&self) -> &str {
+        match *self {
+            AdminUpdateAuthEventFeedbackError::InternalError(ref cause) => cause,
+            AdminUpdateAuthEventFeedbackError::InvalidParameter(ref cause) => cause,
+            AdminUpdateAuthEventFeedbackError::NotAuthorized(ref cause) => cause,
+            AdminUpdateAuthEventFeedbackError::ResourceNotFound(ref cause) => cause,
+            AdminUpdateAuthEventFeedbackError::TooManyRequests(ref cause) => cause,
+            AdminUpdateAuthEventFeedbackError::UserNotFound(ref cause) => cause,
+            AdminUpdateAuthEventFeedbackError::UserPoolAddOnNotEnabled(ref cause) => cause,
+            AdminUpdateAuthEventFeedbackError::Validation(ref cause) => cause,
+            AdminUpdateAuthEventFeedbackError::Credentials(ref err) => err.description(),
+            AdminUpdateAuthEventFeedbackError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            AdminUpdateAuthEventFeedbackError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -5803,6 +6945,112 @@ impl Error for AdminUserGlobalSignOutError {
                 dispatch_error.description()
             }
             AdminUserGlobalSignOutError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by AssociateSoftwareToken
+#[derive(Debug, PartialEq)]
+pub enum AssociateSoftwareTokenError {
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    InternalError(String),
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    InvalidParameter(String),
+    /// <p>This exception is thrown when a user is not authorized.</p>
+    NotAuthorized(String),
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    ResourceNotFound(String),
+    /// <p>This exception is thrown when the software token TOTP multi-factor authentication (MFA) is not enabled for the user pool.</p>
+    SoftwareTokenMFANotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl AssociateSoftwareTokenError {
+    pub fn from_body(body: &str) -> AssociateSoftwareTokenError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalErrorException" => {
+                        AssociateSoftwareTokenError::InternalError(String::from(error_message))
+                    }
+                    "InvalidParameterException" => {
+                        AssociateSoftwareTokenError::InvalidParameter(String::from(error_message))
+                    }
+                    "NotAuthorizedException" => {
+                        AssociateSoftwareTokenError::NotAuthorized(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        AssociateSoftwareTokenError::ResourceNotFound(String::from(error_message))
+                    }
+                    "SoftwareTokenMFANotFoundException" => {
+                        AssociateSoftwareTokenError::SoftwareTokenMFANotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        AssociateSoftwareTokenError::Validation(error_message.to_string())
+                    }
+                    _ => AssociateSoftwareTokenError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => AssociateSoftwareTokenError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for AssociateSoftwareTokenError {
+    fn from(err: serde_json::error::Error) -> AssociateSoftwareTokenError {
+        AssociateSoftwareTokenError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for AssociateSoftwareTokenError {
+    fn from(err: CredentialsError) -> AssociateSoftwareTokenError {
+        AssociateSoftwareTokenError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AssociateSoftwareTokenError {
+    fn from(err: HttpDispatchError) -> AssociateSoftwareTokenError {
+        AssociateSoftwareTokenError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AssociateSoftwareTokenError {
+    fn from(err: io::Error) -> AssociateSoftwareTokenError {
+        AssociateSoftwareTokenError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for AssociateSoftwareTokenError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AssociateSoftwareTokenError {
+    fn description(&self) -> &str {
+        match *self {
+            AssociateSoftwareTokenError::InternalError(ref cause) => cause,
+            AssociateSoftwareTokenError::InvalidParameter(ref cause) => cause,
+            AssociateSoftwareTokenError::NotAuthorized(ref cause) => cause,
+            AssociateSoftwareTokenError::ResourceNotFound(ref cause) => cause,
+            AssociateSoftwareTokenError::SoftwareTokenMFANotFound(ref cause) => cause,
+            AssociateSoftwareTokenError::Validation(ref cause) => cause,
+            AssociateSoftwareTokenError::Credentials(ref err) => err.description(),
+            AssociateSoftwareTokenError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            AssociateSoftwareTokenError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -8294,6 +9542,122 @@ impl Error for DescribeResourceServerError {
         }
     }
 }
+/// Errors returned by DescribeRiskConfiguration
+#[derive(Debug, PartialEq)]
+pub enum DescribeRiskConfigurationError {
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    InternalError(String),
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    InvalidParameter(String),
+    /// <p>This exception is thrown when a user is not authorized.</p>
+    NotAuthorized(String),
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    ResourceNotFound(String),
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    TooManyRequests(String),
+    /// <p>This exception is thrown when user pool add-ons are not enabled.</p>
+    UserPoolAddOnNotEnabled(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeRiskConfigurationError {
+    pub fn from_body(body: &str) -> DescribeRiskConfigurationError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalErrorException" => {
+                        DescribeRiskConfigurationError::InternalError(String::from(error_message))
+                    }
+                    "InvalidParameterException" => {
+                        DescribeRiskConfigurationError::InvalidParameter(String::from(
+                            error_message,
+                        ))
+                    }
+                    "NotAuthorizedException" => {
+                        DescribeRiskConfigurationError::NotAuthorized(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        DescribeRiskConfigurationError::ResourceNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "TooManyRequestsException" => {
+                        DescribeRiskConfigurationError::TooManyRequests(String::from(error_message))
+                    }
+                    "UserPoolAddOnNotEnabledException" => {
+                        DescribeRiskConfigurationError::UserPoolAddOnNotEnabled(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        DescribeRiskConfigurationError::Validation(error_message.to_string())
+                    }
+                    _ => DescribeRiskConfigurationError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribeRiskConfigurationError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeRiskConfigurationError {
+    fn from(err: serde_json::error::Error) -> DescribeRiskConfigurationError {
+        DescribeRiskConfigurationError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeRiskConfigurationError {
+    fn from(err: CredentialsError) -> DescribeRiskConfigurationError {
+        DescribeRiskConfigurationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeRiskConfigurationError {
+    fn from(err: HttpDispatchError) -> DescribeRiskConfigurationError {
+        DescribeRiskConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeRiskConfigurationError {
+    fn from(err: io::Error) -> DescribeRiskConfigurationError {
+        DescribeRiskConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeRiskConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeRiskConfigurationError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeRiskConfigurationError::InternalError(ref cause) => cause,
+            DescribeRiskConfigurationError::InvalidParameter(ref cause) => cause,
+            DescribeRiskConfigurationError::NotAuthorized(ref cause) => cause,
+            DescribeRiskConfigurationError::ResourceNotFound(ref cause) => cause,
+            DescribeRiskConfigurationError::TooManyRequests(ref cause) => cause,
+            DescribeRiskConfigurationError::UserPoolAddOnNotEnabled(ref cause) => cause,
+            DescribeRiskConfigurationError::Validation(ref cause) => cause,
+            DescribeRiskConfigurationError::Credentials(ref err) => err.description(),
+            DescribeRiskConfigurationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeRiskConfigurationError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeUserImportJob
 #[derive(Debug, PartialEq)]
 pub enum DescribeUserImportJobError {
@@ -9866,6 +11230,110 @@ impl Error for GetUserAttributeVerificationCodeError {
         }
     }
 }
+/// Errors returned by GetUserPoolMfaConfig
+#[derive(Debug, PartialEq)]
+pub enum GetUserPoolMfaConfigError {
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    InternalError(String),
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    InvalidParameter(String),
+    /// <p>This exception is thrown when a user is not authorized.</p>
+    NotAuthorized(String),
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    ResourceNotFound(String),
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    TooManyRequests(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetUserPoolMfaConfigError {
+    pub fn from_body(body: &str) -> GetUserPoolMfaConfigError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalErrorException" => {
+                        GetUserPoolMfaConfigError::InternalError(String::from(error_message))
+                    }
+                    "InvalidParameterException" => {
+                        GetUserPoolMfaConfigError::InvalidParameter(String::from(error_message))
+                    }
+                    "NotAuthorizedException" => {
+                        GetUserPoolMfaConfigError::NotAuthorized(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        GetUserPoolMfaConfigError::ResourceNotFound(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        GetUserPoolMfaConfigError::TooManyRequests(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetUserPoolMfaConfigError::Validation(error_message.to_string())
+                    }
+                    _ => GetUserPoolMfaConfigError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetUserPoolMfaConfigError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetUserPoolMfaConfigError {
+    fn from(err: serde_json::error::Error) -> GetUserPoolMfaConfigError {
+        GetUserPoolMfaConfigError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetUserPoolMfaConfigError {
+    fn from(err: CredentialsError) -> GetUserPoolMfaConfigError {
+        GetUserPoolMfaConfigError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetUserPoolMfaConfigError {
+    fn from(err: HttpDispatchError) -> GetUserPoolMfaConfigError {
+        GetUserPoolMfaConfigError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetUserPoolMfaConfigError {
+    fn from(err: io::Error) -> GetUserPoolMfaConfigError {
+        GetUserPoolMfaConfigError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetUserPoolMfaConfigError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetUserPoolMfaConfigError {
+    fn description(&self) -> &str {
+        match *self {
+            GetUserPoolMfaConfigError::InternalError(ref cause) => cause,
+            GetUserPoolMfaConfigError::InvalidParameter(ref cause) => cause,
+            GetUserPoolMfaConfigError::NotAuthorized(ref cause) => cause,
+            GetUserPoolMfaConfigError::ResourceNotFound(ref cause) => cause,
+            GetUserPoolMfaConfigError::TooManyRequests(ref cause) => cause,
+            GetUserPoolMfaConfigError::Validation(ref cause) => cause,
+            GetUserPoolMfaConfigError::Credentials(ref err) => err.description(),
+            GetUserPoolMfaConfigError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetUserPoolMfaConfigError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GlobalSignOut
 #[derive(Debug, PartialEq)]
 pub enum GlobalSignOutError {
@@ -11265,6 +12733,8 @@ pub enum RespondToAuthChallengeError {
     PasswordResetRequired(String),
     /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
     ResourceNotFound(String),
+    /// <p>This exception is thrown when the software token TOTP multi-factor authentication (MFA) is not enabled for the user pool.</p>
+    SoftwareTokenMFANotFound(String),
     /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
     TooManyRequests(String),
     /// <p>This exception is thrown when the Amazon Cognito service encounters an unexpected exception with the AWS Lambda service.</p>
@@ -11350,6 +12820,11 @@ impl RespondToAuthChallengeError {
                     "ResourceNotFoundException" => {
                         RespondToAuthChallengeError::ResourceNotFound(String::from(error_message))
                     }
+                    "SoftwareTokenMFANotFoundException" => {
+                        RespondToAuthChallengeError::SoftwareTokenMFANotFound(String::from(
+                            error_message,
+                        ))
+                    }
                     "TooManyRequestsException" => {
                         RespondToAuthChallengeError::TooManyRequests(String::from(error_message))
                     }
@@ -11420,6 +12895,7 @@ impl Error for RespondToAuthChallengeError {
             RespondToAuthChallengeError::NotAuthorized(ref cause) => cause,
             RespondToAuthChallengeError::PasswordResetRequired(ref cause) => cause,
             RespondToAuthChallengeError::ResourceNotFound(ref cause) => cause,
+            RespondToAuthChallengeError::SoftwareTokenMFANotFound(ref cause) => cause,
             RespondToAuthChallengeError::TooManyRequests(ref cause) => cause,
             RespondToAuthChallengeError::UnexpectedLambda(ref cause) => cause,
             RespondToAuthChallengeError::UserLambdaValidation(ref cause) => cause,
@@ -11431,6 +12907,132 @@ impl Error for RespondToAuthChallengeError {
                 dispatch_error.description()
             }
             RespondToAuthChallengeError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by SetRiskConfiguration
+#[derive(Debug, PartialEq)]
+pub enum SetRiskConfigurationError {
+    /// <p>This exception is thrown when a verification code fails to deliver successfully.</p>
+    CodeDeliveryFailure(String),
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    InternalError(String),
+    /// <p>This exception is thrown when Amazon Cognito is not allowed to use your email identity. HTTP status code: 400.</p>
+    InvalidEmailRoleAccessPolicy(String),
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    InvalidParameter(String),
+    /// <p>This exception is thrown when a user is not authorized.</p>
+    NotAuthorized(String),
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    ResourceNotFound(String),
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    TooManyRequests(String),
+    /// <p>This exception is thrown when user pool add-ons are not enabled.</p>
+    UserPoolAddOnNotEnabled(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl SetRiskConfigurationError {
+    pub fn from_body(body: &str) -> SetRiskConfigurationError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "CodeDeliveryFailureException" => {
+                        SetRiskConfigurationError::CodeDeliveryFailure(String::from(error_message))
+                    }
+                    "InternalErrorException" => {
+                        SetRiskConfigurationError::InternalError(String::from(error_message))
+                    }
+                    "InvalidEmailRoleAccessPolicyException" => {
+                        SetRiskConfigurationError::InvalidEmailRoleAccessPolicy(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidParameterException" => {
+                        SetRiskConfigurationError::InvalidParameter(String::from(error_message))
+                    }
+                    "NotAuthorizedException" => {
+                        SetRiskConfigurationError::NotAuthorized(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        SetRiskConfigurationError::ResourceNotFound(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        SetRiskConfigurationError::TooManyRequests(String::from(error_message))
+                    }
+                    "UserPoolAddOnNotEnabledException" => {
+                        SetRiskConfigurationError::UserPoolAddOnNotEnabled(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        SetRiskConfigurationError::Validation(error_message.to_string())
+                    }
+                    _ => SetRiskConfigurationError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => SetRiskConfigurationError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for SetRiskConfigurationError {
+    fn from(err: serde_json::error::Error) -> SetRiskConfigurationError {
+        SetRiskConfigurationError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for SetRiskConfigurationError {
+    fn from(err: CredentialsError) -> SetRiskConfigurationError {
+        SetRiskConfigurationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for SetRiskConfigurationError {
+    fn from(err: HttpDispatchError) -> SetRiskConfigurationError {
+        SetRiskConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetRiskConfigurationError {
+    fn from(err: io::Error) -> SetRiskConfigurationError {
+        SetRiskConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for SetRiskConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SetRiskConfigurationError {
+    fn description(&self) -> &str {
+        match *self {
+            SetRiskConfigurationError::CodeDeliveryFailure(ref cause) => cause,
+            SetRiskConfigurationError::InternalError(ref cause) => cause,
+            SetRiskConfigurationError::InvalidEmailRoleAccessPolicy(ref cause) => cause,
+            SetRiskConfigurationError::InvalidParameter(ref cause) => cause,
+            SetRiskConfigurationError::NotAuthorized(ref cause) => cause,
+            SetRiskConfigurationError::ResourceNotFound(ref cause) => cause,
+            SetRiskConfigurationError::TooManyRequests(ref cause) => cause,
+            SetRiskConfigurationError::UserPoolAddOnNotEnabled(ref cause) => cause,
+            SetRiskConfigurationError::Validation(ref cause) => cause,
+            SetRiskConfigurationError::Credentials(ref err) => err.description(),
+            SetRiskConfigurationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            SetRiskConfigurationError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -11535,6 +13137,244 @@ impl Error for SetUICustomizationError {
                 dispatch_error.description()
             }
             SetUICustomizationError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by SetUserMFAPreference
+#[derive(Debug, PartialEq)]
+pub enum SetUserMFAPreferenceError {
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    InternalError(String),
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    InvalidParameter(String),
+    /// <p>This exception is thrown when a user is not authorized.</p>
+    NotAuthorized(String),
+    /// <p>This exception is thrown when a password reset is required.</p>
+    PasswordResetRequired(String),
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    ResourceNotFound(String),
+    /// <p>This exception is thrown when a user is not confirmed successfully.</p>
+    UserNotConfirmed(String),
+    /// <p>This exception is thrown when a user is not found.</p>
+    UserNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl SetUserMFAPreferenceError {
+    pub fn from_body(body: &str) -> SetUserMFAPreferenceError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalErrorException" => {
+                        SetUserMFAPreferenceError::InternalError(String::from(error_message))
+                    }
+                    "InvalidParameterException" => {
+                        SetUserMFAPreferenceError::InvalidParameter(String::from(error_message))
+                    }
+                    "NotAuthorizedException" => {
+                        SetUserMFAPreferenceError::NotAuthorized(String::from(error_message))
+                    }
+                    "PasswordResetRequiredException" => {
+                        SetUserMFAPreferenceError::PasswordResetRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ResourceNotFoundException" => {
+                        SetUserMFAPreferenceError::ResourceNotFound(String::from(error_message))
+                    }
+                    "UserNotConfirmedException" => {
+                        SetUserMFAPreferenceError::UserNotConfirmed(String::from(error_message))
+                    }
+                    "UserNotFoundException" => {
+                        SetUserMFAPreferenceError::UserNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        SetUserMFAPreferenceError::Validation(error_message.to_string())
+                    }
+                    _ => SetUserMFAPreferenceError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => SetUserMFAPreferenceError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for SetUserMFAPreferenceError {
+    fn from(err: serde_json::error::Error) -> SetUserMFAPreferenceError {
+        SetUserMFAPreferenceError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for SetUserMFAPreferenceError {
+    fn from(err: CredentialsError) -> SetUserMFAPreferenceError {
+        SetUserMFAPreferenceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for SetUserMFAPreferenceError {
+    fn from(err: HttpDispatchError) -> SetUserMFAPreferenceError {
+        SetUserMFAPreferenceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetUserMFAPreferenceError {
+    fn from(err: io::Error) -> SetUserMFAPreferenceError {
+        SetUserMFAPreferenceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for SetUserMFAPreferenceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SetUserMFAPreferenceError {
+    fn description(&self) -> &str {
+        match *self {
+            SetUserMFAPreferenceError::InternalError(ref cause) => cause,
+            SetUserMFAPreferenceError::InvalidParameter(ref cause) => cause,
+            SetUserMFAPreferenceError::NotAuthorized(ref cause) => cause,
+            SetUserMFAPreferenceError::PasswordResetRequired(ref cause) => cause,
+            SetUserMFAPreferenceError::ResourceNotFound(ref cause) => cause,
+            SetUserMFAPreferenceError::UserNotConfirmed(ref cause) => cause,
+            SetUserMFAPreferenceError::UserNotFound(ref cause) => cause,
+            SetUserMFAPreferenceError::Validation(ref cause) => cause,
+            SetUserMFAPreferenceError::Credentials(ref err) => err.description(),
+            SetUserMFAPreferenceError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            SetUserMFAPreferenceError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by SetUserPoolMfaConfig
+#[derive(Debug, PartialEq)]
+pub enum SetUserPoolMfaConfigError {
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    InternalError(String),
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    InvalidParameter(String),
+    /// <p>This exception is returned when the role provided for SMS configuration does not have permission to publish using Amazon SNS.</p>
+    InvalidSmsRoleAccessPolicy(String),
+    /// <p>This exception is thrown when the trust relationship is invalid for the role provided for SMS configuration. This can happen if you do not trust <b>cognito-idp.amazonaws.com</b> or the external ID provided in the role does not match what is provided in the SMS configuration for the user pool.</p>
+    InvalidSmsRoleTrustRelationship(String),
+    /// <p>This exception is thrown when a user is not authorized.</p>
+    NotAuthorized(String),
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    ResourceNotFound(String),
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    TooManyRequests(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl SetUserPoolMfaConfigError {
+    pub fn from_body(body: &str) -> SetUserPoolMfaConfigError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalErrorException" => {
+                        SetUserPoolMfaConfigError::InternalError(String::from(error_message))
+                    }
+                    "InvalidParameterException" => {
+                        SetUserPoolMfaConfigError::InvalidParameter(String::from(error_message))
+                    }
+                    "InvalidSmsRoleAccessPolicyException" => {
+                        SetUserPoolMfaConfigError::InvalidSmsRoleAccessPolicy(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidSmsRoleTrustRelationshipException" => {
+                        SetUserPoolMfaConfigError::InvalidSmsRoleTrustRelationship(String::from(
+                            error_message,
+                        ))
+                    }
+                    "NotAuthorizedException" => {
+                        SetUserPoolMfaConfigError::NotAuthorized(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        SetUserPoolMfaConfigError::ResourceNotFound(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        SetUserPoolMfaConfigError::TooManyRequests(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        SetUserPoolMfaConfigError::Validation(error_message.to_string())
+                    }
+                    _ => SetUserPoolMfaConfigError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => SetUserPoolMfaConfigError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for SetUserPoolMfaConfigError {
+    fn from(err: serde_json::error::Error) -> SetUserPoolMfaConfigError {
+        SetUserPoolMfaConfigError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for SetUserPoolMfaConfigError {
+    fn from(err: CredentialsError) -> SetUserPoolMfaConfigError {
+        SetUserPoolMfaConfigError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for SetUserPoolMfaConfigError {
+    fn from(err: HttpDispatchError) -> SetUserPoolMfaConfigError {
+        SetUserPoolMfaConfigError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SetUserPoolMfaConfigError {
+    fn from(err: io::Error) -> SetUserPoolMfaConfigError {
+        SetUserPoolMfaConfigError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for SetUserPoolMfaConfigError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SetUserPoolMfaConfigError {
+    fn description(&self) -> &str {
+        match *self {
+            SetUserPoolMfaConfigError::InternalError(ref cause) => cause,
+            SetUserPoolMfaConfigError::InvalidParameter(ref cause) => cause,
+            SetUserPoolMfaConfigError::InvalidSmsRoleAccessPolicy(ref cause) => cause,
+            SetUserPoolMfaConfigError::InvalidSmsRoleTrustRelationship(ref cause) => cause,
+            SetUserPoolMfaConfigError::NotAuthorized(ref cause) => cause,
+            SetUserPoolMfaConfigError::ResourceNotFound(ref cause) => cause,
+            SetUserPoolMfaConfigError::TooManyRequests(ref cause) => cause,
+            SetUserPoolMfaConfigError::Validation(ref cause) => cause,
+            SetUserPoolMfaConfigError::Credentials(ref err) => err.description(),
+            SetUserPoolMfaConfigError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            SetUserPoolMfaConfigError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -12023,6 +13863,124 @@ impl Error for StopUserImportJobError {
                 dispatch_error.description()
             }
             StopUserImportJobError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdateAuthEventFeedback
+#[derive(Debug, PartialEq)]
+pub enum UpdateAuthEventFeedbackError {
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    InternalError(String),
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    InvalidParameter(String),
+    /// <p>This exception is thrown when a user is not authorized.</p>
+    NotAuthorized(String),
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    ResourceNotFound(String),
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    TooManyRequests(String),
+    /// <p>This exception is thrown when a user is not found.</p>
+    UserNotFound(String),
+    /// <p>This exception is thrown when user pool add-ons are not enabled.</p>
+    UserPoolAddOnNotEnabled(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateAuthEventFeedbackError {
+    pub fn from_body(body: &str) -> UpdateAuthEventFeedbackError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InternalErrorException" => {
+                        UpdateAuthEventFeedbackError::InternalError(String::from(error_message))
+                    }
+                    "InvalidParameterException" => {
+                        UpdateAuthEventFeedbackError::InvalidParameter(String::from(error_message))
+                    }
+                    "NotAuthorizedException" => {
+                        UpdateAuthEventFeedbackError::NotAuthorized(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        UpdateAuthEventFeedbackError::ResourceNotFound(String::from(error_message))
+                    }
+                    "TooManyRequestsException" => {
+                        UpdateAuthEventFeedbackError::TooManyRequests(String::from(error_message))
+                    }
+                    "UserNotFoundException" => {
+                        UpdateAuthEventFeedbackError::UserNotFound(String::from(error_message))
+                    }
+                    "UserPoolAddOnNotEnabledException" => {
+                        UpdateAuthEventFeedbackError::UserPoolAddOnNotEnabled(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        UpdateAuthEventFeedbackError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateAuthEventFeedbackError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateAuthEventFeedbackError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateAuthEventFeedbackError {
+    fn from(err: serde_json::error::Error) -> UpdateAuthEventFeedbackError {
+        UpdateAuthEventFeedbackError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateAuthEventFeedbackError {
+    fn from(err: CredentialsError) -> UpdateAuthEventFeedbackError {
+        UpdateAuthEventFeedbackError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateAuthEventFeedbackError {
+    fn from(err: HttpDispatchError) -> UpdateAuthEventFeedbackError {
+        UpdateAuthEventFeedbackError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateAuthEventFeedbackError {
+    fn from(err: io::Error) -> UpdateAuthEventFeedbackError {
+        UpdateAuthEventFeedbackError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateAuthEventFeedbackError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateAuthEventFeedbackError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateAuthEventFeedbackError::InternalError(ref cause) => cause,
+            UpdateAuthEventFeedbackError::InvalidParameter(ref cause) => cause,
+            UpdateAuthEventFeedbackError::NotAuthorized(ref cause) => cause,
+            UpdateAuthEventFeedbackError::ResourceNotFound(ref cause) => cause,
+            UpdateAuthEventFeedbackError::TooManyRequests(ref cause) => cause,
+            UpdateAuthEventFeedbackError::UserNotFound(ref cause) => cause,
+            UpdateAuthEventFeedbackError::UserPoolAddOnNotEnabled(ref cause) => cause,
+            UpdateAuthEventFeedbackError::Validation(ref cause) => cause,
+            UpdateAuthEventFeedbackError::Credentials(ref err) => err.description(),
+            UpdateAuthEventFeedbackError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateAuthEventFeedbackError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -12811,6 +14769,8 @@ impl Error for UpdateUserPoolError {
 /// Errors returned by UpdateUserPoolClient
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserPoolClientError {
+    /// <p>This exception is thrown if two or more modifications are happening concurrently.</p>
+    ConcurrentModification(String),
     /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
     InternalError(String),
     /// <p>This exception is thrown when the specified OAuth flow is invalid.</p>
@@ -12848,6 +14808,11 @@ impl UpdateUserPoolClientError {
                 let error_type = pieces.last().expect("Expected error type");
 
                 match *error_type {
+                    "ConcurrentModificationException" => {
+                        UpdateUserPoolClientError::ConcurrentModification(String::from(
+                            error_message,
+                        ))
+                    }
                     "InternalErrorException" => {
                         UpdateUserPoolClientError::InternalError(String::from(error_message))
                     }
@@ -12908,6 +14873,7 @@ impl fmt::Display for UpdateUserPoolClientError {
 impl Error for UpdateUserPoolClientError {
     fn description(&self) -> &str {
         match *self {
+            UpdateUserPoolClientError::ConcurrentModification(ref cause) => cause,
             UpdateUserPoolClientError::InternalError(ref cause) => cause,
             UpdateUserPoolClientError::InvalidOAuthFlow(ref cause) => cause,
             UpdateUserPoolClientError::InvalidParameter(ref cause) => cause,
@@ -12921,6 +14887,158 @@ impl Error for UpdateUserPoolClientError {
                 dispatch_error.description()
             }
             UpdateUserPoolClientError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by VerifySoftwareToken
+#[derive(Debug, PartialEq)]
+pub enum VerifySoftwareTokenError {
+    /// <p>This exception is thrown if the provided code does not match what the server was expecting.</p>
+    CodeMismatch(String),
+    /// <p>This exception is thrown when there is a code mismatch and the service fails to configure the software token TOTP multi-factor authentication (MFA).</p>
+    EnableSoftwareTokenMFA(String),
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    InternalError(String),
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    InvalidParameter(String),
+    /// <p>This exception is thrown when the user pool configuration is invalid.</p>
+    InvalidUserPoolConfiguration(String),
+    /// <p>This exception is thrown when a user is not authorized.</p>
+    NotAuthorized(String),
+    /// <p>This exception is thrown when a password reset is required.</p>
+    PasswordResetRequired(String),
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    ResourceNotFound(String),
+    /// <p>This exception is thrown when the software token TOTP multi-factor authentication (MFA) is not enabled for the user pool.</p>
+    SoftwareTokenMFANotFound(String),
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    TooManyRequests(String),
+    /// <p>This exception is thrown when a user is not confirmed successfully.</p>
+    UserNotConfirmed(String),
+    /// <p>This exception is thrown when a user is not found.</p>
+    UserNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl VerifySoftwareTokenError {
+    pub fn from_body(body: &str) -> VerifySoftwareTokenError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "CodeMismatchException" => {
+                        VerifySoftwareTokenError::CodeMismatch(String::from(error_message))
+                    }
+                    "EnableSoftwareTokenMFAException" => {
+                        VerifySoftwareTokenError::EnableSoftwareTokenMFA(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InternalErrorException" => {
+                        VerifySoftwareTokenError::InternalError(String::from(error_message))
+                    }
+                    "InvalidParameterException" => {
+                        VerifySoftwareTokenError::InvalidParameter(String::from(error_message))
+                    }
+                    "InvalidUserPoolConfigurationException" => {
+                        VerifySoftwareTokenError::InvalidUserPoolConfiguration(String::from(
+                            error_message,
+                        ))
+                    }
+                    "NotAuthorizedException" => {
+                        VerifySoftwareTokenError::NotAuthorized(String::from(error_message))
+                    }
+                    "PasswordResetRequiredException" => {
+                        VerifySoftwareTokenError::PasswordResetRequired(String::from(error_message))
+                    }
+                    "ResourceNotFoundException" => {
+                        VerifySoftwareTokenError::ResourceNotFound(String::from(error_message))
+                    }
+                    "SoftwareTokenMFANotFoundException" => {
+                        VerifySoftwareTokenError::SoftwareTokenMFANotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "TooManyRequestsException" => {
+                        VerifySoftwareTokenError::TooManyRequests(String::from(error_message))
+                    }
+                    "UserNotConfirmedException" => {
+                        VerifySoftwareTokenError::UserNotConfirmed(String::from(error_message))
+                    }
+                    "UserNotFoundException" => {
+                        VerifySoftwareTokenError::UserNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        VerifySoftwareTokenError::Validation(error_message.to_string())
+                    }
+                    _ => VerifySoftwareTokenError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => VerifySoftwareTokenError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for VerifySoftwareTokenError {
+    fn from(err: serde_json::error::Error) -> VerifySoftwareTokenError {
+        VerifySoftwareTokenError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for VerifySoftwareTokenError {
+    fn from(err: CredentialsError) -> VerifySoftwareTokenError {
+        VerifySoftwareTokenError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for VerifySoftwareTokenError {
+    fn from(err: HttpDispatchError) -> VerifySoftwareTokenError {
+        VerifySoftwareTokenError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for VerifySoftwareTokenError {
+    fn from(err: io::Error) -> VerifySoftwareTokenError {
+        VerifySoftwareTokenError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for VerifySoftwareTokenError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for VerifySoftwareTokenError {
+    fn description(&self) -> &str {
+        match *self {
+            VerifySoftwareTokenError::CodeMismatch(ref cause) => cause,
+            VerifySoftwareTokenError::EnableSoftwareTokenMFA(ref cause) => cause,
+            VerifySoftwareTokenError::InternalError(ref cause) => cause,
+            VerifySoftwareTokenError::InvalidParameter(ref cause) => cause,
+            VerifySoftwareTokenError::InvalidUserPoolConfiguration(ref cause) => cause,
+            VerifySoftwareTokenError::NotAuthorized(ref cause) => cause,
+            VerifySoftwareTokenError::PasswordResetRequired(ref cause) => cause,
+            VerifySoftwareTokenError::ResourceNotFound(ref cause) => cause,
+            VerifySoftwareTokenError::SoftwareTokenMFANotFound(ref cause) => cause,
+            VerifySoftwareTokenError::TooManyRequests(ref cause) => cause,
+            VerifySoftwareTokenError::UserNotConfirmed(ref cause) => cause,
+            VerifySoftwareTokenError::UserNotFound(ref cause) => cause,
+            VerifySoftwareTokenError::Validation(ref cause) => cause,
+            VerifySoftwareTokenError::Credentials(ref err) => err.description(),
+            VerifySoftwareTokenError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            VerifySoftwareTokenError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -13084,7 +15202,7 @@ pub trait CognitoIdentityProvider {
         input: &AdminConfirmSignUpRequest,
     ) -> Result<AdminConfirmSignUpResponse, AdminConfirmSignUpError>;
 
-    /// <p>Creates a new user in the specified user pool and sends a welcome message via email or phone (SMS). This message is based on a template that you configured in your call to <a href="API_CreateUserPool.html">CreateUserPool</a> or <a href="API_UpdateUserPool.html">UpdateUserPool</a>. This template includes your custom sign-up instructions and placeholders for user name and temporary password.</p> <p>Requires developer credentials.</p>
+    /// <p>Creates a new user in the specified user pool.</p> <p>If <code>MessageAction</code> is not set, the default is to send a welcome message via email or phone (SMS).</p> <note> <p>This message is based on a template that you configured in your call to or . This template includes your custom sign-up instructions and placeholders for user name and temporary password.</p> </note> <p>Alternatively, you can call AdminCreateUser with “SUPPRESS” for the <code>MessageAction</code> parameter, and Amazon Cognito will not send any email. </p> <p>In either case, the user will be in the <code>FORCE_CHANGE_PASSWORD</code> state until they sign in and change their password.</p> <p>AdminCreateUser requires developer credentials.</p>
     fn admin_create_user(
         &self,
         input: &AdminCreateUserRequest,
@@ -13100,7 +15218,7 @@ pub trait CognitoIdentityProvider {
         input: &AdminDeleteUserAttributesRequest,
     ) -> Result<AdminDeleteUserAttributesResponse, AdminDeleteUserAttributesError>;
 
-    /// <p>Disables the user from signing in with the specified external (SAML or social) identity provider. If the user to disable is a Cognito User Pools native username + password user, they are not permitted to use their password to sign-in. If the user to disable is a linked external IdP user, any link between that user and an existing user is removed. The next time the external user (no longer attached to the previously linked <code>DestinationUser</code>) signs in, they must create a new user account. See <a href="API_AdminLinkProviderForUser.html">AdminLinkProviderForUser</a>.</p> <p>This action is enabled only for admin access and requires developer credentials.</p> <p>The <code>ProviderName</code> must match the value specified when creating an IdP for the pool. </p> <p>To disable a native username + password user, the <code>ProviderName</code> value must be <code>Cognito</code> and the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code>, with the <code>ProviderAttributeValue</code> being the name that is used in the user pool for the user.</p> <p>The <code>ProviderAttributeName</code> must always be <code>Cognito_Subject</code> for social identity providers. The <code>ProviderAttributeValue</code> must always be the exact subject that was used when the user was originally linked as a source user.</p> <p>For de-linking a SAML identity, there are two scenarios. If the linked identity has not yet been used to sign-in, the <code>ProviderAttributeName</code> and <code>ProviderAttributeValue</code> must be the same values that were used for the <code>SourceUser</code> when the identities were originally linked in the <a href="API_AdminLinkProviderForUser.html">AdminLinkProviderForUser</a> call. (If the linking was done with <code>ProviderAttributeName</code> set to <code>Cognito_Subject</code>, the same applies here). However, if the user has already signed in, the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code> and <code>ProviderAttributeValue</code> must be the subject of the SAML assertion.</p>
+    /// <p>Disables the user from signing in with the specified external (SAML or social) identity provider. If the user to disable is a Cognito User Pools native username + password user, they are not permitted to use their password to sign-in. If the user to disable is a linked external IdP user, any link between that user and an existing user is removed. The next time the external user (no longer attached to the previously linked <code>DestinationUser</code>) signs in, they must create a new user account. See .</p> <p>This action is enabled only for admin access and requires developer credentials.</p> <p>The <code>ProviderName</code> must match the value specified when creating an IdP for the pool. </p> <p>To disable a native username + password user, the <code>ProviderName</code> value must be <code>Cognito</code> and the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code>, with the <code>ProviderAttributeValue</code> being the name that is used in the user pool for the user.</p> <p>The <code>ProviderAttributeName</code> must always be <code>Cognito_Subject</code> for social identity providers. The <code>ProviderAttributeValue</code> must always be the exact subject that was used when the user was originally linked as a source user.</p> <p>For de-linking a SAML identity, there are two scenarios. If the linked identity has not yet been used to sign-in, the <code>ProviderAttributeName</code> and <code>ProviderAttributeValue</code> must be the same values that were used for the <code>SourceUser</code> when the identities were originally linked in the call. (If the linking was done with <code>ProviderAttributeName</code> set to <code>Cognito_Subject</code>, the same applies here). However, if the user has already signed in, the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code> and <code>ProviderAttributeValue</code> must be the subject of the SAML assertion.</p>
     fn admin_disable_provider_for_user(
         &self,
         input: &AdminDisableProviderForUserRequest,
@@ -13142,7 +15260,7 @@ pub trait CognitoIdentityProvider {
         input: &AdminInitiateAuthRequest,
     ) -> Result<AdminInitiateAuthResponse, AdminInitiateAuthError>;
 
-    /// <p>Links an existing user account in a user pool (<code>DestinationUser</code>) to an identity from an external identity provider (<code>SourceUser</code>) based on a specified attribute name and value from the external identity provider. This allows you to create a link from the existing user account to an external federated user identity that has not yet been used to sign in, so that the federated user identity can be used to sign in as the existing user account. </p> <p> For example, if there is an existing user with a username and password, this API links that user to a federated user identity, so that when the federated user identity is used, the user signs in as the existing user account. </p> <important> <p>Because this API allows a user with an external federated identity to sign in as an existing user in the user pool, it is critical that it only be used with external identity providers and provider attributes that have been trusted by the application owner.</p> </important> <p>See also <a href="API_AdminDisableProviderForUser.html">AdminDisableProviderForUser</a>.</p> <p>This action is enabled only for admin access and requires developer credentials.</p>
+    /// <p>Links an existing user account in a user pool (<code>DestinationUser</code>) to an identity from an external identity provider (<code>SourceUser</code>) based on a specified attribute name and value from the external identity provider. This allows you to create a link from the existing user account to an external federated user identity that has not yet been used to sign in, so that the federated user identity can be used to sign in as the existing user account. </p> <p> For example, if there is an existing user with a username and password, this API links that user to a federated user identity, so that when the federated user identity is used, the user signs in as the existing user account. </p> <important> <p>Because this API allows a user with an external federated identity to sign in as an existing user in the user pool, it is critical that it only be used with external identity providers and provider attributes that have been trusted by the application owner.</p> </important> <p>See also .</p> <p>This action is enabled only for admin access and requires developer credentials.</p>
     fn admin_link_provider_for_user(
         &self,
         input: &AdminLinkProviderForUserRequest,
@@ -13159,6 +15277,12 @@ pub trait CognitoIdentityProvider {
         &self,
         input: &AdminListGroupsForUserRequest,
     ) -> Result<AdminListGroupsForUserResponse, AdminListGroupsForUserError>;
+
+    /// <p>Lists a history of user activity and any risks detected as part of Amazon Cognito advanced security.</p>
+    fn admin_list_user_auth_events(
+        &self,
+        input: &AdminListUserAuthEventsRequest,
+    ) -> Result<AdminListUserAuthEventsResponse, AdminListUserAuthEventsError>;
 
     /// <p>Removes the specified user from the specified group.</p> <p>Requires developer credentials.</p>
     fn admin_remove_user_from_group(
@@ -13178,11 +15302,23 @@ pub trait CognitoIdentityProvider {
         input: &AdminRespondToAuthChallengeRequest,
     ) -> Result<AdminRespondToAuthChallengeResponse, AdminRespondToAuthChallengeError>;
 
+    /// <p>Sets the user's multi-factor authentication (MFA) preference.</p>
+    fn admin_set_user_mfa_preference(
+        &self,
+        input: &AdminSetUserMFAPreferenceRequest,
+    ) -> Result<AdminSetUserMFAPreferenceResponse, AdminSetUserMFAPreferenceError>;
+
     /// <p>Sets all the user settings for a specified user name. Works on any user.</p> <p>Requires developer credentials.</p>
     fn admin_set_user_settings(
         &self,
         input: &AdminSetUserSettingsRequest,
     ) -> Result<AdminSetUserSettingsResponse, AdminSetUserSettingsError>;
+
+    /// <p>Provides feedback for an authentication event as to whether it was from a valid user. This feedback is used for improving the risk evaluation decision for the user pool as part of Amazon Cognito advanced security.</p>
+    fn admin_update_auth_event_feedback(
+        &self,
+        input: &AdminUpdateAuthEventFeedbackRequest,
+    ) -> Result<AdminUpdateAuthEventFeedbackResponse, AdminUpdateAuthEventFeedbackError>;
 
     /// <p>Updates the device status as an administrator.</p> <p>Requires developer credentials.</p>
     fn admin_update_device_status(
@@ -13201,6 +15337,12 @@ pub trait CognitoIdentityProvider {
         &self,
         input: &AdminUserGlobalSignOutRequest,
     ) -> Result<AdminUserGlobalSignOutResponse, AdminUserGlobalSignOutError>;
+
+    /// <p>Returns a unique generated shared secret key code for the user account. The request takes an access token or a session string, but not both.</p>
+    fn associate_software_token(
+        &self,
+        input: &AssociateSoftwareTokenRequest,
+    ) -> Result<AssociateSoftwareTokenResponse, AssociateSoftwareTokenError>;
 
     /// <p>Changes the password for a specified user in a user pool.</p>
     fn change_password(
@@ -13319,6 +15461,12 @@ pub trait CognitoIdentityProvider {
         input: &DescribeResourceServerRequest,
     ) -> Result<DescribeResourceServerResponse, DescribeResourceServerError>;
 
+    /// <p>Describes the risk configuration.</p>
+    fn describe_risk_configuration(
+        &self,
+        input: &DescribeRiskConfigurationRequest,
+    ) -> Result<DescribeRiskConfigurationResponse, DescribeRiskConfigurationError>;
+
     /// <p>Describes the user import job.</p>
     fn describe_user_import_job(
         &self,
@@ -13346,7 +15494,7 @@ pub trait CognitoIdentityProvider {
     /// <p>Forgets the specified device.</p>
     fn forget_device(&self, input: &ForgetDeviceRequest) -> Result<(), ForgetDeviceError>;
 
-    /// <p>Calling this API causes a message to be sent to the end user with a confirmation code that is required to change the user's password. For the <code>Username</code> parameter, you can use the username or user alias. If a verified phone number exists for the user, the confirmation code is sent to the phone number. Otherwise, if a verified email exists, the confirmation code is sent to the email. If neither a verified phone number nor a verified email exists, <code>InvalidParameterException</code> is thrown. To use the confirmation code for resetting the password, call <a href="API_ConfirmForgotPassword.html">ConfirmForgotPassword</a>.</p>
+    /// <p>Calling this API causes a message to be sent to the end user with a confirmation code that is required to change the user's password. For the <code>Username</code> parameter, you can use the username or user alias. If a verified phone number exists for the user, the confirmation code is sent to the phone number. Otherwise, if a verified email exists, the confirmation code is sent to the email. If neither a verified phone number nor a verified email exists, <code>InvalidParameterException</code> is thrown. To use the confirmation code for resetting the password, call .</p>
     fn forgot_password(
         &self,
         input: &ForgotPasswordRequest,
@@ -13384,6 +15532,12 @@ pub trait CognitoIdentityProvider {
         &self,
         input: &GetUserAttributeVerificationCodeRequest,
     ) -> Result<GetUserAttributeVerificationCodeResponse, GetUserAttributeVerificationCodeError>;
+
+    /// <p>Gets the user pool multi-factor authentication (MFA) configuration.</p>
+    fn get_user_pool_mfa_config(
+        &self,
+        input: &GetUserPoolMfaConfigRequest,
+    ) -> Result<GetUserPoolMfaConfigResponse, GetUserPoolMfaConfigError>;
 
     /// <p>Signs out users from all devices.</p>
     fn global_sign_out(
@@ -13458,11 +15612,29 @@ pub trait CognitoIdentityProvider {
         input: &RespondToAuthChallengeRequest,
     ) -> Result<RespondToAuthChallengeResponse, RespondToAuthChallengeError>;
 
+    /// <p>Configures actions on detected risks. To delete the risk configuration for <code>UserPoolId</code> or <code>ClientId</code>, pass null values for all four configuration types.</p> <p>To enable Amazon Cognito advanced security features, update the user pool to include the <code>UserPoolAddOns</code> key<code>AdvancedSecurityMode</code>.</p> <p>See .</p>
+    fn set_risk_configuration(
+        &self,
+        input: &SetRiskConfigurationRequest,
+    ) -> Result<SetRiskConfigurationResponse, SetRiskConfigurationError>;
+
     /// <p><p>Sets the UI customization information for a user pool&#39;s built-in app UI.</p> <p>You can specify app UI customization settings for a single client (with a specific <code>clientId</code>) or for all clients (by setting the <code>clientId</code> to <code>ALL</code>). If you specify <code>ALL</code>, the default configuration will be used for every client that has no UI customization set previously. If you specify UI customization settings for a particular client, it will no longer fall back to the <code>ALL</code> configuration. </p> <note> <p>To use this API, your user pool must have a domain associated with it. Otherwise, there is no place to host the app&#39;s pages, and the service will throw an error.</p> </note></p>
     fn set_ui_customization(
         &self,
         input: &SetUICustomizationRequest,
     ) -> Result<SetUICustomizationResponse, SetUICustomizationError>;
+
+    /// <p>Set the user's multi-factor authentication (MFA) method preference.</p>
+    fn set_user_mfa_preference(
+        &self,
+        input: &SetUserMFAPreferenceRequest,
+    ) -> Result<SetUserMFAPreferenceResponse, SetUserMFAPreferenceError>;
+
+    /// <p>Set the user pool MFA configuration.</p>
+    fn set_user_pool_mfa_config(
+        &self,
+        input: &SetUserPoolMfaConfigRequest,
+    ) -> Result<SetUserPoolMfaConfigResponse, SetUserPoolMfaConfigError>;
 
     /// <p>Sets the user settings like multi-factor authentication (MFA). If MFA is to be removed for a particular attribute pass the attribute with code delivery as null. If null list is passed, all MFA options are removed.</p>
     fn set_user_settings(
@@ -13484,6 +15656,12 @@ pub trait CognitoIdentityProvider {
         &self,
         input: &StopUserImportJobRequest,
     ) -> Result<StopUserImportJobResponse, StopUserImportJobError>;
+
+    /// <p>Provides the feedback for an authentication event whether it was from a valid user or not. This feedback is used for improving the risk evaluation decision for the user pool as part of Amazon Cognito advanced security.</p>
+    fn update_auth_event_feedback(
+        &self,
+        input: &UpdateAuthEventFeedbackRequest,
+    ) -> Result<UpdateAuthEventFeedbackResponse, UpdateAuthEventFeedbackError>;
 
     /// <p>Updates the device status.</p>
     fn update_device_status(
@@ -13526,6 +15704,12 @@ pub trait CognitoIdentityProvider {
         &self,
         input: &UpdateUserPoolClientRequest,
     ) -> Result<UpdateUserPoolClientResponse, UpdateUserPoolClientError>;
+
+    /// <p>Use this API to register a user's entered TOTP code and mark the user's software token MFA status as "verified" if successful,</p>
+    fn verify_software_token(
+        &self,
+        input: &VerifySoftwareTokenRequest,
+    ) -> Result<VerifySoftwareTokenResponse, VerifySoftwareTokenError>;
 
     /// <p>Verifies the specified user attributes in the user pool.</p>
     fn verify_user_attribute(
@@ -13668,7 +15852,7 @@ where
         }
     }
 
-    /// <p>Creates a new user in the specified user pool and sends a welcome message via email or phone (SMS). This message is based on a template that you configured in your call to <a href="API_CreateUserPool.html">CreateUserPool</a> or <a href="API_UpdateUserPool.html">UpdateUserPool</a>. This template includes your custom sign-up instructions and placeholders for user name and temporary password.</p> <p>Requires developer credentials.</p>
+    /// <p>Creates a new user in the specified user pool.</p> <p>If <code>MessageAction</code> is not set, the default is to send a welcome message via email or phone (SMS).</p> <note> <p>This message is based on a template that you configured in your call to or . This template includes your custom sign-up instructions and placeholders for user name and temporary password.</p> </note> <p>Alternatively, you can call AdminCreateUser with “SUPPRESS” for the <code>MessageAction</code> parameter, and Amazon Cognito will not send any email. </p> <p>In either case, the user will be in the <code>FORCE_CHANGE_PASSWORD</code> state until they sign in and change their password.</p> <p>AdminCreateUser requires developer credentials.</p>
     fn admin_create_user(
         &self,
         input: &AdminCreateUserRequest,
@@ -13773,7 +15957,7 @@ where
         }
     }
 
-    /// <p>Disables the user from signing in with the specified external (SAML or social) identity provider. If the user to disable is a Cognito User Pools native username + password user, they are not permitted to use their password to sign-in. If the user to disable is a linked external IdP user, any link between that user and an existing user is removed. The next time the external user (no longer attached to the previously linked <code>DestinationUser</code>) signs in, they must create a new user account. See <a href="API_AdminLinkProviderForUser.html">AdminLinkProviderForUser</a>.</p> <p>This action is enabled only for admin access and requires developer credentials.</p> <p>The <code>ProviderName</code> must match the value specified when creating an IdP for the pool. </p> <p>To disable a native username + password user, the <code>ProviderName</code> value must be <code>Cognito</code> and the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code>, with the <code>ProviderAttributeValue</code> being the name that is used in the user pool for the user.</p> <p>The <code>ProviderAttributeName</code> must always be <code>Cognito_Subject</code> for social identity providers. The <code>ProviderAttributeValue</code> must always be the exact subject that was used when the user was originally linked as a source user.</p> <p>For de-linking a SAML identity, there are two scenarios. If the linked identity has not yet been used to sign-in, the <code>ProviderAttributeName</code> and <code>ProviderAttributeValue</code> must be the same values that were used for the <code>SourceUser</code> when the identities were originally linked in the <a href="API_AdminLinkProviderForUser.html">AdminLinkProviderForUser</a> call. (If the linking was done with <code>ProviderAttributeName</code> set to <code>Cognito_Subject</code>, the same applies here). However, if the user has already signed in, the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code> and <code>ProviderAttributeValue</code> must be the subject of the SAML assertion.</p>
+    /// <p>Disables the user from signing in with the specified external (SAML or social) identity provider. If the user to disable is a Cognito User Pools native username + password user, they are not permitted to use their password to sign-in. If the user to disable is a linked external IdP user, any link between that user and an existing user is removed. The next time the external user (no longer attached to the previously linked <code>DestinationUser</code>) signs in, they must create a new user account. See .</p> <p>This action is enabled only for admin access and requires developer credentials.</p> <p>The <code>ProviderName</code> must match the value specified when creating an IdP for the pool. </p> <p>To disable a native username + password user, the <code>ProviderName</code> value must be <code>Cognito</code> and the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code>, with the <code>ProviderAttributeValue</code> being the name that is used in the user pool for the user.</p> <p>The <code>ProviderAttributeName</code> must always be <code>Cognito_Subject</code> for social identity providers. The <code>ProviderAttributeValue</code> must always be the exact subject that was used when the user was originally linked as a source user.</p> <p>For de-linking a SAML identity, there are two scenarios. If the linked identity has not yet been used to sign-in, the <code>ProviderAttributeName</code> and <code>ProviderAttributeValue</code> must be the same values that were used for the <code>SourceUser</code> when the identities were originally linked in the call. (If the linking was done with <code>ProviderAttributeName</code> set to <code>Cognito_Subject</code>, the same applies here). However, if the user has already signed in, the <code>ProviderAttributeName</code> must be <code>Cognito_Subject</code> and <code>ProviderAttributeValue</code> must be the subject of the SAML assertion.</p>
     fn admin_disable_provider_for_user(
         &self,
         input: &AdminDisableProviderForUserRequest,
@@ -14026,7 +16210,7 @@ where
         }
     }
 
-    /// <p>Links an existing user account in a user pool (<code>DestinationUser</code>) to an identity from an external identity provider (<code>SourceUser</code>) based on a specified attribute name and value from the external identity provider. This allows you to create a link from the existing user account to an external federated user identity that has not yet been used to sign in, so that the federated user identity can be used to sign in as the existing user account. </p> <p> For example, if there is an existing user with a username and password, this API links that user to a federated user identity, so that when the federated user identity is used, the user signs in as the existing user account. </p> <important> <p>Because this API allows a user with an external federated identity to sign in as an existing user in the user pool, it is critical that it only be used with external identity providers and provider attributes that have been trusted by the application owner.</p> </important> <p>See also <a href="API_AdminDisableProviderForUser.html">AdminDisableProviderForUser</a>.</p> <p>This action is enabled only for admin access and requires developer credentials.</p>
+    /// <p>Links an existing user account in a user pool (<code>DestinationUser</code>) to an identity from an external identity provider (<code>SourceUser</code>) based on a specified attribute name and value from the external identity provider. This allows you to create a link from the existing user account to an external federated user identity that has not yet been used to sign in, so that the federated user identity can be used to sign in as the existing user account. </p> <p> For example, if there is an existing user with a username and password, this API links that user to a federated user identity, so that when the federated user identity is used, the user signs in as the existing user account. </p> <important> <p>Because this API allows a user with an external federated identity to sign in as an existing user in the user pool, it is critical that it only be used with external identity providers and provider attributes that have been trusted by the application owner.</p> </important> <p>See also .</p> <p>This action is enabled only for admin access and requires developer credentials.</p>
     fn admin_link_provider_for_user(
         &self,
         input: &AdminLinkProviderForUserRequest,
@@ -14131,6 +16315,43 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(AdminListGroupsForUserError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Lists a history of user activity and any risks detected as part of Amazon Cognito advanced security.</p>
+    fn admin_list_user_auth_events(
+        &self,
+        input: &AdminListUserAuthEventsRequest,
+    ) -> Result<AdminListUserAuthEventsResponse, AdminListUserAuthEventsError> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.AdminListUserAuthEvents",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AdminListUserAuthEventsResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AdminListUserAuthEventsError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -14242,6 +16463,43 @@ where
         }
     }
 
+    /// <p>Sets the user's multi-factor authentication (MFA) preference.</p>
+    fn admin_set_user_mfa_preference(
+        &self,
+        input: &AdminSetUserMFAPreferenceRequest,
+    ) -> Result<AdminSetUserMFAPreferenceResponse, AdminSetUserMFAPreferenceError> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.AdminSetUserMFAPreference",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AdminSetUserMFAPreferenceResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AdminSetUserMFAPreferenceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Sets all the user settings for a specified user name. Works on any user.</p> <p>Requires developer credentials.</p>
     fn admin_set_user_settings(
         &self,
@@ -14273,6 +16531,45 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(AdminSetUserSettingsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Provides feedback for an authentication event as to whether it was from a valid user. This feedback is used for improving the risk evaluation decision for the user pool as part of Amazon Cognito advanced security.</p>
+    fn admin_update_auth_event_feedback(
+        &self,
+        input: &AdminUpdateAuthEventFeedbackRequest,
+    ) -> Result<AdminUpdateAuthEventFeedbackResponse, AdminUpdateAuthEventFeedbackError> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.AdminUpdateAuthEventFeedback",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(
+                    serde_json::from_str::<AdminUpdateAuthEventFeedbackResponse>(
+                        String::from_utf8_lossy(&body).as_ref(),
+                    ).unwrap(),
+                )
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AdminUpdateAuthEventFeedbackError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -14384,6 +16681,43 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(AdminUserGlobalSignOutError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Returns a unique generated shared secret key code for the user account. The request takes an access token or a session string, but not both.</p>
+    fn associate_software_token(
+        &self,
+        input: &AssociateSoftwareTokenRequest,
+    ) -> Result<AssociateSoftwareTokenResponse, AssociateSoftwareTokenError> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.AssociateSoftwareToken",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<AssociateSoftwareTokenResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AssociateSoftwareTokenError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -15122,6 +17456,43 @@ where
         }
     }
 
+    /// <p>Describes the risk configuration.</p>
+    fn describe_risk_configuration(
+        &self,
+        input: &DescribeRiskConfigurationRequest,
+    ) -> Result<DescribeRiskConfigurationResponse, DescribeRiskConfigurationError> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.DescribeRiskConfiguration",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribeRiskConfigurationResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeRiskConfigurationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Describes the user import job.</p>
     fn describe_user_import_job(
         &self,
@@ -15298,7 +17669,7 @@ where
         }
     }
 
-    /// <p>Calling this API causes a message to be sent to the end user with a confirmation code that is required to change the user's password. For the <code>Username</code> parameter, you can use the username or user alias. If a verified phone number exists for the user, the confirmation code is sent to the phone number. Otherwise, if a verified email exists, the confirmation code is sent to the email. If neither a verified phone number nor a verified email exists, <code>InvalidParameterException</code> is thrown. To use the confirmation code for resetting the password, call <a href="API_ConfirmForgotPassword.html">ConfirmForgotPassword</a>.</p>
+    /// <p>Calling this API causes a message to be sent to the end user with a confirmation code that is required to change the user's password. For the <code>Username</code> parameter, you can use the username or user alias. If a verified phone number exists for the user, the confirmation code is sent to the phone number. Otherwise, if a verified email exists, the confirmation code is sent to the email. If neither a verified phone number nor a verified email exists, <code>InvalidParameterException</code> is thrown. To use the confirmation code for resetting the password, call .</p>
     fn forgot_password(
         &self,
         input: &ForgotPasswordRequest,
@@ -15580,6 +17951,43 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(GetUserAttributeVerificationCodeError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Gets the user pool multi-factor authentication (MFA) configuration.</p>
+    fn get_user_pool_mfa_config(
+        &self,
+        input: &GetUserPoolMfaConfigRequest,
+    ) -> Result<GetUserPoolMfaConfigResponse, GetUserPoolMfaConfigError> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.GetUserPoolMfaConfig",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetUserPoolMfaConfigResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetUserPoolMfaConfigError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -16064,6 +18472,43 @@ where
         }
     }
 
+    /// <p>Configures actions on detected risks. To delete the risk configuration for <code>UserPoolId</code> or <code>ClientId</code>, pass null values for all four configuration types.</p> <p>To enable Amazon Cognito advanced security features, update the user pool to include the <code>UserPoolAddOns</code> key<code>AdvancedSecurityMode</code>.</p> <p>See .</p>
+    fn set_risk_configuration(
+        &self,
+        input: &SetRiskConfigurationRequest,
+    ) -> Result<SetRiskConfigurationResponse, SetRiskConfigurationError> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.SetRiskConfiguration",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<SetRiskConfigurationResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetRiskConfigurationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p><p>Sets the UI customization information for a user pool&#39;s built-in app UI.</p> <p>You can specify app UI customization settings for a single client (with a specific <code>clientId</code>) or for all clients (by setting the <code>clientId</code> to <code>ALL</code>). If you specify <code>ALL</code>, the default configuration will be used for every client that has no UI customization set previously. If you specify UI customization settings for a particular client, it will no longer fall back to the <code>ALL</code> configuration. </p> <note> <p>To use this API, your user pool must have a domain associated with it. Otherwise, there is no place to host the app&#39;s pages, and the service will throw an error.</p> </note></p>
     fn set_ui_customization(
         &self,
@@ -16095,6 +18540,80 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(SetUICustomizationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Set the user's multi-factor authentication (MFA) method preference.</p>
+    fn set_user_mfa_preference(
+        &self,
+        input: &SetUserMFAPreferenceRequest,
+    ) -> Result<SetUserMFAPreferenceResponse, SetUserMFAPreferenceError> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.SetUserMFAPreference",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<SetUserMFAPreferenceResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetUserMFAPreferenceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Set the user pool MFA configuration.</p>
+    fn set_user_pool_mfa_config(
+        &self,
+        input: &SetUserPoolMfaConfigRequest,
+    ) -> Result<SetUserPoolMfaConfigResponse, SetUserPoolMfaConfigError> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.SetUserPoolMfaConfig",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<SetUserPoolMfaConfigResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(SetUserPoolMfaConfigError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -16238,6 +18757,43 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(StopUserImportJobError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Provides the feedback for an authentication event whether it was from a valid user or not. This feedback is used for improving the risk evaluation decision for the user pool as part of Amazon Cognito advanced security.</p>
+    fn update_auth_event_feedback(
+        &self,
+        input: &UpdateAuthEventFeedbackRequest,
+    ) -> Result<UpdateAuthEventFeedbackResponse, UpdateAuthEventFeedbackError> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.UpdateAuthEventFeedback",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateAuthEventFeedbackResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateAuthEventFeedbackError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -16497,6 +19053,43 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(UpdateUserPoolClientError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Use this API to register a user's entered TOTP code and mark the user's software token MFA status as "verified" if successful,</p>
+    fn verify_software_token(
+        &self,
+        input: &VerifySoftwareTokenRequest,
+    ) -> Result<VerifySoftwareTokenResponse, VerifySoftwareTokenError> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.VerifySoftwareToken",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<VerifySoftwareTokenResponse>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(VerifySoftwareTokenError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }

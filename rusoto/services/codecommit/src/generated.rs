@@ -78,6 +78,113 @@ pub struct BranchInfo {
     pub commit_id: Option<String>,
 }
 
+/// <p>Returns information about a specific comment.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct Comment {
+    /// <p>The Amazon Resource Name (ARN) of the person who posted the comment.</p>
+    #[serde(rename = "authorArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub author_arn: Option<String>,
+    /// <p>A unique, client-generated idempotency token that when provided in a request, ensures the request cannot be repeated with a changed parameter. If a request is received with the same parameters and a token is included, the request will return information about the initial request that used that token.</p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The system-generated comment ID.</p>
+    #[serde(rename = "commentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub comment_id: Option<String>,
+    /// <p>The content of the comment.</p>
+    #[serde(rename = "content")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content: Option<String>,
+    /// <p>The date and time the comment was created, in timestamp format.</p>
+    #[serde(rename = "creationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<f64>,
+    /// <p>A Boolean value indicating whether the comment has been deleted.</p>
+    #[serde(rename = "deleted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deleted: Option<bool>,
+    /// <p>The ID of the comment for which this comment is a reply, if any.</p>
+    #[serde(rename = "inReplyTo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub in_reply_to: Option<String>,
+    /// <p>The date and time the comment was most recently modified, in timestamp format.</p>
+    #[serde(rename = "lastModifiedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_date: Option<f64>,
+}
+
+/// <p>Returns information about comments on the comparison between two commits.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CommentsForComparedCommit {
+    /// <p>The full blob ID of the commit used to establish the 'after' of the comparison.</p>
+    #[serde(rename = "afterBlobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub after_blob_id: Option<String>,
+    /// <p>The full commit ID of the commit used to establish the 'after' of the comparison.</p>
+    #[serde(rename = "afterCommitId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub after_commit_id: Option<String>,
+    /// <p>The full blob ID of the commit used to establish the 'before' of the comparison.</p>
+    #[serde(rename = "beforeBlobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub before_blob_id: Option<String>,
+    /// <p>The full commit ID of the commit used to establish the 'before' of the comparison.</p>
+    #[serde(rename = "beforeCommitId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub before_commit_id: Option<String>,
+    /// <p>An array of comment objects. Each comment object contains information about a comment on the comparison between commits.</p>
+    #[serde(rename = "comments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub comments: Option<Vec<Comment>>,
+    /// <p>Location information about the comment on the comparison, including the file name, line number, and whether the version of the file where the comment was made is 'BEFORE' or 'AFTER'.</p>
+    #[serde(rename = "location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location: Option<Location>,
+    /// <p>The name of the repository that contains the compared commits.</p>
+    #[serde(rename = "repositoryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub repository_name: Option<String>,
+}
+
+/// <p>Returns information about comments on a pull request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CommentsForPullRequest {
+    /// <p>The full blob ID of the file on which you want to comment on the source commit.</p>
+    #[serde(rename = "afterBlobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub after_blob_id: Option<String>,
+    /// <p>he full commit ID of the commit that was the tip of the source branch at the time the comment was made. </p>
+    #[serde(rename = "afterCommitId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub after_commit_id: Option<String>,
+    /// <p>The full blob ID of the file on which you want to comment on the destination commit.</p>
+    #[serde(rename = "beforeBlobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub before_blob_id: Option<String>,
+    /// <p>The full commit ID of the commit that was the tip of the destination branch when the pull request was created. This commit will be superceded by the after commit in the source branch when and if you merge the source branch into the destination branch.</p>
+    #[serde(rename = "beforeCommitId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub before_commit_id: Option<String>,
+    /// <p>An array of comment objects. Each comment object contains information about a comment on the pull request.</p>
+    #[serde(rename = "comments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub comments: Option<Vec<Comment>>,
+    /// <p>Location information about the comment on the pull request, including the file name, line number, and whether the version of the file where the comment was made is 'BEFORE' (destination branch) or 'AFTER' (source branch).</p>
+    #[serde(rename = "location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location: Option<Location>,
+    /// <p>The system-generated ID of the pull request.</p>
+    #[serde(rename = "pullRequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pull_request_id: Option<String>,
+    /// <p>The name of the repository that contains the pull request.</p>
+    #[serde(rename = "repositoryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub repository_name: Option<String>,
+}
+
 /// <p>Returns information about a specific commit.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct Commit {
@@ -89,6 +196,10 @@ pub struct Commit {
     #[serde(rename = "author")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub author: Option<UserInfo>,
+    /// <p>The full SHA of the specified commit. </p>
+    #[serde(rename = "commitId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub commit_id: Option<String>,
     /// <p>Information about the person who committed the specified commit, also known as the committer. Information includes the date in timestamp format with GMT offset, the name of the committer, and the email address for the committer, as configured in Git.</p> <p>For more information about the difference between an author and a committer in Git, see <a href="http://git-scm.com/book/ch2-3.html">Viewing the Commit History</a> in Pro Git by Scott Chacon and Ben Straub.</p>
     #[serde(rename = "committer")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -121,6 +232,31 @@ pub struct CreateBranchInput {
     pub repository_name: String,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct CreatePullRequestInput {
+    /// <p><p>A unique, client-generated idempotency token that when provided in a request, ensures the request cannot be repeated with a changed parameter. If a request is received with the same parameters and a token is included, the request will return information about the initial request that used that token.</p> <note> <p>The AWS SDKs prepopulate client request tokens. If using an AWS SDK, you do not have to generate an idempotency token, as this will be done for you.</p> </note></p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>A description of the pull request.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The targets for the pull request, including the source of the code to be reviewed (the source branch), and the destination where the creator of the pull request intends the code to be merged after the pull request is closed (the destination branch).</p>
+    #[serde(rename = "targets")]
+    pub targets: Vec<Target>,
+    /// <p>The title of the pull request. This title will be used to identify the pull request to other users in the repository.</p>
+    #[serde(rename = "title")]
+    pub title: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct CreatePullRequestOutput {
+    /// <p>Information about the newly created pull request.</p>
+    #[serde(rename = "pullRequest")]
+    pub pull_request: PullRequest,
+}
+
 /// <p>Represents the input of a create repository operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateRepositoryInput {
@@ -142,6 +278,41 @@ pub struct CreateRepositoryOutput {
     pub repository_metadata: Option<RepositoryMetadata>,
 }
 
+/// <p>Represents the input of a delete branch operation.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteBranchInput {
+    /// <p>The name of the branch to delete.</p>
+    #[serde(rename = "branchName")]
+    pub branch_name: String,
+    /// <p>The name of the repository that contains the branch to be deleted.</p>
+    #[serde(rename = "repositoryName")]
+    pub repository_name: String,
+}
+
+/// <p>Represents the output of a delete branch operation.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteBranchOutput {
+    /// <p>Information about the branch deleted by the operation, including the branch name and the commit ID that was the tip of the branch.</p>
+    #[serde(rename = "deletedBranch")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deleted_branch: Option<BranchInfo>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DeleteCommentContentInput {
+    /// <p>The unique, system-generated ID of the comment. To get this ID, use <a>GetCommentsForComparedCommit</a> or <a>GetCommentsForPullRequest</a>.</p>
+    #[serde(rename = "commentId")]
+    pub comment_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DeleteCommentContentOutput {
+    /// <p>Information about the comment you just deleted.</p>
+    #[serde(rename = "comment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub comment: Option<Comment>,
+}
+
 /// <p>Represents the input of a delete repository operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteRepositoryInput {
@@ -157,6 +328,40 @@ pub struct DeleteRepositoryOutput {
     #[serde(rename = "repositoryId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub repository_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct DescribePullRequestEventsInput {
+    /// <p>The Amazon Resource Name (ARN) of the user whose actions resulted in the event. Examples include updating the pull request with additional commits or changing the status of a pull request.</p>
+    #[serde(rename = "actorArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub actor_arn: Option<String>,
+    /// <p>A non-negative integer used to limit the number of returned results. The default is 100 events, which is also the maximum number of events that can be returned in a result.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>An enumeration token that when provided in a request, returns the next batch of the results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Optional. The pull request event type about which you want to return information.</p>
+    #[serde(rename = "pullRequestEventType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pull_request_event_type: Option<String>,
+    /// <p>The system-generated ID of the pull request. To get this ID, use <a>ListPullRequests</a>.</p>
+    #[serde(rename = "pullRequestId")]
+    pub pull_request_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct DescribePullRequestEventsOutput {
+    /// <p>An enumeration token that can be used in a request to return the next batch of the results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Information about the pull request events.</p>
+    #[serde(rename = "pullRequestEvents")]
+    pub pull_request_events: Vec<PullRequestEvent>,
 }
 
 /// <p>Returns information about a set of differences for a commit specifier.</p>
@@ -219,10 +424,98 @@ pub struct GetBranchOutput {
     pub branch: Option<BranchInfo>,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetCommentInput {
+    /// <p>The unique, system-generated ID of the comment. To get this ID, use <a>GetCommentsForComparedCommit</a> or <a>GetCommentsForPullRequest</a>.</p>
+    #[serde(rename = "commentId")]
+    pub comment_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetCommentOutput {
+    /// <p>The contents of the comment.</p>
+    #[serde(rename = "comment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub comment: Option<Comment>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetCommentsForComparedCommitInput {
+    /// <p>To establish the directionality of the comparison, the full commit ID of the 'after' commit.</p>
+    #[serde(rename = "afterCommitId")]
+    pub after_commit_id: String,
+    /// <p>To establish the directionality of the comparison, the full commit ID of the 'before' commit.</p>
+    #[serde(rename = "beforeCommitId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub before_commit_id: Option<String>,
+    /// <p>A non-negative integer used to limit the number of returned results. The default is 100 comments, and is configurable up to 500.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>An enumeration token that when provided in a request, returns the next batch of the results. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The name of the repository where you want to compare commits.</p>
+    #[serde(rename = "repositoryName")]
+    pub repository_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetCommentsForComparedCommitOutput {
+    /// <p>A list of comment objects on the compared commit.</p>
+    #[serde(rename = "commentsForComparedCommitData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub comments_for_compared_commit_data: Option<Vec<CommentsForComparedCommit>>,
+    /// <p>An enumeration token that can be used in a request to return the next batch of the results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetCommentsForPullRequestInput {
+    /// <p>The full commit ID of the commit in the source branch that was the tip of the branch at the time the comment was made.</p>
+    #[serde(rename = "afterCommitId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub after_commit_id: Option<String>,
+    /// <p>The full commit ID of the commit in the destination branch that was the tip of the branch at the time the pull request was created.</p>
+    #[serde(rename = "beforeCommitId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub before_commit_id: Option<String>,
+    /// <p>A non-negative integer used to limit the number of returned results. The default is 100 comments. You can return up to 500 comments with a single request.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>An enumeration token that when provided in a request, returns the next batch of the results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The system-generated ID of the pull request. To get this ID, use <a>ListPullRequests</a>.</p>
+    #[serde(rename = "pullRequestId")]
+    pub pull_request_id: String,
+    /// <p>The name of the repository that contains the pull request.</p>
+    #[serde(rename = "repositoryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub repository_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetCommentsForPullRequestOutput {
+    /// <p>An array of comment objects on the pull request.</p>
+    #[serde(rename = "commentsForPullRequestData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub comments_for_pull_request_data: Option<Vec<CommentsForPullRequest>>,
+    /// <p>An enumeration token that can be used in a request to return the next batch of the results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
 /// <p>Represents the input of a get commit operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetCommitInput {
-    /// <p>The commit ID.</p>
+    /// <p>The commit ID. Commit IDs are the full SHA of the commit.</p>
     #[serde(rename = "commitId")]
     pub commit_id: String,
     /// <p>The name of the repository to which the commit was made.</p>
@@ -278,6 +571,49 @@ pub struct GetDifferencesOutput {
     #[serde(rename = "differences")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub differences: Option<Vec<Difference>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetMergeConflictsInput {
+    /// <p>The branch, tag, HEAD, or other fully qualified reference used to identify a commit. For example, a branch name or a full commit ID.</p>
+    #[serde(rename = "destinationCommitSpecifier")]
+    pub destination_commit_specifier: String,
+    /// <p>The merge option or strategy you want to use to merge the code. The only valid value is FAST_FORWARD_MERGE.</p>
+    #[serde(rename = "mergeOption")]
+    pub merge_option: String,
+    /// <p>The name of the repository where the pull request was created.</p>
+    #[serde(rename = "repositoryName")]
+    pub repository_name: String,
+    /// <p>The branch, tag, HEAD, or other fully qualified reference used to identify a commit. For example, a branch name or a full commit ID.</p>
+    #[serde(rename = "sourceCommitSpecifier")]
+    pub source_commit_specifier: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetMergeConflictsOutput {
+    /// <p>The commit ID of the destination commit specifier that was used in the merge evaluation.</p>
+    #[serde(rename = "destinationCommitId")]
+    pub destination_commit_id: String,
+    /// <p>A Boolean value that indicates whether the code is mergable by the specified merge option.</p>
+    #[serde(rename = "mergeable")]
+    pub mergeable: bool,
+    /// <p>The commit ID of the source commit specifier that was used in the merge evaluation.</p>
+    #[serde(rename = "sourceCommitId")]
+    pub source_commit_id: String,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct GetPullRequestInput {
+    /// <p>The system-generated ID of the pull request. To get this ID, use <a>ListPullRequests</a>.</p>
+    #[serde(rename = "pullRequestId")]
+    pub pull_request_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct GetPullRequestOutput {
+    /// <p>Information about the specified pull request.</p>
+    #[serde(rename = "pullRequest")]
+    pub pull_request: PullRequest,
 }
 
 /// <p>Represents the input of a get repository operation.</p>
@@ -343,6 +679,40 @@ pub struct ListBranchesOutput {
     pub next_token: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ListPullRequestsInput {
+    /// <p>Optional. The Amazon Resource Name (ARN) of the user who created the pull request. If used, this filters the results to pull requests created by that user.</p>
+    #[serde(rename = "authorArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub author_arn: Option<String>,
+    /// <p>A non-negative integer used to limit the number of returned results.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>An enumeration token that when provided in a request, returns the next batch of the results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Optional. The status of the pull request. If used, this refines the results to the pull requests that match the specified status.</p>
+    #[serde(rename = "pullRequestStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pull_request_status: Option<String>,
+    /// <p>The name of the repository for which you want to list pull requests.</p>
+    #[serde(rename = "repositoryName")]
+    pub repository_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ListPullRequestsOutput {
+    /// <p>An enumeration token that when provided in a request, returns the next batch of the results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The system-generated IDs of the pull requests.</p>
+    #[serde(rename = "pullRequestIds")]
+    pub pull_request_ids: Vec<String>,
+}
+
 /// <p>Represents the input of a list repositories operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListRepositoriesInput {
@@ -371,6 +741,348 @@ pub struct ListRepositoriesOutput {
     #[serde(rename = "repositories")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub repositories: Option<Vec<RepositoryNameIdPair>>,
+}
+
+/// <p>Returns information about the location of a change or comment in the comparison between two commits or a pull request.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct Location {
+    /// <p>The name of the file being compared, including its extension and subdirectory, if any.</p>
+    #[serde(rename = "filePath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_path: Option<String>,
+    /// <p>The position of a change within a compared file, in line number format.</p>
+    #[serde(rename = "filePosition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_position: Option<i64>,
+    /// <p>In a comparison of commits or a pull request, whether the change is in the 'before' or 'after' of that comparison.</p>
+    #[serde(rename = "relativeFileVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub relative_file_version: Option<String>,
+}
+
+/// <p>Returns information about a merge or potential merge between a source reference and a destination reference in a pull request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct MergeMetadata {
+    /// <p>A Boolean value indicating whether the merge has been made.</p>
+    #[serde(rename = "isMerged")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_merged: Option<bool>,
+    /// <p>The Amazon Resource Name (ARN) of the user who merged the branches.</p>
+    #[serde(rename = "mergedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub merged_by: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct MergePullRequestByFastForwardInput {
+    /// <p>The system-generated ID of the pull request. To get this ID, use <a>ListPullRequests</a>.</p>
+    #[serde(rename = "pullRequestId")]
+    pub pull_request_id: String,
+    /// <p>The name of the repository where the pull request was created.</p>
+    #[serde(rename = "repositoryName")]
+    pub repository_name: String,
+    /// <p>The full commit ID of the original or updated commit in the pull request source branch. Pass this value if you want an exception thrown if the current commit ID of the tip of the source branch does not match this commit ID.</p>
+    #[serde(rename = "sourceCommitId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_commit_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct MergePullRequestByFastForwardOutput {
+    /// <p>Information about the specified pull request, including information about the merge.</p>
+    #[serde(rename = "pullRequest")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pull_request: Option<PullRequest>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct PostCommentForComparedCommitInput {
+    /// <p>To establish the directionality of the comparison, the full commit ID of the 'after' commit.</p>
+    #[serde(rename = "afterCommitId")]
+    pub after_commit_id: String,
+    /// <p>To establish the directionality of the comparison, the full commit ID of the 'before' commit.</p>
+    #[serde(rename = "beforeCommitId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub before_commit_id: Option<String>,
+    /// <p>A unique, client-generated idempotency token that when provided in a request, ensures the request cannot be repeated with a changed parameter. If a request is received with the same parameters and a token is included, the request will return information about the initial request that used that token.</p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The content of the comment you want to make.</p>
+    #[serde(rename = "content")]
+    pub content: String,
+    /// <p>The location of the comparison where you want to comment.</p>
+    #[serde(rename = "location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location: Option<Location>,
+    /// <p>The name of the repository where you want to post a comment on the comparison between commits.</p>
+    #[serde(rename = "repositoryName")]
+    pub repository_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct PostCommentForComparedCommitOutput {
+    /// <p>In the directionality you established, the blob ID of the 'after' blob.</p>
+    #[serde(rename = "afterBlobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub after_blob_id: Option<String>,
+    /// <p>In the directionality you established, the full commit ID of the 'after' commit.</p>
+    #[serde(rename = "afterCommitId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub after_commit_id: Option<String>,
+    /// <p>In the directionality you established, the blob ID of the 'before' blob.</p>
+    #[serde(rename = "beforeBlobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub before_blob_id: Option<String>,
+    /// <p>In the directionality you established, the full commit ID of the 'before' commit.</p>
+    #[serde(rename = "beforeCommitId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub before_commit_id: Option<String>,
+    /// <p>The content of the comment you posted.</p>
+    #[serde(rename = "comment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub comment: Option<Comment>,
+    /// <p>The location of the comment in the comparison between the two commits.</p>
+    #[serde(rename = "location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location: Option<Location>,
+    /// <p>The name of the repository where you posted a comment on the comparison between commits.</p>
+    #[serde(rename = "repositoryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub repository_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct PostCommentForPullRequestInput {
+    /// <p>The full commit ID of the commit in the source branch that is the current tip of the branch for the pull request when you post the comment.</p>
+    #[serde(rename = "afterCommitId")]
+    pub after_commit_id: String,
+    /// <p>The full commit ID of the commit in the destination branch that was the tip of the branch at the time the pull request was created.</p>
+    #[serde(rename = "beforeCommitId")]
+    pub before_commit_id: String,
+    /// <p>A unique, client-generated idempotency token that when provided in a request, ensures the request cannot be repeated with a changed parameter. If a request is received with the same parameters and a token is included, the request will return information about the initial request that used that token.</p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The content of your comment on the change.</p>
+    #[serde(rename = "content")]
+    pub content: String,
+    /// <p>The location of the change where you want to post your comment. If no location is provided, the comment will be posted as a general comment on the pull request difference between the before commit ID and the after commit ID.</p>
+    #[serde(rename = "location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location: Option<Location>,
+    /// <p>The system-generated ID of the pull request. To get this ID, use <a>ListPullRequests</a>.</p>
+    #[serde(rename = "pullRequestId")]
+    pub pull_request_id: String,
+    /// <p>The name of the repository where you want to post a comment on a pull request.</p>
+    #[serde(rename = "repositoryName")]
+    pub repository_name: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct PostCommentForPullRequestOutput {
+    /// <p>In the directionality of the pull request, the blob ID of the 'after' blob.</p>
+    #[serde(rename = "afterBlobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub after_blob_id: Option<String>,
+    /// <p>The full commit ID of the commit in the destination branch where the pull request will be merged.</p>
+    #[serde(rename = "afterCommitId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub after_commit_id: Option<String>,
+    /// <p>In the directionality of the pull request, the blob ID of the 'before' blob.</p>
+    #[serde(rename = "beforeBlobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub before_blob_id: Option<String>,
+    /// <p>The full commit ID of the commit in the source branch used to create the pull request, or in the case of an updated pull request, the full commit ID of the commit used to update the pull request.</p>
+    #[serde(rename = "beforeCommitId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub before_commit_id: Option<String>,
+    /// <p>The content of the comment you posted.</p>
+    #[serde(rename = "comment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub comment: Option<Comment>,
+    /// <p>The location of the change where you posted your comment.</p>
+    #[serde(rename = "location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location: Option<Location>,
+    /// <p>The system-generated ID of the pull request. </p>
+    #[serde(rename = "pullRequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pull_request_id: Option<String>,
+    /// <p>The name of the repository where you posted a comment on a pull request.</p>
+    #[serde(rename = "repositoryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub repository_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct PostCommentReplyInput {
+    /// <p>A unique, client-generated idempotency token that when provided in a request, ensures the request cannot be repeated with a changed parameter. If a request is received with the same parameters and a token is included, the request will return information about the initial request that used that token.</p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The contents of your reply to a comment.</p>
+    #[serde(rename = "content")]
+    pub content: String,
+    /// <p>The system-generated ID of the comment to which you want to reply. To get this ID, use <a>GetCommentsForComparedCommit</a> or <a>GetCommentsForPullRequest</a>.</p>
+    #[serde(rename = "inReplyTo")]
+    pub in_reply_to: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct PostCommentReplyOutput {
+    /// <p>Information about the reply to a comment.</p>
+    #[serde(rename = "comment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub comment: Option<Comment>,
+}
+
+/// <p>Returns information about a pull request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct PullRequest {
+    /// <p>The Amazon Resource Name (ARN) of the user who created the pull request.</p>
+    #[serde(rename = "authorArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub author_arn: Option<String>,
+    /// <p>A unique, client-generated idempotency token that when provided in a request, ensures the request cannot be repeated with a changed parameter. If a request is received with the same parameters and a token is included, the request will return information about the initial request that used that token.</p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The date and time the pull request was originally created, in timestamp format.</p>
+    #[serde(rename = "creationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<f64>,
+    /// <p>The user-defined description of the pull request. This description can be used to clarify what should be reviewed and other details of the request.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The day and time of the last user or system activity on the pull request, in timestamp format.</p>
+    #[serde(rename = "lastActivityDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_activity_date: Option<f64>,
+    /// <p>The system-generated ID of the pull request. </p>
+    #[serde(rename = "pullRequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pull_request_id: Option<String>,
+    /// <p>The status of the pull request. Pull request status can only change from <code>OPEN</code> to <code>CLOSED</code>.</p>
+    #[serde(rename = "pullRequestStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pull_request_status: Option<String>,
+    /// <p>The targets of the pull request, including the source branch and destination branch for the pull request.</p>
+    #[serde(rename = "pullRequestTargets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pull_request_targets: Option<Vec<PullRequestTarget>>,
+    /// <p>The user-defined title of the pull request. This title is displayed in the list of pull requests to other users of the repository.</p>
+    #[serde(rename = "title")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub title: Option<String>,
+}
+
+/// <p>Returns information about a pull request event.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct PullRequestEvent {
+    /// <p>The Amazon Resource Name (ARN) of the user whose actions resulted in the event. Examples include updating the pull request with additional commits or changing the status of a pull request.</p>
+    #[serde(rename = "actorArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub actor_arn: Option<String>,
+    /// <p>The day and time of the pull request event, in timestamp format.</p>
+    #[serde(rename = "eventDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_date: Option<f64>,
+    /// <p>The type of the pull request event, for example a status change event (PULL_REQUEST_STATUS_CHANGED) or update event (PULL_REQUEST_SOURCE_REFERENCE_UPDATED).</p>
+    #[serde(rename = "pullRequestEventType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pull_request_event_type: Option<String>,
+    /// <p>The system-generated ID of the pull request.</p>
+    #[serde(rename = "pullRequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pull_request_id: Option<String>,
+    /// <p>Information about the change in mergability state for the pull request event.</p>
+    #[serde(rename = "pullRequestMergedStateChangedEventMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pull_request_merged_state_changed_event_metadata:
+        Option<PullRequestMergedStateChangedEventMetadata>,
+    /// <p>Information about the updated source branch for the pull request event. </p>
+    #[serde(rename = "pullRequestSourceReferenceUpdatedEventMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pull_request_source_reference_updated_event_metadata:
+        Option<PullRequestSourceReferenceUpdatedEventMetadata>,
+    /// <p>Information about the change in status for the pull request event.</p>
+    #[serde(rename = "pullRequestStatusChangedEventMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pull_request_status_changed_event_metadata: Option<PullRequestStatusChangedEventMetadata>,
+}
+
+/// <p>Returns information about the change in the merge state for a pull request event. </p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct PullRequestMergedStateChangedEventMetadata {
+    /// <p>The name of the branch that the pull request will be merged into.</p>
+    #[serde(rename = "destinationReference")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_reference: Option<String>,
+    /// <p>Information about the merge state change event.</p>
+    #[serde(rename = "mergeMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub merge_metadata: Option<MergeMetadata>,
+    /// <p>The name of the repository where the pull request was created.</p>
+    #[serde(rename = "repositoryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub repository_name: Option<String>,
+}
+
+/// <p>Information about an update to the source branch of a pull request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct PullRequestSourceReferenceUpdatedEventMetadata {
+    /// <p>The full commit ID of the commit in the source branch that was the tip of the branch at the time the pull request was updated.</p>
+    #[serde(rename = "afterCommitId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub after_commit_id: Option<String>,
+    /// <p>The full commit ID of the commit in the destination branch that was the tip of the branch at the time the pull request was updated.</p>
+    #[serde(rename = "beforeCommitId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub before_commit_id: Option<String>,
+    /// <p>The name of the repository where the pull request was updated.</p>
+    #[serde(rename = "repositoryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub repository_name: Option<String>,
+}
+
+/// <p>Information about a change to the status of a pull request.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct PullRequestStatusChangedEventMetadata {
+    /// <p>The changed status of the pull request.</p>
+    #[serde(rename = "pullRequestStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pull_request_status: Option<String>,
+}
+
+/// <p>Returns information about a pull request target.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct PullRequestTarget {
+    /// <p>The full commit ID that is the tip of the destination branch. This is the commit where the pull request was or will be merged.</p>
+    #[serde(rename = "destinationCommit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_commit: Option<String>,
+    /// <p>The branch of the repository where the pull request changes will be merged into. Also known as the destination branch. </p>
+    #[serde(rename = "destinationReference")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_reference: Option<String>,
+    /// <p>Returns metadata about the state of the merge, including whether the merge has been made.</p>
+    #[serde(rename = "mergeMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub merge_metadata: Option<MergeMetadata>,
+    /// <p>The name of the repository that contains the pull request source and destination branches.</p>
+    #[serde(rename = "repositoryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub repository_name: Option<String>,
+    /// <p>The full commit ID of the tip of the source branch used to create the pull request. If the pull request branch is updated by a push while the pull request is open, the commit ID will change to reflect the new tip of the branch.</p>
+    #[serde(rename = "sourceCommit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_commit: Option<String>,
+    /// <p>The branch of the repository that contains the changes for the pull request. Also known as the source branch.</p>
+    #[serde(rename = "sourceReference")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_reference: Option<String>,
 }
 
 /// <p>Represents the input ofa put repository triggers operation.</p>
@@ -454,7 +1166,7 @@ pub struct RepositoryNameIdPair {
 /// <p>Information about a trigger for a repository.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct RepositoryTrigger {
-    /// <p>The branches that will be included in the trigger configuration. If no branches are specified, the trigger will apply to all branches.</p>
+    /// <p><p>The branches that will be included in the trigger configuration. If you specify an empty array, the trigger will apply to all branches.</p> <note> <p>While no content is required in the array, you must include the array itself.</p> </note></p>
     #[serde(rename = "branches")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub branches: Option<Vec<String>>,
@@ -486,6 +1198,21 @@ pub struct RepositoryTriggerExecutionFailure {
     pub trigger: Option<String>,
 }
 
+/// <p>Returns information about a target for a pull request.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct Target {
+    /// <p>The branch of the repository where the pull request changes will be merged into. Also known as the destination branch.</p>
+    #[serde(rename = "destinationReference")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_reference: Option<String>,
+    /// <p>The name of the repository that contains the pull request.</p>
+    #[serde(rename = "repositoryName")]
+    pub repository_name: String,
+    /// <p>The branch of the repository that contains the changes for the pull request. Also known as the source branch.</p>
+    #[serde(rename = "sourceReference")]
+    pub source_reference: String,
+}
+
 /// <p>Represents the input of a test repository triggers operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct TestRepositoryTriggersInput {
@@ -510,6 +1237,24 @@ pub struct TestRepositoryTriggersOutput {
     pub successful_executions: Option<Vec<String>>,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct UpdateCommentInput {
+    /// <p>The system-generated ID of the comment you want to update. To get this ID, use <a>GetCommentsForComparedCommit</a> or <a>GetCommentsForPullRequest</a>.</p>
+    #[serde(rename = "commentId")]
+    pub comment_id: String,
+    /// <p>The updated content with which you want to replace the existing content of the comment.</p>
+    #[serde(rename = "content")]
+    pub content: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct UpdateCommentOutput {
+    /// <p>Information about the updated comment.</p>
+    #[serde(rename = "comment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub comment: Option<Comment>,
+}
+
 /// <p>Represents the input of an update default branch operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateDefaultBranchInput {
@@ -519,6 +1264,57 @@ pub struct UpdateDefaultBranchInput {
     /// <p>The name of the repository to set or change the default branch for.</p>
     #[serde(rename = "repositoryName")]
     pub repository_name: String,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct UpdatePullRequestDescriptionInput {
+    /// <p>The updated content of the description for the pull request. This content will replace the existing description.</p>
+    #[serde(rename = "description")]
+    pub description: String,
+    /// <p>The system-generated ID of the pull request. To get this ID, use <a>ListPullRequests</a>.</p>
+    #[serde(rename = "pullRequestId")]
+    pub pull_request_id: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct UpdatePullRequestDescriptionOutput {
+    /// <p>Information about the updated pull request.</p>
+    #[serde(rename = "pullRequest")]
+    pub pull_request: PullRequest,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct UpdatePullRequestStatusInput {
+    /// <p>The system-generated ID of the pull request. To get this ID, use <a>ListPullRequests</a>.</p>
+    #[serde(rename = "pullRequestId")]
+    pub pull_request_id: String,
+    /// <p>The status of the pull request. The only valid operations are to update the status from <code>OPEN</code> to <code>OPEN</code>, <code>OPEN</code> to <code>CLOSED</code> or from from <code>CLOSED</code> to <code>CLOSED</code>.</p>
+    #[serde(rename = "pullRequestStatus")]
+    pub pull_request_status: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct UpdatePullRequestStatusOutput {
+    /// <p>Information about the pull request.</p>
+    #[serde(rename = "pullRequest")]
+    pub pull_request: PullRequest,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct UpdatePullRequestTitleInput {
+    /// <p>The system-generated ID of the pull request. To get this ID, use <a>ListPullRequests</a>.</p>
+    #[serde(rename = "pullRequestId")]
+    pub pull_request_id: String,
+    /// <p>The updated title of the pull request. This will replace the existing title.</p>
+    #[serde(rename = "title")]
+    pub title: String,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct UpdatePullRequestTitleOutput {
+    /// <p>Information about the updated pull request.</p>
+    #[serde(rename = "pullRequest")]
+    pub pull_request: PullRequest,
 }
 
 /// <p>Represents the input of an update repository description operation.</p>
@@ -720,7 +1516,7 @@ pub enum CreateBranchError {
     EncryptionKeyNotFound(String),
     /// <p>The encryption key is not available.</p>
     EncryptionKeyUnavailable(String),
-    /// <p>The specified branch name is not valid.</p>
+    /// <p>The specified reference name is not valid.</p>
     InvalidBranchName(String),
     /// <p>The specified commit ID is not valid.</p>
     InvalidCommitId(String),
@@ -854,6 +1650,250 @@ impl Error for CreateBranchError {
             CreateBranchError::Credentials(ref err) => err.description(),
             CreateBranchError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             CreateBranchError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreatePullRequest
+#[derive(Debug, PartialEq)]
+pub enum CreatePullRequestError {
+    /// <p>A client request token is required. A client request token is an unique, client-generated idempotency token that when provided in a request, ensures the request cannot be repeated with a changed parameter. If a request is received with the same parameters and a token is included, the request will return information about the initial request that used that token.</p>
+    ClientRequestTokenRequired(String),
+    /// <p>An encryption integrity check failed.</p>
+    EncryptionIntegrityChecksFailed(String),
+    /// <p>An encryption key could not be accessed.</p>
+    EncryptionKeyAccessDenied(String),
+    /// <p>The encryption key is disabled.</p>
+    EncryptionKeyDisabled(String),
+    /// <p>No encryption key was found.</p>
+    EncryptionKeyNotFound(String),
+    /// <p>The encryption key is not available.</p>
+    EncryptionKeyUnavailable(String),
+    /// <p>The client request token is not valid. Either the token is not in a valid format, or the token has been used in a previous request and cannot be re-used.</p>
+    IdempotencyParameterMismatch(String),
+    /// <p>The client request token is not valid.</p>
+    InvalidClientRequestToken(String),
+    /// <p>The pull request description is not valid. Descriptions are limited to 1,000 characters in length.</p>
+    InvalidDescription(String),
+    /// <p>The specified reference name format is not valid. Reference names must conform to the Git references format, for example refs/heads/master. For more information, see <a href="https://git-scm.com/book/en/v2/Git-Internals-Git-References">Git Internals - Git References</a> or consult your Git documentation.</p>
+    InvalidReferenceName(String),
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
+    InvalidRepositoryName(String),
+    /// <p>The target for the pull request is not valid. A target must contain the full values for the repository name, source branch, and destination branch for the pull request.</p>
+    InvalidTarget(String),
+    /// <p>The targets for the pull request is not valid or not in a valid format. Targets are a list of target objects. Each target object must contain the full values for the repository name, source branch, and destination branch for a pull request.</p>
+    InvalidTargets(String),
+    /// <p>The title of the pull request is not valid. Pull request titles cannot exceed 100 characters in length.</p>
+    InvalidTitle(String),
+    /// <p>You cannot create the pull request because the repository has too many open pull requests. The maximum number of open pull requests for a repository is 1,000. Close one or more open pull requests, and then try again.</p>
+    MaximumOpenPullRequestsExceeded(String),
+    /// <p>You cannot include more than one repository in a pull request. Make sure you have specified only one repository name in your request, and then try again.</p>
+    MultipleRepositoriesInPullRequest(String),
+    /// <p>The specified reference does not exist. You must provide a full commit ID.</p>
+    ReferenceDoesNotExist(String),
+    /// <p>A reference name is required, but none was provided.</p>
+    ReferenceNameRequired(String),
+    /// <p>The specified reference is not a supported type. </p>
+    ReferenceTypeNotSupported(String),
+    /// <p>The specified repository does not exist.</p>
+    RepositoryDoesNotExist(String),
+    /// <p>A repository name is required but was not specified.</p>
+    RepositoryNameRequired(String),
+    /// <p>The source branch and the destination branch for the pull request are the same. You must specify different branches for the source and destination.</p>
+    SourceAndDestinationAreSame(String),
+    /// <p>A pull request target is required. It cannot be empty or null. A pull request target must contain the full values for the repository name, source branch, and destination branch for the pull request.</p>
+    TargetRequired(String),
+    /// <p>An array of target objects is required. It cannot be empty or null.</p>
+    TargetsRequired(String),
+    /// <p>A pull request title is required. It cannot be empty or null.</p>
+    TitleRequired(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreatePullRequestError {
+    pub fn from_body(body: &str) -> CreatePullRequestError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ClientRequestTokenRequiredException" => {
+                        CreatePullRequestError::ClientRequestTokenRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionIntegrityChecksFailedException" => {
+                        CreatePullRequestError::EncryptionIntegrityChecksFailed(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionKeyAccessDeniedException" => {
+                        CreatePullRequestError::EncryptionKeyAccessDenied(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionKeyDisabledException" => {
+                        CreatePullRequestError::EncryptionKeyDisabled(String::from(error_message))
+                    }
+                    "EncryptionKeyNotFoundException" => {
+                        CreatePullRequestError::EncryptionKeyNotFound(String::from(error_message))
+                    }
+                    "EncryptionKeyUnavailableException" => {
+                        CreatePullRequestError::EncryptionKeyUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "IdempotencyParameterMismatchException" => {
+                        CreatePullRequestError::IdempotencyParameterMismatch(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidClientRequestTokenException" => {
+                        CreatePullRequestError::InvalidClientRequestToken(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidDescriptionException" => {
+                        CreatePullRequestError::InvalidDescription(String::from(error_message))
+                    }
+                    "InvalidReferenceNameException" => {
+                        CreatePullRequestError::InvalidReferenceName(String::from(error_message))
+                    }
+                    "InvalidRepositoryNameException" => {
+                        CreatePullRequestError::InvalidRepositoryName(String::from(error_message))
+                    }
+                    "InvalidTargetException" => {
+                        CreatePullRequestError::InvalidTarget(String::from(error_message))
+                    }
+                    "InvalidTargetsException" => {
+                        CreatePullRequestError::InvalidTargets(String::from(error_message))
+                    }
+                    "InvalidTitleException" => {
+                        CreatePullRequestError::InvalidTitle(String::from(error_message))
+                    }
+                    "MaximumOpenPullRequestsExceededException" => {
+                        CreatePullRequestError::MaximumOpenPullRequestsExceeded(String::from(
+                            error_message,
+                        ))
+                    }
+                    "MultipleRepositoriesInPullRequestException" => {
+                        CreatePullRequestError::MultipleRepositoriesInPullRequest(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ReferenceDoesNotExistException" => {
+                        CreatePullRequestError::ReferenceDoesNotExist(String::from(error_message))
+                    }
+                    "ReferenceNameRequiredException" => {
+                        CreatePullRequestError::ReferenceNameRequired(String::from(error_message))
+                    }
+                    "ReferenceTypeNotSupportedException" => {
+                        CreatePullRequestError::ReferenceTypeNotSupported(String::from(
+                            error_message,
+                        ))
+                    }
+                    "RepositoryDoesNotExistException" => {
+                        CreatePullRequestError::RepositoryDoesNotExist(String::from(error_message))
+                    }
+                    "RepositoryNameRequiredException" => {
+                        CreatePullRequestError::RepositoryNameRequired(String::from(error_message))
+                    }
+                    "SourceAndDestinationAreSameException" => {
+                        CreatePullRequestError::SourceAndDestinationAreSame(String::from(
+                            error_message,
+                        ))
+                    }
+                    "TargetRequiredException" => {
+                        CreatePullRequestError::TargetRequired(String::from(error_message))
+                    }
+                    "TargetsRequiredException" => {
+                        CreatePullRequestError::TargetsRequired(String::from(error_message))
+                    }
+                    "TitleRequiredException" => {
+                        CreatePullRequestError::TitleRequired(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        CreatePullRequestError::Validation(error_message.to_string())
+                    }
+                    _ => CreatePullRequestError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => CreatePullRequestError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for CreatePullRequestError {
+    fn from(err: serde_json::error::Error) -> CreatePullRequestError {
+        CreatePullRequestError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreatePullRequestError {
+    fn from(err: CredentialsError) -> CreatePullRequestError {
+        CreatePullRequestError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreatePullRequestError {
+    fn from(err: HttpDispatchError) -> CreatePullRequestError {
+        CreatePullRequestError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreatePullRequestError {
+    fn from(err: io::Error) -> CreatePullRequestError {
+        CreatePullRequestError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreatePullRequestError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreatePullRequestError {
+    fn description(&self) -> &str {
+        match *self {
+            CreatePullRequestError::ClientRequestTokenRequired(ref cause) => cause,
+            CreatePullRequestError::EncryptionIntegrityChecksFailed(ref cause) => cause,
+            CreatePullRequestError::EncryptionKeyAccessDenied(ref cause) => cause,
+            CreatePullRequestError::EncryptionKeyDisabled(ref cause) => cause,
+            CreatePullRequestError::EncryptionKeyNotFound(ref cause) => cause,
+            CreatePullRequestError::EncryptionKeyUnavailable(ref cause) => cause,
+            CreatePullRequestError::IdempotencyParameterMismatch(ref cause) => cause,
+            CreatePullRequestError::InvalidClientRequestToken(ref cause) => cause,
+            CreatePullRequestError::InvalidDescription(ref cause) => cause,
+            CreatePullRequestError::InvalidReferenceName(ref cause) => cause,
+            CreatePullRequestError::InvalidRepositoryName(ref cause) => cause,
+            CreatePullRequestError::InvalidTarget(ref cause) => cause,
+            CreatePullRequestError::InvalidTargets(ref cause) => cause,
+            CreatePullRequestError::InvalidTitle(ref cause) => cause,
+            CreatePullRequestError::MaximumOpenPullRequestsExceeded(ref cause) => cause,
+            CreatePullRequestError::MultipleRepositoriesInPullRequest(ref cause) => cause,
+            CreatePullRequestError::ReferenceDoesNotExist(ref cause) => cause,
+            CreatePullRequestError::ReferenceNameRequired(ref cause) => cause,
+            CreatePullRequestError::ReferenceTypeNotSupported(ref cause) => cause,
+            CreatePullRequestError::RepositoryDoesNotExist(ref cause) => cause,
+            CreatePullRequestError::RepositoryNameRequired(ref cause) => cause,
+            CreatePullRequestError::SourceAndDestinationAreSame(ref cause) => cause,
+            CreatePullRequestError::TargetRequired(ref cause) => cause,
+            CreatePullRequestError::TargetsRequired(ref cause) => cause,
+            CreatePullRequestError::TitleRequired(ref cause) => cause,
+            CreatePullRequestError::Validation(ref cause) => cause,
+            CreatePullRequestError::Credentials(ref err) => err.description(),
+            CreatePullRequestError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreatePullRequestError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -995,6 +2035,244 @@ impl Error for CreateRepositoryError {
         }
     }
 }
+/// Errors returned by DeleteBranch
+#[derive(Debug, PartialEq)]
+pub enum DeleteBranchError {
+    /// <p>A branch name is required but was not specified.</p>
+    BranchNameRequired(String),
+    /// <p>The specified branch is the default branch for the repository, and cannot be deleted. To delete this branch, you must first set another branch as the default branch.</p>
+    DefaultBranchCannotBeDeleted(String),
+    /// <p>An encryption integrity check failed.</p>
+    EncryptionIntegrityChecksFailed(String),
+    /// <p>An encryption key could not be accessed.</p>
+    EncryptionKeyAccessDenied(String),
+    /// <p>The encryption key is disabled.</p>
+    EncryptionKeyDisabled(String),
+    /// <p>No encryption key was found.</p>
+    EncryptionKeyNotFound(String),
+    /// <p>The encryption key is not available.</p>
+    EncryptionKeyUnavailable(String),
+    /// <p>The specified reference name is not valid.</p>
+    InvalidBranchName(String),
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
+    InvalidRepositoryName(String),
+    /// <p>The specified repository does not exist.</p>
+    RepositoryDoesNotExist(String),
+    /// <p>A repository name is required but was not specified.</p>
+    RepositoryNameRequired(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteBranchError {
+    pub fn from_body(body: &str) -> DeleteBranchError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "BranchNameRequiredException" => {
+                        DeleteBranchError::BranchNameRequired(String::from(error_message))
+                    }
+                    "DefaultBranchCannotBeDeletedException" => {
+                        DeleteBranchError::DefaultBranchCannotBeDeleted(String::from(error_message))
+                    }
+                    "EncryptionIntegrityChecksFailedException" => {
+                        DeleteBranchError::EncryptionIntegrityChecksFailed(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionKeyAccessDeniedException" => {
+                        DeleteBranchError::EncryptionKeyAccessDenied(String::from(error_message))
+                    }
+                    "EncryptionKeyDisabledException" => {
+                        DeleteBranchError::EncryptionKeyDisabled(String::from(error_message))
+                    }
+                    "EncryptionKeyNotFoundException" => {
+                        DeleteBranchError::EncryptionKeyNotFound(String::from(error_message))
+                    }
+                    "EncryptionKeyUnavailableException" => {
+                        DeleteBranchError::EncryptionKeyUnavailable(String::from(error_message))
+                    }
+                    "InvalidBranchNameException" => {
+                        DeleteBranchError::InvalidBranchName(String::from(error_message))
+                    }
+                    "InvalidRepositoryNameException" => {
+                        DeleteBranchError::InvalidRepositoryName(String::from(error_message))
+                    }
+                    "RepositoryDoesNotExistException" => {
+                        DeleteBranchError::RepositoryDoesNotExist(String::from(error_message))
+                    }
+                    "RepositoryNameRequiredException" => {
+                        DeleteBranchError::RepositoryNameRequired(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteBranchError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteBranchError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteBranchError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteBranchError {
+    fn from(err: serde_json::error::Error) -> DeleteBranchError {
+        DeleteBranchError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteBranchError {
+    fn from(err: CredentialsError) -> DeleteBranchError {
+        DeleteBranchError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteBranchError {
+    fn from(err: HttpDispatchError) -> DeleteBranchError {
+        DeleteBranchError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteBranchError {
+    fn from(err: io::Error) -> DeleteBranchError {
+        DeleteBranchError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteBranchError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteBranchError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteBranchError::BranchNameRequired(ref cause) => cause,
+            DeleteBranchError::DefaultBranchCannotBeDeleted(ref cause) => cause,
+            DeleteBranchError::EncryptionIntegrityChecksFailed(ref cause) => cause,
+            DeleteBranchError::EncryptionKeyAccessDenied(ref cause) => cause,
+            DeleteBranchError::EncryptionKeyDisabled(ref cause) => cause,
+            DeleteBranchError::EncryptionKeyNotFound(ref cause) => cause,
+            DeleteBranchError::EncryptionKeyUnavailable(ref cause) => cause,
+            DeleteBranchError::InvalidBranchName(ref cause) => cause,
+            DeleteBranchError::InvalidRepositoryName(ref cause) => cause,
+            DeleteBranchError::RepositoryDoesNotExist(ref cause) => cause,
+            DeleteBranchError::RepositoryNameRequired(ref cause) => cause,
+            DeleteBranchError::Validation(ref cause) => cause,
+            DeleteBranchError::Credentials(ref err) => err.description(),
+            DeleteBranchError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteBranchError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteCommentContent
+#[derive(Debug, PartialEq)]
+pub enum DeleteCommentContentError {
+    /// <p>This comment has already been deleted. You cannot edit or delete a deleted comment.</p>
+    CommentDeleted(String),
+    /// <p>No comment exists with the provided ID. Verify that you have provided the correct ID, and then try again.</p>
+    CommentDoesNotExist(String),
+    /// <p>The comment ID is missing or null. A comment ID is required.</p>
+    CommentIdRequired(String),
+    /// <p>The comment ID is not in a valid format. Make sure that you have provided the full comment ID.</p>
+    InvalidCommentId(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteCommentContentError {
+    pub fn from_body(body: &str) -> DeleteCommentContentError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "CommentDeletedException" => {
+                        DeleteCommentContentError::CommentDeleted(String::from(error_message))
+                    }
+                    "CommentDoesNotExistException" => {
+                        DeleteCommentContentError::CommentDoesNotExist(String::from(error_message))
+                    }
+                    "CommentIdRequiredException" => {
+                        DeleteCommentContentError::CommentIdRequired(String::from(error_message))
+                    }
+                    "InvalidCommentIdException" => {
+                        DeleteCommentContentError::InvalidCommentId(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        DeleteCommentContentError::Validation(error_message.to_string())
+                    }
+                    _ => DeleteCommentContentError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DeleteCommentContentError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteCommentContentError {
+    fn from(err: serde_json::error::Error) -> DeleteCommentContentError {
+        DeleteCommentContentError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteCommentContentError {
+    fn from(err: CredentialsError) -> DeleteCommentContentError {
+        DeleteCommentContentError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteCommentContentError {
+    fn from(err: HttpDispatchError) -> DeleteCommentContentError {
+        DeleteCommentContentError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteCommentContentError {
+    fn from(err: io::Error) -> DeleteCommentContentError {
+        DeleteCommentContentError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteCommentContentError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteCommentContentError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteCommentContentError::CommentDeleted(ref cause) => cause,
+            DeleteCommentContentError::CommentDoesNotExist(ref cause) => cause,
+            DeleteCommentContentError::CommentIdRequired(ref cause) => cause,
+            DeleteCommentContentError::InvalidCommentId(ref cause) => cause,
+            DeleteCommentContentError::Validation(ref cause) => cause,
+            DeleteCommentContentError::Credentials(ref err) => err.description(),
+            DeleteCommentContentError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteCommentContentError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteRepository
 #[derive(Debug, PartialEq)]
 pub enum DeleteRepositoryError {
@@ -1110,6 +2388,182 @@ impl Error for DeleteRepositoryError {
             DeleteRepositoryError::Credentials(ref err) => err.description(),
             DeleteRepositoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             DeleteRepositoryError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribePullRequestEvents
+#[derive(Debug, PartialEq)]
+pub enum DescribePullRequestEventsError {
+    /// <p>The specified Amazon Resource Name (ARN) does not exist in the AWS account.</p>
+    ActorDoesNotExist(String),
+    /// <p>An encryption integrity check failed.</p>
+    EncryptionIntegrityChecksFailed(String),
+    /// <p>An encryption key could not be accessed.</p>
+    EncryptionKeyAccessDenied(String),
+    /// <p>The encryption key is disabled.</p>
+    EncryptionKeyDisabled(String),
+    /// <p>No encryption key was found.</p>
+    EncryptionKeyNotFound(String),
+    /// <p>The encryption key is not available.</p>
+    EncryptionKeyUnavailable(String),
+    /// <p>The Amazon Resource Name (ARN) is not valid. Make sure that you have provided the full ARN for the user who initiated the change for the pull request, and then try again.</p>
+    InvalidActorArn(String),
+    /// <p>The specified continuation token is not valid.</p>
+    InvalidContinuationToken(String),
+    /// <p>The specified number of maximum results is not valid.</p>
+    InvalidMaxResults(String),
+    /// <p>The pull request event type is not valid. </p>
+    InvalidPullRequestEventType(String),
+    /// <p>The pull request ID is not valid. Make sure that you have provided the full ID and that the pull request is in the specified repository, and then try again.</p>
+    InvalidPullRequestId(String),
+    /// <p>The pull request ID could not be found. Make sure that you have specified the correct repository name and pull request ID, and then try again.</p>
+    PullRequestDoesNotExist(String),
+    /// <p>A pull request ID is required, but none was provided.</p>
+    PullRequestIdRequired(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribePullRequestEventsError {
+    pub fn from_body(body: &str) -> DescribePullRequestEventsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ActorDoesNotExistException" => {
+                        DescribePullRequestEventsError::ActorDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionIntegrityChecksFailedException" => {
+                        DescribePullRequestEventsError::EncryptionIntegrityChecksFailed(
+                            String::from(error_message),
+                        )
+                    }
+                    "EncryptionKeyAccessDeniedException" => {
+                        DescribePullRequestEventsError::EncryptionKeyAccessDenied(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionKeyDisabledException" => {
+                        DescribePullRequestEventsError::EncryptionKeyDisabled(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionKeyNotFoundException" => {
+                        DescribePullRequestEventsError::EncryptionKeyNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionKeyUnavailableException" => {
+                        DescribePullRequestEventsError::EncryptionKeyUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidActorArnException" => {
+                        DescribePullRequestEventsError::InvalidActorArn(String::from(error_message))
+                    }
+                    "InvalidContinuationTokenException" => {
+                        DescribePullRequestEventsError::InvalidContinuationToken(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidMaxResultsException" => {
+                        DescribePullRequestEventsError::InvalidMaxResults(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidPullRequestEventTypeException" => {
+                        DescribePullRequestEventsError::InvalidPullRequestEventType(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidPullRequestIdException" => {
+                        DescribePullRequestEventsError::InvalidPullRequestId(String::from(
+                            error_message,
+                        ))
+                    }
+                    "PullRequestDoesNotExistException" => {
+                        DescribePullRequestEventsError::PullRequestDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "PullRequestIdRequiredException" => {
+                        DescribePullRequestEventsError::PullRequestIdRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        DescribePullRequestEventsError::Validation(error_message.to_string())
+                    }
+                    _ => DescribePullRequestEventsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => DescribePullRequestEventsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for DescribePullRequestEventsError {
+    fn from(err: serde_json::error::Error) -> DescribePullRequestEventsError {
+        DescribePullRequestEventsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribePullRequestEventsError {
+    fn from(err: CredentialsError) -> DescribePullRequestEventsError {
+        DescribePullRequestEventsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribePullRequestEventsError {
+    fn from(err: HttpDispatchError) -> DescribePullRequestEventsError {
+        DescribePullRequestEventsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribePullRequestEventsError {
+    fn from(err: io::Error) -> DescribePullRequestEventsError {
+        DescribePullRequestEventsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribePullRequestEventsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribePullRequestEventsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribePullRequestEventsError::ActorDoesNotExist(ref cause) => cause,
+            DescribePullRequestEventsError::EncryptionIntegrityChecksFailed(ref cause) => cause,
+            DescribePullRequestEventsError::EncryptionKeyAccessDenied(ref cause) => cause,
+            DescribePullRequestEventsError::EncryptionKeyDisabled(ref cause) => cause,
+            DescribePullRequestEventsError::EncryptionKeyNotFound(ref cause) => cause,
+            DescribePullRequestEventsError::EncryptionKeyUnavailable(ref cause) => cause,
+            DescribePullRequestEventsError::InvalidActorArn(ref cause) => cause,
+            DescribePullRequestEventsError::InvalidContinuationToken(ref cause) => cause,
+            DescribePullRequestEventsError::InvalidMaxResults(ref cause) => cause,
+            DescribePullRequestEventsError::InvalidPullRequestEventType(ref cause) => cause,
+            DescribePullRequestEventsError::InvalidPullRequestId(ref cause) => cause,
+            DescribePullRequestEventsError::PullRequestDoesNotExist(ref cause) => cause,
+            DescribePullRequestEventsError::PullRequestIdRequired(ref cause) => cause,
+            DescribePullRequestEventsError::Validation(ref cause) => cause,
+            DescribePullRequestEventsError::Credentials(ref err) => err.description(),
+            DescribePullRequestEventsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribePullRequestEventsError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -1272,7 +2726,7 @@ pub enum GetBranchError {
     EncryptionKeyNotFound(String),
     /// <p>The encryption key is not available.</p>
     EncryptionKeyUnavailable(String),
-    /// <p>The specified branch name is not valid.</p>
+    /// <p>The specified reference name is not valid.</p>
     InvalidBranchName(String),
     /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
     InvalidRepositoryName(String),
@@ -1388,6 +2842,488 @@ impl Error for GetBranchError {
             GetBranchError::Credentials(ref err) => err.description(),
             GetBranchError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             GetBranchError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetComment
+#[derive(Debug, PartialEq)]
+pub enum GetCommentError {
+    /// <p>This comment has already been deleted. You cannot edit or delete a deleted comment.</p>
+    CommentDeleted(String),
+    /// <p>No comment exists with the provided ID. Verify that you have provided the correct ID, and then try again.</p>
+    CommentDoesNotExist(String),
+    /// <p>The comment ID is missing or null. A comment ID is required.</p>
+    CommentIdRequired(String),
+    /// <p>The comment ID is not in a valid format. Make sure that you have provided the full comment ID.</p>
+    InvalidCommentId(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetCommentError {
+    pub fn from_body(body: &str) -> GetCommentError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "CommentDeletedException" => {
+                        GetCommentError::CommentDeleted(String::from(error_message))
+                    }
+                    "CommentDoesNotExistException" => {
+                        GetCommentError::CommentDoesNotExist(String::from(error_message))
+                    }
+                    "CommentIdRequiredException" => {
+                        GetCommentError::CommentIdRequired(String::from(error_message))
+                    }
+                    "InvalidCommentIdException" => {
+                        GetCommentError::InvalidCommentId(String::from(error_message))
+                    }
+                    "ValidationException" => GetCommentError::Validation(error_message.to_string()),
+                    _ => GetCommentError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetCommentError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetCommentError {
+    fn from(err: serde_json::error::Error) -> GetCommentError {
+        GetCommentError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetCommentError {
+    fn from(err: CredentialsError) -> GetCommentError {
+        GetCommentError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetCommentError {
+    fn from(err: HttpDispatchError) -> GetCommentError {
+        GetCommentError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetCommentError {
+    fn from(err: io::Error) -> GetCommentError {
+        GetCommentError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetCommentError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetCommentError {
+    fn description(&self) -> &str {
+        match *self {
+            GetCommentError::CommentDeleted(ref cause) => cause,
+            GetCommentError::CommentDoesNotExist(ref cause) => cause,
+            GetCommentError::CommentIdRequired(ref cause) => cause,
+            GetCommentError::InvalidCommentId(ref cause) => cause,
+            GetCommentError::Validation(ref cause) => cause,
+            GetCommentError::Credentials(ref err) => err.description(),
+            GetCommentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetCommentError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetCommentsForComparedCommit
+#[derive(Debug, PartialEq)]
+pub enum GetCommentsForComparedCommitError {
+    /// <p>The specified commit does not exist or no commit was specified, and the specified repository has no default branch.</p>
+    CommitDoesNotExist(String),
+    /// <p>A commit ID was not specified.</p>
+    CommitIdRequired(String),
+    /// <p>An encryption integrity check failed.</p>
+    EncryptionIntegrityChecksFailed(String),
+    /// <p>An encryption key could not be accessed.</p>
+    EncryptionKeyAccessDenied(String),
+    /// <p>The encryption key is disabled.</p>
+    EncryptionKeyDisabled(String),
+    /// <p>No encryption key was found.</p>
+    EncryptionKeyNotFound(String),
+    /// <p>The encryption key is not available.</p>
+    EncryptionKeyUnavailable(String),
+    /// <p>The specified commit ID is not valid.</p>
+    InvalidCommitId(String),
+    /// <p>The specified continuation token is not valid.</p>
+    InvalidContinuationToken(String),
+    /// <p>The specified number of maximum results is not valid.</p>
+    InvalidMaxResults(String),
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
+    InvalidRepositoryName(String),
+    /// <p>The specified repository does not exist.</p>
+    RepositoryDoesNotExist(String),
+    /// <p>A repository name is required but was not specified.</p>
+    RepositoryNameRequired(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetCommentsForComparedCommitError {
+    pub fn from_body(body: &str) -> GetCommentsForComparedCommitError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "CommitDoesNotExistException" => {
+                        GetCommentsForComparedCommitError::CommitDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "CommitIdRequiredException" => {
+                        GetCommentsForComparedCommitError::CommitIdRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionIntegrityChecksFailedException" => {
+                        GetCommentsForComparedCommitError::EncryptionIntegrityChecksFailed(
+                            String::from(error_message),
+                        )
+                    }
+                    "EncryptionKeyAccessDeniedException" => {
+                        GetCommentsForComparedCommitError::EncryptionKeyAccessDenied(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionKeyDisabledException" => {
+                        GetCommentsForComparedCommitError::EncryptionKeyDisabled(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionKeyNotFoundException" => {
+                        GetCommentsForComparedCommitError::EncryptionKeyNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionKeyUnavailableException" => {
+                        GetCommentsForComparedCommitError::EncryptionKeyUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidCommitIdException" => {
+                        GetCommentsForComparedCommitError::InvalidCommitId(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidContinuationTokenException" => {
+                        GetCommentsForComparedCommitError::InvalidContinuationToken(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidMaxResultsException" => {
+                        GetCommentsForComparedCommitError::InvalidMaxResults(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidRepositoryNameException" => {
+                        GetCommentsForComparedCommitError::InvalidRepositoryName(String::from(
+                            error_message,
+                        ))
+                    }
+                    "RepositoryDoesNotExistException" => {
+                        GetCommentsForComparedCommitError::RepositoryDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "RepositoryNameRequiredException" => {
+                        GetCommentsForComparedCommitError::RepositoryNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        GetCommentsForComparedCommitError::Validation(error_message.to_string())
+                    }
+                    _ => GetCommentsForComparedCommitError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetCommentsForComparedCommitError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetCommentsForComparedCommitError {
+    fn from(err: serde_json::error::Error) -> GetCommentsForComparedCommitError {
+        GetCommentsForComparedCommitError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetCommentsForComparedCommitError {
+    fn from(err: CredentialsError) -> GetCommentsForComparedCommitError {
+        GetCommentsForComparedCommitError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetCommentsForComparedCommitError {
+    fn from(err: HttpDispatchError) -> GetCommentsForComparedCommitError {
+        GetCommentsForComparedCommitError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetCommentsForComparedCommitError {
+    fn from(err: io::Error) -> GetCommentsForComparedCommitError {
+        GetCommentsForComparedCommitError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetCommentsForComparedCommitError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetCommentsForComparedCommitError {
+    fn description(&self) -> &str {
+        match *self {
+            GetCommentsForComparedCommitError::CommitDoesNotExist(ref cause) => cause,
+            GetCommentsForComparedCommitError::CommitIdRequired(ref cause) => cause,
+            GetCommentsForComparedCommitError::EncryptionIntegrityChecksFailed(ref cause) => cause,
+            GetCommentsForComparedCommitError::EncryptionKeyAccessDenied(ref cause) => cause,
+            GetCommentsForComparedCommitError::EncryptionKeyDisabled(ref cause) => cause,
+            GetCommentsForComparedCommitError::EncryptionKeyNotFound(ref cause) => cause,
+            GetCommentsForComparedCommitError::EncryptionKeyUnavailable(ref cause) => cause,
+            GetCommentsForComparedCommitError::InvalidCommitId(ref cause) => cause,
+            GetCommentsForComparedCommitError::InvalidContinuationToken(ref cause) => cause,
+            GetCommentsForComparedCommitError::InvalidMaxResults(ref cause) => cause,
+            GetCommentsForComparedCommitError::InvalidRepositoryName(ref cause) => cause,
+            GetCommentsForComparedCommitError::RepositoryDoesNotExist(ref cause) => cause,
+            GetCommentsForComparedCommitError::RepositoryNameRequired(ref cause) => cause,
+            GetCommentsForComparedCommitError::Validation(ref cause) => cause,
+            GetCommentsForComparedCommitError::Credentials(ref err) => err.description(),
+            GetCommentsForComparedCommitError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetCommentsForComparedCommitError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetCommentsForPullRequest
+#[derive(Debug, PartialEq)]
+pub enum GetCommentsForPullRequestError {
+    /// <p>The specified commit does not exist or no commit was specified, and the specified repository has no default branch.</p>
+    CommitDoesNotExist(String),
+    /// <p>A commit ID was not specified.</p>
+    CommitIdRequired(String),
+    /// <p>An encryption integrity check failed.</p>
+    EncryptionIntegrityChecksFailed(String),
+    /// <p>An encryption key could not be accessed.</p>
+    EncryptionKeyAccessDenied(String),
+    /// <p>The encryption key is disabled.</p>
+    EncryptionKeyDisabled(String),
+    /// <p>No encryption key was found.</p>
+    EncryptionKeyNotFound(String),
+    /// <p>The encryption key is not available.</p>
+    EncryptionKeyUnavailable(String),
+    /// <p>The specified commit ID is not valid.</p>
+    InvalidCommitId(String),
+    /// <p>The specified continuation token is not valid.</p>
+    InvalidContinuationToken(String),
+    /// <p>The specified number of maximum results is not valid.</p>
+    InvalidMaxResults(String),
+    /// <p>The pull request ID is not valid. Make sure that you have provided the full ID and that the pull request is in the specified repository, and then try again.</p>
+    InvalidPullRequestId(String),
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
+    InvalidRepositoryName(String),
+    /// <p>The pull request ID could not be found. Make sure that you have specified the correct repository name and pull request ID, and then try again.</p>
+    PullRequestDoesNotExist(String),
+    /// <p>A pull request ID is required, but none was provided.</p>
+    PullRequestIdRequired(String),
+    /// <p>The specified repository does not exist.</p>
+    RepositoryDoesNotExist(String),
+    /// <p>A repository name is required but was not specified.</p>
+    RepositoryNameRequired(String),
+    /// <p>The repository does not contain any pull requests with that pull request ID. Check to make sure you have provided the correct repository name for the pull request.</p>
+    RepositoryNotAssociatedWithPullRequest(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetCommentsForPullRequestError {
+    pub fn from_body(body: &str) -> GetCommentsForPullRequestError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "CommitDoesNotExistException" => {
+                        GetCommentsForPullRequestError::CommitDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "CommitIdRequiredException" => {
+                        GetCommentsForPullRequestError::CommitIdRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionIntegrityChecksFailedException" => {
+                        GetCommentsForPullRequestError::EncryptionIntegrityChecksFailed(
+                            String::from(error_message),
+                        )
+                    }
+                    "EncryptionKeyAccessDeniedException" => {
+                        GetCommentsForPullRequestError::EncryptionKeyAccessDenied(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionKeyDisabledException" => {
+                        GetCommentsForPullRequestError::EncryptionKeyDisabled(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionKeyNotFoundException" => {
+                        GetCommentsForPullRequestError::EncryptionKeyNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionKeyUnavailableException" => {
+                        GetCommentsForPullRequestError::EncryptionKeyUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidCommitIdException" => {
+                        GetCommentsForPullRequestError::InvalidCommitId(String::from(error_message))
+                    }
+                    "InvalidContinuationTokenException" => {
+                        GetCommentsForPullRequestError::InvalidContinuationToken(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidMaxResultsException" => {
+                        GetCommentsForPullRequestError::InvalidMaxResults(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidPullRequestIdException" => {
+                        GetCommentsForPullRequestError::InvalidPullRequestId(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidRepositoryNameException" => {
+                        GetCommentsForPullRequestError::InvalidRepositoryName(String::from(
+                            error_message,
+                        ))
+                    }
+                    "PullRequestDoesNotExistException" => {
+                        GetCommentsForPullRequestError::PullRequestDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "PullRequestIdRequiredException" => {
+                        GetCommentsForPullRequestError::PullRequestIdRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "RepositoryDoesNotExistException" => {
+                        GetCommentsForPullRequestError::RepositoryDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "RepositoryNameRequiredException" => {
+                        GetCommentsForPullRequestError::RepositoryNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "RepositoryNotAssociatedWithPullRequestException" => {
+                        GetCommentsForPullRequestError::RepositoryNotAssociatedWithPullRequest(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => {
+                        GetCommentsForPullRequestError::Validation(error_message.to_string())
+                    }
+                    _ => GetCommentsForPullRequestError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetCommentsForPullRequestError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetCommentsForPullRequestError {
+    fn from(err: serde_json::error::Error) -> GetCommentsForPullRequestError {
+        GetCommentsForPullRequestError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetCommentsForPullRequestError {
+    fn from(err: CredentialsError) -> GetCommentsForPullRequestError {
+        GetCommentsForPullRequestError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetCommentsForPullRequestError {
+    fn from(err: HttpDispatchError) -> GetCommentsForPullRequestError {
+        GetCommentsForPullRequestError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetCommentsForPullRequestError {
+    fn from(err: io::Error) -> GetCommentsForPullRequestError {
+        GetCommentsForPullRequestError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetCommentsForPullRequestError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetCommentsForPullRequestError {
+    fn description(&self) -> &str {
+        match *self {
+            GetCommentsForPullRequestError::CommitDoesNotExist(ref cause) => cause,
+            GetCommentsForPullRequestError::CommitIdRequired(ref cause) => cause,
+            GetCommentsForPullRequestError::EncryptionIntegrityChecksFailed(ref cause) => cause,
+            GetCommentsForPullRequestError::EncryptionKeyAccessDenied(ref cause) => cause,
+            GetCommentsForPullRequestError::EncryptionKeyDisabled(ref cause) => cause,
+            GetCommentsForPullRequestError::EncryptionKeyNotFound(ref cause) => cause,
+            GetCommentsForPullRequestError::EncryptionKeyUnavailable(ref cause) => cause,
+            GetCommentsForPullRequestError::InvalidCommitId(ref cause) => cause,
+            GetCommentsForPullRequestError::InvalidContinuationToken(ref cause) => cause,
+            GetCommentsForPullRequestError::InvalidMaxResults(ref cause) => cause,
+            GetCommentsForPullRequestError::InvalidPullRequestId(ref cause) => cause,
+            GetCommentsForPullRequestError::InvalidRepositoryName(ref cause) => cause,
+            GetCommentsForPullRequestError::PullRequestDoesNotExist(ref cause) => cause,
+            GetCommentsForPullRequestError::PullRequestIdRequired(ref cause) => cause,
+            GetCommentsForPullRequestError::RepositoryDoesNotExist(ref cause) => cause,
+            GetCommentsForPullRequestError::RepositoryNameRequired(ref cause) => cause,
+            GetCommentsForPullRequestError::RepositoryNotAssociatedWithPullRequest(ref cause) => {
+                cause
+            }
+            GetCommentsForPullRequestError::Validation(ref cause) => cause,
+            GetCommentsForPullRequestError::Credentials(ref err) => err.description(),
+            GetCommentsForPullRequestError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetCommentsForPullRequestError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -1694,6 +3630,308 @@ impl Error for GetDifferencesError {
             GetDifferencesError::Credentials(ref err) => err.description(),
             GetDifferencesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             GetDifferencesError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetMergeConflicts
+#[derive(Debug, PartialEq)]
+pub enum GetMergeConflictsError {
+    /// <p>The specified commit does not exist or no commit was specified, and the specified repository has no default branch.</p>
+    CommitDoesNotExist(String),
+    /// <p>A commit was not specified.</p>
+    CommitRequired(String),
+    /// <p>An encryption integrity check failed.</p>
+    EncryptionIntegrityChecksFailed(String),
+    /// <p>An encryption key could not be accessed.</p>
+    EncryptionKeyAccessDenied(String),
+    /// <p>The encryption key is disabled.</p>
+    EncryptionKeyDisabled(String),
+    /// <p>No encryption key was found.</p>
+    EncryptionKeyNotFound(String),
+    /// <p>The encryption key is not available.</p>
+    EncryptionKeyUnavailable(String),
+    /// <p>The specified commit is not valid.</p>
+    InvalidCommit(String),
+    /// <p>The destination commit specifier is not valid. You must provide a valid branch name, tag, or full commit ID. </p>
+    InvalidDestinationCommitSpecifier(String),
+    /// <p>The specified merge option is not valid. The only valid value is FAST_FORWARD_MERGE.</p>
+    InvalidMergeOption(String),
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
+    InvalidRepositoryName(String),
+    /// <p>The source commit specifier is not valid. You must provide a valid branch name, tag, or full commit ID.</p>
+    InvalidSourceCommitSpecifier(String),
+    /// <p>A merge option or stategy is required, and none was provided.</p>
+    MergeOptionRequired(String),
+    /// <p>The specified repository does not exist.</p>
+    RepositoryDoesNotExist(String),
+    /// <p>A repository name is required but was not specified.</p>
+    RepositoryNameRequired(String),
+    /// <p>The divergence between the tips of the provided commit specifiers is too great to determine whether there might be any merge conflicts. Locally compare the specifiers using <code>git diff</code> or a diff tool.</p>
+    TipsDivergenceExceeded(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetMergeConflictsError {
+    pub fn from_body(body: &str) -> GetMergeConflictsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "CommitDoesNotExistException" => {
+                        GetMergeConflictsError::CommitDoesNotExist(String::from(error_message))
+                    }
+                    "CommitRequiredException" => {
+                        GetMergeConflictsError::CommitRequired(String::from(error_message))
+                    }
+                    "EncryptionIntegrityChecksFailedException" => {
+                        GetMergeConflictsError::EncryptionIntegrityChecksFailed(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionKeyAccessDeniedException" => {
+                        GetMergeConflictsError::EncryptionKeyAccessDenied(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionKeyDisabledException" => {
+                        GetMergeConflictsError::EncryptionKeyDisabled(String::from(error_message))
+                    }
+                    "EncryptionKeyNotFoundException" => {
+                        GetMergeConflictsError::EncryptionKeyNotFound(String::from(error_message))
+                    }
+                    "EncryptionKeyUnavailableException" => {
+                        GetMergeConflictsError::EncryptionKeyUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidCommitException" => {
+                        GetMergeConflictsError::InvalidCommit(String::from(error_message))
+                    }
+                    "InvalidDestinationCommitSpecifierException" => {
+                        GetMergeConflictsError::InvalidDestinationCommitSpecifier(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidMergeOptionException" => {
+                        GetMergeConflictsError::InvalidMergeOption(String::from(error_message))
+                    }
+                    "InvalidRepositoryNameException" => {
+                        GetMergeConflictsError::InvalidRepositoryName(String::from(error_message))
+                    }
+                    "InvalidSourceCommitSpecifierException" => {
+                        GetMergeConflictsError::InvalidSourceCommitSpecifier(String::from(
+                            error_message,
+                        ))
+                    }
+                    "MergeOptionRequiredException" => {
+                        GetMergeConflictsError::MergeOptionRequired(String::from(error_message))
+                    }
+                    "RepositoryDoesNotExistException" => {
+                        GetMergeConflictsError::RepositoryDoesNotExist(String::from(error_message))
+                    }
+                    "RepositoryNameRequiredException" => {
+                        GetMergeConflictsError::RepositoryNameRequired(String::from(error_message))
+                    }
+                    "TipsDivergenceExceededException" => {
+                        GetMergeConflictsError::TipsDivergenceExceeded(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetMergeConflictsError::Validation(error_message.to_string())
+                    }
+                    _ => GetMergeConflictsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetMergeConflictsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetMergeConflictsError {
+    fn from(err: serde_json::error::Error) -> GetMergeConflictsError {
+        GetMergeConflictsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetMergeConflictsError {
+    fn from(err: CredentialsError) -> GetMergeConflictsError {
+        GetMergeConflictsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetMergeConflictsError {
+    fn from(err: HttpDispatchError) -> GetMergeConflictsError {
+        GetMergeConflictsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetMergeConflictsError {
+    fn from(err: io::Error) -> GetMergeConflictsError {
+        GetMergeConflictsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetMergeConflictsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetMergeConflictsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetMergeConflictsError::CommitDoesNotExist(ref cause) => cause,
+            GetMergeConflictsError::CommitRequired(ref cause) => cause,
+            GetMergeConflictsError::EncryptionIntegrityChecksFailed(ref cause) => cause,
+            GetMergeConflictsError::EncryptionKeyAccessDenied(ref cause) => cause,
+            GetMergeConflictsError::EncryptionKeyDisabled(ref cause) => cause,
+            GetMergeConflictsError::EncryptionKeyNotFound(ref cause) => cause,
+            GetMergeConflictsError::EncryptionKeyUnavailable(ref cause) => cause,
+            GetMergeConflictsError::InvalidCommit(ref cause) => cause,
+            GetMergeConflictsError::InvalidDestinationCommitSpecifier(ref cause) => cause,
+            GetMergeConflictsError::InvalidMergeOption(ref cause) => cause,
+            GetMergeConflictsError::InvalidRepositoryName(ref cause) => cause,
+            GetMergeConflictsError::InvalidSourceCommitSpecifier(ref cause) => cause,
+            GetMergeConflictsError::MergeOptionRequired(ref cause) => cause,
+            GetMergeConflictsError::RepositoryDoesNotExist(ref cause) => cause,
+            GetMergeConflictsError::RepositoryNameRequired(ref cause) => cause,
+            GetMergeConflictsError::TipsDivergenceExceeded(ref cause) => cause,
+            GetMergeConflictsError::Validation(ref cause) => cause,
+            GetMergeConflictsError::Credentials(ref err) => err.description(),
+            GetMergeConflictsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetMergeConflictsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by GetPullRequest
+#[derive(Debug, PartialEq)]
+pub enum GetPullRequestError {
+    /// <p>An encryption integrity check failed.</p>
+    EncryptionIntegrityChecksFailed(String),
+    /// <p>An encryption key could not be accessed.</p>
+    EncryptionKeyAccessDenied(String),
+    /// <p>The encryption key is disabled.</p>
+    EncryptionKeyDisabled(String),
+    /// <p>No encryption key was found.</p>
+    EncryptionKeyNotFound(String),
+    /// <p>The encryption key is not available.</p>
+    EncryptionKeyUnavailable(String),
+    /// <p>The pull request ID is not valid. Make sure that you have provided the full ID and that the pull request is in the specified repository, and then try again.</p>
+    InvalidPullRequestId(String),
+    /// <p>The pull request ID could not be found. Make sure that you have specified the correct repository name and pull request ID, and then try again.</p>
+    PullRequestDoesNotExist(String),
+    /// <p>A pull request ID is required, but none was provided.</p>
+    PullRequestIdRequired(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetPullRequestError {
+    pub fn from_body(body: &str) -> GetPullRequestError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "EncryptionIntegrityChecksFailedException" => {
+                        GetPullRequestError::EncryptionIntegrityChecksFailed(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionKeyAccessDeniedException" => {
+                        GetPullRequestError::EncryptionKeyAccessDenied(String::from(error_message))
+                    }
+                    "EncryptionKeyDisabledException" => {
+                        GetPullRequestError::EncryptionKeyDisabled(String::from(error_message))
+                    }
+                    "EncryptionKeyNotFoundException" => {
+                        GetPullRequestError::EncryptionKeyNotFound(String::from(error_message))
+                    }
+                    "EncryptionKeyUnavailableException" => {
+                        GetPullRequestError::EncryptionKeyUnavailable(String::from(error_message))
+                    }
+                    "InvalidPullRequestIdException" => {
+                        GetPullRequestError::InvalidPullRequestId(String::from(error_message))
+                    }
+                    "PullRequestDoesNotExistException" => {
+                        GetPullRequestError::PullRequestDoesNotExist(String::from(error_message))
+                    }
+                    "PullRequestIdRequiredException" => {
+                        GetPullRequestError::PullRequestIdRequired(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        GetPullRequestError::Validation(error_message.to_string())
+                    }
+                    _ => GetPullRequestError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => GetPullRequestError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for GetPullRequestError {
+    fn from(err: serde_json::error::Error) -> GetPullRequestError {
+        GetPullRequestError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetPullRequestError {
+    fn from(err: CredentialsError) -> GetPullRequestError {
+        GetPullRequestError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetPullRequestError {
+    fn from(err: HttpDispatchError) -> GetPullRequestError {
+        GetPullRequestError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetPullRequestError {
+    fn from(err: io::Error) -> GetPullRequestError {
+        GetPullRequestError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetPullRequestError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetPullRequestError {
+    fn description(&self) -> &str {
+        match *self {
+            GetPullRequestError::EncryptionIntegrityChecksFailed(ref cause) => cause,
+            GetPullRequestError::EncryptionKeyAccessDenied(ref cause) => cause,
+            GetPullRequestError::EncryptionKeyDisabled(ref cause) => cause,
+            GetPullRequestError::EncryptionKeyNotFound(ref cause) => cause,
+            GetPullRequestError::EncryptionKeyUnavailable(ref cause) => cause,
+            GetPullRequestError::InvalidPullRequestId(ref cause) => cause,
+            GetPullRequestError::PullRequestDoesNotExist(ref cause) => cause,
+            GetPullRequestError::PullRequestIdRequired(ref cause) => cause,
+            GetPullRequestError::Validation(ref cause) => cause,
+            GetPullRequestError::Credentials(ref err) => err.description(),
+            GetPullRequestError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetPullRequestError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -2085,6 +4323,160 @@ impl Error for ListBranchesError {
         }
     }
 }
+/// Errors returned by ListPullRequests
+#[derive(Debug, PartialEq)]
+pub enum ListPullRequestsError {
+    /// <p>The specified Amazon Resource Name (ARN) does not exist in the AWS account.</p>
+    AuthorDoesNotExist(String),
+    /// <p>An encryption integrity check failed.</p>
+    EncryptionIntegrityChecksFailed(String),
+    /// <p>An encryption key could not be accessed.</p>
+    EncryptionKeyAccessDenied(String),
+    /// <p>The encryption key is disabled.</p>
+    EncryptionKeyDisabled(String),
+    /// <p>No encryption key was found.</p>
+    EncryptionKeyNotFound(String),
+    /// <p>The encryption key is not available.</p>
+    EncryptionKeyUnavailable(String),
+    /// <p>The Amazon Resource Name (ARN) is not valid. Make sure that you have provided the full ARN for the author of the pull request, and then try again.</p>
+    InvalidAuthorArn(String),
+    /// <p>The specified continuation token is not valid.</p>
+    InvalidContinuationToken(String),
+    /// <p>The specified number of maximum results is not valid.</p>
+    InvalidMaxResults(String),
+    /// <p>The pull request status is not valid. The only valid values are <code>OPEN</code> and <code>CLOSED</code>.</p>
+    InvalidPullRequestStatus(String),
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
+    InvalidRepositoryName(String),
+    /// <p>The specified repository does not exist.</p>
+    RepositoryDoesNotExist(String),
+    /// <p>A repository name is required but was not specified.</p>
+    RepositoryNameRequired(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListPullRequestsError {
+    pub fn from_body(body: &str) -> ListPullRequestsError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "AuthorDoesNotExistException" => {
+                        ListPullRequestsError::AuthorDoesNotExist(String::from(error_message))
+                    }
+                    "EncryptionIntegrityChecksFailedException" => {
+                        ListPullRequestsError::EncryptionIntegrityChecksFailed(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionKeyAccessDeniedException" => {
+                        ListPullRequestsError::EncryptionKeyAccessDenied(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionKeyDisabledException" => {
+                        ListPullRequestsError::EncryptionKeyDisabled(String::from(error_message))
+                    }
+                    "EncryptionKeyNotFoundException" => {
+                        ListPullRequestsError::EncryptionKeyNotFound(String::from(error_message))
+                    }
+                    "EncryptionKeyUnavailableException" => {
+                        ListPullRequestsError::EncryptionKeyUnavailable(String::from(error_message))
+                    }
+                    "InvalidAuthorArnException" => {
+                        ListPullRequestsError::InvalidAuthorArn(String::from(error_message))
+                    }
+                    "InvalidContinuationTokenException" => {
+                        ListPullRequestsError::InvalidContinuationToken(String::from(error_message))
+                    }
+                    "InvalidMaxResultsException" => {
+                        ListPullRequestsError::InvalidMaxResults(String::from(error_message))
+                    }
+                    "InvalidPullRequestStatusException" => {
+                        ListPullRequestsError::InvalidPullRequestStatus(String::from(error_message))
+                    }
+                    "InvalidRepositoryNameException" => {
+                        ListPullRequestsError::InvalidRepositoryName(String::from(error_message))
+                    }
+                    "RepositoryDoesNotExistException" => {
+                        ListPullRequestsError::RepositoryDoesNotExist(String::from(error_message))
+                    }
+                    "RepositoryNameRequiredException" => {
+                        ListPullRequestsError::RepositoryNameRequired(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListPullRequestsError::Validation(error_message.to_string())
+                    }
+                    _ => ListPullRequestsError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListPullRequestsError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListPullRequestsError {
+    fn from(err: serde_json::error::Error) -> ListPullRequestsError {
+        ListPullRequestsError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListPullRequestsError {
+    fn from(err: CredentialsError) -> ListPullRequestsError {
+        ListPullRequestsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListPullRequestsError {
+    fn from(err: HttpDispatchError) -> ListPullRequestsError {
+        ListPullRequestsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListPullRequestsError {
+    fn from(err: io::Error) -> ListPullRequestsError {
+        ListPullRequestsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListPullRequestsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListPullRequestsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListPullRequestsError::AuthorDoesNotExist(ref cause) => cause,
+            ListPullRequestsError::EncryptionIntegrityChecksFailed(ref cause) => cause,
+            ListPullRequestsError::EncryptionKeyAccessDenied(ref cause) => cause,
+            ListPullRequestsError::EncryptionKeyDisabled(ref cause) => cause,
+            ListPullRequestsError::EncryptionKeyNotFound(ref cause) => cause,
+            ListPullRequestsError::EncryptionKeyUnavailable(ref cause) => cause,
+            ListPullRequestsError::InvalidAuthorArn(ref cause) => cause,
+            ListPullRequestsError::InvalidContinuationToken(ref cause) => cause,
+            ListPullRequestsError::InvalidMaxResults(ref cause) => cause,
+            ListPullRequestsError::InvalidPullRequestStatus(ref cause) => cause,
+            ListPullRequestsError::InvalidRepositoryName(ref cause) => cause,
+            ListPullRequestsError::RepositoryDoesNotExist(ref cause) => cause,
+            ListPullRequestsError::RepositoryNameRequired(ref cause) => cause,
+            ListPullRequestsError::Validation(ref cause) => cause,
+            ListPullRequestsError::Credentials(ref err) => err.description(),
+            ListPullRequestsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ListPullRequestsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListRepositories
 #[derive(Debug, PartialEq)]
 pub enum ListRepositoriesError {
@@ -2172,6 +4564,880 @@ impl Error for ListRepositoriesError {
             ListRepositoriesError::Credentials(ref err) => err.description(),
             ListRepositoriesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             ListRepositoriesError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by MergePullRequestByFastForward
+#[derive(Debug, PartialEq)]
+pub enum MergePullRequestByFastForwardError {
+    /// <p>An encryption integrity check failed.</p>
+    EncryptionIntegrityChecksFailed(String),
+    /// <p>An encryption key could not be accessed.</p>
+    EncryptionKeyAccessDenied(String),
+    /// <p>The encryption key is disabled.</p>
+    EncryptionKeyDisabled(String),
+    /// <p>No encryption key was found.</p>
+    EncryptionKeyNotFound(String),
+    /// <p>The encryption key is not available.</p>
+    EncryptionKeyUnavailable(String),
+    /// <p>The specified commit ID is not valid.</p>
+    InvalidCommitId(String),
+    /// <p>The pull request ID is not valid. Make sure that you have provided the full ID and that the pull request is in the specified repository, and then try again.</p>
+    InvalidPullRequestId(String),
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
+    InvalidRepositoryName(String),
+    /// <p>The pull request cannot be merged automatically into the destination branch. You must manually merge the branches and resolve any conflicts.</p>
+    ManualMergeRequired(String),
+    /// <p>The pull request status cannot be updated because it is already closed.</p>
+    PullRequestAlreadyClosed(String),
+    /// <p>The pull request ID could not be found. Make sure that you have specified the correct repository name and pull request ID, and then try again.</p>
+    PullRequestDoesNotExist(String),
+    /// <p>A pull request ID is required, but none was provided.</p>
+    PullRequestIdRequired(String),
+    /// <p>The specified reference does not exist. You must provide a full commit ID.</p>
+    ReferenceDoesNotExist(String),
+    /// <p>The specified repository does not exist.</p>
+    RepositoryDoesNotExist(String),
+    /// <p>A repository name is required but was not specified.</p>
+    RepositoryNameRequired(String),
+    /// <p>The tip of the source branch in the destination repository does not match the tip of the source branch specified in your request. The pull request might have been updated. Make sure that you have the latest changes.</p>
+    TipOfSourceReferenceIsDifferent(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl MergePullRequestByFastForwardError {
+    pub fn from_body(body: &str) -> MergePullRequestByFastForwardError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "EncryptionIntegrityChecksFailedException" => {
+                        MergePullRequestByFastForwardError::EncryptionIntegrityChecksFailed(
+                            String::from(error_message),
+                        )
+                    }
+                    "EncryptionKeyAccessDeniedException" => {
+                        MergePullRequestByFastForwardError::EncryptionKeyAccessDenied(
+                            String::from(error_message),
+                        )
+                    }
+                    "EncryptionKeyDisabledException" => {
+                        MergePullRequestByFastForwardError::EncryptionKeyDisabled(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionKeyNotFoundException" => {
+                        MergePullRequestByFastForwardError::EncryptionKeyNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionKeyUnavailableException" => {
+                        MergePullRequestByFastForwardError::EncryptionKeyUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidCommitIdException" => {
+                        MergePullRequestByFastForwardError::InvalidCommitId(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidPullRequestIdException" => {
+                        MergePullRequestByFastForwardError::InvalidPullRequestId(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidRepositoryNameException" => {
+                        MergePullRequestByFastForwardError::InvalidRepositoryName(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ManualMergeRequiredException" => {
+                        MergePullRequestByFastForwardError::ManualMergeRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "PullRequestAlreadyClosedException" => {
+                        MergePullRequestByFastForwardError::PullRequestAlreadyClosed(String::from(
+                            error_message,
+                        ))
+                    }
+                    "PullRequestDoesNotExistException" => {
+                        MergePullRequestByFastForwardError::PullRequestDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "PullRequestIdRequiredException" => {
+                        MergePullRequestByFastForwardError::PullRequestIdRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ReferenceDoesNotExistException" => {
+                        MergePullRequestByFastForwardError::ReferenceDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "RepositoryDoesNotExistException" => {
+                        MergePullRequestByFastForwardError::RepositoryDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "RepositoryNameRequiredException" => {
+                        MergePullRequestByFastForwardError::RepositoryNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "TipOfSourceReferenceIsDifferentException" => {
+                        MergePullRequestByFastForwardError::TipOfSourceReferenceIsDifferent(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => {
+                        MergePullRequestByFastForwardError::Validation(error_message.to_string())
+                    }
+                    _ => MergePullRequestByFastForwardError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => MergePullRequestByFastForwardError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for MergePullRequestByFastForwardError {
+    fn from(err: serde_json::error::Error) -> MergePullRequestByFastForwardError {
+        MergePullRequestByFastForwardError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for MergePullRequestByFastForwardError {
+    fn from(err: CredentialsError) -> MergePullRequestByFastForwardError {
+        MergePullRequestByFastForwardError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for MergePullRequestByFastForwardError {
+    fn from(err: HttpDispatchError) -> MergePullRequestByFastForwardError {
+        MergePullRequestByFastForwardError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for MergePullRequestByFastForwardError {
+    fn from(err: io::Error) -> MergePullRequestByFastForwardError {
+        MergePullRequestByFastForwardError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for MergePullRequestByFastForwardError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for MergePullRequestByFastForwardError {
+    fn description(&self) -> &str {
+        match *self {
+            MergePullRequestByFastForwardError::EncryptionIntegrityChecksFailed(ref cause) => cause,
+            MergePullRequestByFastForwardError::EncryptionKeyAccessDenied(ref cause) => cause,
+            MergePullRequestByFastForwardError::EncryptionKeyDisabled(ref cause) => cause,
+            MergePullRequestByFastForwardError::EncryptionKeyNotFound(ref cause) => cause,
+            MergePullRequestByFastForwardError::EncryptionKeyUnavailable(ref cause) => cause,
+            MergePullRequestByFastForwardError::InvalidCommitId(ref cause) => cause,
+            MergePullRequestByFastForwardError::InvalidPullRequestId(ref cause) => cause,
+            MergePullRequestByFastForwardError::InvalidRepositoryName(ref cause) => cause,
+            MergePullRequestByFastForwardError::ManualMergeRequired(ref cause) => cause,
+            MergePullRequestByFastForwardError::PullRequestAlreadyClosed(ref cause) => cause,
+            MergePullRequestByFastForwardError::PullRequestDoesNotExist(ref cause) => cause,
+            MergePullRequestByFastForwardError::PullRequestIdRequired(ref cause) => cause,
+            MergePullRequestByFastForwardError::ReferenceDoesNotExist(ref cause) => cause,
+            MergePullRequestByFastForwardError::RepositoryDoesNotExist(ref cause) => cause,
+            MergePullRequestByFastForwardError::RepositoryNameRequired(ref cause) => cause,
+            MergePullRequestByFastForwardError::TipOfSourceReferenceIsDifferent(ref cause) => cause,
+            MergePullRequestByFastForwardError::Validation(ref cause) => cause,
+            MergePullRequestByFastForwardError::Credentials(ref err) => err.description(),
+            MergePullRequestByFastForwardError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            MergePullRequestByFastForwardError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by PostCommentForComparedCommit
+#[derive(Debug, PartialEq)]
+pub enum PostCommentForComparedCommitError {
+    /// <p>The before commit ID and the after commit ID are the same, which is not valid. The before commit ID and the after commit ID must be different commit IDs.</p>
+    BeforeCommitIdAndAfterCommitIdAreSame(String),
+    /// <p>A client request token is required. A client request token is an unique, client-generated idempotency token that when provided in a request, ensures the request cannot be repeated with a changed parameter. If a request is received with the same parameters and a token is included, the request will return information about the initial request that used that token.</p>
+    ClientRequestTokenRequired(String),
+    /// <p>The comment is empty. You must provide some content for a comment. The content cannot be null.</p>
+    CommentContentRequired(String),
+    /// <p>The comment is too large. Comments are limited to 1,000 characters.</p>
+    CommentContentSizeLimitExceeded(String),
+    /// <p>The specified commit does not exist or no commit was specified, and the specified repository has no default branch.</p>
+    CommitDoesNotExist(String),
+    /// <p>A commit ID was not specified.</p>
+    CommitIdRequired(String),
+    /// <p>An encryption integrity check failed.</p>
+    EncryptionIntegrityChecksFailed(String),
+    /// <p>An encryption key could not be accessed.</p>
+    EncryptionKeyAccessDenied(String),
+    /// <p>The encryption key is disabled.</p>
+    EncryptionKeyDisabled(String),
+    /// <p>No encryption key was found.</p>
+    EncryptionKeyNotFound(String),
+    /// <p>The encryption key is not available.</p>
+    EncryptionKeyUnavailable(String),
+    /// <p>The client request token is not valid. Either the token is not in a valid format, or the token has been used in a previous request and cannot be re-used.</p>
+    IdempotencyParameterMismatch(String),
+    /// <p>The client request token is not valid.</p>
+    InvalidClientRequestToken(String),
+    /// <p>The specified commit ID is not valid.</p>
+    InvalidCommitId(String),
+    /// <p>The location of the file is not valid. Make sure that you include the extension of the file as well as the file name.</p>
+    InvalidFileLocation(String),
+    /// <p>The position is not valid. Make sure that the line number exists in the version of the file you want to comment on.</p>
+    InvalidFilePosition(String),
+    /// <p>The specified path is not valid.</p>
+    InvalidPath(String),
+    /// <p>Either the enum is not in a valid format, or the specified file version enum is not valid in respect to the current file version.</p>
+    InvalidRelativeFileVersionEnum(String),
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
+    InvalidRepositoryName(String),
+    /// <p>The specified path does not exist.</p>
+    PathDoesNotExist(String),
+    /// <p>The filePath for a location cannot be empty or null.</p>
+    PathRequired(String),
+    /// <p>The specified repository does not exist.</p>
+    RepositoryDoesNotExist(String),
+    /// <p>A repository name is required but was not specified.</p>
+    RepositoryNameRequired(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl PostCommentForComparedCommitError {
+    pub fn from_body(body: &str) -> PostCommentForComparedCommitError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "BeforeCommitIdAndAfterCommitIdAreSameException" => {
+                        PostCommentForComparedCommitError::BeforeCommitIdAndAfterCommitIdAreSame(
+                            String::from(error_message),
+                        )
+                    }
+                    "ClientRequestTokenRequiredException" => {
+                        PostCommentForComparedCommitError::ClientRequestTokenRequired(
+                            String::from(error_message),
+                        )
+                    }
+                    "CommentContentRequiredException" => {
+                        PostCommentForComparedCommitError::CommentContentRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "CommentContentSizeLimitExceededException" => {
+                        PostCommentForComparedCommitError::CommentContentSizeLimitExceeded(
+                            String::from(error_message),
+                        )
+                    }
+                    "CommitDoesNotExistException" => {
+                        PostCommentForComparedCommitError::CommitDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "CommitIdRequiredException" => {
+                        PostCommentForComparedCommitError::CommitIdRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionIntegrityChecksFailedException" => {
+                        PostCommentForComparedCommitError::EncryptionIntegrityChecksFailed(
+                            String::from(error_message),
+                        )
+                    }
+                    "EncryptionKeyAccessDeniedException" => {
+                        PostCommentForComparedCommitError::EncryptionKeyAccessDenied(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionKeyDisabledException" => {
+                        PostCommentForComparedCommitError::EncryptionKeyDisabled(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionKeyNotFoundException" => {
+                        PostCommentForComparedCommitError::EncryptionKeyNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionKeyUnavailableException" => {
+                        PostCommentForComparedCommitError::EncryptionKeyUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "IdempotencyParameterMismatchException" => {
+                        PostCommentForComparedCommitError::IdempotencyParameterMismatch(
+                            String::from(error_message),
+                        )
+                    }
+                    "InvalidClientRequestTokenException" => {
+                        PostCommentForComparedCommitError::InvalidClientRequestToken(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidCommitIdException" => {
+                        PostCommentForComparedCommitError::InvalidCommitId(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidFileLocationException" => {
+                        PostCommentForComparedCommitError::InvalidFileLocation(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidFilePositionException" => {
+                        PostCommentForComparedCommitError::InvalidFilePosition(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidPathException" => {
+                        PostCommentForComparedCommitError::InvalidPath(String::from(error_message))
+                    }
+                    "InvalidRelativeFileVersionEnumException" => {
+                        PostCommentForComparedCommitError::InvalidRelativeFileVersionEnum(
+                            String::from(error_message),
+                        )
+                    }
+                    "InvalidRepositoryNameException" => {
+                        PostCommentForComparedCommitError::InvalidRepositoryName(String::from(
+                            error_message,
+                        ))
+                    }
+                    "PathDoesNotExistException" => {
+                        PostCommentForComparedCommitError::PathDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "PathRequiredException" => {
+                        PostCommentForComparedCommitError::PathRequired(String::from(error_message))
+                    }
+                    "RepositoryDoesNotExistException" => {
+                        PostCommentForComparedCommitError::RepositoryDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "RepositoryNameRequiredException" => {
+                        PostCommentForComparedCommitError::RepositoryNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        PostCommentForComparedCommitError::Validation(error_message.to_string())
+                    }
+                    _ => PostCommentForComparedCommitError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => PostCommentForComparedCommitError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for PostCommentForComparedCommitError {
+    fn from(err: serde_json::error::Error) -> PostCommentForComparedCommitError {
+        PostCommentForComparedCommitError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for PostCommentForComparedCommitError {
+    fn from(err: CredentialsError) -> PostCommentForComparedCommitError {
+        PostCommentForComparedCommitError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for PostCommentForComparedCommitError {
+    fn from(err: HttpDispatchError) -> PostCommentForComparedCommitError {
+        PostCommentForComparedCommitError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PostCommentForComparedCommitError {
+    fn from(err: io::Error) -> PostCommentForComparedCommitError {
+        PostCommentForComparedCommitError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for PostCommentForComparedCommitError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PostCommentForComparedCommitError {
+    fn description(&self) -> &str {
+        match *self {
+            PostCommentForComparedCommitError::BeforeCommitIdAndAfterCommitIdAreSame(ref cause) => {
+                cause
+            }
+            PostCommentForComparedCommitError::ClientRequestTokenRequired(ref cause) => cause,
+            PostCommentForComparedCommitError::CommentContentRequired(ref cause) => cause,
+            PostCommentForComparedCommitError::CommentContentSizeLimitExceeded(ref cause) => cause,
+            PostCommentForComparedCommitError::CommitDoesNotExist(ref cause) => cause,
+            PostCommentForComparedCommitError::CommitIdRequired(ref cause) => cause,
+            PostCommentForComparedCommitError::EncryptionIntegrityChecksFailed(ref cause) => cause,
+            PostCommentForComparedCommitError::EncryptionKeyAccessDenied(ref cause) => cause,
+            PostCommentForComparedCommitError::EncryptionKeyDisabled(ref cause) => cause,
+            PostCommentForComparedCommitError::EncryptionKeyNotFound(ref cause) => cause,
+            PostCommentForComparedCommitError::EncryptionKeyUnavailable(ref cause) => cause,
+            PostCommentForComparedCommitError::IdempotencyParameterMismatch(ref cause) => cause,
+            PostCommentForComparedCommitError::InvalidClientRequestToken(ref cause) => cause,
+            PostCommentForComparedCommitError::InvalidCommitId(ref cause) => cause,
+            PostCommentForComparedCommitError::InvalidFileLocation(ref cause) => cause,
+            PostCommentForComparedCommitError::InvalidFilePosition(ref cause) => cause,
+            PostCommentForComparedCommitError::InvalidPath(ref cause) => cause,
+            PostCommentForComparedCommitError::InvalidRelativeFileVersionEnum(ref cause) => cause,
+            PostCommentForComparedCommitError::InvalidRepositoryName(ref cause) => cause,
+            PostCommentForComparedCommitError::PathDoesNotExist(ref cause) => cause,
+            PostCommentForComparedCommitError::PathRequired(ref cause) => cause,
+            PostCommentForComparedCommitError::RepositoryDoesNotExist(ref cause) => cause,
+            PostCommentForComparedCommitError::RepositoryNameRequired(ref cause) => cause,
+            PostCommentForComparedCommitError::Validation(ref cause) => cause,
+            PostCommentForComparedCommitError::Credentials(ref err) => err.description(),
+            PostCommentForComparedCommitError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            PostCommentForComparedCommitError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by PostCommentForPullRequest
+#[derive(Debug, PartialEq)]
+pub enum PostCommentForPullRequestError {
+    /// <p>The before commit ID and the after commit ID are the same, which is not valid. The before commit ID and the after commit ID must be different commit IDs.</p>
+    BeforeCommitIdAndAfterCommitIdAreSame(String),
+    /// <p>A client request token is required. A client request token is an unique, client-generated idempotency token that when provided in a request, ensures the request cannot be repeated with a changed parameter. If a request is received with the same parameters and a token is included, the request will return information about the initial request that used that token.</p>
+    ClientRequestTokenRequired(String),
+    /// <p>The comment is empty. You must provide some content for a comment. The content cannot be null.</p>
+    CommentContentRequired(String),
+    /// <p>The comment is too large. Comments are limited to 1,000 characters.</p>
+    CommentContentSizeLimitExceeded(String),
+    /// <p>The specified commit does not exist or no commit was specified, and the specified repository has no default branch.</p>
+    CommitDoesNotExist(String),
+    /// <p>A commit ID was not specified.</p>
+    CommitIdRequired(String),
+    /// <p>An encryption integrity check failed.</p>
+    EncryptionIntegrityChecksFailed(String),
+    /// <p>An encryption key could not be accessed.</p>
+    EncryptionKeyAccessDenied(String),
+    /// <p>The encryption key is disabled.</p>
+    EncryptionKeyDisabled(String),
+    /// <p>No encryption key was found.</p>
+    EncryptionKeyNotFound(String),
+    /// <p>The encryption key is not available.</p>
+    EncryptionKeyUnavailable(String),
+    /// <p>The client request token is not valid. Either the token is not in a valid format, or the token has been used in a previous request and cannot be re-used.</p>
+    IdempotencyParameterMismatch(String),
+    /// <p>The client request token is not valid.</p>
+    InvalidClientRequestToken(String),
+    /// <p>The specified commit ID is not valid.</p>
+    InvalidCommitId(String),
+    /// <p>The location of the file is not valid. Make sure that you include the extension of the file as well as the file name.</p>
+    InvalidFileLocation(String),
+    /// <p>The position is not valid. Make sure that the line number exists in the version of the file you want to comment on.</p>
+    InvalidFilePosition(String),
+    /// <p>The specified path is not valid.</p>
+    InvalidPath(String),
+    /// <p>The pull request ID is not valid. Make sure that you have provided the full ID and that the pull request is in the specified repository, and then try again.</p>
+    InvalidPullRequestId(String),
+    /// <p>Either the enum is not in a valid format, or the specified file version enum is not valid in respect to the current file version.</p>
+    InvalidRelativeFileVersionEnum(String),
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
+    InvalidRepositoryName(String),
+    /// <p>The specified path does not exist.</p>
+    PathDoesNotExist(String),
+    /// <p>The filePath for a location cannot be empty or null.</p>
+    PathRequired(String),
+    /// <p>The pull request ID could not be found. Make sure that you have specified the correct repository name and pull request ID, and then try again.</p>
+    PullRequestDoesNotExist(String),
+    /// <p>A pull request ID is required, but none was provided.</p>
+    PullRequestIdRequired(String),
+    /// <p>The specified repository does not exist.</p>
+    RepositoryDoesNotExist(String),
+    /// <p>A repository name is required but was not specified.</p>
+    RepositoryNameRequired(String),
+    /// <p>The repository does not contain any pull requests with that pull request ID. Check to make sure you have provided the correct repository name for the pull request.</p>
+    RepositoryNotAssociatedWithPullRequest(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl PostCommentForPullRequestError {
+    pub fn from_body(body: &str) -> PostCommentForPullRequestError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "BeforeCommitIdAndAfterCommitIdAreSameException" => {
+                        PostCommentForPullRequestError::BeforeCommitIdAndAfterCommitIdAreSame(
+                            String::from(error_message),
+                        )
+                    }
+                    "ClientRequestTokenRequiredException" => {
+                        PostCommentForPullRequestError::ClientRequestTokenRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "CommentContentRequiredException" => {
+                        PostCommentForPullRequestError::CommentContentRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "CommentContentSizeLimitExceededException" => {
+                        PostCommentForPullRequestError::CommentContentSizeLimitExceeded(
+                            String::from(error_message),
+                        )
+                    }
+                    "CommitDoesNotExistException" => {
+                        PostCommentForPullRequestError::CommitDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "CommitIdRequiredException" => {
+                        PostCommentForPullRequestError::CommitIdRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionIntegrityChecksFailedException" => {
+                        PostCommentForPullRequestError::EncryptionIntegrityChecksFailed(
+                            String::from(error_message),
+                        )
+                    }
+                    "EncryptionKeyAccessDeniedException" => {
+                        PostCommentForPullRequestError::EncryptionKeyAccessDenied(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionKeyDisabledException" => {
+                        PostCommentForPullRequestError::EncryptionKeyDisabled(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionKeyNotFoundException" => {
+                        PostCommentForPullRequestError::EncryptionKeyNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionKeyUnavailableException" => {
+                        PostCommentForPullRequestError::EncryptionKeyUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "IdempotencyParameterMismatchException" => {
+                        PostCommentForPullRequestError::IdempotencyParameterMismatch(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidClientRequestTokenException" => {
+                        PostCommentForPullRequestError::InvalidClientRequestToken(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidCommitIdException" => {
+                        PostCommentForPullRequestError::InvalidCommitId(String::from(error_message))
+                    }
+                    "InvalidFileLocationException" => {
+                        PostCommentForPullRequestError::InvalidFileLocation(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidFilePositionException" => {
+                        PostCommentForPullRequestError::InvalidFilePosition(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidPathException" => {
+                        PostCommentForPullRequestError::InvalidPath(String::from(error_message))
+                    }
+                    "InvalidPullRequestIdException" => {
+                        PostCommentForPullRequestError::InvalidPullRequestId(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidRelativeFileVersionEnumException" => {
+                        PostCommentForPullRequestError::InvalidRelativeFileVersionEnum(
+                            String::from(error_message),
+                        )
+                    }
+                    "InvalidRepositoryNameException" => {
+                        PostCommentForPullRequestError::InvalidRepositoryName(String::from(
+                            error_message,
+                        ))
+                    }
+                    "PathDoesNotExistException" => {
+                        PostCommentForPullRequestError::PathDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "PathRequiredException" => {
+                        PostCommentForPullRequestError::PathRequired(String::from(error_message))
+                    }
+                    "PullRequestDoesNotExistException" => {
+                        PostCommentForPullRequestError::PullRequestDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "PullRequestIdRequiredException" => {
+                        PostCommentForPullRequestError::PullRequestIdRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "RepositoryDoesNotExistException" => {
+                        PostCommentForPullRequestError::RepositoryDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "RepositoryNameRequiredException" => {
+                        PostCommentForPullRequestError::RepositoryNameRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "RepositoryNotAssociatedWithPullRequestException" => {
+                        PostCommentForPullRequestError::RepositoryNotAssociatedWithPullRequest(
+                            String::from(error_message),
+                        )
+                    }
+                    "ValidationException" => {
+                        PostCommentForPullRequestError::Validation(error_message.to_string())
+                    }
+                    _ => PostCommentForPullRequestError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => PostCommentForPullRequestError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for PostCommentForPullRequestError {
+    fn from(err: serde_json::error::Error) -> PostCommentForPullRequestError {
+        PostCommentForPullRequestError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for PostCommentForPullRequestError {
+    fn from(err: CredentialsError) -> PostCommentForPullRequestError {
+        PostCommentForPullRequestError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for PostCommentForPullRequestError {
+    fn from(err: HttpDispatchError) -> PostCommentForPullRequestError {
+        PostCommentForPullRequestError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PostCommentForPullRequestError {
+    fn from(err: io::Error) -> PostCommentForPullRequestError {
+        PostCommentForPullRequestError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for PostCommentForPullRequestError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PostCommentForPullRequestError {
+    fn description(&self) -> &str {
+        match *self {
+            PostCommentForPullRequestError::BeforeCommitIdAndAfterCommitIdAreSame(ref cause) => {
+                cause
+            }
+            PostCommentForPullRequestError::ClientRequestTokenRequired(ref cause) => cause,
+            PostCommentForPullRequestError::CommentContentRequired(ref cause) => cause,
+            PostCommentForPullRequestError::CommentContentSizeLimitExceeded(ref cause) => cause,
+            PostCommentForPullRequestError::CommitDoesNotExist(ref cause) => cause,
+            PostCommentForPullRequestError::CommitIdRequired(ref cause) => cause,
+            PostCommentForPullRequestError::EncryptionIntegrityChecksFailed(ref cause) => cause,
+            PostCommentForPullRequestError::EncryptionKeyAccessDenied(ref cause) => cause,
+            PostCommentForPullRequestError::EncryptionKeyDisabled(ref cause) => cause,
+            PostCommentForPullRequestError::EncryptionKeyNotFound(ref cause) => cause,
+            PostCommentForPullRequestError::EncryptionKeyUnavailable(ref cause) => cause,
+            PostCommentForPullRequestError::IdempotencyParameterMismatch(ref cause) => cause,
+            PostCommentForPullRequestError::InvalidClientRequestToken(ref cause) => cause,
+            PostCommentForPullRequestError::InvalidCommitId(ref cause) => cause,
+            PostCommentForPullRequestError::InvalidFileLocation(ref cause) => cause,
+            PostCommentForPullRequestError::InvalidFilePosition(ref cause) => cause,
+            PostCommentForPullRequestError::InvalidPath(ref cause) => cause,
+            PostCommentForPullRequestError::InvalidPullRequestId(ref cause) => cause,
+            PostCommentForPullRequestError::InvalidRelativeFileVersionEnum(ref cause) => cause,
+            PostCommentForPullRequestError::InvalidRepositoryName(ref cause) => cause,
+            PostCommentForPullRequestError::PathDoesNotExist(ref cause) => cause,
+            PostCommentForPullRequestError::PathRequired(ref cause) => cause,
+            PostCommentForPullRequestError::PullRequestDoesNotExist(ref cause) => cause,
+            PostCommentForPullRequestError::PullRequestIdRequired(ref cause) => cause,
+            PostCommentForPullRequestError::RepositoryDoesNotExist(ref cause) => cause,
+            PostCommentForPullRequestError::RepositoryNameRequired(ref cause) => cause,
+            PostCommentForPullRequestError::RepositoryNotAssociatedWithPullRequest(ref cause) => {
+                cause
+            }
+            PostCommentForPullRequestError::Validation(ref cause) => cause,
+            PostCommentForPullRequestError::Credentials(ref err) => err.description(),
+            PostCommentForPullRequestError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            PostCommentForPullRequestError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by PostCommentReply
+#[derive(Debug, PartialEq)]
+pub enum PostCommentReplyError {
+    /// <p>A client request token is required. A client request token is an unique, client-generated idempotency token that when provided in a request, ensures the request cannot be repeated with a changed parameter. If a request is received with the same parameters and a token is included, the request will return information about the initial request that used that token.</p>
+    ClientRequestTokenRequired(String),
+    /// <p>The comment is empty. You must provide some content for a comment. The content cannot be null.</p>
+    CommentContentRequired(String),
+    /// <p>The comment is too large. Comments are limited to 1,000 characters.</p>
+    CommentContentSizeLimitExceeded(String),
+    /// <p>No comment exists with the provided ID. Verify that you have provided the correct ID, and then try again.</p>
+    CommentDoesNotExist(String),
+    /// <p>The comment ID is missing or null. A comment ID is required.</p>
+    CommentIdRequired(String),
+    /// <p>The client request token is not valid. Either the token is not in a valid format, or the token has been used in a previous request and cannot be re-used.</p>
+    IdempotencyParameterMismatch(String),
+    /// <p>The client request token is not valid.</p>
+    InvalidClientRequestToken(String),
+    /// <p>The comment ID is not in a valid format. Make sure that you have provided the full comment ID.</p>
+    InvalidCommentId(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl PostCommentReplyError {
+    pub fn from_body(body: &str) -> PostCommentReplyError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ClientRequestTokenRequiredException" => {
+                        PostCommentReplyError::ClientRequestTokenRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "CommentContentRequiredException" => {
+                        PostCommentReplyError::CommentContentRequired(String::from(error_message))
+                    }
+                    "CommentContentSizeLimitExceededException" => {
+                        PostCommentReplyError::CommentContentSizeLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
+                    "CommentDoesNotExistException" => {
+                        PostCommentReplyError::CommentDoesNotExist(String::from(error_message))
+                    }
+                    "CommentIdRequiredException" => {
+                        PostCommentReplyError::CommentIdRequired(String::from(error_message))
+                    }
+                    "IdempotencyParameterMismatchException" => {
+                        PostCommentReplyError::IdempotencyParameterMismatch(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidClientRequestTokenException" => {
+                        PostCommentReplyError::InvalidClientRequestToken(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidCommentIdException" => {
+                        PostCommentReplyError::InvalidCommentId(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        PostCommentReplyError::Validation(error_message.to_string())
+                    }
+                    _ => PostCommentReplyError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => PostCommentReplyError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for PostCommentReplyError {
+    fn from(err: serde_json::error::Error) -> PostCommentReplyError {
+        PostCommentReplyError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for PostCommentReplyError {
+    fn from(err: CredentialsError) -> PostCommentReplyError {
+        PostCommentReplyError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for PostCommentReplyError {
+    fn from(err: HttpDispatchError) -> PostCommentReplyError {
+        PostCommentReplyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PostCommentReplyError {
+    fn from(err: io::Error) -> PostCommentReplyError {
+        PostCommentReplyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for PostCommentReplyError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PostCommentReplyError {
+    fn description(&self) -> &str {
+        match *self {
+            PostCommentReplyError::ClientRequestTokenRequired(ref cause) => cause,
+            PostCommentReplyError::CommentContentRequired(ref cause) => cause,
+            PostCommentReplyError::CommentContentSizeLimitExceeded(ref cause) => cause,
+            PostCommentReplyError::CommentDoesNotExist(ref cause) => cause,
+            PostCommentReplyError::CommentIdRequired(ref cause) => cause,
+            PostCommentReplyError::IdempotencyParameterMismatch(ref cause) => cause,
+            PostCommentReplyError::InvalidClientRequestToken(ref cause) => cause,
+            PostCommentReplyError::InvalidCommentId(ref cause) => cause,
+            PostCommentReplyError::Validation(ref cause) => cause,
+            PostCommentReplyError::Credentials(ref err) => err.description(),
+            PostCommentReplyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            PostCommentReplyError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -2663,6 +5929,122 @@ impl Error for TestRepositoryTriggersError {
         }
     }
 }
+/// Errors returned by UpdateComment
+#[derive(Debug, PartialEq)]
+pub enum UpdateCommentError {
+    /// <p>The comment is empty. You must provide some content for a comment. The content cannot be null.</p>
+    CommentContentRequired(String),
+    /// <p>The comment is too large. Comments are limited to 1,000 characters.</p>
+    CommentContentSizeLimitExceeded(String),
+    /// <p>This comment has already been deleted. You cannot edit or delete a deleted comment.</p>
+    CommentDeleted(String),
+    /// <p>No comment exists with the provided ID. Verify that you have provided the correct ID, and then try again.</p>
+    CommentDoesNotExist(String),
+    /// <p>The comment ID is missing or null. A comment ID is required.</p>
+    CommentIdRequired(String),
+    /// <p>You cannot modify or delete this comment. Only comment authors can modify or delete their comments.</p>
+    CommentNotCreatedByCaller(String),
+    /// <p>The comment ID is not in a valid format. Make sure that you have provided the full comment ID.</p>
+    InvalidCommentId(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateCommentError {
+    pub fn from_body(body: &str) -> UpdateCommentError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "CommentContentRequiredException" => {
+                        UpdateCommentError::CommentContentRequired(String::from(error_message))
+                    }
+                    "CommentContentSizeLimitExceededException" => {
+                        UpdateCommentError::CommentContentSizeLimitExceeded(String::from(
+                            error_message,
+                        ))
+                    }
+                    "CommentDeletedException" => {
+                        UpdateCommentError::CommentDeleted(String::from(error_message))
+                    }
+                    "CommentDoesNotExistException" => {
+                        UpdateCommentError::CommentDoesNotExist(String::from(error_message))
+                    }
+                    "CommentIdRequiredException" => {
+                        UpdateCommentError::CommentIdRequired(String::from(error_message))
+                    }
+                    "CommentNotCreatedByCallerException" => {
+                        UpdateCommentError::CommentNotCreatedByCaller(String::from(error_message))
+                    }
+                    "InvalidCommentIdException" => {
+                        UpdateCommentError::InvalidCommentId(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdateCommentError::Validation(error_message.to_string())
+                    }
+                    _ => UpdateCommentError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdateCommentError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateCommentError {
+    fn from(err: serde_json::error::Error) -> UpdateCommentError {
+        UpdateCommentError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateCommentError {
+    fn from(err: CredentialsError) -> UpdateCommentError {
+        UpdateCommentError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateCommentError {
+    fn from(err: HttpDispatchError) -> UpdateCommentError {
+        UpdateCommentError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateCommentError {
+    fn from(err: io::Error) -> UpdateCommentError {
+        UpdateCommentError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateCommentError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateCommentError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateCommentError::CommentContentRequired(ref cause) => cause,
+            UpdateCommentError::CommentContentSizeLimitExceeded(ref cause) => cause,
+            UpdateCommentError::CommentDeleted(ref cause) => cause,
+            UpdateCommentError::CommentDoesNotExist(ref cause) => cause,
+            UpdateCommentError::CommentIdRequired(ref cause) => cause,
+            UpdateCommentError::CommentNotCreatedByCaller(ref cause) => cause,
+            UpdateCommentError::InvalidCommentId(ref cause) => cause,
+            UpdateCommentError::Validation(ref cause) => cause,
+            UpdateCommentError::Credentials(ref err) => err.description(),
+            UpdateCommentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UpdateCommentError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by UpdateDefaultBranch
 #[derive(Debug, PartialEq)]
 pub enum UpdateDefaultBranchError {
@@ -2680,7 +6062,7 @@ pub enum UpdateDefaultBranchError {
     EncryptionKeyNotFound(String),
     /// <p>The encryption key is not available.</p>
     EncryptionKeyUnavailable(String),
-    /// <p>The specified branch name is not valid.</p>
+    /// <p>The specified reference name is not valid.</p>
     InvalidBranchName(String),
     /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
     InvalidRepositoryName(String),
@@ -2810,6 +6192,400 @@ impl Error for UpdateDefaultBranchError {
                 dispatch_error.description()
             }
             UpdateDefaultBranchError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdatePullRequestDescription
+#[derive(Debug, PartialEq)]
+pub enum UpdatePullRequestDescriptionError {
+    /// <p>The pull request description is not valid. Descriptions are limited to 1,000 characters in length.</p>
+    InvalidDescription(String),
+    /// <p>The pull request ID is not valid. Make sure that you have provided the full ID and that the pull request is in the specified repository, and then try again.</p>
+    InvalidPullRequestId(String),
+    /// <p>The pull request status cannot be updated because it is already closed.</p>
+    PullRequestAlreadyClosed(String),
+    /// <p>The pull request ID could not be found. Make sure that you have specified the correct repository name and pull request ID, and then try again.</p>
+    PullRequestDoesNotExist(String),
+    /// <p>A pull request ID is required, but none was provided.</p>
+    PullRequestIdRequired(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdatePullRequestDescriptionError {
+    pub fn from_body(body: &str) -> UpdatePullRequestDescriptionError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidDescriptionException" => {
+                        UpdatePullRequestDescriptionError::InvalidDescription(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidPullRequestIdException" => {
+                        UpdatePullRequestDescriptionError::InvalidPullRequestId(String::from(
+                            error_message,
+                        ))
+                    }
+                    "PullRequestAlreadyClosedException" => {
+                        UpdatePullRequestDescriptionError::PullRequestAlreadyClosed(String::from(
+                            error_message,
+                        ))
+                    }
+                    "PullRequestDoesNotExistException" => {
+                        UpdatePullRequestDescriptionError::PullRequestDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "PullRequestIdRequiredException" => {
+                        UpdatePullRequestDescriptionError::PullRequestIdRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        UpdatePullRequestDescriptionError::Validation(error_message.to_string())
+                    }
+                    _ => UpdatePullRequestDescriptionError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdatePullRequestDescriptionError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdatePullRequestDescriptionError {
+    fn from(err: serde_json::error::Error) -> UpdatePullRequestDescriptionError {
+        UpdatePullRequestDescriptionError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdatePullRequestDescriptionError {
+    fn from(err: CredentialsError) -> UpdatePullRequestDescriptionError {
+        UpdatePullRequestDescriptionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdatePullRequestDescriptionError {
+    fn from(err: HttpDispatchError) -> UpdatePullRequestDescriptionError {
+        UpdatePullRequestDescriptionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdatePullRequestDescriptionError {
+    fn from(err: io::Error) -> UpdatePullRequestDescriptionError {
+        UpdatePullRequestDescriptionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdatePullRequestDescriptionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdatePullRequestDescriptionError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdatePullRequestDescriptionError::InvalidDescription(ref cause) => cause,
+            UpdatePullRequestDescriptionError::InvalidPullRequestId(ref cause) => cause,
+            UpdatePullRequestDescriptionError::PullRequestAlreadyClosed(ref cause) => cause,
+            UpdatePullRequestDescriptionError::PullRequestDoesNotExist(ref cause) => cause,
+            UpdatePullRequestDescriptionError::PullRequestIdRequired(ref cause) => cause,
+            UpdatePullRequestDescriptionError::Validation(ref cause) => cause,
+            UpdatePullRequestDescriptionError::Credentials(ref err) => err.description(),
+            UpdatePullRequestDescriptionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdatePullRequestDescriptionError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdatePullRequestStatus
+#[derive(Debug, PartialEq)]
+pub enum UpdatePullRequestStatusError {
+    /// <p>An encryption integrity check failed.</p>
+    EncryptionIntegrityChecksFailed(String),
+    /// <p>An encryption key could not be accessed.</p>
+    EncryptionKeyAccessDenied(String),
+    /// <p>The encryption key is disabled.</p>
+    EncryptionKeyDisabled(String),
+    /// <p>No encryption key was found.</p>
+    EncryptionKeyNotFound(String),
+    /// <p>The encryption key is not available.</p>
+    EncryptionKeyUnavailable(String),
+    /// <p>The pull request ID is not valid. Make sure that you have provided the full ID and that the pull request is in the specified repository, and then try again.</p>
+    InvalidPullRequestId(String),
+    /// <p>The pull request status is not valid. The only valid values are <code>OPEN</code> and <code>CLOSED</code>.</p>
+    InvalidPullRequestStatus(String),
+    /// <p>The pull request status update is not valid. The only valid update is from <code>OPEN</code> to <code>CLOSED</code>.</p>
+    InvalidPullRequestStatusUpdate(String),
+    /// <p>The pull request ID could not be found. Make sure that you have specified the correct repository name and pull request ID, and then try again.</p>
+    PullRequestDoesNotExist(String),
+    /// <p>A pull request ID is required, but none was provided.</p>
+    PullRequestIdRequired(String),
+    /// <p>A pull request status is required, but none was provided.</p>
+    PullRequestStatusRequired(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdatePullRequestStatusError {
+    pub fn from_body(body: &str) -> UpdatePullRequestStatusError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "EncryptionIntegrityChecksFailedException" => {
+                        UpdatePullRequestStatusError::EncryptionIntegrityChecksFailed(
+                            String::from(error_message),
+                        )
+                    }
+                    "EncryptionKeyAccessDeniedException" => {
+                        UpdatePullRequestStatusError::EncryptionKeyAccessDenied(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionKeyDisabledException" => {
+                        UpdatePullRequestStatusError::EncryptionKeyDisabled(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionKeyNotFoundException" => {
+                        UpdatePullRequestStatusError::EncryptionKeyNotFound(String::from(
+                            error_message,
+                        ))
+                    }
+                    "EncryptionKeyUnavailableException" => {
+                        UpdatePullRequestStatusError::EncryptionKeyUnavailable(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidPullRequestIdException" => {
+                        UpdatePullRequestStatusError::InvalidPullRequestId(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidPullRequestStatusException" => {
+                        UpdatePullRequestStatusError::InvalidPullRequestStatus(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidPullRequestStatusUpdateException" => {
+                        UpdatePullRequestStatusError::InvalidPullRequestStatusUpdate(String::from(
+                            error_message,
+                        ))
+                    }
+                    "PullRequestDoesNotExistException" => {
+                        UpdatePullRequestStatusError::PullRequestDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "PullRequestIdRequiredException" => {
+                        UpdatePullRequestStatusError::PullRequestIdRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "PullRequestStatusRequiredException" => {
+                        UpdatePullRequestStatusError::PullRequestStatusRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        UpdatePullRequestStatusError::Validation(error_message.to_string())
+                    }
+                    _ => UpdatePullRequestStatusError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdatePullRequestStatusError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdatePullRequestStatusError {
+    fn from(err: serde_json::error::Error) -> UpdatePullRequestStatusError {
+        UpdatePullRequestStatusError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdatePullRequestStatusError {
+    fn from(err: CredentialsError) -> UpdatePullRequestStatusError {
+        UpdatePullRequestStatusError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdatePullRequestStatusError {
+    fn from(err: HttpDispatchError) -> UpdatePullRequestStatusError {
+        UpdatePullRequestStatusError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdatePullRequestStatusError {
+    fn from(err: io::Error) -> UpdatePullRequestStatusError {
+        UpdatePullRequestStatusError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdatePullRequestStatusError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdatePullRequestStatusError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdatePullRequestStatusError::EncryptionIntegrityChecksFailed(ref cause) => cause,
+            UpdatePullRequestStatusError::EncryptionKeyAccessDenied(ref cause) => cause,
+            UpdatePullRequestStatusError::EncryptionKeyDisabled(ref cause) => cause,
+            UpdatePullRequestStatusError::EncryptionKeyNotFound(ref cause) => cause,
+            UpdatePullRequestStatusError::EncryptionKeyUnavailable(ref cause) => cause,
+            UpdatePullRequestStatusError::InvalidPullRequestId(ref cause) => cause,
+            UpdatePullRequestStatusError::InvalidPullRequestStatus(ref cause) => cause,
+            UpdatePullRequestStatusError::InvalidPullRequestStatusUpdate(ref cause) => cause,
+            UpdatePullRequestStatusError::PullRequestDoesNotExist(ref cause) => cause,
+            UpdatePullRequestStatusError::PullRequestIdRequired(ref cause) => cause,
+            UpdatePullRequestStatusError::PullRequestStatusRequired(ref cause) => cause,
+            UpdatePullRequestStatusError::Validation(ref cause) => cause,
+            UpdatePullRequestStatusError::Credentials(ref err) => err.description(),
+            UpdatePullRequestStatusError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdatePullRequestStatusError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdatePullRequestTitle
+#[derive(Debug, PartialEq)]
+pub enum UpdatePullRequestTitleError {
+    /// <p>The pull request ID is not valid. Make sure that you have provided the full ID and that the pull request is in the specified repository, and then try again.</p>
+    InvalidPullRequestId(String),
+    /// <p>The title of the pull request is not valid. Pull request titles cannot exceed 100 characters in length.</p>
+    InvalidTitle(String),
+    /// <p>The pull request status cannot be updated because it is already closed.</p>
+    PullRequestAlreadyClosed(String),
+    /// <p>The pull request ID could not be found. Make sure that you have specified the correct repository name and pull request ID, and then try again.</p>
+    PullRequestDoesNotExist(String),
+    /// <p>A pull request ID is required, but none was provided.</p>
+    PullRequestIdRequired(String),
+    /// <p>A pull request title is required. It cannot be empty or null.</p>
+    TitleRequired(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdatePullRequestTitleError {
+    pub fn from_body(body: &str) -> UpdatePullRequestTitleError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidPullRequestIdException" => {
+                        UpdatePullRequestTitleError::InvalidPullRequestId(String::from(
+                            error_message,
+                        ))
+                    }
+                    "InvalidTitleException" => {
+                        UpdatePullRequestTitleError::InvalidTitle(String::from(error_message))
+                    }
+                    "PullRequestAlreadyClosedException" => {
+                        UpdatePullRequestTitleError::PullRequestAlreadyClosed(String::from(
+                            error_message,
+                        ))
+                    }
+                    "PullRequestDoesNotExistException" => {
+                        UpdatePullRequestTitleError::PullRequestDoesNotExist(String::from(
+                            error_message,
+                        ))
+                    }
+                    "PullRequestIdRequiredException" => {
+                        UpdatePullRequestTitleError::PullRequestIdRequired(String::from(
+                            error_message,
+                        ))
+                    }
+                    "TitleRequiredException" => {
+                        UpdatePullRequestTitleError::TitleRequired(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UpdatePullRequestTitleError::Validation(error_message.to_string())
+                    }
+                    _ => UpdatePullRequestTitleError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UpdatePullRequestTitleError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UpdatePullRequestTitleError {
+    fn from(err: serde_json::error::Error) -> UpdatePullRequestTitleError {
+        UpdatePullRequestTitleError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdatePullRequestTitleError {
+    fn from(err: CredentialsError) -> UpdatePullRequestTitleError {
+        UpdatePullRequestTitleError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdatePullRequestTitleError {
+    fn from(err: HttpDispatchError) -> UpdatePullRequestTitleError {
+        UpdatePullRequestTitleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdatePullRequestTitleError {
+    fn from(err: io::Error) -> UpdatePullRequestTitleError {
+        UpdatePullRequestTitleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdatePullRequestTitleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdatePullRequestTitleError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdatePullRequestTitleError::InvalidPullRequestId(ref cause) => cause,
+            UpdatePullRequestTitleError::InvalidTitle(ref cause) => cause,
+            UpdatePullRequestTitleError::PullRequestAlreadyClosed(ref cause) => cause,
+            UpdatePullRequestTitleError::PullRequestDoesNotExist(ref cause) => cause,
+            UpdatePullRequestTitleError::PullRequestIdRequired(ref cause) => cause,
+            UpdatePullRequestTitleError::TitleRequired(ref cause) => cause,
+            UpdatePullRequestTitleError::Validation(ref cause) => cause,
+            UpdatePullRequestTitleError::Credentials(ref err) => err.description(),
+            UpdatePullRequestTitleError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdatePullRequestTitleError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -3074,23 +6850,62 @@ pub trait CodeCommit {
     /// <p><p>Creates a new branch in a repository and points the branch to a commit.</p> <note> <p>Calling the create branch operation does not set a repository&#39;s default branch. To do this, call the update default branch operation.</p> </note></p>
     fn create_branch(&self, input: &CreateBranchInput) -> Result<(), CreateBranchError>;
 
+    /// <p>Creates a pull request in the specified repository.</p>
+    fn create_pull_request(
+        &self,
+        input: &CreatePullRequestInput,
+    ) -> Result<CreatePullRequestOutput, CreatePullRequestError>;
+
     /// <p>Creates a new, empty repository.</p>
     fn create_repository(
         &self,
         input: &CreateRepositoryInput,
     ) -> Result<CreateRepositoryOutput, CreateRepositoryError>;
 
-    /// <p><p>Deletes a repository. If a specified repository was already deleted, a null repository ID will be returned.</p> <important><p>Deleting a repository also deletes all associated objects and metadata. After a repository is deleted, all future push calls to the deleted repository will fail.</p> </important></p>
+    /// <p>Deletes a branch from a repository, unless that branch is the default branch for the repository. </p>
+    fn delete_branch(
+        &self,
+        input: &DeleteBranchInput,
+    ) -> Result<DeleteBranchOutput, DeleteBranchError>;
+
+    /// <p>Deletes the content of a comment made on a change, file, or commit in a repository.</p>
+    fn delete_comment_content(
+        &self,
+        input: &DeleteCommentContentInput,
+    ) -> Result<DeleteCommentContentOutput, DeleteCommentContentError>;
+
+    /// <p><p>Deletes a repository. If a specified repository was already deleted, a null repository ID will be returned.</p> <important> <p>Deleting a repository also deletes all associated objects and metadata. After a repository is deleted, all future push calls to the deleted repository will fail.</p> </important></p>
     fn delete_repository(
         &self,
         input: &DeleteRepositoryInput,
     ) -> Result<DeleteRepositoryOutput, DeleteRepositoryError>;
+
+    /// <p>Returns information about one or more pull request events.</p>
+    fn describe_pull_request_events(
+        &self,
+        input: &DescribePullRequestEventsInput,
+    ) -> Result<DescribePullRequestEventsOutput, DescribePullRequestEventsError>;
 
     /// <p>Returns the base-64 encoded content of an individual blob within a repository.</p>
     fn get_blob(&self, input: &GetBlobInput) -> Result<GetBlobOutput, GetBlobError>;
 
     /// <p>Returns information about a repository branch, including its name and the last commit ID.</p>
     fn get_branch(&self, input: &GetBranchInput) -> Result<GetBranchOutput, GetBranchError>;
+
+    /// <p>Returns the content of a comment made on a change, file, or commit in a repository.</p>
+    fn get_comment(&self, input: &GetCommentInput) -> Result<GetCommentOutput, GetCommentError>;
+
+    /// <p>Returns information about comments made on the comparison between two commits.</p>
+    fn get_comments_for_compared_commit(
+        &self,
+        input: &GetCommentsForComparedCommitInput,
+    ) -> Result<GetCommentsForComparedCommitOutput, GetCommentsForComparedCommitError>;
+
+    /// <p>Returns comments made on a pull request.</p>
+    fn get_comments_for_pull_request(
+        &self,
+        input: &GetCommentsForPullRequestInput,
+    ) -> Result<GetCommentsForPullRequestOutput, GetCommentsForPullRequestError>;
 
     /// <p>Returns information about a commit, including commit message and committer information.</p>
     fn get_commit(&self, input: &GetCommitInput) -> Result<GetCommitOutput, GetCommitError>;
@@ -3100,6 +6915,18 @@ pub trait CodeCommit {
         &self,
         input: &GetDifferencesInput,
     ) -> Result<GetDifferencesOutput, GetDifferencesError>;
+
+    /// <p>Returns information about merge conflicts between the before and after commit IDs for a pull request in a repository.</p>
+    fn get_merge_conflicts(
+        &self,
+        input: &GetMergeConflictsInput,
+    ) -> Result<GetMergeConflictsOutput, GetMergeConflictsError>;
+
+    /// <p>Gets information about a pull request in a specified repository.</p>
+    fn get_pull_request(
+        &self,
+        input: &GetPullRequestInput,
+    ) -> Result<GetPullRequestOutput, GetPullRequestError>;
 
     /// <p><p>Returns information about a repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note></p>
     fn get_repository(
@@ -3119,11 +6946,41 @@ pub trait CodeCommit {
         input: &ListBranchesInput,
     ) -> Result<ListBranchesOutput, ListBranchesError>;
 
+    /// <p>Returns a list of pull requests for a specified repository. The return list can be refined by pull request status or pull request author ARN.</p>
+    fn list_pull_requests(
+        &self,
+        input: &ListPullRequestsInput,
+    ) -> Result<ListPullRequestsOutput, ListPullRequestsError>;
+
     /// <p>Gets information about one or more repositories.</p>
     fn list_repositories(
         &self,
         input: &ListRepositoriesInput,
     ) -> Result<ListRepositoriesOutput, ListRepositoriesError>;
+
+    /// <p>Closes a pull request and attempts to merge the source commit of a pull request into the specified destination branch for that pull request at the specified commit using the fast-forward merge option.</p>
+    fn merge_pull_request_by_fast_forward(
+        &self,
+        input: &MergePullRequestByFastForwardInput,
+    ) -> Result<MergePullRequestByFastForwardOutput, MergePullRequestByFastForwardError>;
+
+    /// <p>Posts a comment on the comparison between two commits.</p>
+    fn post_comment_for_compared_commit(
+        &self,
+        input: &PostCommentForComparedCommitInput,
+    ) -> Result<PostCommentForComparedCommitOutput, PostCommentForComparedCommitError>;
+
+    /// <p>Posts a comment on a pull request.</p>
+    fn post_comment_for_pull_request(
+        &self,
+        input: &PostCommentForPullRequestInput,
+    ) -> Result<PostCommentForPullRequestOutput, PostCommentForPullRequestError>;
+
+    /// <p>Posts a comment in reply to an existing comment on a comparison between commits or a pull request.</p>
+    fn post_comment_reply(
+        &self,
+        input: &PostCommentReplyInput,
+    ) -> Result<PostCommentReplyOutput, PostCommentReplyError>;
 
     /// <p>Replaces all triggers for a repository. This can be used to create or delete triggers.</p>
     fn put_repository_triggers(
@@ -3137,11 +6994,35 @@ pub trait CodeCommit {
         input: &TestRepositoryTriggersInput,
     ) -> Result<TestRepositoryTriggersOutput, TestRepositoryTriggersError>;
 
+    /// <p>Replaces the contents of a comment.</p>
+    fn update_comment(
+        &self,
+        input: &UpdateCommentInput,
+    ) -> Result<UpdateCommentOutput, UpdateCommentError>;
+
     /// <p><p>Sets or changes the default branch name for the specified repository.</p> <note> <p>If you use this operation to change the default branch name to the current default branch name, a success message is returned even though the default branch did not change.</p> </note></p>
     fn update_default_branch(
         &self,
         input: &UpdateDefaultBranchInput,
     ) -> Result<(), UpdateDefaultBranchError>;
+
+    /// <p>Replaces the contents of the description of a pull request.</p>
+    fn update_pull_request_description(
+        &self,
+        input: &UpdatePullRequestDescriptionInput,
+    ) -> Result<UpdatePullRequestDescriptionOutput, UpdatePullRequestDescriptionError>;
+
+    /// <p>Updates the status of a pull request. </p>
+    fn update_pull_request_status(
+        &self,
+        input: &UpdatePullRequestStatusInput,
+    ) -> Result<UpdatePullRequestStatusOutput, UpdatePullRequestStatusError>;
+
+    /// <p>Replaces the title of a pull request.</p>
+    fn update_pull_request_title(
+        &self,
+        input: &UpdatePullRequestTitleInput,
+    ) -> Result<UpdatePullRequestTitleOutput, UpdatePullRequestTitleError>;
 
     /// <p><p>Sets or changes the comment or description for a repository.</p> <note> <p>The description field for a repository accepts all HTML characters and all valid Unicode characters. Applications that do not HTML-encode the description and display it in a web page could expose users to potentially malicious code. Make sure that you HTML-encode the description field in any application that uses this API to display the repository description on a web page.</p> </note></p>
     fn update_repository_description(
@@ -3244,6 +7125,40 @@ where
         }
     }
 
+    /// <p>Creates a pull request in the specified repository.</p>
+    fn create_pull_request(
+        &self,
+        input: &CreatePullRequestInput,
+    ) -> Result<CreatePullRequestOutput, CreatePullRequestError> {
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeCommit_20150413.CreatePullRequest");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<CreatePullRequestOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreatePullRequestError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Creates a new, empty repository.</p>
     fn create_repository(
         &self,
@@ -3278,7 +7193,75 @@ where
         }
     }
 
-    /// <p><p>Deletes a repository. If a specified repository was already deleted, a null repository ID will be returned.</p> <important><p>Deleting a repository also deletes all associated objects and metadata. After a repository is deleted, all future push calls to the deleted repository will fail.</p> </important></p>
+    /// <p>Deletes a branch from a repository, unless that branch is the default branch for the repository. </p>
+    fn delete_branch(
+        &self,
+        input: &DeleteBranchInput,
+    ) -> Result<DeleteBranchOutput, DeleteBranchError> {
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeCommit_20150413.DeleteBranch");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteBranchOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteBranchError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Deletes the content of a comment made on a change, file, or commit in a repository.</p>
+    fn delete_comment_content(
+        &self,
+        input: &DeleteCommentContentInput,
+    ) -> Result<DeleteCommentContentOutput, DeleteCommentContentError> {
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeCommit_20150413.DeleteCommentContent");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DeleteCommentContentOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteCommentContentError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p><p>Deletes a repository. If a specified repository was already deleted, a null repository ID will be returned.</p> <important> <p>Deleting a repository also deletes all associated objects and metadata. After a repository is deleted, all future push calls to the deleted repository will fail.</p> </important></p>
     fn delete_repository(
         &self,
         input: &DeleteRepositoryInput,
@@ -3306,6 +7289,43 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(DeleteRepositoryError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Returns information about one or more pull request events.</p>
+    fn describe_pull_request_events(
+        &self,
+        input: &DescribePullRequestEventsInput,
+    ) -> Result<DescribePullRequestEventsOutput, DescribePullRequestEventsError> {
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "CodeCommit_20150413.DescribePullRequestEvents",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<DescribePullRequestEventsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribePullRequestEventsError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -3377,6 +7397,111 @@ where
         }
     }
 
+    /// <p>Returns the content of a comment made on a change, file, or commit in a repository.</p>
+    fn get_comment(&self, input: &GetCommentInput) -> Result<GetCommentOutput, GetCommentError> {
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeCommit_20150413.GetComment");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetCommentOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetCommentError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Returns information about comments made on the comparison between two commits.</p>
+    fn get_comments_for_compared_commit(
+        &self,
+        input: &GetCommentsForComparedCommitInput,
+    ) -> Result<GetCommentsForComparedCommitOutput, GetCommentsForComparedCommitError> {
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "CodeCommit_20150413.GetCommentsForComparedCommit",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetCommentsForComparedCommitOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetCommentsForComparedCommitError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Returns comments made on a pull request.</p>
+    fn get_comments_for_pull_request(
+        &self,
+        input: &GetCommentsForPullRequestInput,
+    ) -> Result<GetCommentsForPullRequestOutput, GetCommentsForPullRequestError> {
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "CodeCommit_20150413.GetCommentsForPullRequest",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetCommentsForPullRequestOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetCommentsForPullRequestError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Returns information about a commit, including commit message and committer information.</p>
     fn get_commit(&self, input: &GetCommitInput) -> Result<GetCommitOutput, GetCommitError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
@@ -3438,6 +7563,74 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(GetDifferencesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Returns information about merge conflicts between the before and after commit IDs for a pull request in a repository.</p>
+    fn get_merge_conflicts(
+        &self,
+        input: &GetMergeConflictsInput,
+    ) -> Result<GetMergeConflictsOutput, GetMergeConflictsError> {
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeCommit_20150413.GetMergeConflicts");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetMergeConflictsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetMergeConflictsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Gets information about a pull request in a specified repository.</p>
+    fn get_pull_request(
+        &self,
+        input: &GetPullRequestInput,
+    ) -> Result<GetPullRequestOutput, GetPullRequestError> {
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeCommit_20150413.GetPullRequest");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<GetPullRequestOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetPullRequestError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -3546,6 +7739,40 @@ where
         }
     }
 
+    /// <p>Returns a list of pull requests for a specified repository. The return list can be refined by pull request status or pull request author ARN.</p>
+    fn list_pull_requests(
+        &self,
+        input: &ListPullRequestsInput,
+    ) -> Result<ListPullRequestsOutput, ListPullRequestsError> {
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeCommit_20150413.ListPullRequests");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListPullRequestsOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListPullRequestsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Gets information about one or more repositories.</p>
     fn list_repositories(
         &self,
@@ -3574,6 +7801,151 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(ListRepositoriesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Closes a pull request and attempts to merge the source commit of a pull request into the specified destination branch for that pull request at the specified commit using the fast-forward merge option.</p>
+    fn merge_pull_request_by_fast_forward(
+        &self,
+        input: &MergePullRequestByFastForwardInput,
+    ) -> Result<MergePullRequestByFastForwardOutput, MergePullRequestByFastForwardError> {
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "CodeCommit_20150413.MergePullRequestByFastForward",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<MergePullRequestByFastForwardOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(MergePullRequestByFastForwardError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Posts a comment on the comparison between two commits.</p>
+    fn post_comment_for_compared_commit(
+        &self,
+        input: &PostCommentForComparedCommitInput,
+    ) -> Result<PostCommentForComparedCommitOutput, PostCommentForComparedCommitError> {
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "CodeCommit_20150413.PostCommentForComparedCommit",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PostCommentForComparedCommitOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PostCommentForComparedCommitError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Posts a comment on a pull request.</p>
+    fn post_comment_for_pull_request(
+        &self,
+        input: &PostCommentForPullRequestInput,
+    ) -> Result<PostCommentForPullRequestOutput, PostCommentForPullRequestError> {
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "CodeCommit_20150413.PostCommentForPullRequest",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PostCommentForPullRequestOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PostCommentForPullRequestError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Posts a comment in reply to an existing comment on a comparison between commits or a pull request.</p>
+    fn post_comment_reply(
+        &self,
+        input: &PostCommentReplyInput,
+    ) -> Result<PostCommentReplyOutput, PostCommentReplyError> {
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeCommit_20150413.PostCommentReply");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<PostCommentReplyOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(PostCommentReplyError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -3648,6 +8020,40 @@ where
         }
     }
 
+    /// <p>Replaces the contents of a comment.</p>
+    fn update_comment(
+        &self,
+        input: &UpdateCommentInput,
+    ) -> Result<UpdateCommentOutput, UpdateCommentError> {
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeCommit_20150413.UpdateComment");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdateCommentOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateCommentError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p><p>Sets or changes the default branch name for the specified repository.</p> <note> <p>If you use this operation to change the default branch name to the current default branch name, a success message is returned even though the default branch did not change.</p> </note></p>
     fn update_default_branch(
         &self,
@@ -3670,6 +8076,114 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(UpdateDefaultBranchError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Replaces the contents of the description of a pull request.</p>
+    fn update_pull_request_description(
+        &self,
+        input: &UpdatePullRequestDescriptionInput,
+    ) -> Result<UpdatePullRequestDescriptionOutput, UpdatePullRequestDescriptionError> {
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "CodeCommit_20150413.UpdatePullRequestDescription",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdatePullRequestDescriptionOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdatePullRequestDescriptionError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Updates the status of a pull request. </p>
+    fn update_pull_request_status(
+        &self,
+        input: &UpdatePullRequestStatusInput,
+    ) -> Result<UpdatePullRequestStatusOutput, UpdatePullRequestStatusError> {
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "CodeCommit_20150413.UpdatePullRequestStatus",
+        );
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdatePullRequestStatusOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdatePullRequestStatusError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Replaces the title of a pull request.</p>
+    fn update_pull_request_title(
+        &self,
+        input: &UpdatePullRequestTitleInput,
+    ) -> Result<UpdatePullRequestTitleOutput, UpdatePullRequestTitleError> {
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeCommit_20150413.UpdatePullRequestTitle");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UpdatePullRequestTitleOutput>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdatePullRequestTitleError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }

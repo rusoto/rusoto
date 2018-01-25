@@ -113,7 +113,7 @@ pub struct ComplianceSummaryByResourceType {
     pub resource_type: Option<String>,
 }
 
-/// <p>A list that contains the status of the delivery of either the snapshot or the configuration history to the specified Amazon S3 bucket.</p>
+/// <p>Provides status of the delivery of the snapshot or the configuration history to the specified Amazon S3 bucket. Also provides the status of notifications about the Amazon S3 delivery to the specified Amazon SNS topic.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ConfigExportDeliveryInfo {
     /// <p>The time of the last attempted delivery.</p>
@@ -1107,7 +1107,7 @@ pub struct Scope {
     #[serde(rename = "ComplianceResourceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_resource_types: Option<Vec<String>>,
-    /// <p>The tag key that is applied to only those AWS resources that you want you want to trigger an evaluation for the rule.</p>
+    /// <p>The tag key that is applied to only those AWS resources that you want to trigger an evaluation for the rule.</p>
     #[serde(rename = "TagKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_key: Option<String>,

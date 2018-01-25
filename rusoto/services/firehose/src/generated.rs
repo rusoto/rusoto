@@ -98,6 +98,10 @@ pub struct CreateDeliveryStreamInput {
     #[serde(rename = "RedshiftDestinationConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub redshift_destination_configuration: Option<RedshiftDestinationConfiguration>,
+    /// <p>The destination in Splunk. You can specify only one destination.</p>
+    #[serde(rename = "SplunkDestinationConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub splunk_destination_configuration: Option<SplunkDestinationConfiguration>,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -200,6 +204,10 @@ pub struct DestinationDescription {
     #[serde(rename = "S3DestinationDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_destination_description: Option<S3DestinationDescription>,
+    /// <p>The destination in Splunk.</p>
+    #[serde(rename = "SplunkDestinationDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub splunk_destination_description: Option<SplunkDestinationDescription>,
 }
 
 /// <p>Describes the buffering to perform before delivering data to the Amazon ES destination.</p>
@@ -503,22 +511,6 @@ pub struct ExtendedS3DestinationUpdate {
     pub s3_backup_update: Option<S3DestinationUpdate>,
 }
 
-#[derive(Default, Debug, Clone, Serialize)]
-pub struct GetKinesisStreamInput {
-    #[serde(rename = "DeliveryStreamARN")]
-    pub delivery_stream_arn: String,
-}
-
-#[derive(Default, Debug, Clone, Deserialize)]
-pub struct GetKinesisStreamOutput {
-    #[serde(rename = "CredentialsForReadingKinesisStream")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub credentials_for_reading_kinesis_stream: Option<SessionCredentials>,
-    #[serde(rename = "KinesisStreamARN")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub kinesis_stream_arn: Option<String>,
-}
-
 /// <p>Describes an encryption key for a destination in Amazon S3.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct KMSEncryptionConfig {
@@ -565,7 +557,7 @@ pub struct ListDeliveryStreamsInput {
     #[serde(rename = "ExclusiveStartDeliveryStreamName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub exclusive_start_delivery_stream_name: Option<String>,
-    /// <p>The maximum number of delivery streams to list.</p>
+    /// <p>The maximum number of delivery streams to list. The default value is 10.</p>
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
@@ -914,18 +906,6 @@ pub struct S3DestinationUpdate {
     pub role_arn: Option<String>,
 }
 
-#[derive(Default, Debug, Clone, Deserialize)]
-pub struct SessionCredentials {
-    #[serde(rename = "AccessKeyId")]
-    pub access_key_id: String,
-    #[serde(rename = "Expiration")]
-    pub expiration: f64,
-    #[serde(rename = "SecretAccessKey")]
-    pub secret_access_key: String,
-    #[serde(rename = "SessionToken")]
-    pub session_token: String,
-}
-
 /// <p>Details about a Kinesis stream used as the source for a Kinesis Firehose delivery stream.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct SourceDescription {
@@ -933,6 +913,134 @@ pub struct SourceDescription {
     #[serde(rename = "KinesisStreamSourceDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kinesis_stream_source_description: Option<KinesisStreamSourceDescription>,
+}
+
+/// <p>Describes the configuration of a destination in Splunk.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct SplunkDestinationConfiguration {
+    /// <p>The CloudWatch logging options for your delivery stream.</p>
+    #[serde(rename = "CloudWatchLoggingOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_watch_logging_options: Option<CloudWatchLoggingOptions>,
+    /// <p>The amount of time that Kinesis Firehose waits to receive an acknowledgment from Splunk after it sends it data. At the end of the timeout period Kinesis Firehose either tries to send the data again or considers it an error, based on your retry settings.</p>
+    #[serde(rename = "HECAcknowledgmentTimeoutInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hec_acknowledgment_timeout_in_seconds: Option<i64>,
+    /// <p>The HTTP Event Collector (HEC) endpoint to which Kinesis Firehose sends your data.</p>
+    #[serde(rename = "HECEndpoint")]
+    pub hec_endpoint: String,
+    /// <p>This type can be either "Raw" or "Event".</p>
+    #[serde(rename = "HECEndpointType")]
+    pub hec_endpoint_type: String,
+    /// <p>This is a GUID you obtain from your Splunk cluster when you create a new HEC endpoint.</p>
+    #[serde(rename = "HECToken")]
+    pub hec_token: String,
+    /// <p>The data processing configuration.</p>
+    #[serde(rename = "ProcessingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub processing_configuration: Option<ProcessingConfiguration>,
+    /// <p>The retry behavior in case Kinesis Firehose is unable to deliver data to Splunk or if it doesn't receive an acknowledgment of receipt from Splunk.</p>
+    #[serde(rename = "RetryOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retry_options: Option<SplunkRetryOptions>,
+    /// <p>Defines how documents should be delivered to Amazon S3. When set to <code>FailedDocumentsOnly</code>, Kinesis Firehose writes any data that could not be indexed to the configured Amazon S3 destination. When set to <code>AllDocuments</code>, Kinesis Firehose delivers all incoming records to Amazon S3, and also writes failed documents to Amazon S3. Default value is <code>FailedDocumentsOnly</code>. </p>
+    #[serde(rename = "S3BackupMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_backup_mode: Option<String>,
+    /// <p>The configuration for the backup Amazon S3 location.</p>
+    #[serde(rename = "S3Configuration")]
+    pub s3_configuration: S3DestinationConfiguration,
+}
+
+/// <p>Describes a destination in Splunk.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct SplunkDestinationDescription {
+    /// <p>The CloudWatch logging options for your delivery stream.</p>
+    #[serde(rename = "CloudWatchLoggingOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_watch_logging_options: Option<CloudWatchLoggingOptions>,
+    /// <p>The amount of time that Kinesis Firehose waits to receive an acknowledgment from Splunk after it sends it data. At the end of the timeout period Kinesis Firehose either tries to send the data again or considers it an error, based on your retry settings.</p>
+    #[serde(rename = "HECAcknowledgmentTimeoutInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hec_acknowledgment_timeout_in_seconds: Option<i64>,
+    /// <p>The HTTP Event Collector (HEC) endpoint to which Kinesis Firehose sends your data.</p>
+    #[serde(rename = "HECEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hec_endpoint: Option<String>,
+    /// <p>This type can be either "Raw" or "Event".</p>
+    #[serde(rename = "HECEndpointType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hec_endpoint_type: Option<String>,
+    /// <p>This is a GUID you obtain from your Splunk cluster when you create a new HEC endpoint.</p>
+    #[serde(rename = "HECToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hec_token: Option<String>,
+    /// <p>The data processing configuration.</p>
+    #[serde(rename = "ProcessingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub processing_configuration: Option<ProcessingConfiguration>,
+    /// <p>The retry behavior in case Kinesis Firehose is unable to deliver data to Splunk or if it doesn't receive an acknowledgment of receipt from Splunk.</p>
+    #[serde(rename = "RetryOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retry_options: Option<SplunkRetryOptions>,
+    /// <p>Defines how documents should be delivered to Amazon S3. When set to <code>FailedDocumentsOnly</code>, Kinesis Firehose writes any data that could not be indexed to the configured Amazon S3 destination. When set to <code>AllDocuments</code>, Kinesis Firehose delivers all incoming records to Amazon S3, and also writes failed documents to Amazon S3. Default value is <code>FailedDocumentsOnly</code>. </p>
+    #[serde(rename = "S3BackupMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_backup_mode: Option<String>,
+    /// <p>The Amazon S3 destination.&gt;</p>
+    #[serde(rename = "S3DestinationDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_destination_description: Option<S3DestinationDescription>,
+}
+
+/// <p>Describes an update for a destination in Splunk.</p>
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct SplunkDestinationUpdate {
+    /// <p>The CloudWatch logging options for your delivery stream.</p>
+    #[serde(rename = "CloudWatchLoggingOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_watch_logging_options: Option<CloudWatchLoggingOptions>,
+    /// <p>The amount of time that Kinesis Firehose waits to receive an acknowledgment from Splunk after it sends it data. At the end of the timeout period Kinesis Firehose either tries to send the data again or considers it an error, based on your retry settings.</p>
+    #[serde(rename = "HECAcknowledgmentTimeoutInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hec_acknowledgment_timeout_in_seconds: Option<i64>,
+    /// <p>The HTTP Event Collector (HEC) endpoint to which Kinesis Firehose sends your data.</p>
+    #[serde(rename = "HECEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hec_endpoint: Option<String>,
+    /// <p>This type can be either "Raw" or "Event".</p>
+    #[serde(rename = "HECEndpointType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hec_endpoint_type: Option<String>,
+    /// <p>This is a GUID you obtain from your Splunk cluster when you create a new HEC endpoint.</p>
+    #[serde(rename = "HECToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hec_token: Option<String>,
+    /// <p>The data processing configuration.</p>
+    #[serde(rename = "ProcessingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub processing_configuration: Option<ProcessingConfiguration>,
+    /// <p>The retry behavior in case Kinesis Firehose is unable to deliver data to Splunk or if it doesn't receive an acknowledgment of receipt from Splunk.</p>
+    #[serde(rename = "RetryOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retry_options: Option<SplunkRetryOptions>,
+    /// <p>Defines how documents should be delivered to Amazon S3. When set to <code>FailedDocumentsOnly</code>, Kinesis Firehose writes any data that could not be indexed to the configured Amazon S3 destination. When set to <code>AllDocuments</code>, Kinesis Firehose delivers all incoming records to Amazon S3, and also writes failed documents to Amazon S3. Default value is <code>FailedDocumentsOnly</code>. </p>
+    #[serde(rename = "S3BackupMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_backup_mode: Option<String>,
+    /// <p>Your update to the configuration of the backup Amazon S3 location.</p>
+    #[serde(rename = "S3Update")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_update: Option<S3DestinationUpdate>,
+}
+
+/// <p>Configures retry behavior in case Kinesis Firehose is unable to deliver documents to Splunk or if it doesn't receive an acknowledgment from Splunk.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct SplunkRetryOptions {
+    /// <p>The total amount of time that Kinesis Firehose spends on retries. This duration starts after the initial attempt to send data to Splunk fails and doesn't include the periods during which Kinesis Firehose waits for acknowledgment from Splunk after each attempt.</p>
+    #[serde(rename = "DurationInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub duration_in_seconds: Option<i64>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
@@ -958,6 +1066,10 @@ pub struct UpdateDestinationInput {
     #[serde(rename = "RedshiftDestinationUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub redshift_destination_update: Option<RedshiftDestinationUpdate>,
+    /// <p>Describes an update for a destination in Splunk.</p>
+    #[serde(rename = "SplunkDestinationUpdate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub splunk_destination_update: Option<SplunkDestinationUpdate>,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
@@ -1218,96 +1330,6 @@ impl Error for DescribeDeliveryStreamError {
                 dispatch_error.description()
             }
             DescribeDeliveryStreamError::Unknown(ref cause) => cause,
-        }
-    }
-}
-/// Errors returned by GetKinesisStream
-#[derive(Debug, PartialEq)]
-pub enum GetKinesisStreamError {
-    /// <p>The specified input parameter has a value that is not valid.</p>
-    InvalidArgument(String),
-
-    InvalidStreamType(String),
-    /// <p>The specified resource could not be found.</p>
-    ResourceNotFound(String),
-    /// An error occurred dispatching the HTTP request
-    HttpDispatch(HttpDispatchError),
-    /// An error was encountered with AWS credentials.
-    Credentials(CredentialsError),
-    /// A validation error occurred.  Details from AWS are provided.
-    Validation(String),
-    /// An unknown error occurred.  The raw HTTP response is provided.
-    Unknown(String),
-}
-
-impl GetKinesisStreamError {
-    pub fn from_body(body: &str) -> GetKinesisStreamError {
-        match from_str::<SerdeJsonValue>(body) {
-            Ok(json) => {
-                let raw_error_type = json.get("__type")
-                    .and_then(|e| e.as_str())
-                    .unwrap_or("Unknown");
-                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
-
-                let pieces: Vec<&str> = raw_error_type.split("#").collect();
-                let error_type = pieces.last().expect("Expected error type");
-
-                match *error_type {
-                    "InvalidArgumentException" => {
-                        GetKinesisStreamError::InvalidArgument(String::from(error_message))
-                    }
-                    "InvalidStreamTypeException" => {
-                        GetKinesisStreamError::InvalidStreamType(String::from(error_message))
-                    }
-                    "ResourceNotFoundException" => {
-                        GetKinesisStreamError::ResourceNotFound(String::from(error_message))
-                    }
-                    "ValidationException" => {
-                        GetKinesisStreamError::Validation(error_message.to_string())
-                    }
-                    _ => GetKinesisStreamError::Unknown(String::from(body)),
-                }
-            }
-            Err(_) => GetKinesisStreamError::Unknown(String::from(body)),
-        }
-    }
-}
-
-impl From<serde_json::error::Error> for GetKinesisStreamError {
-    fn from(err: serde_json::error::Error) -> GetKinesisStreamError {
-        GetKinesisStreamError::Unknown(err.description().to_string())
-    }
-}
-impl From<CredentialsError> for GetKinesisStreamError {
-    fn from(err: CredentialsError) -> GetKinesisStreamError {
-        GetKinesisStreamError::Credentials(err)
-    }
-}
-impl From<HttpDispatchError> for GetKinesisStreamError {
-    fn from(err: HttpDispatchError) -> GetKinesisStreamError {
-        GetKinesisStreamError::HttpDispatch(err)
-    }
-}
-impl From<io::Error> for GetKinesisStreamError {
-    fn from(err: io::Error) -> GetKinesisStreamError {
-        GetKinesisStreamError::HttpDispatch(HttpDispatchError::from(err))
-    }
-}
-impl fmt::Display for GetKinesisStreamError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.description())
-    }
-}
-impl Error for GetKinesisStreamError {
-    fn description(&self) -> &str {
-        match *self {
-            GetKinesisStreamError::InvalidArgument(ref cause) => cause,
-            GetKinesisStreamError::InvalidStreamType(ref cause) => cause,
-            GetKinesisStreamError::ResourceNotFound(ref cause) => cause,
-            GetKinesisStreamError::Validation(ref cause) => cause,
-            GetKinesisStreamError::Credentials(ref err) => err.description(),
-            GetKinesisStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
-            GetKinesisStreamError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -1681,11 +1703,6 @@ pub trait KinesisFirehose {
         input: &DescribeDeliveryStreamInput,
     ) -> Result<DescribeDeliveryStreamOutput, DescribeDeliveryStreamError>;
 
-    fn get_kinesis_stream(
-        &self,
-        input: &GetKinesisStreamInput,
-    ) -> Result<GetKinesisStreamOutput, GetKinesisStreamError>;
-
     /// <p>Lists your delivery streams.</p> <p>The number of delivery streams might be too large to return using a single call to <a>ListDeliveryStreams</a>. You can limit the number of delivery streams returned, using the <b>Limit</b> parameter. To determine whether there are more delivery streams to list, check the value of <b>HasMoreDeliveryStreams</b> in the output. If there are more delivery streams to list, you can request them by specifying the name of the last delivery stream returned in the call in the <b>ExclusiveStartDeliveryStreamName</b> parameter of a subsequent call.</p>
     fn list_delivery_streams(
         &self,
@@ -1833,39 +1850,6 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(DescribeDeliveryStreamError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
-    }
-
-    fn get_kinesis_stream(
-        &self,
-        input: &GetKinesisStreamInput,
-    ) -> Result<GetKinesisStreamOutput, GetKinesisStreamError> {
-        let mut request = SignedRequest::new("POST", "firehose", &self.region, "/");
-
-        request.set_content_type("application/x-amz-json-1.1".to_owned());
-        request.add_header("x-amz-target", "Firehose_20150804.GetKinesisStream");
-        let encoded = serde_json::to_string(input).unwrap();
-        request.set_payload(Some(encoded.into_bytes()));
-
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetKinesisStreamOutput>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetKinesisStreamError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }

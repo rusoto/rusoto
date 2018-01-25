@@ -85,6 +85,60 @@ pub struct ArchiveCreationOutput {
     pub location: Option<String>,
 }
 
+/// <p>Contains information about the comma-separated value (CSV) file to select from.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct CSVInput {
+    /// <p>A single character used to indicate that a row should be ignored when the character is present at the start of that row.</p>
+    #[serde(rename = "Comments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub comments: Option<String>,
+    /// <p>A value used to separate individual fields from each other within a record.</p>
+    #[serde(rename = "FieldDelimiter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub field_delimiter: Option<String>,
+    /// <p>Describes the first line of input. Valid values are <code>None</code>, <code>Ignore</code>, and <code>Use</code>.</p>
+    #[serde(rename = "FileHeaderInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_header_info: Option<String>,
+    /// <p>A value used as an escape character where the field delimiter is part of the value.</p>
+    #[serde(rename = "QuoteCharacter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub quote_character: Option<String>,
+    /// <p>A single character used for escaping the quotation-mark character inside an already escaped value.</p>
+    #[serde(rename = "QuoteEscapeCharacter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub quote_escape_character: Option<String>,
+    /// <p>A value used to separate individual records from each other.</p>
+    #[serde(rename = "RecordDelimiter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub record_delimiter: Option<String>,
+}
+
+/// <p>Contains information about the comma-separated value (CSV) file that the job results are stored in.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct CSVOutput {
+    /// <p>A value used to separate individual fields from each other within a record.</p>
+    #[serde(rename = "FieldDelimiter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub field_delimiter: Option<String>,
+    /// <p>A value used as an escape character where the field delimiter is part of the value.</p>
+    #[serde(rename = "QuoteCharacter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub quote_character: Option<String>,
+    /// <p>A single character used for escaping the quotation-mark character inside an already escaped value.</p>
+    #[serde(rename = "QuoteEscapeCharacter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub quote_escape_character: Option<String>,
+    /// <p>A value that indicates whether all output fields should be contained within quotation marks.</p>
+    #[serde(rename = "QuoteFields")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub quote_fields: Option<String>,
+    /// <p>A value used to separate individual records from each other.</p>
+    #[serde(rename = "RecordDelimiter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub record_delimiter: Option<String>,
+}
+
 /// <p>Provides options to complete a multipart upload operation. This informs Amazon Glacier that all the archive parts have been uploaded and Amazon Glacier can now assemble the archive from the uploaded parts. After assembling and saving the archive to the vault, Amazon Glacier returns the URI path of the newly created archive resource.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CompleteMultipartUploadInput {
@@ -264,6 +318,23 @@ pub struct DescribeVaultOutput {
     pub vault_name: Option<String>,
 }
 
+/// <p>Contains information about the encryption used to store the job results in Amazon S3. </p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct Encryption {
+    /// <p>The server-side encryption algorithm used when storing job results in Amazon S3, for example <code>AES256</code> or <code>aws:kms</code>.</p>
+    #[serde(rename = "EncryptionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_type: Option<String>,
+    /// <p>Optional. If the encryption type is <code>aws:kms</code>, you can use this value to specify the encryption context for the restore results.</p>
+    #[serde(rename = "KMSContext")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_context: Option<String>,
+    /// <p>The AWS KMS key ID to use for object encryption. All GET and PUT requests for an object protected by AWS KMS fail if not made by using Secure Sockets Layer (SSL) or Signature Version 4. </p>
+    #[serde(rename = "KMSKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
+}
+
 /// <p>Input for GetDataRetrievalPolicy.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetDataRetrievalPolicyInput {
@@ -390,34 +461,34 @@ pub struct GetVaultNotificationsOutput {
     pub vault_notification_config: Option<VaultNotificationConfig>,
 }
 
-/// <p>Describes an Amazon Glacier job.</p>
+/// <p>Contains the description of an Amazon Glacier job.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct GlacierJobDescription {
-    /// <p>The job type. It is either ArchiveRetrieval or InventoryRetrieval.</p>
+    /// <p>The job type. This value is either <code>ArchiveRetrieval</code>, <code>InventoryRetrieval</code>, or <code>Select</code>. </p>
     #[serde(rename = "Action")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action: Option<String>,
-    /// <p>For an ArchiveRetrieval job, this is the archive ID requested for download. Otherwise, this field is null.</p>
+    /// <p>The archive ID requested for a select job or archive retrieval. Otherwise, this field is null.</p>
     #[serde(rename = "ArchiveId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub archive_id: Option<String>,
-    /// <p>The SHA256 tree hash of the entire archive for an archive retrieval. For inventory retrieval jobs, this field is null.</p>
+    /// <p>The SHA256 tree hash of the entire archive for an archive retrieval. For inventory retrieval or select jobs, this field is null.</p>
     #[serde(rename = "ArchiveSHA256TreeHash")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub archive_sha256_tree_hash: Option<String>,
-    /// <p>For an ArchiveRetrieval job, this is the size in bytes of the archive being requested for download. For the InventoryRetrieval job, the value is null.</p>
+    /// <p>For an archive retrieval job, this value is the size in bytes of the archive being requested for download. For an inventory retrieval or select job, this value is null.</p>
     #[serde(rename = "ArchiveSizeInBytes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub archive_size_in_bytes: Option<i64>,
-    /// <p>The job status. When a job is completed, you get the job's output.</p>
+    /// <p>The job status. When a job is completed, you get the job's output using Get Job Output (GET output).</p>
     #[serde(rename = "Completed")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub completed: Option<bool>,
-    /// <p>The UTC time that the archive retrieval request completed. While the job is in progress, the value will be null.</p>
+    /// <p>The UTC time that the job request completed. While the job is in progress, the value is null.</p>
     #[serde(rename = "CompletionDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub completion_date: Option<String>,
-    /// <p>The UTC date when the job was created. A string representation of ISO 8601 date format, for example, "2012-03-20T17:03:43.221Z".</p>
+    /// <p>The UTC date when the job was created. This value is a string representation of ISO 8601 date format, for example <code>"2012-03-20T17:03:43.221Z"</code>.</p>
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<String>,
@@ -425,11 +496,11 @@ pub struct GlacierJobDescription {
     #[serde(rename = "InventoryRetrievalParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inventory_retrieval_parameters: Option<InventoryRetrievalJobDescription>,
-    /// <p>For an InventoryRetrieval job, this is the size in bytes of the inventory requested for download. For the ArchiveRetrieval job, the value is null.</p>
+    /// <p>For an inventory retrieval job, this value is the size in bytes of the inventory requested for download. For an archive retrieval or select job, this value is null.</p>
     #[serde(rename = "InventorySizeInBytes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inventory_size_in_bytes: Option<i64>,
-    /// <p>The job description you provided when you initiated the job.</p>
+    /// <p>The job description provided when initiating the job.</p>
     #[serde(rename = "JobDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_description: Option<String>,
@@ -437,19 +508,31 @@ pub struct GlacierJobDescription {
     #[serde(rename = "JobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_id: Option<String>,
-    /// <p>The retrieved byte range for archive retrieval jobs in the form "<i>StartByteValue</i>-<i>EndByteValue</i>" If no range was specified in the archive retrieval, then the whole archive is retrieved and <i>StartByteValue</i> equals 0 and <i>EndByteValue</i> equals the size of the archive minus 1. For inventory retrieval jobs this field is null. </p>
+    /// <p>Contains the job output location.</p>
+    #[serde(rename = "JobOutputPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_output_path: Option<String>,
+    /// <p>Contains the location where the data from the select job is stored.</p>
+    #[serde(rename = "OutputLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_location: Option<OutputLocation>,
+    /// <p>The retrieved byte range for archive retrieval jobs in the form <i>StartByteValue</i>-<i>EndByteValue</i>. If no range was specified in the archive retrieval, then the whole archive is retrieved. In this case, <i>StartByteValue</i> equals 0 and <i>EndByteValue</i> equals the size of the archive minus 1. For inventory retrieval or select jobs, this field is null. </p>
     #[serde(rename = "RetrievalByteRange")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retrieval_byte_range: Option<String>,
-    /// <p><p>For an ArchiveRetrieval job, it is the checksum of the archive. Otherwise, the value is null.</p> <p>The SHA256 tree hash value for the requested range of an archive. If the Initiate a Job request for an archive specified a tree-hash aligned range, then this field returns a value.</p> <p>For the specific case when the whole archive is retrieved, this value is the same as the ArchiveSHA256TreeHash value.</p> <p>This field is null in the following situations:</p> <ul> <li> <p>Archive retrieval jobs that specify a range that is not tree-hash aligned.</p> </li> </ul> <ul> <li> <p>Archival jobs that specify a range that is equal to the whole archive and the job status is InProgress.</p> </li> </ul> <ul> <li> <p>Inventory jobs.</p> </li> </ul></p>
+    /// <p><p>For an archive retrieval job, this value is the checksum of the archive. Otherwise, this value is null.</p> <p>The SHA256 tree hash value for the requested range of an archive. If the <b>InitiateJob</b> request for an archive specified a tree-hash aligned range, then this field returns a value.</p> <p>If the whole archive is retrieved, this value is the same as the ArchiveSHA256TreeHash value.</p> <p>This field is null for the following:</p> <ul> <li> <p>Archive retrieval jobs that specify a range that is not tree-hash aligned</p> </li> </ul> <ul> <li> <p>Archival jobs that specify a range that is equal to the whole archive, when the job status is <code>InProgress</code> </p> </li> </ul> <ul> <li> <p>Inventory jobs</p> </li> <li> <p>Select jobs</p> </li> </ul></p>
     #[serde(rename = "SHA256TreeHash")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sha256_tree_hash: Option<String>,
-    /// <p>An Amazon Simple Notification Service (Amazon SNS) topic that receives notification.</p>
+    /// <p>An Amazon SNS topic that receives notification.</p>
     #[serde(rename = "SNSTopic")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sns_topic: Option<String>,
-    /// <p>The status code can be InProgress, Succeeded, or Failed, and indicates the status of the job.</p>
+    /// <p>Contains the parameters that define a select job.</p>
+    #[serde(rename = "SelectParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub select_parameters: Option<SelectParameters>,
+    /// <p>The status code can be <code>InProgress</code>, <code>Succeeded</code>, or <code>Failed</code>, and indicates the status of the job.</p>
     #[serde(rename = "StatusCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_code: Option<String>,
@@ -461,10 +544,47 @@ pub struct GlacierJobDescription {
     #[serde(rename = "Tier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tier: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the vault from which the archive retrieval was requested.</p>
+    /// <p>The Amazon Resource Name (ARN) of the vault from which an archive retrieval was requested.</p>
     #[serde(rename = "VaultARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vault_arn: Option<String>,
+}
+
+/// <p>Contains information about a grant.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct Grant {
+    /// <p>The grantee.</p>
+    #[serde(rename = "Grantee")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub grantee: Option<Grantee>,
+    /// <p>Specifies the permission given to the grantee. </p>
+    #[serde(rename = "Permission")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permission: Option<String>,
+}
+
+/// <p>Contains information about the grantee.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct Grantee {
+    /// <p>Screen name of the grantee.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
+    /// <p>Email address of the grantee.</p>
+    #[serde(rename = "EmailAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub email_address: Option<String>,
+    /// <p>The canonical user ID of the grantee.</p>
+    #[serde(rename = "ID")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>Type of grantee</p>
+    #[serde(rename = "Type")]
+    pub type_: String,
+    /// <p>URI of the grantee group.</p>
+    #[serde(rename = "URI")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub uri: Option<String>,
 }
 
 /// <p>Provides options for initiating an Amazon Glacier job.</p>
@@ -489,6 +609,10 @@ pub struct InitiateJobOutput {
     #[serde(rename = "jobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_id: Option<String>,
+    /// <p>The path to the location of where the select results are stored.</p>
+    #[serde(rename = "jobOutputPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_output_path: Option<String>,
     /// <p>The relative URI path of the job.</p>
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -551,6 +675,15 @@ pub struct InitiateVaultLockOutput {
     pub lock_id: Option<String>,
 }
 
+/// <p>Describes how the archive is serialized.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct InputSerialization {
+    /// <p>Describes the serialization of a CSV-encoded object.</p>
+    #[serde(rename = "csv")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub csv: Option<CSVInput>,
+}
+
 /// <p>Describes the options for a range inventory retrieval job.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct InventoryRetrievalJobDescription {
@@ -600,7 +733,7 @@ pub struct InventoryRetrievalJobInput {
 /// <p>Provides options for defining a job.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct JobParameters {
-    /// <p>The ID of the archive that you want to retrieve. This field is required only if <code>Type</code> is set to archive-retrieval. An error occurs if you specify this request parameter for an inventory retrieval job request. </p>
+    /// <p>The ID of the archive that you want to retrieve. This field is required only if <code>Type</code> is set to <code>select</code> or <code>archive-retrieval</code>code&gt;. An error occurs if you specify this request parameter for an inventory retrieval job request. </p>
     #[serde(rename = "ArchiveId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub archive_id: Option<String>,
@@ -616,6 +749,10 @@ pub struct JobParameters {
     #[serde(rename = "InventoryRetrievalParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inventory_retrieval_parameters: Option<InventoryRetrievalJobInput>,
+    /// <p>Contains information about the location where the select job results are stored.</p>
+    #[serde(rename = "OutputLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_location: Option<OutputLocation>,
     /// <p>The byte range to retrieve for an archive retrieval. in the form "<i>StartByteValue</i>-<i>EndByteValue</i>" If not specified, the whole archive is retrieved. If specified, the byte range must be megabyte (1024*1024) aligned which means that <i>StartByteValue</i> must be divisible by 1 MB and <i>EndByteValue</i> plus 1 must be divisible by 1 MB or be the end of the archive specified as the archive byte size value minus 1. If RetrievalByteRange is not megabyte aligned, this operation returns a 400 response. </p> <p>An error occurs if you specify this field for an inventory retrieval job request.</p>
     #[serde(rename = "RetrievalByteRange")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -624,11 +761,15 @@ pub struct JobParameters {
     #[serde(rename = "SNSTopic")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sns_topic: Option<String>,
-    /// <p>The retrieval option to use for the archive retrieval. Valid values are <code>Expedited</code>, <code>Standard</code>, or <code>Bulk</code>. <code>Standard</code> is the default.</p>
+    /// <p>Contains the parameters that define a job.</p>
+    #[serde(rename = "SelectParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub select_parameters: Option<SelectParameters>,
+    /// <p>The retrieval option to use for a select or archive retrieval job. Valid values are <code>Expedited</code>, <code>Standard</code>, or <code>Bulk</code>. <code>Standard</code> is the default.</p>
     #[serde(rename = "Tier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tier: Option<String>,
-    /// <p>The job type. You can initiate a job to retrieve an archive or get an inventory of a vault. Valid values are "archive-retrieval" and "inventory-retrieval".</p>
+    /// <p>The job type. You can initiate a job to perform a select query on an archive, retrieve an archive, or get an inventory of a vault. Valid values are "select", "archive-retrieval" and "inventory-retrieval".</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -763,7 +904,7 @@ pub struct ListPartsOutput {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListProvisionedCapacityInput {
-    /// <p>The <code>AccountId</code> value is the AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '-' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, don't include any hyphens ('-') in the ID. </p>
+    /// <p>The AWS account ID of the account that owns the vault. You can either specify an AWS account ID or optionally a single '-' (hyphen), in which case Amazon Glacier uses the AWS account ID associated with the credentials used to sign the request. If you use an account ID, don't include any hyphens ('-') in the ID. </p>
     #[serde(rename = "accountId")]
     pub account_id: String,
 }
@@ -825,6 +966,24 @@ pub struct ListVaultsOutput {
     pub vault_list: Option<Vec<DescribeVaultOutput>>,
 }
 
+/// <p>Contains information about the location where the select job results are stored.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct OutputLocation {
+    /// <p>Describes an S3 location that will receive the results of the restore request.</p>
+    #[serde(rename = "S3")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3: Option<S3Location>,
+}
+
+/// <p>Describes how the select output is serialized.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct OutputSerialization {
+    /// <p>Describes the serialization of CSV-encoded query results.</p>
+    #[serde(rename = "csv")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub csv: Option<CSVOutput>,
+}
+
 /// <p>A list of the part sizes of the multipart upload.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct PartListElement {
@@ -883,6 +1042,64 @@ pub struct RemoveTagsFromVaultInput {
     /// <p>The name of the vault.</p>
     #[serde(rename = "vaultName")]
     pub vault_name: String,
+}
+
+/// <p>Contains information about the location in Amazon S3 where the select job results are stored.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct S3Location {
+    /// <p>A list of grants that control access to the staged results.</p>
+    #[serde(rename = "AccessControlList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_control_list: Option<Vec<Grant>>,
+    /// <p>The name of the bucket where the restore results are stored.</p>
+    #[serde(rename = "BucketName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bucket_name: Option<String>,
+    /// <p>The canned ACL to apply to the restore results.</p>
+    #[serde(rename = "CannedACL")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub canned_acl: Option<String>,
+    /// <p>Contains information about the encryption used to store the job results in Amazon S3.</p>
+    #[serde(rename = "Encryption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption: Option<Encryption>,
+    /// <p>The prefix that is prepended to the restore results for this request.</p>
+    #[serde(rename = "Prefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prefix: Option<String>,
+    /// <p>The storage class used to store the restore results.</p>
+    #[serde(rename = "StorageClass")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub storage_class: Option<String>,
+    /// <p>The tag-set that is applied to the restore results.</p>
+    #[serde(rename = "Tagging")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tagging: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A map of metadata to store with the restore results in Amazon S3.</p>
+    #[serde(rename = "UserMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_metadata: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>Contains information about the parameters used for a select.</p>
+#[derive(Default, Debug, Clone, Serialize, Deserialize)]
+pub struct SelectParameters {
+    /// <p>The expression that is used to select the object.</p>
+    #[serde(rename = "Expression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expression: Option<String>,
+    /// <p>The type of the provided expression, for example <code>SQL</code>.</p>
+    #[serde(rename = "ExpressionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expression_type: Option<String>,
+    /// <p>Describes the serialization format of the object.</p>
+    #[serde(rename = "InputSerialization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_serialization: Option<InputSerialization>,
+    /// <p>Describes how the results of the select job are serialized.</p>
+    #[serde(rename = "OutputSerialization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_serialization: Option<OutputSerialization>,
 }
 
 /// <p>SetDataRetrievalPolicy input.</p>
@@ -4369,7 +4586,7 @@ pub trait Glacier {
         input: &DeleteVaultNotificationsInput,
     ) -> Result<(), DeleteVaultNotificationsError>;
 
-    /// <p>This operation returns information about a job you previously initiated, including the job initiation date, the user who initiated the job, the job status code/message and the Amazon SNS topic to notify after Amazon Glacier completes the job. For more information about initiating a job, see <a>InitiateJob</a>. </p> <note> <p>This operation enables you to check the status of your job. However, it is strongly recommended that you set up an Amazon SNS topic and specify it in your initiate job request so that Amazon Glacier can notify the topic after it completes the job.</p> </note> <p>A job ID will not expire for at least 24 hours after Amazon Glacier completes the job.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For information about the underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-describe-job-get.html">Working with Archives in Amazon Glacier</a> in the <i>Amazon Glacier Developer Guide</i>. </p>
+    /// <p>This operation returns information about a job you previously initiated, including the job initiation date, the user who initiated the job, the job status code/message and the Amazon SNS topic to notify after Amazon Glacier completes the job. For more information about initiating a job, see <a>InitiateJob</a>. </p> <note> <p>This operation enables you to check the status of your job. However, it is strongly recommended that you set up an Amazon SNS topic and specify it in your initiate job request so that Amazon Glacier can notify the topic after it completes the job.</p> </note> <p>A job ID will not expire for at least 24 hours after Amazon Glacier completes the job.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For more information about using this operation, see the documentation for the underlying REST API <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-describe-job-get.html">Describe Job</a> in the <i>Amazon Glacier Developer Guide</i>. </p>
     fn describe_job(
         &self,
         input: &DescribeJobInput,
@@ -4411,7 +4628,7 @@ pub trait Glacier {
         input: &GetVaultNotificationsInput,
     ) -> Result<GetVaultNotificationsOutput, GetVaultNotificationsError>;
 
-    /// <p>This operation initiates a job of the specified type. In this release, you can initiate a job to retrieve either an archive or a vault inventory (a list of archives in a vault).</p> <p>Retrieving data from Amazon Glacier is a two-step process:</p> <ol> <li> <p>Initiate a retrieval job.</p> <note> <p>A data retrieval policy can cause your initiate retrieval job request to fail with a PolicyEnforcedException exception. For more information about data retrieval policies, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/data-retrieval-policy.html">Amazon Glacier Data Retrieval Policies</a>. For more information about the PolicyEnforcedException exception, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-error-responses.html">Error Responses</a>.</p> </note> </li> <li> <p>After the job completes, download the bytes.</p> </li> </ol> <p>The retrieval request is executed asynchronously. When you initiate a retrieval job, Amazon Glacier creates a job and returns a job ID in the response. When Amazon Glacier completes the job, you can get the job output (archive or inventory data). For information about getting job output, see <a>GetJobOutput</a> operation. </p> <p>The job must complete before you can get its output. To determine when a job is complete, you have the following options:</p> <ul> <li> <p> <b>Use Amazon SNS Notification</b> You can specify an Amazon Simple Notification Service (Amazon SNS) topic to which Amazon Glacier can post a notification after the job is completed. You can specify an SNS topic per job request. The notification is sent only after Amazon Glacier completes the job. In addition to specifying an SNS topic per job request, you can configure vault notifications for a vault so that job notifications are always sent. For more information, see <a>SetVaultNotifications</a>.</p> </li> <li> <p> <b>Get job details</b> You can make a <a>DescribeJob</a> request to obtain job status information while a job is in progress. However, it is more efficient to use an Amazon SNS notification to determine when a job is complete.</p> </li> </ul> <note> <p>The information you get via notification is same that you get by calling <a>DescribeJob</a>.</p> </note> <p>If for a specific event, you add both the notification configuration on the vault and also specify an SNS topic in your initiate job request, Amazon Glacier sends both notifications. For more information, see <a>SetVaultNotifications</a>.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> <b>About the Vault Inventory</b> </p> <p>Amazon Glacier prepares an inventory for each vault periodically, every 24 hours. When you initiate a job for a vault inventory, Amazon Glacier returns the last inventory for the vault. The inventory data you get might be up to a day or two days old. Also, the initiate inventory job might take some time to complete before you can download the vault inventory. So you do not want to retrieve a vault inventory for each vault operation. However, in some scenarios, you might find the vault inventory useful. For example, when you upload an archive, you can provide an archive description but not an archive name. Amazon Glacier provides you a unique archive ID, an opaque string of characters. So, you might maintain your own database that maps archive names to their corresponding Amazon Glacier assigned archive IDs. You might find the vault inventory useful in the event you need to reconcile information in your database with the actual vault inventory.</p> <p> <b>Range Inventory Retrieval</b> </p> <p>You can limit the number of inventory items retrieved by filtering on the archive creation date or by setting a limit.</p> <p> <i>Filtering by Archive Creation Date</i> </p> <p>You can retrieve inventory items for archives created between <code>StartDate</code> and <code>EndDate</code> by specifying values for these parameters in the <b>InitiateJob</b> request. Archives created on or after the <code>StartDate</code> and before the <code>EndDate</code> will be returned. If you only provide the <code>StartDate</code> without the <code>EndDate</code>, you will retrieve the inventory for all archives created on or after the <code>StartDate</code>. If you only provide the <code>EndDate</code> without the <code>StartDate</code>, you will get back the inventory for all archives created before the <code>EndDate</code>.</p> <p> <i>Limiting Inventory Items per Retrieval</i> </p> <p>You can limit the number of inventory items returned by setting the <code>Limit</code> parameter in the <b>InitiateJob</b> request. The inventory job output will contain inventory items up to the specified <code>Limit</code>. If there are more inventory items available, the result is paginated. After a job is complete you can use the <a>DescribeJob</a> operation to get a marker that you use in a subsequent <b>InitiateJob</b> request. The marker will indicate the starting point to retrieve the next set of inventory items. You can page through your entire inventory by repeatedly making <b>InitiateJob</b> requests with the marker from the previous <b>DescribeJob</b> output, until you get a marker from <b>DescribeJob</b> that returns null, indicating that there are no more inventory items available.</p> <p>You can use the <code>Limit</code> parameter together with the date range parameters.</p> <p> <b>About Ranged Archive Retrieval</b> </p> <p>You can initiate an archive retrieval for the whole archive or a range of the archive. In the case of ranged archive retrieval, you specify a byte range to return or the whole archive. The range specified must be megabyte (MB) aligned, that is the range start value must be divisible by 1 MB and range end value plus 1 must be divisible by 1 MB or equal the end of the archive. If the ranged archive retrieval is not megabyte aligned, this operation returns a 400 response. Furthermore, to ensure you get checksum values for data you download using Get Job Output API, the range must be tree hash aligned.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and the underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-initiate-job-post.html">Initiate a Job</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-inventory.html">Downloading a Vault Inventory</a> </p> <p> <b>Expedited and Bulk Archive Retrievals</b> </p> <p>When retrieving an archive, you can specify one of the following options in the <code>Tier</code> field of the request body: </p> <ul> <li> <p> <b>Standard</b> The default type of retrieval, which allows access to any of your archives within several hours. Standard retrievals typically complete within 3–5 hours.</p> </li> <li> <p> <b>Bulk</b> Amazon Glacier’s lowest-cost retrieval option, which enables you to retrieve large amounts of data inexpensively in a day. Bulk retrieval requests typically complete within 5–12 hours. </p> </li> <li> <p> <b>Expedited</b> Amazon Glacier’s option for the fastest retrievals. Archives requested using the expedited retrievals typically become accessible within 1–5 minutes. </p> </li> </ul> <p>For more information about expedited and bulk retrievals, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/downloading-an-archive-two-steps.html">Retrieving Amazon Glacier Archives</a>.</p>
+    /// <p>This operation initiates a job of the specified type, which can be a select, an archival retrieval, or a vault retrieval. For more information about using this operation, see the documentation for the underlying REST API <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-initiate-job-post.html">Initiate a Job</a>. </p>
     fn initiate_job(&self, input: &InitiateJobInput)
         -> Result<InitiateJobOutput, InitiateJobError>;
 
@@ -4427,7 +4644,7 @@ pub trait Glacier {
         input: &InitiateVaultLockInput,
     ) -> Result<InitiateVaultLockOutput, InitiateVaultLockError>;
 
-    /// <p>This operation lists jobs for a vault, including jobs that are in-progress and jobs that have recently finished.</p> <note> <p>Amazon Glacier retains recently completed jobs for a period before deleting them; however, it eventually removes completed jobs. The output of completed jobs can be retrieved. Retaining completed jobs for a period of time after they have completed enables you to get a job output in the event you miss the job completion notification or your first attempt to download it fails. For example, suppose you start an archive retrieval job to download an archive. After the job completes, you start to download the archive but encounter a network error. In this scenario, you can retry and download the archive while the job exists.</p> </note> <p>To retrieve an archive or retrieve a vault inventory from Amazon Glacier, you first initiate a job, and after the job completes, you download the data. For an archive retrieval, the output is the archive data. For an inventory retrieval, it is the inventory list. The List Job operation returns a list of these jobs sorted by job initiation time.</p> <p>The List Jobs operation supports pagination. You should always check the response <code>Marker</code> field. If there are no more jobs to list, the <code>Marker</code> field is set to <code>null</code>. If there are more jobs to list, the <code>Marker</code> field is set to a non-null value, which you can use to continue the pagination of the list. To return a list of jobs that begins at a specific job, set the marker request parameter to the <code>Marker</code> value for that job that you obtained from a previous List Jobs request.</p> <p>You can set a maximum limit for the number of jobs returned in the response by specifying the <code>limit</code> parameter in the request. The default limit is 1000. The number of jobs returned might be fewer than the limit, but the number of returned jobs never exceeds the limit.</p> <p>Additionally, you can filter the jobs list returned by specifying the optional <code>statuscode</code> parameter or <code>completed</code> parameter, or both. Using the <code>statuscode</code> parameter, you can specify to return only jobs that match either the <code>InProgress</code>, <code>Succeeded</code>, or <code>Failed</code> status. Using the <code>completed</code> parameter, you can specify to return only jobs that were completed (<code>true</code>) or jobs that were not completed (<code>false</code>).</p> <p>For the underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-jobs-get.html">List Jobs</a>. </p>
+    /// <p>This operation lists jobs for a vault, including jobs that are in-progress and jobs that have recently finished. The List Job operation returns a list of these jobs sorted by job initiation time.</p> <note> <p>Amazon Glacier retains recently completed jobs for a period before deleting them; however, it eventually removes completed jobs. The output of completed jobs can be retrieved. Retaining completed jobs for a period of time after they have completed enables you to get a job output in the event you miss the job completion notification or your first attempt to download it fails. For example, suppose you start an archive retrieval job to download an archive. After the job completes, you start to download the archive but encounter a network error. In this scenario, you can retry and download the archive while the job exists.</p> </note> <p>The List Jobs operation supports pagination. You should always check the response <code>Marker</code> field. If there are no more jobs to list, the <code>Marker</code> field is set to <code>null</code>. If there are more jobs to list, the <code>Marker</code> field is set to a non-null value, which you can use to continue the pagination of the list. To return a list of jobs that begins at a specific job, set the marker request parameter to the <code>Marker</code> value for that job that you obtained from a previous List Jobs request.</p> <p>You can set a maximum limit for the number of jobs returned in the response by specifying the <code>limit</code> parameter in the request. The default limit is 1000. The number of jobs returned might be fewer than the limit, but the number of returned jobs never exceeds the limit.</p> <p>Additionally, you can filter the jobs list returned by specifying the optional <code>statuscode</code> parameter or <code>completed</code> parameter, or both. Using the <code>statuscode</code> parameter, you can specify to return only jobs that match either the <code>InProgress</code>, <code>Succeeded</code>, or <code>Failed</code> status. Using the <code>completed</code> parameter, you can specify to return only jobs that were completed (<code>true</code>) or jobs that were not completed (<code>false</code>).</p> <p>For more information about using this operation, see the documentation for the underlying REST API <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-jobs-get.html">List Jobs</a>. </p>
     fn list_jobs(&self, input: &ListJobsInput) -> Result<ListJobsOutput, ListJobsError>;
 
     /// <p>This operation lists in-progress multipart uploads for the specified vault. An in-progress multipart upload is a multipart upload that has been initiated by an <a>InitiateMultipartUpload</a> request, but has not yet been completed or aborted. The list returned in the List Multipart Upload response has no guaranteed order. </p> <p>The List Multipart Uploads operation supports pagination. By default, this operation returns up to 1,000 multipart uploads in the response. You should always check the response for a <code>marker</code> at which to continue the list; if there are no more items the <code>marker</code> is <code>null</code>. To return a list of multipart uploads that begins at a specific upload, set the <code>marker</code> request parameter to the value you obtained from a previous List Multipart Upload request. You can also limit the number of uploads returned in the response by specifying the <code>limit</code> parameter in the request.</p> <p>Note the difference between this operation and listing parts (<a>ListParts</a>). The List Multipart Uploads operation lists all multipart uploads for a vault and does not require a multipart upload ID. The List Parts operation requires a multipart upload ID since parts are associated with a single upload.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and the underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/working-with-archives.html">Working with Archives in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-multipart-list-uploads.html">List Multipart Uploads </a> in the <i>Amazon Glacier Developer Guide</i>.</p>
@@ -4439,7 +4656,7 @@ pub trait Glacier {
     /// <p>This operation lists the parts of an archive that have been uploaded in a specific multipart upload. You can make this request at any time during an in-progress multipart upload before you complete the upload (see <a>CompleteMultipartUpload</a>. List Parts returns an error for completed uploads. The list returned in the List Parts response is sorted by part range. </p> <p>The List Parts operation supports pagination. By default, this operation returns up to 1,000 uploaded parts in the response. You should always check the response for a <code>marker</code> at which to continue the list; if there are no more items the <code>marker</code> is <code>null</code>. To return a list of parts that begins at a specific part, set the <code>marker</code> request parameter to the value you obtained from a previous List Parts request. You can also limit the number of parts returned in the response by specifying the <code>limit</code> parameter in the request. </p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and the underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/working-with-archives.html">Working with Archives in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-multipart-list-parts.html">List Parts</a> in the <i>Amazon Glacier Developer Guide</i>.</p>
     fn list_parts(&self, input: &ListPartsInput) -> Result<ListPartsOutput, ListPartsError>;
 
-    /// <p>This operation lists the provisioned capacity for the specified AWS account.</p>
+    /// <p>This operation lists the provisioned capacity units for the specified AWS account.</p>
     fn list_provisioned_capacity(
         &self,
         input: &ListProvisionedCapacityInput,
@@ -4454,7 +4671,7 @@ pub trait Glacier {
     /// <p>This operation lists all vaults owned by the calling user's account. The list returned in the response is ASCII-sorted by vault name.</p> <p>By default, this operation returns up to 1,000 items. If there are more vaults to list, the response <code>marker</code> field contains the vault Amazon Resource Name (ARN) at which to continue the list with a new List Vaults request; otherwise, the <code>marker</code> field is <code>null</code>. To return a list of vaults that begins at a specific vault, set the <code>marker</code> request parameter to the vault ARN you obtained from a previous List Vaults request. You can also limit the number of vaults returned in the response by specifying the <code>limit</code> parameter in the request. </p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/retrieving-vault-info.html">Retrieving Vault Metadata in Amazon Glacier</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-vaults-get.html">List Vaults </a> in the <i>Amazon Glacier Developer Guide</i>. </p>
     fn list_vaults(&self, input: &ListVaultsInput) -> Result<ListVaultsOutput, ListVaultsError>;
 
-    /// <p>This operation purchases a provisioned capacity unit for an AWS account.</p>
+    /// <p>This operation purchases a provisioned capacity unit for an AWS account. </p>
     fn purchase_provisioned_capacity(
         &self,
         input: &PurchaseProvisionedCapacityInput,
@@ -4909,7 +5126,7 @@ where
         }
     }
 
-    /// <p>This operation returns information about a job you previously initiated, including the job initiation date, the user who initiated the job, the job status code/message and the Amazon SNS topic to notify after Amazon Glacier completes the job. For more information about initiating a job, see <a>InitiateJob</a>. </p> <note> <p>This operation enables you to check the status of your job. However, it is strongly recommended that you set up an Amazon SNS topic and specify it in your initiate job request so that Amazon Glacier can notify the topic after it completes the job.</p> </note> <p>A job ID will not expire for at least 24 hours after Amazon Glacier completes the job.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For information about the underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-describe-job-get.html">Working with Archives in Amazon Glacier</a> in the <i>Amazon Glacier Developer Guide</i>. </p>
+    /// <p>This operation returns information about a job you previously initiated, including the job initiation date, the user who initiated the job, the job status code/message and the Amazon SNS topic to notify after Amazon Glacier completes the job. For more information about initiating a job, see <a>InitiateJob</a>. </p> <note> <p>This operation enables you to check the status of your job. However, it is strongly recommended that you set up an Amazon SNS topic and specify it in your initiate job request so that Amazon Glacier can notify the topic after it completes the job.</p> </note> <p>A job ID will not expire for at least 24 hours after Amazon Glacier completes the job.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> For more information about using this operation, see the documentation for the underlying REST API <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-describe-job-get.html">Describe Job</a> in the <i>Amazon Glacier Developer Guide</i>. </p>
     fn describe_job(
         &self,
         input: &DescribeJobInput,
@@ -5233,7 +5450,7 @@ where
         }
     }
 
-    /// <p>This operation initiates a job of the specified type. In this release, you can initiate a job to retrieve either an archive or a vault inventory (a list of archives in a vault).</p> <p>Retrieving data from Amazon Glacier is a two-step process:</p> <ol> <li> <p>Initiate a retrieval job.</p> <note> <p>A data retrieval policy can cause your initiate retrieval job request to fail with a PolicyEnforcedException exception. For more information about data retrieval policies, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/data-retrieval-policy.html">Amazon Glacier Data Retrieval Policies</a>. For more information about the PolicyEnforcedException exception, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-error-responses.html">Error Responses</a>.</p> </note> </li> <li> <p>After the job completes, download the bytes.</p> </li> </ol> <p>The retrieval request is executed asynchronously. When you initiate a retrieval job, Amazon Glacier creates a job and returns a job ID in the response. When Amazon Glacier completes the job, you can get the job output (archive or inventory data). For information about getting job output, see <a>GetJobOutput</a> operation. </p> <p>The job must complete before you can get its output. To determine when a job is complete, you have the following options:</p> <ul> <li> <p> <b>Use Amazon SNS Notification</b> You can specify an Amazon Simple Notification Service (Amazon SNS) topic to which Amazon Glacier can post a notification after the job is completed. You can specify an SNS topic per job request. The notification is sent only after Amazon Glacier completes the job. In addition to specifying an SNS topic per job request, you can configure vault notifications for a vault so that job notifications are always sent. For more information, see <a>SetVaultNotifications</a>.</p> </li> <li> <p> <b>Get job details</b> You can make a <a>DescribeJob</a> request to obtain job status information while a job is in progress. However, it is more efficient to use an Amazon SNS notification to determine when a job is complete.</p> </li> </ul> <note> <p>The information you get via notification is same that you get by calling <a>DescribeJob</a>.</p> </note> <p>If for a specific event, you add both the notification configuration on the vault and also specify an SNS topic in your initiate job request, Amazon Glacier sends both notifications. For more information, see <a>SetVaultNotifications</a>.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p> <b>About the Vault Inventory</b> </p> <p>Amazon Glacier prepares an inventory for each vault periodically, every 24 hours. When you initiate a job for a vault inventory, Amazon Glacier returns the last inventory for the vault. The inventory data you get might be up to a day or two days old. Also, the initiate inventory job might take some time to complete before you can download the vault inventory. So you do not want to retrieve a vault inventory for each vault operation. However, in some scenarios, you might find the vault inventory useful. For example, when you upload an archive, you can provide an archive description but not an archive name. Amazon Glacier provides you a unique archive ID, an opaque string of characters. So, you might maintain your own database that maps archive names to their corresponding Amazon Glacier assigned archive IDs. You might find the vault inventory useful in the event you need to reconcile information in your database with the actual vault inventory.</p> <p> <b>Range Inventory Retrieval</b> </p> <p>You can limit the number of inventory items retrieved by filtering on the archive creation date or by setting a limit.</p> <p> <i>Filtering by Archive Creation Date</i> </p> <p>You can retrieve inventory items for archives created between <code>StartDate</code> and <code>EndDate</code> by specifying values for these parameters in the <b>InitiateJob</b> request. Archives created on or after the <code>StartDate</code> and before the <code>EndDate</code> will be returned. If you only provide the <code>StartDate</code> without the <code>EndDate</code>, you will retrieve the inventory for all archives created on or after the <code>StartDate</code>. If you only provide the <code>EndDate</code> without the <code>StartDate</code>, you will get back the inventory for all archives created before the <code>EndDate</code>.</p> <p> <i>Limiting Inventory Items per Retrieval</i> </p> <p>You can limit the number of inventory items returned by setting the <code>Limit</code> parameter in the <b>InitiateJob</b> request. The inventory job output will contain inventory items up to the specified <code>Limit</code>. If there are more inventory items available, the result is paginated. After a job is complete you can use the <a>DescribeJob</a> operation to get a marker that you use in a subsequent <b>InitiateJob</b> request. The marker will indicate the starting point to retrieve the next set of inventory items. You can page through your entire inventory by repeatedly making <b>InitiateJob</b> requests with the marker from the previous <b>DescribeJob</b> output, until you get a marker from <b>DescribeJob</b> that returns null, indicating that there are no more inventory items available.</p> <p>You can use the <code>Limit</code> parameter together with the date range parameters.</p> <p> <b>About Ranged Archive Retrieval</b> </p> <p>You can initiate an archive retrieval for the whole archive or a range of the archive. In the case of ranged archive retrieval, you specify a byte range to return or the whole archive. The range specified must be megabyte (MB) aligned, that is the range start value must be divisible by 1 MB and range end value plus 1 must be divisible by 1 MB or equal the end of the archive. If the ranged archive retrieval is not megabyte aligned, this operation returns a 400 response. Furthermore, to ensure you get checksum values for data you download using Get Job Output API, the range must be tree hash aligned.</p> <p>An AWS account has full permission to perform all operations (actions). However, AWS Identity and Access Management (IAM) users don't have any permissions by default. You must grant them explicit permission to perform specific actions. For more information, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/using-iam-with-amazon-glacier.html">Access Control Using AWS Identity and Access Management (IAM)</a>.</p> <p>For conceptual information and the underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-initiate-job-post.html">Initiate a Job</a> and <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/vault-inventory.html">Downloading a Vault Inventory</a> </p> <p> <b>Expedited and Bulk Archive Retrievals</b> </p> <p>When retrieving an archive, you can specify one of the following options in the <code>Tier</code> field of the request body: </p> <ul> <li> <p> <b>Standard</b> The default type of retrieval, which allows access to any of your archives within several hours. Standard retrievals typically complete within 3–5 hours.</p> </li> <li> <p> <b>Bulk</b> Amazon Glacier’s lowest-cost retrieval option, which enables you to retrieve large amounts of data inexpensively in a day. Bulk retrieval requests typically complete within 5–12 hours. </p> </li> <li> <p> <b>Expedited</b> Amazon Glacier’s option for the fastest retrievals. Archives requested using the expedited retrievals typically become accessible within 1–5 minutes. </p> </li> </ul> <p>For more information about expedited and bulk retrievals, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/downloading-an-archive-two-steps.html">Retrieving Amazon Glacier Archives</a>.</p>
+    /// <p>This operation initiates a job of the specified type, which can be a select, an archival retrieval, or a vault retrieval. For more information about using this operation, see the documentation for the underlying REST API <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-initiate-job-post.html">Initiate a Job</a>. </p>
     fn initiate_job(
         &self,
         input: &InitiateJobInput,
@@ -5270,6 +5487,10 @@ where
                 if let Some(job_id) = response.headers.get("x-amz-job-id") {
                     let value = job_id.to_owned();
                     result.job_id = Some(value)
+                };
+                if let Some(job_output_path) = response.headers.get("x-amz-job-output-path") {
+                    let value = job_output_path.to_owned();
+                    result.job_output_path = Some(value)
                 };
                 if let Some(location) = response.headers.get("Location") {
                     let value = location.to_owned();
@@ -5403,7 +5624,7 @@ where
         }
     }
 
-    /// <p>This operation lists jobs for a vault, including jobs that are in-progress and jobs that have recently finished.</p> <note> <p>Amazon Glacier retains recently completed jobs for a period before deleting them; however, it eventually removes completed jobs. The output of completed jobs can be retrieved. Retaining completed jobs for a period of time after they have completed enables you to get a job output in the event you miss the job completion notification or your first attempt to download it fails. For example, suppose you start an archive retrieval job to download an archive. After the job completes, you start to download the archive but encounter a network error. In this scenario, you can retry and download the archive while the job exists.</p> </note> <p>To retrieve an archive or retrieve a vault inventory from Amazon Glacier, you first initiate a job, and after the job completes, you download the data. For an archive retrieval, the output is the archive data. For an inventory retrieval, it is the inventory list. The List Job operation returns a list of these jobs sorted by job initiation time.</p> <p>The List Jobs operation supports pagination. You should always check the response <code>Marker</code> field. If there are no more jobs to list, the <code>Marker</code> field is set to <code>null</code>. If there are more jobs to list, the <code>Marker</code> field is set to a non-null value, which you can use to continue the pagination of the list. To return a list of jobs that begins at a specific job, set the marker request parameter to the <code>Marker</code> value for that job that you obtained from a previous List Jobs request.</p> <p>You can set a maximum limit for the number of jobs returned in the response by specifying the <code>limit</code> parameter in the request. The default limit is 1000. The number of jobs returned might be fewer than the limit, but the number of returned jobs never exceeds the limit.</p> <p>Additionally, you can filter the jobs list returned by specifying the optional <code>statuscode</code> parameter or <code>completed</code> parameter, or both. Using the <code>statuscode</code> parameter, you can specify to return only jobs that match either the <code>InProgress</code>, <code>Succeeded</code>, or <code>Failed</code> status. Using the <code>completed</code> parameter, you can specify to return only jobs that were completed (<code>true</code>) or jobs that were not completed (<code>false</code>).</p> <p>For the underlying REST API, see <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-jobs-get.html">List Jobs</a>. </p>
+    /// <p>This operation lists jobs for a vault, including jobs that are in-progress and jobs that have recently finished. The List Job operation returns a list of these jobs sorted by job initiation time.</p> <note> <p>Amazon Glacier retains recently completed jobs for a period before deleting them; however, it eventually removes completed jobs. The output of completed jobs can be retrieved. Retaining completed jobs for a period of time after they have completed enables you to get a job output in the event you miss the job completion notification or your first attempt to download it fails. For example, suppose you start an archive retrieval job to download an archive. After the job completes, you start to download the archive but encounter a network error. In this scenario, you can retry and download the archive while the job exists.</p> </note> <p>The List Jobs operation supports pagination. You should always check the response <code>Marker</code> field. If there are no more jobs to list, the <code>Marker</code> field is set to <code>null</code>. If there are more jobs to list, the <code>Marker</code> field is set to a non-null value, which you can use to continue the pagination of the list. To return a list of jobs that begins at a specific job, set the marker request parameter to the <code>Marker</code> value for that job that you obtained from a previous List Jobs request.</p> <p>You can set a maximum limit for the number of jobs returned in the response by specifying the <code>limit</code> parameter in the request. The default limit is 1000. The number of jobs returned might be fewer than the limit, but the number of returned jobs never exceeds the limit.</p> <p>Additionally, you can filter the jobs list returned by specifying the optional <code>statuscode</code> parameter or <code>completed</code> parameter, or both. Using the <code>statuscode</code> parameter, you can specify to return only jobs that match either the <code>InProgress</code>, <code>Succeeded</code>, or <code>Failed</code> status. Using the <code>completed</code> parameter, you can specify to return only jobs that were completed (<code>true</code>) or jobs that were not completed (<code>false</code>).</p> <p>For more information about using this operation, see the documentation for the underlying REST API <a href="http://docs.aws.amazon.com/amazonglacier/latest/dev/api-jobs-get.html">List Jobs</a>. </p>
     fn list_jobs(&self, input: &ListJobsInput) -> Result<ListJobsOutput, ListJobsError> {
         let request_uri = format!(
             "/{account_id}/vaults/{vault_name}/jobs",
@@ -5560,7 +5781,7 @@ where
         }
     }
 
-    /// <p>This operation lists the provisioned capacity for the specified AWS account.</p>
+    /// <p>This operation lists the provisioned capacity units for the specified AWS account.</p>
     fn list_provisioned_capacity(
         &self,
         input: &ListProvisionedCapacityInput,
@@ -5691,7 +5912,7 @@ where
         }
     }
 
-    /// <p>This operation purchases a provisioned capacity unit for an AWS account.</p>
+    /// <p>This operation purchases a provisioned capacity unit for an AWS account. </p>
     fn purchase_provisioned_capacity(
         &self,
         input: &PurchaseProvisionedCapacityInput,

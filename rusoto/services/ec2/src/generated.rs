@@ -44,9 +44,9 @@ enum DeserializerNext {
 pub struct AcceptReservedInstancesExchangeQuoteRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>The IDs of the Convertible Reserved Instances to exchange for other Convertible Reserved Instances of the same or higher value.</p>
+    /// <p>The IDs of the Convertible Reserved Instances to exchange for another Convertible Reserved Instance of the same or higher value.</p>
     pub reserved_instance_ids: Vec<String>,
-    /// <p>The configurations of the Convertible Reserved Instance offerings that you are purchasing in this exchange.</p>
+    /// <p>The configuration of the target Convertible Reserved Instance to exchange for your current Convertible Reserved Instances.</p>
     pub target_configurations: Option<Vec<TargetConfigurationRequest>>,
 }
 
@@ -131,12 +131,96 @@ impl AcceptReservedInstancesExchangeQuoteResultDeserializer {
         Ok(obj)
     }
 }
+#[derive(Default, Debug, Clone)]
+pub struct AcceptVpcEndpointConnectionsRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The ID of the endpoint service.</p>
+    pub service_id: String,
+    /// <p>The IDs of one or more interface VPC endpoints.</p>
+    pub vpc_endpoint_ids: Vec<String>,
+}
+
+/// Serialize `AcceptVpcEndpointConnectionsRequest` contents to a `SignedRequest`.
+struct AcceptVpcEndpointConnectionsRequestSerializer;
+impl AcceptVpcEndpointConnectionsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &AcceptVpcEndpointConnectionsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "ServiceId"),
+            &obj.service_id.replace("+", "%2B"),
+        );
+        ValueStringListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "VpcEndpointId"),
+            &obj.vpc_endpoint_ids,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct AcceptVpcEndpointConnectionsResult {
+    /// <p>Information about the interface endpoints that were not accepted, if applicable.</p>
+    pub unsuccessful: Option<Vec<UnsuccessfulItem>>,
+}
+
+struct AcceptVpcEndpointConnectionsResultDeserializer;
+impl AcceptVpcEndpointConnectionsResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AcceptVpcEndpointConnectionsResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = AcceptVpcEndpointConnectionsResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "unsuccessful" => {
+                        obj.unsuccessful = Some(try!(
+                            UnsuccessfulItemSetDeserializer::deserialize("unsuccessful", stack)
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>Contains the parameters for AcceptVpcPeeringConnection.</p>
 #[derive(Default, Debug, Clone)]
 pub struct AcceptVpcPeeringConnectionRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>The ID of the VPC peering connection.</p>
+    /// <p>The ID of the VPC peering connection. You must specify this parameter in the request.</p>
     pub vpc_peering_connection_id: Option<String>,
 }
 
@@ -419,7 +503,7 @@ impl AccountAttributeValueListDeserializer {
         Ok(obj)
     }
 }
-/// <p>Describes a running instance in a Spot fleet.</p>
+/// <p>Describes a running instance in a Spot Fleet.</p>
 #[derive(Default, Debug, Clone)]
 pub struct ActiveInstance {
     /// <p>The health status of the instance. If the status of either the instance status check or the system status check is <code>impaired</code>, the health status of the instance is <code>unhealthy</code>. Otherwise, the health status is <code>healthy</code>.</p>
@@ -428,7 +512,7 @@ pub struct ActiveInstance {
     pub instance_id: Option<String>,
     /// <p>The instance type.</p>
     pub instance_type: Option<String>,
-    /// <p>The ID of the Spot instance request.</p>
+    /// <p>The ID of the Spot Instance request.</p>
     pub spot_instance_request_id: Option<String>,
 }
 
@@ -559,6 +643,8 @@ pub struct Address {
     pub private_ip_address: Option<String>,
     /// <p>The Elastic IP address.</p>
     pub public_ip: Option<String>,
+    /// <p>Any tags assigned to the Elastic IP address.</p>
+    pub tags: Option<Vec<Tag>>,
 }
 
 struct AddressDeserializer;
@@ -621,6 +707,9 @@ impl AddressDeserializer {
                     "publicIp" => {
                         obj.public_ip =
                             Some(try!(StringDeserializer::deserialize("publicIp", stack)));
+                    }
+                    "tagSet" => {
+                        obj.tags = Some(try!(TagListDeserializer::deserialize("tagSet", stack)));
                     }
                     _ => skip_tree(stack),
                 },
@@ -912,6 +1001,104 @@ impl AllocationStrategyDeserializer {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
         try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>Describes a principal.</p>
+#[derive(Default, Debug, Clone)]
+pub struct AllowedPrincipal {
+    /// <p>The Amazon Resource Name (ARN) of the principal.</p>
+    pub principal: Option<String>,
+    /// <p>The type of principal.</p>
+    pub principal_type: Option<String>,
+}
+
+struct AllowedPrincipalDeserializer;
+impl AllowedPrincipalDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AllowedPrincipal, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = AllowedPrincipal::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "principal" => {
+                        obj.principal =
+                            Some(try!(StringDeserializer::deserialize("principal", stack)));
+                    }
+                    "principalType" => {
+                        obj.principal_type = Some(try!(PrincipalTypeDeserializer::deserialize(
+                            "principalType",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct AllowedPrincipalSetDeserializer;
+impl AllowedPrincipalSetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<AllowedPrincipal>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(AllowedPrincipalDeserializer::deserialize(
+                            "item",
+                            stack
+                        )));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
 
         Ok(obj)
     }
@@ -1486,6 +1673,8 @@ impl AssociateSubnetCidrBlockResultDeserializer {
 pub struct AssociateVpcCidrBlockRequest {
     /// <p>Requests an Amazon-provided IPv6 CIDR block with a /56 prefix length for the VPC. You cannot specify the range of IPv6 addresses, or the size of the CIDR block.</p>
     pub amazon_provided_ipv_6_cidr_block: Option<bool>,
+    /// <p>An IPv4 CIDR block to associate with the VPC.</p>
+    pub cidr_block: Option<String>,
     /// <p>The ID of the VPC.</p>
     pub vpc_id: String,
 }
@@ -1505,6 +1694,12 @@ impl AssociateVpcCidrBlockRequestSerializer {
                 &field_value.to_string().replace("+", "%2B"),
             );
         }
+        if let Some(ref field_value) = obj.cidr_block {
+            params.put(
+                &format!("{}{}", prefix, "CidrBlock"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
         params.put(
             &format!("{}{}", prefix, "VpcId"),
             &obj.vpc_id.replace("+", "%2B"),
@@ -1514,6 +1709,8 @@ impl AssociateVpcCidrBlockRequestSerializer {
 
 #[derive(Default, Debug, Clone)]
 pub struct AssociateVpcCidrBlockResult {
+    /// <p>Information about the IPv4 CIDR block association.</p>
+    pub cidr_block_association: Option<VpcCidrBlockAssociation>,
     /// <p>Information about the IPv6 CIDR block association.</p>
     pub ipv_6_cidr_block_association: Option<VpcIpv6CidrBlockAssociation>,
     /// <p>The ID of the VPC.</p>
@@ -1542,6 +1739,13 @@ impl AssociateVpcCidrBlockResultDeserializer {
 
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
+                    "cidrBlockAssociation" => {
+                        obj.cidr_block_association =
+                            Some(try!(VpcCidrBlockAssociationDeserializer::deserialize(
+                                "cidrBlockAssociation",
+                                stack
+                            )));
+                    }
                     "ipv6CidrBlockAssociation" => {
                         obj.ipv_6_cidr_block_association =
                             Some(try!(VpcIpv6CidrBlockAssociationDeserializer::deserialize(
@@ -1798,7 +2002,7 @@ impl AttachNetworkInterfaceResultDeserializer {
 /// <p>Contains the parameters for AttachVolume.</p>
 #[derive(Default, Debug, Clone)]
 pub struct AttachVolumeRequest {
-    /// <p>The device name to expose to the instance (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p>
+    /// <p>The device name (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p>
     pub device: String,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -2071,23 +2275,23 @@ impl AttributeValueSerializer {
 /// <p>Contains the parameters for AuthorizeSecurityGroupEgress.</p>
 #[derive(Default, Debug, Clone)]
 pub struct AuthorizeSecurityGroupEgressRequest {
-    /// <p>The CIDR IPv4 address range. We recommend that you specify the CIDR range in a set of IP permissions instead.</p>
+    /// <p>Not supported. Use a set of IP permissions to specify the CIDR.</p>
     pub cidr_ip: Option<String>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>The start of port range for the TCP and UDP protocols, or an ICMP type number. We recommend that you specify the port range in a set of IP permissions instead.</p>
+    /// <p>Not supported. Use a set of IP permissions to specify the port.</p>
     pub from_port: Option<i64>,
     /// <p>The ID of the security group.</p>
     pub group_id: String,
-    /// <p>A set of IP permissions. You can't specify a destination security group and a CIDR IP address range.</p>
+    /// <p>One or more sets of IP permissions. You can't specify a destination security group and a CIDR IP address range in the same set of permissions.</p>
     pub ip_permissions: Option<Vec<IpPermission>>,
-    /// <p>The IP protocol name or number. We recommend that you specify the protocol in a set of IP permissions instead.</p>
+    /// <p>Not supported. Use a set of IP permissions to specify the protocol name or number.</p>
     pub ip_protocol: Option<String>,
-    /// <p>The name of a destination security group. To authorize outbound access to a destination security group, we recommend that you use a set of IP permissions instead.</p>
+    /// <p>Not supported. Use a set of IP permissions to specify a destination security group.</p>
     pub source_security_group_name: Option<String>,
-    /// <p>The AWS account number for a destination security group. To authorize outbound access to a destination security group, we recommend that you use a set of IP permissions instead.</p>
+    /// <p>Not supported. Use a set of IP permissions to specify a destination security group.</p>
     pub source_security_group_owner_id: Option<String>,
-    /// <p>The end of port range for the TCP and UDP protocols, or an ICMP type number. We recommend that you specify the port range in a set of IP permissions instead.</p>
+    /// <p>Not supported. Use a set of IP permissions to specify the port.</p>
     pub to_port: Option<i64>,
 }
 
@@ -2163,21 +2367,21 @@ pub struct AuthorizeSecurityGroupIngressRequest {
     pub cidr_ip: Option<String>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>The start of port range for the TCP and UDP protocols, or an ICMP/ICMPv6 type number. For the ICMP/ICMPv6 type number, use <code>-1</code> to specify all types.</p>
+    /// <p>The start of port range for the TCP and UDP protocols, or an ICMP/ICMPv6 type number. For the ICMP/ICMPv6 type number, use <code>-1</code> to specify all types. If you specify all ICMP/ICMPv6 types, you must specify all codes.</p>
     pub from_port: Option<i64>,
-    /// <p>The ID of the security group. Required for a nondefault VPC.</p>
+    /// <p>The ID of the security group. You must specify either the security group ID or the security group name in the request. For security groups in a nondefault VPC, you must specify the security group ID.</p>
     pub group_id: Option<String>,
-    /// <p>[EC2-Classic, default VPC] The name of the security group.</p>
+    /// <p>[EC2-Classic, default VPC] The name of the security group. You must specify either the security group ID or the security group name in the request.</p>
     pub group_name: Option<String>,
-    /// <p>A set of IP permissions. Can be used to specify multiple rules in a single command.</p>
+    /// <p>One or more sets of IP permissions. Can be used to specify multiple rules in a single command.</p>
     pub ip_permissions: Option<Vec<IpPermission>>,
     /// <p>The IP protocol name (<code>tcp</code>, <code>udp</code>, <code>icmp</code>) or number (see <a href="http://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml">Protocol Numbers</a>). (VPC only) Use <code>-1</code> to specify all protocols. If you specify <code>-1</code>, or a protocol number other than <code>tcp</code>, <code>udp</code>, <code>icmp</code>, or <code>58</code> (ICMPv6), traffic on all ports is allowed, regardless of any ports you specify. For <code>tcp</code>, <code>udp</code>, and <code>icmp</code>, you must specify a port range. For protocol <code>58</code> (ICMPv6), you can optionally specify a port range; if you don't, traffic for all types and codes is allowed.</p>
     pub ip_protocol: Option<String>,
     /// <p>[EC2-Classic, default VPC] The name of the source security group. You can't specify this parameter in combination with the following parameters: the CIDR IP address range, the start of the port range, the IP protocol, and the end of the port range. Creates rules that grant full ICMP, UDP, and TCP access. To create a rule with a specific IP protocol and port range, use a set of IP permissions instead. For EC2-VPC, the source security group must be in the same VPC.</p>
     pub source_security_group_name: Option<String>,
-    /// <p>[EC2-Classic] The AWS account number for the source security group, if the source security group is in a different account. You can't specify this parameter in combination with the following parameters: the CIDR IP address range, the IP protocol, the start of the port range, and the end of the port range. Creates rules that grant full ICMP, UDP, and TCP access. To create a rule with a specific IP protocol and port range, use a set of IP permissions instead.</p>
+    /// <p>[EC2-Classic] The AWS account ID for the source security group, if the source security group is in a different account. You can't specify this parameter in combination with the following parameters: the CIDR IP address range, the IP protocol, the start of the port range, and the end of the port range. Creates rules that grant full ICMP, UDP, and TCP access. To create a rule with a specific IP protocol and port range, use a set of IP permissions instead.</p>
     pub source_security_group_owner_id: Option<String>,
-    /// <p>The end of port range for the TCP and UDP protocols, or an ICMP/ICMPv6 code number. For the ICMP/ICMPv6 code number, use <code>-1</code> to specify all codes.</p>
+    /// <p>The end of port range for the TCP and UDP protocols, or an ICMP/ICMPv6 code number. For the ICMP/ICMPv6 code number, use <code>-1</code> to specify all codes. If you specify all ICMP/ICMPv6 types, you must specify all codes.</p>
     pub to_port: Option<i64>,
 }
 
@@ -2654,7 +2858,7 @@ impl BlobAttributeValueSerializer {
 /// <p>Describes a block device mapping.</p>
 #[derive(Default, Debug, Clone)]
 pub struct BlockDeviceMapping {
-    /// <p>The device name exposed to the instance (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p>
+    /// <p>The device name (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p>
     pub device_name: Option<String>,
     /// <p>Parameters used to automatically set up EBS volumes when the instance is launched.</p>
     pub ebs: Option<EbsBlockDevice>,
@@ -3456,7 +3660,7 @@ impl CancelReservedInstancesListingResultDeserializer {
         Ok(obj)
     }
 }
-/// <p>Describes a Spot fleet error.</p>
+/// <p>Describes a Spot Fleet error.</p>
 #[derive(Default, Debug, Clone)]
 pub struct CancelSpotFleetRequestsError {
     /// <p>The error code.</p>
@@ -3508,12 +3712,12 @@ impl CancelSpotFleetRequestsErrorDeserializer {
         Ok(obj)
     }
 }
-/// <p>Describes a Spot fleet request that was not successfully canceled.</p>
+/// <p>Describes a Spot Fleet request that was not successfully canceled.</p>
 #[derive(Default, Debug, Clone)]
 pub struct CancelSpotFleetRequestsErrorItem {
     /// <p>The error.</p>
     pub error: CancelSpotFleetRequestsError,
-    /// <p>The ID of the Spot fleet request.</p>
+    /// <p>The ID of the Spot Fleet request.</p>
     pub spot_fleet_request_id: String,
 }
 
@@ -3613,9 +3817,9 @@ impl CancelSpotFleetRequestsErrorSetDeserializer {
 pub struct CancelSpotFleetRequestsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>The IDs of the Spot fleet requests.</p>
+    /// <p>The IDs of the Spot Fleet requests.</p>
     pub spot_fleet_request_ids: Vec<String>,
-    /// <p>Indicates whether to terminate instances for a Spot fleet request if it is canceled successfully.</p>
+    /// <p>Indicates whether to terminate instances for a Spot Fleet request if it is canceled successfully.</p>
     pub terminate_instances: bool,
 }
 
@@ -3649,9 +3853,9 @@ impl CancelSpotFleetRequestsRequestSerializer {
 /// <p>Contains the output of CancelSpotFleetRequests.</p>
 #[derive(Default, Debug, Clone)]
 pub struct CancelSpotFleetRequestsResponse {
-    /// <p>Information about the Spot fleet requests that are successfully canceled.</p>
+    /// <p>Information about the Spot Fleet requests that are successfully canceled.</p>
     pub successful_fleet_requests: Option<Vec<CancelSpotFleetRequestsSuccessItem>>,
-    /// <p>Information about the Spot fleet requests that are not successfully canceled.</p>
+    /// <p>Information about the Spot Fleet requests that are not successfully canceled.</p>
     pub unsuccessful_fleet_requests: Option<Vec<CancelSpotFleetRequestsErrorItem>>,
 }
 
@@ -3707,14 +3911,14 @@ impl CancelSpotFleetRequestsResponseDeserializer {
         Ok(obj)
     }
 }
-/// <p>Describes a Spot fleet request that was successfully canceled.</p>
+/// <p>Describes a Spot Fleet request that was successfully canceled.</p>
 #[derive(Default, Debug, Clone)]
 pub struct CancelSpotFleetRequestsSuccessItem {
-    /// <p>The current state of the Spot fleet request.</p>
+    /// <p>The current state of the Spot Fleet request.</p>
     pub current_spot_fleet_request_state: String,
-    /// <p>The previous state of the Spot fleet request.</p>
+    /// <p>The previous state of the Spot Fleet request.</p>
     pub previous_spot_fleet_request_state: String,
-    /// <p>The ID of the Spot fleet request.</p>
+    /// <p>The ID of the Spot Fleet request.</p>
     pub spot_fleet_request_id: String,
 }
 
@@ -3836,7 +4040,7 @@ impl CancelSpotInstanceRequestStateDeserializer {
 pub struct CancelSpotInstanceRequestsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>One or more Spot instance request IDs.</p>
+    /// <p>One or more Spot Instance request IDs.</p>
     pub spot_instance_request_ids: Vec<String>,
 }
 
@@ -3866,7 +4070,7 @@ impl CancelSpotInstanceRequestsRequestSerializer {
 /// <p>Contains the output of CancelSpotInstanceRequests.</p>
 #[derive(Default, Debug, Clone)]
 pub struct CancelSpotInstanceRequestsResult {
-    /// <p>One or more Spot instance requests.</p>
+    /// <p>One or more Spot Instance requests.</p>
     pub cancelled_spot_instance_requests: Option<Vec<CancelledSpotInstanceRequest>>,
 }
 
@@ -3914,12 +4118,12 @@ impl CancelSpotInstanceRequestsResultDeserializer {
         Ok(obj)
     }
 }
-/// <p>Describes a request to cancel a Spot instance.</p>
+/// <p>Describes a request to cancel a Spot Instance.</p>
 #[derive(Default, Debug, Clone)]
 pub struct CancelledSpotInstanceRequest {
-    /// <p>The ID of the Spot instance request.</p>
+    /// <p>The ID of the Spot Instance request.</p>
     pub spot_instance_request_id: Option<String>,
-    /// <p>The state of the Spot instance request.</p>
+    /// <p>The state of the Spot Instance request.</p>
     pub state: Option<String>,
 }
 
@@ -3994,6 +4198,93 @@ impl CancelledSpotInstanceRequestListDeserializer {
                         obj.push(try!(
                             CancelledSpotInstanceRequestDeserializer::deserialize("item", stack)
                         ));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+/// <p>Describes an IPv4 CIDR block.</p>
+#[derive(Default, Debug, Clone)]
+pub struct CidrBlock {
+    /// <p>The IPv4 CIDR block.</p>
+    pub cidr_block: Option<String>,
+}
+
+struct CidrBlockDeserializer;
+impl CidrBlockDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CidrBlock, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = CidrBlock::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "cidrBlock" => {
+                        obj.cidr_block =
+                            Some(try!(StringDeserializer::deserialize("cidrBlock", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct CidrBlockSetDeserializer;
+impl CidrBlockSetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<CidrBlock>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(CidrBlockDeserializer::deserialize("item", stack)));
                     } else {
                         skip_tree(stack);
                     }
@@ -4215,6 +4506,192 @@ impl ClassicLinkInstanceListDeserializer {
         Ok(obj)
     }
 }
+/// <p>Describes a Classic Load Balancer.</p>
+#[derive(Default, Debug, Clone)]
+pub struct ClassicLoadBalancer {
+    /// <p>The name of the load balancer.</p>
+    pub name: String,
+}
+
+struct ClassicLoadBalancerDeserializer;
+impl ClassicLoadBalancerDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ClassicLoadBalancer, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ClassicLoadBalancer::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "name" => {
+                        obj.name = try!(StringDeserializer::deserialize("name", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `ClassicLoadBalancer` contents to a `SignedRequest`.
+struct ClassicLoadBalancerSerializer;
+impl ClassicLoadBalancerSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ClassicLoadBalancer) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "Name"),
+            &obj.name.replace("+", "%2B"),
+        );
+    }
+}
+
+struct ClassicLoadBalancersDeserializer;
+impl ClassicLoadBalancersDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<ClassicLoadBalancer>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(ClassicLoadBalancerDeserializer::deserialize(
+                            "item",
+                            stack
+                        )));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `ClassicLoadBalancers` contents to a `SignedRequest`.
+struct ClassicLoadBalancersSerializer;
+impl ClassicLoadBalancersSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<ClassicLoadBalancer>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            ClassicLoadBalancerSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+/// <p>Describes the Classic Load Balancers to attach to a Spot Fleet. Spot Fleet registers the running Spot Instances with these Classic Load Balancers.</p>
+#[derive(Default, Debug, Clone)]
+pub struct ClassicLoadBalancersConfig {
+    /// <p>One or more Classic Load Balancers.</p>
+    pub classic_load_balancers: Vec<ClassicLoadBalancer>,
+}
+
+struct ClassicLoadBalancersConfigDeserializer;
+impl ClassicLoadBalancersConfigDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ClassicLoadBalancersConfig, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ClassicLoadBalancersConfig::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "classicLoadBalancers" => {
+                        obj.classic_load_balancers =
+                            try!(ClassicLoadBalancersDeserializer::deserialize(
+                                "classicLoadBalancers",
+                                stack
+                            ));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `ClassicLoadBalancersConfig` contents to a `SignedRequest`.
+struct ClassicLoadBalancersConfigSerializer;
+impl ClassicLoadBalancersConfigSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ClassicLoadBalancersConfig) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        ClassicLoadBalancersSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "ClassicLoadBalancers"),
+            &obj.classic_load_balancers,
+        );
+    }
+}
+
 /// <p>Describes the client-specific data.</p>
 #[derive(Default, Debug, Clone)]
 pub struct ClientData {
@@ -4353,6 +4830,171 @@ impl ConfirmProductInstanceResultDeserializer {
         Ok(obj)
     }
 }
+/// <p>Describes a connection notification for a VPC endpoint or VPC endpoint service.</p>
+#[derive(Default, Debug, Clone)]
+pub struct ConnectionNotification {
+    /// <p>The events for the notification. Valid values are <code>Accept</code>, <code>Connect</code>, <code>Delete</code>, and <code>Reject</code>.</p>
+    pub connection_events: Option<Vec<String>>,
+    /// <p>The ARN of the SNS topic for the notification.</p>
+    pub connection_notification_arn: Option<String>,
+    /// <p>The ID of the notification.</p>
+    pub connection_notification_id: Option<String>,
+    /// <p>The state of the notification.</p>
+    pub connection_notification_state: Option<String>,
+    /// <p>The type of notification.</p>
+    pub connection_notification_type: Option<String>,
+    /// <p>The ID of the endpoint service.</p>
+    pub service_id: Option<String>,
+    /// <p>The ID of the VPC endpoint.</p>
+    pub vpc_endpoint_id: Option<String>,
+}
+
+struct ConnectionNotificationDeserializer;
+impl ConnectionNotificationDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ConnectionNotification, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ConnectionNotification::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "connectionEvents" => {
+                        obj.connection_events = Some(try!(
+                            ValueStringListDeserializer::deserialize("connectionEvents", stack)
+                        ));
+                    }
+                    "connectionNotificationArn" => {
+                        obj.connection_notification_arn = Some(try!(
+                            StringDeserializer::deserialize("connectionNotificationArn", stack)
+                        ));
+                    }
+                    "connectionNotificationId" => {
+                        obj.connection_notification_id = Some(try!(
+                            StringDeserializer::deserialize("connectionNotificationId", stack)
+                        ));
+                    }
+                    "connectionNotificationState" => {
+                        obj.connection_notification_state =
+                            Some(try!(ConnectionNotificationStateDeserializer::deserialize(
+                                "connectionNotificationState",
+                                stack
+                            )));
+                    }
+                    "connectionNotificationType" => {
+                        obj.connection_notification_type =
+                            Some(try!(ConnectionNotificationTypeDeserializer::deserialize(
+                                "connectionNotificationType",
+                                stack
+                            )));
+                    }
+                    "serviceId" => {
+                        obj.service_id =
+                            Some(try!(StringDeserializer::deserialize("serviceId", stack)));
+                    }
+                    "vpcEndpointId" => {
+                        obj.vpc_endpoint_id = Some(try!(StringDeserializer::deserialize(
+                            "vpcEndpointId",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct ConnectionNotificationSetDeserializer;
+impl ConnectionNotificationSetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<ConnectionNotification>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(ConnectionNotificationDeserializer::deserialize(
+                            "item",
+                            stack
+                        )));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+struct ConnectionNotificationStateDeserializer;
+impl ConnectionNotificationStateDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct ConnectionNotificationTypeDeserializer;
+impl ConnectionNotificationTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 struct ContainerFormatDeserializer;
 impl ContainerFormatDeserializer {
     #[allow(unused_variables)]
@@ -4478,6 +5120,112 @@ impl ConversionTaskStateDeserializer {
     ) -> Result<String, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
+pub struct CopyFpgaImageRequest {
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p>
+    pub client_token: Option<String>,
+    /// <p>The description for the new AFI.</p>
+    pub description: Option<String>,
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The name for the new AFI. The default is the name of the source AFI.</p>
+    pub name: Option<String>,
+    /// <p>The ID of the source AFI.</p>
+    pub source_fpga_image_id: String,
+    /// <p>The region that contains the source AFI.</p>
+    pub source_region: String,
+}
+
+/// Serialize `CopyFpgaImageRequest` contents to a `SignedRequest`.
+struct CopyFpgaImageRequestSerializer;
+impl CopyFpgaImageRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CopyFpgaImageRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.client_token {
+            params.put(
+                &format!("{}{}", prefix, "ClientToken"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.description {
+            params.put(
+                &format!("{}{}", prefix, "Description"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.name {
+            params.put(
+                &format!("{}{}", prefix, "Name"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "SourceFpgaImageId"),
+            &obj.source_fpga_image_id.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "SourceRegion"),
+            &obj.source_region.replace("+", "%2B"),
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct CopyFpgaImageResult {
+    /// <p>The ID of the new AFI.</p>
+    pub fpga_image_id: Option<String>,
+}
+
+struct CopyFpgaImageResultDeserializer;
+impl CopyFpgaImageResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CopyFpgaImageResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = CopyFpgaImageResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "fpgaImageId" => {
+                        obj.fpga_image_id =
+                            Some(try!(StringDeserializer::deserialize("fpgaImageId", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -4805,6 +5553,81 @@ impl CreateCustomerGatewayResultDeserializer {
                         obj.customer_gateway = Some(try!(
                             CustomerGatewayDeserializer::deserialize("customerGateway", stack)
                         ));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
+pub struct CreateDefaultSubnetRequest {
+    /// <p>The Availability Zone in which to create the default subnet.</p>
+    pub availability_zone: String,
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+}
+
+/// Serialize `CreateDefaultSubnetRequest` contents to a `SignedRequest`.
+struct CreateDefaultSubnetRequestSerializer;
+impl CreateDefaultSubnetRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateDefaultSubnetRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "AvailabilityZone"),
+            &obj.availability_zone.replace("+", "%2B"),
+        );
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct CreateDefaultSubnetResult {
+    /// <p>Information about the subnet.</p>
+    pub subnet: Option<Subnet>,
+}
+
+struct CreateDefaultSubnetResultDeserializer;
+impl CreateDefaultSubnetResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateDefaultSubnetResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = CreateDefaultSubnetResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "subnet" => {
+                        obj.subnet = Some(try!(SubnetDeserializer::deserialize("subnet", stack)));
                     }
                     _ => skip_tree(stack),
                 },
@@ -5611,6 +6434,227 @@ impl CreateKeyPairRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone)]
+pub struct CreateLaunchTemplateRequest {
+    /// <p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p>
+    pub client_token: Option<String>,
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The information for the launch template.</p>
+    pub launch_template_data: RequestLaunchTemplateData,
+    /// <p>A name for the launch template.</p>
+    pub launch_template_name: String,
+    /// <p>A description for the first version of the launch template.</p>
+    pub version_description: Option<String>,
+}
+
+/// Serialize `CreateLaunchTemplateRequest` contents to a `SignedRequest`.
+struct CreateLaunchTemplateRequestSerializer;
+impl CreateLaunchTemplateRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateLaunchTemplateRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.client_token {
+            params.put(
+                &format!("{}{}", prefix, "ClientToken"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        RequestLaunchTemplateDataSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "LaunchTemplateData"),
+            &obj.launch_template_data,
+        );
+        params.put(
+            &format!("{}{}", prefix, "LaunchTemplateName"),
+            &obj.launch_template_name.replace("+", "%2B"),
+        );
+        if let Some(ref field_value) = obj.version_description {
+            params.put(
+                &format!("{}{}", prefix, "VersionDescription"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct CreateLaunchTemplateResult {
+    /// <p>Information about the launch template.</p>
+    pub launch_template: Option<LaunchTemplate>,
+}
+
+struct CreateLaunchTemplateResultDeserializer;
+impl CreateLaunchTemplateResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateLaunchTemplateResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = CreateLaunchTemplateResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "launchTemplate" => {
+                        obj.launch_template = Some(try!(LaunchTemplateDeserializer::deserialize(
+                            "launchTemplate",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
+pub struct CreateLaunchTemplateVersionRequest {
+    /// <p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p>
+    pub client_token: Option<String>,
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The information for the launch template.</p>
+    pub launch_template_data: RequestLaunchTemplateData,
+    /// <p>The ID of the launch template. You must specify either the launch template ID or launch template name in the request.</p>
+    pub launch_template_id: Option<String>,
+    /// <p>The name of the launch template. You must specify either the launch template ID or launch template name in the request.</p>
+    pub launch_template_name: Option<String>,
+    /// <p>The version number of the launch template version on which to base the new version. The new version inherits the same launch parameters as the source version, except for parameters that you specify in LaunchTemplateData.</p>
+    pub source_version: Option<String>,
+    /// <p>A description for the version of the launch template.</p>
+    pub version_description: Option<String>,
+}
+
+/// Serialize `CreateLaunchTemplateVersionRequest` contents to a `SignedRequest`.
+struct CreateLaunchTemplateVersionRequestSerializer;
+impl CreateLaunchTemplateVersionRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateLaunchTemplateVersionRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.client_token {
+            params.put(
+                &format!("{}{}", prefix, "ClientToken"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        RequestLaunchTemplateDataSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "LaunchTemplateData"),
+            &obj.launch_template_data,
+        );
+        if let Some(ref field_value) = obj.launch_template_id {
+            params.put(
+                &format!("{}{}", prefix, "LaunchTemplateId"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.launch_template_name {
+            params.put(
+                &format!("{}{}", prefix, "LaunchTemplateName"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.source_version {
+            params.put(
+                &format!("{}{}", prefix, "SourceVersion"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.version_description {
+            params.put(
+                &format!("{}{}", prefix, "VersionDescription"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct CreateLaunchTemplateVersionResult {
+    /// <p>Information about the launch template version.</p>
+    pub launch_template_version: Option<LaunchTemplateVersion>,
+}
+
+struct CreateLaunchTemplateVersionResultDeserializer;
+impl CreateLaunchTemplateVersionResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateLaunchTemplateVersionResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = CreateLaunchTemplateVersionResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "launchTemplateVersion" => {
+                        obj.launch_template_version =
+                            Some(try!(LaunchTemplateVersionDeserializer::deserialize(
+                                "launchTemplateVersion",
+                                stack
+                            )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>Contains the parameters for CreateNatGateway.</p>
 #[derive(Default, Debug, Clone)]
 pub struct CreateNatGatewayRequest {
@@ -6118,7 +7162,7 @@ impl CreateNetworkInterfaceResultDeserializer {
 pub struct CreatePlacementGroupRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>A name for the placement group.</p> <p>Constraints: Up to 255 ASCII characters</p>
+    /// <p>A name for the placement group. Must be unique within the scope of your account for the region.</p> <p>Constraints: Up to 255 ASCII characters</p>
     pub group_name: String,
     /// <p>The placement strategy.</p>
     pub strategy: String,
@@ -6598,7 +7642,7 @@ impl CreateSnapshotRequestSerializer {
 /// <p>Contains the parameters for CreateSpotDatafeedSubscription.</p>
 #[derive(Default, Debug, Clone)]
 pub struct CreateSpotDatafeedSubscriptionRequest {
-    /// <p>The Amazon S3 bucket in which to store the Spot instance data feed.</p>
+    /// <p>The Amazon S3 bucket in which to store the Spot Instance data feed.</p>
     pub bucket: String,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -6637,7 +7681,7 @@ impl CreateSpotDatafeedSubscriptionRequestSerializer {
 /// <p>Contains the output of CreateSpotDatafeedSubscription.</p>
 #[derive(Default, Debug, Clone)]
 pub struct CreateSpotDatafeedSubscriptionResult {
-    /// <p>The Spot instance data feed subscription.</p>
+    /// <p>The Spot Instance data feed subscription.</p>
     pub spot_datafeed_subscription: Option<SpotDatafeedSubscription>,
 }
 
@@ -7075,6 +8119,126 @@ impl CreateVolumeRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone)]
+pub struct CreateVpcEndpointConnectionNotificationRequest {
+    /// <p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
+    pub client_token: Option<String>,
+    /// <p>One or more endpoint events for which to receive notifications. Valid values are <code>Accept</code>, <code>Connect</code>, <code>Delete</code>, and <code>Reject</code>.</p>
+    pub connection_events: Vec<String>,
+    /// <p>The ARN of the SNS topic for the notifications.</p>
+    pub connection_notification_arn: String,
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The ID of the endpoint service.</p>
+    pub service_id: Option<String>,
+    /// <p>The ID of the endpoint. </p>
+    pub vpc_endpoint_id: Option<String>,
+}
+
+/// Serialize `CreateVpcEndpointConnectionNotificationRequest` contents to a `SignedRequest`.
+struct CreateVpcEndpointConnectionNotificationRequestSerializer;
+impl CreateVpcEndpointConnectionNotificationRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &CreateVpcEndpointConnectionNotificationRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.client_token {
+            params.put(
+                &format!("{}{}", prefix, "ClientToken"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        ValueStringListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "ConnectionEvents"),
+            &obj.connection_events,
+        );
+        params.put(
+            &format!("{}{}", prefix, "ConnectionNotificationArn"),
+            &obj.connection_notification_arn.replace("+", "%2B"),
+        );
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.service_id {
+            params.put(
+                &format!("{}{}", prefix, "ServiceId"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.vpc_endpoint_id {
+            params.put(
+                &format!("{}{}", prefix, "VpcEndpointId"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct CreateVpcEndpointConnectionNotificationResult {
+    /// <p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request.</p>
+    pub client_token: Option<String>,
+    /// <p>Information about the notification.</p>
+    pub connection_notification: Option<ConnectionNotification>,
+}
+
+struct CreateVpcEndpointConnectionNotificationResultDeserializer;
+impl CreateVpcEndpointConnectionNotificationResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateVpcEndpointConnectionNotificationResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = CreateVpcEndpointConnectionNotificationResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "clientToken" => {
+                        obj.client_token =
+                            Some(try!(StringDeserializer::deserialize("clientToken", stack)));
+                    }
+                    "connectionNotification" => {
+                        obj.connection_notification =
+                            Some(try!(ConnectionNotificationDeserializer::deserialize(
+                                "connectionNotification",
+                                stack
+                            )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>Contains the parameters for CreateVpcEndpoint.</p>
 #[derive(Default, Debug, Clone)]
 pub struct CreateVpcEndpointRequest {
@@ -7082,12 +8246,20 @@ pub struct CreateVpcEndpointRequest {
     pub client_token: Option<String>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>A policy to attach to the endpoint that controls access to the service. The policy must be in valid JSON format. If this parameter is not specified, we attach a default policy that allows full access to the service.</p>
+    /// <p>(Gateway endpoint) A policy to attach to the endpoint that controls access to the service. The policy must be in valid JSON format. If this parameter is not specified, we attach a default policy that allows full access to the service.</p>
     pub policy_document: Option<String>,
-    /// <p>One or more route table IDs.</p>
+    /// <p>(Interface endpoint) Indicate whether to associate a private hosted zone with the specified VPC. The private hosted zone contains a record set for the default public DNS name for the service for the region (for example, <code>kinesis.us-east-1.amazonaws.com</code>) which resolves to the private IP addresses of the endpoint network interfaces in the VPC. This enables you to make requests to the default public DNS name for the service instead of the public DNS names that are automatically generated by the VPC endpoint service.</p> <p>To use a private hosted zone, you must set the following VPC attributes to <code>true</code>: <code>enableDnsHostnames</code> and <code>enableDnsSupport</code>. Use <a>ModifyVpcAttribute</a> to set the VPC attributes.</p> <p>Default: <code>true</code> </p>
+    pub private_dns_enabled: Option<bool>,
+    /// <p>(Gateway endpoint) One or more route table IDs.</p>
     pub route_table_ids: Option<Vec<String>>,
-    /// <p>The AWS service name, in the form <code>com.amazonaws.<i>region</i>.<i>service</i> </code>. To get a list of available services, use the <a>DescribeVpcEndpointServices</a> request.</p>
+    /// <p>(Interface endpoint) The ID of one or more security groups to associate with the endpoint network interface.</p>
+    pub security_group_ids: Option<Vec<String>>,
+    /// <p>The service name. To get a list of available services, use the <a>DescribeVpcEndpointServices</a> request.</p>
     pub service_name: String,
+    /// <p>(Interface endpoint) The ID of one or more subnets in which to create an endpoint network interface.</p>
+    pub subnet_ids: Option<Vec<String>>,
+    /// <p>The type of endpoint.</p> <p>Default: Gateway</p>
+    pub vpc_endpoint_type: Option<String>,
     /// <p>The ID of the VPC in which the endpoint will be used.</p>
     pub vpc_id: String,
 }
@@ -7119,6 +8291,12 @@ impl CreateVpcEndpointRequestSerializer {
                 &field_value.replace("+", "%2B"),
             );
         }
+        if let Some(ref field_value) = obj.private_dns_enabled {
+            params.put(
+                &format!("{}{}", prefix, "PrivateDnsEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
         if let Some(ref field_value) = obj.route_table_ids {
             ValueStringListSerializer::serialize(
                 params,
@@ -7126,10 +8304,30 @@ impl CreateVpcEndpointRequestSerializer {
                 field_value,
             );
         }
+        if let Some(ref field_value) = obj.security_group_ids {
+            ValueStringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "SecurityGroupId"),
+                field_value,
+            );
+        }
         params.put(
             &format!("{}{}", prefix, "ServiceName"),
             &obj.service_name.replace("+", "%2B"),
         );
+        if let Some(ref field_value) = obj.subnet_ids {
+            ValueStringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "SubnetId"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.vpc_endpoint_type {
+            params.put(
+                &format!("{}{}", prefix, "VpcEndpointType"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
         params.put(
             &format!("{}{}", prefix, "VpcId"),
             &obj.vpc_id.replace("+", "%2B"),
@@ -7192,16 +8390,124 @@ impl CreateVpcEndpointResultDeserializer {
         Ok(obj)
     }
 }
+#[derive(Default, Debug, Clone)]
+pub struct CreateVpcEndpointServiceConfigurationRequest {
+    /// <p>Indicate whether requests from service consumers to create an endpoint to your service must be accepted. To accept a request, use <a>AcceptVpcEndpointConnections</a>.</p>
+    pub acceptance_required: Option<bool>,
+    /// <p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html">How to Ensure Idempotency</a>.</p>
+    pub client_token: Option<String>,
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The Amazon Resource Names (ARNs) of one or more Network Load Balancers for your service.</p>
+    pub network_load_balancer_arns: Vec<String>,
+}
+
+/// Serialize `CreateVpcEndpointServiceConfigurationRequest` contents to a `SignedRequest`.
+struct CreateVpcEndpointServiceConfigurationRequestSerializer;
+impl CreateVpcEndpointServiceConfigurationRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &CreateVpcEndpointServiceConfigurationRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.acceptance_required {
+            params.put(
+                &format!("{}{}", prefix, "AcceptanceRequired"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.client_token {
+            params.put(
+                &format!("{}{}", prefix, "ClientToken"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        ValueStringListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "NetworkLoadBalancerArn"),
+            &obj.network_load_balancer_arns,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct CreateVpcEndpointServiceConfigurationResult {
+    /// <p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request.</p>
+    pub client_token: Option<String>,
+    /// <p>Information about the service configuration.</p>
+    pub service_configuration: Option<ServiceConfiguration>,
+}
+
+struct CreateVpcEndpointServiceConfigurationResultDeserializer;
+impl CreateVpcEndpointServiceConfigurationResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateVpcEndpointServiceConfigurationResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = CreateVpcEndpointServiceConfigurationResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "clientToken" => {
+                        obj.client_token =
+                            Some(try!(StringDeserializer::deserialize("clientToken", stack)));
+                    }
+                    "serviceConfiguration" => {
+                        obj.service_configuration =
+                            Some(try!(ServiceConfigurationDeserializer::deserialize(
+                                "serviceConfiguration",
+                                stack
+                            )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>Contains the parameters for CreateVpcPeeringConnection.</p>
 #[derive(Default, Debug, Clone)]
 pub struct CreateVpcPeeringConnectionRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>The AWS account ID of the owner of the peer VPC.</p> <p>Default: Your AWS account ID</p>
+    /// <p>The AWS account ID of the owner of the accepter VPC.</p> <p>Default: Your AWS account ID</p>
     pub peer_owner_id: Option<String>,
-    /// <p>The ID of the VPC with which you are creating the VPC peering connection.</p>
+    /// <p>The region code for the accepter VPC, if the accepter VPC is located in a region other than the region in which you make the request.</p> <p>Default: The region in which you make the request.</p>
+    pub peer_region: Option<String>,
+    /// <p>The ID of the VPC with which you are creating the VPC peering connection. You must specify this parameter in the request.</p>
     pub peer_vpc_id: Option<String>,
-    /// <p>The ID of the requester VPC.</p>
+    /// <p>The ID of the requester VPC. You must specify this parameter in the request.</p>
     pub vpc_id: Option<String>,
 }
 
@@ -7223,6 +8529,12 @@ impl CreateVpcPeeringConnectionRequestSerializer {
         if let Some(ref field_value) = obj.peer_owner_id {
             params.put(
                 &format!("{}{}", prefix, "PeerOwnerId"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.peer_region {
+            params.put(
+                &format!("{}{}", prefix, "PeerRegion"),
                 &field_value.replace("+", "%2B"),
             );
         }
@@ -7391,7 +8703,7 @@ pub struct CreateVpnConnectionRequest {
     pub customer_gateway_id: String,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>Indicates whether the VPN connection requires static routes. If you are creating a VPN connection for a device that does not support BGP, you must specify <code>true</code>.</p> <p>Default: <code>false</code> </p>
+    /// <p>The options for the VPN connection.</p>
     pub options: Option<VpnConnectionOptionsSpecification>,
     /// <p>The type of VPN connection (<code>ipsec.1</code>).</p>
     pub type_: String,
@@ -7517,6 +8829,8 @@ impl CreateVpnConnectionRouteRequestSerializer {
 /// <p>Contains the parameters for CreateVpnGateway.</p>
 #[derive(Default, Debug, Clone)]
 pub struct CreateVpnGatewayRequest {
+    /// <p>A private Autonomous System Number (ASN) for the Amazon side of a BGP session. If you're using a 16-bit ASN, it must be in the 64512 to 65534 range. If you're using a 32-bit ASN, it must be in the 4200000000 to 4294967294 range.</p> <p>Default: 64512</p>
+    pub amazon_side_asn: Option<i64>,
     /// <p>The Availability Zone for the virtual private gateway.</p>
     pub availability_zone: Option<String>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
@@ -7534,6 +8848,12 @@ impl CreateVpnGatewayRequestSerializer {
             prefix.push_str(".");
         }
 
+        if let Some(ref field_value) = obj.amazon_side_asn {
+            params.put(
+                &format!("{}{}", prefix, "AmazonSideAsn"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
         if let Some(ref field_value) = obj.availability_zone {
             params.put(
                 &format!("{}{}", prefix, "AvailabilityZone"),
@@ -7602,6 +8922,76 @@ impl CreateVpnGatewayResultDeserializer {
         Ok(obj)
     }
 }
+/// <p>Describes the credit option for CPU usage of a T2 instance.</p>
+#[derive(Default, Debug, Clone)]
+pub struct CreditSpecification {
+    /// <p>The credit option for CPU usage of a T2 instance.</p>
+    pub cpu_credits: Option<String>,
+}
+
+struct CreditSpecificationDeserializer;
+impl CreditSpecificationDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreditSpecification, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = CreditSpecification::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "cpuCredits" => {
+                        obj.cpu_credits =
+                            Some(try!(StringDeserializer::deserialize("cpuCredits", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>The credit option for CPU usage of a T2 instance.</p>
+#[derive(Default, Debug, Clone)]
+pub struct CreditSpecificationRequest {
+    /// <p>The credit option for CPU usage of a T2 instance. Valid values are <code>standard</code> and <code>unlimited</code>.</p>
+    pub cpu_credits: String,
+}
+
+/// Serialize `CreditSpecificationRequest` contents to a `SignedRequest`.
+struct CreditSpecificationRequestSerializer;
+impl CreditSpecificationRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreditSpecificationRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "CpuCredits"),
+            &obj.cpu_credits.replace("+", "%2B"),
+        );
+    }
+}
+
 struct CurrencyCodeValuesDeserializer;
 impl CurrencyCodeValuesDeserializer {
     #[allow(unused_variables)]
@@ -7984,6 +9374,81 @@ impl DeleteFlowLogsResultDeserializer {
         Ok(obj)
     }
 }
+#[derive(Default, Debug, Clone)]
+pub struct DeleteFpgaImageRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The ID of the AFI.</p>
+    pub fpga_image_id: String,
+}
+
+/// Serialize `DeleteFpgaImageRequest` contents to a `SignedRequest`.
+struct DeleteFpgaImageRequestSerializer;
+impl DeleteFpgaImageRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteFpgaImageRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "FpgaImageId"),
+            &obj.fpga_image_id.replace("+", "%2B"),
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct DeleteFpgaImageResult {
+    /// <p>Is <code>true</code> if the request succeeds, and an error otherwise.</p>
+    pub return_: Option<bool>,
+}
+
+struct DeleteFpgaImageResultDeserializer;
+impl DeleteFpgaImageResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteFpgaImageResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = DeleteFpgaImageResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "return" => {
+                        obj.return_ = Some(try!(BooleanDeserializer::deserialize("return", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>Contains the parameters for DeleteInternetGateway.</p>
 #[derive(Default, Debug, Clone)]
 pub struct DeleteInternetGatewayRequest {
@@ -8046,6 +9511,409 @@ impl DeleteKeyPairRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone)]
+pub struct DeleteLaunchTemplateRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The ID of the launch template. You must specify either the launch template ID or launch template name in the request.</p>
+    pub launch_template_id: Option<String>,
+    /// <p>The name of the launch template. You must specify either the launch template ID or launch template name in the request.</p>
+    pub launch_template_name: Option<String>,
+}
+
+/// Serialize `DeleteLaunchTemplateRequest` contents to a `SignedRequest`.
+struct DeleteLaunchTemplateRequestSerializer;
+impl DeleteLaunchTemplateRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteLaunchTemplateRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.launch_template_id {
+            params.put(
+                &format!("{}{}", prefix, "LaunchTemplateId"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.launch_template_name {
+            params.put(
+                &format!("{}{}", prefix, "LaunchTemplateName"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct DeleteLaunchTemplateResult {
+    /// <p>Information about the launch template.</p>
+    pub launch_template: Option<LaunchTemplate>,
+}
+
+struct DeleteLaunchTemplateResultDeserializer;
+impl DeleteLaunchTemplateResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteLaunchTemplateResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = DeleteLaunchTemplateResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "launchTemplate" => {
+                        obj.launch_template = Some(try!(LaunchTemplateDeserializer::deserialize(
+                            "launchTemplate",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
+pub struct DeleteLaunchTemplateVersionsRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The ID of the launch template. You must specify either the launch template ID or launch template name in the request.</p>
+    pub launch_template_id: Option<String>,
+    /// <p>The name of the launch template. You must specify either the launch template ID or launch template name in the request.</p>
+    pub launch_template_name: Option<String>,
+    /// <p>The version numbers of one or more launch template versions to delete.</p>
+    pub versions: Vec<String>,
+}
+
+/// Serialize `DeleteLaunchTemplateVersionsRequest` contents to a `SignedRequest`.
+struct DeleteLaunchTemplateVersionsRequestSerializer;
+impl DeleteLaunchTemplateVersionsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteLaunchTemplateVersionsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.launch_template_id {
+            params.put(
+                &format!("{}{}", prefix, "LaunchTemplateId"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.launch_template_name {
+            params.put(
+                &format!("{}{}", prefix, "LaunchTemplateName"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        VersionStringListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "LaunchTemplateVersion"),
+            &obj.versions,
+        );
+    }
+}
+
+/// <p>Describes a launch template version that could not be deleted.</p>
+#[derive(Default, Debug, Clone)]
+pub struct DeleteLaunchTemplateVersionsResponseErrorItem {
+    /// <p>The ID of the launch template.</p>
+    pub launch_template_id: Option<String>,
+    /// <p>The name of the launch template.</p>
+    pub launch_template_name: Option<String>,
+    /// <p>Information about the error.</p>
+    pub response_error: Option<ResponseError>,
+    /// <p>The version number of the launch template.</p>
+    pub version_number: Option<i64>,
+}
+
+struct DeleteLaunchTemplateVersionsResponseErrorItemDeserializer;
+impl DeleteLaunchTemplateVersionsResponseErrorItemDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteLaunchTemplateVersionsResponseErrorItem, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = DeleteLaunchTemplateVersionsResponseErrorItem::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "launchTemplateId" => {
+                            obj.launch_template_id = Some(try!(StringDeserializer::deserialize(
+                                "launchTemplateId",
+                                stack
+                            )));
+                        }
+                        "launchTemplateName" => {
+                            obj.launch_template_name = Some(try!(
+                                StringDeserializer::deserialize("launchTemplateName", stack)
+                            ));
+                        }
+                        "responseError" => {
+                            obj.response_error = Some(try!(
+                                ResponseErrorDeserializer::deserialize("responseError", stack)
+                            ));
+                        }
+                        "versionNumber" => {
+                            obj.version_number =
+                                Some(try!(LongDeserializer::deserialize("versionNumber", stack)));
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct DeleteLaunchTemplateVersionsResponseErrorSetDeserializer;
+impl DeleteLaunchTemplateVersionsResponseErrorSetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<DeleteLaunchTemplateVersionsResponseErrorItem>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(DeleteLaunchTemplateVersionsResponseErrorItemDeserializer::deserialize("item", stack)));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+/// <p>Describes a launch template version that was successfully deleted.</p>
+#[derive(Default, Debug, Clone)]
+pub struct DeleteLaunchTemplateVersionsResponseSuccessItem {
+    /// <p>The ID of the launch template.</p>
+    pub launch_template_id: Option<String>,
+    /// <p>The name of the launch template.</p>
+    pub launch_template_name: Option<String>,
+    /// <p>The version number of the launch template.</p>
+    pub version_number: Option<i64>,
+}
+
+struct DeleteLaunchTemplateVersionsResponseSuccessItemDeserializer;
+impl DeleteLaunchTemplateVersionsResponseSuccessItemDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteLaunchTemplateVersionsResponseSuccessItem, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = DeleteLaunchTemplateVersionsResponseSuccessItem::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "launchTemplateId" => {
+                        obj.launch_template_id = Some(try!(StringDeserializer::deserialize(
+                            "launchTemplateId",
+                            stack
+                        )));
+                    }
+                    "launchTemplateName" => {
+                        obj.launch_template_name = Some(try!(StringDeserializer::deserialize(
+                            "launchTemplateName",
+                            stack
+                        )));
+                    }
+                    "versionNumber" => {
+                        obj.version_number =
+                            Some(try!(LongDeserializer::deserialize("versionNumber", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct DeleteLaunchTemplateVersionsResponseSuccessSetDeserializer;
+impl DeleteLaunchTemplateVersionsResponseSuccessSetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<DeleteLaunchTemplateVersionsResponseSuccessItem>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(DeleteLaunchTemplateVersionsResponseSuccessItemDeserializer::deserialize("item", stack)));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
+pub struct DeleteLaunchTemplateVersionsResult {
+    /// <p>Information about the launch template versions that were successfully deleted.</p>
+    pub successfully_deleted_launch_template_versions:
+        Option<Vec<DeleteLaunchTemplateVersionsResponseSuccessItem>>,
+    /// <p>Information about the launch template versions that could not be deleted.</p>
+    pub unsuccessfully_deleted_launch_template_versions:
+        Option<Vec<DeleteLaunchTemplateVersionsResponseErrorItem>>,
+}
+
+struct DeleteLaunchTemplateVersionsResultDeserializer;
+impl DeleteLaunchTemplateVersionsResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteLaunchTemplateVersionsResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = DeleteLaunchTemplateVersionsResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "successfullyDeletedLaunchTemplateVersionSet" => {
+                            obj.successfully_deleted_launch_template_versions = Some(try!(DeleteLaunchTemplateVersionsResponseSuccessSetDeserializer::deserialize("successfullyDeletedLaunchTemplateVersionSet", stack)));
+                        }
+                        "unsuccessfullyDeletedLaunchTemplateVersionSet" => {
+                            obj.unsuccessfully_deleted_launch_template_versions = Some(try!(DeleteLaunchTemplateVersionsResponseErrorSetDeserializer::deserialize("unsuccessfullyDeletedLaunchTemplateVersionSet", stack)));
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>Contains the parameters for DeleteNatGateway.</p>
 #[derive(Default, Debug, Clone)]
 pub struct DeleteNatGatewayRequest {
@@ -8548,9 +10416,9 @@ impl DeleteSubnetRequestSerializer {
 pub struct DeleteTagsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>The ID of the resource. For example, ami-1a2b3c4d. You can specify more than one resource ID.</p>
+    /// <p>The IDs of one or more resources.</p>
     pub resources: Vec<String>,
-    /// <p>One or more tags to delete. If you omit the <code>value</code> parameter, we delete the tag regardless of its value. If you specify this parameter with an empty string as the value, we delete the key only if its value is an empty string.</p>
+    /// <p>One or more tags to delete. If you omit this parameter, we delete all tags for the specified resources. Specify a tag key and an optional tag value to delete specific tags. If you specify a tag key without a tag value, we delete any tag with this key regardless of its value. If you specify a tag key with an empty string as the tag value, we delete the tag only if its value is an empty string.</p>
     pub tags: Option<Vec<Tag>>,
 }
 
@@ -8611,12 +10479,176 @@ impl DeleteVolumeRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone)]
+pub struct DeleteVpcEndpointConnectionNotificationsRequest {
+    /// <p>One or more notification IDs.</p>
+    pub connection_notification_ids: Vec<String>,
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+}
+
+/// Serialize `DeleteVpcEndpointConnectionNotificationsRequest` contents to a `SignedRequest`.
+struct DeleteVpcEndpointConnectionNotificationsRequestSerializer;
+impl DeleteVpcEndpointConnectionNotificationsRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &DeleteVpcEndpointConnectionNotificationsRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        ValueStringListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "ConnectionNotificationId"),
+            &obj.connection_notification_ids,
+        );
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct DeleteVpcEndpointConnectionNotificationsResult {
+    /// <p>Information about the notifications that could not be deleted successfully.</p>
+    pub unsuccessful: Option<Vec<UnsuccessfulItem>>,
+}
+
+struct DeleteVpcEndpointConnectionNotificationsResultDeserializer;
+impl DeleteVpcEndpointConnectionNotificationsResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteVpcEndpointConnectionNotificationsResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = DeleteVpcEndpointConnectionNotificationsResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "unsuccessful" => {
+                        obj.unsuccessful = Some(try!(
+                            UnsuccessfulItemSetDeserializer::deserialize("unsuccessful", stack)
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
+pub struct DeleteVpcEndpointServiceConfigurationsRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The IDs of one or more services.</p>
+    pub service_ids: Vec<String>,
+}
+
+/// Serialize `DeleteVpcEndpointServiceConfigurationsRequest` contents to a `SignedRequest`.
+struct DeleteVpcEndpointServiceConfigurationsRequestSerializer;
+impl DeleteVpcEndpointServiceConfigurationsRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &DeleteVpcEndpointServiceConfigurationsRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        ValueStringListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "ServiceId"),
+            &obj.service_ids,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct DeleteVpcEndpointServiceConfigurationsResult {
+    /// <p>Information about the service configurations that were not deleted, if applicable.</p>
+    pub unsuccessful: Option<Vec<UnsuccessfulItem>>,
+}
+
+struct DeleteVpcEndpointServiceConfigurationsResultDeserializer;
+impl DeleteVpcEndpointServiceConfigurationsResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteVpcEndpointServiceConfigurationsResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = DeleteVpcEndpointServiceConfigurationsResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "unsuccessful" => {
+                        obj.unsuccessful = Some(try!(
+                            UnsuccessfulItemSetDeserializer::deserialize("unsuccessful", stack)
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>Contains the parameters for DeleteVpcEndpoints.</p>
 #[derive(Default, Debug, Clone)]
 pub struct DeleteVpcEndpointsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>One or more endpoint IDs.</p>
+    /// <p>One or more VPC endpoint IDs.</p>
     pub vpc_endpoint_ids: Vec<String>,
 }
 
@@ -8646,7 +10678,7 @@ impl DeleteVpcEndpointsRequestSerializer {
 /// <p>Contains the output of DeleteVpcEndpoints.</p>
 #[derive(Default, Debug, Clone)]
 pub struct DeleteVpcEndpointsResult {
-    /// <p>Information about the endpoints that were not successfully deleted.</p>
+    /// <p>Information about the VPC endpoints that were not successfully deleted.</p>
     pub unsuccessful: Option<Vec<UnsuccessfulItem>>,
 }
 
@@ -10118,6 +12150,91 @@ impl DescribeFlowLogsResultDeserializer {
     }
 }
 #[derive(Default, Debug, Clone)]
+pub struct DescribeFpgaImageAttributeRequest {
+    /// <p>The AFI attribute.</p>
+    pub attribute: String,
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The ID of the AFI.</p>
+    pub fpga_image_id: String,
+}
+
+/// Serialize `DescribeFpgaImageAttributeRequest` contents to a `SignedRequest`.
+struct DescribeFpgaImageAttributeRequestSerializer;
+impl DescribeFpgaImageAttributeRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeFpgaImageAttributeRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "Attribute"),
+            &obj.attribute.replace("+", "%2B"),
+        );
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "FpgaImageId"),
+            &obj.fpga_image_id.replace("+", "%2B"),
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct DescribeFpgaImageAttributeResult {
+    /// <p>Information about the attribute.</p>
+    pub fpga_image_attribute: Option<FpgaImageAttribute>,
+}
+
+struct DescribeFpgaImageAttributeResultDeserializer;
+impl DescribeFpgaImageAttributeResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeFpgaImageAttributeResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = DescribeFpgaImageAttributeResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "fpgaImageAttribute" => {
+                        obj.fpga_image_attribute =
+                            Some(try!(FpgaImageAttributeDeserializer::deserialize(
+                                "fpgaImageAttribute",
+                                stack
+                            )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
 pub struct DescribeFpgaImagesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
@@ -10873,7 +12990,7 @@ pub struct DescribeImagesRequest {
     pub dry_run: Option<bool>,
     /// <p>Scopes the images by users with explicit launch permissions. Specify an AWS account ID, <code>self</code> (the sender of the request), or <code>all</code> (public AMIs).</p>
     pub executable_users: Option<Vec<String>>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>architecture</code> - The image architecture (<code>i386</code> | <code>x86_64</code>).</p> </li> <li> <p> <code>block-device-mapping.delete-on-termination</code> - A Boolean value that indicates whether the Amazon EBS volume is deleted on instance termination.</p> </li> <li> <p> <code>block-device-mapping.device-name</code> - The device name for the EBS volume (for example, <code>/dev/sdh</code>).</p> </li> <li> <p> <code>block-device-mapping.snapshot-id</code> - The ID of the snapshot used for the EBS volume.</p> </li> <li> <p> <code>block-device-mapping.volume-size</code> - The volume size of the EBS volume, in GiB.</p> </li> <li> <p> <code>block-device-mapping.volume-type</code> - The volume type of the EBS volume (<code>gp2</code> | <code>io1</code> | <code>st1 </code>| <code>sc1</code> | <code>standard</code>).</p> </li> <li> <p> <code>description</code> - The description of the image (provided during image creation).</p> </li> <li> <p> <code>ena-support</code> - A Boolean that indicates whether enhanced networking with ENA is enabled.</p> </li> <li> <p> <code>hypervisor</code> - The hypervisor type (<code>ovm</code> | <code>xen</code>).</p> </li> <li> <p> <code>image-id</code> - The ID of the image.</p> </li> <li> <p> <code>image-type</code> - The image type (<code>machine</code> | <code>kernel</code> | <code>ramdisk</code>).</p> </li> <li> <p> <code>is-public</code> - A Boolean that indicates whether the image is public.</p> </li> <li> <p> <code>kernel-id</code> - The kernel ID.</p> </li> <li> <p> <code>manifest-location</code> - The location of the image manifest.</p> </li> <li> <p> <code>name</code> - The name of the AMI (provided during image creation).</p> </li> <li> <p> <code>owner-alias</code> - String value from an Amazon-maintained list (<code>amazon</code> | <code>aws-marketplace</code> | <code>microsoft</code>) of snapshot owners. Not to be confused with the user-configured AWS account alias, which is set from the IAM console.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the image owner.</p> </li> <li> <p> <code>platform</code> - The platform. To only list Windows-based AMIs, use <code>windows</code>.</p> </li> <li> <p> <code>product-code</code> - The product code.</p> </li> <li> <p> <code>product-code.type</code> - The type of the product code (<code>devpay</code> | <code>marketplace</code>).</p> </li> <li> <p> <code>ramdisk-id</code> - The RAM disk ID.</p> </li> <li> <p> <code>root-device-name</code> - The name of the root device volume (for example, <code>/dev/sda1</code>).</p> </li> <li> <p> <code>root-device-type</code> - The type of the root device volume (<code>ebs</code> | <code>instance-store</code>).</p> </li> <li> <p> <code>state</code> - The state of the image (<code>available</code> | <code>pending</code> | <code>failed</code>).</p> </li> <li> <p> <code>state-reason-code</code> - The reason code for the state change.</p> </li> <li> <p> <code>state-reason-message</code> - The message for the state change.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the tag-value filter. For example, if you use both the filter &quot;tag-key=Purpose&quot; and the filter &quot;tag-value=X&quot;, you get any resources assigned both the tag key Purpose (regardless of what the tag&#39;s value is), and the tag value X (regardless of what the tag&#39;s key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>virtualization-type</code> - The virtualization type (<code>paravirtual</code> | <code>hvm</code>).</p> </li> </ul></p>
+    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>architecture</code> - The image architecture (<code>i386</code> | <code>x86_64</code>).</p> </li> <li> <p> <code>block-device-mapping.delete-on-termination</code> - A Boolean value that indicates whether the Amazon EBS volume is deleted on instance termination.</p> </li> <li> <p> <code>block-device-mapping.device-name</code> - The device name specified in the block device mapping (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p> </li> <li> <p> <code>block-device-mapping.snapshot-id</code> - The ID of the snapshot used for the EBS volume.</p> </li> <li> <p> <code>block-device-mapping.volume-size</code> - The volume size of the EBS volume, in GiB.</p> </li> <li> <p> <code>block-device-mapping.volume-type</code> - The volume type of the EBS volume (<code>gp2</code> | <code>io1</code> | <code>st1 </code>| <code>sc1</code> | <code>standard</code>).</p> </li> <li> <p> <code>description</code> - The description of the image (provided during image creation).</p> </li> <li> <p> <code>ena-support</code> - A Boolean that indicates whether enhanced networking with ENA is enabled.</p> </li> <li> <p> <code>hypervisor</code> - The hypervisor type (<code>ovm</code> | <code>xen</code>).</p> </li> <li> <p> <code>image-id</code> - The ID of the image.</p> </li> <li> <p> <code>image-type</code> - The image type (<code>machine</code> | <code>kernel</code> | <code>ramdisk</code>).</p> </li> <li> <p> <code>is-public</code> - A Boolean that indicates whether the image is public.</p> </li> <li> <p> <code>kernel-id</code> - The kernel ID.</p> </li> <li> <p> <code>manifest-location</code> - The location of the image manifest.</p> </li> <li> <p> <code>name</code> - The name of the AMI (provided during image creation).</p> </li> <li> <p> <code>owner-alias</code> - String value from an Amazon-maintained list (<code>amazon</code> | <code>aws-marketplace</code> | <code>microsoft</code>) of snapshot owners. Not to be confused with the user-configured AWS account alias, which is set from the IAM console.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the image owner.</p> </li> <li> <p> <code>platform</code> - The platform. To only list Windows-based AMIs, use <code>windows</code>.</p> </li> <li> <p> <code>product-code</code> - The product code.</p> </li> <li> <p> <code>product-code.type</code> - The type of the product code (<code>devpay</code> | <code>marketplace</code>).</p> </li> <li> <p> <code>ramdisk-id</code> - The RAM disk ID.</p> </li> <li> <p> <code>root-device-name</code> - The device name of the root device volume (for example, <code>/dev/sda1</code>).</p> </li> <li> <p> <code>root-device-type</code> - The type of the root device volume (<code>ebs</code> | <code>instance-store</code>).</p> </li> <li> <p> <code>state</code> - The state of the image (<code>available</code> | <code>pending</code> | <code>failed</code>).</p> </li> <li> <p> <code>state-reason-code</code> - The reason code for the state change.</p> </li> <li> <p> <code>state-reason-message</code> - The message for the state change.</p> </li> <li> <p> <code>sriov-net-support</code> - A value of <code>simple</code> indicates that enhanced networking with the Intel 82599 VF interface is enabled.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the tag-value filter. For example, if you use both the filter &quot;tag-key=Purpose&quot; and the filter &quot;tag-value=X&quot;, you get any resources assigned both the tag key Purpose (regardless of what the tag&#39;s value is), and the tag value X (regardless of what the tag&#39;s key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>virtualization-type</code> - The virtualization type (<code>paravirtual</code> | <code>hvm</code>).</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>One or more image IDs.</p> <p>Default: Describes all images available to you.</p>
     pub image_ids: Option<Vec<String>>,
@@ -11241,6 +13358,124 @@ impl DescribeInstanceAttributeRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone)]
+pub struct DescribeInstanceCreditSpecificationsRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>instance-id</code> - The ID of the instance.</p> </li> </ul></p>
+    pub filters: Option<Vec<Filter>>,
+    /// <p>One or more instance IDs.</p> <p>Default: Describes all your instances.</p> <p>Constraints: Maximum 1000 explicitly specified instance IDs.</p>
+    pub instance_ids: Option<Vec<String>>,
+    /// <p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value. This value can be between 5 and 1000. You cannot specify this parameter and the instance IDs parameter in the same call.</p>
+    pub max_results: Option<i64>,
+    /// <p>The token to retrieve the next page of results.</p>
+    pub next_token: Option<String>,
+}
+
+/// Serialize `DescribeInstanceCreditSpecificationsRequest` contents to a `SignedRequest`.
+struct DescribeInstanceCreditSpecificationsRequestSerializer;
+impl DescribeInstanceCreditSpecificationsRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &DescribeInstanceCreditSpecificationsRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.filters {
+            FilterListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Filter"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.instance_ids {
+            InstanceIdStringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "InstanceId"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.max_results {
+            params.put(
+                &format!("{}{}", prefix, "MaxResults"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct DescribeInstanceCreditSpecificationsResult {
+    /// <p>Information about the credit option for CPU usage of an instance.</p>
+    pub instance_credit_specifications: Option<Vec<InstanceCreditSpecification>>,
+    /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
+    pub next_token: Option<String>,
+}
+
+struct DescribeInstanceCreditSpecificationsResultDeserializer;
+impl DescribeInstanceCreditSpecificationsResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeInstanceCreditSpecificationsResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = DescribeInstanceCreditSpecificationsResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "instanceCreditSpecificationSet" => {
+                        obj.instance_credit_specifications = Some(try!(
+                            InstanceCreditSpecificationListDeserializer::deserialize(
+                                "instanceCreditSpecificationSet",
+                                stack
+                            )
+                        ));
+                    }
+                    "nextToken" => {
+                        obj.next_token =
+                            Some(try!(StringDeserializer::deserialize("nextToken", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>Contains the parameters for DescribeInstanceStatus.</p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeInstanceStatusRequest {
@@ -11367,7 +13602,7 @@ impl DescribeInstanceStatusResultDeserializer {
 pub struct DescribeInstancesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>affinity</code> - The affinity setting for an instance running on a Dedicated Host (<code>default</code> | <code>host</code>).</p> </li> <li> <p> <code>architecture</code> - The instance architecture (<code>i386</code> | <code>x86_64</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone of the instance.</p> </li> <li> <p> <code>block-device-mapping.attach-time</code> - The attach time for an EBS volume mapped to the instance, for example, <code>2010-09-15T17:15:20.000Z</code>.</p> </li> <li> <p> <code>block-device-mapping.delete-on-termination</code> - A Boolean that indicates whether the EBS volume is deleted on instance termination.</p> </li> <li> <p> <code>block-device-mapping.device-name</code> - The device name for the EBS volume (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p> </li> <li> <p> <code>block-device-mapping.status</code> - The status for the EBS volume (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>block-device-mapping.volume-id</code> - The volume ID of the EBS volume.</p> </li> <li> <p> <code>client-token</code> - The idempotency token you provided when you launched the instance.</p> </li> <li> <p> <code>dns-name</code> - The public DNS name of the instance.</p> </li> <li> <p> <code>group-id</code> - The ID of the security group for the instance. EC2-Classic only.</p> </li> <li> <p> <code>group-name</code> - The name of the security group for the instance. EC2-Classic only.</p> </li> <li> <p> <code>host-id</code> - The ID of the Dedicated Host on which the instance is running, if applicable.</p> </li> <li> <p> <code>hypervisor</code> - The hypervisor type of the instance (<code>ovm</code> | <code>xen</code>).</p> </li> <li> <p> <code>iam-instance-profile.arn</code> - The instance profile associated with the instance. Specified as an ARN.</p> </li> <li> <p> <code>image-id</code> - The ID of the image used to launch the instance.</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance.</p> </li> <li> <p> <code>instance-lifecycle</code> - Indicates whether this is a Spot Instance or a Scheduled Instance (<code>spot</code> | <code>scheduled</code>).</p> </li> <li> <p> <code>instance-state-code</code> - The state of the instance, as a 16-bit unsigned integer. The high byte is an opaque internal value and should be ignored. The low byte is set based on the state represented. The valid values are: 0 (pending), 16 (running), 32 (shutting-down), 48 (terminated), 64 (stopping), and 80 (stopped).</p> </li> <li> <p> <code>instance-state-name</code> - The state of the instance (<code>pending</code> | <code>running</code> | <code>shutting-down</code> | <code>terminated</code> | <code>stopping</code> | <code>stopped</code>).</p> </li> <li> <p> <code>instance-type</code> - The type of instance (for example, <code>t2.micro</code>).</p> </li> <li> <p> <code>instance.group-id</code> - The ID of the security group for the instance. </p> </li> <li> <p> <code>instance.group-name</code> - The name of the security group for the instance. </p> </li> <li> <p> <code>ip-address</code> - The public IPv4 address of the instance.</p> </li> <li> <p> <code>kernel-id</code> - The kernel ID.</p> </li> <li> <p> <code>key-name</code> - The name of the key pair used when the instance was launched.</p> </li> <li> <p> <code>launch-index</code> - When launching multiple instances, this is the index for the instance in the launch group (for example, 0, 1, 2, and so on). </p> </li> <li> <p> <code>launch-time</code> - The time when the instance was launched.</p> </li> <li> <p> <code>monitoring-state</code> - Indicates whether detailed monitoring is enabled (<code>disabled</code> | <code>enabled</code>).</p> </li> <li> <p> <code>network-interface.addresses.private-ip-address</code> - The private IPv4 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.addresses.primary</code> - Specifies whether the IPv4 address of the network interface is the primary private IPv4 address.</p> </li> <li> <p> <code>network-interface.addresses.association.public-ip</code> - The ID of the association of an Elastic IP address (IPv4) with a network interface.</p> </li> <li> <p> <code>network-interface.addresses.association.ip-owner-id</code> - The owner ID of the private IPv4 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.association.public-ip</code> - The address of the Elastic IP address (IPv4) bound to the network interface.</p> </li> <li> <p> <code>network-interface.association.ip-owner-id</code> - The owner of the Elastic IP address (IPv4) associated with the network interface.</p> </li> <li> <p> <code>network-interface.association.allocation-id</code> - The allocation ID returned when you allocated the Elastic IP address (IPv4) for your network interface.</p> </li> <li> <p> <code>network-interface.association.association-id</code> - The association ID returned when the network interface was associated with an IPv4 address.</p> </li> <li> <p> <code>network-interface.attachment.attachment-id</code> - The ID of the interface attachment.</p> </li> <li> <p> <code>network-interface.attachment.instance-id</code> - The ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.instance-owner-id</code> - The owner ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.device-index</code> - The device index to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.status</code> - The status of the attachment (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>network-interface.attachment.attach-time</code> - The time that the network interface was attached to an instance.</p> </li> <li> <p> <code>network-interface.attachment.delete-on-termination</code> - Specifies whether the attachment is deleted when an instance is terminated.</p> </li> <li> <p> <code>network-interface.availability-zone</code> - The Availability Zone for the network interface.</p> </li> <li> <p> <code>network-interface.description</code> - The description of the network interface.</p> </li> <li> <p> <code>network-interface.group-id</code> - The ID of a security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.group-name</code> - The name of a security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.ipv6-addresses.ipv6-address</code> - The IPv6 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.mac-address</code> - The MAC address of the network interface.</p> </li> <li> <p> <code>network-interface.network-interface-id</code> - The ID of the network interface.</p> </li> <li> <p> <code>network-interface.owner-id</code> - The ID of the owner of the network interface.</p> </li> <li> <p> <code>network-interface.private-dns-name</code> - The private DNS name of the network interface.</p> </li> <li> <p> <code>network-interface.requester-id</code> - The requester ID for the network interface.</p> </li> <li> <p> <code>network-interface.requester-managed</code> - Indicates whether the network interface is being managed by AWS.</p> </li> <li> <p> <code>network-interface.status</code> - The status of the network interface (<code>available</code>) | <code>in-use</code>).</p> </li> <li> <p> <code>network-interface.source-dest-check</code> - Whether the network interface performs source/destination checking. A value of <code>true</code> means checking is enabled, and <code>false</code> means checking is disabled. The value must be <code>false</code> for the network interface to perform network address translation (NAT) in your VPC.</p> </li> <li> <p> <code>network-interface.subnet-id</code> - The ID of the subnet for the network interface.</p> </li> <li> <p> <code>network-interface.vpc-id</code> - The ID of the VPC for the network interface.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the instance owner.</p> </li> <li> <p> <code>placement-group-name</code> - The name of the placement group for the instance.</p> </li> <li> <p> <code>platform</code> - The platform. Use <code>windows</code> if you have Windows instances; otherwise, leave blank.</p> </li> <li> <p> <code>private-dns-name</code> - The private IPv4 DNS name of the instance.</p> </li> <li> <p> <code>private-ip-address</code> - The private IPv4 address of the instance.</p> </li> <li> <p> <code>product-code</code> - The product code associated with the AMI used to launch the instance.</p> </li> <li> <p> <code>product-code.type</code> - The type of product code (<code>devpay</code> | <code>marketplace</code>).</p> </li> <li> <p> <code>ramdisk-id</code> - The RAM disk ID.</p> </li> <li> <p> <code>reason</code> - The reason for the current state of the instance (for example, shows &quot;User Initiated [date]&quot; when you stop or terminate the instance). Similar to the state-reason-code filter.</p> </li> <li> <p> <code>requester-id</code> - The ID of the entity that launched the instance on your behalf (for example, AWS Management Console, Auto Scaling, and so on).</p> </li> <li> <p> <code>reservation-id</code> - The ID of the instance&#39;s reservation. A reservation ID is created any time you launch an instance. A reservation ID has a one-to-one relationship with an instance launch request, but can be associated with more than one instance if you launch multiple instances using the same launch request. For example, if you launch one instance, you&#39;ll get one reservation ID. If you launch ten instances using the same launch request, you&#39;ll also get one reservation ID.</p> </li> <li> <p> <code>root-device-name</code> - The name of the root device for the instance (for example, <code>/dev/sda1</code> or <code>/dev/xvda</code>).</p> </li> <li> <p> <code>root-device-type</code> - The type of root device that the instance uses (<code>ebs</code> | <code>instance-store</code>).</p> </li> <li> <p> <code>source-dest-check</code> - Indicates whether the instance performs source/destination checking. A value of <code>true</code> means that checking is enabled, and <code>false</code> means checking is disabled. The value must be <code>false</code> for the instance to perform network address translation (NAT) in your VPC. </p> </li> <li> <p> <code>spot-instance-request-id</code> - The ID of the Spot instance request.</p> </li> <li> <p> <code>state-reason-code</code> - The reason code for the state change.</p> </li> <li> <p> <code>state-reason-message</code> - A message that describes the state change.</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet for the instance.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter &quot;tag-key=Purpose&quot; and the filter &quot;tag-value=X&quot;, you get any resources assigned both the tag key Purpose (regardless of what the tag&#39;s value is), and the tag value X (regardless of what the tag&#39;s key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>tenancy</code> - The tenancy of an instance (<code>dedicated</code> | <code>default</code> | <code>host</code>).</p> </li> <li> <p> <code>virtualization-type</code> - The virtualization type of the instance (<code>paravirtual</code> | <code>hvm</code>).</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC that the instance is running in.</p> </li> </ul></p>
+    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>affinity</code> - The affinity setting for an instance running on a Dedicated Host (<code>default</code> | <code>host</code>).</p> </li> <li> <p> <code>architecture</code> - The instance architecture (<code>i386</code> | <code>x86_64</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone of the instance.</p> </li> <li> <p> <code>block-device-mapping.attach-time</code> - The attach time for an EBS volume mapped to the instance, for example, <code>2010-09-15T17:15:20.000Z</code>.</p> </li> <li> <p> <code>block-device-mapping.delete-on-termination</code> - A Boolean that indicates whether the EBS volume is deleted on instance termination.</p> </li> <li> <p> <code>block-device-mapping.device-name</code> - The device name specified in the block device mapping (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p> </li> <li> <p> <code>block-device-mapping.status</code> - The status for the EBS volume (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>block-device-mapping.volume-id</code> - The volume ID of the EBS volume.</p> </li> <li> <p> <code>client-token</code> - The idempotency token you provided when you launched the instance.</p> </li> <li> <p> <code>dns-name</code> - The public DNS name of the instance.</p> </li> <li> <p> <code>group-id</code> - The ID of the security group for the instance. EC2-Classic only.</p> </li> <li> <p> <code>group-name</code> - The name of the security group for the instance. EC2-Classic only.</p> </li> <li> <p> <code>host-id</code> - The ID of the Dedicated Host on which the instance is running, if applicable.</p> </li> <li> <p> <code>hypervisor</code> - The hypervisor type of the instance (<code>ovm</code> | <code>xen</code>).</p> </li> <li> <p> <code>iam-instance-profile.arn</code> - The instance profile associated with the instance. Specified as an ARN.</p> </li> <li> <p> <code>image-id</code> - The ID of the image used to launch the instance.</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance.</p> </li> <li> <p> <code>instance-lifecycle</code> - Indicates whether this is a Spot Instance or a Scheduled Instance (<code>spot</code> | <code>scheduled</code>).</p> </li> <li> <p> <code>instance-state-code</code> - The state of the instance, as a 16-bit unsigned integer. The high byte is an opaque internal value and should be ignored. The low byte is set based on the state represented. The valid values are: 0 (pending), 16 (running), 32 (shutting-down), 48 (terminated), 64 (stopping), and 80 (stopped).</p> </li> <li> <p> <code>instance-state-name</code> - The state of the instance (<code>pending</code> | <code>running</code> | <code>shutting-down</code> | <code>terminated</code> | <code>stopping</code> | <code>stopped</code>).</p> </li> <li> <p> <code>instance-type</code> - The type of instance (for example, <code>t2.micro</code>).</p> </li> <li> <p> <code>instance.group-id</code> - The ID of the security group for the instance. </p> </li> <li> <p> <code>instance.group-name</code> - The name of the security group for the instance. </p> </li> <li> <p> <code>ip-address</code> - The public IPv4 address of the instance.</p> </li> <li> <p> <code>kernel-id</code> - The kernel ID.</p> </li> <li> <p> <code>key-name</code> - The name of the key pair used when the instance was launched.</p> </li> <li> <p> <code>launch-index</code> - When launching multiple instances, this is the index for the instance in the launch group (for example, 0, 1, 2, and so on). </p> </li> <li> <p> <code>launch-time</code> - The time when the instance was launched.</p> </li> <li> <p> <code>monitoring-state</code> - Indicates whether detailed monitoring is enabled (<code>disabled</code> | <code>enabled</code>).</p> </li> <li> <p> <code>network-interface.addresses.private-ip-address</code> - The private IPv4 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.addresses.primary</code> - Specifies whether the IPv4 address of the network interface is the primary private IPv4 address.</p> </li> <li> <p> <code>network-interface.addresses.association.public-ip</code> - The ID of the association of an Elastic IP address (IPv4) with a network interface.</p> </li> <li> <p> <code>network-interface.addresses.association.ip-owner-id</code> - The owner ID of the private IPv4 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.association.public-ip</code> - The address of the Elastic IP address (IPv4) bound to the network interface.</p> </li> <li> <p> <code>network-interface.association.ip-owner-id</code> - The owner of the Elastic IP address (IPv4) associated with the network interface.</p> </li> <li> <p> <code>network-interface.association.allocation-id</code> - The allocation ID returned when you allocated the Elastic IP address (IPv4) for your network interface.</p> </li> <li> <p> <code>network-interface.association.association-id</code> - The association ID returned when the network interface was associated with an IPv4 address.</p> </li> <li> <p> <code>network-interface.attachment.attachment-id</code> - The ID of the interface attachment.</p> </li> <li> <p> <code>network-interface.attachment.instance-id</code> - The ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.instance-owner-id</code> - The owner ID of the instance to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.device-index</code> - The device index to which the network interface is attached.</p> </li> <li> <p> <code>network-interface.attachment.status</code> - The status of the attachment (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>network-interface.attachment.attach-time</code> - The time that the network interface was attached to an instance.</p> </li> <li> <p> <code>network-interface.attachment.delete-on-termination</code> - Specifies whether the attachment is deleted when an instance is terminated.</p> </li> <li> <p> <code>network-interface.availability-zone</code> - The Availability Zone for the network interface.</p> </li> <li> <p> <code>network-interface.description</code> - The description of the network interface.</p> </li> <li> <p> <code>network-interface.group-id</code> - The ID of a security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.group-name</code> - The name of a security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.ipv6-addresses.ipv6-address</code> - The IPv6 address associated with the network interface.</p> </li> <li> <p> <code>network-interface.mac-address</code> - The MAC address of the network interface.</p> </li> <li> <p> <code>network-interface.network-interface-id</code> - The ID of the network interface.</p> </li> <li> <p> <code>network-interface.owner-id</code> - The ID of the owner of the network interface.</p> </li> <li> <p> <code>network-interface.private-dns-name</code> - The private DNS name of the network interface.</p> </li> <li> <p> <code>network-interface.requester-id</code> - The requester ID for the network interface.</p> </li> <li> <p> <code>network-interface.requester-managed</code> - Indicates whether the network interface is being managed by AWS.</p> </li> <li> <p> <code>network-interface.status</code> - The status of the network interface (<code>available</code>) | <code>in-use</code>).</p> </li> <li> <p> <code>network-interface.source-dest-check</code> - Whether the network interface performs source/destination checking. A value of <code>true</code> means that checking is enabled, and <code>false</code> means that checking is disabled. The value must be <code>false</code> for the network interface to perform network address translation (NAT) in your VPC.</p> </li> <li> <p> <code>network-interface.subnet-id</code> - The ID of the subnet for the network interface.</p> </li> <li> <p> <code>network-interface.vpc-id</code> - The ID of the VPC for the network interface.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the instance owner.</p> </li> <li> <p> <code>placement-group-name</code> - The name of the placement group for the instance.</p> </li> <li> <p> <code>platform</code> - The platform. Use <code>windows</code> if you have Windows instances; otherwise, leave blank.</p> </li> <li> <p> <code>private-dns-name</code> - The private IPv4 DNS name of the instance.</p> </li> <li> <p> <code>private-ip-address</code> - The private IPv4 address of the instance.</p> </li> <li> <p> <code>product-code</code> - The product code associated with the AMI used to launch the instance.</p> </li> <li> <p> <code>product-code.type</code> - The type of product code (<code>devpay</code> | <code>marketplace</code>).</p> </li> <li> <p> <code>ramdisk-id</code> - The RAM disk ID.</p> </li> <li> <p> <code>reason</code> - The reason for the current state of the instance (for example, shows &quot;User Initiated [date]&quot; when you stop or terminate the instance). Similar to the state-reason-code filter.</p> </li> <li> <p> <code>requester-id</code> - The ID of the entity that launched the instance on your behalf (for example, AWS Management Console, Auto Scaling, and so on).</p> </li> <li> <p> <code>reservation-id</code> - The ID of the instance&#39;s reservation. A reservation ID is created any time you launch an instance. A reservation ID has a one-to-one relationship with an instance launch request, but can be associated with more than one instance if you launch multiple instances using the same launch request. For example, if you launch one instance, you get one reservation ID. If you launch ten instances using the same launch request, you also get one reservation ID.</p> </li> <li> <p> <code>root-device-name</code> - The device name of the root device volume (for example, <code>/dev/sda1</code>).</p> </li> <li> <p> <code>root-device-type</code> - The type of the root device volume (<code>ebs</code> | <code>instance-store</code>).</p> </li> <li> <p> <code>source-dest-check</code> - Indicates whether the instance performs source/destination checking. A value of <code>true</code> means that checking is enabled, and <code>false</code> means that checking is disabled. The value must be <code>false</code> for the instance to perform network address translation (NAT) in your VPC. </p> </li> <li> <p> <code>spot-instance-request-id</code> - The ID of the Spot Instance request.</p> </li> <li> <p> <code>state-reason-code</code> - The reason code for the state change.</p> </li> <li> <p> <code>state-reason-message</code> - A message that describes the state change.</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet for the instance.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter &quot;tag-key=Purpose&quot; and the filter &quot;tag-value=X&quot;, you get any resources assigned both the tag key Purpose (regardless of what the tag&#39;s value is), and the tag value X (regardless of the tag&#39;s key). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>tenancy</code> - The tenancy of an instance (<code>dedicated</code> | <code>default</code> | <code>host</code>).</p> </li> <li> <p> <code>virtualization-type</code> - The virtualization type of the instance (<code>paravirtual</code> | <code>hvm</code>).</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC that the instance is running in.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>One or more instance IDs.</p> <p>Default: Describes all your instances.</p>
     pub instance_ids: Option<Vec<String>>,
@@ -11659,6 +13894,271 @@ impl DescribeKeyPairsResultDeserializer {
         Ok(obj)
     }
 }
+#[derive(Default, Debug, Clone)]
+pub struct DescribeLaunchTemplateVersionsRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>create-time</code> - The time the launch template version was created.</p> </li> <li> <p> <code>ebs-optimized</code> - A boolean that indicates whether the instance is optimized for Amazon EBS I/O.</p> </li> <li> <p> <code>iam-instance-profile</code> - The ARN of the IAM instance profile.</p> </li> <li> <p> <code>image-id</code> - The ID of the AMI.</p> </li> <li> <p> <code>instance-type</code> - The instance type.</p> </li> <li> <p> <code>is-default-version</code> - A boolean that indicates whether the launch template version is the default version.</p> </li> <li> <p> <code>kernel-id</code> - The kernel ID.</p> </li> <li> <p> <code>ram-disk-id</code> - The RAM disk ID.</p> </li> </ul></p>
+    pub filters: Option<Vec<Filter>>,
+    /// <p>The ID of the launch template. You must specify either the launch template ID or launch template name in the request.</p>
+    pub launch_template_id: Option<String>,
+    /// <p>The name of the launch template. You must specify either the launch template ID or launch template name in the request.</p>
+    pub launch_template_name: Option<String>,
+    /// <p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value. This value can be between 5 and 1000.</p>
+    pub max_results: Option<i64>,
+    /// <p>The version number up to which to describe launch template versions.</p>
+    pub max_version: Option<String>,
+    /// <p>The version number after which to describe launch template versions.</p>
+    pub min_version: Option<String>,
+    /// <p>The token to request the next page of results.</p>
+    pub next_token: Option<String>,
+    /// <p>One or more versions of the launch template.</p>
+    pub versions: Option<Vec<String>>,
+}
+
+/// Serialize `DescribeLaunchTemplateVersionsRequest` contents to a `SignedRequest`.
+struct DescribeLaunchTemplateVersionsRequestSerializer;
+impl DescribeLaunchTemplateVersionsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeLaunchTemplateVersionsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.filters {
+            FilterListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Filter"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.launch_template_id {
+            params.put(
+                &format!("{}{}", prefix, "LaunchTemplateId"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.launch_template_name {
+            params.put(
+                &format!("{}{}", prefix, "LaunchTemplateName"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.max_results {
+            params.put(
+                &format!("{}{}", prefix, "MaxResults"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.max_version {
+            params.put(
+                &format!("{}{}", prefix, "MaxVersion"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.min_version {
+            params.put(
+                &format!("{}{}", prefix, "MinVersion"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.versions {
+            VersionStringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "LaunchTemplateVersion"),
+                field_value,
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct DescribeLaunchTemplateVersionsResult {
+    /// <p>Information about the launch template versions.</p>
+    pub launch_template_versions: Option<Vec<LaunchTemplateVersion>>,
+    /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
+    pub next_token: Option<String>,
+}
+
+struct DescribeLaunchTemplateVersionsResultDeserializer;
+impl DescribeLaunchTemplateVersionsResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeLaunchTemplateVersionsResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = DescribeLaunchTemplateVersionsResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "launchTemplateVersionSet" => {
+                        obj.launch_template_versions =
+                            Some(try!(LaunchTemplateVersionSetDeserializer::deserialize(
+                                "launchTemplateVersionSet",
+                                stack
+                            )));
+                    }
+                    "nextToken" => {
+                        obj.next_token =
+                            Some(try!(StringDeserializer::deserialize("nextToken", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
+pub struct DescribeLaunchTemplatesRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>create-time</code> - The time the launch template was created.</p> </li> <li> <p> <code>launch-template-name</code> - The name of the launch template.</p> </li> </ul></p>
+    pub filters: Option<Vec<Filter>>,
+    /// <p>One or more launch template IDs.</p>
+    pub launch_template_ids: Option<Vec<String>>,
+    /// <p>One or more launch template names.</p>
+    pub launch_template_names: Option<Vec<String>>,
+    /// <p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value. This value can be between 5 and 1000.</p>
+    pub max_results: Option<i64>,
+    /// <p>The token to request the next page of results.</p>
+    pub next_token: Option<String>,
+}
+
+/// Serialize `DescribeLaunchTemplatesRequest` contents to a `SignedRequest`.
+struct DescribeLaunchTemplatesRequestSerializer;
+impl DescribeLaunchTemplatesRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeLaunchTemplatesRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.filters {
+            FilterListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Filter"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.launch_template_ids {
+            ValueStringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "LaunchTemplateId"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.launch_template_names {
+            LaunchTemplateNameStringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "LaunchTemplateName"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.max_results {
+            params.put(
+                &format!("{}{}", prefix, "MaxResults"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct DescribeLaunchTemplatesResult {
+    /// <p>Information about the launch templates.</p>
+    pub launch_templates: Option<Vec<LaunchTemplate>>,
+    /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
+    pub next_token: Option<String>,
+}
+
+struct DescribeLaunchTemplatesResultDeserializer;
+impl DescribeLaunchTemplatesResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeLaunchTemplatesResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = DescribeLaunchTemplatesResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "launchTemplates" => {
+                        obj.launch_templates = Some(try!(
+                            LaunchTemplateSetDeserializer::deserialize("launchTemplates", stack)
+                        ));
+                    }
+                    "nextToken" => {
+                        obj.next_token =
+                            Some(try!(StringDeserializer::deserialize("nextToken", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>Contains the parameters for DescribeMovingAddresses.</p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeMovingAddressesRequest {
@@ -11777,7 +14277,7 @@ impl DescribeMovingAddressesResultDeserializer {
 /// <p>Contains the parameters for DescribeNatGateways.</p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeNatGatewaysRequest {
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>nat-gateway-id</code> - The ID of the NAT gateway.</p> </li> <li> <p> <code>state</code> - The state of the NAT gateway (<code>pending</code> | <code>failed</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>).</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet in which the NAT gateway resides.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC in which the NAT gateway resides.</p> </li> </ul></p>
+    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>nat-gateway-id</code> - The ID of the NAT gateway.</p> </li> <li> <p> <code>state</code> - The state of the NAT gateway (<code>pending</code> | <code>failed</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>).</p> </li> <li> <p> <code>subnet-id</code> - The ID of the subnet in which the NAT gateway resides.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter &quot;tag-key=Purpose&quot; and the filter &quot;tag-value=X&quot;, you get any resources assigned both the tag key Purpose (regardless of what the tag&#39;s value is), and the tag value X (regardless of what the tag&#39;s key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC in which the NAT gateway resides.</p> </li> </ul></p>
     pub filter: Option<Vec<Filter>>,
     /// <p>The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results.</p> <p>Constraint: If the value specified is greater than 1000, we return only 1000 items.</p>
     pub max_results: Option<i64>,
@@ -12304,7 +14804,7 @@ impl DescribeNetworkInterfacesResultDeserializer {
 pub struct DescribePlacementGroupsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>group-name</code> - The name of the placement group.</p> </li> <li> <p> <code>state</code> - The state of the placement group (<code>pending</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>).</p> </li> <li> <p> <code>strategy</code> - The strategy of the placement group (<code>cluster</code>).</p> </li> </ul></p>
+    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>group-name</code> - The name of the placement group.</p> </li> <li> <p> <code>state</code> - The state of the placement group (<code>pending</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>).</p> </li> <li> <p> <code>strategy</code> - The strategy of the placement group (<code>cluster</code> | <code>spread</code>).</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>One or more placement group names.</p> <p>Default: Describes all your placement groups, or only those otherwise specified.</p>
     pub group_names: Option<Vec<String>>,
@@ -13536,12 +16036,16 @@ impl DescribeSecurityGroupReferencesResultDeserializer {
 pub struct DescribeSecurityGroupsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters. If using multiple filters for rules, the results include security groups for which any combination of rules - not necessarily a single rule - match all filters.</p> <ul> <li> <p> <code>description</code> - The description of the security group.</p> </li> <li> <p> <code>egress.ip-permission.prefix-list-id</code> - The ID (prefix) of the AWS service to which the security group allows access.</p> </li> <li> <p> <code>group-id</code> - The ID of the security group. </p> </li> <li> <p> <code>group-name</code> - The name of the security group.</p> </li> <li> <p> <code>ip-permission.cidr</code> - An IPv4 CIDR range that has been granted permission in a security group rule.</p> </li> <li> <p> <code>ip-permission.from-port</code> - The start of port range for the TCP and UDP protocols, or an ICMP type number.</p> </li> <li> <p> <code>ip-permission.group-id</code> - The ID of a security group that has been granted permission.</p> </li> <li> <p> <code>ip-permission.group-name</code> - The name of a security group that has been granted permission.</p> </li> <li> <p> <code>ip-permission.ipv6-cidr</code> - An IPv6 CIDR range that has been granted permission in a security group rule.</p> </li> <li> <p> <code>ip-permission.protocol</code> - The IP protocol for the permission (<code>tcp</code> | <code>udp</code> | <code>icmp</code> or a protocol number).</p> </li> <li> <p> <code>ip-permission.to-port</code> - The end of port range for the TCP and UDP protocols, or an ICMP code.</p> </li> <li> <p> <code>ip-permission.user-id</code> - The ID of an AWS account that has been granted permission.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the owner of the security group.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the security group.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the security group.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC specified when the security group was created.</p> </li> </ul></p>
+    /// <p><p>One or more filters. If using multiple filters for rules, the results include security groups for which any combination of rules - not necessarily a single rule - match all filters.</p> <ul> <li> <p> <code>description</code> - The description of the security group.</p> </li> <li> <p> <code>egress.ip-permission.cidr</code> - An IPv4 CIDR block for an outbound security group rule.</p> </li> <li> <p> <code>egress.ip-permission.from-port</code> - For an outbound rule, the start of port range for the TCP and UDP protocols, or an ICMP type number.</p> </li> <li> <p> <code>egress.ip-permission.group-id</code> - The ID of a security group that has been referenced in an outbound security group rule.</p> </li> <li> <p> <code>egress.ip-permission.group-name</code> - The name of a security group that has been referenced in an outbound security group rule.</p> </li> <li> <p> <code>egress.ip-permission.ipv6-cidr</code> - An IPv6 CIDR block for an outbound security group rule.</p> </li> <li> <p> <code>egress.ip-permission.prefix-list-id</code> - The ID (prefix) of the AWS service to which a security group rule allows outbound access.</p> </li> <li> <p> <code>egress.ip-permission.protocol</code> - The IP protocol for an outbound security group rule (<code>tcp</code> | <code>udp</code> | <code>icmp</code> or a protocol number).</p> </li> <li> <p> <code>egress.ip-permission.to-port</code> - For an outbound rule, the end of port range for the TCP and UDP protocols, or an ICMP code.</p> </li> <li> <p> <code>egress.ip-permission.user-id</code> - The ID of an AWS account that has been referenced in an outbound security group rule.</p> </li> <li> <p> <code>group-id</code> - The ID of the security group. </p> </li> <li> <p> <code>group-name</code> - The name of the security group.</p> </li> <li> <p> <code>ip-permission.cidr</code> - An IPv4 CIDR block for an inbound security group rule.</p> </li> <li> <p> <code>ip-permission.from-port</code> - For an inbound rule, the start of port range for the TCP and UDP protocols, or an ICMP type number.</p> </li> <li> <p> <code>ip-permission.group-id</code> - The ID of a security group that has been referenced in an inbound security group rule.</p> </li> <li> <p> <code>ip-permission.group-name</code> - The name of a security group that has been referenced in an inbound security group rule.</p> </li> <li> <p> <code>ip-permission.ipv6-cidr</code> - An IPv6 CIDR block for an inbound security group rule.</p> </li> <li> <p> <code>ip-permission.prefix-list-id</code> - The ID (prefix) of the AWS service from which a security group rule allows inbound access.</p> </li> <li> <p> <code>ip-permission.protocol</code> - The IP protocol for an inbound security group rule (<code>tcp</code> | <code>udp</code> | <code>icmp</code> or a protocol number).</p> </li> <li> <p> <code>ip-permission.to-port</code> - For an inbound rule, the end of port range for the TCP and UDP protocols, or an ICMP code.</p> </li> <li> <p> <code>ip-permission.user-id</code> - The ID of an AWS account that has been referenced in an inbound security group rule.</p> </li> <li> <p> <code>owner-id</code> - The AWS account ID of the owner of the security group.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the security group.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the security group.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC specified when the security group was created.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>One or more security group IDs. Required for security groups in a nondefault VPC.</p> <p>Default: Describes all your security groups.</p>
     pub group_ids: Option<Vec<String>>,
     /// <p>[EC2-Classic and default VPC only] One or more security group names. You can specify either the security group name or the security group ID. For security groups in a nondefault VPC, use the <code>group-name</code> filter to describe security groups by name.</p> <p>Default: Describes all your security groups.</p>
     pub group_names: Option<Vec<String>>,
+    /// <p>The maximum number of results to return in a single call. To retrieve the remaining results, make another request with the returned <code>NextToken</code> value. This value can be between 5 and 1000.</p>
+    pub max_results: Option<i64>,
+    /// <p>The token to request the next page of results.</p>
+    pub next_token: Option<String>,
 }
 
 /// Serialize `DescribeSecurityGroupsRequest` contents to a `SignedRequest`.
@@ -13580,12 +16084,26 @@ impl DescribeSecurityGroupsRequestSerializer {
                 field_value,
             );
         }
+        if let Some(ref field_value) = obj.max_results {
+            params.put(
+                &format!("{}{}", prefix, "MaxResults"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
     }
 }
 
 /// <p>Contains the output of DescribeSecurityGroups.</p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeSecurityGroupsResult {
+    /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
+    pub next_token: Option<String>,
     /// <p>Information about one or more security groups.</p>
     pub security_groups: Option<Vec<SecurityGroup>>,
 }
@@ -13612,6 +16130,10 @@ impl DescribeSecurityGroupsResultDeserializer {
 
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
+                    "nextToken" => {
+                        obj.next_token =
+                            Some(try!(StringDeserializer::deserialize("nextToken", stack)));
+                    }
                     "securityGroupInfo" => {
                         obj.security_groups = Some(try!(
                             SecurityGroupListDeserializer::deserialize("securityGroupInfo", stack)
@@ -13892,7 +16414,7 @@ impl DescribeSpotDatafeedSubscriptionRequestSerializer {
 /// <p>Contains the output of DescribeSpotDatafeedSubscription.</p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeSpotDatafeedSubscriptionResult {
-    /// <p>The Spot instance data feed subscription.</p>
+    /// <p>The Spot Instance data feed subscription.</p>
     pub spot_datafeed_subscription: Option<SpotDatafeedSubscription>,
 }
 
@@ -13948,7 +16470,7 @@ pub struct DescribeSpotFleetInstancesRequest {
     pub max_results: Option<i64>,
     /// <p>The token for the next set of results.</p>
     pub next_token: Option<String>,
-    /// <p>The ID of the Spot fleet request.</p>
+    /// <p>The ID of the Spot Fleet request.</p>
     pub spot_fleet_request_id: String,
 }
 
@@ -13993,7 +16515,7 @@ pub struct DescribeSpotFleetInstancesResponse {
     pub active_instances: Vec<ActiveInstance>,
     /// <p>The token required to retrieve the next set of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
-    /// <p>The ID of the Spot fleet request.</p>
+    /// <p>The ID of the Spot Fleet request.</p>
     pub spot_fleet_request_id: String,
 }
 
@@ -14058,7 +16580,7 @@ pub struct DescribeSpotFleetRequestHistoryRequest {
     pub max_results: Option<i64>,
     /// <p>The token for the next set of results.</p>
     pub next_token: Option<String>,
-    /// <p>The ID of the Spot fleet request.</p>
+    /// <p>The ID of the Spot Fleet request.</p>
     pub spot_fleet_request_id: String,
     /// <p>The starting date and time for the events, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z).</p>
     pub start_time: String,
@@ -14111,13 +16633,13 @@ impl DescribeSpotFleetRequestHistoryRequestSerializer {
 /// <p>Contains the output of DescribeSpotFleetRequestHistory.</p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeSpotFleetRequestHistoryResponse {
-    /// <p>Information about the events in the history of the Spot fleet request.</p>
+    /// <p>Information about the events in the history of the Spot Fleet request.</p>
     pub history_records: Vec<HistoryRecord>,
     /// <p>The last date and time for the events, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z). All records up to this time were retrieved.</p> <p>If <code>nextToken</code> indicates that there are more results, this value is not present.</p>
     pub last_evaluated_time: String,
     /// <p>The token required to retrieve the next set of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
-    /// <p>The ID of the Spot fleet request.</p>
+    /// <p>The ID of the Spot Fleet request.</p>
     pub spot_fleet_request_id: String,
     /// <p>The starting date and time for the events, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z).</p>
     pub start_time: String,
@@ -14192,7 +16714,7 @@ pub struct DescribeSpotFleetRequestsRequest {
     pub max_results: Option<i64>,
     /// <p>The token for the next set of results.</p>
     pub next_token: Option<String>,
-    /// <p>The IDs of the Spot fleet requests.</p>
+    /// <p>The IDs of the Spot Fleet requests.</p>
     pub spot_fleet_request_ids: Option<Vec<String>>,
 }
 
@@ -14238,7 +16760,7 @@ impl DescribeSpotFleetRequestsRequestSerializer {
 pub struct DescribeSpotFleetRequestsResponse {
     /// <p>The token required to retrieve the next set of results. This value is <code>null</code> when there are no more results to return.</p>
     pub next_token: Option<String>,
-    /// <p>Information about the configuration of your Spot fleet.</p>
+    /// <p>Information about the configuration of your Spot Fleet.</p>
     pub spot_fleet_request_configs: Vec<SpotFleetRequestConfig>,
 }
 
@@ -14294,9 +16816,9 @@ impl DescribeSpotFleetRequestsResponseDeserializer {
 pub struct DescribeSpotInstanceRequestsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>availability-zone-group</code> - The Availability Zone group.</p> </li> <li> <p> <code>create-time</code> - The time stamp when the Spot instance request was created.</p> </li> <li> <p> <code>fault-code</code> - The fault code related to the request.</p> </li> <li> <p> <code>fault-message</code> - The fault message related to the request.</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance that fulfilled the request.</p> </li> <li> <p> <code>launch-group</code> - The Spot instance launch group.</p> </li> <li> <p> <code>launch.block-device-mapping.delete-on-termination</code> - Indicates whether the Amazon EBS volume is deleted on instance termination.</p> </li> <li> <p> <code>launch.block-device-mapping.device-name</code> - The device name for the Amazon EBS volume (for example, <code>/dev/sdh</code>).</p> </li> <li> <p> <code>launch.block-device-mapping.snapshot-id</code> - The ID of the snapshot used for the Amazon EBS volume.</p> </li> <li> <p> <code>launch.block-device-mapping.volume-size</code> - The size of the Amazon EBS volume, in GiB.</p> </li> <li> <p> <code>launch.block-device-mapping.volume-type</code> - The type of the Amazon EBS volume: <code>gp2</code> for General Purpose SSD, <code>io1</code> for Provisioned IOPS SSD, <code>st1</code> for Throughput Optimized HDD, <code>sc1</code>for Cold HDD, or <code>standard</code> for Magnetic.</p> </li> <li> <p> <code>launch.group-id</code> - The security group for the instance.</p> </li> <li> <p> <code>launch.image-id</code> - The ID of the AMI.</p> </li> <li> <p> <code>launch.instance-type</code> - The type of instance (for example, <code>m3.medium</code>).</p> </li> <li> <p> <code>launch.kernel-id</code> - The kernel ID.</p> </li> <li> <p> <code>launch.key-name</code> - The name of the key pair the instance launched with.</p> </li> <li> <p> <code>launch.monitoring-enabled</code> - Whether monitoring is enabled for the Spot instance.</p> </li> <li> <p> <code>launch.ramdisk-id</code> - The RAM disk ID.</p> </li> <li> <p> <code>network-interface.network-interface-id</code> - The ID of the network interface.</p> </li> <li> <p> <code>network-interface.device-index</code> - The index of the device for the network interface attachment on the instance.</p> </li> <li> <p> <code>network-interface.subnet-id</code> - The ID of the subnet for the instance.</p> </li> <li> <p> <code>network-interface.description</code> - A description of the network interface.</p> </li> <li> <p> <code>network-interface.private-ip-address</code> - The primary private IP address of the network interface.</p> </li> <li> <p> <code>network-interface.delete-on-termination</code> - Indicates whether the network interface is deleted when the instance is terminated.</p> </li> <li> <p> <code>network-interface.group-id</code> - The ID of the security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.group-name</code> - The name of the security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.addresses.primary</code> - Indicates whether the IP address is the primary private IP address.</p> </li> <li> <p> <code>product-description</code> - The product description associated with the instance (<code>Linux/UNIX</code> | <code>Windows</code>).</p> </li> <li> <p> <code>spot-instance-request-id</code> - The Spot instance request ID.</p> </li> <li> <p> <code>spot-price</code> - The maximum hourly price for any Spot instance launched to fulfill the request.</p> </li> <li> <p> <code>state</code> - The state of the Spot instance request (<code>open</code> | <code>active</code> | <code>closed</code> | <code>cancelled</code> | <code>failed</code>). Spot bid status information can help you track your Amazon EC2 Spot instance requests. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-bid-status.html">Spot Bid Status</a> in the Amazon Elastic Compute Cloud User Guide.</p> </li> <li> <p> <code>status-code</code> - The short code describing the most recent evaluation of your Spot instance request.</p> </li> <li> <p> <code>status-message</code> - The message explaining the status of the Spot instance request.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter &quot;tag-key=Purpose&quot; and the filter &quot;tag-value=X&quot;, you get any resources assigned both the tag key Purpose (regardless of what the tag&#39;s value is), and the tag value X (regardless of what the tag&#39;s key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>type</code> - The type of Spot instance request (<code>one-time</code> | <code>persistent</code>).</p> </li> <li> <p> <code>launched-availability-zone</code> - The Availability Zone in which the bid is launched.</p> </li> <li> <p> <code>valid-from</code> - The start date of the request.</p> </li> <li> <p> <code>valid-until</code> - The end date of the request.</p> </li> </ul></p>
+    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>availability-zone-group</code> - The Availability Zone group.</p> </li> <li> <p> <code>create-time</code> - The time stamp when the Spot Instance request was created.</p> </li> <li> <p> <code>fault-code</code> - The fault code related to the request.</p> </li> <li> <p> <code>fault-message</code> - The fault message related to the request.</p> </li> <li> <p> <code>instance-id</code> - The ID of the instance that fulfilled the request.</p> </li> <li> <p> <code>launch-group</code> - The Spot Instance launch group.</p> </li> <li> <p> <code>launch.block-device-mapping.delete-on-termination</code> - Indicates whether the EBS volume is deleted on instance termination.</p> </li> <li> <p> <code>launch.block-device-mapping.device-name</code> - The device name for the volume in the block device mapping (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p> </li> <li> <p> <code>launch.block-device-mapping.snapshot-id</code> - The ID of the snapshot for the EBS volume.</p> </li> <li> <p> <code>launch.block-device-mapping.volume-size</code> - The size of the EBS volume, in GiB.</p> </li> <li> <p> <code>launch.block-device-mapping.volume-type</code> - The type of EBS volume: <code>gp2</code> for General Purpose SSD, <code>io1</code> for Provisioned IOPS SSD, <code>st1</code> for Throughput Optimized HDD, <code>sc1</code>for Cold HDD, or <code>standard</code> for Magnetic.</p> </li> <li> <p> <code>launch.group-id</code> - The security group for the instance.</p> </li> <li> <p> <code>launch.image-id</code> - The ID of the AMI.</p> </li> <li> <p> <code>launch.instance-type</code> - The type of instance (for example, <code>m3.medium</code>).</p> </li> <li> <p> <code>launch.kernel-id</code> - The kernel ID.</p> </li> <li> <p> <code>launch.key-name</code> - The name of the key pair the instance launched with.</p> </li> <li> <p> <code>launch.monitoring-enabled</code> - Whether detailed monitoring is enabled for the Spot Instance.</p> </li> <li> <p> <code>launch.ramdisk-id</code> - The RAM disk ID.</p> </li> <li> <p> <code>launched-availability-zone</code> - The Availability Zone in which the request is launched.</p> </li> <li> <p> <code>network-interface.addresses.primary</code> - Indicates whether the IP address is the primary private IP address.</p> </li> <li> <p> <code>network-interface.delete-on-termination</code> - Indicates whether the network interface is deleted when the instance is terminated.</p> </li> <li> <p> <code>network-interface.description</code> - A description of the network interface.</p> </li> <li> <p> <code>network-interface.device-index</code> - The index of the device for the network interface attachment on the instance.</p> </li> <li> <p> <code>network-interface.group-id</code> - The ID of the security group associated with the network interface.</p> </li> <li> <p> <code>network-interface.network-interface-id</code> - The ID of the network interface.</p> </li> <li> <p> <code>network-interface.private-ip-address</code> - The primary private IP address of the network interface.</p> </li> <li> <p> <code>network-interface.subnet-id</code> - The ID of the subnet for the instance.</p> </li> <li> <p> <code>product-description</code> - The product description associated with the instance (<code>Linux/UNIX</code> | <code>Windows</code>).</p> </li> <li> <p> <code>spot-instance-request-id</code> - The Spot Instance request ID.</p> </li> <li> <p> <code>spot-price</code> - The maximum hourly price for any Spot Instance launched to fulfill the request.</p> </li> <li> <p> <code>state</code> - The state of the Spot Instance request (<code>open</code> | <code>active</code> | <code>closed</code> | <code>cancelled</code> | <code>failed</code>). Spot request status information can help you track your Amazon EC2 Spot Instance requests. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-bid-status.html">Spot Request Status</a> in the Amazon Elastic Compute Cloud User Guide.</p> </li> <li> <p> <code>status-code</code> - The short code describing the most recent evaluation of your Spot Instance request.</p> </li> <li> <p> <code>status-message</code> - The message explaining the status of the Spot Instance request.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter &quot;tag-key=Purpose&quot; and the filter &quot;tag-value=X&quot;, you get any resources assigned both the tag key Purpose (regardless of what the tag&#39;s value is), and the tag value X (regardless of what the tag&#39;s key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>type</code> - The type of Spot Instance request (<code>one-time</code> | <code>persistent</code>).</p> </li> <li> <p> <code>valid-from</code> - The start date of the request.</p> </li> <li> <p> <code>valid-until</code> - The end date of the request.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
-    /// <p>One or more Spot instance request IDs.</p>
+    /// <p>One or more Spot Instance request IDs.</p>
     pub spot_instance_request_ids: Option<Vec<String>>,
 }
 
@@ -14335,7 +16857,7 @@ impl DescribeSpotInstanceRequestsRequestSerializer {
 /// <p>Contains the output of DescribeSpotInstanceRequests.</p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeSpotInstanceRequestsResult {
-    /// <p>One or more Spot instance requests.</p>
+    /// <p>One or more Spot Instance requests.</p>
     pub spot_instance_requests: Option<Vec<SpotInstanceRequest>>,
 }
 
@@ -14393,7 +16915,7 @@ pub struct DescribeSpotPriceHistoryRequest {
     pub end_time: Option<String>,
     /// <p><p>One or more filters.</p> <ul> <li> <p> <code>availability-zone</code> - The Availability Zone for which prices should be returned.</p> </li> <li> <p> <code>instance-type</code> - The type of instance (for example, <code>m3.medium</code>).</p> </li> <li> <p> <code>product-description</code> - The product description for the Spot price (<code>Linux/UNIX</code> | <code>SUSE Linux</code> | <code>Windows</code> | <code>Linux/UNIX (Amazon VPC)</code> | <code>SUSE Linux (Amazon VPC)</code> | <code>Windows (Amazon VPC)</code>).</p> </li> <li> <p> <code>spot-price</code> - The Spot price. The value must match exactly (or use wildcards; greater than or less than comparison is not supported).</p> </li> <li> <p> <code>timestamp</code> - The timestamp of the Spot price history, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z). You can use wildcards (* and ?). Greater than or less than comparison is not supported.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
-    /// <p>Filters the results by the specified instance types. Note that T2 and HS1 instance types are not supported.</p>
+    /// <p>Filters the results by the specified instance types.</p>
     pub instance_types: Option<Vec<String>>,
     /// <p>The maximum number of results to return in a single call. Specify a value between 1 and 1000. The default value is 1000. To retrieve the remaining results, make another call with the returned <code>NextToken</code> value.</p>
     pub max_results: Option<i64>,
@@ -15160,7 +17682,7 @@ impl DescribeVolumesModificationsResultDeserializer {
 pub struct DescribeVolumesRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>attachment.attach-time</code> - The time stamp when the attachment initiated.</p> </li> <li> <p> <code>attachment.delete-on-termination</code> - Whether the volume is deleted on instance termination.</p> </li> <li> <p> <code>attachment.device</code> - The device name that is exposed to the instance (for example, <code>/dev/sda1</code>).</p> </li> <li> <p> <code>attachment.instance-id</code> - The ID of the instance the volume is attached to.</p> </li> <li> <p> <code>attachment.status</code> - The attachment state (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone in which the volume was created.</p> </li> <li> <p> <code>create-time</code> - The time stamp when the volume was created.</p> </li> <li> <p> <code>encrypted</code> - The encryption status of the volume.</p> </li> <li> <p> <code>size</code> - The size of the volume, in GiB.</p> </li> <li> <p> <code>snapshot-id</code> - The snapshot from which the volume was created.</p> </li> <li> <p> <code>status</code> - The status of the volume (<code>creating</code> | <code>available</code> | <code>in-use</code> | <code>deleting</code> | <code>deleted</code> | <code>error</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter &quot;tag-key=Purpose&quot; and the filter &quot;tag-value=X&quot;, you get any resources assigned both the tag key Purpose (regardless of what the tag&#39;s value is), and the tag value X (regardless of what the tag&#39;s key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>volume-id</code> - The volume ID.</p> </li> <li> <p> <code>volume-type</code> - The Amazon EBS volume type. This can be <code>gp2</code> for General Purpose SSD, <code>io1</code> for Provisioned IOPS SSD, <code>st1</code> for Throughput Optimized HDD, <code>sc1</code> for Cold HDD, or <code>standard</code> for Magnetic volumes.</p> </li> </ul></p>
+    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>attachment.attach-time</code> - The time stamp when the attachment initiated.</p> </li> <li> <p> <code>attachment.delete-on-termination</code> - Whether the volume is deleted on instance termination.</p> </li> <li> <p> <code>attachment.device</code> - The device name specified in the block device mapping (for example, <code>/dev/sda1</code>).</p> </li> <li> <p> <code>attachment.instance-id</code> - The ID of the instance the volume is attached to.</p> </li> <li> <p> <code>attachment.status</code> - The attachment state (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone in which the volume was created.</p> </li> <li> <p> <code>create-time</code> - The time stamp when the volume was created.</p> </li> <li> <p> <code>encrypted</code> - The encryption status of the volume.</p> </li> <li> <p> <code>size</code> - The size of the volume, in GiB.</p> </li> <li> <p> <code>snapshot-id</code> - The snapshot from which the volume was created.</p> </li> <li> <p> <code>status</code> - The status of the volume (<code>creating</code> | <code>available</code> | <code>in-use</code> | <code>deleting</code> | <code>deleted</code> | <code>error</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter &quot;tag-key=Purpose&quot; and the filter &quot;tag-value=X&quot;, you get any resources assigned both the tag key Purpose (regardless of what the tag&#39;s value is), and the tag value X (regardless of what the tag&#39;s key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>volume-id</code> - The volume ID.</p> </li> <li> <p> <code>volume-type</code> - The Amazon EBS volume type. This can be <code>gp2</code> for General Purpose SSD, <code>io1</code> for Provisioned IOPS SSD, <code>st1</code> for Throughput Optimized HDD, <code>sc1</code> for Cold HDD, or <code>standard</code> for Magnetic volumes.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>The maximum number of volume results returned by <code>DescribeVolumes</code> in paginated output. When this parameter is used, <code>DescribeVolumes</code> only returns <code>MaxResults</code> results in a single page along with a <code>NextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeVolumes</code> request with the returned <code>NextToken</code> value. This value can be between 5 and 500; if <code>MaxResults</code> is given a value larger than 500, only 500 results are returned. If this parameter is not used, then <code>DescribeVolumes</code> returns all results. You cannot specify this parameter and the volume IDs parameter in the same request.</p>
     pub max_results: Option<i64>,
@@ -15559,30 +18081,50 @@ impl DescribeVpcClassicLinkResultDeserializer {
         Ok(obj)
     }
 }
-/// <p>Contains the parameters for DescribeVpcEndpointServices.</p>
 #[derive(Default, Debug, Clone)]
-pub struct DescribeVpcEndpointServicesRequest {
+pub struct DescribeVpcEndpointConnectionNotificationsRequest {
+    /// <p>The ID of the notification.</p>
+    pub connection_notification_id: Option<String>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results.</p> <p>Constraint: If the value is greater than 1000, we return only 1000 items.</p>
+    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>connection-notification-arn</code> - The ARN of SNS topic for the notification.</p> </li> <li> <p> <code>connection-notification-id</code> - The ID of the notification.</p> </li> <li> <p> <code>connection-notification-state</code> - The state of the notification (<code>Enabled</code> | <code>Disabled</code>).</p> </li> <li> <p> <code>connection-notification-type</code> - The type of notification (<code>Topic</code>).</p> </li> <li> <p> <code>service-id</code> - The ID of the endpoint service.</p> </li> <li> <p> <code>vpc-endpoint-id</code> - The ID of the VPC endpoint.</p> </li> </ul></p>
+    pub filters: Option<Vec<Filter>>,
+    /// <p>The maximum number of results to return in a single call. To retrieve the remaining results, make another request with the returned <code>NextToken</code> value.</p>
     pub max_results: Option<i64>,
-    /// <p>The token for the next set of items to return. (You received this token from a prior call.)</p>
+    /// <p>The token to request the next page of results.</p>
     pub next_token: Option<String>,
 }
 
-/// Serialize `DescribeVpcEndpointServicesRequest` contents to a `SignedRequest`.
-struct DescribeVpcEndpointServicesRequestSerializer;
-impl DescribeVpcEndpointServicesRequestSerializer {
-    fn serialize(params: &mut Params, name: &str, obj: &DescribeVpcEndpointServicesRequest) {
+/// Serialize `DescribeVpcEndpointConnectionNotificationsRequest` contents to a `SignedRequest`.
+struct DescribeVpcEndpointConnectionNotificationsRequestSerializer;
+impl DescribeVpcEndpointConnectionNotificationsRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &DescribeVpcEndpointConnectionNotificationsRequest,
+    ) {
         let mut prefix = name.to_string();
         if prefix != "" {
             prefix.push_str(".");
         }
 
+        if let Some(ref field_value) = obj.connection_notification_id {
+            params.put(
+                &format!("{}{}", prefix, "ConnectionNotificationId"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
         if let Some(ref field_value) = obj.dry_run {
             params.put(
                 &format!("{}{}", prefix, "DryRun"),
                 &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.filters {
+            FilterListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Filter"),
+                field_value,
             );
         }
         if let Some(ref field_value) = obj.max_results {
@@ -15600,12 +18142,463 @@ impl DescribeVpcEndpointServicesRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone)]
+pub struct DescribeVpcEndpointConnectionNotificationsResult {
+    /// <p>One or more notifications.</p>
+    pub connection_notification_set: Option<Vec<ConnectionNotification>>,
+    /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
+    pub next_token: Option<String>,
+}
+
+struct DescribeVpcEndpointConnectionNotificationsResultDeserializer;
+impl DescribeVpcEndpointConnectionNotificationsResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeVpcEndpointConnectionNotificationsResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = DescribeVpcEndpointConnectionNotificationsResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "connectionNotificationSet" => {
+                        obj.connection_notification_set =
+                            Some(try!(ConnectionNotificationSetDeserializer::deserialize(
+                                "connectionNotificationSet",
+                                stack
+                            )));
+                    }
+                    "nextToken" => {
+                        obj.next_token =
+                            Some(try!(StringDeserializer::deserialize("nextToken", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
+pub struct DescribeVpcEndpointConnectionsRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>service-id</code> - The ID of the service.</p> </li> <li> <p> <code>vpc-endpoint-owner</code> - The AWS account number of the owner of the endpoint.</p> </li> <li> <p> <code>vpc-endpoint-state</code> - The state of the endpoint (<code>pendingAcceptance</code> | <code>pending</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code> | <code>rejected</code> | <code>failed</code>).</p> </li> <li> <p> <code>vpc-endpoint-id</code> - The ID of the endpoint.</p> </li> </ul></p>
+    pub filters: Option<Vec<Filter>>,
+    /// <p>The maximum number of results to return for the request in a single page. The remaining results of the initial request can be seen by sending another request with the returned <code>NextToken</code> value. This value can be between 5 and 1000; if <code>MaxResults</code> is given a value larger than 1000, only 1000 results are returned.</p>
+    pub max_results: Option<i64>,
+    /// <p>The token to retrieve the next page of results.</p>
+    pub next_token: Option<String>,
+}
+
+/// Serialize `DescribeVpcEndpointConnectionsRequest` contents to a `SignedRequest`.
+struct DescribeVpcEndpointConnectionsRequestSerializer;
+impl DescribeVpcEndpointConnectionsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeVpcEndpointConnectionsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.filters {
+            FilterListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Filter"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.max_results {
+            params.put(
+                &format!("{}{}", prefix, "MaxResults"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct DescribeVpcEndpointConnectionsResult {
+    /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
+    pub next_token: Option<String>,
+    /// <p>Information about one or more VPC endpoint connections.</p>
+    pub vpc_endpoint_connections: Option<Vec<VpcEndpointConnection>>,
+}
+
+struct DescribeVpcEndpointConnectionsResultDeserializer;
+impl DescribeVpcEndpointConnectionsResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeVpcEndpointConnectionsResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = DescribeVpcEndpointConnectionsResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "nextToken" => {
+                        obj.next_token =
+                            Some(try!(StringDeserializer::deserialize("nextToken", stack)));
+                    }
+                    "vpcEndpointConnectionSet" => {
+                        obj.vpc_endpoint_connections =
+                            Some(try!(VpcEndpointConnectionSetDeserializer::deserialize(
+                                "vpcEndpointConnectionSet",
+                                stack
+                            )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
+pub struct DescribeVpcEndpointServiceConfigurationsRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>service-name</code> - The name of the service.</p> </li> <li> <p> <code>service-id</code> - The ID of the service.</p> </li> <li> <p> <code>service-state</code> - The state of the service (<code>Pending</code> | <code>Available</code> | <code>Deleting</code> | <code>Deleted</code> | <code>Failed</code>). </p> </li> </ul></p>
+    pub filters: Option<Vec<Filter>>,
+    /// <p>The maximum number of results to return for the request in a single page. The remaining results of the initial request can be seen by sending another request with the returned <code>NextToken</code> value. This value can be between 5 and 1000; if <code>MaxResults</code> is given a value larger than 1000, only 1000 results are returned.</p>
+    pub max_results: Option<i64>,
+    /// <p>The token to retrieve the next page of results.</p>
+    pub next_token: Option<String>,
+    /// <p>The IDs of one or more services.</p>
+    pub service_ids: Option<Vec<String>>,
+}
+
+/// Serialize `DescribeVpcEndpointServiceConfigurationsRequest` contents to a `SignedRequest`.
+struct DescribeVpcEndpointServiceConfigurationsRequestSerializer;
+impl DescribeVpcEndpointServiceConfigurationsRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &DescribeVpcEndpointServiceConfigurationsRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.filters {
+            FilterListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Filter"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.max_results {
+            params.put(
+                &format!("{}{}", prefix, "MaxResults"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.service_ids {
+            ValueStringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "ServiceId"),
+                field_value,
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct DescribeVpcEndpointServiceConfigurationsResult {
+    /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
+    pub next_token: Option<String>,
+    /// <p>Information about one or more services.</p>
+    pub service_configurations: Option<Vec<ServiceConfiguration>>,
+}
+
+struct DescribeVpcEndpointServiceConfigurationsResultDeserializer;
+impl DescribeVpcEndpointServiceConfigurationsResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeVpcEndpointServiceConfigurationsResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = DescribeVpcEndpointServiceConfigurationsResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "nextToken" => {
+                        obj.next_token =
+                            Some(try!(StringDeserializer::deserialize("nextToken", stack)));
+                    }
+                    "serviceConfigurationSet" => {
+                        obj.service_configurations =
+                            Some(try!(ServiceConfigurationSetDeserializer::deserialize(
+                                "serviceConfigurationSet",
+                                stack
+                            )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
+pub struct DescribeVpcEndpointServicePermissionsRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>principal</code> - The ARN of the principal.</p> </li> <li> <p> <code>principal-type</code> - The principal type (<code>All</code> | <code>Service</code> | <code>OrganizationUnit</code> | <code>Account</code> | <code>User</code> | <code>Role</code>).</p> </li> </ul></p>
+    pub filters: Option<Vec<Filter>>,
+    /// <p>The maximum number of results to return for the request in a single page. The remaining results of the initial request can be seen by sending another request with the returned <code>NextToken</code> value. This value can be between 5 and 1000; if <code>MaxResults</code> is given a value larger than 1000, only 1000 results are returned.</p>
+    pub max_results: Option<i64>,
+    /// <p>The token to retrieve the next page of results.</p>
+    pub next_token: Option<String>,
+    /// <p>The ID of the service.</p>
+    pub service_id: String,
+}
+
+/// Serialize `DescribeVpcEndpointServicePermissionsRequest` contents to a `SignedRequest`.
+struct DescribeVpcEndpointServicePermissionsRequestSerializer;
+impl DescribeVpcEndpointServicePermissionsRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &DescribeVpcEndpointServicePermissionsRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.filters {
+            FilterListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Filter"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.max_results {
+            params.put(
+                &format!("{}{}", prefix, "MaxResults"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "ServiceId"),
+            &obj.service_id.replace("+", "%2B"),
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct DescribeVpcEndpointServicePermissionsResult {
+    /// <p>Information about one or more allowed principals.</p>
+    pub allowed_principals: Option<Vec<AllowedPrincipal>>,
+    /// <p>The token to use to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
+    pub next_token: Option<String>,
+}
+
+struct DescribeVpcEndpointServicePermissionsResultDeserializer;
+impl DescribeVpcEndpointServicePermissionsResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeVpcEndpointServicePermissionsResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = DescribeVpcEndpointServicePermissionsResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "allowedPrincipals" => {
+                        obj.allowed_principals =
+                            Some(try!(AllowedPrincipalSetDeserializer::deserialize(
+                                "allowedPrincipals",
+                                stack
+                            )));
+                    }
+                    "nextToken" => {
+                        obj.next_token =
+                            Some(try!(StringDeserializer::deserialize("nextToken", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>Contains the parameters for DescribeVpcEndpointServices.</p>
+#[derive(Default, Debug, Clone)]
+pub struct DescribeVpcEndpointServicesRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>service-name</code>: The name of the service.</p> </li> </ul></p>
+    pub filters: Option<Vec<Filter>>,
+    /// <p>The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results.</p> <p>Constraint: If the value is greater than 1000, we return only 1000 items.</p>
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of items to return. (You received this token from a prior call.)</p>
+    pub next_token: Option<String>,
+    /// <p>One or more service names.</p>
+    pub service_names: Option<Vec<String>>,
+}
+
+/// Serialize `DescribeVpcEndpointServicesRequest` contents to a `SignedRequest`.
+struct DescribeVpcEndpointServicesRequestSerializer;
+impl DescribeVpcEndpointServicesRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeVpcEndpointServicesRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.filters {
+            FilterListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Filter"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.max_results {
+            params.put(
+                &format!("{}{}", prefix, "MaxResults"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(
+                &format!("{}{}", prefix, "NextToken"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.service_names {
+            ValueStringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "ServiceName"),
+                field_value,
+            );
+        }
+    }
+}
+
 /// <p>Contains the output of DescribeVpcEndpointServices.</p>
 #[derive(Default, Debug, Clone)]
 pub struct DescribeVpcEndpointServicesResult {
     /// <p>The token to use when requesting the next set of items. If there are no additional items to return, the string is empty.</p>
     pub next_token: Option<String>,
-    /// <p>A list of supported AWS services.</p>
+    /// <p>Information about the service.</p>
+    pub service_details: Option<Vec<ServiceDetail>>,
+    /// <p>A list of supported services.</p>
     pub service_names: Option<Vec<String>>,
 }
 
@@ -15635,6 +18628,11 @@ impl DescribeVpcEndpointServicesResultDeserializer {
                         obj.next_token =
                             Some(try!(StringDeserializer::deserialize("nextToken", stack)));
                     }
+                    "serviceDetailSet" => {
+                        obj.service_details = Some(try!(
+                            ServiceDetailSetDeserializer::deserialize("serviceDetailSet", stack)
+                        ));
+                    }
                     "serviceNameSet" => {
                         obj.service_names = Some(try!(ValueStringListDeserializer::deserialize(
                             "serviceNameSet",
@@ -15660,7 +18658,7 @@ impl DescribeVpcEndpointServicesResultDeserializer {
 pub struct DescribeVpcEndpointsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>service-name</code>: The name of the AWS service.</p> </li> <li> <p> <code>vpc-id</code>: The ID of the VPC in which the endpoint resides.</p> </li> <li> <p> <code>vpc-endpoint-id</code>: The ID of the endpoint.</p> </li> <li> <p> <code>vpc-endpoint-state</code>: The state of the endpoint. (<code>pending</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>)</p> </li> </ul></p>
+    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>service-name</code>: The name of the service.</p> </li> <li> <p> <code>vpc-id</code>: The ID of the VPC in which the endpoint resides.</p> </li> <li> <p> <code>vpc-endpoint-id</code>: The ID of the endpoint.</p> </li> <li> <p> <code>vpc-endpoint-state</code>: The state of the endpoint. (<code>pending</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>)</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>The maximum number of items to return for this request. The request returns a token that you can specify in a subsequent call to get the next set of results.</p> <p>Constraint: If the value is greater than 1000, we return only 1000 items.</p>
     pub max_results: Option<i64>,
@@ -15774,7 +18772,7 @@ impl DescribeVpcEndpointsResultDeserializer {
 pub struct DescribeVpcPeeringConnectionsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>accepter-vpc-info.cidr-block</code> - The IPv4 CIDR block of the peer VPC.</p> </li> <li> <p> <code>accepter-vpc-info.owner-id</code> - The AWS account ID of the owner of the peer VPC.</p> </li> <li> <p> <code>accepter-vpc-info.vpc-id</code> - The ID of the peer VPC.</p> </li> <li> <p> <code>expiration-time</code> - The expiration date and time for the VPC peering connection.</p> </li> <li> <p> <code>requester-vpc-info.cidr-block</code> - The IPv4 CIDR block of the requester&#39;s VPC.</p> </li> <li> <p> <code>requester-vpc-info.owner-id</code> - The AWS account ID of the owner of the requester VPC.</p> </li> <li> <p> <code>requester-vpc-info.vpc-id</code> - The ID of the requester VPC.</p> </li> <li> <p> <code>status-code</code> - The status of the VPC peering connection (<code>pending-acceptance</code> | <code>failed</code> | <code>expired</code> | <code>provisioning</code> | <code>active</code> | <code>deleted</code> | <code>rejected</code>).</p> </li> <li> <p> <code>status-message</code> - A message that provides more information about the status of the VPC peering connection, if applicable.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter &quot;tag-key=Purpose&quot; and the filter &quot;tag-value=X&quot;, you get any resources assigned both the tag key Purpose (regardless of what the tag&#39;s value is), and the tag value X (regardless of what the tag&#39;s key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-peering-connection-id</code> - The ID of the VPC peering connection.</p> </li> </ul></p>
+    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>accepter-vpc-info.cidr-block</code> - The IPv4 CIDR block of the accepter VPC.</p> </li> <li> <p> <code>accepter-vpc-info.owner-id</code> - The AWS account ID of the owner of the accepter VPC.</p> </li> <li> <p> <code>accepter-vpc-info.vpc-id</code> - The ID of the accepter VPC.</p> </li> <li> <p> <code>expiration-time</code> - The expiration date and time for the VPC peering connection.</p> </li> <li> <p> <code>requester-vpc-info.cidr-block</code> - The IPv4 CIDR block of the requester&#39;s VPC.</p> </li> <li> <p> <code>requester-vpc-info.owner-id</code> - The AWS account ID of the owner of the requester VPC.</p> </li> <li> <p> <code>requester-vpc-info.vpc-id</code> - The ID of the requester VPC.</p> </li> <li> <p> <code>status-code</code> - The status of the VPC peering connection (<code>pending-acceptance</code> | <code>failed</code> | <code>expired</code> | <code>provisioning</code> | <code>active</code> | <code>deleting</code> | <code>deleted</code> | <code>rejected</code>).</p> </li> <li> <p> <code>status-message</code> - A message that provides more information about the status of the VPC peering connection, if applicable.</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter &quot;tag-key=Purpose&quot; and the filter &quot;tag-value=X&quot;, you get any resources assigned both the tag key Purpose (regardless of what the tag&#39;s value is), and the tag value X (regardless of what the tag&#39;s key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-peering-connection-id</code> - The ID of the VPC peering connection.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>One or more VPC peering connection IDs.</p> <p>Default: Describes all your VPC peering connections.</p>
     pub vpc_peering_connection_ids: Option<Vec<String>>,
@@ -15867,7 +18865,7 @@ impl DescribeVpcPeeringConnectionsResultDeserializer {
 pub struct DescribeVpcsRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>cidr</code> - The IPv4 CIDR block of the VPC. The CIDR block you specify must exactly match the VPC&#39;s CIDR block for information to be returned for the VPC. Must contain the slash followed by one or two digits (for example, <code>/28</code>).</p> </li> <li> <p> <code>dhcp-options-id</code> - The ID of a set of DHCP options.</p> </li> <li> <p> <code>ipv6-cidr-block-association.ipv6-cidr-block</code> - An IPv6 CIDR block associated with the VPC.</p> </li> <li> <p> <code>ipv6-cidr-block-association.association-id</code> - The association ID for an IPv6 CIDR block associated with the VPC.</p> </li> <li> <p> <code>ipv6-cidr-block-association.state</code> - The state of an IPv6 CIDR block associated with the VPC.</p> </li> <li> <p> <code>isDefault</code> - Indicates whether the VPC is the default VPC.</p> </li> <li> <p> <code>state</code> - The state of the VPC (<code>pending</code> | <code>available</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter &quot;tag-key=Purpose&quot; and the filter &quot;tag-value=X&quot;, you get any resources assigned both the tag key Purpose (regardless of what the tag&#39;s value is), and the tag value X (regardless of what the tag&#39;s key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC.</p> </li> </ul></p>
+    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>cidr</code> - The primary IPv4 CIDR block of the VPC. The CIDR block you specify must exactly match the VPC&#39;s CIDR block for information to be returned for the VPC. Must contain the slash followed by one or two digits (for example, <code>/28</code>).</p> </li> <li> <p> <code>cidr-block-association.cidr-block</code> - An IPv4 CIDR block associated with the VPC.</p> </li> <li> <p> <code>cidr-block-association.association-id</code> - The association ID for an IPv4 CIDR block associated with the VPC.</p> </li> <li> <p> <code>cidr-block-association.state</code> - The state of an IPv4 CIDR block associated with the VPC.</p> </li> <li> <p> <code>dhcp-options-id</code> - The ID of a set of DHCP options.</p> </li> <li> <p> <code>ipv6-cidr-block-association.ipv6-cidr-block</code> - An IPv6 CIDR block associated with the VPC.</p> </li> <li> <p> <code>ipv6-cidr-block-association.association-id</code> - The association ID for an IPv6 CIDR block associated with the VPC.</p> </li> <li> <p> <code>ipv6-cidr-block-association.state</code> - The state of an IPv6 CIDR block associated with the VPC.</p> </li> <li> <p> <code>isDefault</code> - Indicates whether the VPC is the default VPC.</p> </li> <li> <p> <code>state</code> - The state of the VPC (<code>pending</code> | <code>available</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter &quot;tag-key=Purpose&quot; and the filter &quot;tag-value=X&quot;, you get any resources assigned both the tag key Purpose (regardless of what the tag&#39;s value is), and the tag value X (regardless of what the tag&#39;s key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>vpc-id</code> - The ID of the VPC.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>One or more VPC IDs.</p> <p>Default: Describes all your VPCs.</p>
     pub vpc_ids: Option<Vec<String>>,
@@ -16047,7 +19045,7 @@ impl DescribeVpnConnectionsResultDeserializer {
 pub struct DescribeVpnGatewaysRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>attachment.state</code> - The current state of the attachment between the gateway and the VPC (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>attachment.vpc-id</code> - The ID of an attached VPC.</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone for the virtual private gateway (if applicable).</p> </li> <li> <p> <code>state</code> - The state of the virtual private gateway (<code>pending</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter &quot;tag-key=Purpose&quot; and the filter &quot;tag-value=X&quot;, you get any resources assigned both the tag key Purpose (regardless of what the tag&#39;s value is), and the tag value X (regardless of what the tag&#39;s key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>type</code> - The type of virtual private gateway. Currently the only supported type is <code>ipsec.1</code>.</p> </li> <li> <p> <code>vpn-gateway-id</code> - The ID of the virtual private gateway.</p> </li> </ul></p>
+    /// <p><p>One or more filters.</p> <ul> <li> <p> <code>amazon-side-asn</code> - The Autonomous System Number (ASN) for the Amazon side of the gateway.</p> </li> <li> <p> <code>attachment.state</code> - The current state of the attachment between the gateway and the VPC (<code>attaching</code> | <code>attached</code> | <code>detaching</code> | <code>detached</code>).</p> </li> <li> <p> <code>attachment.vpc-id</code> - The ID of an attached VPC.</p> </li> <li> <p> <code>availability-zone</code> - The Availability Zone for the virtual private gateway (if applicable).</p> </li> <li> <p> <code>state</code> - The state of the virtual private gateway (<code>pending</code> | <code>available</code> | <code>deleting</code> | <code>deleted</code>).</p> </li> <li> <p> <code>tag</code>:<i>key</i>=<i>value</i> - The key/value combination of a tag assigned to the resource. Specify the key of the tag in the filter name and the value of the tag in the filter value. For example, for the tag Purpose=X, specify <code>tag:Purpose</code> for the filter name and <code>X</code> for the filter value.</p> </li> <li> <p> <code>tag-key</code> - The key of a tag assigned to the resource. This filter is independent of the <code>tag-value</code> filter. For example, if you use both the filter &quot;tag-key=Purpose&quot; and the filter &quot;tag-value=X&quot;, you get any resources assigned both the tag key Purpose (regardless of what the tag&#39;s value is), and the tag value X (regardless of what the tag&#39;s key is). If you want to list only resources where Purpose is X, see the <code>tag</code>:<i>key</i>=<i>value</i> filter.</p> </li> <li> <p> <code>tag-value</code> - The value of a tag assigned to the resource. This filter is independent of the <code>tag-key</code> filter.</p> </li> <li> <p> <code>type</code> - The type of virtual private gateway. Currently the only supported type is <code>ipsec.1</code>.</p> </li> <li> <p> <code>vpn-gateway-id</code> - The ID of the virtual private gateway.</p> </li> </ul></p>
     pub filters: Option<Vec<Filter>>,
     /// <p>One or more virtual private gateway IDs.</p> <p>Default: Describes all your virtual private gateways.</p>
     pub vpn_gateway_ids: Option<Vec<String>>,
@@ -17073,6 +20071,8 @@ impl DisassociateVpcCidrBlockRequestSerializer {
 
 #[derive(Default, Debug, Clone)]
 pub struct DisassociateVpcCidrBlockResult {
+    /// <p>Information about the IPv4 CIDR block association.</p>
+    pub cidr_block_association: Option<VpcCidrBlockAssociation>,
     /// <p>Information about the IPv6 CIDR block association.</p>
     pub ipv_6_cidr_block_association: Option<VpcIpv6CidrBlockAssociation>,
     /// <p>The ID of the VPC.</p>
@@ -17101,6 +20101,13 @@ impl DisassociateVpcCidrBlockResultDeserializer {
 
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
+                    "cidrBlockAssociation" => {
+                        obj.cidr_block_association =
+                            Some(try!(VpcCidrBlockAssociationDeserializer::deserialize(
+                                "cidrBlockAssociation",
+                                stack
+                            )));
+                    }
                     "ipv6CidrBlockAssociation" => {
                         obj.ipv_6_cidr_block_association =
                             Some(try!(VpcIpv6CidrBlockAssociationDeserializer::deserialize(
@@ -17344,6 +20351,99 @@ impl DiskImageVolumeDescriptionDeserializer {
         Ok(obj)
     }
 }
+/// <p>Describes a DNS entry.</p>
+#[derive(Default, Debug, Clone)]
+pub struct DnsEntry {
+    /// <p>The DNS name.</p>
+    pub dns_name: Option<String>,
+    /// <p>The ID of the private hosted zone.</p>
+    pub hosted_zone_id: Option<String>,
+}
+
+struct DnsEntryDeserializer;
+impl DnsEntryDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DnsEntry, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = DnsEntry::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "dnsName" => {
+                        obj.dns_name =
+                            Some(try!(StringDeserializer::deserialize("dnsName", stack)));
+                    }
+                    "hostedZoneId" => {
+                        obj.hosted_zone_id =
+                            Some(try!(StringDeserializer::deserialize("hostedZoneId", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct DnsEntrySetDeserializer;
+impl DnsEntrySetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<DnsEntry>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(DnsEntryDeserializer::deserialize("item", stack)));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
 struct DomainTypeDeserializer;
 impl DomainTypeDeserializer {
     #[allow(unused_variables)]
@@ -17377,10 +20477,12 @@ impl DoubleDeserializer {
 pub struct EbsBlockDevice {
     /// <p>Indicates whether the EBS volume is deleted on instance termination.</p>
     pub delete_on_termination: Option<bool>,
-    /// <p>Indicates whether the EBS volume is encrypted. Encrypted Amazon EBS volumes may only be attached to instances that support Amazon EBS encryption.</p>
+    /// <p>Indicates whether the EBS volume is encrypted. Encrypted volumes can only be attached to instances that support Amazon EBS encryption. If you are creating a volume from a snapshot, you can't specify an encryption value. This is because only blank volumes can be encrypted on creation.</p>
     pub encrypted: Option<bool>,
     /// <p>The number of I/O operations per second (IOPS) that the volume supports. For <code>io1</code>, this represents the number of IOPS that are provisioned for the volume. For <code>gp2</code>, this represents the baseline performance of the volume and the rate at which the volume accumulates I/O credits for bursting. For more information about General Purpose SSD baseline performance, I/O credits, and bursting, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">Amazon EBS Volume Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Constraint: Range is 100-20000 IOPS for <code>io1</code> volumes and 100-10000 IOPS for <code>gp2</code> volumes.</p> <p>Condition: This parameter is required for requests to create <code>io1</code> volumes; it is not used in requests to create <code>gp2</code>, <code>st1</code>, <code>sc1</code>, or <code>standard</code> volumes.</p>
     pub iops: Option<i64>,
+    /// <p>ID for a user-managed CMK under which the EBS volume is encrypted.</p> <p>Note: This parameter is only supported on <code>BlockDeviceMapping</code> objects called by <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RunInstances.html">RunInstances</a>, <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RequestSpotFleet.html">RequestSpotFleet</a>, and <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RequestSpotInstances.html">RequestSpotInstances</a>.</p>
+    pub kms_key_id: Option<String>,
     /// <p>The ID of the snapshot.</p>
     pub snapshot_id: Option<String>,
     /// <p>The size of the volume, in GiB.</p> <p>Constraints: 1-16384 for General Purpose SSD (<code>gp2</code>), 4-16384 for Provisioned IOPS SSD (<code>io1</code>), 500-16384 for Throughput Optimized HDD (<code>st1</code>), 500-16384 for Cold HDD (<code>sc1</code>), and 1-1024 for Magnetic (<code>standard</code>) volumes. If you specify a snapshot, the volume size must be equal to or larger than the snapshot size.</p> <p>Default: If you're creating the volume from a snapshot and don't specify a volume size, the default is the snapshot size.</p>
@@ -17423,6 +20525,10 @@ impl EbsBlockDeviceDeserializer {
                     }
                     "iops" => {
                         obj.iops = Some(try!(IntegerDeserializer::deserialize("iops", stack)));
+                    }
+                    "KmsKeyId" => {
+                        obj.kms_key_id =
+                            Some(try!(StringDeserializer::deserialize("KmsKeyId", stack)));
                     }
                     "snapshotId" => {
                         obj.snapshot_id =
@@ -17478,6 +20584,12 @@ impl EbsBlockDeviceSerializer {
             params.put(
                 &format!("{}{}", prefix, "Iops"),
                 &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.kms_key_id {
+            params.put(
+                &format!("{}{}", prefix, "KmsKeyId"),
+                &field_value.replace("+", "%2B"),
             );
         }
         if let Some(ref field_value) = obj.snapshot_id {
@@ -17925,8 +21037,8 @@ impl ElasticGpuSetDeserializer {
 
             match next_event {
                 DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(try!(ElasticGpusDeserializer::deserialize("member", stack)));
+                    if name == "item" {
+                        obj.push(try!(ElasticGpusDeserializer::deserialize("item", stack)));
                     } else {
                         skip_tree(stack);
                     }
@@ -17964,6 +21076,106 @@ impl ElasticGpuSpecificationSerializer {
             &format!("{}{}", prefix, "Type"),
             &obj.type_.replace("+", "%2B"),
         );
+    }
+}
+
+/// Serialize `ElasticGpuSpecificationList` contents to a `SignedRequest`.
+struct ElasticGpuSpecificationListSerializer;
+impl ElasticGpuSpecificationListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<ElasticGpuSpecification>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            ElasticGpuSpecificationSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+/// <p>Describes an elastic GPU.</p>
+#[derive(Default, Debug, Clone)]
+pub struct ElasticGpuSpecificationResponse {
+    /// <p>The elastic GPU type.</p>
+    pub type_: Option<String>,
+}
+
+struct ElasticGpuSpecificationResponseDeserializer;
+impl ElasticGpuSpecificationResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ElasticGpuSpecificationResponse, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ElasticGpuSpecificationResponse::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "type" => {
+                        obj.type_ = Some(try!(StringDeserializer::deserialize("type", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct ElasticGpuSpecificationResponseListDeserializer;
+impl ElasticGpuSpecificationResponseListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<ElasticGpuSpecificationResponse>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(
+                            ElasticGpuSpecificationResponseDeserializer::deserialize("item", stack)
+                        ));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
     }
 }
 
@@ -18311,12 +21523,12 @@ impl EventCodeDeserializer {
         Ok(obj)
     }
 }
-/// <p>Describes a Spot fleet event.</p>
+/// <p>Describes a Spot Fleet event.</p>
 #[derive(Default, Debug, Clone)]
 pub struct EventInformation {
     /// <p>The description of the event.</p>
     pub event_description: Option<String>,
-    /// <p><p>The event.</p> <p>The following are the <code>error</code> events.</p> <ul> <li> <p> <code>iamFleetRoleInvalid</code> - The Spot fleet did not have the required permissions either to launch or terminate an instance.</p> </li> <li> <p> <code>launchSpecTemporarilyBlacklisted</code> - The configuration is not valid and several attempts to launch instances have failed. For more information, see the description of the event.</p> </li> <li> <p> <code>spotFleetRequestConfigurationInvalid</code> - The configuration is not valid. For more information, see the description of the event.</p> </li> <li> <p> <code>spotInstanceCountLimitExceeded</code> - You&#39;ve reached the limit on the number of Spot instances that you can launch.</p> </li> </ul> <p>The following are the <code>fleetRequestChange</code> events.</p> <ul> <li> <p> <code>active</code> - The Spot fleet has been validated and Amazon EC2 is attempting to maintain the target number of running Spot instances.</p> </li> <li> <p> <code>cancelled</code> - The Spot fleet is canceled and has no running Spot instances. The Spot fleet will be deleted two days after its instances were terminated.</p> </li> <li> <p> <code>cancelled<em>running</code> - The Spot fleet is canceled and will not launch additional Spot instances, but its existing Spot instances continue to run until they are interrupted or terminated.</p> </li> <li> <p> <code>cancelled</em>terminating</code> - The Spot fleet is canceled and its Spot instances are terminating.</p> </li> <li> <p> <code>expired</code> - The Spot fleet request has expired. A subsequent event indicates that the instances were terminated, if the request was created with <code>TerminateInstancesWithExpiration</code> set.</p> </li> <li> <p> <code>modify<em>in</em>progress</code> - A request to modify the Spot fleet request was accepted and is in progress.</p> </li> <li> <p> <code>modify<em>successful</code> - The Spot fleet request was modified.</p> </li> <li> <p> <code>price</em>update</code> - The bid price for a launch configuration was adjusted because it was too high. This change is permanent.</p> </li> <li> <p> <code>submitted</code> - The Spot fleet request is being evaluated and Amazon EC2 is preparing to launch the target number of Spot instances.</p> </li> </ul> <p>The following are the <code>instanceChange</code> events.</p> <ul> <li> <p> <code>launched</code> - A bid was fulfilled and a new instance was launched.</p> </li> <li> <p> <code>terminated</code> - An instance was terminated by the user.</p> </li> </ul></p>
+    /// <p><p>The event.</p> <p>The following are the <code>error</code> events:</p> <ul> <li> <p> <code>iamFleetRoleInvalid</code> - The Spot Fleet did not have the required permissions either to launch or terminate an instance.</p> </li> <li> <p> <code>launchSpecTemporarilyBlacklisted</code> - The configuration is not valid and several attempts to launch instances have failed. For more information, see the description of the event.</p> </li> <li> <p> <code>spotFleetRequestConfigurationInvalid</code> - The configuration is not valid. For more information, see the description of the event.</p> </li> <li> <p> <code>spotInstanceCountLimitExceeded</code> - You&#39;ve reached the limit on the number of Spot Instances that you can launch.</p> </li> </ul> <p>The following are the <code>fleetRequestChange</code> events:</p> <ul> <li> <p> <code>active</code> - The Spot Fleet has been validated and Amazon EC2 is attempting to maintain the target number of running Spot Instances.</p> </li> <li> <p> <code>cancelled</code> - The Spot Fleet is canceled and has no running Spot Instances. The Spot Fleet will be deleted two days after its instances were terminated.</p> </li> <li> <p> <code>cancelled<em>running</code> - The Spot Fleet is canceled and will not launch additional Spot Instances, but its existing Spot Instances continue to run until they are interrupted or terminated.</p> </li> <li> <p> <code>cancelled</em>terminating</code> - The Spot Fleet is canceled and its Spot Instances are terminating.</p> </li> <li> <p> <code>expired</code> - The Spot Fleet request has expired. A subsequent event indicates that the instances were terminated, if the request was created with <code>TerminateInstancesWithExpiration</code> set.</p> </li> <li> <p> <code>modify<em>in</em>progress</code> - A request to modify the Spot Fleet request was accepted and is in progress.</p> </li> <li> <p> <code>modify<em>successful</code> - The Spot Fleet request was modified.</p> </li> <li> <p> <code>price</em>update</code> - The price for a launch configuration was adjusted because it was too high. This change is permanent.</p> </li> <li> <p> <code>submitted</code> - The Spot Fleet request is being evaluated and Amazon EC2 is preparing to launch the target number of Spot Instances.</p> </li> </ul> <p>The following are the <code>instanceChange</code> events:</p> <ul> <li> <p> <code>launched</code> - A request was fulfilled and a new instance was launched.</p> </li> <li> <p> <code>terminated</code> - An instance was terminated by the user.</p> </li> </ul> <p>The following are the <code>Information</code> events:</p> <ul> <li> <p> <code>launchSpecUnusable</code> - The price in a launch specification is not valid because it is below the Spot price or the Spot price is above the On-Demand price.</p> </li> <li> <p> <code>fleetProgressHalted</code> - The price in every launch specification is not valid. A launch specification might become valid if the Spot price changes.</p> </li> </ul></p>
     pub event_sub_type: Option<String>,
     /// <p>The ID of the instance. This information is available only for <code>instanceChange</code> events.</p>
     pub instance_id: Option<String>,
@@ -18735,6 +21947,100 @@ impl FilterListSerializer {
     }
 }
 
+/// <p>Describes a launch template.</p>
+#[derive(Default, Debug, Clone)]
+pub struct FleetLaunchTemplateSpecification {
+    /// <p>The ID of the launch template. You must specify either a template ID or a template name.</p>
+    pub launch_template_id: Option<String>,
+    /// <p>The name of the launch template. You must specify either a template name or a template ID.</p>
+    pub launch_template_name: Option<String>,
+    /// <p>The version number. By default, the default version of the launch template is used.</p>
+    pub version: Option<String>,
+}
+
+struct FleetLaunchTemplateSpecificationDeserializer;
+impl FleetLaunchTemplateSpecificationDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<FleetLaunchTemplateSpecification, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = FleetLaunchTemplateSpecification::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "launchTemplateId" => {
+                        obj.launch_template_id = Some(try!(StringDeserializer::deserialize(
+                            "launchTemplateId",
+                            stack
+                        )));
+                    }
+                    "launchTemplateName" => {
+                        obj.launch_template_name =
+                            Some(try!(LaunchTemplateNameDeserializer::deserialize(
+                                "launchTemplateName",
+                                stack
+                            )));
+                    }
+                    "version" => {
+                        obj.version = Some(try!(StringDeserializer::deserialize("version", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `FleetLaunchTemplateSpecification` contents to a `SignedRequest`.
+struct FleetLaunchTemplateSpecificationSerializer;
+impl FleetLaunchTemplateSpecificationSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &FleetLaunchTemplateSpecification) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.launch_template_id {
+            params.put(
+                &format!("{}{}", prefix, "LaunchTemplateId"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.launch_template_name {
+            params.put(
+                &format!("{}{}", prefix, "LaunchTemplateName"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.version {
+            params.put(
+                &format!("{}{}", prefix, "Version"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
 struct FleetTypeDeserializer;
 impl FleetTypeDeserializer {
     #[allow(unused_variables)]
@@ -18929,6 +22235,8 @@ pub struct FpgaImage {
     pub pci_id: Option<PciId>,
     /// <p>The product codes for the AFI.</p>
     pub product_codes: Option<Vec<ProductCode>>,
+    /// <p>Indicates whether the AFI is public.</p>
+    pub public: Option<bool>,
     /// <p>The version of the AWS Shell that was used to create the bitstream.</p>
     pub shell_version: Option<String>,
     /// <p>Information about the state of the AFI.</p>
@@ -18960,64 +22268,140 @@ impl FpgaImageDeserializer {
             };
 
             match next_event {
-                DeserializerNext::Element(name) => {
-                    match &name[..] {
-                        "createTime" => {
-                            obj.create_time =
-                                Some(try!(DateTimeDeserializer::deserialize("createTime", stack)));
-                        }
-                        "description" => {
-                            obj.description =
-                                Some(try!(StringDeserializer::deserialize("description", stack)));
-                        }
-                        "fpgaImageGlobalId" => {
-                            obj.fpga_image_global_id = Some(try!(
-                                StringDeserializer::deserialize("fpgaImageGlobalId", stack)
-                            ));
-                        }
-                        "fpgaImageId" => {
-                            obj.fpga_image_id =
-                                Some(try!(StringDeserializer::deserialize("fpgaImageId", stack)));
-                        }
-                        "name" => {
-                            obj.name = Some(try!(StringDeserializer::deserialize("name", stack)));
-                        }
-                        "ownerAlias" => {
-                            obj.owner_alias =
-                                Some(try!(StringDeserializer::deserialize("ownerAlias", stack)));
-                        }
-                        "ownerId" => {
-                            obj.owner_id =
-                                Some(try!(StringDeserializer::deserialize("ownerId", stack)));
-                        }
-                        "pciId" => {
-                            obj.pci_id = Some(try!(PciIdDeserializer::deserialize("pciId", stack)));
-                        }
-                        "productCodes" => {
-                            obj.product_codes = Some(try!(
-                                ProductCodeListDeserializer::deserialize("productCodes", stack)
-                            ));
-                        }
-                        "shellVersion" => {
-                            obj.shell_version =
-                                Some(try!(StringDeserializer::deserialize("shellVersion", stack)));
-                        }
-                        "state" => {
-                            obj.state = Some(try!(FpgaImageStateDeserializer::deserialize(
-                                "state",
-                                stack
-                            )));
-                        }
-                        "tags" => {
-                            obj.tags = Some(try!(TagListDeserializer::deserialize("tags", stack)));
-                        }
-                        "updateTime" => {
-                            obj.update_time =
-                                Some(try!(DateTimeDeserializer::deserialize("updateTime", stack)));
-                        }
-                        _ => skip_tree(stack),
+                DeserializerNext::Element(name) => match &name[..] {
+                    "createTime" => {
+                        obj.create_time =
+                            Some(try!(DateTimeDeserializer::deserialize("createTime", stack)));
                     }
+                    "description" => {
+                        obj.description =
+                            Some(try!(StringDeserializer::deserialize("description", stack)));
+                    }
+                    "fpgaImageGlobalId" => {
+                        obj.fpga_image_global_id = Some(try!(StringDeserializer::deserialize(
+                            "fpgaImageGlobalId",
+                            stack
+                        )));
+                    }
+                    "fpgaImageId" => {
+                        obj.fpga_image_id =
+                            Some(try!(StringDeserializer::deserialize("fpgaImageId", stack)));
+                    }
+                    "name" => {
+                        obj.name = Some(try!(StringDeserializer::deserialize("name", stack)));
+                    }
+                    "ownerAlias" => {
+                        obj.owner_alias =
+                            Some(try!(StringDeserializer::deserialize("ownerAlias", stack)));
+                    }
+                    "ownerId" => {
+                        obj.owner_id =
+                            Some(try!(StringDeserializer::deserialize("ownerId", stack)));
+                    }
+                    "pciId" => {
+                        obj.pci_id = Some(try!(PciIdDeserializer::deserialize("pciId", stack)));
+                    }
+                    "productCodes" => {
+                        obj.product_codes = Some(try!(ProductCodeListDeserializer::deserialize(
+                            "productCodes",
+                            stack
+                        )));
+                    }
+                    "public" => {
+                        obj.public = Some(try!(BooleanDeserializer::deserialize("public", stack)));
+                    }
+                    "shellVersion" => {
+                        obj.shell_version =
+                            Some(try!(StringDeserializer::deserialize("shellVersion", stack)));
+                    }
+                    "state" => {
+                        obj.state = Some(try!(FpgaImageStateDeserializer::deserialize(
+                            "state",
+                            stack
+                        )));
+                    }
+                    "tags" => {
+                        obj.tags = Some(try!(TagListDeserializer::deserialize("tags", stack)));
+                    }
+                    "updateTime" => {
+                        obj.update_time =
+                            Some(try!(DateTimeDeserializer::deserialize("updateTime", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
                 }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>Describes an Amazon FPGA image (AFI) attribute.</p>
+#[derive(Default, Debug, Clone)]
+pub struct FpgaImageAttribute {
+    /// <p>The description of the AFI.</p>
+    pub description: Option<String>,
+    /// <p>The ID of the AFI.</p>
+    pub fpga_image_id: Option<String>,
+    /// <p>One or more load permissions.</p>
+    pub load_permissions: Option<Vec<LoadPermission>>,
+    /// <p>The name of the AFI.</p>
+    pub name: Option<String>,
+    /// <p>One or more product codes.</p>
+    pub product_codes: Option<Vec<ProductCode>>,
+}
+
+struct FpgaImageAttributeDeserializer;
+impl FpgaImageAttributeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<FpgaImageAttribute, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = FpgaImageAttribute::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "description" => {
+                        obj.description =
+                            Some(try!(StringDeserializer::deserialize("description", stack)));
+                    }
+                    "fpgaImageId" => {
+                        obj.fpga_image_id =
+                            Some(try!(StringDeserializer::deserialize("fpgaImageId", stack)));
+                    }
+                    "loadPermissions" => {
+                        obj.load_permissions = Some(try!(
+                            LoadPermissionListDeserializer::deserialize("loadPermissions", stack)
+                        ));
+                    }
+                    "name" => {
+                        obj.name = Some(try!(StringDeserializer::deserialize("name", stack)));
+                    }
+                    "productCodes" => {
+                        obj.product_codes = Some(try!(ProductCodeListDeserializer::deserialize(
+                            "productCodes",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
                 DeserializerNext::Close => break,
                 DeserializerNext::Skip => {
                     stack.next();
@@ -19445,6 +22829,85 @@ impl GetHostReservationPurchasePreviewResultDeserializer {
         Ok(obj)
     }
 }
+#[derive(Default, Debug, Clone)]
+pub struct GetLaunchTemplateDataRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The ID of the instance.</p>
+    pub instance_id: String,
+}
+
+/// Serialize `GetLaunchTemplateDataRequest` contents to a `SignedRequest`.
+struct GetLaunchTemplateDataRequestSerializer;
+impl GetLaunchTemplateDataRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &GetLaunchTemplateDataRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "InstanceId"),
+            &obj.instance_id.replace("+", "%2B"),
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct GetLaunchTemplateDataResult {
+    /// <p>The instance data.</p>
+    pub launch_template_data: Option<ResponseLaunchTemplateData>,
+}
+
+struct GetLaunchTemplateDataResultDeserializer;
+impl GetLaunchTemplateDataResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetLaunchTemplateDataResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = GetLaunchTemplateDataResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "launchTemplateData" => {
+                        obj.launch_template_data =
+                            Some(try!(ResponseLaunchTemplateDataDeserializer::deserialize(
+                                "launchTemplateData",
+                                stack
+                            )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>Contains the parameters for GetPasswordData.</p>
 #[derive(Default, Debug, Clone)]
 pub struct GetPasswordDataRequest {
@@ -19481,7 +22944,7 @@ impl GetPasswordDataRequestSerializer {
 pub struct GetPasswordDataResult {
     /// <p>The ID of the Windows instance.</p>
     pub instance_id: Option<String>,
-    /// <p>The password of the instance.</p>
+    /// <p>The password of the instance. Returns an empty string if the password is not available.</p>
     pub password_data: Option<String>,
     /// <p>The time the data was last updated.</p>
     pub timestamp: Option<String>,
@@ -19542,7 +23005,7 @@ pub struct GetReservedInstancesExchangeQuoteRequest {
     pub dry_run: Option<bool>,
     /// <p>The IDs of the Convertible Reserved Instances to exchange.</p>
     pub reserved_instance_ids: Vec<String>,
-    /// <p>The configuration requirements of the Convertible Reserved Instances to exchange for your current Convertible Reserved Instances.</p>
+    /// <p>The configuration of the target Convertible Reserved Instance to exchange for your current Convertible Reserved Instances.</p>
     pub target_configurations: Option<Vec<TargetConfigurationRequest>>,
 }
 
@@ -19686,6 +23149,46 @@ impl GetReservedInstancesExchangeQuoteResultDeserializer {
         }
 
         try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct GroupIdStringListDeserializer;
+impl GroupIdStringListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "groupId" {
+                        obj.push(try!(StringDeserializer::deserialize("groupId", stack)));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
 
         Ok(obj)
     }
@@ -19835,6 +23338,50 @@ impl GroupIdentifierListSerializer {
     }
 }
 
+struct GroupIdentifierSetDeserializer;
+impl GroupIdentifierSetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<SecurityGroupIdentifier>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(SecurityGroupIdentifierDeserializer::deserialize(
+                            "item",
+                            stack
+                        )));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+
 /// Serialize `GroupIds` contents to a `SignedRequest`.
 struct GroupIdsSerializer;
 impl GroupIdsSerializer {
@@ -19857,12 +23404,12 @@ impl GroupNameStringListSerializer {
     }
 }
 
-/// <p>Describes an event in the history of the Spot fleet request.</p>
+/// <p>Describes an event in the history of the Spot Fleet request.</p>
 #[derive(Default, Debug, Clone)]
 pub struct HistoryRecord {
     /// <p>Information about the event.</p>
     pub event_information: EventInformation,
-    /// <p><p>The event type.</p> <ul> <li> <p> <code>error</code> - Indicates an error with the Spot fleet request.</p> </li> <li> <p> <code>fleetRequestChange</code> - Indicates a change in the status or configuration of the Spot fleet request.</p> </li> <li> <p> <code>instanceChange</code> - Indicates that an instance was launched or terminated.</p> </li> </ul></p>
+    /// <p><p>The event type.</p> <ul> <li> <p> <code>error</code> - An error with the Spot Fleet request.</p> </li> <li> <p> <code>fleetRequestChange</code> - A change in the status or configuration of the Spot Fleet request.</p> </li> <li> <p> <code>instanceChange</code> - An instance was launched or terminated.</p> </li> <li> <p> <code>Information</code> - An informational event.</p> </li> </ul></p>
     pub event_type: String,
     /// <p>The date and time of the event, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z).</p>
     pub timestamp: String,
@@ -20306,8 +23853,8 @@ impl HostOfferingSetDeserializer {
 
             match next_event {
                 DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(try!(HostOfferingDeserializer::deserialize("member", stack)));
+                    if name == "item" {
+                        obj.push(try!(HostOfferingDeserializer::deserialize("item", stack)));
                     } else {
                         skip_tree(stack);
                     }
@@ -21060,7 +24607,7 @@ pub struct Image {
     pub public: Option<bool>,
     /// <p>The RAM disk associated with the image, if any. Only applicable for machine images.</p>
     pub ramdisk_id: Option<String>,
-    /// <p>The device name of the root device (for example, <code>/dev/sda1</code> or <code>/dev/xvda</code>).</p>
+    /// <p>The device name of the root device volume (for example, <code>/dev/sda1</code>).</p>
     pub root_device_name: Option<String>,
     /// <p>The type of root device used by the AMI. The AMI can use an EBS volume or an instance store volume.</p>
     pub root_device_type: Option<String>,
@@ -22790,7 +26337,7 @@ pub struct Instance {
     pub block_device_mappings: Option<Vec<InstanceBlockDeviceMapping>>,
     /// <p>The idempotency token you provided when you launched the instance, if applicable.</p>
     pub client_token: Option<String>,
-    /// <p>Indicates whether the instance is optimized for EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS Optimized instance.</p>
+    /// <p>Indicates whether the instance is optimized for Amazon EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS Optimized instance.</p>
     pub ebs_optimized: Option<bool>,
     /// <p>The Elastic GPU associated with the instance.</p>
     pub elastic_gpu_associations: Option<Vec<ElasticGpuAssociation>>,
@@ -22804,7 +26351,7 @@ pub struct Instance {
     pub image_id: Option<String>,
     /// <p>The ID of the instance.</p>
     pub instance_id: Option<String>,
-    /// <p>Indicates whether this is a Spot instance or a Scheduled Instance.</p>
+    /// <p>Indicates whether this is a Spot Instance or a Scheduled Instance.</p>
     pub instance_lifecycle: Option<String>,
     /// <p>The instance type.</p>
     pub instance_type: Option<String>,
@@ -22822,7 +26369,7 @@ pub struct Instance {
     pub placement: Option<Placement>,
     /// <p>The value is <code>Windows</code> for Windows instances; otherwise blank.</p>
     pub platform: Option<String>,
-    /// <p>(IPv4 only) The private DNS hostname name assigned to the instance. This DNS hostname can only be used inside the Amazon EC2 network. This name is not available until the instance enters the <code>running</code> state. </p> <p>[EC2-VPC] The Amazon-provided DNS server will resolve Amazon-provided private DNS hostnames if you've enabled DNS resolution and DNS hostnames in your VPC. If you are not using the Amazon-provided DNS server in your VPC, your custom domain name servers must resolve the hostname as appropriate.</p>
+    /// <p>(IPv4 only) The private DNS hostname name assigned to the instance. This DNS hostname can only be used inside the Amazon EC2 network. This name is not available until the instance enters the <code>running</code> state. </p> <p>[EC2-VPC] The Amazon-provided DNS server resolves Amazon-provided private DNS hostnames if you've enabled DNS resolution and DNS hostnames in your VPC. If you are not using the Amazon-provided DNS server in your VPC, your custom domain name servers must resolve the hostname as appropriate.</p>
     pub private_dns_name: Option<String>,
     /// <p>The private IPv4 address assigned to the instance.</p>
     pub private_ip_address: Option<String>,
@@ -22834,15 +26381,15 @@ pub struct Instance {
     pub public_ip_address: Option<String>,
     /// <p>The RAM disk associated with this instance, if applicable.</p>
     pub ramdisk_id: Option<String>,
-    /// <p>The root device name (for example, <code>/dev/sda1</code> or <code>/dev/xvda</code>).</p>
+    /// <p>The device name of the root device volume (for example, <code>/dev/sda1</code>).</p>
     pub root_device_name: Option<String>,
     /// <p>The root device type used by the AMI. The AMI can use an EBS volume or an instance store volume.</p>
     pub root_device_type: Option<String>,
     /// <p>One or more security groups for the instance.</p>
     pub security_groups: Option<Vec<GroupIdentifier>>,
-    /// <p>Specifies whether to enable an instance launched in a VPC to perform NAT. This controls whether source/destination checking is enabled on the instance. A value of <code>true</code> means checking is enabled, and <code>false</code> means checking is disabled. The value must be <code>false</code> for the instance to perform NAT. For more information, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_NAT_Instance.html">NAT Instances</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Specifies whether to enable an instance launched in a VPC to perform NAT. This controls whether source/destination checking is enabled on the instance. A value of <code>true</code> means that checking is enabled, and <code>false</code> means that checking is disabled. The value must be <code>false</code> for the instance to perform NAT. For more information, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_NAT_Instance.html">NAT Instances</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     pub source_dest_check: Option<bool>,
-    /// <p>If the request is a Spot instance request, the ID of the request.</p>
+    /// <p>If the request is a Spot Instance request, the ID of the request.</p>
     pub spot_instance_request_id: Option<String>,
     /// <p>Specifies whether enhanced networking with the Intel 82599 Virtual Function interface is enabled.</p>
     pub sriov_net_support: Option<String>,
@@ -23112,7 +26659,7 @@ pub struct InstanceAttribute {
     pub block_device_mappings: Option<Vec<InstanceBlockDeviceMapping>>,
     /// <p>If the value is <code>true</code>, you can't terminate the instance through the Amazon EC2 console, CLI, or API; otherwise, you can.</p>
     pub disable_api_termination: Option<AttributeBooleanValue>,
-    /// <p>Indicates whether the instance is optimized for EBS I/O.</p>
+    /// <p>Indicates whether the instance is optimized for Amazon EBS I/O.</p>
     pub ebs_optimized: Option<AttributeBooleanValue>,
     /// <p>Indicates whether enhanced networking with ENA is enabled.</p>
     pub ena_support: Option<AttributeBooleanValue>,
@@ -23130,9 +26677,9 @@ pub struct InstanceAttribute {
     pub product_codes: Option<Vec<ProductCode>>,
     /// <p>The RAM disk ID.</p>
     pub ramdisk_id: Option<AttributeValue>,
-    /// <p>The name of the root device (for example, <code>/dev/sda1</code> or <code>/dev/xvda</code>).</p>
+    /// <p>The device name of the root device volume (for example, <code>/dev/sda1</code>).</p>
     pub root_device_name: Option<AttributeValue>,
-    /// <p>Indicates whether source/destination checking is enabled. A value of <code>true</code> means checking is enabled, and <code>false</code> means checking is disabled. This value must be <code>false</code> for a NAT instance to perform NAT.</p>
+    /// <p>Indicates whether source/destination checking is enabled. A value of <code>true</code> means that checking is enabled, and <code>false</code> means that checking is disabled. This value must be <code>false</code> for a NAT instance to perform NAT.</p>
     pub source_dest_check: Option<AttributeBooleanValue>,
     /// <p>Indicates whether enhanced networking with the Intel 82599 Virtual Function interface is enabled.</p>
     pub sriov_net_support: Option<AttributeValue>,
@@ -23268,7 +26815,7 @@ impl InstanceAttributeDeserializer {
 /// <p>Describes a block device mapping.</p>
 #[derive(Default, Debug, Clone)]
 pub struct InstanceBlockDeviceMapping {
-    /// <p>The device name exposed to the instance (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p>
+    /// <p>The device name (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p>
     pub device_name: Option<String>,
     /// <p>Parameters used to automatically set up EBS volumes when the instance is launched.</p>
     pub ebs: Option<EbsInstanceBlockDevice>,
@@ -23366,7 +26913,7 @@ impl InstanceBlockDeviceMappingListDeserializer {
 /// <p>Describes a block device mapping entry.</p>
 #[derive(Default, Debug, Clone)]
 pub struct InstanceBlockDeviceMappingSpecification {
-    /// <p>The device name exposed to the instance (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p>
+    /// <p>The device name (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p>
     pub device_name: Option<String>,
     /// <p>Parameters used to automatically set up EBS volumes when the instance is launched.</p>
     pub ebs: Option<EbsInstanceBlockDeviceSpecification>,
@@ -23586,6 +27133,147 @@ impl InstanceCountListDeserializer {
         Ok(obj)
     }
 }
+/// <p>Describes the credit option for CPU usage of a T2 instance. </p>
+#[derive(Default, Debug, Clone)]
+pub struct InstanceCreditSpecification {
+    /// <p>The credit option for CPU usage of the instance. Valid values are <code>standard</code> and <code>unlimited</code>.</p>
+    pub cpu_credits: Option<String>,
+    /// <p>The ID of the instance.</p>
+    pub instance_id: Option<String>,
+}
+
+struct InstanceCreditSpecificationDeserializer;
+impl InstanceCreditSpecificationDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<InstanceCreditSpecification, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = InstanceCreditSpecification::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "cpuCredits" => {
+                        obj.cpu_credits =
+                            Some(try!(StringDeserializer::deserialize("cpuCredits", stack)));
+                    }
+                    "instanceId" => {
+                        obj.instance_id =
+                            Some(try!(StringDeserializer::deserialize("instanceId", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct InstanceCreditSpecificationListDeserializer;
+impl InstanceCreditSpecificationListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<InstanceCreditSpecification>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(InstanceCreditSpecificationDeserializer::deserialize(
+                            "item",
+                            stack
+                        )));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `InstanceCreditSpecificationListRequest` contents to a `SignedRequest`.
+struct InstanceCreditSpecificationListRequestSerializer;
+impl InstanceCreditSpecificationListRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<InstanceCreditSpecificationRequest>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            InstanceCreditSpecificationRequestSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+/// <p>Describes the credit option for CPU usage of a T2 instance.</p>
+#[derive(Default, Debug, Clone)]
+pub struct InstanceCreditSpecificationRequest {
+    /// <p>The credit option for CPU usage of the instance. Valid values are <code>standard</code> and <code>unlimited</code>.</p>
+    pub cpu_credits: Option<String>,
+    /// <p>The ID of the instance.</p>
+    pub instance_id: Option<String>,
+}
+
+/// Serialize `InstanceCreditSpecificationRequest` contents to a `SignedRequest`.
+struct InstanceCreditSpecificationRequestSerializer;
+impl InstanceCreditSpecificationRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &InstanceCreditSpecificationRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.cpu_credits {
+            params.put(
+                &format!("{}{}", prefix, "CpuCredits"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.instance_id {
+            params.put(
+                &format!("{}{}", prefix, "InstanceId"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
 /// <p>Describes an instance to export.</p>
 #[derive(Default, Debug, Clone)]
 pub struct InstanceExportDetails {
@@ -23706,6 +27394,20 @@ impl InstanceIdStringListSerializer {
     }
 }
 
+struct InstanceInterruptionBehaviorDeserializer;
+impl InstanceInterruptionBehaviorDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>Describes an IPv6 address.</p>
 #[derive(Default, Debug, Clone)]
 pub struct InstanceIpv6Address {
@@ -23827,6 +27529,42 @@ impl InstanceIpv6AddressListSerializer {
     }
 }
 
+/// Serialize `InstanceIpv6AddressListRequest` contents to a `SignedRequest`.
+struct InstanceIpv6AddressListRequestSerializer;
+impl InstanceIpv6AddressListRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<InstanceIpv6AddressRequest>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            InstanceIpv6AddressRequestSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+/// <p>Describes an IPv6 address.</p>
+#[derive(Default, Debug, Clone)]
+pub struct InstanceIpv6AddressRequest {
+    /// <p>The IPv6 address.</p>
+    pub ipv_6_address: Option<String>,
+}
+
+/// Serialize `InstanceIpv6AddressRequest` contents to a `SignedRequest`.
+struct InstanceIpv6AddressRequestSerializer;
+impl InstanceIpv6AddressRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &InstanceIpv6AddressRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.ipv_6_address {
+            params.put(
+                &format!("{}{}", prefix, "Ipv6Address"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
 struct InstanceLifecycleTypeDeserializer;
 impl InstanceLifecycleTypeDeserializer {
     #[allow(unused_variables)]
@@ -23881,6 +27619,40 @@ impl InstanceListDeserializer {
         Ok(obj)
     }
 }
+/// <p>Describes the market (purchasing) option for the instances.</p>
+#[derive(Default, Debug, Clone)]
+pub struct InstanceMarketOptionsRequest {
+    /// <p>The market type.</p>
+    pub market_type: Option<String>,
+    /// <p>The options for Spot Instances.</p>
+    pub spot_options: Option<SpotMarketOptions>,
+}
+
+/// Serialize `InstanceMarketOptionsRequest` contents to a `SignedRequest`.
+struct InstanceMarketOptionsRequestSerializer;
+impl InstanceMarketOptionsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &InstanceMarketOptionsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.market_type {
+            params.put(
+                &format!("{}{}", prefix, "MarketType"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.spot_options {
+            SpotMarketOptionsSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "SpotOptions"),
+                field_value,
+            );
+        }
+    }
+}
+
 /// <p>Describes the monitoring of an instance.</p>
 #[derive(Default, Debug, Clone)]
 pub struct InstanceMonitoring {
@@ -25537,10 +29309,10 @@ impl InternetGatewayListDeserializer {
         Ok(obj)
     }
 }
-/// <p>Describes a security group rule.</p>
+/// <p>Describes a set of permissions for a security group rule.</p>
 #[derive(Default, Debug, Clone)]
 pub struct IpPermission {
-    /// <p>The start of port range for the TCP and UDP protocols, or an ICMP/ICMPv6 type number. A value of <code>-1</code> indicates all ICMP/ICMPv6 types.</p>
+    /// <p>The start of port range for the TCP and UDP protocols, or an ICMP/ICMPv6 type number. A value of <code>-1</code> indicates all ICMP/ICMPv6 types. If you specify all ICMP/ICMPv6 types, you must specify all codes.</p>
     pub from_port: Option<i64>,
     /// <p>The IP protocol name (<code>tcp</code>, <code>udp</code>, <code>icmp</code>) or number (see <a href="http://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml">Protocol Numbers</a>). </p> <p>[EC2-VPC only] Use <code>-1</code> to specify all protocols. When authorizing security group rules, specifying <code>-1</code> or a protocol number other than <code>tcp</code>, <code>udp</code>, <code>icmp</code>, or <code>58</code> (ICMPv6) allows traffic on all ports, regardless of any port range you specify. For <code>tcp</code>, <code>udp</code>, and <code>icmp</code>, you must specify a port range. For <code>58</code> (ICMPv6), you can optionally specify a port range; if you don't, traffic for all types and codes is allowed when authorizing rules. </p>
     pub ip_protocol: Option<String>,
@@ -25548,9 +29320,9 @@ pub struct IpPermission {
     pub ip_ranges: Option<Vec<IpRange>>,
     /// <p>[EC2-VPC only] One or more IPv6 ranges.</p>
     pub ipv_6_ranges: Option<Vec<Ipv6Range>>,
-    /// <p>(Valid for <a>AuthorizeSecurityGroupEgress</a>, <a>RevokeSecurityGroupEgress</a> and <a>DescribeSecurityGroups</a> only) One or more prefix list IDs for an AWS service. In an <a>AuthorizeSecurityGroupEgress</a> request, this is the AWS service that you want to access through a VPC endpoint from instances associated with the security group.</p>
+    /// <p>(EC2-VPC only; valid for <a>AuthorizeSecurityGroupEgress</a>, <a>RevokeSecurityGroupEgress</a> and <a>DescribeSecurityGroups</a> only) One or more prefix list IDs for an AWS service. In an <a>AuthorizeSecurityGroupEgress</a> request, this is the AWS service that you want to access through a VPC endpoint from instances associated with the security group.</p>
     pub prefix_list_ids: Option<Vec<PrefixListId>>,
-    /// <p>The end of port range for the TCP and UDP protocols, or an ICMP/ICMPv6 code. A value of <code>-1</code> indicates all ICMP/ICMPv6 codes for the specified ICMP type.</p>
+    /// <p>The end of port range for the TCP and UDP protocols, or an ICMP/ICMPv6 code. A value of <code>-1</code> indicates all ICMP/ICMPv6 codes for the specified ICMP type. If you specify all ICMP/ICMPv6 types, you must specify all codes.</p>
     pub to_port: Option<i64>,
     /// <p>One or more security group and AWS account ID pairs.</p>
     pub user_id_group_pairs: Option<Vec<UserIdGroupPair>>,
@@ -25739,8 +29511,10 @@ impl IpPermissionListSerializer {
 /// <p>Describes an IPv4 range.</p>
 #[derive(Default, Debug, Clone)]
 pub struct IpRange {
-    /// <p>The IPv4 CIDR range. You can either specify a CIDR range or a source security group, not both. To specify a single IPv4 address, use the /32 prefix.</p>
+    /// <p>The IPv4 CIDR range. You can either specify a CIDR range or a source security group, not both. To specify a single IPv4 address, use the /32 prefix length.</p>
     pub cidr_ip: Option<String>,
+    /// <p>A description for the security group rule that references this IPv4 address range.</p> <p>Constraints: Up to 255 characters in length. Allowed characters are a-z, A-Z, 0-9, spaces, and ._-:/()#,@[]+=;{}!$*</p>
+    pub description: Option<String>,
 }
 
 struct IpRangeDeserializer;
@@ -25767,6 +29541,10 @@ impl IpRangeDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "cidrIp" => {
                         obj.cidr_ip = Some(try!(StringDeserializer::deserialize("cidrIp", stack)));
+                    }
+                    "description" => {
+                        obj.description =
+                            Some(try!(StringDeserializer::deserialize("description", stack)));
                     }
                     _ => skip_tree(stack),
                 },
@@ -25795,6 +29573,12 @@ impl IpRangeSerializer {
         if let Some(ref field_value) = obj.cidr_ip {
             params.put(
                 &format!("{}{}", prefix, "CidrIp"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.description {
+            params.put(
+                &format!("{}{}", prefix, "Description"),
                 &field_value.replace("+", "%2B"),
             );
         }
@@ -26037,8 +29821,10 @@ impl Ipv6CidrBlockSetDeserializer {
 /// <p>[EC2-VPC only] Describes an IPv6 range.</p>
 #[derive(Default, Debug, Clone)]
 pub struct Ipv6Range {
-    /// <p>The IPv6 CIDR range. You can either specify a CIDR range or a source security group, not both. To specify a single IPv6 address, use the /128 prefix.</p>
+    /// <p>The IPv6 CIDR range. You can either specify a CIDR range or a source security group, not both. To specify a single IPv6 address, use the /128 prefix length.</p>
     pub cidr_ipv_6: Option<String>,
+    /// <p>A description for the security group rule that references this IPv6 address range.</p> <p>Constraints: Up to 255 characters in length. Allowed characters are a-z, A-Z, 0-9, spaces, and ._-:/()#,@[]+=;{}!$*</p>
+    pub description: Option<String>,
 }
 
 struct Ipv6RangeDeserializer;
@@ -26067,6 +29853,10 @@ impl Ipv6RangeDeserializer {
                         obj.cidr_ipv_6 =
                             Some(try!(StringDeserializer::deserialize("cidrIpv6", stack)));
                     }
+                    "description" => {
+                        obj.description =
+                            Some(try!(StringDeserializer::deserialize("description", stack)));
+                    }
                     _ => skip_tree(stack),
                 },
                 DeserializerNext::Close => break,
@@ -26094,6 +29884,12 @@ impl Ipv6RangeSerializer {
         if let Some(ref field_value) = obj.cidr_ipv_6 {
             params.put(
                 &format!("{}{}", prefix, "CidrIpv6"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.description {
+            params.put(
+                &format!("{}{}", prefix, "Description"),
                 &field_value.replace("+", "%2B"),
             );
         }
@@ -26493,7 +30289,7 @@ impl LaunchPermissionModificationsSerializer {
 pub struct LaunchSpecification {
     /// <p>Deprecated.</p>
     pub addressing_type: Option<String>,
-    /// <p>One or more block device mapping entries.</p> <p>Although you can specify encrypted EBS volumes in this block device mapping for your Spot Instances, these volumes are not encrypted.</p>
+    /// <p>One or more block device mapping entries.</p>
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     /// <p>Indicates whether the instance is optimized for EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal EBS I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS Optimized instance.</p> <p>Default: <code>false</code> </p>
     pub ebs_optimized: Option<bool>,
@@ -26693,6 +30489,2003 @@ impl LaunchSpecsListSerializer {
     }
 }
 
+/// <p>Describes a launch template.</p>
+#[derive(Default, Debug, Clone)]
+pub struct LaunchTemplate {
+    /// <p>The time launch template was created.</p>
+    pub create_time: Option<String>,
+    /// <p>The principal that created the launch template. </p>
+    pub created_by: Option<String>,
+    /// <p>The version number of the default version of the launch template.</p>
+    pub default_version_number: Option<i64>,
+    /// <p>The version number of the latest version of the launch template.</p>
+    pub latest_version_number: Option<i64>,
+    /// <p>The ID of the launch template.</p>
+    pub launch_template_id: Option<String>,
+    /// <p>The name of the launch template.</p>
+    pub launch_template_name: Option<String>,
+    /// <p>The tags for the launch template.</p>
+    pub tags: Option<Vec<Tag>>,
+}
+
+struct LaunchTemplateDeserializer;
+impl LaunchTemplateDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LaunchTemplate, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = LaunchTemplate::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "createTime" => {
+                        obj.create_time =
+                            Some(try!(DateTimeDeserializer::deserialize("createTime", stack)));
+                    }
+                    "createdBy" => {
+                        obj.created_by =
+                            Some(try!(StringDeserializer::deserialize("createdBy", stack)));
+                    }
+                    "defaultVersionNumber" => {
+                        obj.default_version_number = Some(try!(LongDeserializer::deserialize(
+                            "defaultVersionNumber",
+                            stack
+                        )));
+                    }
+                    "latestVersionNumber" => {
+                        obj.latest_version_number = Some(try!(LongDeserializer::deserialize(
+                            "latestVersionNumber",
+                            stack
+                        )));
+                    }
+                    "launchTemplateId" => {
+                        obj.launch_template_id = Some(try!(StringDeserializer::deserialize(
+                            "launchTemplateId",
+                            stack
+                        )));
+                    }
+                    "launchTemplateName" => {
+                        obj.launch_template_name =
+                            Some(try!(LaunchTemplateNameDeserializer::deserialize(
+                                "launchTemplateName",
+                                stack
+                            )));
+                    }
+                    "tagSet" => {
+                        obj.tags = Some(try!(TagListDeserializer::deserialize("tagSet", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>Describes a block device mapping.</p>
+#[derive(Default, Debug, Clone)]
+pub struct LaunchTemplateBlockDeviceMapping {
+    /// <p>The device name.</p>
+    pub device_name: Option<String>,
+    /// <p>Information about the block device for an EBS volume.</p>
+    pub ebs: Option<LaunchTemplateEbsBlockDevice>,
+    /// <p>Suppresses the specified device included in the block device mapping of the AMI.</p>
+    pub no_device: Option<String>,
+    /// <p>The virtual device name (ephemeralN).</p>
+    pub virtual_name: Option<String>,
+}
+
+struct LaunchTemplateBlockDeviceMappingDeserializer;
+impl LaunchTemplateBlockDeviceMappingDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LaunchTemplateBlockDeviceMapping, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = LaunchTemplateBlockDeviceMapping::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "deviceName" => {
+                        obj.device_name =
+                            Some(try!(StringDeserializer::deserialize("deviceName", stack)));
+                    }
+                    "ebs" => {
+                        obj.ebs = Some(try!(
+                            LaunchTemplateEbsBlockDeviceDeserializer::deserialize("ebs", stack)
+                        ));
+                    }
+                    "noDevice" => {
+                        obj.no_device =
+                            Some(try!(StringDeserializer::deserialize("noDevice", stack)));
+                    }
+                    "virtualName" => {
+                        obj.virtual_name =
+                            Some(try!(StringDeserializer::deserialize("virtualName", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct LaunchTemplateBlockDeviceMappingListDeserializer;
+impl LaunchTemplateBlockDeviceMappingListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<LaunchTemplateBlockDeviceMapping>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(
+                            LaunchTemplateBlockDeviceMappingDeserializer::deserialize(
+                                "item",
+                                stack
+                            )
+                        ));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+/// <p>Describes a block device mapping.</p>
+#[derive(Default, Debug, Clone)]
+pub struct LaunchTemplateBlockDeviceMappingRequest {
+    /// <p>The device name (for example, /dev/sdh or xvdh).</p>
+    pub device_name: Option<String>,
+    /// <p>Parameters used to automatically set up EBS volumes when the instance is launched.</p>
+    pub ebs: Option<LaunchTemplateEbsBlockDeviceRequest>,
+    /// <p>Suppresses the specified device included in the block device mapping of the AMI.</p>
+    pub no_device: Option<String>,
+    /// <p>The virtual device name (ephemeralN). Instance store volumes are numbered starting from 0. An instance type with 2 available instance store volumes can specify mappings for ephemeral0 and ephemeral1. The number of available instance store volumes depends on the instance type. After you connect to the instance, you must mount the volume.</p>
+    pub virtual_name: Option<String>,
+}
+
+/// Serialize `LaunchTemplateBlockDeviceMappingRequest` contents to a `SignedRequest`.
+struct LaunchTemplateBlockDeviceMappingRequestSerializer;
+impl LaunchTemplateBlockDeviceMappingRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &LaunchTemplateBlockDeviceMappingRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.device_name {
+            params.put(
+                &format!("{}{}", prefix, "DeviceName"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.ebs {
+            LaunchTemplateEbsBlockDeviceRequestSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Ebs"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.no_device {
+            params.put(
+                &format!("{}{}", prefix, "NoDevice"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.virtual_name {
+            params.put(
+                &format!("{}{}", prefix, "VirtualName"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
+/// Serialize `LaunchTemplateBlockDeviceMappingRequestList` contents to a `SignedRequest`.
+struct LaunchTemplateBlockDeviceMappingRequestListSerializer;
+impl LaunchTemplateBlockDeviceMappingRequestListSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &Vec<LaunchTemplateBlockDeviceMappingRequest>,
+    ) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            LaunchTemplateBlockDeviceMappingRequestSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+/// <p>Describes a launch template and overrides.</p>
+#[derive(Default, Debug, Clone)]
+pub struct LaunchTemplateConfig {
+    /// <p>The launch template.</p>
+    pub launch_template_specification: Option<FleetLaunchTemplateSpecification>,
+    /// <p>Any parameters that you specify override the same parameters in the launch template.</p>
+    pub overrides: Option<Vec<LaunchTemplateOverrides>>,
+}
+
+struct LaunchTemplateConfigDeserializer;
+impl LaunchTemplateConfigDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LaunchTemplateConfig, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = LaunchTemplateConfig::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "launchTemplateSpecification" => {
+                        obj.launch_template_specification = Some(try!(
+                            FleetLaunchTemplateSpecificationDeserializer::deserialize(
+                                "launchTemplateSpecification",
+                                stack
+                            )
+                        ));
+                    }
+                    "overrides" => {
+                        obj.overrides =
+                            Some(try!(LaunchTemplateOverridesListDeserializer::deserialize(
+                                "overrides",
+                                stack
+                            )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `LaunchTemplateConfig` contents to a `SignedRequest`.
+struct LaunchTemplateConfigSerializer;
+impl LaunchTemplateConfigSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &LaunchTemplateConfig) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.launch_template_specification {
+            FleetLaunchTemplateSpecificationSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "LaunchTemplateSpecification"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.overrides {
+            LaunchTemplateOverridesListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Overrides"),
+                field_value,
+            );
+        }
+    }
+}
+
+struct LaunchTemplateConfigListDeserializer;
+impl LaunchTemplateConfigListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<LaunchTemplateConfig>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(LaunchTemplateConfigDeserializer::deserialize(
+                            "item",
+                            stack
+                        )));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `LaunchTemplateConfigList` contents to a `SignedRequest`.
+struct LaunchTemplateConfigListSerializer;
+impl LaunchTemplateConfigListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<LaunchTemplateConfig>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            LaunchTemplateConfigSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+/// <p>Describes a block device for an EBS volume.</p>
+#[derive(Default, Debug, Clone)]
+pub struct LaunchTemplateEbsBlockDevice {
+    /// <p>Indicates whether the EBS volume is deleted on instance termination.</p>
+    pub delete_on_termination: Option<bool>,
+    /// <p>Indicates whether the EBS volume is encrypted.</p>
+    pub encrypted: Option<bool>,
+    /// <p>The number of I/O operations per second (IOPS) that the volume supports. </p>
+    pub iops: Option<i64>,
+    /// <p>The ARN of the AWS Key Management Service (AWS KMS) CMK used for encryption.</p>
+    pub kms_key_id: Option<String>,
+    /// <p>The ID of the snapshot.</p>
+    pub snapshot_id: Option<String>,
+    /// <p>The size of the volume, in GiB.</p>
+    pub volume_size: Option<i64>,
+    /// <p>The volume type.</p>
+    pub volume_type: Option<String>,
+}
+
+struct LaunchTemplateEbsBlockDeviceDeserializer;
+impl LaunchTemplateEbsBlockDeviceDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LaunchTemplateEbsBlockDevice, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = LaunchTemplateEbsBlockDevice::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "deleteOnTermination" => {
+                        obj.delete_on_termination = Some(try!(BooleanDeserializer::deserialize(
+                            "deleteOnTermination",
+                            stack
+                        )));
+                    }
+                    "encrypted" => {
+                        obj.encrypted =
+                            Some(try!(BooleanDeserializer::deserialize("encrypted", stack)));
+                    }
+                    "iops" => {
+                        obj.iops = Some(try!(IntegerDeserializer::deserialize("iops", stack)));
+                    }
+                    "kmsKeyId" => {
+                        obj.kms_key_id =
+                            Some(try!(StringDeserializer::deserialize("kmsKeyId", stack)));
+                    }
+                    "snapshotId" => {
+                        obj.snapshot_id =
+                            Some(try!(StringDeserializer::deserialize("snapshotId", stack)));
+                    }
+                    "volumeSize" => {
+                        obj.volume_size =
+                            Some(try!(IntegerDeserializer::deserialize("volumeSize", stack)));
+                    }
+                    "volumeType" => {
+                        obj.volume_type = Some(try!(VolumeTypeDeserializer::deserialize(
+                            "volumeType",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>The parameters for a block device for an EBS volume.</p>
+#[derive(Default, Debug, Clone)]
+pub struct LaunchTemplateEbsBlockDeviceRequest {
+    /// <p>Indicates whether the EBS volume is deleted on instance termination.</p>
+    pub delete_on_termination: Option<bool>,
+    /// <p>Indicates whether the EBS volume is encrypted. Encrypted volumes can only be attached to instances that support Amazon EBS encryption. If you are creating a volume from a snapshot, you can't specify an encryption value.</p>
+    pub encrypted: Option<bool>,
+    /// <p>The number of I/O operations per second (IOPS) that the volume supports. For io1, this represents the number of IOPS that are provisioned for the volume. For gp2, this represents the baseline performance of the volume and the rate at which the volume accumulates I/O credits for bursting. For more information about General Purpose SSD baseline performance, I/O credits, and bursting, see Amazon EBS Volume Types in the Amazon Elastic Compute Cloud User Guide.</p> <p>Condition: This parameter is required for requests to create io1 volumes; it is not used in requests to create gp2, st1, sc1, or standard volumes.</p>
+    pub iops: Option<i64>,
+    /// <p>The ARN of the AWS Key Management Service (AWS KMS) CMK used for encryption.</p>
+    pub kms_key_id: Option<String>,
+    /// <p>The ID of the snapshot.</p>
+    pub snapshot_id: Option<String>,
+    /// <p>The size of the volume, in GiB.</p> <p>Default: If you're creating the volume from a snapshot and don't specify a volume size, the default is the snapshot size.</p>
+    pub volume_size: Option<i64>,
+    /// <p>The volume type.</p>
+    pub volume_type: Option<String>,
+}
+
+/// Serialize `LaunchTemplateEbsBlockDeviceRequest` contents to a `SignedRequest`.
+struct LaunchTemplateEbsBlockDeviceRequestSerializer;
+impl LaunchTemplateEbsBlockDeviceRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &LaunchTemplateEbsBlockDeviceRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.delete_on_termination {
+            params.put(
+                &format!("{}{}", prefix, "DeleteOnTermination"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.encrypted {
+            params.put(
+                &format!("{}{}", prefix, "Encrypted"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.iops {
+            params.put(
+                &format!("{}{}", prefix, "Iops"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.kms_key_id {
+            params.put(
+                &format!("{}{}", prefix, "KmsKeyId"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.snapshot_id {
+            params.put(
+                &format!("{}{}", prefix, "SnapshotId"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.volume_size {
+            params.put(
+                &format!("{}{}", prefix, "VolumeSize"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.volume_type {
+            params.put(
+                &format!("{}{}", prefix, "VolumeType"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
+struct LaunchTemplateErrorCodeDeserializer;
+impl LaunchTemplateErrorCodeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>Describes an IAM instance profile.</p>
+#[derive(Default, Debug, Clone)]
+pub struct LaunchTemplateIamInstanceProfileSpecification {
+    /// <p>The Amazon Resource Name (ARN) of the instance profile.</p>
+    pub arn: Option<String>,
+    /// <p>The name of the instance profile.</p>
+    pub name: Option<String>,
+}
+
+struct LaunchTemplateIamInstanceProfileSpecificationDeserializer;
+impl LaunchTemplateIamInstanceProfileSpecificationDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LaunchTemplateIamInstanceProfileSpecification, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = LaunchTemplateIamInstanceProfileSpecification::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "arn" => {
+                        obj.arn = Some(try!(StringDeserializer::deserialize("arn", stack)));
+                    }
+                    "name" => {
+                        obj.name = Some(try!(StringDeserializer::deserialize("name", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>An IAM instance profile.</p>
+#[derive(Default, Debug, Clone)]
+pub struct LaunchTemplateIamInstanceProfileSpecificationRequest {
+    /// <p>The Amazon Resource Name (ARN) of the instance profile.</p>
+    pub arn: Option<String>,
+    /// <p>The name of the instance profile.</p>
+    pub name: Option<String>,
+}
+
+/// Serialize `LaunchTemplateIamInstanceProfileSpecificationRequest` contents to a `SignedRequest`.
+struct LaunchTemplateIamInstanceProfileSpecificationRequestSerializer;
+impl LaunchTemplateIamInstanceProfileSpecificationRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &LaunchTemplateIamInstanceProfileSpecificationRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.arn {
+            params.put(
+                &format!("{}{}", prefix, "Arn"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.name {
+            params.put(
+                &format!("{}{}", prefix, "Name"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
+/// <p>The market (purchasing) option for the instances.</p>
+#[derive(Default, Debug, Clone)]
+pub struct LaunchTemplateInstanceMarketOptions {
+    /// <p>The market type.</p>
+    pub market_type: Option<String>,
+    /// <p>The options for Spot Instances.</p>
+    pub spot_options: Option<LaunchTemplateSpotMarketOptions>,
+}
+
+struct LaunchTemplateInstanceMarketOptionsDeserializer;
+impl LaunchTemplateInstanceMarketOptionsDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LaunchTemplateInstanceMarketOptions, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = LaunchTemplateInstanceMarketOptions::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "marketType" => {
+                        obj.market_type = Some(try!(MarketTypeDeserializer::deserialize(
+                            "marketType",
+                            stack
+                        )));
+                    }
+                    "spotOptions" => {
+                        obj.spot_options = Some(try!(
+                            LaunchTemplateSpotMarketOptionsDeserializer::deserialize(
+                                "spotOptions",
+                                stack
+                            )
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>The market (purchasing) option for the instances.</p>
+#[derive(Default, Debug, Clone)]
+pub struct LaunchTemplateInstanceMarketOptionsRequest {
+    /// <p>The market type.</p>
+    pub market_type: Option<String>,
+    /// <p>The options for Spot Instances.</p>
+    pub spot_options: Option<LaunchTemplateSpotMarketOptionsRequest>,
+}
+
+/// Serialize `LaunchTemplateInstanceMarketOptionsRequest` contents to a `SignedRequest`.
+struct LaunchTemplateInstanceMarketOptionsRequestSerializer;
+impl LaunchTemplateInstanceMarketOptionsRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &LaunchTemplateInstanceMarketOptionsRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.market_type {
+            params.put(
+                &format!("{}{}", prefix, "MarketType"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.spot_options {
+            LaunchTemplateSpotMarketOptionsRequestSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "SpotOptions"),
+                field_value,
+            );
+        }
+    }
+}
+
+/// <p>Describes a network interface.</p>
+#[derive(Default, Debug, Clone)]
+pub struct LaunchTemplateInstanceNetworkInterfaceSpecification {
+    /// <p>Indicates whether to associate a public IPv4 address with eth0 for a new network interface.</p>
+    pub associate_public_ip_address: Option<bool>,
+    /// <p>Indicates whether the network interface is deleted when the instance is terminated.</p>
+    pub delete_on_termination: Option<bool>,
+    /// <p>A description for the network interface.</p>
+    pub description: Option<String>,
+    /// <p>The device index for the network interface attachment.</p>
+    pub device_index: Option<i64>,
+    /// <p>The IDs of one or more security groups.</p>
+    pub groups: Option<Vec<String>>,
+    /// <p>The number of IPv6 addresses for the network interface.</p>
+    pub ipv_6_address_count: Option<i64>,
+    /// <p>The IPv6 addresses for the network interface.</p>
+    pub ipv_6_addresses: Option<Vec<InstanceIpv6Address>>,
+    /// <p>The ID of the network interface.</p>
+    pub network_interface_id: Option<String>,
+    /// <p>The primary private IPv4 address of the network interface.</p>
+    pub private_ip_address: Option<String>,
+    /// <p>One or more private IPv4 addresses.</p>
+    pub private_ip_addresses: Option<Vec<PrivateIpAddressSpecification>>,
+    /// <p>The number of secondary private IPv4 addresses for the network interface.</p>
+    pub secondary_private_ip_address_count: Option<i64>,
+    /// <p>The ID of the subnet for the network interface.</p>
+    pub subnet_id: Option<String>,
+}
+
+struct LaunchTemplateInstanceNetworkInterfaceSpecificationDeserializer;
+impl LaunchTemplateInstanceNetworkInterfaceSpecificationDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LaunchTemplateInstanceNetworkInterfaceSpecification, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = LaunchTemplateInstanceNetworkInterfaceSpecification::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "associatePublicIpAddress" => {
+                            obj.associate_public_ip_address = Some(try!(
+                                BooleanDeserializer::deserialize("associatePublicIpAddress", stack)
+                            ));
+                        }
+                        "deleteOnTermination" => {
+                            obj.delete_on_termination = Some(try!(
+                                BooleanDeserializer::deserialize("deleteOnTermination", stack)
+                            ));
+                        }
+                        "description" => {
+                            obj.description =
+                                Some(try!(StringDeserializer::deserialize("description", stack)));
+                        }
+                        "deviceIndex" => {
+                            obj.device_index =
+                                Some(try!(IntegerDeserializer::deserialize("deviceIndex", stack)));
+                        }
+                        "groupSet" => {
+                            obj.groups = Some(try!(GroupIdStringListDeserializer::deserialize(
+                                "groupSet",
+                                stack
+                            )));
+                        }
+                        "ipv6AddressCount" => {
+                            obj.ipv_6_address_count = Some(try!(
+                                IntegerDeserializer::deserialize("ipv6AddressCount", stack)
+                            ));
+                        }
+                        "ipv6AddressesSet" => {
+                            obj.ipv_6_addresses =
+                                Some(try!(InstanceIpv6AddressListDeserializer::deserialize(
+                                    "ipv6AddressesSet",
+                                    stack
+                                )));
+                        }
+                        "networkInterfaceId" => {
+                            obj.network_interface_id = Some(try!(
+                                StringDeserializer::deserialize("networkInterfaceId", stack)
+                            ));
+                        }
+                        "privateIpAddress" => {
+                            obj.private_ip_address = Some(try!(StringDeserializer::deserialize(
+                                "privateIpAddress",
+                                stack
+                            )));
+                        }
+                        "privateIpAddressesSet" => {
+                            obj.private_ip_addresses = Some(try!(
+                                PrivateIpAddressSpecificationListDeserializer::deserialize(
+                                    "privateIpAddressesSet",
+                                    stack
+                                )
+                            ));
+                        }
+                        "secondaryPrivateIpAddressCount" => {
+                            obj.secondary_private_ip_address_count =
+                                Some(try!(IntegerDeserializer::deserialize(
+                                    "secondaryPrivateIpAddressCount",
+                                    stack
+                                )));
+                        }
+                        "subnetId" => {
+                            obj.subnet_id =
+                                Some(try!(StringDeserializer::deserialize("subnetId", stack)));
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct LaunchTemplateInstanceNetworkInterfaceSpecificationListDeserializer;
+impl LaunchTemplateInstanceNetworkInterfaceSpecificationListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<LaunchTemplateInstanceNetworkInterfaceSpecification>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(LaunchTemplateInstanceNetworkInterfaceSpecificationDeserializer::deserialize("item", stack)));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+/// <p>The parameters for a network interface.</p>
+#[derive(Default, Debug, Clone)]
+pub struct LaunchTemplateInstanceNetworkInterfaceSpecificationRequest {
+    /// <p>Associates a public IPv4 address with eth0 for a new network interface.</p>
+    pub associate_public_ip_address: Option<bool>,
+    /// <p>Indicates whether the network interface is deleted when the instance is terminated.</p>
+    pub delete_on_termination: Option<bool>,
+    /// <p>A description for the network interface.</p>
+    pub description: Option<String>,
+    /// <p>The device index for the network interface attachment.</p>
+    pub device_index: Option<i64>,
+    /// <p>The IDs of one or more security groups.</p>
+    pub groups: Option<Vec<String>>,
+    /// <p>The number of IPv6 addresses to assign to a network interface. Amazon EC2 automatically selects the IPv6 addresses from the subnet range. You can't use this option if specifying specific IPv6 addresses.</p>
+    pub ipv_6_address_count: Option<i64>,
+    /// <p>One or more specific IPv6 addresses from the IPv6 CIDR block range of your subnet. You can't use this option if you're specifying a number of IPv6 addresses.</p>
+    pub ipv_6_addresses: Option<Vec<InstanceIpv6AddressRequest>>,
+    /// <p>The ID of the network interface.</p>
+    pub network_interface_id: Option<String>,
+    /// <p>The primary private IPv4 address of the network interface.</p>
+    pub private_ip_address: Option<String>,
+    /// <p>One or more private IPv4 addresses.</p>
+    pub private_ip_addresses: Option<Vec<PrivateIpAddressSpecification>>,
+    /// <p>The number of secondary private IPv4 addresses to assign to a network interface.</p>
+    pub secondary_private_ip_address_count: Option<i64>,
+    /// <p>The ID of the subnet for the network interface.</p>
+    pub subnet_id: Option<String>,
+}
+
+/// Serialize `LaunchTemplateInstanceNetworkInterfaceSpecificationRequest` contents to a `SignedRequest`.
+struct LaunchTemplateInstanceNetworkInterfaceSpecificationRequestSerializer;
+impl LaunchTemplateInstanceNetworkInterfaceSpecificationRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &LaunchTemplateInstanceNetworkInterfaceSpecificationRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.associate_public_ip_address {
+            params.put(
+                &format!("{}{}", prefix, "AssociatePublicIpAddress"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.delete_on_termination {
+            params.put(
+                &format!("{}{}", prefix, "DeleteOnTermination"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.description {
+            params.put(
+                &format!("{}{}", prefix, "Description"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.device_index {
+            params.put(
+                &format!("{}{}", prefix, "DeviceIndex"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.groups {
+            SecurityGroupIdStringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "SecurityGroupId"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.ipv_6_address_count {
+            params.put(
+                &format!("{}{}", prefix, "Ipv6AddressCount"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.ipv_6_addresses {
+            InstanceIpv6AddressListRequestSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Ipv6Addresses"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.network_interface_id {
+            params.put(
+                &format!("{}{}", prefix, "NetworkInterfaceId"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.private_ip_address {
+            params.put(
+                &format!("{}{}", prefix, "PrivateIpAddress"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.private_ip_addresses {
+            PrivateIpAddressSpecificationListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "PrivateIpAddresses"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.secondary_private_ip_address_count {
+            params.put(
+                &format!("{}{}", prefix, "SecondaryPrivateIpAddressCount"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.subnet_id {
+            params.put(
+                &format!("{}{}", prefix, "SubnetId"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
+/// Serialize `LaunchTemplateInstanceNetworkInterfaceSpecificationRequestList` contents to a `SignedRequest`.
+struct LaunchTemplateInstanceNetworkInterfaceSpecificationRequestListSerializer;
+impl LaunchTemplateInstanceNetworkInterfaceSpecificationRequestListSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &Vec<LaunchTemplateInstanceNetworkInterfaceSpecificationRequest>,
+    ) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            LaunchTemplateInstanceNetworkInterfaceSpecificationRequestSerializer::serialize(
+                params,
+                &key,
+                obj,
+            );
+        }
+    }
+}
+
+struct LaunchTemplateNameDeserializer;
+impl LaunchTemplateNameDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `LaunchTemplateNameStringList` contents to a `SignedRequest`.
+struct LaunchTemplateNameStringListSerializer;
+impl LaunchTemplateNameStringListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
+/// <p>Describes overrides for a launch template.</p>
+#[derive(Default, Debug, Clone)]
+pub struct LaunchTemplateOverrides {
+    /// <p>The Availability Zone in which to launch the instances.</p>
+    pub availability_zone: Option<String>,
+    /// <p>The instance type.</p>
+    pub instance_type: Option<String>,
+    /// <p>The maximum price per unit hour that you are willing to pay for a Spot Instance.</p>
+    pub spot_price: Option<String>,
+    /// <p>The ID of the subnet in which to launch the instances.</p>
+    pub subnet_id: Option<String>,
+    /// <p>The number of units provided by the specified instance type.</p>
+    pub weighted_capacity: Option<f64>,
+}
+
+struct LaunchTemplateOverridesDeserializer;
+impl LaunchTemplateOverridesDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LaunchTemplateOverrides, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = LaunchTemplateOverrides::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "availabilityZone" => {
+                        obj.availability_zone = Some(try!(StringDeserializer::deserialize(
+                            "availabilityZone",
+                            stack
+                        )));
+                    }
+                    "instanceType" => {
+                        obj.instance_type = Some(try!(InstanceTypeDeserializer::deserialize(
+                            "instanceType",
+                            stack
+                        )));
+                    }
+                    "spotPrice" => {
+                        obj.spot_price =
+                            Some(try!(StringDeserializer::deserialize("spotPrice", stack)));
+                    }
+                    "subnetId" => {
+                        obj.subnet_id =
+                            Some(try!(StringDeserializer::deserialize("subnetId", stack)));
+                    }
+                    "weightedCapacity" => {
+                        obj.weighted_capacity = Some(try!(DoubleDeserializer::deserialize(
+                            "weightedCapacity",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `LaunchTemplateOverrides` contents to a `SignedRequest`.
+struct LaunchTemplateOverridesSerializer;
+impl LaunchTemplateOverridesSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &LaunchTemplateOverrides) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.availability_zone {
+            params.put(
+                &format!("{}{}", prefix, "AvailabilityZone"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.instance_type {
+            params.put(
+                &format!("{}{}", prefix, "InstanceType"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.spot_price {
+            params.put(
+                &format!("{}{}", prefix, "SpotPrice"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.subnet_id {
+            params.put(
+                &format!("{}{}", prefix, "SubnetId"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.weighted_capacity {
+            params.put(
+                &format!("{}{}", prefix, "WeightedCapacity"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+    }
+}
+
+struct LaunchTemplateOverridesListDeserializer;
+impl LaunchTemplateOverridesListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<LaunchTemplateOverrides>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(LaunchTemplateOverridesDeserializer::deserialize(
+                            "item",
+                            stack
+                        )));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `LaunchTemplateOverridesList` contents to a `SignedRequest`.
+struct LaunchTemplateOverridesListSerializer;
+impl LaunchTemplateOverridesListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<LaunchTemplateOverrides>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            LaunchTemplateOverridesSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+/// <p>Describes the placement of an instance.</p>
+#[derive(Default, Debug, Clone)]
+pub struct LaunchTemplatePlacement {
+    /// <p>The affinity setting for the instance on the Dedicated Host.</p>
+    pub affinity: Option<String>,
+    /// <p>The Availability Zone of the instance.</p>
+    pub availability_zone: Option<String>,
+    /// <p>The name of the placement group for the instance.</p>
+    pub group_name: Option<String>,
+    /// <p>The ID of the Dedicated Host for the instance.</p>
+    pub host_id: Option<String>,
+    /// <p>Reserved for future use.</p>
+    pub spread_domain: Option<String>,
+    /// <p>The tenancy of the instance (if the instance is running in a VPC). An instance with a tenancy of <code>dedicated</code> runs on single-tenant hardware. </p>
+    pub tenancy: Option<String>,
+}
+
+struct LaunchTemplatePlacementDeserializer;
+impl LaunchTemplatePlacementDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LaunchTemplatePlacement, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = LaunchTemplatePlacement::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "affinity" => {
+                        obj.affinity =
+                            Some(try!(StringDeserializer::deserialize("affinity", stack)));
+                    }
+                    "availabilityZone" => {
+                        obj.availability_zone = Some(try!(StringDeserializer::deserialize(
+                            "availabilityZone",
+                            stack
+                        )));
+                    }
+                    "groupName" => {
+                        obj.group_name =
+                            Some(try!(StringDeserializer::deserialize("groupName", stack)));
+                    }
+                    "hostId" => {
+                        obj.host_id = Some(try!(StringDeserializer::deserialize("hostId", stack)));
+                    }
+                    "spreadDomain" => {
+                        obj.spread_domain =
+                            Some(try!(StringDeserializer::deserialize("spreadDomain", stack)));
+                    }
+                    "tenancy" => {
+                        obj.tenancy =
+                            Some(try!(TenancyDeserializer::deserialize("tenancy", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>The placement for the instance.</p>
+#[derive(Default, Debug, Clone)]
+pub struct LaunchTemplatePlacementRequest {
+    /// <p>The affinity setting for an instance on a Dedicated Host.</p>
+    pub affinity: Option<String>,
+    /// <p>The Availability Zone for the instance.</p>
+    pub availability_zone: Option<String>,
+    /// <p>The name of the placement group for the instance.</p>
+    pub group_name: Option<String>,
+    /// <p>The ID of the Dedicated Host for the instance.</p>
+    pub host_id: Option<String>,
+    /// <p>Reserved for future use.</p>
+    pub spread_domain: Option<String>,
+    /// <p>The tenancy of the instance (if the instance is running in a VPC). An instance with a tenancy of dedicated runs on single-tenant hardware.</p>
+    pub tenancy: Option<String>,
+}
+
+/// Serialize `LaunchTemplatePlacementRequest` contents to a `SignedRequest`.
+struct LaunchTemplatePlacementRequestSerializer;
+impl LaunchTemplatePlacementRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &LaunchTemplatePlacementRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.affinity {
+            params.put(
+                &format!("{}{}", prefix, "Affinity"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.availability_zone {
+            params.put(
+                &format!("{}{}", prefix, "AvailabilityZone"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.group_name {
+            params.put(
+                &format!("{}{}", prefix, "GroupName"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.host_id {
+            params.put(
+                &format!("{}{}", prefix, "HostId"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.spread_domain {
+            params.put(
+                &format!("{}{}", prefix, "SpreadDomain"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.tenancy {
+            params.put(
+                &format!("{}{}", prefix, "Tenancy"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
+struct LaunchTemplateSetDeserializer;
+impl LaunchTemplateSetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<LaunchTemplate>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(LaunchTemplateDeserializer::deserialize("item", stack)));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+/// <p>The launch template to use. You must specify either the launch template ID or launch template name in the request.</p>
+#[derive(Default, Debug, Clone)]
+pub struct LaunchTemplateSpecification {
+    /// <p>The ID of the launch template.</p>
+    pub launch_template_id: Option<String>,
+    /// <p>The name of the launch template.</p>
+    pub launch_template_name: Option<String>,
+    /// <p>The version number of the launch template.</p> <p>Default: The default version for the launch template.</p>
+    pub version: Option<String>,
+}
+
+/// Serialize `LaunchTemplateSpecification` contents to a `SignedRequest`.
+struct LaunchTemplateSpecificationSerializer;
+impl LaunchTemplateSpecificationSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &LaunchTemplateSpecification) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.launch_template_id {
+            params.put(
+                &format!("{}{}", prefix, "LaunchTemplateId"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.launch_template_name {
+            params.put(
+                &format!("{}{}", prefix, "LaunchTemplateName"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.version {
+            params.put(
+                &format!("{}{}", prefix, "Version"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
+/// <p>The options for Spot Instances.</p>
+#[derive(Default, Debug, Clone)]
+pub struct LaunchTemplateSpotMarketOptions {
+    /// <p>The required duration for the Spot Instances (also known as Spot blocks), in minutes. This value must be a multiple of 60 (60, 120, 180, 240, 300, or 360).</p>
+    pub block_duration_minutes: Option<i64>,
+    /// <p>The behavior when a Spot Instance is interrupted.</p>
+    pub instance_interruption_behavior: Option<String>,
+    /// <p>The maximum hourly price you're willing to pay for the Spot Instances.</p>
+    pub max_price: Option<String>,
+    /// <p>The Spot Instance request type.</p>
+    pub spot_instance_type: Option<String>,
+    /// <p>The end date of the request. For a one-time request, the request remains active until all instances launch, the request is canceled, or this date is reached. If the request is persistent, it remains active until it is canceled or this date and time is reached.</p>
+    pub valid_until: Option<String>,
+}
+
+struct LaunchTemplateSpotMarketOptionsDeserializer;
+impl LaunchTemplateSpotMarketOptionsDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LaunchTemplateSpotMarketOptions, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = LaunchTemplateSpotMarketOptions::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "blockDurationMinutes" => {
+                        obj.block_duration_minutes = Some(try!(IntegerDeserializer::deserialize(
+                            "blockDurationMinutes",
+                            stack
+                        )));
+                    }
+                    "instanceInterruptionBehavior" => {
+                        obj.instance_interruption_behavior = Some(try!(
+                            InstanceInterruptionBehaviorDeserializer::deserialize(
+                                "instanceInterruptionBehavior",
+                                stack
+                            )
+                        ));
+                    }
+                    "maxPrice" => {
+                        obj.max_price =
+                            Some(try!(StringDeserializer::deserialize("maxPrice", stack)));
+                    }
+                    "spotInstanceType" => {
+                        obj.spot_instance_type = Some(try!(
+                            SpotInstanceTypeDeserializer::deserialize("spotInstanceType", stack)
+                        ));
+                    }
+                    "validUntil" => {
+                        obj.valid_until =
+                            Some(try!(DateTimeDeserializer::deserialize("validUntil", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>The options for Spot Instances.</p>
+#[derive(Default, Debug, Clone)]
+pub struct LaunchTemplateSpotMarketOptionsRequest {
+    /// <p>The required duration for the Spot Instances (also known as Spot blocks), in minutes. This value must be a multiple of 60 (60, 120, 180, 240, 300, or 360).</p>
+    pub block_duration_minutes: Option<i64>,
+    /// <p>The behavior when a Spot Instance is interrupted. The default is <code>terminate</code>.</p>
+    pub instance_interruption_behavior: Option<String>,
+    /// <p>The maximum hourly price you're willing to pay for the Spot Instances.</p>
+    pub max_price: Option<String>,
+    /// <p>The Spot Instance request type.</p>
+    pub spot_instance_type: Option<String>,
+    /// <p>The end date of the request. For a one-time request, the request remains active until all instances launch, the request is canceled, or this date is reached. If the request is persistent, it remains active until it is canceled or this date and time is reached. The default end date is 7 days from the current date.</p>
+    pub valid_until: Option<String>,
+}
+
+/// Serialize `LaunchTemplateSpotMarketOptionsRequest` contents to a `SignedRequest`.
+struct LaunchTemplateSpotMarketOptionsRequestSerializer;
+impl LaunchTemplateSpotMarketOptionsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &LaunchTemplateSpotMarketOptionsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.block_duration_minutes {
+            params.put(
+                &format!("{}{}", prefix, "BlockDurationMinutes"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.instance_interruption_behavior {
+            params.put(
+                &format!("{}{}", prefix, "InstanceInterruptionBehavior"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.max_price {
+            params.put(
+                &format!("{}{}", prefix, "MaxPrice"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.spot_instance_type {
+            params.put(
+                &format!("{}{}", prefix, "SpotInstanceType"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.valid_until {
+            params.put(
+                &format!("{}{}", prefix, "ValidUntil"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
+/// <p>The tag specification for the launch template.</p>
+#[derive(Default, Debug, Clone)]
+pub struct LaunchTemplateTagSpecification {
+    /// <p>The type of resource.</p>
+    pub resource_type: Option<String>,
+    /// <p>The tags for the resource.</p>
+    pub tags: Option<Vec<Tag>>,
+}
+
+struct LaunchTemplateTagSpecificationDeserializer;
+impl LaunchTemplateTagSpecificationDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LaunchTemplateTagSpecification, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = LaunchTemplateTagSpecification::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "resourceType" => {
+                        obj.resource_type = Some(try!(ResourceTypeDeserializer::deserialize(
+                            "resourceType",
+                            stack
+                        )));
+                    }
+                    "tagSet" => {
+                        obj.tags = Some(try!(TagListDeserializer::deserialize("tagSet", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct LaunchTemplateTagSpecificationListDeserializer;
+impl LaunchTemplateTagSpecificationListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<LaunchTemplateTagSpecification>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(
+                            LaunchTemplateTagSpecificationDeserializer::deserialize("item", stack)
+                        ));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+/// <p>The tags specification for the launch template.</p>
+#[derive(Default, Debug, Clone)]
+pub struct LaunchTemplateTagSpecificationRequest {
+    /// <p>The type of resource to tag. Currently, the resource types that support tagging on creation are <code>instance</code> and <code>volume</code>.</p>
+    pub resource_type: Option<String>,
+    /// <p>The tags to apply to the resource.</p>
+    pub tags: Option<Vec<Tag>>,
+}
+
+/// Serialize `LaunchTemplateTagSpecificationRequest` contents to a `SignedRequest`.
+struct LaunchTemplateTagSpecificationRequestSerializer;
+impl LaunchTemplateTagSpecificationRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &LaunchTemplateTagSpecificationRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.resource_type {
+            params.put(
+                &format!("{}{}", prefix, "ResourceType"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.tags {
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
+        }
+    }
+}
+
+/// Serialize `LaunchTemplateTagSpecificationRequestList` contents to a `SignedRequest`.
+struct LaunchTemplateTagSpecificationRequestListSerializer;
+impl LaunchTemplateTagSpecificationRequestListSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &Vec<LaunchTemplateTagSpecificationRequest>,
+    ) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            LaunchTemplateTagSpecificationRequestSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+/// <p>Describes a launch template version.</p>
+#[derive(Default, Debug, Clone)]
+pub struct LaunchTemplateVersion {
+    /// <p>The time the version was created.</p>
+    pub create_time: Option<String>,
+    /// <p>The principal that created the version.</p>
+    pub created_by: Option<String>,
+    /// <p>Indicates whether the version is the default version.</p>
+    pub default_version: Option<bool>,
+    /// <p>Information about the launch template.</p>
+    pub launch_template_data: Option<ResponseLaunchTemplateData>,
+    /// <p>The ID of the launch template.</p>
+    pub launch_template_id: Option<String>,
+    /// <p>The name of the launch template.</p>
+    pub launch_template_name: Option<String>,
+    /// <p>The description for the version.</p>
+    pub version_description: Option<String>,
+    /// <p>The version number.</p>
+    pub version_number: Option<i64>,
+}
+
+struct LaunchTemplateVersionDeserializer;
+impl LaunchTemplateVersionDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LaunchTemplateVersion, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = LaunchTemplateVersion::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "createTime" => {
+                        obj.create_time =
+                            Some(try!(DateTimeDeserializer::deserialize("createTime", stack)));
+                    }
+                    "createdBy" => {
+                        obj.created_by =
+                            Some(try!(StringDeserializer::deserialize("createdBy", stack)));
+                    }
+                    "defaultVersion" => {
+                        obj.default_version = Some(try!(BooleanDeserializer::deserialize(
+                            "defaultVersion",
+                            stack
+                        )));
+                    }
+                    "launchTemplateData" => {
+                        obj.launch_template_data =
+                            Some(try!(ResponseLaunchTemplateDataDeserializer::deserialize(
+                                "launchTemplateData",
+                                stack
+                            )));
+                    }
+                    "launchTemplateId" => {
+                        obj.launch_template_id = Some(try!(StringDeserializer::deserialize(
+                            "launchTemplateId",
+                            stack
+                        )));
+                    }
+                    "launchTemplateName" => {
+                        obj.launch_template_name =
+                            Some(try!(LaunchTemplateNameDeserializer::deserialize(
+                                "launchTemplateName",
+                                stack
+                            )));
+                    }
+                    "versionDescription" => {
+                        obj.version_description =
+                            Some(try!(VersionDescriptionDeserializer::deserialize(
+                                "versionDescription",
+                                stack
+                            )));
+                    }
+                    "versionNumber" => {
+                        obj.version_number =
+                            Some(try!(LongDeserializer::deserialize("versionNumber", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct LaunchTemplateVersionSetDeserializer;
+impl LaunchTemplateVersionSetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<LaunchTemplateVersion>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(LaunchTemplateVersionDeserializer::deserialize(
+                            "item",
+                            stack
+                        )));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+/// <p>Describes the monitoring for the instance.</p>
+#[derive(Default, Debug, Clone)]
+pub struct LaunchTemplatesMonitoring {
+    /// <p>Indicates whether detailed monitoring is enabled. Otherwise, basic monitoring is enabled.</p>
+    pub enabled: Option<bool>,
+}
+
+struct LaunchTemplatesMonitoringDeserializer;
+impl LaunchTemplatesMonitoringDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LaunchTemplatesMonitoring, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = LaunchTemplatesMonitoring::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "enabled" => {
+                        obj.enabled =
+                            Some(try!(BooleanDeserializer::deserialize("enabled", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>Describes the monitoring for the instance.</p>
+#[derive(Default, Debug, Clone)]
+pub struct LaunchTemplatesMonitoringRequest {
+    /// <p>Specify <code>true</code> to enable detailed monitoring. Otherwise, basic monitoring is enabled.</p>
+    pub enabled: Option<bool>,
+}
+
+/// Serialize `LaunchTemplatesMonitoringRequest` contents to a `SignedRequest`.
+struct LaunchTemplatesMonitoringRequestSerializer;
+impl LaunchTemplatesMonitoringRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &LaunchTemplatesMonitoringRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.enabled {
+            params.put(
+                &format!("{}{}", prefix, "Enabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+    }
+}
+
 struct ListingStateDeserializer;
 impl ListingStateDeserializer {
     #[allow(unused_variables)]
@@ -26721,6 +32514,266 @@ impl ListingStatusDeserializer {
         Ok(obj)
     }
 }
+/// <p>Describes the Classic Load Balancers and target groups to attach to a Spot Fleet request.</p>
+#[derive(Default, Debug, Clone)]
+pub struct LoadBalancersConfig {
+    /// <p>The Classic Load Balancers.</p>
+    pub classic_load_balancers_config: Option<ClassicLoadBalancersConfig>,
+    /// <p>The target groups.</p>
+    pub target_groups_config: Option<TargetGroupsConfig>,
+}
+
+struct LoadBalancersConfigDeserializer;
+impl LoadBalancersConfigDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LoadBalancersConfig, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = LoadBalancersConfig::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "classicLoadBalancersConfig" => {
+                        obj.classic_load_balancers_config =
+                            Some(try!(ClassicLoadBalancersConfigDeserializer::deserialize(
+                                "classicLoadBalancersConfig",
+                                stack
+                            )));
+                    }
+                    "targetGroupsConfig" => {
+                        obj.target_groups_config =
+                            Some(try!(TargetGroupsConfigDeserializer::deserialize(
+                                "targetGroupsConfig",
+                                stack
+                            )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `LoadBalancersConfig` contents to a `SignedRequest`.
+struct LoadBalancersConfigSerializer;
+impl LoadBalancersConfigSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &LoadBalancersConfig) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.classic_load_balancers_config {
+            ClassicLoadBalancersConfigSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "ClassicLoadBalancersConfig"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.target_groups_config {
+            TargetGroupsConfigSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "TargetGroupsConfig"),
+                field_value,
+            );
+        }
+    }
+}
+
+/// <p>Describes a load permission.</p>
+#[derive(Default, Debug, Clone)]
+pub struct LoadPermission {
+    /// <p>The name of the group.</p>
+    pub group: Option<String>,
+    /// <p>The AWS account ID.</p>
+    pub user_id: Option<String>,
+}
+
+struct LoadPermissionDeserializer;
+impl LoadPermissionDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LoadPermission, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = LoadPermission::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "group" => {
+                        obj.group = Some(try!(PermissionGroupDeserializer::deserialize(
+                            "group",
+                            stack
+                        )));
+                    }
+                    "userId" => {
+                        obj.user_id = Some(try!(StringDeserializer::deserialize("userId", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct LoadPermissionListDeserializer;
+impl LoadPermissionListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<LoadPermission>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(LoadPermissionDeserializer::deserialize("item", stack)));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `LoadPermissionListRequest` contents to a `SignedRequest`.
+struct LoadPermissionListRequestSerializer;
+impl LoadPermissionListRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<LoadPermissionRequest>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            LoadPermissionRequestSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+/// <p>Describes modifications to the load permissions of an Amazon FPGA image (AFI).</p>
+#[derive(Default, Debug, Clone)]
+pub struct LoadPermissionModifications {
+    /// <p>The load permissions to add.</p>
+    pub add: Option<Vec<LoadPermissionRequest>>,
+    /// <p>The load permissions to remove.</p>
+    pub remove: Option<Vec<LoadPermissionRequest>>,
+}
+
+/// Serialize `LoadPermissionModifications` contents to a `SignedRequest`.
+struct LoadPermissionModificationsSerializer;
+impl LoadPermissionModificationsSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &LoadPermissionModifications) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.add {
+            LoadPermissionListRequestSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Add"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.remove {
+            LoadPermissionListRequestSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Remove"),
+                field_value,
+            );
+        }
+    }
+}
+
+/// <p>Describes a load permission.</p>
+#[derive(Default, Debug, Clone)]
+pub struct LoadPermissionRequest {
+    /// <p>The name of the group.</p>
+    pub group: Option<String>,
+    /// <p>The AWS account ID.</p>
+    pub user_id: Option<String>,
+}
+
+/// Serialize `LoadPermissionRequest` contents to a `SignedRequest`.
+struct LoadPermissionRequestSerializer;
+impl LoadPermissionRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &LoadPermissionRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.group {
+            params.put(
+                &format!("{}{}", prefix, "Group"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.user_id {
+            params.put(
+                &format!("{}{}", prefix, "UserId"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
 struct LongDeserializer;
 impl LongDeserializer {
     #[allow(unused_variables)]
@@ -26730,6 +32783,167 @@ impl LongDeserializer {
     ) -> Result<i64, XmlParseError> {
         try!(start_element(tag_name, stack));
         let obj = i64::from_str(try!(characters(stack)).as_ref()).unwrap();
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct MarketTypeDeserializer;
+impl MarketTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
+pub struct ModifyFpgaImageAttributeRequest {
+    /// <p>The name of the attribute.</p>
+    pub attribute: Option<String>,
+    /// <p>A description for the AFI.</p>
+    pub description: Option<String>,
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The ID of the AFI.</p>
+    pub fpga_image_id: String,
+    /// <p>The load permission for the AFI.</p>
+    pub load_permission: Option<LoadPermissionModifications>,
+    /// <p>A name for the AFI.</p>
+    pub name: Option<String>,
+    /// <p>The operation type.</p>
+    pub operation_type: Option<String>,
+    /// <p>One or more product codes. After you add a product code to an AFI, it can't be removed. This parameter is valid only when modifying the <code>productCodes</code> attribute.</p>
+    pub product_codes: Option<Vec<String>>,
+    /// <p>One or more user groups. This parameter is valid only when modifying the <code>loadPermission</code> attribute.</p>
+    pub user_groups: Option<Vec<String>>,
+    /// <p>One or more AWS account IDs. This parameter is valid only when modifying the <code>loadPermission</code> attribute.</p>
+    pub user_ids: Option<Vec<String>>,
+}
+
+/// Serialize `ModifyFpgaImageAttributeRequest` contents to a `SignedRequest`.
+struct ModifyFpgaImageAttributeRequestSerializer;
+impl ModifyFpgaImageAttributeRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyFpgaImageAttributeRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.attribute {
+            params.put(
+                &format!("{}{}", prefix, "Attribute"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.description {
+            params.put(
+                &format!("{}{}", prefix, "Description"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "FpgaImageId"),
+            &obj.fpga_image_id.replace("+", "%2B"),
+        );
+        if let Some(ref field_value) = obj.load_permission {
+            LoadPermissionModificationsSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "LoadPermission"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.name {
+            params.put(
+                &format!("{}{}", prefix, "Name"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.operation_type {
+            params.put(
+                &format!("{}{}", prefix, "OperationType"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.product_codes {
+            ProductCodeStringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "ProductCode"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.user_groups {
+            UserGroupStringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "UserGroup"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.user_ids {
+            UserIdStringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "UserId"),
+                field_value,
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct ModifyFpgaImageAttributeResult {
+    /// <p>Information about the attribute.</p>
+    pub fpga_image_attribute: Option<FpgaImageAttribute>,
+}
+
+struct ModifyFpgaImageAttributeResultDeserializer;
+impl ModifyFpgaImageAttributeResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyFpgaImageAttributeResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ModifyFpgaImageAttributeResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "fpgaImageAttribute" => {
+                        obj.fpga_image_attribute =
+                            Some(try!(FpgaImageAttributeDeserializer::deserialize(
+                                "fpgaImageAttribute",
+                                stack
+                            )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
         try!(end_element(tag_name, stack));
 
         Ok(obj)
@@ -26888,25 +33102,25 @@ impl ModifyIdentityIdFormatRequestSerializer {
 /// <p>Contains the parameters for ModifyImageAttribute.</p>
 #[derive(Default, Debug, Clone)]
 pub struct ModifyImageAttributeRequest {
-    /// <p>The name of the attribute to modify.</p>
+    /// <p>The name of the attribute to modify. The valid values are <code>description</code>, <code>launchPermission</code>, and <code>productCodes</code>.</p>
     pub attribute: Option<String>,
-    /// <p>A description for the AMI.</p>
+    /// <p>A new description for the AMI.</p>
     pub description: Option<AttributeValue>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
     /// <p>The ID of the AMI.</p>
     pub image_id: String,
-    /// <p>A launch permission modification.</p>
+    /// <p>A new launch permission for the AMI.</p>
     pub launch_permission: Option<LaunchPermissionModifications>,
-    /// <p>The operation type.</p>
+    /// <p>The operation type. This parameter can be used only when the <code>Attribute</code> parameter is <code>launchPermission</code>.</p>
     pub operation_type: Option<String>,
-    /// <p>One or more product codes. After you add a product code to an AMI, it can't be removed. This is only valid when modifying the <code>productCodes</code> attribute.</p>
+    /// <p>One or more DevPay product codes. After you add a product code to an AMI, it can't be removed.</p>
     pub product_codes: Option<Vec<String>>,
-    /// <p>One or more user groups. This is only valid when modifying the <code>launchPermission</code> attribute.</p>
+    /// <p>One or more user groups. This parameter can be used only when the <code>Attribute</code> parameter is <code>launchPermission</code>.</p>
     pub user_groups: Option<Vec<String>>,
-    /// <p>One or more AWS account IDs. This is only valid when modifying the <code>launchPermission</code> attribute.</p>
+    /// <p>One or more AWS account IDs. This parameter can be used only when the <code>Attribute</code> parameter is <code>launchPermission</code>.</p>
     pub user_ids: Option<Vec<String>>,
-    /// <p>The value of the attribute being modified. This is only valid when modifying the <code>description</code> attribute.</p>
+    /// <p>The value of the attribute being modified. This parameter can be used only when the <code>Attribute</code> parameter is <code>description</code> or <code>productCodes</code>.</p>
     pub value: Option<String>,
 }
 
@@ -26996,7 +33210,7 @@ pub struct ModifyInstanceAttributeRequest {
     pub disable_api_termination: Option<AttributeBooleanValue>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>Specifies whether the instance is optimized for EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal EBS I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS Optimized instance.</p>
+    /// <p>Specifies whether the instance is optimized for Amazon EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal EBS I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS Optimized instance.</p>
     pub ebs_optimized: Option<AttributeBooleanValue>,
     /// <p>Set to <code>true</code> to enable enhanced networking with ENA for the instance.</p> <p>This option is supported only for HVM instances. Specifying this option with a PV instance can make it unreachable.</p>
     pub ena_support: Option<AttributeBooleanValue>,
@@ -27012,11 +33226,11 @@ pub struct ModifyInstanceAttributeRequest {
     pub kernel: Option<AttributeValue>,
     /// <p>Changes the instance's RAM disk to the specified value. We recommend that you use PV-GRUB instead of kernels and RAM disks. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/UserProvidedKernels.html">PV-GRUB</a>.</p>
     pub ramdisk: Option<AttributeValue>,
-    /// <p>Specifies whether source/destination checking is enabled. A value of <code>true</code> means that checking is enabled, and <code>false</code> means checking is disabled. This value must be <code>false</code> for a NAT instance to perform NAT.</p>
+    /// <p>Specifies whether source/destination checking is enabled. A value of <code>true</code> means that checking is enabled, and <code>false</code> means that checking is disabled. This value must be <code>false</code> for a NAT instance to perform NAT.</p>
     pub source_dest_check: Option<AttributeBooleanValue>,
     /// <p>Set to <code>simple</code> to enable enhanced networking with the Intel 82599 Virtual Function interface for the instance.</p> <p>There is no way to disable enhanced networking with the Intel 82599 Virtual Function interface at this time.</p> <p>This option is supported only for HVM instances. Specifying this option with a PV instance can make it unreachable.</p>
     pub sriov_net_support: Option<AttributeValue>,
-    /// <p>Changes the instance's user data to the specified value. If you are using an AWS SDK or command line tool, Base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide Base64-encoded text.</p>
+    /// <p>Changes the instance's user data to the specified value. If you are using an AWS SDK or command line tool, base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide base64-encoded text.</p>
     pub user_data: Option<BlobAttributeValue>,
     /// <p>A new value for the attribute. Use only with the <code>kernel</code>, <code>ramdisk</code>, <code>userData</code>, <code>disableApiTermination</code>, or <code>instanceInitiatedShutdownBehavior</code> attribute.</p>
     pub value: Option<String>,
@@ -27140,6 +33354,104 @@ impl ModifyInstanceAttributeRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone)]
+pub struct ModifyInstanceCreditSpecificationRequest {
+    /// <p>A unique, case-sensitive token that you provide to ensure idempotency of your modification request. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p>
+    pub client_token: Option<String>,
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>Information about the credit option for CPU usage.</p>
+    pub instance_credit_specifications: Vec<InstanceCreditSpecificationRequest>,
+}
+
+/// Serialize `ModifyInstanceCreditSpecificationRequest` contents to a `SignedRequest`.
+struct ModifyInstanceCreditSpecificationRequestSerializer;
+impl ModifyInstanceCreditSpecificationRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyInstanceCreditSpecificationRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.client_token {
+            params.put(
+                &format!("{}{}", prefix, "ClientToken"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        InstanceCreditSpecificationListRequestSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "InstanceCreditSpecification"),
+            &obj.instance_credit_specifications,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct ModifyInstanceCreditSpecificationResult {
+    /// <p>Information about the instances whose credit option for CPU usage was successfully modified.</p>
+    pub successful_instance_credit_specifications:
+        Option<Vec<SuccessfulInstanceCreditSpecificationItem>>,
+    /// <p>Information about the instances whose credit option for CPU usage was not modified.</p>
+    pub unsuccessful_instance_credit_specifications:
+        Option<Vec<UnsuccessfulInstanceCreditSpecificationItem>>,
+}
+
+struct ModifyInstanceCreditSpecificationResultDeserializer;
+impl ModifyInstanceCreditSpecificationResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyInstanceCreditSpecificationResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ModifyInstanceCreditSpecificationResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "successfulInstanceCreditSpecificationSet" => {
+                            obj.successful_instance_credit_specifications = Some(try!(
+                                SuccessfulInstanceCreditSpecificationSetDeserializer::deserialize(
+                                    "successfulInstanceCreditSpecificationSet",
+                                    stack
+                                )
+                            ));
+                        }
+                        "unsuccessfulInstanceCreditSpecificationSet" => {
+                            obj.unsuccessful_instance_credit_specifications = Some(try!(UnsuccessfulInstanceCreditSpecificationSetDeserializer::deserialize("unsuccessfulInstanceCreditSpecificationSet", stack)));
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>Contains the parameters for ModifyInstancePlacement.</p>
 #[derive(Default, Debug, Clone)]
 pub struct ModifyInstancePlacementRequest {
@@ -27218,6 +33530,110 @@ impl ModifyInstancePlacementResultDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "return" => {
                         obj.return_ = Some(try!(BooleanDeserializer::deserialize("return", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
+pub struct ModifyLaunchTemplateRequest {
+    /// <p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p>
+    pub client_token: Option<String>,
+    /// <p>The version number of the launch template to set as the default version.</p>
+    pub default_version: Option<String>,
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The ID of the launch template. You must specify either the launch template ID or launch template name in the request.</p>
+    pub launch_template_id: Option<String>,
+    /// <p>The name of the launch template. You must specify either the launch template ID or launch template name in the request.</p>
+    pub launch_template_name: Option<String>,
+}
+
+/// Serialize `ModifyLaunchTemplateRequest` contents to a `SignedRequest`.
+struct ModifyLaunchTemplateRequestSerializer;
+impl ModifyLaunchTemplateRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyLaunchTemplateRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.client_token {
+            params.put(
+                &format!("{}{}", prefix, "ClientToken"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.default_version {
+            params.put(
+                &format!("{}{}", prefix, "SetDefaultVersion"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.launch_template_id {
+            params.put(
+                &format!("{}{}", prefix, "LaunchTemplateId"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.launch_template_name {
+            params.put(
+                &format!("{}{}", prefix, "LaunchTemplateName"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct ModifyLaunchTemplateResult {
+    /// <p>Information about the launch template.</p>
+    pub launch_template: Option<LaunchTemplate>,
+}
+
+struct ModifyLaunchTemplateResultDeserializer;
+impl ModifyLaunchTemplateResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyLaunchTemplateResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ModifyLaunchTemplateResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "launchTemplate" => {
+                        obj.launch_template = Some(try!(LaunchTemplateDeserializer::deserialize(
+                            "launchTemplate",
+                            stack
+                        )));
                     }
                     _ => skip_tree(stack),
                 },
@@ -27466,9 +33882,9 @@ impl ModifySnapshotAttributeRequestSerializer {
 /// <p>Contains the parameters for ModifySpotFleetRequest.</p>
 #[derive(Default, Debug, Clone)]
 pub struct ModifySpotFleetRequestRequest {
-    /// <p>Indicates whether running Spot instances should be terminated if the target capacity of the Spot fleet request is decreased below the current size of the Spot fleet.</p>
+    /// <p>Indicates whether running Spot Instances should be terminated if the target capacity of the Spot Fleet request is decreased below the current size of the Spot Fleet.</p>
     pub excess_capacity_termination_policy: Option<String>,
-    /// <p>The ID of the Spot fleet request.</p>
+    /// <p>The ID of the Spot Fleet request.</p>
     pub spot_fleet_request_id: String,
     /// <p>The size of the fleet.</p>
     pub target_capacity: Option<i64>,
@@ -27772,18 +34188,125 @@ impl ModifyVpcAttributeRequestSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone)]
+pub struct ModifyVpcEndpointConnectionNotificationRequest {
+    /// <p>One or more events for the endpoint. Valid values are <code>Accept</code>, <code>Connect</code>, <code>Delete</code>, and <code>Reject</code>.</p>
+    pub connection_events: Option<Vec<String>>,
+    /// <p>The ARN for the SNS topic for the notification.</p>
+    pub connection_notification_arn: Option<String>,
+    /// <p>The ID of the notification.</p>
+    pub connection_notification_id: String,
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+}
+
+/// Serialize `ModifyVpcEndpointConnectionNotificationRequest` contents to a `SignedRequest`.
+struct ModifyVpcEndpointConnectionNotificationRequestSerializer;
+impl ModifyVpcEndpointConnectionNotificationRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &ModifyVpcEndpointConnectionNotificationRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.connection_events {
+            ValueStringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "ConnectionEvents"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.connection_notification_arn {
+            params.put(
+                &format!("{}{}", prefix, "ConnectionNotificationArn"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "ConnectionNotificationId"),
+            &obj.connection_notification_id.replace("+", "%2B"),
+        );
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct ModifyVpcEndpointConnectionNotificationResult {
+    /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
+    pub return_value: Option<bool>,
+}
+
+struct ModifyVpcEndpointConnectionNotificationResultDeserializer;
+impl ModifyVpcEndpointConnectionNotificationResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyVpcEndpointConnectionNotificationResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ModifyVpcEndpointConnectionNotificationResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "return" => {
+                        obj.return_value =
+                            Some(try!(BooleanDeserializer::deserialize("return", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>Contains the parameters for ModifyVpcEndpoint.</p>
 #[derive(Default, Debug, Clone)]
 pub struct ModifyVpcEndpointRequest {
-    /// <p>One or more route tables IDs to associate with the endpoint.</p>
+    /// <p>(Gateway endpoint) One or more route tables IDs to associate with the endpoint.</p>
     pub add_route_table_ids: Option<Vec<String>>,
+    /// <p>(Interface endpoint) One or more security group IDs to associate with the network interface.</p>
+    pub add_security_group_ids: Option<Vec<String>>,
+    /// <p>(Interface endpoint) One or more subnet IDs in which to serve the endpoint.</p>
+    pub add_subnet_ids: Option<Vec<String>>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>A policy document to attach to the endpoint. The policy must be in valid JSON format.</p>
+    /// <p>(Gateway endpoint) A policy document to attach to the endpoint. The policy must be in valid JSON format.</p>
     pub policy_document: Option<String>,
-    /// <p>One or more route table IDs to disassociate from the endpoint.</p>
+    /// <p>(Interface endpoint) Indicate whether a private hosted zone is associated with the VPC.</p>
+    pub private_dns_enabled: Option<bool>,
+    /// <p>(Gateway endpoint) One or more route table IDs to disassociate from the endpoint.</p>
     pub remove_route_table_ids: Option<Vec<String>>,
-    /// <p>Specify <code>true</code> to reset the policy document to the default policy. The default policy allows access to the service.</p>
+    /// <p>(Interface endpoint) One or more security group IDs to disassociate from the network interface.</p>
+    pub remove_security_group_ids: Option<Vec<String>>,
+    /// <p>(Interface endpoint) One or more subnets IDs in which to remove the endpoint.</p>
+    pub remove_subnet_ids: Option<Vec<String>>,
+    /// <p>(Gateway endpoint) Specify <code>true</code> to reset the policy document to the default policy. The default policy allows full access to the service.</p>
     pub reset_policy: Option<bool>,
     /// <p>The ID of the endpoint.</p>
     pub vpc_endpoint_id: String,
@@ -27805,6 +34328,20 @@ impl ModifyVpcEndpointRequestSerializer {
                 field_value,
             );
         }
+        if let Some(ref field_value) = obj.add_security_group_ids {
+            ValueStringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "AddSecurityGroupId"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.add_subnet_ids {
+            ValueStringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "AddSubnetId"),
+                field_value,
+            );
+        }
         if let Some(ref field_value) = obj.dry_run {
             params.put(
                 &format!("{}{}", prefix, "DryRun"),
@@ -27817,10 +34354,30 @@ impl ModifyVpcEndpointRequestSerializer {
                 &field_value.replace("+", "%2B"),
             );
         }
+        if let Some(ref field_value) = obj.private_dns_enabled {
+            params.put(
+                &format!("{}{}", prefix, "PrivateDnsEnabled"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
         if let Some(ref field_value) = obj.remove_route_table_ids {
             ValueStringListSerializer::serialize(
                 params,
                 &format!("{}{}", prefix, "RemoveRouteTableId"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.remove_security_group_ids {
+            ValueStringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "RemoveSecurityGroupId"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.remove_subnet_ids {
+            ValueStringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "RemoveSubnetId"),
                 field_value,
             );
         }
@@ -27837,7 +34394,6 @@ impl ModifyVpcEndpointRequestSerializer {
     }
 }
 
-/// <p>Contains the output of ModifyVpcEndpoint.</p>
 #[derive(Default, Debug, Clone)]
 pub struct ModifyVpcEndpointResult {
     /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
@@ -27868,6 +34424,209 @@ impl ModifyVpcEndpointResultDeserializer {
                 DeserializerNext::Element(name) => match &name[..] {
                     "return" => {
                         obj.return_ = Some(try!(BooleanDeserializer::deserialize("return", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
+pub struct ModifyVpcEndpointServiceConfigurationRequest {
+    /// <p>Indicate whether requests to create an endpoint to your service must be accepted.</p>
+    pub acceptance_required: Option<bool>,
+    /// <p>The Amazon Resource Names (ARNs) of Network Load Balancers to add to your service configuration.</p>
+    pub add_network_load_balancer_arns: Option<Vec<String>>,
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The Amazon Resource Names (ARNs) of Network Load Balancers to remove from your service configuration.</p>
+    pub remove_network_load_balancer_arns: Option<Vec<String>>,
+    /// <p>The ID of the service.</p>
+    pub service_id: String,
+}
+
+/// Serialize `ModifyVpcEndpointServiceConfigurationRequest` contents to a `SignedRequest`.
+struct ModifyVpcEndpointServiceConfigurationRequestSerializer;
+impl ModifyVpcEndpointServiceConfigurationRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &ModifyVpcEndpointServiceConfigurationRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.acceptance_required {
+            params.put(
+                &format!("{}{}", prefix, "AcceptanceRequired"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.add_network_load_balancer_arns {
+            ValueStringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "AddNetworkLoadBalancerArn"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.remove_network_load_balancer_arns {
+            ValueStringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "RemoveNetworkLoadBalancerArn"),
+                field_value,
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "ServiceId"),
+            &obj.service_id.replace("+", "%2B"),
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct ModifyVpcEndpointServiceConfigurationResult {
+    /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
+    pub return_: Option<bool>,
+}
+
+struct ModifyVpcEndpointServiceConfigurationResultDeserializer;
+impl ModifyVpcEndpointServiceConfigurationResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyVpcEndpointServiceConfigurationResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ModifyVpcEndpointServiceConfigurationResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "return" => {
+                        obj.return_ = Some(try!(BooleanDeserializer::deserialize("return", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
+pub struct ModifyVpcEndpointServicePermissionsRequest {
+    /// <p>One or more Amazon Resource Names (ARNs) of principals for which to allow permission. Specify <code>*</code> to allow all principals.</p>
+    pub add_allowed_principals: Option<Vec<String>>,
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>One or more Amazon Resource Names (ARNs) of principals for which to remove permission.</p>
+    pub remove_allowed_principals: Option<Vec<String>>,
+    /// <p>The ID of the service.</p>
+    pub service_id: String,
+}
+
+/// Serialize `ModifyVpcEndpointServicePermissionsRequest` contents to a `SignedRequest`.
+struct ModifyVpcEndpointServicePermissionsRequestSerializer;
+impl ModifyVpcEndpointServicePermissionsRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &ModifyVpcEndpointServicePermissionsRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.add_allowed_principals {
+            ValueStringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "AddAllowedPrincipals"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.remove_allowed_principals {
+            ValueStringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "RemoveAllowedPrincipals"),
+                field_value,
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "ServiceId"),
+            &obj.service_id.replace("+", "%2B"),
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct ModifyVpcEndpointServicePermissionsResult {
+    /// <p>Returns <code>true</code> if the request succeeds; otherwise, it returns an error.</p>
+    pub return_value: Option<bool>,
+}
+
+struct ModifyVpcEndpointServicePermissionsResultDeserializer;
+impl ModifyVpcEndpointServicePermissionsResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyVpcEndpointServicePermissionsResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ModifyVpcEndpointServicePermissionsResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "return" => {
+                        obj.return_value =
+                            Some(try!(BooleanDeserializer::deserialize("return", stack)));
                     }
                     _ => skip_tree(stack),
                 },
@@ -27974,6 +34733,90 @@ impl ModifyVpcPeeringConnectionOptionsResultDeserializer {
                                 "requesterPeeringConnectionOptions",
                                 stack
                             )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>Contains the parameters for ModifyVpcTenancy.</p>
+#[derive(Default, Debug, Clone)]
+pub struct ModifyVpcTenancyRequest {
+    /// <p>Checks whether you have the required permissions for the operation, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The instance tenancy attribute for the VPC. </p>
+    pub instance_tenancy: String,
+    /// <p>The ID of the VPC.</p>
+    pub vpc_id: String,
+}
+
+/// Serialize `ModifyVpcTenancyRequest` contents to a `SignedRequest`.
+struct ModifyVpcTenancyRequestSerializer;
+impl ModifyVpcTenancyRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyVpcTenancyRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "InstanceTenancy"),
+            &obj.instance_tenancy.replace("+", "%2B"),
+        );
+        params.put(
+            &format!("{}{}", prefix, "VpcId"),
+            &obj.vpc_id.replace("+", "%2B"),
+        );
+    }
+}
+
+/// <p>Contains the output of ModifyVpcTenancy.</p>
+#[derive(Default, Debug, Clone)]
+pub struct ModifyVpcTenancyResult {
+    /// <p>Returns <code>true</code> if the request succeeds; otherwise, returns an error.</p>
+    pub return_value: Option<bool>,
+}
+
+struct ModifyVpcTenancyResultDeserializer;
+impl ModifyVpcTenancyResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyVpcTenancyResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ModifyVpcTenancyResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "return" => {
+                        obj.return_value =
+                            Some(try!(BooleanDeserializer::deserialize("return", stack)));
                     }
                     _ => skip_tree(stack),
                 },
@@ -28348,6 +35191,8 @@ pub struct NatGateway {
     pub state: Option<String>,
     /// <p>The ID of the subnet in which the NAT gateway is located.</p>
     pub subnet_id: Option<String>,
+    /// <p>The tags for the NAT gateway.</p>
+    pub tags: Option<Vec<Tag>>,
     /// <p>The ID of the VPC in which the NAT gateway is located.</p>
     pub vpc_id: Option<String>,
 }
@@ -28419,6 +35264,9 @@ impl NatGatewayDeserializer {
                     "subnetId" => {
                         obj.subnet_id =
                             Some(try!(StringDeserializer::deserialize("subnetId", stack)));
+                    }
+                    "tagSet" => {
+                        obj.tags = Some(try!(TagListDeserializer::deserialize("tagSet", stack)));
                     }
                     "vpcId" => {
                         obj.vpc_id = Some(try!(StringDeserializer::deserialize("vpcId", stack)));
@@ -30625,9 +37473,11 @@ impl PrefixListDeserializer {
         Ok(obj)
     }
 }
-/// <p>The ID of the prefix.</p>
+/// <p>[EC2-VPC only] The ID of the prefix.</p>
 #[derive(Default, Debug, Clone)]
 pub struct PrefixListId {
+    /// <p>A description for the security group rule that references this prefix list ID.</p> <p>Constraints: Up to 255 characters in length. Allowed characters are a-z, A-Z, 0-9, spaces, and ._-:/()#,@[]+=;{}!$*</p>
+    pub description: Option<String>,
     /// <p>The ID of the prefix.</p>
     pub prefix_list_id: Option<String>,
 }
@@ -30654,6 +37504,10 @@ impl PrefixListIdDeserializer {
 
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
+                    "description" => {
+                        obj.description =
+                            Some(try!(StringDeserializer::deserialize("description", stack)));
+                    }
                     "prefixListId" => {
                         obj.prefix_list_id =
                             Some(try!(StringDeserializer::deserialize("prefixListId", stack)));
@@ -30682,6 +37536,12 @@ impl PrefixListIdSerializer {
             prefix.push_str(".");
         }
 
+        if let Some(ref field_value) = obj.description {
+            params.put(
+                &format!("{}{}", prefix, "Description"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
         if let Some(ref field_value) = obj.prefix_list_id {
             params.put(
                 &format!("{}{}", prefix, "PrefixListId"),
@@ -31065,6 +37925,20 @@ impl PricingDetailsListDeserializer {
                 }
             }
         }
+
+        Ok(obj)
+    }
+}
+struct PrincipalTypeDeserializer;
+impl PrincipalTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
 
         Ok(obj)
     }
@@ -32006,8 +38880,8 @@ impl PurchaseSetDeserializer {
 
             match next_event {
                 DeserializerNext::Element(name) => {
-                    if name == "member" {
-                        obj.push(try!(PurchaseDeserializer::deserialize("member", stack)));
+                    if name == "item" {
+                        obj.push(try!(PurchaseDeserializer::deserialize("item", stack)));
                     } else {
                         skip_tree(stack);
                     }
@@ -32366,11 +39240,11 @@ pub struct RegisterImageRequest {
     pub name: String,
     /// <p>The ID of the RAM disk.</p>
     pub ramdisk_id: Option<String>,
-    /// <p>The name of the root device (for example, <code>/dev/sda1</code>, or <code>/dev/xvda</code>).</p>
+    /// <p>The device name of the root device volume (for example, <code>/dev/sda1</code>).</p>
     pub root_device_name: Option<String>,
     /// <p>Set to <code>simple</code> to enable enhanced networking with the Intel 82599 Virtual Function interface for the AMI and any instances that you launch from the AMI.</p> <p>There is no way to disable <code>sriovNetSupport</code> at this time.</p> <p>This option is supported only for HVM AMIs. Specifying this option with a PV AMI can make instances launched from the AMI unreachable.</p>
     pub sriov_net_support: Option<String>,
-    /// <p>The type of virtualization.</p> <p>Default: <code>paravirtual</code> </p>
+    /// <p>The type of virtualization (<code>hvm</code> | <code>paravirtual</code>).</p> <p>Default: <code>paravirtual</code> </p>
     pub virtualization_type: Option<String>,
 }
 
@@ -32496,6 +39370,90 @@ impl RegisterImageResultDeserializer {
                     "imageId" => {
                         obj.image_id =
                             Some(try!(StringDeserializer::deserialize("imageId", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone)]
+pub struct RejectVpcEndpointConnectionsRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The ID of the service.</p>
+    pub service_id: String,
+    /// <p>The IDs of one or more VPC endpoints.</p>
+    pub vpc_endpoint_ids: Vec<String>,
+}
+
+/// Serialize `RejectVpcEndpointConnectionsRequest` contents to a `SignedRequest`.
+struct RejectVpcEndpointConnectionsRequestSerializer;
+impl RejectVpcEndpointConnectionsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &RejectVpcEndpointConnectionsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "ServiceId"),
+            &obj.service_id.replace("+", "%2B"),
+        );
+        ValueStringListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "VpcEndpointId"),
+            &obj.vpc_endpoint_ids,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct RejectVpcEndpointConnectionsResult {
+    /// <p>Information about the endpoints that were not rejected, if applicable.</p>
+    pub unsuccessful: Option<Vec<UnsuccessfulItem>>,
+}
+
+struct RejectVpcEndpointConnectionsResultDeserializer;
+impl RejectVpcEndpointConnectionsResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RejectVpcEndpointConnectionsResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = RejectVpcEndpointConnectionsResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "unsuccessful" => {
+                        obj.unsuccessful = Some(try!(
+                            UnsuccessfulItemSetDeserializer::deserialize("unsuccessful", stack)
+                        ));
                     }
                     _ => skip_tree(stack),
                 },
@@ -33159,7 +40117,7 @@ pub struct ReportInstanceStatusRequest {
     pub end_time: Option<String>,
     /// <p>One or more instances.</p>
     pub instances: Vec<String>,
-    /// <p><p>One or more reason codes that describes the health state of your instance.</p> <ul> <li> <p> <code>instance-stuck-in-state</code>: My instance is stuck in a state.</p> </li> <li> <p> <code>unresponsive</code>: My instance is unresponsive.</p> </li> <li> <p> <code>not-accepting-credentials</code>: My instance is not accepting my credentials.</p> </li> <li> <p> <code>password-not-available</code>: A password is not available for my instance.</p> </li> <li> <p> <code>performance-network</code>: My instance is experiencing performance problems which I believe are network related.</p> </li> <li> <p> <code>performance-instance-store</code>: My instance is experiencing performance problems which I believe are related to the instance stores.</p> </li> <li> <p> <code>performance-ebs-volume</code>: My instance is experiencing performance problems which I believe are related to an EBS volume.</p> </li> <li> <p> <code>performance-other</code>: My instance is experiencing performance problems.</p> </li> <li> <p> <code>other</code>: [explain using the description parameter]</p> </li> </ul></p>
+    /// <p><p>One or more reason codes that describe the health state of your instance.</p> <ul> <li> <p> <code>instance-stuck-in-state</code>: My instance is stuck in a state.</p> </li> <li> <p> <code>unresponsive</code>: My instance is unresponsive.</p> </li> <li> <p> <code>not-accepting-credentials</code>: My instance is not accepting my credentials.</p> </li> <li> <p> <code>password-not-available</code>: A password is not available for my instance.</p> </li> <li> <p> <code>performance-network</code>: My instance is experiencing performance problems that I believe are network related.</p> </li> <li> <p> <code>performance-instance-store</code>: My instance is experiencing performance problems that I believe are related to the instance stores.</p> </li> <li> <p> <code>performance-ebs-volume</code>: My instance is experiencing performance problems that I believe are related to an EBS volume.</p> </li> <li> <p> <code>performance-other</code>: My instance is experiencing performance problems.</p> </li> <li> <p> <code>other</code>: [explain using the description parameter]</p> </li> </ul></p>
     pub reason_codes: Vec<String>,
     /// <p>The time at which the reported instance health state began.</p>
     pub start_time: Option<String>,
@@ -33239,12 +40197,200 @@ impl RequestHostIdSetSerializer {
     }
 }
 
+/// <p>The information to include in the launch template.</p>
+#[derive(Default, Debug, Clone)]
+pub struct RequestLaunchTemplateData {
+    /// <p><p>The block device mapping.</p> <important> <p>Supplying both a snapshot ID and an encryption value as arguments for block-device mapping results in an error. This is because only blank volumes can be encrypted on start, and these are not created from a snapshot. If a snapshot is the basis for the volume, it contains data by definition and its encryption status cannot be changed using this action.</p> </important></p>
+    pub block_device_mappings: Option<Vec<LaunchTemplateBlockDeviceMappingRequest>>,
+    /// <p>The credit option for CPU usage of the instance. Valid for T2 instances only.</p>
+    pub credit_specification: Option<CreditSpecificationRequest>,
+    /// <p>If set to <code>true</code>, you can't terminate the instance using the Amazon EC2 console, CLI, or API. To change this attribute to <code>false</code> after launch, use <a>ModifyInstanceAttribute</a>.</p>
+    pub disable_api_termination: Option<bool>,
+    /// <p>Indicates whether the instance is optimized for Amazon EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal Amazon EBS I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS-optimized instance.</p>
+    pub ebs_optimized: Option<bool>,
+    /// <p>An elastic GPU to associate with the instance.</p>
+    pub elastic_gpu_specifications: Option<Vec<ElasticGpuSpecification>>,
+    /// <p>The IAM instance profile.</p>
+    pub iam_instance_profile: Option<LaunchTemplateIamInstanceProfileSpecificationRequest>,
+    /// <p>The ID of the AMI, which you can get by using <a>DescribeImages</a>.</p>
+    pub image_id: Option<String>,
+    /// <p>Indicates whether an instance stops or terminates when you initiate shutdown from the instance (using the operating system command for system shutdown).</p> <p>Default: <code>stop</code> </p>
+    pub instance_initiated_shutdown_behavior: Option<String>,
+    /// <p>The market (purchasing) option for the instances.</p>
+    pub instance_market_options: Option<LaunchTemplateInstanceMarketOptionsRequest>,
+    /// <p>The instance type. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html">Instance Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    pub instance_type: Option<String>,
+    /// <p><p>The ID of the kernel.</p> <important> <p>We recommend that you use PV-GRUB instead of kernels and RAM disks. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/UserProvidedkernels.html">User Provided Kernels</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </important></p>
+    pub kernel_id: Option<String>,
+    /// <p><p>The name of the key pair. You can create a key pair using <a>CreateKeyPair</a> or <a>ImportKeyPair</a>.</p> <important> <p>If you do not specify a key pair, you can&#39;t connect to the instance unless you choose an AMI that is configured to allow users another way to log in.</p> </important></p>
+    pub key_name: Option<String>,
+    /// <p>The monitoring for the instance.</p>
+    pub monitoring: Option<LaunchTemplatesMonitoringRequest>,
+    /// <p>One or more network interfaces.</p>
+    pub network_interfaces: Option<Vec<LaunchTemplateInstanceNetworkInterfaceSpecificationRequest>>,
+    /// <p>The placement for the instance.</p>
+    pub placement: Option<LaunchTemplatePlacementRequest>,
+    /// <p><p>The ID of the RAM disk.</p> <important> <p>We recommend that you use PV-GRUB instead of kernels and RAM disks. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/UserProvidedkernels.html">User Provided Kernels</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </important></p>
+    pub ram_disk_id: Option<String>,
+    /// <p>One or more security group IDs. You can create a security group using <a>CreateSecurityGroup</a>. You cannot specify both a security group ID and security name in the same request.</p>
+    pub security_group_ids: Option<Vec<String>>,
+    /// <p>[EC2-Classic, default VPC] One or more security group names. For a nondefault VPC, you must use security group IDs instead. You cannot specify both a security group ID and security name in the same request.</p>
+    pub security_groups: Option<Vec<String>>,
+    /// <p>The tags to apply to the resources during launch. You can tag instances and volumes. The specified tags are applied to all instances or volumes that are created during launch.</p>
+    pub tag_specifications: Option<Vec<LaunchTemplateTagSpecificationRequest>>,
+    /// <p>The user data to make available to the instance. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html">Running Commands on Your Linux Instance at Launch</a> (Linux) and <a href="http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2-instance-metadata.html#instancedata-add-user-data">Adding User Data</a> (Windows). If you are using a command line tool, base64-encoding is performed for you and you can load the text from a file. Otherwise, you must provide base64-encoded text.</p>
+    pub user_data: Option<String>,
+}
+
+/// Serialize `RequestLaunchTemplateData` contents to a `SignedRequest`.
+struct RequestLaunchTemplateDataSerializer;
+impl RequestLaunchTemplateDataSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &RequestLaunchTemplateData) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.block_device_mappings {
+            LaunchTemplateBlockDeviceMappingRequestListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "BlockDeviceMapping"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.credit_specification {
+            CreditSpecificationRequestSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "CreditSpecification"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.disable_api_termination {
+            params.put(
+                &format!("{}{}", prefix, "DisableApiTermination"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.ebs_optimized {
+            params.put(
+                &format!("{}{}", prefix, "EbsOptimized"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.elastic_gpu_specifications {
+            ElasticGpuSpecificationListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "ElasticGpuSpecification"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.iam_instance_profile {
+            LaunchTemplateIamInstanceProfileSpecificationRequestSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "IamInstanceProfile"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.image_id {
+            params.put(
+                &format!("{}{}", prefix, "ImageId"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.instance_initiated_shutdown_behavior {
+            params.put(
+                &format!("{}{}", prefix, "InstanceInitiatedShutdownBehavior"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.instance_market_options {
+            LaunchTemplateInstanceMarketOptionsRequestSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "InstanceMarketOptions"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.instance_type {
+            params.put(
+                &format!("{}{}", prefix, "InstanceType"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.kernel_id {
+            params.put(
+                &format!("{}{}", prefix, "KernelId"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.key_name {
+            params.put(
+                &format!("{}{}", prefix, "KeyName"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.monitoring {
+            LaunchTemplatesMonitoringRequestSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Monitoring"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.network_interfaces {
+            LaunchTemplateInstanceNetworkInterfaceSpecificationRequestListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "NetworkInterface"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.placement {
+            LaunchTemplatePlacementRequestSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Placement"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.ram_disk_id {
+            params.put(
+                &format!("{}{}", prefix, "RamDiskId"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.security_group_ids {
+            SecurityGroupIdStringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "SecurityGroupId"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.security_groups {
+            SecurityGroupStringListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "SecurityGroup"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.tag_specifications {
+            LaunchTemplateTagSpecificationRequestListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "TagSpecification"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.user_data {
+            params.put(
+                &format!("{}{}", prefix, "UserData"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
 /// <p>Contains the parameters for RequestSpotFleet.</p>
 #[derive(Default, Debug, Clone)]
 pub struct RequestSpotFleetRequest {
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>The configuration for the Spot fleet request.</p>
+    /// <p>The configuration for the Spot Fleet request.</p>
     pub spot_fleet_request_config: SpotFleetRequestConfigData,
 }
 
@@ -33274,7 +40420,7 @@ impl RequestSpotFleetRequestSerializer {
 /// <p>Contains the output of RequestSpotFleet.</p>
 #[derive(Default, Debug, Clone)]
 pub struct RequestSpotFleetResponse {
-    /// <p>The ID of the Spot fleet request.</p>
+    /// <p>The ID of the Spot Fleet request.</p>
     pub spot_fleet_request_id: String,
 }
 
@@ -33321,27 +40467,29 @@ impl RequestSpotFleetResponseDeserializer {
 /// <p>Contains the parameters for RequestSpotInstances.</p>
 #[derive(Default, Debug, Clone)]
 pub struct RequestSpotInstancesRequest {
-    /// <p>The user-specified name for a logical grouping of bids.</p> <p>When you specify an Availability Zone group in a Spot Instance request, all Spot instances in the request are launched in the same Availability Zone. Instance proximity is maintained with this parameter, but the choice of Availability Zone is not. The group applies only to bids for Spot Instances of the same instance type. Any additional Spot instance requests that are specified with the same Availability Zone group name are launched in that same Availability Zone, as long as at least one instance from the group is still active.</p> <p>If there is no active instance running in the Availability Zone group that you specify for a new Spot instance request (all instances are terminated, the bid is expired, or the bid falls below current market), then Amazon EC2 launches the instance in any Availability Zone where the constraint can be met. Consequently, the subsequent set of Spot instances could be placed in a different zone from the original request, even if you specified the same Availability Zone group.</p> <p>Default: Instances are launched in any available Availability Zone.</p>
+    /// <p>The user-specified name for a logical grouping of requests.</p> <p>When you specify an Availability Zone group in a Spot Instance request, all Spot Instances in the request are launched in the same Availability Zone. Instance proximity is maintained with this parameter, but the choice of Availability Zone is not. The group applies only to requests for Spot Instances of the same instance type. Any additional Spot Instance requests that are specified with the same Availability Zone group name are launched in that same Availability Zone, as long as at least one instance from the group is still active.</p> <p>If there is no active instance running in the Availability Zone group that you specify for a new Spot Instance request (all instances are terminated, the request is expired, or the maximum price you specified falls below current Spot price), then Amazon EC2 launches the instance in any Availability Zone where the constraint can be met. Consequently, the subsequent set of Spot Instances could be placed in a different zone from the original request, even if you specified the same Availability Zone group.</p> <p>Default: Instances are launched in any available Availability Zone.</p>
     pub availability_zone_group: Option<String>,
-    /// <p>The required duration for the Spot instances (also known as Spot blocks), in minutes. This value must be a multiple of 60 (60, 120, 180, 240, 300, or 360).</p> <p>The duration period starts as soon as your Spot instance receives its instance ID. At the end of the duration period, Amazon EC2 marks the Spot instance for termination and provides a Spot instance termination notice, which gives the instance a two-minute warning before it terminates.</p> <p>Note that you can't specify an Availability Zone group or a launch group if you specify a duration.</p>
+    /// <p>The required duration for the Spot Instances (also known as Spot blocks), in minutes. This value must be a multiple of 60 (60, 120, 180, 240, 300, or 360).</p> <p>The duration period starts as soon as your Spot Instance receives its instance ID. At the end of the duration period, Amazon EC2 marks the Spot Instance for termination and provides a Spot Instance termination notice, which gives the instance a two-minute warning before it terminates.</p> <p>Note that you can't specify an Availability Zone group or a launch group if you specify a duration.</p>
     pub block_duration_minutes: Option<i64>,
     /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Run_Instance_Idempotency.html">How to Ensure Idempotency</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     pub client_token: Option<String>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>The maximum number of Spot instances to launch.</p> <p>Default: 1</p>
+    /// <p>The maximum number of Spot Instances to launch.</p> <p>Default: 1</p>
     pub instance_count: Option<i64>,
-    /// <p>The instance launch group. Launch groups are Spot instances that launch together and terminate together.</p> <p>Default: Instances are launched and terminated individually</p>
+    /// <p>The behavior when a Spot Instance is interrupted. The default is <code>terminate</code>.</p>
+    pub instance_interruption_behavior: Option<String>,
+    /// <p>The instance launch group. Launch groups are Spot Instances that launch together and terminate together.</p> <p>Default: Instances are launched and terminated individually</p>
     pub launch_group: Option<String>,
     /// <p>The launch specification.</p>
     pub launch_specification: Option<RequestSpotLaunchSpecification>,
-    /// <p>The maximum hourly price (bid) for any Spot instance launched to fulfill the request.</p>
-    pub spot_price: String,
-    /// <p>The Spot instance request type.</p> <p>Default: <code>one-time</code> </p>
+    /// <p>The maximum price per hour that you are willing to pay for a Spot Instance. The default is the On-Demand price.</p>
+    pub spot_price: Option<String>,
+    /// <p>The Spot Instance request type.</p> <p>Default: <code>one-time</code> </p>
     pub type_: Option<String>,
-    /// <p>The start date of the request. If this is a one-time request, the request becomes active at this date and time and remains active until all instances launch, the request expires, or the request is canceled. If the request is persistent, the request becomes active at this date and time and remains active until it expires or is canceled.</p> <p>Default: The request is effective indefinitely.</p>
+    /// <p>The start date of the request. If this is a one-time request, the request becomes active at this date and time and remains active until all instances launch, the request expires, or the request is canceled. If the request is persistent, the request becomes active at this date and time and remains active until it expires or is canceled.</p>
     pub valid_from: Option<String>,
-    /// <p>The end date of the request. If this is a one-time request, the request remains active until all instances launch, the request is canceled, or this date is reached. If the request is persistent, it remains active until it is canceled or this date and time is reached.</p> <p>Default: The request is effective indefinitely.</p>
+    /// <p>The end date of the request. If this is a one-time request, the request remains active until all instances launch, the request is canceled, or this date is reached. If the request is persistent, it remains active until it is canceled or this date is reached. The default end date is 7 days from the current date.</p>
     pub valid_until: Option<String>,
 }
 
@@ -33384,6 +40532,12 @@ impl RequestSpotInstancesRequestSerializer {
                 &field_value.to_string().replace("+", "%2B"),
             );
         }
+        if let Some(ref field_value) = obj.instance_interruption_behavior {
+            params.put(
+                &format!("{}{}", prefix, "InstanceInterruptionBehavior"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
         if let Some(ref field_value) = obj.launch_group {
             params.put(
                 &format!("{}{}", prefix, "LaunchGroup"),
@@ -33397,10 +40551,12 @@ impl RequestSpotInstancesRequestSerializer {
                 field_value,
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "SpotPrice"),
-            &obj.spot_price.replace("+", "%2B"),
-        );
+        if let Some(ref field_value) = obj.spot_price {
+            params.put(
+                &format!("{}{}", prefix, "SpotPrice"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
         if let Some(ref field_value) = obj.type_ {
             params.put(
                 &format!("{}{}", prefix, "Type"),
@@ -33425,7 +40581,7 @@ impl RequestSpotInstancesRequestSerializer {
 /// <p>Contains the output of RequestSpotInstances.</p>
 #[derive(Default, Debug, Clone)]
 pub struct RequestSpotInstancesResult {
-    /// <p>One or more Spot instance requests.</p>
+    /// <p>One or more Spot Instance requests.</p>
     pub spot_instance_requests: Option<Vec<SpotInstanceRequest>>,
 }
 
@@ -33477,7 +40633,7 @@ impl RequestSpotInstancesResultDeserializer {
 pub struct RequestSpotLaunchSpecification {
     /// <p>Deprecated.</p>
     pub addressing_type: Option<String>,
-    /// <p>One or more block device mapping entries.</p> <p>Although you can specify encrypted EBS volumes in this block device mapping for your Spot Instances, these volumes are not encrypted.</p>
+    /// <p>One or more block device mapping entries. You can't specify both a snapshot ID and an encryption value. This is because only blank volumes can be encrypted on creation. If a snapshot is the basis for a volume, it is not blank and its encryption status is used for the volume encryption status.</p>
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     /// <p>Indicates whether the instance is optimized for EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal EBS I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS Optimized instance.</p> <p>Default: <code>false</code> </p>
     pub ebs_optimized: Option<bool>,
@@ -35039,6 +42195,89 @@ impl ReservedIntancesIdsDeserializer {
         Ok(obj)
     }
 }
+#[derive(Default, Debug, Clone)]
+pub struct ResetFpgaImageAttributeRequest {
+    /// <p>The attribute.</p>
+    pub attribute: Option<String>,
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The ID of the AFI.</p>
+    pub fpga_image_id: String,
+}
+
+/// Serialize `ResetFpgaImageAttributeRequest` contents to a `SignedRequest`.
+struct ResetFpgaImageAttributeRequestSerializer;
+impl ResetFpgaImageAttributeRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ResetFpgaImageAttributeRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.attribute {
+            params.put(
+                &format!("{}{}", prefix, "Attribute"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "FpgaImageId"),
+            &obj.fpga_image_id.replace("+", "%2B"),
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone)]
+pub struct ResetFpgaImageAttributeResult {
+    /// <p>Is <code>true</code> if the request succeeds, and an error otherwise.</p>
+    pub return_: Option<bool>,
+}
+
+struct ResetFpgaImageAttributeResultDeserializer;
+impl ResetFpgaImageAttributeResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ResetFpgaImageAttributeResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ResetFpgaImageAttributeResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "return" => {
+                        obj.return_ = Some(try!(BooleanDeserializer::deserialize("return", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>Contains the parameters for ResetImageAttribute.</p>
 #[derive(Default, Debug, Clone)]
 pub struct ResetImageAttributeRequest {
@@ -35214,6 +42453,60 @@ impl ResourceTypeDeserializer {
         Ok(obj)
     }
 }
+/// <p>Describes the error that's returned when you cannot delete a launch template version.</p>
+#[derive(Default, Debug, Clone)]
+pub struct ResponseError {
+    /// <p>The error code.</p>
+    pub code: Option<String>,
+    /// <p>The error message, if applicable.</p>
+    pub message: Option<String>,
+}
+
+struct ResponseErrorDeserializer;
+impl ResponseErrorDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ResponseError, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ResponseError::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "code" => {
+                        obj.code = Some(try!(LaunchTemplateErrorCodeDeserializer::deserialize(
+                            "code",
+                            stack
+                        )));
+                    }
+                    "message" => {
+                        obj.message = Some(try!(StringDeserializer::deserialize("message", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 struct ResponseHostIdListDeserializer;
 impl ResponseHostIdListDeserializer {
     #[allow(unused_variables)]
@@ -35290,6 +42583,196 @@ impl ResponseHostIdSetDeserializer {
                 }
             }
         }
+
+        Ok(obj)
+    }
+}
+/// <p>The information for a launch template. </p>
+#[derive(Default, Debug, Clone)]
+pub struct ResponseLaunchTemplateData {
+    /// <p>The block device mappings.</p>
+    pub block_device_mappings: Option<Vec<LaunchTemplateBlockDeviceMapping>>,
+    /// <p>The credit option for CPU usage of the instance.</p>
+    pub credit_specification: Option<CreditSpecification>,
+    /// <p>If set to <code>true</code>, indicates that the instance cannot be terminated using the Amazon EC2 console, command line tool, or API.</p>
+    pub disable_api_termination: Option<bool>,
+    /// <p>Indicates whether the instance is optimized for Amazon EBS I/O. </p>
+    pub ebs_optimized: Option<bool>,
+    /// <p>The elastic GPU specification.</p>
+    pub elastic_gpu_specifications: Option<Vec<ElasticGpuSpecificationResponse>>,
+    /// <p>The IAM instance profile.</p>
+    pub iam_instance_profile: Option<LaunchTemplateIamInstanceProfileSpecification>,
+    /// <p>The ID of the AMI that was used to launch the instance.</p>
+    pub image_id: Option<String>,
+    /// <p>Indicates whether an instance stops or terminates when you initiate shutdown from the instance (using the operating system command for system shutdown).</p>
+    pub instance_initiated_shutdown_behavior: Option<String>,
+    /// <p>The market (purchasing) option for the instances.</p>
+    pub instance_market_options: Option<LaunchTemplateInstanceMarketOptions>,
+    /// <p>The instance type.</p>
+    pub instance_type: Option<String>,
+    /// <p>The ID of the kernel, if applicable.</p>
+    pub kernel_id: Option<String>,
+    /// <p>The name of the key pair.</p>
+    pub key_name: Option<String>,
+    /// <p>The monitoring for the instance.</p>
+    pub monitoring: Option<LaunchTemplatesMonitoring>,
+    /// <p>The network interfaces.</p>
+    pub network_interfaces: Option<Vec<LaunchTemplateInstanceNetworkInterfaceSpecification>>,
+    /// <p>The placement of the instance.</p>
+    pub placement: Option<LaunchTemplatePlacement>,
+    /// <p>The ID of the RAM disk, if applicable.</p>
+    pub ram_disk_id: Option<String>,
+    /// <p>The security group IDs.</p>
+    pub security_group_ids: Option<Vec<String>>,
+    /// <p>The security group names.</p>
+    pub security_groups: Option<Vec<String>>,
+    /// <p>The tags.</p>
+    pub tag_specifications: Option<Vec<LaunchTemplateTagSpecification>>,
+    /// <p>The user data for the instance. </p>
+    pub user_data: Option<String>,
+}
+
+struct ResponseLaunchTemplateDataDeserializer;
+impl ResponseLaunchTemplateDataDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ResponseLaunchTemplateData, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ResponseLaunchTemplateData::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "blockDeviceMappingSet" => {
+                        obj.block_device_mappings = Some(try!(
+                            LaunchTemplateBlockDeviceMappingListDeserializer::deserialize(
+                                "blockDeviceMappingSet",
+                                stack
+                            )
+                        ));
+                    }
+                    "creditSpecification" => {
+                        obj.credit_specification =
+                            Some(try!(CreditSpecificationDeserializer::deserialize(
+                                "creditSpecification",
+                                stack
+                            )));
+                    }
+                    "disableApiTermination" => {
+                        obj.disable_api_termination = Some(try!(
+                            BooleanDeserializer::deserialize("disableApiTermination", stack)
+                        ));
+                    }
+                    "ebsOptimized" => {
+                        obj.ebs_optimized = Some(try!(BooleanDeserializer::deserialize(
+                            "ebsOptimized",
+                            stack
+                        )));
+                    }
+                    "elasticGpuSpecificationSet" => {
+                        obj.elastic_gpu_specifications = Some(try!(
+                            ElasticGpuSpecificationResponseListDeserializer::deserialize(
+                                "elasticGpuSpecificationSet",
+                                stack
+                            )
+                        ));
+                    }
+                    "iamInstanceProfile" => {
+                        obj.iam_instance_profile = Some(try!(LaunchTemplateIamInstanceProfileSpecificationDeserializer::deserialize("iamInstanceProfile", stack)));
+                    }
+                    "imageId" => {
+                        obj.image_id =
+                            Some(try!(StringDeserializer::deserialize("imageId", stack)));
+                    }
+                    "instanceInitiatedShutdownBehavior" => {
+                        obj.instance_initiated_shutdown_behavior =
+                            Some(try!(ShutdownBehaviorDeserializer::deserialize(
+                                "instanceInitiatedShutdownBehavior",
+                                stack
+                            )));
+                    }
+                    "instanceMarketOptions" => {
+                        obj.instance_market_options = Some(try!(
+                            LaunchTemplateInstanceMarketOptionsDeserializer::deserialize(
+                                "instanceMarketOptions",
+                                stack
+                            )
+                        ));
+                    }
+                    "instanceType" => {
+                        obj.instance_type = Some(try!(InstanceTypeDeserializer::deserialize(
+                            "instanceType",
+                            stack
+                        )));
+                    }
+                    "kernelId" => {
+                        obj.kernel_id =
+                            Some(try!(StringDeserializer::deserialize("kernelId", stack)));
+                    }
+                    "keyName" => {
+                        obj.key_name =
+                            Some(try!(StringDeserializer::deserialize("keyName", stack)));
+                    }
+                    "monitoring" => {
+                        obj.monitoring = Some(try!(
+                            LaunchTemplatesMonitoringDeserializer::deserialize("monitoring", stack)
+                        ));
+                    }
+                    "networkInterfaceSet" => {
+                        obj.network_interfaces = Some(try!(LaunchTemplateInstanceNetworkInterfaceSpecificationListDeserializer::deserialize("networkInterfaceSet", stack)));
+                    }
+                    "placement" => {
+                        obj.placement = Some(try!(
+                            LaunchTemplatePlacementDeserializer::deserialize("placement", stack)
+                        ));
+                    }
+                    "ramDiskId" => {
+                        obj.ram_disk_id =
+                            Some(try!(StringDeserializer::deserialize("ramDiskId", stack)));
+                    }
+                    "securityGroupIdSet" => {
+                        obj.security_group_ids = Some(try!(
+                            ValueStringListDeserializer::deserialize("securityGroupIdSet", stack)
+                        ));
+                    }
+                    "securityGroupSet" => {
+                        obj.security_groups = Some(try!(
+                            ValueStringListDeserializer::deserialize("securityGroupSet", stack)
+                        ));
+                    }
+                    "tagSpecificationSet" => {
+                        obj.tag_specifications = Some(try!(
+                            LaunchTemplateTagSpecificationListDeserializer::deserialize(
+                                "tagSpecificationSet",
+                                stack
+                            )
+                        ));
+                    }
+                    "userData" => {
+                        obj.user_data =
+                            Some(try!(StringDeserializer::deserialize("userData", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
 
         Ok(obj)
     }
@@ -35392,23 +42875,23 @@ impl RestoreAddressToClassicResultDeserializer {
 /// <p>Contains the parameters for RevokeSecurityGroupEgress.</p>
 #[derive(Default, Debug, Clone)]
 pub struct RevokeSecurityGroupEgressRequest {
-    /// <p>The CIDR IP address range. We recommend that you specify the CIDR range in a set of IP permissions instead.</p>
+    /// <p>Not supported. Use a set of IP permissions to specify the CIDR.</p>
     pub cidr_ip: Option<String>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>The start of port range for the TCP and UDP protocols, or an ICMP type number. We recommend that you specify the port range in a set of IP permissions instead.</p>
+    /// <p>Not supported. Use a set of IP permissions to specify the port.</p>
     pub from_port: Option<i64>,
     /// <p>The ID of the security group.</p>
     pub group_id: String,
-    /// <p>A set of IP permissions. You can't specify a destination security group and a CIDR IP address range.</p>
+    /// <p>One or more sets of IP permissions. You can't specify a destination security group and a CIDR IP address range in the same set of permissions.</p>
     pub ip_permissions: Option<Vec<IpPermission>>,
-    /// <p>The IP protocol name or number. We recommend that you specify the protocol in a set of IP permissions instead.</p>
+    /// <p>Not supported. Use a set of IP permissions to specify the protocol name or number.</p>
     pub ip_protocol: Option<String>,
-    /// <p>The name of a destination security group. To revoke outbound access to a destination security group, we recommend that you use a set of IP permissions instead.</p>
+    /// <p>Not supported. Use a set of IP permissions to specify a destination security group.</p>
     pub source_security_group_name: Option<String>,
-    /// <p>The AWS account number for a destination security group. To revoke outbound access to a destination security group, we recommend that you use a set of IP permissions instead.</p>
+    /// <p>Not supported. Use a set of IP permissions to specify a destination security group.</p>
     pub source_security_group_owner_id: Option<String>,
-    /// <p>The end of port range for the TCP and UDP protocols, or an ICMP type number. We recommend that you specify the port range in a set of IP permissions instead.</p>
+    /// <p>Not supported. Use a set of IP permissions to specify the port.</p>
     pub to_port: Option<i64>,
 }
 
@@ -35486,11 +42969,11 @@ pub struct RevokeSecurityGroupIngressRequest {
     pub dry_run: Option<bool>,
     /// <p>The start of port range for the TCP and UDP protocols, or an ICMP type number. For the ICMP type number, use <code>-1</code> to specify all ICMP types.</p>
     pub from_port: Option<i64>,
-    /// <p>The ID of the security group. Required for a security group in a nondefault VPC.</p>
+    /// <p>The ID of the security group. You must specify either the security group ID or the security group name in the request. For security groups in a nondefault VPC, you must specify the security group ID.</p>
     pub group_id: Option<String>,
-    /// <p>[EC2-Classic, default VPC] The name of the security group.</p>
+    /// <p>[EC2-Classic, default VPC] The name of the security group. You must specify either the security group ID or the security group name in the request.</p>
     pub group_name: Option<String>,
-    /// <p>A set of IP permissions. You can't specify a source security group and a CIDR IP address range.</p>
+    /// <p>One or more sets of IP permissions. You can't specify a source security group and a CIDR IP address range in the same set of permissions.</p>
     pub ip_permissions: Option<Vec<IpPermission>>,
     /// <p>The IP protocol name (<code>tcp</code>, <code>udp</code>, <code>icmp</code>) or number (see <a href="http://www.iana.org/assignments/protocol-numbers/protocol-numbers.xhtml">Protocol Numbers</a>). Use <code>-1</code> to specify all.</p>
     pub ip_protocol: Option<String>,
@@ -36074,24 +43557,28 @@ impl RunInstancesMonitoringEnabledSerializer {
 pub struct RunInstancesRequest {
     /// <p>Reserved.</p>
     pub additional_info: Option<String>,
-    /// <p><p>The block device mapping.</p> <important> <p>Supplying both a snapshot ID and an encryption value as arguments for block-device mapping results in an error. This is because only blank volumes can be encrypted on start, and these are not created from a snapshot. If a snapshot is the basis for the volume, it contains data by definition and its encryption status cannot be changed using this action.</p> </important></p>
+    /// <p>One or more block device mapping entries. You can't specify both a snapshot ID and an encryption value. This is because only blank volumes can be encrypted on creation. If a snapshot is the basis for a volume, it is not blank and its encryption status is used for the volume encryption status.</p>
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     /// <p>Unique, case-sensitive identifier you provide to ensure the idempotency of the request. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p> <p>Constraints: Maximum 64 ASCII characters</p>
     pub client_token: Option<String>,
+    /// <p>The credit option for CPU usage of the instance. Valid values are <code>standard</code> and <code>unlimited</code>. To change this attribute after launch, use <a>ModifyInstanceCreditSpecification</a>. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/t2-instances.html">T2 Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Default: <code>standard</code> </p>
+    pub credit_specification: Option<CreditSpecificationRequest>,
     /// <p>If you set this parameter to <code>true</code>, you can't terminate the instance using the Amazon EC2 console, CLI, or API; otherwise, you can. To change this attribute to <code>false</code> after launch, use <a>ModifyInstanceAttribute</a>. Alternatively, if you set <code>InstanceInitiatedShutdownBehavior</code> to <code>terminate</code>, you can terminate the instance by running the shutdown command from the instance.</p> <p>Default: <code>false</code> </p>
     pub disable_api_termination: Option<bool>,
     /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
     pub dry_run: Option<bool>,
-    /// <p>Indicates whether the instance is optimized for EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal EBS I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS-optimized instance.</p> <p>Default: <code>false</code> </p>
+    /// <p>Indicates whether the instance is optimized for Amazon EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal Amazon EBS I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS-optimized instance.</p> <p>Default: <code>false</code> </p>
     pub ebs_optimized: Option<bool>,
-    /// <p>An Elastic GPU to associate with the instance.</p>
+    /// <p>An elastic GPU to associate with the instance.</p>
     pub elastic_gpu_specification: Option<Vec<ElasticGpuSpecification>>,
     /// <p>The IAM instance profile.</p>
     pub iam_instance_profile: Option<IamInstanceProfileSpecification>,
     /// <p>The ID of the AMI, which you can get by calling <a>DescribeImages</a>.</p>
-    pub image_id: String,
+    pub image_id: Option<String>,
     /// <p>Indicates whether an instance stops or terminates when you initiate shutdown from the instance (using the operating system command for system shutdown).</p> <p>Default: <code>stop</code> </p>
     pub instance_initiated_shutdown_behavior: Option<String>,
+    /// <p>The market (purchasing) option for the instances.</p>
+    pub instance_market_options: Option<InstanceMarketOptionsRequest>,
     /// <p>The instance type. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html">Instance Types</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>Default: <code>m1.small</code> </p>
     pub instance_type: Option<String>,
     /// <p>[EC2-VPC] A number of IPv6 addresses to associate with the primary network interface. Amazon EC2 chooses the IPv6 addresses from the range of your subnet. You cannot specify this option and the option to assign specific IPv6 addresses in the same request. You can specify this option if you've specified a minimum number of instances to launch.</p>
@@ -36102,6 +43589,8 @@ pub struct RunInstancesRequest {
     pub kernel_id: Option<String>,
     /// <p><p>The name of the key pair. You can create a key pair using <a>CreateKeyPair</a> or <a>ImportKeyPair</a>.</p> <important> <p>If you do not specify a key pair, you can&#39;t connect to the instance unless you choose an AMI that is configured to allow users another way to log in.</p> </important></p>
     pub key_name: Option<String>,
+    /// <p>The launch template to use to launch the instances. Any parameters that you specify in <a>RunInstances</a> override the same parameters in the launch template.</p>
+    pub launch_template: Option<LaunchTemplateSpecification>,
     /// <p>The maximum number of instances to launch. If you specify more instances than Amazon EC2 can launch in the target Availability Zone, Amazon EC2 launches the largest possible number of instances above <code>MinCount</code>.</p> <p>Constraints: Between 1 and the maximum number you're allowed for the specified instance type. For more information about the default limits, and how to request an increase, see <a href="http://aws.amazon.com/ec2/faqs/#How_many_instances_can_I_run_in_Amazon_EC2">How many instances can I run in Amazon EC2</a> in the Amazon EC2 FAQ.</p>
     pub max_count: i64,
     /// <p>The minimum number of instances to launch. If you specify a minimum that is more instances than Amazon EC2 can launch in the target Availability Zone, Amazon EC2 launches no instances.</p> <p>Constraints: Between 1 and the maximum number you're allowed for the specified instance type. For more information about the default limits, and how to request an increase, see <a href="http://aws.amazon.com/ec2/faqs/#How_many_instances_can_I_run_in_Amazon_EC2">How many instances can I run in Amazon EC2</a> in the Amazon EC2 General FAQ.</p>
@@ -36124,7 +43613,7 @@ pub struct RunInstancesRequest {
     pub subnet_id: Option<String>,
     /// <p>The tags to apply to the resources during launch. You can tag instances and volumes. The specified tags are applied to all instances or volumes that are created during launch.</p>
     pub tag_specifications: Option<Vec<TagSpecification>>,
-    /// <p>The user data to make available to the instance. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html">Running Commands on Your Linux Instance at Launch</a> (Linux) and <a href="http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2-instance-metadata.html#instancedata-add-user-data">Adding User Data</a> (Windows). If you are using an AWS SDK or command line tool, Base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide Base64-encoded text.</p>
+    /// <p>The user data to make available to the instance. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/user-data.html">Running Commands on Your Linux Instance at Launch</a> (Linux) and <a href="http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2-instance-metadata.html#instancedata-add-user-data">Adding User Data</a> (Windows). If you are using a command line tool, base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide base64-encoded text.</p>
     pub user_data: Option<String>,
 }
 
@@ -36154,6 +43643,13 @@ impl RunInstancesRequestSerializer {
             params.put(
                 &format!("{}{}", prefix, "ClientToken"),
                 &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.credit_specification {
+            CreditSpecificationRequestSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "CreditSpecification"),
+                field_value,
             );
         }
         if let Some(ref field_value) = obj.disable_api_termination {
@@ -36188,14 +43684,23 @@ impl RunInstancesRequestSerializer {
                 field_value,
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "ImageId"),
-            &obj.image_id.replace("+", "%2B"),
-        );
+        if let Some(ref field_value) = obj.image_id {
+            params.put(
+                &format!("{}{}", prefix, "ImageId"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
         if let Some(ref field_value) = obj.instance_initiated_shutdown_behavior {
             params.put(
                 &format!("{}{}", prefix, "InstanceInitiatedShutdownBehavior"),
                 &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.instance_market_options {
+            InstanceMarketOptionsRequestSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "InstanceMarketOptions"),
+                field_value,
             );
         }
         if let Some(ref field_value) = obj.instance_type {
@@ -36227,6 +43732,13 @@ impl RunInstancesRequestSerializer {
             params.put(
                 &format!("{}{}", prefix, "KeyName"),
                 &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.launch_template {
+            LaunchTemplateSpecificationSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "LaunchTemplate"),
+                field_value,
             );
         }
         params.put(
@@ -37048,13 +44560,13 @@ impl ScheduledInstanceSetDeserializer {
 /// <p>Describes a block device mapping for a Scheduled Instance.</p>
 #[derive(Default, Debug, Clone)]
 pub struct ScheduledInstancesBlockDeviceMapping {
-    /// <p>The device name exposed to the instance (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p>
+    /// <p>The device name (for example, <code>/dev/sdh</code> or <code>xvdh</code>).</p>
     pub device_name: Option<String>,
     /// <p>Parameters used to set up EBS volumes automatically when the instance is launched.</p>
     pub ebs: Option<ScheduledInstancesEbs>,
     /// <p>Suppresses the specified device included in the block device mapping of the AMI.</p>
     pub no_device: Option<String>,
-    /// <p>The virtual device name (<code>ephemeral</code>N). Instance store volumes are numbered starting from 0. An instance type with two available instance store volumes can specify mappings for <code>ephemeral0</code> and <code>ephemeral1</code>.The number of available instance store volumes depends on the instance type. After you connect to the instance, you must mount the volume.</p> <p>Constraints: For M3 instances, you must specify instance store volumes in the block device mapping for the instance. When you launch an M3 instance, we ignore any instance store volumes specified in the block device mapping for the AMI.</p>
+    /// <p>The virtual device name (<code>ephemeral</code>N). Instance store volumes are numbered starting from 0. An instance type with two available instance store volumes can specify mappings for <code>ephemeral0</code> and <code>ephemeral1</code>. The number of available instance store volumes depends on the instance type. After you connect to the instance, you must mount the volume.</p> <p>Constraints: For M3 instances, you must specify instance store volumes in the block device mapping for the instance. When you launch an M3 instance, we ignore any instance store volumes specified in the block device mapping for the AMI.</p>
     pub virtual_name: Option<String>,
 }
 
@@ -37762,6 +45274,59 @@ impl SecurityGroupIdStringListSerializer {
     }
 }
 
+/// <p>Describes a security group.</p>
+#[derive(Default, Debug, Clone)]
+pub struct SecurityGroupIdentifier {
+    /// <p>The ID of the security group.</p>
+    pub group_id: Option<String>,
+    /// <p>The name of the security group.</p>
+    pub group_name: Option<String>,
+}
+
+struct SecurityGroupIdentifierDeserializer;
+impl SecurityGroupIdentifierDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SecurityGroupIdentifier, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = SecurityGroupIdentifier::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "groupId" => {
+                        obj.group_id =
+                            Some(try!(StringDeserializer::deserialize("groupId", stack)));
+                    }
+                    "groupName" => {
+                        obj.group_name =
+                            Some(try!(StringDeserializer::deserialize("groupName", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 struct SecurityGroupListDeserializer;
 impl SecurityGroupListDeserializer {
     #[allow(unused_variables)]
@@ -37916,6 +45481,430 @@ impl SecurityGroupStringListSerializer {
     }
 }
 
+/// <p>Describes a service configuration for a VPC endpoint service.</p>
+#[derive(Default, Debug, Clone)]
+pub struct ServiceConfiguration {
+    /// <p>Indicates whether requests from other AWS accounts to create an endpoint to the service must first be accepted.</p>
+    pub acceptance_required: Option<bool>,
+    /// <p>In the Availability Zones in which the service is available.</p>
+    pub availability_zones: Option<Vec<String>>,
+    /// <p>The DNS names for the service.</p>
+    pub base_endpoint_dns_names: Option<Vec<String>>,
+    /// <p>The Amazon Resource Names (ARNs) of the Network Load Balancers for the service.</p>
+    pub network_load_balancer_arns: Option<Vec<String>>,
+    /// <p>The private DNS name for the service.</p>
+    pub private_dns_name: Option<String>,
+    /// <p>The ID of the service.</p>
+    pub service_id: Option<String>,
+    /// <p>The name of the service.</p>
+    pub service_name: Option<String>,
+    /// <p>The service state.</p>
+    pub service_state: Option<String>,
+    /// <p>The type of service.</p>
+    pub service_type: Option<Vec<ServiceTypeDetail>>,
+}
+
+struct ServiceConfigurationDeserializer;
+impl ServiceConfigurationDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ServiceConfiguration, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ServiceConfiguration::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "acceptanceRequired" => {
+                        obj.acceptance_required = Some(try!(BooleanDeserializer::deserialize(
+                            "acceptanceRequired",
+                            stack
+                        )));
+                    }
+                    "availabilityZoneSet" => {
+                        obj.availability_zones = Some(try!(
+                            ValueStringListDeserializer::deserialize("availabilityZoneSet", stack)
+                        ));
+                    }
+                    "baseEndpointDnsNameSet" => {
+                        obj.base_endpoint_dns_names =
+                            Some(try!(ValueStringListDeserializer::deserialize(
+                                "baseEndpointDnsNameSet",
+                                stack
+                            )));
+                    }
+                    "networkLoadBalancerArnSet" => {
+                        obj.network_load_balancer_arns =
+                            Some(try!(ValueStringListDeserializer::deserialize(
+                                "networkLoadBalancerArnSet",
+                                stack
+                            )));
+                    }
+                    "privateDnsName" => {
+                        obj.private_dns_name = Some(try!(StringDeserializer::deserialize(
+                            "privateDnsName",
+                            stack
+                        )));
+                    }
+                    "serviceId" => {
+                        obj.service_id =
+                            Some(try!(StringDeserializer::deserialize("serviceId", stack)));
+                    }
+                    "serviceName" => {
+                        obj.service_name =
+                            Some(try!(StringDeserializer::deserialize("serviceName", stack)));
+                    }
+                    "serviceState" => {
+                        obj.service_state = Some(try!(ServiceStateDeserializer::deserialize(
+                            "serviceState",
+                            stack
+                        )));
+                    }
+                    "serviceType" => {
+                        obj.service_type = Some(try!(
+                            ServiceTypeDetailSetDeserializer::deserialize("serviceType", stack)
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct ServiceConfigurationSetDeserializer;
+impl ServiceConfigurationSetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<ServiceConfiguration>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(ServiceConfigurationDeserializer::deserialize(
+                            "item",
+                            stack
+                        )));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+/// <p>Describes a VPC endpoint service.</p>
+#[derive(Default, Debug, Clone)]
+pub struct ServiceDetail {
+    /// <p>Indicates whether VPC endpoint connection requests to the service must be accepted by the service owner.</p>
+    pub acceptance_required: Option<bool>,
+    /// <p>The Availability Zones in which the service is available.</p>
+    pub availability_zones: Option<Vec<String>>,
+    /// <p>The DNS names for the service.</p>
+    pub base_endpoint_dns_names: Option<Vec<String>>,
+    /// <p>The AWS account ID of the service owner.</p>
+    pub owner: Option<String>,
+    /// <p>The private DNS name for the service.</p>
+    pub private_dns_name: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the service.</p>
+    pub service_name: Option<String>,
+    /// <p>The type of service.</p>
+    pub service_type: Option<Vec<ServiceTypeDetail>>,
+    /// <p>Indicates whether the service supports endpoint policies.</p>
+    pub vpc_endpoint_policy_supported: Option<bool>,
+}
+
+struct ServiceDetailDeserializer;
+impl ServiceDetailDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ServiceDetail, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ServiceDetail::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "acceptanceRequired" => {
+                        obj.acceptance_required = Some(try!(BooleanDeserializer::deserialize(
+                            "acceptanceRequired",
+                            stack
+                        )));
+                    }
+                    "availabilityZoneSet" => {
+                        obj.availability_zones = Some(try!(
+                            ValueStringListDeserializer::deserialize("availabilityZoneSet", stack)
+                        ));
+                    }
+                    "baseEndpointDnsNameSet" => {
+                        obj.base_endpoint_dns_names =
+                            Some(try!(ValueStringListDeserializer::deserialize(
+                                "baseEndpointDnsNameSet",
+                                stack
+                            )));
+                    }
+                    "owner" => {
+                        obj.owner = Some(try!(StringDeserializer::deserialize("owner", stack)));
+                    }
+                    "privateDnsName" => {
+                        obj.private_dns_name = Some(try!(StringDeserializer::deserialize(
+                            "privateDnsName",
+                            stack
+                        )));
+                    }
+                    "serviceName" => {
+                        obj.service_name =
+                            Some(try!(StringDeserializer::deserialize("serviceName", stack)));
+                    }
+                    "serviceType" => {
+                        obj.service_type = Some(try!(
+                            ServiceTypeDetailSetDeserializer::deserialize("serviceType", stack)
+                        ));
+                    }
+                    "vpcEndpointPolicySupported" => {
+                        obj.vpc_endpoint_policy_supported = Some(try!(
+                            BooleanDeserializer::deserialize("vpcEndpointPolicySupported", stack)
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct ServiceDetailSetDeserializer;
+impl ServiceDetailSetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<ServiceDetail>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(ServiceDetailDeserializer::deserialize("item", stack)));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+struct ServiceStateDeserializer;
+impl ServiceStateDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct ServiceTypeDeserializer;
+impl ServiceTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>Describes the type of service for a VPC endpoint.</p>
+#[derive(Default, Debug, Clone)]
+pub struct ServiceTypeDetail {
+    /// <p>The type of service.</p>
+    pub service_type: Option<String>,
+}
+
+struct ServiceTypeDetailDeserializer;
+impl ServiceTypeDetailDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ServiceTypeDetail, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = ServiceTypeDetail::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "serviceType" => {
+                        obj.service_type = Some(try!(ServiceTypeDeserializer::deserialize(
+                            "serviceType",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct ServiceTypeDetailSetDeserializer;
+impl ServiceTypeDetailSetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<ServiceTypeDetail>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(ServiceTypeDetailDeserializer::deserialize(
+                            "item",
+                            stack
+                        )));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+struct ShutdownBehaviorDeserializer;
+impl ShutdownBehaviorDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>Describes the time period for a Scheduled Instance to start its first schedule. The time period must span less than one day.</p>
 #[derive(Default, Debug, Clone)]
 pub struct SlotDateTimeRangeRequest {
@@ -38465,18 +46454,18 @@ impl SnapshotTaskDetailDeserializer {
         Ok(obj)
     }
 }
-/// <p>Describes the data feed for a Spot instance.</p>
+/// <p>Describes the data feed for a Spot Instance.</p>
 #[derive(Default, Debug, Clone)]
 pub struct SpotDatafeedSubscription {
-    /// <p>The Amazon S3 bucket where the Spot instance data feed is located.</p>
+    /// <p>The Amazon S3 bucket where the Spot Instance data feed is located.</p>
     pub bucket: Option<String>,
-    /// <p>The fault codes for the Spot instance request, if any.</p>
+    /// <p>The fault codes for the Spot Instance request, if any.</p>
     pub fault: Option<SpotInstanceStateFault>,
     /// <p>The AWS account ID of the account.</p>
     pub owner_id: Option<String>,
     /// <p>The prefix that is prepended to data feed files.</p>
     pub prefix: Option<String>,
-    /// <p>The state of the Spot instance data feed subscription.</p>
+    /// <p>The state of the Spot Instance data feed subscription.</p>
     pub state: Option<String>,
 }
 
@@ -38537,12 +46526,12 @@ impl SpotDatafeedSubscriptionDeserializer {
         Ok(obj)
     }
 }
-/// <p>Describes the launch specification for one or more Spot instances.</p>
+/// <p>Describes the launch specification for one or more Spot Instances.</p>
 #[derive(Default, Debug, Clone)]
 pub struct SpotFleetLaunchSpecification {
     /// <p>Deprecated.</p>
     pub addressing_type: Option<String>,
-    /// <p>One or more block device mapping entries.</p>
+    /// <p>One or more block device mapping entries. You can't specify both a snapshot ID and an encryption value. This is because only blank volumes can be encrypted on creation. If a snapshot is the basis for a volume, it is not blank and its encryption status is used for the volume encryption status.</p>
     pub block_device_mappings: Option<Vec<BlockDeviceMapping>>,
     /// <p>Indicates whether the instances are optimized for EBS I/O. This optimization provides dedicated throughput to Amazon EBS and an optimized configuration stack to provide optimal EBS I/O performance. This optimization isn't available with all instance types. Additional usage charges apply when using an EBS Optimized instance.</p> <p>Default: <code>false</code> </p>
     pub ebs_optimized: Option<bool>,
@@ -38550,7 +46539,7 @@ pub struct SpotFleetLaunchSpecification {
     pub iam_instance_profile: Option<IamInstanceProfileSpecification>,
     /// <p>The ID of the AMI.</p>
     pub image_id: Option<String>,
-    /// <p>The instance type. Note that T2 and HS1 instance types are not supported.</p>
+    /// <p>The instance type.</p>
     pub instance_type: Option<String>,
     /// <p>The ID of the kernel.</p>
     pub kernel_id: Option<String>,
@@ -38566,7 +46555,7 @@ pub struct SpotFleetLaunchSpecification {
     pub ramdisk_id: Option<String>,
     /// <p>One or more security groups. When requesting instances in a VPC, you must specify the IDs of the security groups. When requesting instances in EC2-Classic, you can specify the names or the IDs of the security groups.</p>
     pub security_groups: Option<Vec<GroupIdentifier>>,
-    /// <p>The bid price per unit hour for the specified instance type. If this value is not specified, the default is the Spot bid price specified for the fleet. To determine the bid price per unit hour, divide the Spot bid price by the value of <code>WeightedCapacity</code>.</p>
+    /// <p>The maximum price per unit hour that you are willing to pay for a Spot Instance. If this value is not specified, the default is the Spot price specified for the fleet. To determine the Spot price per unit hour, divide the Spot price by the value of <code>WeightedCapacity</code>.</p>
     pub spot_price: Option<String>,
     /// <p>The ID of the subnet in which to launch the instances. To specify multiple subnets, separate them using commas; for example, "subnet-a61dafcf, subnet-65ea5f08".</p>
     pub subnet_id: Option<String>,
@@ -38904,18 +46893,18 @@ impl SpotFleetMonitoringSerializer {
     }
 }
 
-/// <p>Describes a Spot fleet request.</p>
+/// <p>Describes a Spot Fleet request.</p>
 #[derive(Default, Debug, Clone)]
 pub struct SpotFleetRequestConfig {
-    /// <p>The progress of the Spot fleet request. If there is an error, the status is <code>error</code>. After all bids are placed, the status is <code>pending_fulfillment</code>. If the size of the fleet is equal to or greater than its target capacity, the status is <code>fulfilled</code>. If the size of the fleet is decreased, the status is <code>pending_termination</code> while Spot instances are terminating.</p>
+    /// <p>The progress of the Spot Fleet request. If there is an error, the status is <code>error</code>. After all requests are placed, the status is <code>pending_fulfillment</code>. If the size of the fleet is equal to or greater than its target capacity, the status is <code>fulfilled</code>. If the size of the fleet is decreased, the status is <code>pending_termination</code> while Spot Instances are terminating.</p>
     pub activity_status: Option<String>,
     /// <p>The creation date and time of the request.</p>
     pub create_time: String,
-    /// <p>Information about the configuration of the Spot fleet request.</p>
+    /// <p>The configuration of the Spot Fleet request.</p>
     pub spot_fleet_request_config: SpotFleetRequestConfigData,
-    /// <p>The ID of the Spot fleet request.</p>
+    /// <p>The ID of the Spot Fleet request.</p>
     pub spot_fleet_request_id: String,
-    /// <p>The state of the Spot fleet request.</p>
+    /// <p>The state of the Spot Fleet request.</p>
     pub spot_fleet_request_state: String,
 }
 
@@ -38982,34 +46971,40 @@ impl SpotFleetRequestConfigDeserializer {
         Ok(obj)
     }
 }
-/// <p>Describes the configuration of a Spot fleet request.</p>
+/// <p>Describes the configuration of a Spot Fleet request.</p>
 #[derive(Default, Debug, Clone)]
 pub struct SpotFleetRequestConfigData {
-    /// <p>Indicates how to allocate the target capacity across the Spot pools specified by the Spot fleet request. The default is <code>lowestPrice</code>.</p>
+    /// <p>Indicates how to allocate the target capacity across the Spot pools specified by the Spot Fleet request. The default is <code>lowestPrice</code>.</p>
     pub allocation_strategy: Option<String>,
     /// <p>A unique, case-sensitive identifier you provide to ensure idempotency of your listings. This helps avoid duplicate listings. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">Ensuring Idempotency</a>.</p>
     pub client_token: Option<String>,
-    /// <p>Indicates whether running Spot instances should be terminated if the target capacity of the Spot fleet request is decreased below the current size of the Spot fleet.</p>
+    /// <p>Indicates whether running Spot Instances should be terminated if the target capacity of the Spot Fleet request is decreased below the current size of the Spot Fleet.</p>
     pub excess_capacity_termination_policy: Option<String>,
     /// <p>The number of units fulfilled by this request compared to the set target capacity.</p>
     pub fulfilled_capacity: Option<f64>,
-    /// <p>Grants the Spot fleet permission to terminate Spot instances on your behalf when you cancel its Spot fleet request using <a>CancelSpotFleetRequests</a> or when the Spot fleet request expires, if you set <code>terminateInstancesWithExpiration</code>.</p>
+    /// <p>Grants the Spot Fleet permission to terminate Spot Instances on your behalf when you cancel its Spot Fleet request using <a>CancelSpotFleetRequests</a> or when the Spot Fleet request expires, if you set <code>terminateInstancesWithExpiration</code>.</p>
     pub iam_fleet_role: String,
-    /// <p>Information about the launch specifications for the Spot fleet request.</p>
-    pub launch_specifications: Vec<SpotFleetLaunchSpecification>,
-    /// <p>Indicates whether Spot fleet should replace unhealthy instances.</p>
+    /// <p>The behavior when a Spot Instance is interrupted. The default is <code>terminate</code>.</p>
+    pub instance_interruption_behavior: Option<String>,
+    /// <p>The launch specifications for the Spot Fleet request.</p>
+    pub launch_specifications: Option<Vec<SpotFleetLaunchSpecification>>,
+    /// <p>The launch template and overrides.</p>
+    pub launch_template_configs: Option<Vec<LaunchTemplateConfig>>,
+    /// <p>One or more Classic Load Balancers and target groups to attach to the Spot Fleet request. Spot Fleet registers the running Spot Instances with the specified Classic Load Balancers and target groups.</p> <p>With Network Load Balancers, Spot Fleet cannot register instances that have the following instance types: C1, CC1, CC2, CG1, CG2, CR1, CS1, G1, G2, HI1, HS1, M1, M2, M3, and T1.</p>
+    pub load_balancers_config: Option<LoadBalancersConfig>,
+    /// <p>Indicates whether Spot Fleet should replace unhealthy instances.</p>
     pub replace_unhealthy_instances: Option<bool>,
-    /// <p>The bid price per unit hour.</p>
-    pub spot_price: String,
-    /// <p>The number of units to request. You can choose to set the target capacity in terms of instances or a performance characteristic that is important to your application workload, such as vCPUs, memory, or I/O.</p>
+    /// <p>The maximum price per unit hour that you are willing to pay for a Spot Instance. The default is the On-Demand price.</p>
+    pub spot_price: Option<String>,
+    /// <p>The number of units to request. You can choose to set the target capacity in terms of instances or a performance characteristic that is important to your application workload, such as vCPUs, memory, or I/O. If the request type is <code>maintain</code>, you can specify a target capacity of 0 and add capacity later.</p>
     pub target_capacity: i64,
-    /// <p>Indicates whether running Spot instances should be terminated when the Spot fleet request expires.</p>
+    /// <p>Indicates whether running Spot Instances should be terminated when the Spot Fleet request expires.</p>
     pub terminate_instances_with_expiration: Option<bool>,
-    /// <p>The type of request. Indicates whether the fleet will only <code>request</code> the target capacity or also attempt to <code>maintain</code> it. When you <code>request</code> a certain target capacity, the fleet will only place the required bids. It will not attempt to replenish Spot instances if capacity is diminished, nor will it submit bids in alternative Spot pools if capacity is not available. When you want to <code>maintain</code> a certain target capacity, fleet will place the required bids to meet this target capacity. It will also automatically replenish any interrupted instances. Default: <code>maintain</code>.</p>
+    /// <p>The type of request. Indicates whether the fleet will only <code>request</code> the target capacity or also attempt to <code>maintain</code> it. When you <code>request</code> a certain target capacity, the fleet will only place the required requests. It will not attempt to replenish Spot Instances if capacity is diminished, nor will it submit requests in alternative Spot pools if capacity is not available. When you want to <code>maintain</code> a certain target capacity, fleet will place the required requests to meet this target capacity. It will also automatically replenish any interrupted instances. Default: <code>maintain</code>.</p>
     pub type_: Option<String>,
     /// <p>The start date and time of the request, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z). The default is to start fulfilling the request immediately.</p>
     pub valid_from: Option<String>,
-    /// <p>The end date and time of the request, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z). At this point, no new Spot instance requests are placed or enabled to fulfill the request.</p>
+    /// <p>The end date and time of the request, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z). At this point, no new Spot Instance requests are placed or able to fulfill the request. The default end date is 7 days from the current date.</p>
     pub valid_until: Option<String>,
 }
 
@@ -39064,10 +47059,32 @@ impl SpotFleetRequestConfigDataDeserializer {
                         obj.iam_fleet_role =
                             try!(StringDeserializer::deserialize("iamFleetRole", stack));
                     }
+                    "instanceInterruptionBehavior" => {
+                        obj.instance_interruption_behavior = Some(try!(
+                            InstanceInterruptionBehaviorDeserializer::deserialize(
+                                "instanceInterruptionBehavior",
+                                stack
+                            )
+                        ));
+                    }
                     "launchSpecifications" => {
-                        obj.launch_specifications = try!(
+                        obj.launch_specifications = Some(try!(
                             LaunchSpecsListDeserializer::deserialize("launchSpecifications", stack)
-                        );
+                        ));
+                    }
+                    "launchTemplateConfigs" => {
+                        obj.launch_template_configs =
+                            Some(try!(LaunchTemplateConfigListDeserializer::deserialize(
+                                "launchTemplateConfigs",
+                                stack
+                            )));
+                    }
+                    "loadBalancersConfig" => {
+                        obj.load_balancers_config =
+                            Some(try!(LoadBalancersConfigDeserializer::deserialize(
+                                "loadBalancersConfig",
+                                stack
+                            )));
                     }
                     "replaceUnhealthyInstances" => {
                         obj.replace_unhealthy_instances = Some(try!(
@@ -39075,7 +47092,8 @@ impl SpotFleetRequestConfigDataDeserializer {
                         ));
                     }
                     "spotPrice" => {
-                        obj.spot_price = try!(StringDeserializer::deserialize("spotPrice", stack));
+                        obj.spot_price =
+                            Some(try!(StringDeserializer::deserialize("spotPrice", stack)));
                     }
                     "targetCapacity" => {
                         obj.target_capacity =
@@ -39151,21 +47169,45 @@ impl SpotFleetRequestConfigDataSerializer {
             &format!("{}{}", prefix, "IamFleetRole"),
             &obj.iam_fleet_role.replace("+", "%2B"),
         );
-        LaunchSpecsListSerializer::serialize(
-            params,
-            &format!("{}{}", prefix, "LaunchSpecifications"),
-            &obj.launch_specifications,
-        );
+        if let Some(ref field_value) = obj.instance_interruption_behavior {
+            params.put(
+                &format!("{}{}", prefix, "InstanceInterruptionBehavior"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.launch_specifications {
+            LaunchSpecsListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "LaunchSpecifications"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.launch_template_configs {
+            LaunchTemplateConfigListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "LaunchTemplateConfigs"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.load_balancers_config {
+            LoadBalancersConfigSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "LoadBalancersConfig"),
+                field_value,
+            );
+        }
         if let Some(ref field_value) = obj.replace_unhealthy_instances {
             params.put(
                 &format!("{}{}", prefix, "ReplaceUnhealthyInstances"),
                 &field_value.to_string().replace("+", "%2B"),
             );
         }
-        params.put(
-            &format!("{}{}", prefix, "SpotPrice"),
-            &obj.spot_price.replace("+", "%2B"),
-        );
+        if let Some(ref field_value) = obj.spot_price {
+            params.put(
+                &format!("{}{}", prefix, "SpotPrice"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
         params.put(
             &format!("{}{}", prefix, "TargetCapacity"),
             &obj.target_capacity.to_string().replace("+", "%2B"),
@@ -39240,7 +47282,7 @@ impl SpotFleetRequestConfigSetDeserializer {
         Ok(obj)
     }
 }
-/// <p>The tags for a Spot fleet resource.</p>
+/// <p>The tags for a Spot Fleet resource.</p>
 #[derive(Default, Debug, Clone)]
 pub struct SpotFleetTagSpecification {
     /// <p>The type of resource. Currently, the only resource type that is supported is <code>instance</code>.</p>
@@ -39371,44 +47413,46 @@ impl SpotFleetTagSpecificationListSerializer {
     }
 }
 
-/// <p>Describes a Spot instance request.</p>
+/// <p>Describes a Spot Instance request.</p>
 #[derive(Default, Debug, Clone)]
 pub struct SpotInstanceRequest {
-    /// <p>If you specified a duration and your Spot instance request was fulfilled, this is the fixed hourly price in effect for the Spot instance while it runs.</p>
+    /// <p>If you specified a duration and your Spot Instance request was fulfilled, this is the fixed hourly price in effect for the Spot Instance while it runs.</p>
     pub actual_block_hourly_price: Option<String>,
-    /// <p>The Availability Zone group. If you specify the same Availability Zone group for all Spot instance requests, all Spot instances are launched in the same Availability Zone.</p>
+    /// <p>The Availability Zone group. If you specify the same Availability Zone group for all Spot Instance requests, all Spot Instances are launched in the same Availability Zone.</p>
     pub availability_zone_group: Option<String>,
-    /// <p>The duration for the Spot instance, in minutes.</p>
+    /// <p>The duration for the Spot Instance, in minutes.</p>
     pub block_duration_minutes: Option<i64>,
-    /// <p>The date and time when the Spot instance request was created, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z).</p>
+    /// <p>The date and time when the Spot Instance request was created, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z).</p>
     pub create_time: Option<String>,
-    /// <p>The fault codes for the Spot instance request, if any.</p>
+    /// <p>The fault codes for the Spot Instance request, if any.</p>
     pub fault: Option<SpotInstanceStateFault>,
-    /// <p>The instance ID, if an instance has been launched to fulfill the Spot instance request.</p>
+    /// <p>The instance ID, if an instance has been launched to fulfill the Spot Instance request.</p>
     pub instance_id: Option<String>,
-    /// <p>The instance launch group. Launch groups are Spot instances that launch together and terminate together.</p>
+    /// <p>The behavior when a Spot Instance is interrupted.</p>
+    pub instance_interruption_behavior: Option<String>,
+    /// <p>The instance launch group. Launch groups are Spot Instances that launch together and terminate together.</p>
     pub launch_group: Option<String>,
     /// <p>Additional information for launching instances.</p>
     pub launch_specification: Option<LaunchSpecification>,
-    /// <p>The Availability Zone in which the bid is launched.</p>
+    /// <p>The Availability Zone in which the request is launched.</p>
     pub launched_availability_zone: Option<String>,
-    /// <p>The product description associated with the Spot instance.</p>
+    /// <p>The product description associated with the Spot Instance.</p>
     pub product_description: Option<String>,
-    /// <p>The ID of the Spot instance request.</p>
+    /// <p>The ID of the Spot Instance request.</p>
     pub spot_instance_request_id: Option<String>,
-    /// <p>The maximum hourly price (bid) for the Spot instance launched to fulfill the request.</p>
+    /// <p>The maximum price per hour that you are willing to pay for a Spot Instance.</p>
     pub spot_price: Option<String>,
-    /// <p>The state of the Spot instance request. Spot bid status information can help you track your Spot instance requests. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-bid-status.html">Spot Bid Status</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>The state of the Spot Instance request. Spot status information can help you track your Spot Instance requests. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-bid-status.html">Spot Status</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     pub state: Option<String>,
-    /// <p>The status code and status message describing the Spot instance request.</p>
+    /// <p>The status code and status message describing the Spot Instance request.</p>
     pub status: Option<SpotInstanceStatus>,
     /// <p>Any tags assigned to the resource.</p>
     pub tags: Option<Vec<Tag>>,
-    /// <p>The Spot instance request type.</p>
+    /// <p>The Spot Instance request type.</p>
     pub type_: Option<String>,
     /// <p>The start date of the request, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z). The request becomes active at this date and time.</p>
     pub valid_from: Option<String>,
-    /// <p>The end date of the request, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z). If this is a one-time request, it remains active until all instances launch, the request is canceled, or this date is reached. If the request is persistent, it remains active until it is canceled or this date is reached.</p>
+    /// <p>The end date of the request, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z). If this is a one-time request, it remains active until all instances launch, the request is canceled, or this date is reached. If the request is persistent, it remains active until it is canceled or this date is reached. The default end date is 7 days from the current date.</p>
     pub valid_until: Option<String>,
 }
 
@@ -39462,6 +47506,14 @@ impl SpotInstanceRequestDeserializer {
                         "instanceId" => {
                             obj.instance_id =
                                 Some(try!(StringDeserializer::deserialize("instanceId", stack)));
+                        }
+                        "instanceInterruptionBehavior" => {
+                            obj.instance_interruption_behavior = Some(try!(
+                                InstanceInterruptionBehaviorDeserializer::deserialize(
+                                    "instanceInterruptionBehavior",
+                                    stack
+                                )
+                            ));
                         }
                         "launchGroup" => {
                             obj.launch_group =
@@ -39609,12 +47661,12 @@ impl SpotInstanceStateDeserializer {
         Ok(obj)
     }
 }
-/// <p>Describes a Spot instance state change.</p>
+/// <p>Describes a Spot Instance state change.</p>
 #[derive(Default, Debug, Clone)]
 pub struct SpotInstanceStateFault {
-    /// <p>The reason code for the Spot instance state change.</p>
+    /// <p>The reason code for the Spot Instance state change.</p>
     pub code: Option<String>,
-    /// <p>The message for the Spot instance state change.</p>
+    /// <p>The message for the Spot Instance state change.</p>
     pub message: Option<String>,
 }
 
@@ -39660,10 +47712,10 @@ impl SpotInstanceStateFaultDeserializer {
         Ok(obj)
     }
 }
-/// <p>Describes the status of a Spot instance request.</p>
+/// <p>Describes the status of a Spot Instance request.</p>
 #[derive(Default, Debug, Clone)]
 pub struct SpotInstanceStatus {
-    /// <p>The status code. For a list of status codes, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-bid-status.html#spot-instance-bid-status-understand">Spot Bid Status Codes</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>The status code. For a list of status codes, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-bid-status.html#spot-instance-bid-status-understand">Spot Status Codes</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     pub code: Option<String>,
     /// <p>The description for the status code.</p>
     pub message: Option<String>,
@@ -39731,14 +47783,71 @@ impl SpotInstanceTypeDeserializer {
         Ok(obj)
     }
 }
-/// <p>Describes Spot instance placement.</p>
+/// <p>The options for Spot Instances.</p>
+#[derive(Default, Debug, Clone)]
+pub struct SpotMarketOptions {
+    /// <p>The required duration for the Spot Instances (also known as Spot blocks), in minutes. This value must be a multiple of 60 (60, 120, 180, 240, 300, or 360).</p>
+    pub block_duration_minutes: Option<i64>,
+    /// <p>The behavior when a Spot Instance is interrupted. The default is <code>terminate</code>.</p>
+    pub instance_interruption_behavior: Option<String>,
+    /// <p>The maximum hourly price you're willing to pay for the Spot Instances. The default is the On-Demand price.</p>
+    pub max_price: Option<String>,
+    /// <p>The Spot Instance request type.</p>
+    pub spot_instance_type: Option<String>,
+    /// <p>The end date of the request. For a one-time request, the request remains active until all instances launch, the request is canceled, or this date is reached. If the request is persistent, it remains active until it is canceled or this date and time is reached. The default end date is 7 days from the current date.</p>
+    pub valid_until: Option<String>,
+}
+
+/// Serialize `SpotMarketOptions` contents to a `SignedRequest`.
+struct SpotMarketOptionsSerializer;
+impl SpotMarketOptionsSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &SpotMarketOptions) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.block_duration_minutes {
+            params.put(
+                &format!("{}{}", prefix, "BlockDurationMinutes"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.instance_interruption_behavior {
+            params.put(
+                &format!("{}{}", prefix, "InstanceInterruptionBehavior"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.max_price {
+            params.put(
+                &format!("{}{}", prefix, "MaxPrice"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.spot_instance_type {
+            params.put(
+                &format!("{}{}", prefix, "SpotInstanceType"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.valid_until {
+            params.put(
+                &format!("{}{}", prefix, "ValidUntil"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
+
+/// <p>Describes Spot Instance placement.</p>
 #[derive(Default, Debug, Clone)]
 pub struct SpotPlacement {
-    /// <p>The Availability Zone.</p> <p>[Spot fleet only] To specify multiple Availability Zones, separate them using commas; for example, "us-west-2a, us-west-2b".</p>
+    /// <p>The Availability Zone.</p> <p>[Spot Fleet only] To specify multiple Availability Zones, separate them using commas; for example, "us-west-2a, us-west-2b".</p>
     pub availability_zone: Option<String>,
-    /// <p>The name of the placement group (for cluster instances).</p>
+    /// <p>The name of the placement group.</p>
     pub group_name: Option<String>,
-    /// <p>The tenancy of the instance (if the instance is running in a VPC). An instance with a tenancy of <code>dedicated</code> runs on single-tenant hardware. The <code>host</code> tenancy is not supported for Spot instances.</p>
+    /// <p>The tenancy of the instance (if the instance is running in a VPC). An instance with a tenancy of <code>dedicated</code> runs on single-tenant hardware. The <code>host</code> tenancy is not supported for Spot Instances.</p>
     pub tenancy: Option<String>,
 }
 
@@ -39823,16 +47932,16 @@ impl SpotPlacementSerializer {
     }
 }
 
-/// <p>Describes the maximum hourly price (bid) for any Spot instance launched to fulfill the request.</p>
+/// <p>Describes the maximum price per hour that you are willing to pay for a Spot Instance.</p>
 #[derive(Default, Debug, Clone)]
 pub struct SpotPrice {
     /// <p>The Availability Zone.</p>
     pub availability_zone: Option<String>,
-    /// <p>The instance type. Note that T2 and HS1 instance types are not supported.</p>
+    /// <p>The instance type.</p>
     pub instance_type: Option<String>,
     /// <p>A general description of the AMI.</p>
     pub product_description: Option<String>,
-    /// <p>The maximum price (bid) that you are willing to pay for a Spot instance.</p>
+    /// <p>The maximum price per hour that you are willing to pay for a Spot Instance.</p>
     pub spot_price: Option<String>,
     /// <p>The date and time the request was created, in UTC format (for example, <i>YYYY</i>-<i>MM</i>-<i>DD</i>T<i>HH</i>:<i>MM</i>:<i>SS</i>Z).</p>
     pub timestamp: Option<String>,
@@ -40293,7 +48402,7 @@ impl StateDeserializer {
 pub struct StateReason {
     /// <p>The reason code for the state change.</p>
     pub code: Option<String>,
-    /// <p><p>The message for the state change.</p> <ul> <li> <p> <code>Server.InsufficientInstanceCapacity</code>: There was insufficient instance capacity to satisfy the launch request.</p> </li> <li> <p> <code>Server.InternalError</code>: An internal error occurred during instance launch, resulting in termination.</p> </li> <li> <p> <code>Server.ScheduledStop</code>: The instance was stopped due to a scheduled retirement.</p> </li> <li> <p> <code>Server.SpotInstanceTermination</code>: A Spot instance was terminated due to an increase in the market price.</p> </li> <li> <p> <code>Client.InternalError</code>: A client error caused the instance to terminate on launch.</p> </li> <li> <p> <code>Client.InstanceInitiatedShutdown</code>: The instance was shut down using the <code>shutdown -h</code> command from the instance.</p> </li> <li> <p> <code>Client.UserInitiatedShutdown</code>: The instance was shut down using the Amazon EC2 API.</p> </li> <li> <p> <code>Client.VolumeLimitExceeded</code>: The limit on the number of EBS volumes or total storage was exceeded. Decrease usage or request an increase in your limits.</p> </li> <li> <p> <code>Client.InvalidSnapshot.NotFound</code>: The specified snapshot was not found.</p> </li> </ul></p>
+    /// <p><p>The message for the state change.</p> <ul> <li> <p> <code>Server.InsufficientInstanceCapacity</code>: There was insufficient instance capacity to satisfy the launch request.</p> </li> <li> <p> <code>Server.InternalError</code>: An internal error occurred during instance launch, resulting in termination.</p> </li> <li> <p> <code>Server.ScheduledStop</code>: The instance was stopped due to a scheduled retirement.</p> </li> <li> <p> <code>Server.SpotInstanceTermination</code>: A Spot Instance was terminated due to an increase in the Spot price.</p> </li> <li> <p> <code>Client.InternalError</code>: A client error caused the instance to terminate on launch.</p> </li> <li> <p> <code>Client.InstanceInitiatedShutdown</code>: The instance was shut down using the <code>shutdown -h</code> command from the instance.</p> </li> <li> <p> <code>Client.InstanceTerminated</code>: The instance was terminated or rebooted during AMI creation.</p> </li> <li> <p> <code>Client.UserInitiatedShutdown</code>: The instance was shut down using the Amazon EC2 API.</p> </li> <li> <p> <code>Client.VolumeLimitExceeded</code>: The limit on the number of EBS volumes or total storage was exceeded. Decrease usage or request an increase in your limits.</p> </li> <li> <p> <code>Client.InvalidSnapshot.NotFound</code>: The specified snapshot was not found.</p> </li> </ul></p>
     pub message: Option<String>,
 }
 
@@ -40939,6 +49048,98 @@ impl SubnetStateDeserializer {
         Ok(obj)
     }
 }
+/// <p>Describes the T2 instance whose credit option for CPU usage was successfully modified.</p>
+#[derive(Default, Debug, Clone)]
+pub struct SuccessfulInstanceCreditSpecificationItem {
+    /// <p>The ID of the instance.</p>
+    pub instance_id: Option<String>,
+}
+
+struct SuccessfulInstanceCreditSpecificationItemDeserializer;
+impl SuccessfulInstanceCreditSpecificationItemDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SuccessfulInstanceCreditSpecificationItem, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = SuccessfulInstanceCreditSpecificationItem::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "instanceId" => {
+                        obj.instance_id =
+                            Some(try!(StringDeserializer::deserialize("instanceId", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct SuccessfulInstanceCreditSpecificationSetDeserializer;
+impl SuccessfulInstanceCreditSpecificationSetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<SuccessfulInstanceCreditSpecificationItem>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(
+                            SuccessfulInstanceCreditSpecificationItemDeserializer::deserialize(
+                                "item",
+                                stack
+                            )
+                        ));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
 struct SummaryStatusDeserializer;
 impl SummaryStatusDeserializer {
     #[allow(unused_variables)]
@@ -41324,6 +49525,186 @@ impl TargetConfigurationRequestSetSerializer {
     }
 }
 
+/// <p>Describes a load balancer target group.</p>
+#[derive(Default, Debug, Clone)]
+pub struct TargetGroup {
+    /// <p>The Amazon Resource Name (ARN) of the target group.</p>
+    pub arn: String,
+}
+
+struct TargetGroupDeserializer;
+impl TargetGroupDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TargetGroup, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = TargetGroup::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "arn" => {
+                        obj.arn = try!(StringDeserializer::deserialize("arn", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `TargetGroup` contents to a `SignedRequest`.
+struct TargetGroupSerializer;
+impl TargetGroupSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &TargetGroup) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "Arn"),
+            &obj.arn.replace("+", "%2B"),
+        );
+    }
+}
+
+struct TargetGroupsDeserializer;
+impl TargetGroupsDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<TargetGroup>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(TargetGroupDeserializer::deserialize("item", stack)));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `TargetGroups` contents to a `SignedRequest`.
+struct TargetGroupsSerializer;
+impl TargetGroupsSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<TargetGroup>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            TargetGroupSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+/// <p>Describes the target groups to attach to a Spot Fleet. Spot Fleet registers the running Spot Instances with these target groups.</p>
+#[derive(Default, Debug, Clone)]
+pub struct TargetGroupsConfig {
+    /// <p>One or more target groups.</p>
+    pub target_groups: Vec<TargetGroup>,
+}
+
+struct TargetGroupsConfigDeserializer;
+impl TargetGroupsConfigDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TargetGroupsConfig, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = TargetGroupsConfig::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "targetGroups" => {
+                        obj.target_groups =
+                            try!(TargetGroupsDeserializer::deserialize("targetGroups", stack));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `TargetGroupsConfig` contents to a `SignedRequest`.
+struct TargetGroupsConfigSerializer;
+impl TargetGroupsConfigSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &TargetGroupsConfig) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        TargetGroupsSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "TargetGroups"),
+            &obj.target_groups,
+        );
+    }
+}
+
 /// <p>The total value of the new Convertible Reserved Instances.</p>
 #[derive(Default, Debug, Clone)]
 pub struct TargetReservationValue {
@@ -41546,6 +49927,18 @@ impl TrafficTypeDeserializer {
         Ok(obj)
     }
 }
+
+/// Serialize `TunnelOptionsList` contents to a `SignedRequest`.
+struct TunnelOptionsListSerializer;
+impl TunnelOptionsListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<VpnTunnelOptionsSpecification>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            VpnTunnelOptionsSpecificationSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
 #[derive(Default, Debug, Clone)]
 pub struct UnassignIpv6AddressesRequest {
     /// <p>The IPv6 addresses to unassign from the network interface.</p>
@@ -41742,6 +50135,168 @@ impl UnmonitorInstancesResultDeserializer {
         Ok(obj)
     }
 }
+struct UnsuccessfulInstanceCreditSpecificationErrorCodeDeserializer;
+impl UnsuccessfulInstanceCreditSpecificationErrorCodeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>Describes the T2 instance whose credit option for CPU usage was not modified.</p>
+#[derive(Default, Debug, Clone)]
+pub struct UnsuccessfulInstanceCreditSpecificationItem {
+    /// <p>The applicable error for the T2 instance whose credit option for CPU usage was not modified.</p>
+    pub error: Option<UnsuccessfulInstanceCreditSpecificationItemError>,
+    /// <p>The ID of the instance.</p>
+    pub instance_id: Option<String>,
+}
+
+struct UnsuccessfulInstanceCreditSpecificationItemDeserializer;
+impl UnsuccessfulInstanceCreditSpecificationItemDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UnsuccessfulInstanceCreditSpecificationItem, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = UnsuccessfulInstanceCreditSpecificationItem::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "error" => {
+                        obj.error = Some(try!(UnsuccessfulInstanceCreditSpecificationItemErrorDeserializer::deserialize("error", stack)));
+                    }
+                    "instanceId" => {
+                        obj.instance_id =
+                            Some(try!(StringDeserializer::deserialize("instanceId", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>Information about the error for the T2 instance whose credit option for CPU usage was not modified.</p>
+#[derive(Default, Debug, Clone)]
+pub struct UnsuccessfulInstanceCreditSpecificationItemError {
+    /// <p>The error code.</p>
+    pub code: Option<String>,
+    /// <p>The applicable error message.</p>
+    pub message: Option<String>,
+}
+
+struct UnsuccessfulInstanceCreditSpecificationItemErrorDeserializer;
+impl UnsuccessfulInstanceCreditSpecificationItemErrorDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UnsuccessfulInstanceCreditSpecificationItemError, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = UnsuccessfulInstanceCreditSpecificationItemError::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "code" => {
+                        obj.code = Some(try!(UnsuccessfulInstanceCreditSpecificationErrorCodeDeserializer::deserialize("code", stack)));
+                    }
+                    "message" => {
+                        obj.message = Some(try!(StringDeserializer::deserialize("message", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct UnsuccessfulInstanceCreditSpecificationSetDeserializer;
+impl UnsuccessfulInstanceCreditSpecificationSetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<UnsuccessfulInstanceCreditSpecificationItem>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(
+                            UnsuccessfulInstanceCreditSpecificationItemDeserializer::deserialize(
+                                "item",
+                                stack
+                            )
+                        ));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
 /// <p>Information about items that were not successfully processed in a batch call.</p>
 #[derive(Default, Debug, Clone)]
 pub struct UnsuccessfulItem {
@@ -41934,6 +50489,202 @@ impl UnsuccessfulItemSetDeserializer {
         Ok(obj)
     }
 }
+/// <p>Contains the parameters for UpdateSecurityGroupRuleDescriptionsEgress.</p>
+#[derive(Default, Debug, Clone)]
+pub struct UpdateSecurityGroupRuleDescriptionsEgressRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The ID of the security group. You must specify either the security group ID or the security group name in the request. For security groups in a nondefault VPC, you must specify the security group ID.</p>
+    pub group_id: Option<String>,
+    /// <p>[Default VPC] The name of the security group. You must specify either the security group ID or the security group name in the request.</p>
+    pub group_name: Option<String>,
+    /// <p>The IP permissions for the security group rule.</p>
+    pub ip_permissions: Vec<IpPermission>,
+}
+
+/// Serialize `UpdateSecurityGroupRuleDescriptionsEgressRequest` contents to a `SignedRequest`.
+struct UpdateSecurityGroupRuleDescriptionsEgressRequestSerializer;
+impl UpdateSecurityGroupRuleDescriptionsEgressRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &UpdateSecurityGroupRuleDescriptionsEgressRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.group_id {
+            params.put(
+                &format!("{}{}", prefix, "GroupId"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.group_name {
+            params.put(
+                &format!("{}{}", prefix, "GroupName"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        IpPermissionListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "IpPermissions"),
+            &obj.ip_permissions,
+        );
+    }
+}
+
+/// <p>Contains the output of UpdateSecurityGroupRuleDescriptionsEgress.</p>
+#[derive(Default, Debug, Clone)]
+pub struct UpdateSecurityGroupRuleDescriptionsEgressResult {
+    /// <p>Returns <code>true</code> if the request succeeds; otherwise, returns an error.</p>
+    pub return_: Option<bool>,
+}
+
+struct UpdateSecurityGroupRuleDescriptionsEgressResultDeserializer;
+impl UpdateSecurityGroupRuleDescriptionsEgressResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateSecurityGroupRuleDescriptionsEgressResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = UpdateSecurityGroupRuleDescriptionsEgressResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "return" => {
+                        obj.return_ = Some(try!(BooleanDeserializer::deserialize("return", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>Contains the parameters for UpdateSecurityGroupRuleDescriptionsIngress.</p>
+#[derive(Default, Debug, Clone)]
+pub struct UpdateSecurityGroupRuleDescriptionsIngressRequest {
+    /// <p>Checks whether you have the required permissions for the action, without actually making the request, and provides an error response. If you have the required permissions, the error response is <code>DryRunOperation</code>. Otherwise, it is <code>UnauthorizedOperation</code>.</p>
+    pub dry_run: Option<bool>,
+    /// <p>The ID of the security group. You must specify either the security group ID or the security group name in the request. For security groups in a nondefault VPC, you must specify the security group ID.</p>
+    pub group_id: Option<String>,
+    /// <p>[EC2-Classic, default VPC] The name of the security group. You must specify either the security group ID or the security group name in the request.</p>
+    pub group_name: Option<String>,
+    /// <p>The IP permissions for the security group rule. </p>
+    pub ip_permissions: Vec<IpPermission>,
+}
+
+/// Serialize `UpdateSecurityGroupRuleDescriptionsIngressRequest` contents to a `SignedRequest`.
+struct UpdateSecurityGroupRuleDescriptionsIngressRequestSerializer;
+impl UpdateSecurityGroupRuleDescriptionsIngressRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &UpdateSecurityGroupRuleDescriptionsIngressRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(
+                &format!("{}{}", prefix, "DryRun"),
+                &field_value.to_string().replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.group_id {
+            params.put(
+                &format!("{}{}", prefix, "GroupId"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.group_name {
+            params.put(
+                &format!("{}{}", prefix, "GroupName"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        IpPermissionListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "IpPermissions"),
+            &obj.ip_permissions,
+        );
+    }
+}
+
+/// <p>Contains the output of UpdateSecurityGroupRuleDescriptionsIngress.</p>
+#[derive(Default, Debug, Clone)]
+pub struct UpdateSecurityGroupRuleDescriptionsIngressResult {
+    /// <p>Returns <code>true</code> if the request succeeds; otherwise, returns an error.</p>
+    pub return_: Option<bool>,
+}
+
+struct UpdateSecurityGroupRuleDescriptionsIngressResultDeserializer;
+impl UpdateSecurityGroupRuleDescriptionsIngressResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateSecurityGroupRuleDescriptionsIngressResult, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = UpdateSecurityGroupRuleDescriptionsIngressResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "return" => {
+                        obj.return_ = Some(try!(BooleanDeserializer::deserialize("return", stack)));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
 /// <p>Describes the S3 bucket for the disk image.</p>
 #[derive(Default, Debug, Clone)]
 pub struct UserBucket {
@@ -42058,6 +50809,8 @@ impl UserGroupStringListSerializer {
 /// <p>Describes a security group and AWS account ID pair.</p>
 #[derive(Default, Debug, Clone)]
 pub struct UserIdGroupPair {
+    /// <p>A description for the security group rule that references this user ID group pair.</p> <p>Constraints: Up to 255 characters in length. Allowed characters are a-z, A-Z, 0-9, spaces, and ._-:/()#,@[]+=;{}!$*</p>
+    pub description: Option<String>,
     /// <p>The ID of the security group.</p>
     pub group_id: Option<String>,
     /// <p>The name of the security group. In a request, use this parameter for a security group in EC2-Classic or a default VPC only. For a security group in a nondefault VPC, use the security group ID.</p>
@@ -42094,6 +50847,10 @@ impl UserIdGroupPairDeserializer {
 
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
+                    "description" => {
+                        obj.description =
+                            Some(try!(StringDeserializer::deserialize("description", stack)));
+                    }
                     "groupId" => {
                         obj.group_id =
                             Some(try!(StringDeserializer::deserialize("groupId", stack)));
@@ -42143,6 +50900,12 @@ impl UserIdGroupPairSerializer {
             prefix.push_str(".");
         }
 
+        if let Some(ref field_value) = obj.description {
+            params.put(
+                &format!("{}{}", prefix, "Description"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
         if let Some(ref field_value) = obj.group_id {
             params.put(
                 &format!("{}{}", prefix, "GroupId"),
@@ -42336,6 +51099,32 @@ impl ValueStringListDeserializer {
 /// Serialize `ValueStringList` contents to a `SignedRequest`.
 struct ValueStringListSerializer;
 impl ValueStringListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
+struct VersionDescriptionDeserializer;
+impl VersionDescriptionDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `VersionStringList` contents to a `SignedRequest`.
+struct VersionStringListSerializer;
+impl VersionStringListSerializer {
     fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
         for (index, obj) in obj.iter().enumerate() {
             let key = format!("{}.{}", name, index + 1);
@@ -43540,8 +52329,10 @@ impl VolumeTypeDeserializer {
 /// <p>Describes a VPC.</p>
 #[derive(Default, Debug, Clone)]
 pub struct Vpc {
-    /// <p>The IPv4 CIDR block for the VPC.</p>
+    /// <p>The primary IPv4 CIDR block for the VPC.</p>
     pub cidr_block: Option<String>,
+    /// <p>Information about the IPv4 CIDR blocks associated with the VPC.</p>
+    pub cidr_block_association_set: Option<Vec<VpcCidrBlockAssociation>>,
     /// <p>The ID of the set of DHCP options you've associated with the VPC (or <code>default</code> if the default options are associated with the VPC).</p>
     pub dhcp_options_id: Option<String>,
     /// <p>The allowed tenancy of instances launched into the VPC.</p>
@@ -43583,6 +52374,13 @@ impl VpcDeserializer {
                     "cidrBlock" => {
                         obj.cidr_block =
                             Some(try!(StringDeserializer::deserialize("cidrBlock", stack)));
+                    }
+                    "cidrBlockAssociationSet" => {
+                        obj.cidr_block_association_set =
+                            Some(try!(VpcCidrBlockAssociationSetDeserializer::deserialize(
+                                "cidrBlockAssociationSet",
+                                stack
+                            )));
                     }
                     "dhcpOptionsId" => {
                         obj.dhcp_options_id = Some(try!(StringDeserializer::deserialize(
@@ -43708,6 +52506,111 @@ impl VpcAttachmentListDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "item" {
                         obj.push(try!(VpcAttachmentDeserializer::deserialize("item", stack)));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+/// <p>Describes an IPv4 CIDR block associated with a VPC.</p>
+#[derive(Default, Debug, Clone)]
+pub struct VpcCidrBlockAssociation {
+    /// <p>The association ID for the IPv4 CIDR block.</p>
+    pub association_id: Option<String>,
+    /// <p>The IPv4 CIDR block.</p>
+    pub cidr_block: Option<String>,
+    /// <p>Information about the state of the CIDR block.</p>
+    pub cidr_block_state: Option<VpcCidrBlockState>,
+}
+
+struct VpcCidrBlockAssociationDeserializer;
+impl VpcCidrBlockAssociationDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<VpcCidrBlockAssociation, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = VpcCidrBlockAssociation::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "associationId" => {
+                        obj.association_id = Some(try!(StringDeserializer::deserialize(
+                            "associationId",
+                            stack
+                        )));
+                    }
+                    "cidrBlock" => {
+                        obj.cidr_block =
+                            Some(try!(StringDeserializer::deserialize("cidrBlock", stack)));
+                    }
+                    "cidrBlockState" => {
+                        obj.cidr_block_state = Some(try!(
+                            VpcCidrBlockStateDeserializer::deserialize("cidrBlockState", stack)
+                        ));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct VpcCidrBlockAssociationSetDeserializer;
+impl VpcCidrBlockAssociationSetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<VpcCidrBlockAssociation>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(VpcCidrBlockAssociationDeserializer::deserialize(
+                            "item",
+                            stack
+                        )));
                     } else {
                         skip_tree(stack);
                     }
@@ -43912,16 +52815,28 @@ impl VpcClassicLinkListDeserializer {
 pub struct VpcEndpoint {
     /// <p>The date and time the VPC endpoint was created.</p>
     pub creation_timestamp: Option<String>,
-    /// <p>The policy document associated with the endpoint.</p>
+    /// <p>(Interface endpoint) The DNS entries for the endpoint.</p>
+    pub dns_entries: Option<Vec<DnsEntry>>,
+    /// <p>(Interface endpoint) Information about the security groups associated with the network interface.</p>
+    pub groups: Option<Vec<SecurityGroupIdentifier>>,
+    /// <p>(Interface endpoint) One or more network interfaces for the endpoint.</p>
+    pub network_interface_ids: Option<Vec<String>>,
+    /// <p>The policy document associated with the endpoint, if applicable.</p>
     pub policy_document: Option<String>,
-    /// <p>One or more route tables associated with the endpoint.</p>
+    /// <p>(Interface endpoint) Indicates whether the VPC is associated with a private hosted zone.</p>
+    pub private_dns_enabled: Option<bool>,
+    /// <p>(Gateway endpoint) One or more route tables associated with the endpoint.</p>
     pub route_table_ids: Option<Vec<String>>,
-    /// <p>The name of the AWS service to which the endpoint is associated.</p>
+    /// <p>The name of the service to which the endpoint is associated.</p>
     pub service_name: Option<String>,
     /// <p>The state of the VPC endpoint.</p>
     pub state: Option<String>,
+    /// <p>(Interface endpoint) One or more subnets in which the endpoint is located.</p>
+    pub subnet_ids: Option<Vec<String>>,
     /// <p>The ID of the VPC endpoint.</p>
     pub vpc_endpoint_id: Option<String>,
+    /// <p>The type of endpoint.</p>
+    pub vpc_endpoint_type: Option<String>,
     /// <p>The ID of the VPC to which the endpoint is associated.</p>
     pub vpc_id: Option<String>,
 }
@@ -43954,9 +52869,34 @@ impl VpcEndpointDeserializer {
                             stack
                         )));
                     }
+                    "dnsEntrySet" => {
+                        obj.dns_entries = Some(try!(DnsEntrySetDeserializer::deserialize(
+                            "dnsEntrySet",
+                            stack
+                        )));
+                    }
+                    "groupSet" => {
+                        obj.groups = Some(try!(GroupIdentifierSetDeserializer::deserialize(
+                            "groupSet",
+                            stack
+                        )));
+                    }
+                    "networkInterfaceIdSet" => {
+                        obj.network_interface_ids =
+                            Some(try!(ValueStringListDeserializer::deserialize(
+                                "networkInterfaceIdSet",
+                                stack
+                            )));
+                    }
                     "policyDocument" => {
                         obj.policy_document = Some(try!(StringDeserializer::deserialize(
                             "policyDocument",
+                            stack
+                        )));
+                    }
+                    "privateDnsEnabled" => {
+                        obj.private_dns_enabled = Some(try!(BooleanDeserializer::deserialize(
+                            "privateDnsEnabled",
                             stack
                         )));
                     }
@@ -43972,11 +52912,22 @@ impl VpcEndpointDeserializer {
                     "state" => {
                         obj.state = Some(try!(StateDeserializer::deserialize("state", stack)));
                     }
+                    "subnetIdSet" => {
+                        obj.subnet_ids = Some(try!(ValueStringListDeserializer::deserialize(
+                            "subnetIdSet",
+                            stack
+                        )));
+                    }
                     "vpcEndpointId" => {
                         obj.vpc_endpoint_id = Some(try!(StringDeserializer::deserialize(
                             "vpcEndpointId",
                             stack
                         )));
+                    }
+                    "vpcEndpointType" => {
+                        obj.vpc_endpoint_type = Some(try!(
+                            VpcEndpointTypeDeserializer::deserialize("vpcEndpointType", stack)
+                        ));
                     }
                     "vpcId" => {
                         obj.vpc_id = Some(try!(StringDeserializer::deserialize("vpcId", stack)));
@@ -43991,6 +52942,128 @@ impl VpcEndpointDeserializer {
         }
 
         try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+/// <p>Describes a VPC endpoint connection to a service.</p>
+#[derive(Default, Debug, Clone)]
+pub struct VpcEndpointConnection {
+    /// <p>The date and time the VPC endpoint was created.</p>
+    pub creation_timestamp: Option<String>,
+    /// <p>The ID of the service to which the endpoint is connected.</p>
+    pub service_id: Option<String>,
+    /// <p>The ID of the VPC endpoint.</p>
+    pub vpc_endpoint_id: Option<String>,
+    /// <p>The AWS account ID of the owner of the VPC endpoint.</p>
+    pub vpc_endpoint_owner: Option<String>,
+    /// <p>The state of the VPC endpoint.</p>
+    pub vpc_endpoint_state: Option<String>,
+}
+
+struct VpcEndpointConnectionDeserializer;
+impl VpcEndpointConnectionDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<VpcEndpointConnection, XmlParseError> {
+        try!(start_element(tag_name, stack));
+
+        let mut obj = VpcEndpointConnection::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "creationTimestamp" => {
+                        obj.creation_timestamp = Some(try!(DateTimeDeserializer::deserialize(
+                            "creationTimestamp",
+                            stack
+                        )));
+                    }
+                    "serviceId" => {
+                        obj.service_id =
+                            Some(try!(StringDeserializer::deserialize("serviceId", stack)));
+                    }
+                    "vpcEndpointId" => {
+                        obj.vpc_endpoint_id = Some(try!(StringDeserializer::deserialize(
+                            "vpcEndpointId",
+                            stack
+                        )));
+                    }
+                    "vpcEndpointOwner" => {
+                        obj.vpc_endpoint_owner = Some(try!(StringDeserializer::deserialize(
+                            "vpcEndpointOwner",
+                            stack
+                        )));
+                    }
+                    "vpcEndpointState" => {
+                        obj.vpc_endpoint_state = Some(try!(StateDeserializer::deserialize(
+                            "vpcEndpointState",
+                            stack
+                        )));
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        try!(end_element(tag_name, stack));
+
+        Ok(obj)
+    }
+}
+struct VpcEndpointConnectionSetDeserializer;
+impl VpcEndpointConnectionSetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<VpcEndpointConnection>, XmlParseError> {
+        let mut obj = vec![];
+        try!(start_element(tag_name, stack));
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "item" {
+                        obj.push(try!(VpcEndpointConnectionDeserializer::deserialize(
+                            "item",
+                            stack
+                        )));
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    try!(end_element(tag_name, stack));
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
 
         Ok(obj)
     }
@@ -44031,6 +53104,20 @@ impl VpcEndpointSetDeserializer {
                 }
             }
         }
+
+        Ok(obj)
+    }
+}
+struct VpcEndpointTypeDeserializer;
+impl VpcEndpointTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        try!(start_element(tag_name, stack));
+        let obj = try!(characters(stack));
+        try!(end_element(tag_name, stack));
 
         Ok(obj)
     }
@@ -44469,12 +53556,16 @@ impl VpcPeeringConnectionStateReasonCodeDeserializer {
 pub struct VpcPeeringConnectionVpcInfo {
     /// <p>The IPv4 CIDR block for the VPC.</p>
     pub cidr_block: Option<String>,
+    /// <p>Information about the IPv4 CIDR blocks for the VPC.</p>
+    pub cidr_block_set: Option<Vec<CidrBlock>>,
     /// <p>The IPv6 CIDR block for the VPC.</p>
     pub ipv_6_cidr_block_set: Option<Vec<Ipv6CidrBlock>>,
     /// <p>The AWS account ID of the VPC owner.</p>
     pub owner_id: Option<String>,
     /// <p>Information about the VPC peering connection options for the accepter or requester VPC.</p>
     pub peering_options: Option<VpcPeeringConnectionOptionsDescription>,
+    /// <p>The region in which the VPC is located.</p>
+    pub region: Option<String>,
     /// <p>The ID of the VPC.</p>
     pub vpc_id: Option<String>,
 }
@@ -44505,6 +53596,12 @@ impl VpcPeeringConnectionVpcInfoDeserializer {
                         obj.cidr_block =
                             Some(try!(StringDeserializer::deserialize("cidrBlock", stack)));
                     }
+                    "cidrBlockSet" => {
+                        obj.cidr_block_set = Some(try!(CidrBlockSetDeserializer::deserialize(
+                            "cidrBlockSet",
+                            stack
+                        )));
+                    }
                     "ipv6CidrBlockSet" => {
                         obj.ipv_6_cidr_block_set = Some(try!(
                             Ipv6CidrBlockSetDeserializer::deserialize("ipv6CidrBlockSet", stack)
@@ -44521,6 +53618,9 @@ impl VpcPeeringConnectionVpcInfoDeserializer {
                                 stack
                             )
                         ));
+                    }
+                    "region" => {
+                        obj.region = Some(try!(StringDeserializer::deserialize("region", stack)));
                     }
                     "vpcId" => {
                         obj.vpc_id = Some(try!(StringDeserializer::deserialize("vpcId", stack)));
@@ -44556,6 +53656,8 @@ impl VpcStateDeserializer {
 /// <p>Describes a VPN connection.</p>
 #[derive(Default, Debug, Clone)]
 pub struct VpnConnection {
+    /// <p>The category of the VPN connection. A value of <code>VPN</code> indicates an AWS VPN connection. A value of <code>VPN-Classic</code> indicates an AWS Classic VPN connection. For more information, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html#vpn-categories">AWS Managed VPN Categories</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    pub category: Option<String>,
     /// <p>The configuration information for the VPN connection's customer gateway (in the native XML format). This element is always present in the <a>CreateVpnConnection</a> response; however, it's present in the <a>DescribeVpnConnections</a> response only if the VPN connection is in the <code>pending</code> or <code>available</code> state.</p>
     pub customer_gateway_configuration: Option<String>,
     /// <p>The ID of the customer gateway at your end of the VPN connection.</p>
@@ -44600,6 +53702,10 @@ impl VpnConnectionDeserializer {
 
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
+                    "category" => {
+                        obj.category =
+                            Some(try!(StringDeserializer::deserialize("category", stack)));
+                    }
                     "customerGatewayConfiguration" => {
                         obj.customer_gateway_configuration = Some(try!(
                             StringDeserializer::deserialize("customerGatewayConfiguration", stack)
@@ -44766,8 +53872,10 @@ impl VpnConnectionOptionsDeserializer {
 /// <p>Describes VPN connection options.</p>
 #[derive(Default, Debug, Clone)]
 pub struct VpnConnectionOptionsSpecification {
-    /// <p>Indicates whether the VPN connection uses static routes only. Static routes must be used for devices that don't support BGP.</p>
+    /// <p>Indicate whether the VPN connection uses static routes only. If you are creating a VPN connection for a device that does not support BGP, you must specify <code>true</code>.</p> <p>Default: <code>false</code> </p>
     pub static_routes_only: Option<bool>,
+    /// <p>The tunnel options for the VPN connection.</p>
+    pub tunnel_options: Option<Vec<VpnTunnelOptionsSpecification>>,
 }
 
 /// Serialize `VpnConnectionOptionsSpecification` contents to a `SignedRequest`.
@@ -44785,12 +53893,21 @@ impl VpnConnectionOptionsSpecificationSerializer {
                 &field_value.to_string().replace("+", "%2B"),
             );
         }
+        if let Some(ref field_value) = obj.tunnel_options {
+            TunnelOptionsListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "TunnelOptions"),
+                field_value,
+            );
+        }
     }
 }
 
 /// <p>Describes a virtual private gateway.</p>
 #[derive(Default, Debug, Clone)]
 pub struct VpnGateway {
+    /// <p>The private Autonomous System Number (ASN) for the Amazon side of a BGP session.</p>
+    pub amazon_side_asn: Option<i64>,
     /// <p>The Availability Zone where the virtual private gateway was created, if applicable. This field may be empty or not returned.</p>
     pub availability_zone: Option<String>,
     /// <p>The current state of the virtual private gateway.</p>
@@ -44827,6 +53944,10 @@ impl VpnGatewayDeserializer {
 
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
+                    "amazonSideAsn" => {
+                        obj.amazon_side_asn =
+                            Some(try!(LongDeserializer::deserialize("amazonSideAsn", stack)));
+                    }
                     "availabilityZone" => {
                         obj.availability_zone = Some(try!(StringDeserializer::deserialize(
                             "availabilityZone",
@@ -45047,6 +54168,38 @@ impl VpnStaticRouteSourceDeserializer {
         Ok(obj)
     }
 }
+/// <p>The tunnel options for a VPN connection.</p>
+#[derive(Default, Debug, Clone)]
+pub struct VpnTunnelOptionsSpecification {
+    /// <p>The pre-shared key (PSK) to establish initial authentication between the virtual private gateway and customer gateway.</p> <p>Constraints: Allowed characters are alphanumeric characters and ._. Must be between 8 and 64 characters in length and cannot start with zero (0).</p>
+    pub pre_shared_key: Option<String>,
+    /// <p><p>The range of inside IP addresses for the tunnel. Any specified CIDR blocks must be unique across all VPN connections that use the same virtual private gateway. </p> <p>Constraints: A size /30 CIDR block from the <code>169.254.0.0/16</code> range. The following CIDR blocks are reserved and cannot be used:</p> <ul> <li> <p> <code>169.254.0.0/30</code> </p> </li> <li> <p> <code>169.254.1.0/30</code> </p> </li> <li> <p> <code>169.254.2.0/30</code> </p> </li> <li> <p> <code>169.254.3.0/30</code> </p> </li> <li> <p> <code>169.254.4.0/30</code> </p> </li> <li> <p> <code>169.254.5.0/30</code> </p> </li> <li> <p> <code>169.254.169.252/30</code> </p> </li> </ul></p>
+    pub tunnel_inside_cidr: Option<String>,
+}
+
+/// Serialize `VpnTunnelOptionsSpecification` contents to a `SignedRequest`.
+struct VpnTunnelOptionsSpecificationSerializer;
+impl VpnTunnelOptionsSpecificationSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &VpnTunnelOptionsSpecification) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.pre_shared_key {
+            params.put(
+                &format!("{}{}", prefix, "PreSharedKey"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+        if let Some(ref field_value) = obj.tunnel_inside_cidr {
+            params.put(
+                &format!("{}{}", prefix, "TunnelInsideCidr"),
+                &field_value.replace("+", "%2B"),
+            );
+        }
+    }
+}
 
 /// Serialize `ZoneNameStringList` contents to a `SignedRequest`.
 struct ZoneNameStringListSerializer;
@@ -45121,6 +54274,71 @@ impl Error for AcceptReservedInstancesExchangeQuoteError {
                 dispatch_error.description()
             }
             AcceptReservedInstancesExchangeQuoteError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by AcceptVpcEndpointConnections
+#[derive(Debug, PartialEq)]
+pub enum AcceptVpcEndpointConnectionsError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl AcceptVpcEndpointConnectionsError {
+    pub fn from_body(body: &str) -> AcceptVpcEndpointConnectionsError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => AcceptVpcEndpointConnectionsError::Unknown(String::from(body)),
+            },
+            Err(_) => AcceptVpcEndpointConnectionsError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for AcceptVpcEndpointConnectionsError {
+    fn from(err: XmlParseError) -> AcceptVpcEndpointConnectionsError {
+        let XmlParseError(message) = err;
+        AcceptVpcEndpointConnectionsError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for AcceptVpcEndpointConnectionsError {
+    fn from(err: CredentialsError) -> AcceptVpcEndpointConnectionsError {
+        AcceptVpcEndpointConnectionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AcceptVpcEndpointConnectionsError {
+    fn from(err: HttpDispatchError) -> AcceptVpcEndpointConnectionsError {
+        AcceptVpcEndpointConnectionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AcceptVpcEndpointConnectionsError {
+    fn from(err: io::Error) -> AcceptVpcEndpointConnectionsError {
+        AcceptVpcEndpointConnectionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for AcceptVpcEndpointConnectionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AcceptVpcEndpointConnectionsError {
+    fn description(&self) -> &str {
+        match *self {
+            AcceptVpcEndpointConnectionsError::Validation(ref cause) => cause,
+            AcceptVpcEndpointConnectionsError::Credentials(ref err) => err.description(),
+            AcceptVpcEndpointConnectionsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            AcceptVpcEndpointConnectionsError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -46861,6 +56079,69 @@ impl Error for ConfirmProductInstanceError {
         }
     }
 }
+/// Errors returned by CopyFpgaImage
+#[derive(Debug, PartialEq)]
+pub enum CopyFpgaImageError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CopyFpgaImageError {
+    pub fn from_body(body: &str) -> CopyFpgaImageError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => CopyFpgaImageError::Unknown(String::from(body)),
+            },
+            Err(_) => CopyFpgaImageError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for CopyFpgaImageError {
+    fn from(err: XmlParseError) -> CopyFpgaImageError {
+        let XmlParseError(message) = err;
+        CopyFpgaImageError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for CopyFpgaImageError {
+    fn from(err: CredentialsError) -> CopyFpgaImageError {
+        CopyFpgaImageError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CopyFpgaImageError {
+    fn from(err: HttpDispatchError) -> CopyFpgaImageError {
+        CopyFpgaImageError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CopyFpgaImageError {
+    fn from(err: io::Error) -> CopyFpgaImageError {
+        CopyFpgaImageError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CopyFpgaImageError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CopyFpgaImageError {
+    fn description(&self) -> &str {
+        match *self {
+            CopyFpgaImageError::Validation(ref cause) => cause,
+            CopyFpgaImageError::Credentials(ref err) => err.description(),
+            CopyFpgaImageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CopyFpgaImageError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CopyImage
 #[derive(Debug, PartialEq)]
 pub enum CopyImageError {
@@ -47049,6 +56330,71 @@ impl Error for CreateCustomerGatewayError {
                 dispatch_error.description()
             }
             CreateCustomerGatewayError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateDefaultSubnet
+#[derive(Debug, PartialEq)]
+pub enum CreateDefaultSubnetError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateDefaultSubnetError {
+    pub fn from_body(body: &str) -> CreateDefaultSubnetError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => CreateDefaultSubnetError::Unknown(String::from(body)),
+            },
+            Err(_) => CreateDefaultSubnetError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for CreateDefaultSubnetError {
+    fn from(err: XmlParseError) -> CreateDefaultSubnetError {
+        let XmlParseError(message) = err;
+        CreateDefaultSubnetError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for CreateDefaultSubnetError {
+    fn from(err: CredentialsError) -> CreateDefaultSubnetError {
+        CreateDefaultSubnetError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateDefaultSubnetError {
+    fn from(err: HttpDispatchError) -> CreateDefaultSubnetError {
+        CreateDefaultSubnetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateDefaultSubnetError {
+    fn from(err: io::Error) -> CreateDefaultSubnetError {
+        CreateDefaultSubnetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateDefaultSubnetError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateDefaultSubnetError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateDefaultSubnetError::Validation(ref cause) => cause,
+            CreateDefaultSubnetError::Credentials(ref err) => err.description(),
+            CreateDefaultSubnetError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateDefaultSubnetError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -47624,6 +56970,136 @@ impl Error for CreateKeyPairError {
             CreateKeyPairError::Credentials(ref err) => err.description(),
             CreateKeyPairError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             CreateKeyPairError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateLaunchTemplate
+#[derive(Debug, PartialEq)]
+pub enum CreateLaunchTemplateError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateLaunchTemplateError {
+    pub fn from_body(body: &str) -> CreateLaunchTemplateError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => CreateLaunchTemplateError::Unknown(String::from(body)),
+            },
+            Err(_) => CreateLaunchTemplateError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for CreateLaunchTemplateError {
+    fn from(err: XmlParseError) -> CreateLaunchTemplateError {
+        let XmlParseError(message) = err;
+        CreateLaunchTemplateError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for CreateLaunchTemplateError {
+    fn from(err: CredentialsError) -> CreateLaunchTemplateError {
+        CreateLaunchTemplateError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateLaunchTemplateError {
+    fn from(err: HttpDispatchError) -> CreateLaunchTemplateError {
+        CreateLaunchTemplateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateLaunchTemplateError {
+    fn from(err: io::Error) -> CreateLaunchTemplateError {
+        CreateLaunchTemplateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateLaunchTemplateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateLaunchTemplateError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateLaunchTemplateError::Validation(ref cause) => cause,
+            CreateLaunchTemplateError::Credentials(ref err) => err.description(),
+            CreateLaunchTemplateError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateLaunchTemplateError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateLaunchTemplateVersion
+#[derive(Debug, PartialEq)]
+pub enum CreateLaunchTemplateVersionError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateLaunchTemplateVersionError {
+    pub fn from_body(body: &str) -> CreateLaunchTemplateVersionError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => CreateLaunchTemplateVersionError::Unknown(String::from(body)),
+            },
+            Err(_) => CreateLaunchTemplateVersionError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for CreateLaunchTemplateVersionError {
+    fn from(err: XmlParseError) -> CreateLaunchTemplateVersionError {
+        let XmlParseError(message) = err;
+        CreateLaunchTemplateVersionError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for CreateLaunchTemplateVersionError {
+    fn from(err: CredentialsError) -> CreateLaunchTemplateVersionError {
+        CreateLaunchTemplateVersionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateLaunchTemplateVersionError {
+    fn from(err: HttpDispatchError) -> CreateLaunchTemplateVersionError {
+        CreateLaunchTemplateVersionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateLaunchTemplateVersionError {
+    fn from(err: io::Error) -> CreateLaunchTemplateVersionError {
+        CreateLaunchTemplateVersionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateLaunchTemplateVersionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateLaunchTemplateVersionError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateLaunchTemplateVersionError::Validation(ref cause) => cause,
+            CreateLaunchTemplateVersionError::Credentials(ref err) => err.description(),
+            CreateLaunchTemplateVersionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateLaunchTemplateVersionError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -48714,6 +58190,136 @@ impl Error for CreateVpcEndpointError {
         }
     }
 }
+/// Errors returned by CreateVpcEndpointConnectionNotification
+#[derive(Debug, PartialEq)]
+pub enum CreateVpcEndpointConnectionNotificationError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateVpcEndpointConnectionNotificationError {
+    pub fn from_body(body: &str) -> CreateVpcEndpointConnectionNotificationError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => CreateVpcEndpointConnectionNotificationError::Unknown(String::from(body)),
+            },
+            Err(_) => CreateVpcEndpointConnectionNotificationError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for CreateVpcEndpointConnectionNotificationError {
+    fn from(err: XmlParseError) -> CreateVpcEndpointConnectionNotificationError {
+        let XmlParseError(message) = err;
+        CreateVpcEndpointConnectionNotificationError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for CreateVpcEndpointConnectionNotificationError {
+    fn from(err: CredentialsError) -> CreateVpcEndpointConnectionNotificationError {
+        CreateVpcEndpointConnectionNotificationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateVpcEndpointConnectionNotificationError {
+    fn from(err: HttpDispatchError) -> CreateVpcEndpointConnectionNotificationError {
+        CreateVpcEndpointConnectionNotificationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateVpcEndpointConnectionNotificationError {
+    fn from(err: io::Error) -> CreateVpcEndpointConnectionNotificationError {
+        CreateVpcEndpointConnectionNotificationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateVpcEndpointConnectionNotificationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateVpcEndpointConnectionNotificationError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateVpcEndpointConnectionNotificationError::Validation(ref cause) => cause,
+            CreateVpcEndpointConnectionNotificationError::Credentials(ref err) => err.description(),
+            CreateVpcEndpointConnectionNotificationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateVpcEndpointConnectionNotificationError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by CreateVpcEndpointServiceConfiguration
+#[derive(Debug, PartialEq)]
+pub enum CreateVpcEndpointServiceConfigurationError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl CreateVpcEndpointServiceConfigurationError {
+    pub fn from_body(body: &str) -> CreateVpcEndpointServiceConfigurationError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => CreateVpcEndpointServiceConfigurationError::Unknown(String::from(body)),
+            },
+            Err(_) => CreateVpcEndpointServiceConfigurationError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for CreateVpcEndpointServiceConfigurationError {
+    fn from(err: XmlParseError) -> CreateVpcEndpointServiceConfigurationError {
+        let XmlParseError(message) = err;
+        CreateVpcEndpointServiceConfigurationError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for CreateVpcEndpointServiceConfigurationError {
+    fn from(err: CredentialsError) -> CreateVpcEndpointServiceConfigurationError {
+        CreateVpcEndpointServiceConfigurationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateVpcEndpointServiceConfigurationError {
+    fn from(err: HttpDispatchError) -> CreateVpcEndpointServiceConfigurationError {
+        CreateVpcEndpointServiceConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateVpcEndpointServiceConfigurationError {
+    fn from(err: io::Error) -> CreateVpcEndpointServiceConfigurationError {
+        CreateVpcEndpointServiceConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateVpcEndpointServiceConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateVpcEndpointServiceConfigurationError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateVpcEndpointServiceConfigurationError::Validation(ref cause) => cause,
+            CreateVpcEndpointServiceConfigurationError::Credentials(ref err) => err.description(),
+            CreateVpcEndpointServiceConfigurationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateVpcEndpointServiceConfigurationError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by CreateVpcPeeringConnection
 #[derive(Debug, PartialEq)]
 pub enum CreateVpcPeeringConnectionError {
@@ -49230,6 +58836,69 @@ impl Error for DeleteFlowLogsError {
         }
     }
 }
+/// Errors returned by DeleteFpgaImage
+#[derive(Debug, PartialEq)]
+pub enum DeleteFpgaImageError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteFpgaImageError {
+    pub fn from_body(body: &str) -> DeleteFpgaImageError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => DeleteFpgaImageError::Unknown(String::from(body)),
+            },
+            Err(_) => DeleteFpgaImageError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DeleteFpgaImageError {
+    fn from(err: XmlParseError) -> DeleteFpgaImageError {
+        let XmlParseError(message) = err;
+        DeleteFpgaImageError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DeleteFpgaImageError {
+    fn from(err: CredentialsError) -> DeleteFpgaImageError {
+        DeleteFpgaImageError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteFpgaImageError {
+    fn from(err: HttpDispatchError) -> DeleteFpgaImageError {
+        DeleteFpgaImageError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteFpgaImageError {
+    fn from(err: io::Error) -> DeleteFpgaImageError {
+        DeleteFpgaImageError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteFpgaImageError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteFpgaImageError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteFpgaImageError::Validation(ref cause) => cause,
+            DeleteFpgaImageError::Credentials(ref err) => err.description(),
+            DeleteFpgaImageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteFpgaImageError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DeleteInternetGateway
 #[derive(Debug, PartialEq)]
 pub enum DeleteInternetGatewayError {
@@ -49355,6 +59024,136 @@ impl Error for DeleteKeyPairError {
             DeleteKeyPairError::Credentials(ref err) => err.description(),
             DeleteKeyPairError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             DeleteKeyPairError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteLaunchTemplate
+#[derive(Debug, PartialEq)]
+pub enum DeleteLaunchTemplateError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteLaunchTemplateError {
+    pub fn from_body(body: &str) -> DeleteLaunchTemplateError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => DeleteLaunchTemplateError::Unknown(String::from(body)),
+            },
+            Err(_) => DeleteLaunchTemplateError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DeleteLaunchTemplateError {
+    fn from(err: XmlParseError) -> DeleteLaunchTemplateError {
+        let XmlParseError(message) = err;
+        DeleteLaunchTemplateError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DeleteLaunchTemplateError {
+    fn from(err: CredentialsError) -> DeleteLaunchTemplateError {
+        DeleteLaunchTemplateError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteLaunchTemplateError {
+    fn from(err: HttpDispatchError) -> DeleteLaunchTemplateError {
+        DeleteLaunchTemplateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteLaunchTemplateError {
+    fn from(err: io::Error) -> DeleteLaunchTemplateError {
+        DeleteLaunchTemplateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteLaunchTemplateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteLaunchTemplateError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteLaunchTemplateError::Validation(ref cause) => cause,
+            DeleteLaunchTemplateError::Credentials(ref err) => err.description(),
+            DeleteLaunchTemplateError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteLaunchTemplateError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteLaunchTemplateVersions
+#[derive(Debug, PartialEq)]
+pub enum DeleteLaunchTemplateVersionsError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteLaunchTemplateVersionsError {
+    pub fn from_body(body: &str) -> DeleteLaunchTemplateVersionsError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => DeleteLaunchTemplateVersionsError::Unknown(String::from(body)),
+            },
+            Err(_) => DeleteLaunchTemplateVersionsError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DeleteLaunchTemplateVersionsError {
+    fn from(err: XmlParseError) -> DeleteLaunchTemplateVersionsError {
+        let XmlParseError(message) = err;
+        DeleteLaunchTemplateVersionsError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DeleteLaunchTemplateVersionsError {
+    fn from(err: CredentialsError) -> DeleteLaunchTemplateVersionsError {
+        DeleteLaunchTemplateVersionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteLaunchTemplateVersionsError {
+    fn from(err: HttpDispatchError) -> DeleteLaunchTemplateVersionsError {
+        DeleteLaunchTemplateVersionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteLaunchTemplateVersionsError {
+    fn from(err: io::Error) -> DeleteLaunchTemplateVersionsError {
+        DeleteLaunchTemplateVersionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteLaunchTemplateVersionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteLaunchTemplateVersionsError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteLaunchTemplateVersionsError::Validation(ref cause) => cause,
+            DeleteLaunchTemplateVersionsError::Credentials(ref err) => err.description(),
+            DeleteLaunchTemplateVersionsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteLaunchTemplateVersionsError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -50312,6 +60111,138 @@ impl Error for DeleteVpcError {
             DeleteVpcError::Credentials(ref err) => err.description(),
             DeleteVpcError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             DeleteVpcError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteVpcEndpointConnectionNotifications
+#[derive(Debug, PartialEq)]
+pub enum DeleteVpcEndpointConnectionNotificationsError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteVpcEndpointConnectionNotificationsError {
+    pub fn from_body(body: &str) -> DeleteVpcEndpointConnectionNotificationsError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => DeleteVpcEndpointConnectionNotificationsError::Unknown(String::from(body)),
+            },
+            Err(_) => DeleteVpcEndpointConnectionNotificationsError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DeleteVpcEndpointConnectionNotificationsError {
+    fn from(err: XmlParseError) -> DeleteVpcEndpointConnectionNotificationsError {
+        let XmlParseError(message) = err;
+        DeleteVpcEndpointConnectionNotificationsError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DeleteVpcEndpointConnectionNotificationsError {
+    fn from(err: CredentialsError) -> DeleteVpcEndpointConnectionNotificationsError {
+        DeleteVpcEndpointConnectionNotificationsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteVpcEndpointConnectionNotificationsError {
+    fn from(err: HttpDispatchError) -> DeleteVpcEndpointConnectionNotificationsError {
+        DeleteVpcEndpointConnectionNotificationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteVpcEndpointConnectionNotificationsError {
+    fn from(err: io::Error) -> DeleteVpcEndpointConnectionNotificationsError {
+        DeleteVpcEndpointConnectionNotificationsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteVpcEndpointConnectionNotificationsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteVpcEndpointConnectionNotificationsError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteVpcEndpointConnectionNotificationsError::Validation(ref cause) => cause,
+            DeleteVpcEndpointConnectionNotificationsError::Credentials(ref err) => {
+                err.description()
+            }
+            DeleteVpcEndpointConnectionNotificationsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteVpcEndpointConnectionNotificationsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DeleteVpcEndpointServiceConfigurations
+#[derive(Debug, PartialEq)]
+pub enum DeleteVpcEndpointServiceConfigurationsError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DeleteVpcEndpointServiceConfigurationsError {
+    pub fn from_body(body: &str) -> DeleteVpcEndpointServiceConfigurationsError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => DeleteVpcEndpointServiceConfigurationsError::Unknown(String::from(body)),
+            },
+            Err(_) => DeleteVpcEndpointServiceConfigurationsError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DeleteVpcEndpointServiceConfigurationsError {
+    fn from(err: XmlParseError) -> DeleteVpcEndpointServiceConfigurationsError {
+        let XmlParseError(message) = err;
+        DeleteVpcEndpointServiceConfigurationsError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DeleteVpcEndpointServiceConfigurationsError {
+    fn from(err: CredentialsError) -> DeleteVpcEndpointServiceConfigurationsError {
+        DeleteVpcEndpointServiceConfigurationsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteVpcEndpointServiceConfigurationsError {
+    fn from(err: HttpDispatchError) -> DeleteVpcEndpointServiceConfigurationsError {
+        DeleteVpcEndpointServiceConfigurationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteVpcEndpointServiceConfigurationsError {
+    fn from(err: io::Error) -> DeleteVpcEndpointServiceConfigurationsError {
+        DeleteVpcEndpointServiceConfigurationsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteVpcEndpointServiceConfigurationsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteVpcEndpointServiceConfigurationsError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteVpcEndpointServiceConfigurationsError::Validation(ref cause) => cause,
+            DeleteVpcEndpointServiceConfigurationsError::Credentials(ref err) => err.description(),
+            DeleteVpcEndpointServiceConfigurationsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteVpcEndpointServiceConfigurationsError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -51479,6 +61410,71 @@ impl Error for DescribeFlowLogsError {
         }
     }
 }
+/// Errors returned by DescribeFpgaImageAttribute
+#[derive(Debug, PartialEq)]
+pub enum DescribeFpgaImageAttributeError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeFpgaImageAttributeError {
+    pub fn from_body(body: &str) -> DescribeFpgaImageAttributeError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => DescribeFpgaImageAttributeError::Unknown(String::from(body)),
+            },
+            Err(_) => DescribeFpgaImageAttributeError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DescribeFpgaImageAttributeError {
+    fn from(err: XmlParseError) -> DescribeFpgaImageAttributeError {
+        let XmlParseError(message) = err;
+        DescribeFpgaImageAttributeError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DescribeFpgaImageAttributeError {
+    fn from(err: CredentialsError) -> DescribeFpgaImageAttributeError {
+        DescribeFpgaImageAttributeError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeFpgaImageAttributeError {
+    fn from(err: HttpDispatchError) -> DescribeFpgaImageAttributeError {
+        DescribeFpgaImageAttributeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeFpgaImageAttributeError {
+    fn from(err: io::Error) -> DescribeFpgaImageAttributeError {
+        DescribeFpgaImageAttributeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeFpgaImageAttributeError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeFpgaImageAttributeError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeFpgaImageAttributeError::Validation(ref cause) => cause,
+            DescribeFpgaImageAttributeError::Credentials(ref err) => err.description(),
+            DescribeFpgaImageAttributeError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeFpgaImageAttributeError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeFpgaImages
 #[derive(Debug, PartialEq)]
 pub enum DescribeFpgaImagesError {
@@ -52253,6 +62249,71 @@ impl Error for DescribeInstanceAttributeError {
         }
     }
 }
+/// Errors returned by DescribeInstanceCreditSpecifications
+#[derive(Debug, PartialEq)]
+pub enum DescribeInstanceCreditSpecificationsError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeInstanceCreditSpecificationsError {
+    pub fn from_body(body: &str) -> DescribeInstanceCreditSpecificationsError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => DescribeInstanceCreditSpecificationsError::Unknown(String::from(body)),
+            },
+            Err(_) => DescribeInstanceCreditSpecificationsError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DescribeInstanceCreditSpecificationsError {
+    fn from(err: XmlParseError) -> DescribeInstanceCreditSpecificationsError {
+        let XmlParseError(message) = err;
+        DescribeInstanceCreditSpecificationsError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DescribeInstanceCreditSpecificationsError {
+    fn from(err: CredentialsError) -> DescribeInstanceCreditSpecificationsError {
+        DescribeInstanceCreditSpecificationsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeInstanceCreditSpecificationsError {
+    fn from(err: HttpDispatchError) -> DescribeInstanceCreditSpecificationsError {
+        DescribeInstanceCreditSpecificationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeInstanceCreditSpecificationsError {
+    fn from(err: io::Error) -> DescribeInstanceCreditSpecificationsError {
+        DescribeInstanceCreditSpecificationsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeInstanceCreditSpecificationsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeInstanceCreditSpecificationsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeInstanceCreditSpecificationsError::Validation(ref cause) => cause,
+            DescribeInstanceCreditSpecificationsError::Credentials(ref err) => err.description(),
+            DescribeInstanceCreditSpecificationsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeInstanceCreditSpecificationsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeInstanceStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeInstanceStatusError {
@@ -52508,6 +62569,136 @@ impl Error for DescribeKeyPairsError {
             DescribeKeyPairsError::Credentials(ref err) => err.description(),
             DescribeKeyPairsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             DescribeKeyPairsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeLaunchTemplateVersions
+#[derive(Debug, PartialEq)]
+pub enum DescribeLaunchTemplateVersionsError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeLaunchTemplateVersionsError {
+    pub fn from_body(body: &str) -> DescribeLaunchTemplateVersionsError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => DescribeLaunchTemplateVersionsError::Unknown(String::from(body)),
+            },
+            Err(_) => DescribeLaunchTemplateVersionsError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DescribeLaunchTemplateVersionsError {
+    fn from(err: XmlParseError) -> DescribeLaunchTemplateVersionsError {
+        let XmlParseError(message) = err;
+        DescribeLaunchTemplateVersionsError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DescribeLaunchTemplateVersionsError {
+    fn from(err: CredentialsError) -> DescribeLaunchTemplateVersionsError {
+        DescribeLaunchTemplateVersionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeLaunchTemplateVersionsError {
+    fn from(err: HttpDispatchError) -> DescribeLaunchTemplateVersionsError {
+        DescribeLaunchTemplateVersionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeLaunchTemplateVersionsError {
+    fn from(err: io::Error) -> DescribeLaunchTemplateVersionsError {
+        DescribeLaunchTemplateVersionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeLaunchTemplateVersionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeLaunchTemplateVersionsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeLaunchTemplateVersionsError::Validation(ref cause) => cause,
+            DescribeLaunchTemplateVersionsError::Credentials(ref err) => err.description(),
+            DescribeLaunchTemplateVersionsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeLaunchTemplateVersionsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeLaunchTemplates
+#[derive(Debug, PartialEq)]
+pub enum DescribeLaunchTemplatesError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeLaunchTemplatesError {
+    pub fn from_body(body: &str) -> DescribeLaunchTemplatesError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => DescribeLaunchTemplatesError::Unknown(String::from(body)),
+            },
+            Err(_) => DescribeLaunchTemplatesError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DescribeLaunchTemplatesError {
+    fn from(err: XmlParseError) -> DescribeLaunchTemplatesError {
+        let XmlParseError(message) = err;
+        DescribeLaunchTemplatesError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DescribeLaunchTemplatesError {
+    fn from(err: CredentialsError) -> DescribeLaunchTemplatesError {
+        DescribeLaunchTemplatesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeLaunchTemplatesError {
+    fn from(err: HttpDispatchError) -> DescribeLaunchTemplatesError {
+        DescribeLaunchTemplatesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeLaunchTemplatesError {
+    fn from(err: io::Error) -> DescribeLaunchTemplatesError {
+        DescribeLaunchTemplatesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeLaunchTemplatesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeLaunchTemplatesError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeLaunchTemplatesError::Validation(ref cause) => cause,
+            DescribeLaunchTemplatesError::Credentials(ref err) => err.description(),
+            DescribeLaunchTemplatesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeLaunchTemplatesError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -54843,6 +65034,270 @@ impl Error for DescribeVpcClassicLinkDnsSupportError {
         }
     }
 }
+/// Errors returned by DescribeVpcEndpointConnectionNotifications
+#[derive(Debug, PartialEq)]
+pub enum DescribeVpcEndpointConnectionNotificationsError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeVpcEndpointConnectionNotificationsError {
+    pub fn from_body(body: &str) -> DescribeVpcEndpointConnectionNotificationsError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => DescribeVpcEndpointConnectionNotificationsError::Unknown(String::from(body)),
+            },
+            Err(_) => DescribeVpcEndpointConnectionNotificationsError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DescribeVpcEndpointConnectionNotificationsError {
+    fn from(err: XmlParseError) -> DescribeVpcEndpointConnectionNotificationsError {
+        let XmlParseError(message) = err;
+        DescribeVpcEndpointConnectionNotificationsError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DescribeVpcEndpointConnectionNotificationsError {
+    fn from(err: CredentialsError) -> DescribeVpcEndpointConnectionNotificationsError {
+        DescribeVpcEndpointConnectionNotificationsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeVpcEndpointConnectionNotificationsError {
+    fn from(err: HttpDispatchError) -> DescribeVpcEndpointConnectionNotificationsError {
+        DescribeVpcEndpointConnectionNotificationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeVpcEndpointConnectionNotificationsError {
+    fn from(err: io::Error) -> DescribeVpcEndpointConnectionNotificationsError {
+        DescribeVpcEndpointConnectionNotificationsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeVpcEndpointConnectionNotificationsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeVpcEndpointConnectionNotificationsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeVpcEndpointConnectionNotificationsError::Validation(ref cause) => cause,
+            DescribeVpcEndpointConnectionNotificationsError::Credentials(ref err) => {
+                err.description()
+            }
+            DescribeVpcEndpointConnectionNotificationsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeVpcEndpointConnectionNotificationsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeVpcEndpointConnections
+#[derive(Debug, PartialEq)]
+pub enum DescribeVpcEndpointConnectionsError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeVpcEndpointConnectionsError {
+    pub fn from_body(body: &str) -> DescribeVpcEndpointConnectionsError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => DescribeVpcEndpointConnectionsError::Unknown(String::from(body)),
+            },
+            Err(_) => DescribeVpcEndpointConnectionsError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DescribeVpcEndpointConnectionsError {
+    fn from(err: XmlParseError) -> DescribeVpcEndpointConnectionsError {
+        let XmlParseError(message) = err;
+        DescribeVpcEndpointConnectionsError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DescribeVpcEndpointConnectionsError {
+    fn from(err: CredentialsError) -> DescribeVpcEndpointConnectionsError {
+        DescribeVpcEndpointConnectionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeVpcEndpointConnectionsError {
+    fn from(err: HttpDispatchError) -> DescribeVpcEndpointConnectionsError {
+        DescribeVpcEndpointConnectionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeVpcEndpointConnectionsError {
+    fn from(err: io::Error) -> DescribeVpcEndpointConnectionsError {
+        DescribeVpcEndpointConnectionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeVpcEndpointConnectionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeVpcEndpointConnectionsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeVpcEndpointConnectionsError::Validation(ref cause) => cause,
+            DescribeVpcEndpointConnectionsError::Credentials(ref err) => err.description(),
+            DescribeVpcEndpointConnectionsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeVpcEndpointConnectionsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeVpcEndpointServiceConfigurations
+#[derive(Debug, PartialEq)]
+pub enum DescribeVpcEndpointServiceConfigurationsError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeVpcEndpointServiceConfigurationsError {
+    pub fn from_body(body: &str) -> DescribeVpcEndpointServiceConfigurationsError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => DescribeVpcEndpointServiceConfigurationsError::Unknown(String::from(body)),
+            },
+            Err(_) => DescribeVpcEndpointServiceConfigurationsError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DescribeVpcEndpointServiceConfigurationsError {
+    fn from(err: XmlParseError) -> DescribeVpcEndpointServiceConfigurationsError {
+        let XmlParseError(message) = err;
+        DescribeVpcEndpointServiceConfigurationsError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DescribeVpcEndpointServiceConfigurationsError {
+    fn from(err: CredentialsError) -> DescribeVpcEndpointServiceConfigurationsError {
+        DescribeVpcEndpointServiceConfigurationsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeVpcEndpointServiceConfigurationsError {
+    fn from(err: HttpDispatchError) -> DescribeVpcEndpointServiceConfigurationsError {
+        DescribeVpcEndpointServiceConfigurationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeVpcEndpointServiceConfigurationsError {
+    fn from(err: io::Error) -> DescribeVpcEndpointServiceConfigurationsError {
+        DescribeVpcEndpointServiceConfigurationsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeVpcEndpointServiceConfigurationsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeVpcEndpointServiceConfigurationsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeVpcEndpointServiceConfigurationsError::Validation(ref cause) => cause,
+            DescribeVpcEndpointServiceConfigurationsError::Credentials(ref err) => {
+                err.description()
+            }
+            DescribeVpcEndpointServiceConfigurationsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeVpcEndpointServiceConfigurationsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by DescribeVpcEndpointServicePermissions
+#[derive(Debug, PartialEq)]
+pub enum DescribeVpcEndpointServicePermissionsError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl DescribeVpcEndpointServicePermissionsError {
+    pub fn from_body(body: &str) -> DescribeVpcEndpointServicePermissionsError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => DescribeVpcEndpointServicePermissionsError::Unknown(String::from(body)),
+            },
+            Err(_) => DescribeVpcEndpointServicePermissionsError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for DescribeVpcEndpointServicePermissionsError {
+    fn from(err: XmlParseError) -> DescribeVpcEndpointServicePermissionsError {
+        let XmlParseError(message) = err;
+        DescribeVpcEndpointServicePermissionsError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for DescribeVpcEndpointServicePermissionsError {
+    fn from(err: CredentialsError) -> DescribeVpcEndpointServicePermissionsError {
+        DescribeVpcEndpointServicePermissionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeVpcEndpointServicePermissionsError {
+    fn from(err: HttpDispatchError) -> DescribeVpcEndpointServicePermissionsError {
+        DescribeVpcEndpointServicePermissionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeVpcEndpointServicePermissionsError {
+    fn from(err: io::Error) -> DescribeVpcEndpointServicePermissionsError {
+        DescribeVpcEndpointServicePermissionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeVpcEndpointServicePermissionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeVpcEndpointServicePermissionsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeVpcEndpointServicePermissionsError::Validation(ref cause) => cause,
+            DescribeVpcEndpointServicePermissionsError::Credentials(ref err) => err.description(),
+            DescribeVpcEndpointServicePermissionsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeVpcEndpointServicePermissionsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by DescribeVpcEndpointServices
 #[derive(Debug, PartialEq)]
 pub enum DescribeVpcEndpointServicesError {
@@ -56523,6 +66978,71 @@ impl Error for GetHostReservationPurchasePreviewError {
         }
     }
 }
+/// Errors returned by GetLaunchTemplateData
+#[derive(Debug, PartialEq)]
+pub enum GetLaunchTemplateDataError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl GetLaunchTemplateDataError {
+    pub fn from_body(body: &str) -> GetLaunchTemplateDataError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => GetLaunchTemplateDataError::Unknown(String::from(body)),
+            },
+            Err(_) => GetLaunchTemplateDataError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for GetLaunchTemplateDataError {
+    fn from(err: XmlParseError) -> GetLaunchTemplateDataError {
+        let XmlParseError(message) = err;
+        GetLaunchTemplateDataError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for GetLaunchTemplateDataError {
+    fn from(err: CredentialsError) -> GetLaunchTemplateDataError {
+        GetLaunchTemplateDataError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetLaunchTemplateDataError {
+    fn from(err: HttpDispatchError) -> GetLaunchTemplateDataError {
+        GetLaunchTemplateDataError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetLaunchTemplateDataError {
+    fn from(err: io::Error) -> GetLaunchTemplateDataError {
+        GetLaunchTemplateDataError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetLaunchTemplateDataError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetLaunchTemplateDataError {
+    fn description(&self) -> &str {
+        match *self {
+            GetLaunchTemplateDataError::Validation(ref cause) => cause,
+            GetLaunchTemplateDataError::Credentials(ref err) => err.description(),
+            GetLaunchTemplateDataError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetLaunchTemplateDataError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by GetPasswordData
 #[derive(Debug, PartialEq)]
 pub enum GetPasswordDataError {
@@ -56966,6 +67486,71 @@ impl Error for ImportVolumeError {
         }
     }
 }
+/// Errors returned by ModifyFpgaImageAttribute
+#[derive(Debug, PartialEq)]
+pub enum ModifyFpgaImageAttributeError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ModifyFpgaImageAttributeError {
+    pub fn from_body(body: &str) -> ModifyFpgaImageAttributeError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => ModifyFpgaImageAttributeError::Unknown(String::from(body)),
+            },
+            Err(_) => ModifyFpgaImageAttributeError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for ModifyFpgaImageAttributeError {
+    fn from(err: XmlParseError) -> ModifyFpgaImageAttributeError {
+        let XmlParseError(message) = err;
+        ModifyFpgaImageAttributeError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for ModifyFpgaImageAttributeError {
+    fn from(err: CredentialsError) -> ModifyFpgaImageAttributeError {
+        ModifyFpgaImageAttributeError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ModifyFpgaImageAttributeError {
+    fn from(err: HttpDispatchError) -> ModifyFpgaImageAttributeError {
+        ModifyFpgaImageAttributeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyFpgaImageAttributeError {
+    fn from(err: io::Error) -> ModifyFpgaImageAttributeError {
+        ModifyFpgaImageAttributeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ModifyFpgaImageAttributeError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifyFpgaImageAttributeError {
+    fn description(&self) -> &str {
+        match *self {
+            ModifyFpgaImageAttributeError::Validation(ref cause) => cause,
+            ModifyFpgaImageAttributeError::Credentials(ref err) => err.description(),
+            ModifyFpgaImageAttributeError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ModifyFpgaImageAttributeError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ModifyHosts
 #[derive(Debug, PartialEq)]
 pub enum ModifyHostsError {
@@ -57287,6 +67872,71 @@ impl Error for ModifyInstanceAttributeError {
         }
     }
 }
+/// Errors returned by ModifyInstanceCreditSpecification
+#[derive(Debug, PartialEq)]
+pub enum ModifyInstanceCreditSpecificationError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ModifyInstanceCreditSpecificationError {
+    pub fn from_body(body: &str) -> ModifyInstanceCreditSpecificationError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => ModifyInstanceCreditSpecificationError::Unknown(String::from(body)),
+            },
+            Err(_) => ModifyInstanceCreditSpecificationError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for ModifyInstanceCreditSpecificationError {
+    fn from(err: XmlParseError) -> ModifyInstanceCreditSpecificationError {
+        let XmlParseError(message) = err;
+        ModifyInstanceCreditSpecificationError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for ModifyInstanceCreditSpecificationError {
+    fn from(err: CredentialsError) -> ModifyInstanceCreditSpecificationError {
+        ModifyInstanceCreditSpecificationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ModifyInstanceCreditSpecificationError {
+    fn from(err: HttpDispatchError) -> ModifyInstanceCreditSpecificationError {
+        ModifyInstanceCreditSpecificationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyInstanceCreditSpecificationError {
+    fn from(err: io::Error) -> ModifyInstanceCreditSpecificationError {
+        ModifyInstanceCreditSpecificationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ModifyInstanceCreditSpecificationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifyInstanceCreditSpecificationError {
+    fn description(&self) -> &str {
+        match *self {
+            ModifyInstanceCreditSpecificationError::Validation(ref cause) => cause,
+            ModifyInstanceCreditSpecificationError::Credentials(ref err) => err.description(),
+            ModifyInstanceCreditSpecificationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ModifyInstanceCreditSpecificationError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ModifyInstancePlacement
 #[derive(Debug, PartialEq)]
 pub enum ModifyInstancePlacementError {
@@ -57349,6 +67999,71 @@ impl Error for ModifyInstancePlacementError {
                 dispatch_error.description()
             }
             ModifyInstancePlacementError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ModifyLaunchTemplate
+#[derive(Debug, PartialEq)]
+pub enum ModifyLaunchTemplateError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ModifyLaunchTemplateError {
+    pub fn from_body(body: &str) -> ModifyLaunchTemplateError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => ModifyLaunchTemplateError::Unknown(String::from(body)),
+            },
+            Err(_) => ModifyLaunchTemplateError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for ModifyLaunchTemplateError {
+    fn from(err: XmlParseError) -> ModifyLaunchTemplateError {
+        let XmlParseError(message) = err;
+        ModifyLaunchTemplateError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for ModifyLaunchTemplateError {
+    fn from(err: CredentialsError) -> ModifyLaunchTemplateError {
+        ModifyLaunchTemplateError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ModifyLaunchTemplateError {
+    fn from(err: HttpDispatchError) -> ModifyLaunchTemplateError {
+        ModifyLaunchTemplateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyLaunchTemplateError {
+    fn from(err: io::Error) -> ModifyLaunchTemplateError {
+        ModifyLaunchTemplateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ModifyLaunchTemplateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifyLaunchTemplateError {
+    fn description(&self) -> &str {
+        match *self {
+            ModifyLaunchTemplateError::Validation(ref cause) => cause,
+            ModifyLaunchTemplateError::Credentials(ref err) => err.description(),
+            ModifyLaunchTemplateError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ModifyLaunchTemplateError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -57935,6 +68650,201 @@ impl Error for ModifyVpcEndpointError {
         }
     }
 }
+/// Errors returned by ModifyVpcEndpointConnectionNotification
+#[derive(Debug, PartialEq)]
+pub enum ModifyVpcEndpointConnectionNotificationError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ModifyVpcEndpointConnectionNotificationError {
+    pub fn from_body(body: &str) -> ModifyVpcEndpointConnectionNotificationError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => ModifyVpcEndpointConnectionNotificationError::Unknown(String::from(body)),
+            },
+            Err(_) => ModifyVpcEndpointConnectionNotificationError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for ModifyVpcEndpointConnectionNotificationError {
+    fn from(err: XmlParseError) -> ModifyVpcEndpointConnectionNotificationError {
+        let XmlParseError(message) = err;
+        ModifyVpcEndpointConnectionNotificationError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for ModifyVpcEndpointConnectionNotificationError {
+    fn from(err: CredentialsError) -> ModifyVpcEndpointConnectionNotificationError {
+        ModifyVpcEndpointConnectionNotificationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ModifyVpcEndpointConnectionNotificationError {
+    fn from(err: HttpDispatchError) -> ModifyVpcEndpointConnectionNotificationError {
+        ModifyVpcEndpointConnectionNotificationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyVpcEndpointConnectionNotificationError {
+    fn from(err: io::Error) -> ModifyVpcEndpointConnectionNotificationError {
+        ModifyVpcEndpointConnectionNotificationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ModifyVpcEndpointConnectionNotificationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifyVpcEndpointConnectionNotificationError {
+    fn description(&self) -> &str {
+        match *self {
+            ModifyVpcEndpointConnectionNotificationError::Validation(ref cause) => cause,
+            ModifyVpcEndpointConnectionNotificationError::Credentials(ref err) => err.description(),
+            ModifyVpcEndpointConnectionNotificationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ModifyVpcEndpointConnectionNotificationError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ModifyVpcEndpointServiceConfiguration
+#[derive(Debug, PartialEq)]
+pub enum ModifyVpcEndpointServiceConfigurationError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ModifyVpcEndpointServiceConfigurationError {
+    pub fn from_body(body: &str) -> ModifyVpcEndpointServiceConfigurationError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => ModifyVpcEndpointServiceConfigurationError::Unknown(String::from(body)),
+            },
+            Err(_) => ModifyVpcEndpointServiceConfigurationError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for ModifyVpcEndpointServiceConfigurationError {
+    fn from(err: XmlParseError) -> ModifyVpcEndpointServiceConfigurationError {
+        let XmlParseError(message) = err;
+        ModifyVpcEndpointServiceConfigurationError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for ModifyVpcEndpointServiceConfigurationError {
+    fn from(err: CredentialsError) -> ModifyVpcEndpointServiceConfigurationError {
+        ModifyVpcEndpointServiceConfigurationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ModifyVpcEndpointServiceConfigurationError {
+    fn from(err: HttpDispatchError) -> ModifyVpcEndpointServiceConfigurationError {
+        ModifyVpcEndpointServiceConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyVpcEndpointServiceConfigurationError {
+    fn from(err: io::Error) -> ModifyVpcEndpointServiceConfigurationError {
+        ModifyVpcEndpointServiceConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ModifyVpcEndpointServiceConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifyVpcEndpointServiceConfigurationError {
+    fn description(&self) -> &str {
+        match *self {
+            ModifyVpcEndpointServiceConfigurationError::Validation(ref cause) => cause,
+            ModifyVpcEndpointServiceConfigurationError::Credentials(ref err) => err.description(),
+            ModifyVpcEndpointServiceConfigurationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ModifyVpcEndpointServiceConfigurationError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ModifyVpcEndpointServicePermissions
+#[derive(Debug, PartialEq)]
+pub enum ModifyVpcEndpointServicePermissionsError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ModifyVpcEndpointServicePermissionsError {
+    pub fn from_body(body: &str) -> ModifyVpcEndpointServicePermissionsError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => ModifyVpcEndpointServicePermissionsError::Unknown(String::from(body)),
+            },
+            Err(_) => ModifyVpcEndpointServicePermissionsError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for ModifyVpcEndpointServicePermissionsError {
+    fn from(err: XmlParseError) -> ModifyVpcEndpointServicePermissionsError {
+        let XmlParseError(message) = err;
+        ModifyVpcEndpointServicePermissionsError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for ModifyVpcEndpointServicePermissionsError {
+    fn from(err: CredentialsError) -> ModifyVpcEndpointServicePermissionsError {
+        ModifyVpcEndpointServicePermissionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ModifyVpcEndpointServicePermissionsError {
+    fn from(err: HttpDispatchError) -> ModifyVpcEndpointServicePermissionsError {
+        ModifyVpcEndpointServicePermissionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyVpcEndpointServicePermissionsError {
+    fn from(err: io::Error) -> ModifyVpcEndpointServicePermissionsError {
+        ModifyVpcEndpointServicePermissionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ModifyVpcEndpointServicePermissionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifyVpcEndpointServicePermissionsError {
+    fn description(&self) -> &str {
+        match *self {
+            ModifyVpcEndpointServicePermissionsError::Validation(ref cause) => cause,
+            ModifyVpcEndpointServicePermissionsError::Credentials(ref err) => err.description(),
+            ModifyVpcEndpointServicePermissionsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ModifyVpcEndpointServicePermissionsError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ModifyVpcPeeringConnectionOptions
 #[derive(Debug, PartialEq)]
 pub enum ModifyVpcPeeringConnectionOptionsError {
@@ -57997,6 +68907,69 @@ impl Error for ModifyVpcPeeringConnectionOptionsError {
                 dispatch_error.description()
             }
             ModifyVpcPeeringConnectionOptionsError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ModifyVpcTenancy
+#[derive(Debug, PartialEq)]
+pub enum ModifyVpcTenancyError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ModifyVpcTenancyError {
+    pub fn from_body(body: &str) -> ModifyVpcTenancyError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => ModifyVpcTenancyError::Unknown(String::from(body)),
+            },
+            Err(_) => ModifyVpcTenancyError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for ModifyVpcTenancyError {
+    fn from(err: XmlParseError) -> ModifyVpcTenancyError {
+        let XmlParseError(message) = err;
+        ModifyVpcTenancyError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for ModifyVpcTenancyError {
+    fn from(err: CredentialsError) -> ModifyVpcTenancyError {
+        ModifyVpcTenancyError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ModifyVpcTenancyError {
+    fn from(err: HttpDispatchError) -> ModifyVpcTenancyError {
+        ModifyVpcTenancyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyVpcTenancyError {
+    fn from(err: io::Error) -> ModifyVpcTenancyError {
+        ModifyVpcTenancyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ModifyVpcTenancyError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifyVpcTenancyError {
+    fn description(&self) -> &str {
+        match *self {
+            ModifyVpcTenancyError::Validation(ref cause) => cause,
+            ModifyVpcTenancyError::Credentials(ref err) => err.description(),
+            ModifyVpcTenancyError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ModifyVpcTenancyError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -58444,6 +69417,71 @@ impl Error for RegisterImageError {
             RegisterImageError::Credentials(ref err) => err.description(),
             RegisterImageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             RegisterImageError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by RejectVpcEndpointConnections
+#[derive(Debug, PartialEq)]
+pub enum RejectVpcEndpointConnectionsError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl RejectVpcEndpointConnectionsError {
+    pub fn from_body(body: &str) -> RejectVpcEndpointConnectionsError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => RejectVpcEndpointConnectionsError::Unknown(String::from(body)),
+            },
+            Err(_) => RejectVpcEndpointConnectionsError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for RejectVpcEndpointConnectionsError {
+    fn from(err: XmlParseError) -> RejectVpcEndpointConnectionsError {
+        let XmlParseError(message) = err;
+        RejectVpcEndpointConnectionsError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for RejectVpcEndpointConnectionsError {
+    fn from(err: CredentialsError) -> RejectVpcEndpointConnectionsError {
+        RejectVpcEndpointConnectionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for RejectVpcEndpointConnectionsError {
+    fn from(err: HttpDispatchError) -> RejectVpcEndpointConnectionsError {
+        RejectVpcEndpointConnectionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RejectVpcEndpointConnectionsError {
+    fn from(err: io::Error) -> RejectVpcEndpointConnectionsError {
+        RejectVpcEndpointConnectionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for RejectVpcEndpointConnectionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for RejectVpcEndpointConnectionsError {
+    fn description(&self) -> &str {
+        match *self {
+            RejectVpcEndpointConnectionsError::Validation(ref cause) => cause,
+            RejectVpcEndpointConnectionsError::Credentials(ref err) => err.description(),
+            RejectVpcEndpointConnectionsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            RejectVpcEndpointConnectionsError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -59151,6 +70189,71 @@ impl Error for RequestSpotInstancesError {
                 dispatch_error.description()
             }
             RequestSpotInstancesError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by ResetFpgaImageAttribute
+#[derive(Debug, PartialEq)]
+pub enum ResetFpgaImageAttributeError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ResetFpgaImageAttributeError {
+    pub fn from_body(body: &str) -> ResetFpgaImageAttributeError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => ResetFpgaImageAttributeError::Unknown(String::from(body)),
+            },
+            Err(_) => ResetFpgaImageAttributeError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for ResetFpgaImageAttributeError {
+    fn from(err: XmlParseError) -> ResetFpgaImageAttributeError {
+        let XmlParseError(message) = err;
+        ResetFpgaImageAttributeError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for ResetFpgaImageAttributeError {
+    fn from(err: CredentialsError) -> ResetFpgaImageAttributeError {
+        ResetFpgaImageAttributeError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ResetFpgaImageAttributeError {
+    fn from(err: HttpDispatchError) -> ResetFpgaImageAttributeError {
+        ResetFpgaImageAttributeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ResetFpgaImageAttributeError {
+    fn from(err: io::Error) -> ResetFpgaImageAttributeError {
+        ResetFpgaImageAttributeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ResetFpgaImageAttributeError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ResetFpgaImageAttributeError {
+    fn description(&self) -> &str {
+        match *self {
+            ResetFpgaImageAttributeError::Validation(ref cause) => cause,
+            ResetFpgaImageAttributeError::Credentials(ref err) => err.description(),
+            ResetFpgaImageAttributeError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ResetFpgaImageAttributeError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -60123,6 +71226,140 @@ impl Error for UnmonitorInstancesError {
         }
     }
 }
+/// Errors returned by UpdateSecurityGroupRuleDescriptionsEgress
+#[derive(Debug, PartialEq)]
+pub enum UpdateSecurityGroupRuleDescriptionsEgressError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateSecurityGroupRuleDescriptionsEgressError {
+    pub fn from_body(body: &str) -> UpdateSecurityGroupRuleDescriptionsEgressError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => UpdateSecurityGroupRuleDescriptionsEgressError::Unknown(String::from(body)),
+            },
+            Err(_) => UpdateSecurityGroupRuleDescriptionsEgressError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for UpdateSecurityGroupRuleDescriptionsEgressError {
+    fn from(err: XmlParseError) -> UpdateSecurityGroupRuleDescriptionsEgressError {
+        let XmlParseError(message) = err;
+        UpdateSecurityGroupRuleDescriptionsEgressError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for UpdateSecurityGroupRuleDescriptionsEgressError {
+    fn from(err: CredentialsError) -> UpdateSecurityGroupRuleDescriptionsEgressError {
+        UpdateSecurityGroupRuleDescriptionsEgressError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateSecurityGroupRuleDescriptionsEgressError {
+    fn from(err: HttpDispatchError) -> UpdateSecurityGroupRuleDescriptionsEgressError {
+        UpdateSecurityGroupRuleDescriptionsEgressError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateSecurityGroupRuleDescriptionsEgressError {
+    fn from(err: io::Error) -> UpdateSecurityGroupRuleDescriptionsEgressError {
+        UpdateSecurityGroupRuleDescriptionsEgressError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateSecurityGroupRuleDescriptionsEgressError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateSecurityGroupRuleDescriptionsEgressError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateSecurityGroupRuleDescriptionsEgressError::Validation(ref cause) => cause,
+            UpdateSecurityGroupRuleDescriptionsEgressError::Credentials(ref err) => {
+                err.description()
+            }
+            UpdateSecurityGroupRuleDescriptionsEgressError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateSecurityGroupRuleDescriptionsEgressError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UpdateSecurityGroupRuleDescriptionsIngress
+#[derive(Debug, PartialEq)]
+pub enum UpdateSecurityGroupRuleDescriptionsIngressError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UpdateSecurityGroupRuleDescriptionsIngressError {
+    pub fn from_body(body: &str) -> UpdateSecurityGroupRuleDescriptionsIngressError {
+        let reader = EventReader::new(body.as_bytes());
+        let mut stack = XmlResponse::new(reader.into_iter().peekable());
+        find_start_element(&mut stack);
+        match XmlErrorDeserializer::deserialize("Error", &mut stack) {
+            Ok(parsed_error) => match &parsed_error.code[..] {
+                _ => UpdateSecurityGroupRuleDescriptionsIngressError::Unknown(String::from(body)),
+            },
+            Err(_) => UpdateSecurityGroupRuleDescriptionsIngressError::Unknown(body.to_string()),
+        }
+    }
+}
+
+impl From<XmlParseError> for UpdateSecurityGroupRuleDescriptionsIngressError {
+    fn from(err: XmlParseError) -> UpdateSecurityGroupRuleDescriptionsIngressError {
+        let XmlParseError(message) = err;
+        UpdateSecurityGroupRuleDescriptionsIngressError::Unknown(message.to_string())
+    }
+}
+impl From<CredentialsError> for UpdateSecurityGroupRuleDescriptionsIngressError {
+    fn from(err: CredentialsError) -> UpdateSecurityGroupRuleDescriptionsIngressError {
+        UpdateSecurityGroupRuleDescriptionsIngressError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateSecurityGroupRuleDescriptionsIngressError {
+    fn from(err: HttpDispatchError) -> UpdateSecurityGroupRuleDescriptionsIngressError {
+        UpdateSecurityGroupRuleDescriptionsIngressError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateSecurityGroupRuleDescriptionsIngressError {
+    fn from(err: io::Error) -> UpdateSecurityGroupRuleDescriptionsIngressError {
+        UpdateSecurityGroupRuleDescriptionsIngressError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateSecurityGroupRuleDescriptionsIngressError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateSecurityGroupRuleDescriptionsIngressError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateSecurityGroupRuleDescriptionsIngressError::Validation(ref cause) => cause,
+            UpdateSecurityGroupRuleDescriptionsIngressError::Credentials(ref err) => {
+                err.description()
+            }
+            UpdateSecurityGroupRuleDescriptionsIngressError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateSecurityGroupRuleDescriptionsIngressError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Trait representing the capabilities of the Amazon EC2 API. Amazon EC2 clients implement this trait.
 pub trait Ec2 {
     /// <p>Accepts the Convertible Reserved Instance exchange quote described in the <a>GetReservedInstancesExchangeQuote</a> call.</p>
@@ -60131,7 +71368,13 @@ pub trait Ec2 {
         input: &AcceptReservedInstancesExchangeQuoteRequest,
     ) -> Result<AcceptReservedInstancesExchangeQuoteResult, AcceptReservedInstancesExchangeQuoteError>;
 
-    /// <p>Accept a VPC peering connection request. To accept a request, the VPC peering connection must be in the <code>pending-acceptance</code> state, and you must be the owner of the peer VPC. Use <a>DescribeVpcPeeringConnections</a> to view your outstanding VPC peering connection requests.</p>
+    /// <p>Accepts one or more interface VPC endpoint connection requests to your VPC endpoint service.</p>
+    fn accept_vpc_endpoint_connections(
+        &self,
+        input: &AcceptVpcEndpointConnectionsRequest,
+    ) -> Result<AcceptVpcEndpointConnectionsResult, AcceptVpcEndpointConnectionsError>;
+
+    /// <p>Accept a VPC peering connection request. To accept a request, the VPC peering connection must be in the <code>pending-acceptance</code> state, and you must be the owner of the peer VPC. Use <a>DescribeVpcPeeringConnections</a> to view your outstanding VPC peering connection requests.</p> <p>For an inter-region VPC peering connection request, you must accept the VPC peering connection in the region of the accepter VPC.</p>
     fn accept_vpc_peering_connection(
         &self,
         input: &AcceptVpcPeeringConnectionRequest,
@@ -60191,7 +71434,7 @@ pub trait Ec2 {
         input: &AssociateSubnetCidrBlockRequest,
     ) -> Result<AssociateSubnetCidrBlockResult, AssociateSubnetCidrBlockError>;
 
-    /// <p>Associates a CIDR block with your VPC. You can only associate a single Amazon-provided IPv6 CIDR block with your VPC. The IPv6 CIDR block size is fixed at /56.</p>
+    /// <p>Associates a CIDR block with your VPC. You can associate a secondary IPv4 CIDR block, or you can associate an Amazon-provided IPv6 CIDR block. The IPv6 CIDR block size is fixed at /56.</p> <p>For more information about associating CIDR blocks with your VPC and applicable restrictions, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html#VPC_Sizing">VPC and Subnet Sizing</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn associate_vpc_cidr_block(
         &self,
         input: &AssociateVpcCidrBlockRequest,
@@ -60221,19 +71464,19 @@ pub trait Ec2 {
         input: &AttachVolumeRequest,
     ) -> Result<VolumeAttachment, AttachVolumeError>;
 
-    /// <p>Attaches a virtual private gateway to a VPC. You can attach one virtual private gateway to one VPC at a time.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Attaches a virtual private gateway to a VPC. You can attach one virtual private gateway to one VPC at a time.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">AWS Managed VPN Connections</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn attach_vpn_gateway(
         &self,
         input: &AttachVpnGatewayRequest,
     ) -> Result<AttachVpnGatewayResult, AttachVpnGatewayError>;
 
-    /// <p>[EC2-VPC only] Adds one or more egress rules to a security group for use with a VPC. Specifically, this action permits instances to send traffic to one or more destination IPv4 or IPv6 CIDR address ranges, or to one or more destination security groups for the same VPC. This action doesn't apply to security groups for use in EC2-Classic. For more information, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>. For more information about security group limits, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Appendix_Limits.html">Amazon VPC Limits</a>.</p> <p>Each rule consists of the protocol (for example, TCP), plus either a CIDR range or a source group. For the TCP and UDP protocols, you must also specify the destination port or port range. For the ICMP protocol, you must also specify the ICMP type and code. You can use -1 for the type or code to mean all types or all codes.</p> <p>Rule changes are propagated to affected instances as quickly as possible. However, a small delay might occur.</p>
+    /// <p>[EC2-VPC only] Adds one or more egress rules to a security group for use with a VPC. Specifically, this action permits instances to send traffic to one or more destination IPv4 or IPv6 CIDR address ranges, or to one or more destination security groups for the same VPC. This action doesn't apply to security groups for use in EC2-Classic. For more information, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>. For more information about security group limits, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Appendix_Limits.html">Amazon VPC Limits</a>.</p> <p>Each rule consists of the protocol (for example, TCP), plus either a CIDR range or a source group. For the TCP and UDP protocols, you must also specify the destination port or port range. For the ICMP protocol, you must also specify the ICMP type and code. You can use -1 for the type or code to mean all types or all codes. You can optionally specify a description for the rule.</p> <p>Rule changes are propagated to affected instances as quickly as possible. However, a small delay might occur.</p>
     fn authorize_security_group_egress(
         &self,
         input: &AuthorizeSecurityGroupEgressRequest,
     ) -> Result<(), AuthorizeSecurityGroupEgressError>;
 
-    /// <p>Adds one or more ingress rules to a security group.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p> <p>[EC2-Classic] This action gives one or more IPv4 CIDR address ranges permission to access a security group in your account, or gives one or more security groups (called the <i>source groups</i>) permission to access a security group for your account. A source group can be for your own AWS account, or another. You can have up to 100 rules per group.</p> <p>[EC2-VPC] This action gives one or more IPv4 or IPv6 CIDR address ranges permission to access a security group in your VPC, or gives one or more other security groups (called the <i>source groups</i>) permission to access a security group for your VPC. The security groups must all be for the same VPC or a peer VPC in a VPC peering connection. For more information about VPC security group limits, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Appendix_Limits.html">Amazon VPC Limits</a>.</p>
+    /// <p>Adds one or more ingress rules to a security group.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p> <p>[EC2-Classic] This action gives one or more IPv4 CIDR address ranges permission to access a security group in your account, or gives one or more security groups (called the <i>source groups</i>) permission to access a security group for your account. A source group can be for your own AWS account, or another. You can have up to 100 rules per group.</p> <p>[EC2-VPC] This action gives one or more IPv4 or IPv6 CIDR address ranges permission to access a security group in your VPC, or gives one or more other security groups (called the <i>source groups</i>) permission to access a security group for your VPC. The security groups must all be for the same VPC or a peer VPC in a VPC peering connection. For more information about VPC security group limits, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Appendix_Limits.html">Amazon VPC Limits</a>.</p> <p>You can optionally specify a description for the security group rule.</p>
     fn authorize_security_group_ingress(
         &self,
         input: &AuthorizeSecurityGroupIngressRequest,
@@ -60275,23 +71518,29 @@ pub trait Ec2 {
         input: &CancelReservedInstancesListingRequest,
     ) -> Result<CancelReservedInstancesListingResult, CancelReservedInstancesListingError>;
 
-    /// <p>Cancels the specified Spot fleet requests.</p> <p>After you cancel a Spot fleet request, the Spot fleet launches no new Spot instances. You must specify whether the Spot fleet should also terminate its Spot instances. If you terminate the instances, the Spot fleet request enters the <code>cancelled_terminating</code> state. Otherwise, the Spot fleet request enters the <code>cancelled_running</code> state and the instances continue to run until they are interrupted or you terminate them manually.</p>
+    /// <p>Cancels the specified Spot Fleet requests.</p> <p>After you cancel a Spot Fleet request, the Spot Fleet launches no new Spot Instances. You must specify whether the Spot Fleet should also terminate its Spot Instances. If you terminate the instances, the Spot Fleet request enters the <code>cancelled_terminating</code> state. Otherwise, the Spot Fleet request enters the <code>cancelled_running</code> state and the instances continue to run until they are interrupted or you terminate them manually.</p>
     fn cancel_spot_fleet_requests(
         &self,
         input: &CancelSpotFleetRequestsRequest,
     ) -> Result<CancelSpotFleetRequestsResponse, EC2CancelSpotFleetRequestsError>;
 
-    /// <p><p>Cancels one or more Spot instance requests. Spot instances are instances that Amazon EC2 starts on your behalf when the bid price that you specify exceeds the current Spot price. Amazon EC2 periodically sets the Spot price based on available Spot instance capacity and current Spot instance requests. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-requests.html">Spot Instance Requests</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <important> <p>Canceling a Spot instance request does not terminate running Spot instances associated with the request.</p> </important></p>
+    /// <p><p>Cancels one or more Spot Instance requests. Spot Instances are instances that Amazon EC2 starts on your behalf when the maximum price that you specify exceeds the current Spot price. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-requests.html">Spot Instance Requests</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <important> <p>Canceling a Spot Instance request does not terminate running Spot Instances associated with the request.</p> </important></p>
     fn cancel_spot_instance_requests(
         &self,
         input: &CancelSpotInstanceRequestsRequest,
     ) -> Result<CancelSpotInstanceRequestsResult, CancelSpotInstanceRequestsError>;
 
-    /// <p>Determines whether a product code is associated with an instance. This action can only be used by the owner of the product code. It is useful when a product code owner needs to verify whether another user's instance is eligible for support.</p>
+    /// <p>Determines whether a product code is associated with an instance. This action can only be used by the owner of the product code. It is useful when a product code owner must verify whether another user's instance is eligible for support.</p>
     fn confirm_product_instance(
         &self,
         input: &ConfirmProductInstanceRequest,
     ) -> Result<ConfirmProductInstanceResult, ConfirmProductInstanceError>;
+
+    /// <p>Copies the specified Amazon FPGA Image (AFI) to the current region.</p>
+    fn copy_fpga_image(
+        &self,
+        input: &CopyFpgaImageRequest,
+    ) -> Result<CopyFpgaImageResult, CopyFpgaImageError>;
 
     /// <p>Initiates the copy of an AMI from the specified source region to the current region. You specify the destination region by using its endpoint when making the request.</p> <p>For more information about the prerequisites and limits when copying an AMI, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/CopyingAMIs.html">Copying an AMI</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn copy_image(&self, input: &CopyImageRequest) -> Result<CopyImageResult, CopyImageError>;
@@ -60302,11 +71551,17 @@ pub trait Ec2 {
         input: &CopySnapshotRequest,
     ) -> Result<CopySnapshotResult, CopySnapshotError>;
 
-    /// <p><p>Provides information to AWS about your VPN customer gateway device. The customer gateway is the appliance at your end of the VPN connection. (The device on the AWS side of the VPN connection is the virtual private gateway.) You must provide the Internet-routable IP address of the customer gateway&#39;s external interface. The IP address must be static and may be behind a device performing network address translation (NAT).</p> <p>For devices that use Border Gateway Protocol (BGP), you can also provide the device&#39;s BGP Autonomous System Number (ASN). You can use an existing ASN assigned to your network. If you don&#39;t have an ASN already, you can use a private ASN (in the 64512 - 65534 range).</p> <note> <p>Amazon EC2 supports all 2-byte ASN numbers in the range of 1 - 65534, with the exception of 7224, which is reserved in the <code>us-east-1</code> region, and 9059, which is reserved in the <code>eu-west-1</code> region.</p> </note> <p>For more information about VPN customer gateways, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <important> <p>You cannot create more than one customer gateway with the same VPN type, IP address, and BGP ASN parameter values. If you run an identical request more than one time, the first request creates the customer gateway, and subsequent requests return information about the existing customer gateway. The subsequent requests do not create new customer gateway resources.</p> </important></p>
+    /// <p><p>Provides information to AWS about your VPN customer gateway device. The customer gateway is the appliance at your end of the VPN connection. (The device on the AWS side of the VPN connection is the virtual private gateway.) You must provide the Internet-routable IP address of the customer gateway&#39;s external interface. The IP address must be static and may be behind a device performing network address translation (NAT).</p> <p>For devices that use Border Gateway Protocol (BGP), you can also provide the device&#39;s BGP Autonomous System Number (ASN). You can use an existing ASN assigned to your network. If you don&#39;t have an ASN already, you can use a private ASN (in the 64512 - 65534 range).</p> <note> <p>Amazon EC2 supports all 2-byte ASN numbers in the range of 1 - 65534, with the exception of 7224, which is reserved in the <code>us-east-1</code> region, and 9059, which is reserved in the <code>eu-west-1</code> region.</p> </note> <p>For more information about VPN customer gateways, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">AWS Managed VPN Connections</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <important> <p>You cannot create more than one customer gateway with the same VPN type, IP address, and BGP ASN parameter values. If you run an identical request more than one time, the first request creates the customer gateway, and subsequent requests return information about the existing customer gateway. The subsequent requests do not create new customer gateway resources.</p> </important></p>
     fn create_customer_gateway(
         &self,
         input: &CreateCustomerGatewayRequest,
     ) -> Result<CreateCustomerGatewayResult, CreateCustomerGatewayError>;
+
+    /// <p>Creates a default subnet with a size <code>/20</code> IPv4 CIDR block in the specified Availability Zone in your default VPC. You can have only one default subnet per Availability Zone. For more information, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/default-vpc.html#create-default-subnet">Creating a Default Subnet</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    fn create_default_subnet(
+        &self,
+        input: &CreateDefaultSubnetRequest,
+    ) -> Result<CreateDefaultSubnetResult, CreateDefaultSubnetError>;
 
     /// <p>Creates a default VPC with a size <code>/16</code> IPv4 CIDR block and a default subnet in each Availability Zone. For more information about the components of a default VPC, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/default-vpc.html">Default VPC and Default Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>. You cannot specify the components of the default VPC yourself.</p> <p>You can create a default VPC if you deleted your previous default VPC. You cannot have more than one default VPC per region. </p> <p>If your account supports EC2-Classic, you cannot use this action to create a default VPC in a region that supports EC2-Classic. If you want a default VPC in a region that supports EC2-Classic, see "I really want a default VPC for my existing EC2 account. Is that possible?" in the <a href="http://aws.amazon.com/vpc/faqs/#Default_VPCs">Default VPCs FAQ</a>.</p>
     fn create_default_vpc(
@@ -60356,8 +71611,20 @@ pub trait Ec2 {
         input: &CreateInternetGatewayRequest,
     ) -> Result<CreateInternetGatewayResult, CreateInternetGatewayError>;
 
-    /// <p>Creates a 2048-bit RSA key pair with the specified name. Amazon EC2 stores the public key and displays the private key for you to save to a file. The private key is returned as an unencrypted PEM encoded PKCS#8 private key. If a key with the specified name already exists, Amazon EC2 returns an error.</p> <p>You can have up to five thousand key pairs per region.</p> <p>The key pair returned to you is available only in the region in which you create it. To create a key pair that is available in all regions, use <a>ImportKeyPair</a>.</p> <p>For more information about key pairs, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Creates a 2048-bit RSA key pair with the specified name. Amazon EC2 stores the public key and displays the private key for you to save to a file. The private key is returned as an unencrypted PEM encoded PKCS#1 private key. If a key with the specified name already exists, Amazon EC2 returns an error.</p> <p>You can have up to five thousand key pairs per region.</p> <p>The key pair returned to you is available only in the region in which you create it. If you prefer, you can create your own key pair using a third-party tool and upload it to any region using <a>ImportKeyPair</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn create_key_pair(&self, input: &CreateKeyPairRequest) -> Result<KeyPair, CreateKeyPairError>;
+
+    /// <p>Creates a launch template. A launch template contains the parameters to launch an instance. When you launch an instance using <a>RunInstances</a>, you can specify a launch template instead of providing the launch parameters in the request.</p>
+    fn create_launch_template(
+        &self,
+        input: &CreateLaunchTemplateRequest,
+    ) -> Result<CreateLaunchTemplateResult, CreateLaunchTemplateError>;
+
+    /// <p>Creates a new version for a launch template. You can specify an existing version of launch template from which to base the new version.</p> <p>Launch template versions are numbered in the order in which they are created. You cannot specify, change, or replace the numbering of launch template versions.</p>
+    fn create_launch_template_version(
+        &self,
+        input: &CreateLaunchTemplateVersionRequest,
+    ) -> Result<CreateLaunchTemplateVersionResult, CreateLaunchTemplateVersionError>;
 
     /// <p>Creates a NAT gateway in the specified subnet. A NAT gateway can be used to enable instances in a private subnet to connect to the Internet. This action creates a network interface in the specified subnet with a private IP address from the IP address range of the subnet. For more information, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-nat-gateway.html">NAT Gateways</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn create_nat_gateway(
@@ -60389,7 +71656,7 @@ pub trait Ec2 {
         input: &CreateNetworkInterfacePermissionRequest,
     ) -> Result<CreateNetworkInterfacePermissionResult, CreateNetworkInterfacePermissionError>;
 
-    /// <p>Creates a placement group that you launch cluster instances into. You must give the group a name that's unique within the scope of your account.</p> <p>For more information about placement groups and cluster instances, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using_cluster_computing.html">Cluster Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Creates a placement group in which to launch instances. The strategy of the placement group determines how the instances are organized within the group. </p> <p>A <code>cluster</code> placement group is a logical grouping of instances within a single Availability Zone that benefit from low network latency, high network throughput. A <code>spread</code> placement group places instances on distinct hardware.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html">Placement Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn create_placement_group(
         &self,
         input: &CreatePlacementGroupRequest,
@@ -60425,13 +71692,13 @@ pub trait Ec2 {
         input: &CreateSnapshotRequest,
     ) -> Result<Snapshot, CreateSnapshotError>;
 
-    /// <p>Creates a data feed for Spot instances, enabling you to view Spot instance usage logs. You can create one data feed per AWS account. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-data-feeds.html">Spot Instance Data Feed</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Creates a data feed for Spot Instances, enabling you to view Spot Instance usage logs. You can create one data feed per AWS account. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-data-feeds.html">Spot Instance Data Feed</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn create_spot_datafeed_subscription(
         &self,
         input: &CreateSpotDatafeedSubscriptionRequest,
     ) -> Result<CreateSpotDatafeedSubscriptionResult, CreateSpotDatafeedSubscriptionError>;
 
-    /// <p>Creates a subnet in an existing VPC.</p> <p>When you create each subnet, you provide the VPC ID and the CIDR block you want for the subnet. After you create a subnet, you can't change its CIDR block. The subnet's IPv4 CIDR block can be the same as the VPC's IPv4 CIDR block (assuming you want only a single subnet in the VPC), or a subset of the VPC's IPv4 CIDR block. If you create more than one subnet in a VPC, the subnets' CIDR blocks must not overlap. The smallest IPv4 subnet (and VPC) you can create uses a /28 netmask (16 IPv4 addresses), and the largest uses a /16 netmask (65,536 IPv4 addresses).</p> <p>If you've associated an IPv6 CIDR block with your VPC, you can create a subnet with an IPv6 CIDR block that uses a /64 prefix length. </p> <important> <p>AWS reserves both the first four and the last IPv4 address in each subnet's CIDR block. They're not available for use.</p> </important> <p>If you add more than one subnet to a VPC, they're set up in a star topology with a logical router in the middle.</p> <p>If you launch an instance in a VPC using an Amazon EBS-backed AMI, the IP address doesn't change if you stop and restart the instance (unlike a similar instance launched outside a VPC, which gets a new IP address when restarted). It's therefore possible to have a subnet with no running instances (they're all stopped), but no remaining IP addresses available.</p> <p>For more information about subnets, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html">Your VPC and Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Creates a subnet in an existing VPC.</p> <p>When you create each subnet, you provide the VPC ID and the IPv4 CIDR block you want for the subnet. After you create a subnet, you can't change its CIDR block. The size of the subnet's IPv4 CIDR block can be the same as a VPC's IPv4 CIDR block, or a subset of a VPC's IPv4 CIDR block. If you create more than one subnet in a VPC, the subnets' CIDR blocks must not overlap. The smallest IPv4 subnet (and VPC) you can create uses a /28 netmask (16 IPv4 addresses), and the largest uses a /16 netmask (65,536 IPv4 addresses).</p> <p>If you've associated an IPv6 CIDR block with your VPC, you can create a subnet with an IPv6 CIDR block that uses a /64 prefix length. </p> <important> <p>AWS reserves both the first four and the last IPv4 address in each subnet's CIDR block. They're not available for use.</p> </important> <p>If you add more than one subnet to a VPC, they're set up in a star topology with a logical router in the middle.</p> <p>If you launch an instance in a VPC using an Amazon EBS-backed AMI, the IP address doesn't change if you stop and restart the instance (unlike a similar instance launched outside a VPC, which gets a new IP address when restarted). It's therefore possible to have a subnet with no running instances (they're all stopped), but no remaining IP addresses available.</p> <p>For more information about subnets, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html">Your VPC and Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn create_subnet(
         &self,
         input: &CreateSubnetRequest,
@@ -60446,31 +71713,49 @@ pub trait Ec2 {
     /// <p>Creates a VPC with the specified IPv4 CIDR block. The smallest VPC you can create uses a /28 netmask (16 IPv4 addresses), and the largest uses a /16 netmask (65,536 IPv4 addresses). To help you decide how big to make your VPC, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html">Your VPC and Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>You can optionally request an Amazon-provided IPv6 CIDR block for the VPC. The IPv6 CIDR block uses a /56 prefix length, and is allocated from Amazon's pool of IPv6 addresses. You cannot choose the IPv6 range for your VPC.</p> <p>By default, each instance you launch in the VPC has the default DHCP options, which includes only a default DNS server that we provide (AmazonProvidedDNS). For more information about DHCP options, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_DHCP_Options.html">DHCP Options Sets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>You can specify the instance tenancy value for the VPC when you create it. You can't change this value for the VPC after you create it. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-instance.html">Dedicated Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn create_vpc(&self, input: &CreateVpcRequest) -> Result<CreateVpcResult, CreateVpcError>;
 
-    /// <p>Creates a VPC endpoint for a specified AWS service. An endpoint enables you to create a private connection between your VPC and another AWS service in your account. You can specify an endpoint policy to attach to the endpoint that will control access to the service from your VPC. You can also specify the VPC route tables that use the endpoint.</p> <p>Use <a>DescribeVpcEndpointServices</a> to get a list of supported AWS services.</p>
+    /// <p>Creates a VPC endpoint for a specified service. An endpoint enables you to create a private connection between your VPC and the service. The service may be provided by AWS, an AWS Marketplace partner, or another AWS account. For more information, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-endpoints.html">VPC Endpoints</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>A <code>gateway</code> endpoint serves as a target for a route in your route table for traffic destined for the AWS service. You can specify an endpoint policy to attach to the endpoint that will control access to the service from your VPC. You can also specify the VPC route tables that use the endpoint.</p> <p>An <code>interface</code> endpoint is a network interface in your subnet that serves as an endpoint for communicating with the specified service. You can specify the subnets in which to create an endpoint, and the security groups to associate with the endpoint network interface.</p> <p>Use <a>DescribeVpcEndpointServices</a> to get a list of supported services.</p>
     fn create_vpc_endpoint(
         &self,
         input: &CreateVpcEndpointRequest,
     ) -> Result<CreateVpcEndpointResult, CreateVpcEndpointError>;
 
-    /// <p>Requests a VPC peering connection between two VPCs: a requester VPC that you own and a peer VPC with which to create the connection. The peer VPC can belong to another AWS account. The requester VPC and peer VPC cannot have overlapping CIDR blocks.</p> <p>The owner of the peer VPC must accept the peering request to activate the peering connection. The VPC peering connection request expires after 7 days, after which it cannot be accepted or rejected.</p> <p>If you try to create a VPC peering connection between VPCs that have overlapping CIDR blocks, the VPC peering connection status goes to <code>failed</code>.</p>
+    /// <p>Creates a connection notification for a specified VPC endpoint or VPC endpoint service. A connection notification notifies you of specific endpoint events. You must create an SNS topic to receive notifications. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/CreateTopic.html">Create a Topic</a> in the <i>Amazon Simple Notification Service Developer Guide</i>.</p> <p>You can create a connection notification for interface endpoints only.</p>
+    fn create_vpc_endpoint_connection_notification(
+        &self,
+        input: &CreateVpcEndpointConnectionNotificationRequest,
+    ) -> Result<
+        CreateVpcEndpointConnectionNotificationResult,
+        CreateVpcEndpointConnectionNotificationError,
+    >;
+
+    /// <p>Creates a VPC endpoint service configuration to which service consumers (AWS accounts, IAM users, and IAM roles) can connect. Service consumers can create an interface VPC endpoint to connect to your service.</p> <p>To create an endpoint service configuration, you must first create a Network Load Balancer for your service. For more information, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/endpoint-service.html">VPC Endpoint Services</a> in the <i>Amazon Virtual Private Cloud User Guide</i>. </p>
+    fn create_vpc_endpoint_service_configuration(
+        &self,
+        input: &CreateVpcEndpointServiceConfigurationRequest,
+    ) -> Result<
+        CreateVpcEndpointServiceConfigurationResult,
+        CreateVpcEndpointServiceConfigurationError,
+    >;
+
+    /// <p>Requests a VPC peering connection between two VPCs: a requester VPC that you own and an accepter VPC with which to create the connection. The accepter VPC can belong to another AWS account and can be in a different region to the requester VPC. The requester VPC and accepter VPC cannot have overlapping CIDR blocks.</p> <p>The owner of the accepter VPC must accept the peering request to activate the peering connection. The VPC peering connection request expires after 7 days, after which it cannot be accepted or rejected.</p> <p>If you create a VPC peering connection request between VPCs with overlapping CIDR blocks, the VPC peering connection has a status of <code>failed</code>.</p>
     fn create_vpc_peering_connection(
         &self,
         input: &CreateVpcPeeringConnectionRequest,
     ) -> Result<CreateVpcPeeringConnectionResult, CreateVpcPeeringConnectionError>;
 
-    /// <p>Creates a VPN connection between an existing virtual private gateway and a VPN customer gateway. The only supported connection type is <code>ipsec.1</code>.</p> <p>The response includes information that you need to give to your network administrator to configure your customer gateway.</p> <important> <p>We strongly recommend that you use HTTPS when calling this operation because the response contains sensitive cryptographic information for configuring your customer gateway.</p> </important> <p>If you decide to shut down your VPN connection for any reason and later create a new VPN connection, you must reconfigure your customer gateway with the new information returned from this call.</p> <p>This is an idempotent operation. If you perform the operation more than once, Amazon EC2 doesn't return an error.</p> <p>For more information about VPN connections, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Creates a VPN connection between an existing virtual private gateway and a VPN customer gateway. The only supported connection type is <code>ipsec.1</code>.</p> <p>The response includes information that you need to give to your network administrator to configure your customer gateway.</p> <important> <p>We strongly recommend that you use HTTPS when calling this operation because the response contains sensitive cryptographic information for configuring your customer gateway.</p> </important> <p>If you decide to shut down your VPN connection for any reason and later create a new VPN connection, you must reconfigure your customer gateway with the new information returned from this call.</p> <p>This is an idempotent operation. If you perform the operation more than once, Amazon EC2 doesn't return an error.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">AWS Managed VPN Connections</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn create_vpn_connection(
         &self,
         input: &CreateVpnConnectionRequest,
     ) -> Result<CreateVpnConnectionResult, CreateVpnConnectionError>;
 
-    /// <p>Creates a static route associated with a VPN connection between an existing virtual private gateway and a VPN customer gateway. The static route allows traffic to be routed from the virtual private gateway to the VPN customer gateway.</p> <p>For more information about VPN connections, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Creates a static route associated with a VPN connection between an existing virtual private gateway and a VPN customer gateway. The static route allows traffic to be routed from the virtual private gateway to the VPN customer gateway.</p> <p>For more information about VPN connections, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">AWS Managed VPN Connections</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn create_vpn_connection_route(
         &self,
         input: &CreateVpnConnectionRouteRequest,
     ) -> Result<(), CreateVpnConnectionRouteError>;
 
-    /// <p>Creates a virtual private gateway. A virtual private gateway is the endpoint on the VPC side of your VPN connection. You can create a virtual private gateway before creating the VPC itself.</p> <p>For more information about virtual private gateways, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Creates a virtual private gateway. A virtual private gateway is the endpoint on the VPC side of your VPN connection. You can create a virtual private gateway before creating the VPC itself.</p> <p>For more information about virtual private gateways, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">AWS Managed VPN Connections</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn create_vpn_gateway(
         &self,
         input: &CreateVpnGatewayRequest,
@@ -60500,6 +71785,12 @@ pub trait Ec2 {
         input: &DeleteFlowLogsRequest,
     ) -> Result<DeleteFlowLogsResult, DeleteFlowLogsError>;
 
+    /// <p>Deletes the specified Amazon FPGA Image (AFI).</p>
+    fn delete_fpga_image(
+        &self,
+        input: &DeleteFpgaImageRequest,
+    ) -> Result<DeleteFpgaImageResult, DeleteFpgaImageError>;
+
     /// <p>Deletes the specified Internet gateway. You must detach the Internet gateway from the VPC before you can delete it.</p>
     fn delete_internet_gateway(
         &self,
@@ -60508,6 +71799,18 @@ pub trait Ec2 {
 
     /// <p>Deletes the specified key pair, by removing the public key from Amazon EC2.</p>
     fn delete_key_pair(&self, input: &DeleteKeyPairRequest) -> Result<(), DeleteKeyPairError>;
+
+    /// <p>Deletes a launch template. Deleting a launch template deletes all of its versions.</p>
+    fn delete_launch_template(
+        &self,
+        input: &DeleteLaunchTemplateRequest,
+    ) -> Result<DeleteLaunchTemplateResult, DeleteLaunchTemplateError>;
+
+    /// <p>Deletes one or more versions of a launch template. You cannot delete the default version of a launch template; you must first assign a different version as the default. If the default version is the only version for the launch template, you must delete the entire launch template using <a>DeleteLaunchTemplate</a>.</p>
+    fn delete_launch_template_versions(
+        &self,
+        input: &DeleteLaunchTemplateVersionsRequest,
+    ) -> Result<DeleteLaunchTemplateVersionsResult, DeleteLaunchTemplateVersionsError>;
 
     /// <p>Deletes the specified NAT gateway. Deleting a NAT gateway disassociates its Elastic IP address, but does not release the address from your account. Deleting a NAT gateway does not delete any NAT gateway routes in your route tables.</p>
     fn delete_nat_gateway(
@@ -60539,7 +71842,7 @@ pub trait Ec2 {
         input: &DeleteNetworkInterfacePermissionRequest,
     ) -> Result<DeleteNetworkInterfacePermissionResult, DeleteNetworkInterfacePermissionError>;
 
-    /// <p>Deletes the specified placement group. You must terminate all instances in the placement group before you can delete the placement group. For more information about placement groups and cluster instances, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using_cluster_computing.html">Cluster Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Deletes the specified placement group. You must terminate all instances in the placement group before you can delete the placement group. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html">Placement Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn delete_placement_group(
         &self,
         input: &DeletePlacementGroupRequest,
@@ -60563,7 +71866,7 @@ pub trait Ec2 {
     /// <p>Deletes the specified snapshot.</p> <p>When you make periodic snapshots of a volume, the snapshots are incremental, and only the blocks on the device that have changed since your last snapshot are saved in the new snapshot. When you delete a snapshot, only the data not needed for any other snapshot is removed. So regardless of which prior snapshots have been deleted, all active snapshots will have access to all the information needed to restore the volume.</p> <p>You cannot delete a snapshot of the root device of an EBS volume used by a registered AMI. You must first de-register the AMI before you can delete the snapshot.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-deleting-snapshot.html">Deleting an Amazon EBS Snapshot</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn delete_snapshot(&self, input: &DeleteSnapshotRequest) -> Result<(), DeleteSnapshotError>;
 
-    /// <p>Deletes the data feed for Spot instances.</p>
+    /// <p>Deletes the data feed for Spot Instances.</p>
     fn delete_spot_datafeed_subscription(
         &self,
         input: &DeleteSpotDatafeedSubscriptionRequest,
@@ -60572,7 +71875,7 @@ pub trait Ec2 {
     /// <p>Deletes the specified subnet. You must terminate all running instances in the subnet before you can delete the subnet.</p>
     fn delete_subnet(&self, input: &DeleteSubnetRequest) -> Result<(), DeleteSubnetError>;
 
-    /// <p>Deletes the specified set of tags from the specified set of resources. This call is designed to follow a <code>DescribeTags</code> request.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Resources</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Deletes the specified set of tags from the specified set of resources.</p> <p>To list the current tags, use <a>DescribeTags</a>. For more information about tags, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Resources</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn delete_tags(&self, input: &DeleteTagsRequest) -> Result<(), DeleteTagsError>;
 
     /// <p>Deletes the specified EBS volume. The volume must be in the <code>available</code> state (not attached to an instance).</p> <note> <p>The volume may remain in the <code>deleting</code> state for several minutes.</p> </note> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ebs-deleting-volume.html">Deleting an Amazon EBS Volume</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
@@ -60581,13 +71884,31 @@ pub trait Ec2 {
     /// <p>Deletes the specified VPC. You must detach or delete all gateways and resources that are associated with the VPC before you can delete it. For example, you must terminate all instances running in the VPC, delete all security groups associated with the VPC (except the default one), delete all route tables associated with the VPC (except the default one), and so on.</p>
     fn delete_vpc(&self, input: &DeleteVpcRequest) -> Result<(), DeleteVpcError>;
 
-    /// <p>Deletes one or more specified VPC endpoints. Deleting the endpoint also deletes the endpoint routes in the route tables that were associated with the endpoint.</p>
+    /// <p>Deletes one or more VPC endpoint connection notifications.</p>
+    fn delete_vpc_endpoint_connection_notifications(
+        &self,
+        input: &DeleteVpcEndpointConnectionNotificationsRequest,
+    ) -> Result<
+        DeleteVpcEndpointConnectionNotificationsResult,
+        DeleteVpcEndpointConnectionNotificationsError,
+    >;
+
+    /// <p>Deletes one or more VPC endpoint service configurations in your account. Before you delete the endpoint service configuration, you must reject any <code>Available</code> or <code>PendingAcceptance</code> interface endpoint connections that are attached to the service.</p>
+    fn delete_vpc_endpoint_service_configurations(
+        &self,
+        input: &DeleteVpcEndpointServiceConfigurationsRequest,
+    ) -> Result<
+        DeleteVpcEndpointServiceConfigurationsResult,
+        DeleteVpcEndpointServiceConfigurationsError,
+    >;
+
+    /// <p>Deletes one or more specified VPC endpoints. Deleting a gateway endpoint also deletes the endpoint routes in the route tables that were associated with the endpoint. Deleting an interface endpoint deletes the endpoint network interfaces.</p>
     fn delete_vpc_endpoints(
         &self,
         input: &DeleteVpcEndpointsRequest,
     ) -> Result<DeleteVpcEndpointsResult, DeleteVpcEndpointsError>;
 
-    /// <p>Deletes a VPC peering connection. Either the owner of the requester VPC or the owner of the peer VPC can delete the VPC peering connection if it's in the <code>active</code> state. The owner of the requester VPC can delete a VPC peering connection in the <code>pending-acceptance</code> state. </p>
+    /// <p>Deletes a VPC peering connection. Either the owner of the requester VPC or the owner of the accepter VPC can delete the VPC peering connection if it's in the <code>active</code> state. The owner of the requester VPC can delete a VPC peering connection in the <code>pending-acceptance</code> state. </p>
     fn delete_vpc_peering_connection(
         &self,
         input: &DeleteVpcPeeringConnectionRequest,
@@ -60650,7 +71971,7 @@ pub trait Ec2 {
         input: &DescribeConversionTasksRequest,
     ) -> Result<DescribeConversionTasksResult, DescribeConversionTasksError>;
 
-    /// <p>Describes one or more of your VPN customer gateways.</p> <p>For more information about VPN customer gateways, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Describes one or more of your VPN customer gateways.</p> <p>For more information about VPN customer gateways, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">AWS Managed VPN Connections</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn describe_customer_gateways(
         &self,
         input: &DescribeCustomerGatewaysRequest,
@@ -60668,7 +71989,7 @@ pub trait Ec2 {
         input: &DescribeEgressOnlyInternetGatewaysRequest,
     ) -> Result<DescribeEgressOnlyInternetGatewaysResult, DescribeEgressOnlyInternetGatewaysError>;
 
-    /// <p>Describes the Elastic GPUs associated with your instances. For more information about Elastic GPUs, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-gpus.html">Amazon EC2 Elastic GPUs</a>.</p>
+    /// <p>Describes the Elastic GPUs associated with your instances. For more information about Elastic GPUs, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/elastic-gpus.html">Amazon EC2 Elastic GPUs</a>.</p>
     fn describe_elastic_gpus(
         &self,
         input: &DescribeElasticGpusRequest,
@@ -60685,6 +72006,12 @@ pub trait Ec2 {
         &self,
         input: &DescribeFlowLogsRequest,
     ) -> Result<DescribeFlowLogsResult, DescribeFlowLogsError>;
+
+    /// <p>Describes the specified attribute of the specified Amazon FPGA Image (AFI).</p>
+    fn describe_fpga_image_attribute(
+        &self,
+        input: &DescribeFpgaImageAttributeRequest,
+    ) -> Result<DescribeFpgaImageAttributeResult, DescribeFpgaImageAttributeError>;
 
     /// <p>Describes one or more available Amazon FPGA Images (AFIs). These include public AFIs, private AFIs that you own, and AFIs owned by other AWS accounts for which you have load permissions.</p>
     fn describe_fpga_images(
@@ -60761,6 +72088,12 @@ pub trait Ec2 {
         input: &DescribeInstanceAttributeRequest,
     ) -> Result<InstanceAttribute, DescribeInstanceAttributeError>;
 
+    /// <p>Describes the credit option for CPU usage of one or more of your T2 instances. The credit options are <code>standard</code> and <code>unlimited</code>.</p> <p>If you do not specify an instance ID, Amazon EC2 returns only the T2 instances with the <code>unlimited</code> credit option. If you specify one or more instance IDs, Amazon EC2 returns the credit option (<code>standard</code> or <code>unlimited</code>) of those instances. If you specify an instance ID that is not valid, such as an instance that is not a T2 instance, an error is returned.</p> <p>Recently terminated instances might appear in the returned results. This interval is usually less than one hour.</p> <p>If an Availability Zone is experiencing a service disruption and you specify instance IDs in the affected zone, or do not specify any instance IDs at all, the call fails. If you specify only instance IDs in an unaffected zone, the call works normally.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/t2-instances.html">T2 Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    fn describe_instance_credit_specifications(
+        &self,
+        input: &DescribeInstanceCreditSpecificationsRequest,
+    ) -> Result<DescribeInstanceCreditSpecificationsResult, DescribeInstanceCreditSpecificationsError>;
+
     /// <p><p>Describes the status of one or more instances. By default, only running instances are described, unless you specifically indicate to return the status of all instances.</p> <p>Instance status includes the following components:</p> <ul> <li> <p> <b>Status checks</b> - Amazon EC2 performs status checks on running EC2 instances to identify hardware and software issues. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-system-instance-status-check.html">Status Checks for Your Instances</a> and <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstances.html">Troubleshooting Instances with Failed Status Checks</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> <li> <p> <b>Scheduled events</b> - Amazon EC2 can schedule events (such as reboot, stop, or terminate) for your instances related to hardware issues, software updates, or system maintenance. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-instances-status-check_sched.html">Scheduled Events for Your Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> <li> <p> <b>Instance state</b> - You can manage your instances from the moment you launch them through their termination. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html">Instance Lifecycle</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> </ul></p>
     fn describe_instance_status(
         &self,
@@ -60784,6 +72117,18 @@ pub trait Ec2 {
         &self,
         input: &DescribeKeyPairsRequest,
     ) -> Result<DescribeKeyPairsResult, DescribeKeyPairsError>;
+
+    /// <p>Describes one or more versions of a specified launch template. You can describe all versions, individual versions, or a range of versions.</p>
+    fn describe_launch_template_versions(
+        &self,
+        input: &DescribeLaunchTemplateVersionsRequest,
+    ) -> Result<DescribeLaunchTemplateVersionsResult, DescribeLaunchTemplateVersionsError>;
+
+    /// <p>Describes one or more launch templates.</p>
+    fn describe_launch_templates(
+        &self,
+        input: &DescribeLaunchTemplatesRequest,
+    ) -> Result<DescribeLaunchTemplatesResult, DescribeLaunchTemplatesError>;
 
     /// <p>Describes your Elastic IP addresses that are being moved to the EC2-VPC platform, or that are being restored to the EC2-Classic platform. This request does not return information about any other Elastic IP addresses in your account.</p>
     fn describe_moving_addresses(
@@ -60821,13 +72166,13 @@ pub trait Ec2 {
         input: &DescribeNetworkInterfacesRequest,
     ) -> Result<DescribeNetworkInterfacesResult, DescribeNetworkInterfacesError>;
 
-    /// <p>Describes one or more of your placement groups. For more information about placement groups and cluster instances, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using_cluster_computing.html">Cluster Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Describes one or more of your placement groups. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html">Placement Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn describe_placement_groups(
         &self,
         input: &DescribePlacementGroupsRequest,
     ) -> Result<DescribePlacementGroupsResult, DescribePlacementGroupsError>;
 
-    /// <p>Describes available AWS services in a prefix list format, which includes the prefix list name and prefix list ID of the service and the IP address range for the service. A prefix list ID is required for creating an outbound security group rule that allows traffic from a VPC to access an AWS service through a VPC endpoint.</p>
+    /// <p>Describes available AWS services in a prefix list format, which includes the prefix list name and prefix list ID of the service and the IP address range for the service. A prefix list ID is required for creating an outbound security group rule that allows traffic from a VPC to access an AWS service through a gateway VPC endpoint.</p>
     fn describe_prefix_lists(
         &self,
         input: &DescribePrefixListsRequest,
@@ -60911,31 +72256,31 @@ pub trait Ec2 {
         input: &DescribeSnapshotsRequest,
     ) -> Result<DescribeSnapshotsResult, DescribeSnapshotsError>;
 
-    /// <p>Describes the data feed for Spot instances. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-data-feeds.html">Spot Instance Data Feed</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Describes the data feed for Spot Instances. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-data-feeds.html">Spot Instance Data Feed</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn describe_spot_datafeed_subscription(
         &self,
         input: &DescribeSpotDatafeedSubscriptionRequest,
     ) -> Result<DescribeSpotDatafeedSubscriptionResult, DescribeSpotDatafeedSubscriptionError>;
 
-    /// <p>Describes the running instances for the specified Spot fleet.</p>
+    /// <p>Describes the running instances for the specified Spot Fleet.</p>
     fn describe_spot_fleet_instances(
         &self,
         input: &DescribeSpotFleetInstancesRequest,
     ) -> Result<DescribeSpotFleetInstancesResponse, DescribeSpotFleetInstancesError>;
 
-    /// <p>Describes the events for the specified Spot fleet request during the specified time.</p> <p>Spot fleet events are delayed by up to 30 seconds before they can be described. This ensures that you can query by the last evaluated time and not miss a recorded event.</p>
+    /// <p>Describes the events for the specified Spot Fleet request during the specified time.</p> <p>Spot Fleet events are delayed by up to 30 seconds before they can be described. This ensures that you can query by the last evaluated time and not miss a recorded event.</p>
     fn describe_spot_fleet_request_history(
         &self,
         input: &DescribeSpotFleetRequestHistoryRequest,
     ) -> Result<DescribeSpotFleetRequestHistoryResponse, DescribeSpotFleetRequestHistoryError>;
 
-    /// <p>Describes your Spot fleet requests.</p> <p>Spot fleet requests are deleted 48 hours after they are canceled and their instances are terminated.</p>
+    /// <p>Describes your Spot Fleet requests.</p> <p>Spot Fleet requests are deleted 48 hours after they are canceled and their instances are terminated.</p>
     fn describe_spot_fleet_requests(
         &self,
         input: &DescribeSpotFleetRequestsRequest,
     ) -> Result<DescribeSpotFleetRequestsResponse, DescribeSpotFleetRequestsError>;
 
-    /// <p>Describes the Spot instance requests that belong to your account. Spot instances are instances that Amazon EC2 launches when the bid price that you specify exceeds the current Spot price. Amazon EC2 periodically sets the Spot price based on available Spot instance capacity and current Spot instance requests. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-requests.html">Spot Instance Requests</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>You can use <code>DescribeSpotInstanceRequests</code> to find a running Spot instance by examining the response. If the status of the Spot instance is <code>fulfilled</code>, the instance ID appears in the response and contains the identifier of the instance. Alternatively, you can use <a>DescribeInstances</a> with a filter to look for instances where the instance lifecycle is <code>spot</code>.</p> <p>Spot instance requests are deleted 4 hours after they are canceled and their instances are terminated.</p>
+    /// <p>Describes the Spot Instance requests that belong to your account. Spot Instances are instances that Amazon EC2 launches when the Spot price that you specify exceeds the current Spot price. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-requests.html">Spot Instance Requests</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>You can use <code>DescribeSpotInstanceRequests</code> to find a running Spot Instance by examining the response. If the status of the Spot Instance is <code>fulfilled</code>, the instance ID appears in the response and contains the identifier of the instance. Alternatively, you can use <a>DescribeInstances</a> with a filter to look for instances where the instance lifecycle is <code>spot</code>.</p> <p>Spot Instance requests are deleted 4 hours after they are canceled and their instances are terminated.</p>
     fn describe_spot_instance_requests(
         &self,
         input: &DescribeSpotInstanceRequestsRequest,
@@ -61007,7 +72352,40 @@ pub trait Ec2 {
         input: &DescribeVpcClassicLinkDnsSupportRequest,
     ) -> Result<DescribeVpcClassicLinkDnsSupportResult, DescribeVpcClassicLinkDnsSupportError>;
 
-    /// <p>Describes all supported AWS services that can be specified when creating a VPC endpoint.</p>
+    /// <p>Describes the connection notifications for VPC endpoints and VPC endpoint services.</p>
+    fn describe_vpc_endpoint_connection_notifications(
+        &self,
+        input: &DescribeVpcEndpointConnectionNotificationsRequest,
+    ) -> Result<
+        DescribeVpcEndpointConnectionNotificationsResult,
+        DescribeVpcEndpointConnectionNotificationsError,
+    >;
+
+    /// <p>Describes the VPC endpoint connections to your VPC endpoint services, including any endpoints that are pending your acceptance.</p>
+    fn describe_vpc_endpoint_connections(
+        &self,
+        input: &DescribeVpcEndpointConnectionsRequest,
+    ) -> Result<DescribeVpcEndpointConnectionsResult, DescribeVpcEndpointConnectionsError>;
+
+    /// <p>Describes the VPC endpoint service configurations in your account (your services).</p>
+    fn describe_vpc_endpoint_service_configurations(
+        &self,
+        input: &DescribeVpcEndpointServiceConfigurationsRequest,
+    ) -> Result<
+        DescribeVpcEndpointServiceConfigurationsResult,
+        DescribeVpcEndpointServiceConfigurationsError,
+    >;
+
+    /// <p>Describes the principals (service consumers) that are permitted to discover your VPC endpoint service.</p>
+    fn describe_vpc_endpoint_service_permissions(
+        &self,
+        input: &DescribeVpcEndpointServicePermissionsRequest,
+    ) -> Result<
+        DescribeVpcEndpointServicePermissionsResult,
+        DescribeVpcEndpointServicePermissionsError,
+    >;
+
+    /// <p>Describes available services to which you can create a VPC endpoint.</p>
     fn describe_vpc_endpoint_services(
         &self,
         input: &DescribeVpcEndpointServicesRequest,
@@ -61031,13 +72409,13 @@ pub trait Ec2 {
         input: &DescribeVpcsRequest,
     ) -> Result<DescribeVpcsResult, DescribeVpcsError>;
 
-    /// <p>Describes one or more of your VPN connections.</p> <p>For more information about VPN connections, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Describes one or more of your VPN connections.</p> <p>For more information about VPN connections, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">AWS Managed VPN Connections</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn describe_vpn_connections(
         &self,
         input: &DescribeVpnConnectionsRequest,
     ) -> Result<DescribeVpnConnectionsResult, DescribeVpnConnectionsError>;
 
-    /// <p>Describes one or more of your virtual private gateways.</p> <p>For more information about virtual private gateways, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">Adding an IPsec Hardware VPN to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Describes one or more of your virtual private gateways.</p> <p>For more information about virtual private gateways, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">AWS Managed VPN Connections</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn describe_vpn_gateways(
         &self,
         input: &DescribeVpnGatewaysRequest,
@@ -61115,7 +72493,7 @@ pub trait Ec2 {
         input: &DisassociateSubnetCidrBlockRequest,
     ) -> Result<DisassociateSubnetCidrBlockResult, DisassociateSubnetCidrBlockError>;
 
-    /// <p>Disassociates a CIDR block from a VPC. Currently, you can disassociate an IPv6 CIDR block only. You must detach or delete all gateways and resources that are associated with the CIDR block before you can disassociate it. </p>
+    /// <p>Disassociates a CIDR block from a VPC. To disassociate the CIDR block, you must specify its association ID. You can get the association ID by using <a>DescribeVpcs</a>. You must detach or delete all gateways and resources that are associated with the CIDR block before you can disassociate it. </p> <p>You cannot disassociate the CIDR block with which you originally created the VPC (the primary CIDR block).</p>
     fn disassociate_vpc_cidr_block(
         &self,
         input: &DisassociateVpcCidrBlockRequest,
@@ -61142,7 +72520,7 @@ pub trait Ec2 {
         input: &EnableVpcClassicLinkDnsSupportRequest,
     ) -> Result<EnableVpcClassicLinkDnsSupportResult, EnableVpcClassicLinkDnsSupportError>;
 
-    /// <p>Gets the console output for the specified instance.</p> <p>Instances do not have a physical monitor through which you can view their console output. They also lack physical controls that allow you to power up, reboot, or shut them down. To allow these actions, we provide them through the Amazon EC2 API and command line interface.</p> <p>Instance console output is buffered and posted shortly after instance boot, reboot, and termination. Amazon EC2 preserves the most recent 64 KB output which is available for at least one hour after the most recent post.</p> <p>For Linux instances, the instance console output displays the exact console output that would normally be displayed on a physical monitor attached to a computer. This output is buffered because the instance produces it and then posts it to a store where the instance's owner can retrieve it.</p> <p>For Windows instances, the instance console output includes output from the EC2Config service.</p>
+    /// <p>Gets the console output for the specified instance.</p> <p>Instances do not have a physical monitor through which you can view their console output. They also lack physical controls that allow you to power up, reboot, or shut them down. To allow these actions, we provide them through the Amazon EC2 API and command line interface.</p> <p>Instance console output is buffered and posted shortly after instance boot, reboot, and termination. Amazon EC2 preserves the most recent 64 KB output, which is available for at least one hour after the most recent post.</p> <p>For Linux instances, the instance console output displays the exact console output that would normally be displayed on a physical monitor attached to a computer. This output is buffered because the instance produces it and then posts it to a store where the instance's owner can retrieve it.</p> <p>For Windows instances, the instance console output includes output from the EC2Config service.</p>
     fn get_console_output(
         &self,
         input: &GetConsoleOutputRequest,
@@ -61160,13 +72538,19 @@ pub trait Ec2 {
         input: &GetHostReservationPurchasePreviewRequest,
     ) -> Result<GetHostReservationPurchasePreviewResult, GetHostReservationPurchasePreviewError>;
 
-    /// <p>Retrieves the encrypted administrator password for an instance running Windows.</p> <p>The Windows password is generated at boot if the <code>EC2Config</code> service plugin, <code>Ec2SetPassword</code>, is enabled. This usually only happens the first time an AMI is launched, and then <code>Ec2SetPassword</code> is automatically disabled. The password is not generated for rebundled AMIs unless <code>Ec2SetPassword</code> is enabled before bundling.</p> <p>The password is encrypted using the key pair that you specified when you launched the instance. You must provide the corresponding key pair file.</p> <p>Password generation and encryption takes a few moments. We recommend that you wait up to 15 minutes after launching an instance before trying to retrieve the generated password.</p>
+    /// <p>Retrieves the configuration data of the specified instance. You can use this data to create a launch template.</p>
+    fn get_launch_template_data(
+        &self,
+        input: &GetLaunchTemplateDataRequest,
+    ) -> Result<GetLaunchTemplateDataResult, GetLaunchTemplateDataError>;
+
+    /// <p>Retrieves the encrypted administrator password for a running Windows instance.</p> <p>The Windows password is generated at boot by the <code>EC2Config</code> service or <code>EC2Launch</code> scripts (Windows Server 2016 and later). This usually only happens the first time an instance is launched. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/UsingConfig_WinAMI.html">EC2Config</a> and <a href="http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2launch.html">EC2Launch</a> in the Amazon Elastic Compute Cloud User Guide.</p> <p>For the <code>EC2Config</code> service, the password is not generated for rebundled AMIs unless <code>Ec2SetPassword</code> is enabled before bundling.</p> <p>The password is encrypted using the key pair that you specified when you launched the instance. You must provide the corresponding key pair file.</p> <p>When you launch an instance, password generation and encryption may take a few minutes. If you try to retrieve the password before it's available, the output returns an empty string. We recommend that you wait up to 15 minutes after launching an instance before trying to retrieve the generated password.</p>
     fn get_password_data(
         &self,
         input: &GetPasswordDataRequest,
     ) -> Result<GetPasswordDataResult, GetPasswordDataError>;
 
-    /// <p>Returns details about the values and term of your specified Convertible Reserved Instances. When a target configuration is specified, it returns information about whether the exchange is valid and can be performed.</p>
+    /// <p>Returns a quote and exchange information for exchanging one or more specified Convertible Reserved Instances for a new Convertible Reserved Instance. If the exchange cannot be performed, the reason is returned in the response. Use <a>AcceptReservedInstancesExchangeQuote</a> to perform the exchange.</p>
     fn get_reserved_instances_exchange_quote(
         &self,
         input: &GetReservedInstancesExchangeQuoteRequest,
@@ -61202,6 +72586,12 @@ pub trait Ec2 {
         input: &ImportVolumeRequest,
     ) -> Result<ImportVolumeResult, ImportVolumeError>;
 
+    /// <p>Modifies the specified attribute of the specified Amazon FPGA Image (AFI).</p>
+    fn modify_fpga_image_attribute(
+        &self,
+        input: &ModifyFpgaImageAttributeRequest,
+    ) -> Result<ModifyFpgaImageAttributeResult, ModifyFpgaImageAttributeError>;
+
     /// <p>Modify the auto-placement setting of a Dedicated Host. When auto-placement is enabled, AWS will place instances that you launch with a tenancy of <code>host</code>, but without targeting a specific host ID, onto any available Dedicated Host in your account which has auto-placement enabled. When auto-placement is disabled, you need to provide a host ID if you want the instance to launch onto a specific host. If no host ID is provided, the instance will be launched onto a suitable host which has auto-placement enabled.</p>
     fn modify_hosts(
         &self,
@@ -61217,7 +72607,7 @@ pub trait Ec2 {
         input: &ModifyIdentityIdFormatRequest,
     ) -> Result<(), ModifyIdentityIdFormatError>;
 
-    /// <p><p>Modifies the specified attribute of the specified AMI. You can specify only one attribute at a time.</p> <note> <p>AWS Marketplace product codes cannot be modified. Images with an AWS Marketplace product code cannot be made public.</p> </note> <note> <p>The SriovNetSupport enhanced networking attribute cannot be changed using this command. Instead, enable SriovNetSupport on an instance and create an AMI from the instance. This will result in an image with SriovNetSupport enabled.</p> </note></p>
+    /// <p>Modifies the specified attribute of the specified AMI. You can specify only one attribute at a time. You can use the <code>Attribute</code> parameter to specify the attribute or one of the following parameters: <code>Description</code>, <code>LaunchPermission</code>, or <code>ProductCode</code>.</p> <p>AWS Marketplace product codes cannot be modified. Images with an AWS Marketplace product code cannot be made public.</p> <p>To enable the SriovNetSupport enhanced networking attribute of an image, enable SriovNetSupport on an instance and create an AMI from the instance.</p>
     fn modify_image_attribute(
         &self,
         input: &ModifyImageAttributeRequest,
@@ -61229,11 +72619,23 @@ pub trait Ec2 {
         input: &ModifyInstanceAttributeRequest,
     ) -> Result<(), ModifyInstanceAttributeError>;
 
+    /// <p>Modifies the credit option for CPU usage on a running or stopped T2 instance. The credit options are <code>standard</code> and <code>unlimited</code>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/t2-instances.html">T2 Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    fn modify_instance_credit_specification(
+        &self,
+        input: &ModifyInstanceCreditSpecificationRequest,
+    ) -> Result<ModifyInstanceCreditSpecificationResult, ModifyInstanceCreditSpecificationError>;
+
     /// <p>Set the instance affinity value for a specific stopped instance and modify the instance tenancy setting.</p> <p>Instance affinity is disabled by default. When instance affinity is <code>host</code> and it is not associated with a specific Dedicated Host, the next time it is launched it will automatically be associated with the host it lands on. This relationship will persist if the instance is stopped/started, or rebooted.</p> <p>You can modify the host ID associated with a stopped instance. If a stopped instance has a new host ID association, the instance will target that host when restarted.</p> <p>You can modify the tenancy of a stopped instance with a tenancy of <code>host</code> or <code>dedicated</code>.</p> <p>Affinity, hostID, and tenancy are not required parameters, but at least one of them must be specified in the request. Affinity and tenancy can be modified in the same request, but tenancy can only be modified on instances that are stopped.</p>
     fn modify_instance_placement(
         &self,
         input: &ModifyInstancePlacementRequest,
     ) -> Result<ModifyInstancePlacementResult, ModifyInstancePlacementError>;
+
+    /// <p>Modifies a launch template. You can specify which version of the launch template to set as the default version. When launching an instance, the default version applies when a launch template version is not specified.</p>
+    fn modify_launch_template(
+        &self,
+        input: &ModifyLaunchTemplateRequest,
+    ) -> Result<ModifyLaunchTemplateResult, ModifyLaunchTemplateError>;
 
     /// <p>Modifies the specified network interface attribute. You can specify only one attribute at a time.</p>
     fn modify_network_interface_attribute(
@@ -61241,7 +72643,7 @@ pub trait Ec2 {
         input: &ModifyNetworkInterfaceAttributeRequest,
     ) -> Result<(), ModifyNetworkInterfaceAttributeError>;
 
-    /// <p>Modifies the Availability Zone, instance count, instance type, or network platform (EC2-Classic or EC2-VPC) of your Standard Reserved Instances. The Reserved Instances to be modified must be identical, except for Availability Zone, network platform, and instance type.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-modifying.html">Modifying Reserved Instances</a> in the Amazon Elastic Compute Cloud User Guide.</p>
+    /// <p>Modifies the Availability Zone, instance count, instance type, or network platform (EC2-Classic or EC2-VPC) of your Reserved Instances. The Reserved Instances to be modified must be identical, except for Availability Zone, network platform, and instance type.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-modifying.html">Modifying Reserved Instances</a> in the Amazon Elastic Compute Cloud User Guide.</p>
     fn modify_reserved_instances(
         &self,
         input: &ModifyReservedInstancesRequest,
@@ -61253,7 +72655,7 @@ pub trait Ec2 {
         input: &ModifySnapshotAttributeRequest,
     ) -> Result<(), ModifySnapshotAttributeError>;
 
-    /// <p>Modifies the specified Spot fleet request.</p> <p>While the Spot fleet request is being modified, it is in the <code>modifying</code> state.</p> <p>To scale up your Spot fleet, increase its target capacity. The Spot fleet launches the additional Spot instances according to the allocation strategy for the Spot fleet request. If the allocation strategy is <code>lowestPrice</code>, the Spot fleet launches instances using the Spot pool with the lowest price. If the allocation strategy is <code>diversified</code>, the Spot fleet distributes the instances across the Spot pools.</p> <p>To scale down your Spot fleet, decrease its target capacity. First, the Spot fleet cancels any open bids that exceed the new target capacity. You can request that the Spot fleet terminate Spot instances until the size of the fleet no longer exceeds the new target capacity. If the allocation strategy is <code>lowestPrice</code>, the Spot fleet terminates the instances with the highest price per unit. If the allocation strategy is <code>diversified</code>, the Spot fleet terminates instances across the Spot pools. Alternatively, you can request that the Spot fleet keep the fleet at its current size, but not replace any Spot instances that are interrupted or that you terminate manually.</p>
+    /// <p>Modifies the specified Spot Fleet request.</p> <p>While the Spot Fleet request is being modified, it is in the <code>modifying</code> state.</p> <p>To scale up your Spot Fleet, increase its target capacity. The Spot Fleet launches the additional Spot Instances according to the allocation strategy for the Spot Fleet request. If the allocation strategy is <code>lowestPrice</code>, the Spot Fleet launches instances using the Spot pool with the lowest price. If the allocation strategy is <code>diversified</code>, the Spot Fleet distributes the instances across the Spot pools.</p> <p>To scale down your Spot Fleet, decrease its target capacity. First, the Spot Fleet cancels any open requests that exceed the new target capacity. You can request that the Spot Fleet terminate Spot Instances until the size of the fleet no longer exceeds the new target capacity. If the allocation strategy is <code>lowestPrice</code>, the Spot Fleet terminates the instances with the highest price per unit. If the allocation strategy is <code>diversified</code>, the Spot Fleet terminates instances across the Spot pools. Alternatively, you can request that the Spot Fleet keep the fleet at its current size, but not replace any Spot Instances that are interrupted or that you terminate manually.</p> <p>If you are finished with your Spot Fleet for now, but will use it again later, you can set the target capacity to 0.</p>
     fn modify_spot_fleet_request(
         &self,
         input: &ModifySpotFleetRequestRequest,
@@ -61283,17 +72685,47 @@ pub trait Ec2 {
         input: &ModifyVpcAttributeRequest,
     ) -> Result<(), ModifyVpcAttributeError>;
 
-    /// <p>Modifies attributes of a specified VPC endpoint. You can modify the policy associated with the endpoint, and you can add and remove route tables associated with the endpoint.</p>
+    /// <p>Modifies attributes of a specified VPC endpoint. The attributes that you can modify depend on the type of VPC endpoint (interface or gateway). For more information, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-endpoints.html">VPC Endpoints</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn modify_vpc_endpoint(
         &self,
         input: &ModifyVpcEndpointRequest,
     ) -> Result<ModifyVpcEndpointResult, ModifyVpcEndpointError>;
+
+    /// <p>Modifies a connection notification for VPC endpoint or VPC endpoint service. You can change the SNS topic for the notification, or the events for which to be notified. </p>
+    fn modify_vpc_endpoint_connection_notification(
+        &self,
+        input: &ModifyVpcEndpointConnectionNotificationRequest,
+    ) -> Result<
+        ModifyVpcEndpointConnectionNotificationResult,
+        ModifyVpcEndpointConnectionNotificationError,
+    >;
+
+    /// <p>Modifies the attributes of your VPC endpoint service configuration. You can change the Network Load Balancers for your service, and you can specify whether acceptance is required for requests to connect to your endpoint service through an interface VPC endpoint.</p>
+    fn modify_vpc_endpoint_service_configuration(
+        &self,
+        input: &ModifyVpcEndpointServiceConfigurationRequest,
+    ) -> Result<
+        ModifyVpcEndpointServiceConfigurationResult,
+        ModifyVpcEndpointServiceConfigurationError,
+    >;
+
+    /// <p>Modifies the permissions for your VPC endpoint service. You can add or remove permissions for service consumers (IAM users, IAM roles, and AWS accounts) to discover your endpoint service.</p>
+    fn modify_vpc_endpoint_service_permissions(
+        &self,
+        input: &ModifyVpcEndpointServicePermissionsRequest,
+    ) -> Result<ModifyVpcEndpointServicePermissionsResult, ModifyVpcEndpointServicePermissionsError>;
 
     /// <p>Modifies the VPC peering connection options on one side of a VPC peering connection. You can do the following:</p> <ul> <li> <p>Enable/disable communication over the peering connection between an EC2-Classic instance that's linked to your VPC (using ClassicLink) and instances in the peer VPC.</p> </li> <li> <p>Enable/disable communication over the peering connection between instances in your VPC and an EC2-Classic instance that's linked to the peer VPC.</p> </li> <li> <p>Enable/disable a local VPC to resolve public DNS hostnames to private IP addresses when queried from instances in the peer VPC.</p> </li> </ul> <p>If the peered VPCs are in different accounts, each owner must initiate a separate request to modify the peering connection options, depending on whether their VPC was the requester or accepter for the VPC peering connection. If the peered VPCs are in the same account, you can modify the requester and accepter options in the same request. To confirm which VPC is the accepter and requester for a VPC peering connection, use the <a>DescribeVpcPeeringConnections</a> command.</p>
     fn modify_vpc_peering_connection_options(
         &self,
         input: &ModifyVpcPeeringConnectionOptionsRequest,
     ) -> Result<ModifyVpcPeeringConnectionOptionsResult, ModifyVpcPeeringConnectionOptionsError>;
+
+    /// <p>Modifies the instance tenancy attribute of the specified VPC. You can change the instance tenancy attribute of a VPC to <code>default</code> only. You cannot change the instance tenancy attribute to <code>dedicated</code>.</p> <p>After you modify the tenancy of the VPC, any new instances that you launch into the VPC have a tenancy of <code>default</code>, unless you specify otherwise during launch. The tenancy of any existing instances in the VPC is not affected.</p> <p>For more information about Dedicated Instances, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-instance.html">Dedicated Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    fn modify_vpc_tenancy(
+        &self,
+        input: &ModifyVpcTenancyRequest,
+    ) -> Result<ModifyVpcTenancyResult, ModifyVpcTenancyError>;
 
     /// <p>Enables detailed monitoring for a running instance. Otherwise, basic monitoring is enabled. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-cloudwatch.html">Monitoring Your Instances and Volumes</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>To disable detailed monitoring, see .</p>
     fn monitor_instances(
@@ -61334,6 +72766,12 @@ pub trait Ec2 {
         input: &RegisterImageRequest,
     ) -> Result<RegisterImageResult, RegisterImageError>;
 
+    /// <p>Rejects one or more VPC endpoint connection requests to your VPC endpoint service.</p>
+    fn reject_vpc_endpoint_connections(
+        &self,
+        input: &RejectVpcEndpointConnectionsRequest,
+    ) -> Result<RejectVpcEndpointConnectionsResult, RejectVpcEndpointConnectionsError>;
+
     /// <p>Rejects a VPC peering connection request. The VPC peering connection must be in the <code>pending-acceptance</code> state. Use the <a>DescribeVpcPeeringConnections</a> request to view your outstanding VPC peering connection requests. To delete an active VPC peering connection, or to delete a VPC peering connection request that you initiated, use <a>DeleteVpcPeeringConnection</a>.</p>
     fn reject_vpc_peering_connection(
         &self,
@@ -61355,7 +72793,7 @@ pub trait Ec2 {
         input: &ReplaceIamInstanceProfileAssociationRequest,
     ) -> Result<ReplaceIamInstanceProfileAssociationResult, ReplaceIamInstanceProfileAssociationError>;
 
-    /// <p>Changes which network ACL a subnet is associated with. By default when you create a subnet, it's automatically associated with the default network ACL. For more information about network ACLs, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_ACLs.html">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Changes which network ACL a subnet is associated with. By default when you create a subnet, it's automatically associated with the default network ACL. For more information about network ACLs, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_ACLs.html">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>This is an idempotent operation.</p>
     fn replace_network_acl_association(
         &self,
         input: &ReplaceNetworkAclAssociationRequest,
@@ -61382,17 +72820,23 @@ pub trait Ec2 {
         input: &ReportInstanceStatusRequest,
     ) -> Result<(), ReportInstanceStatusError>;
 
-    /// <p>Creates a Spot fleet request.</p> <p>You can submit a single request that includes multiple launch specifications that vary by instance type, AMI, Availability Zone, or subnet.</p> <p>By default, the Spot fleet requests Spot instances in the Spot pool where the price per unit is the lowest. Each launch specification can include its own instance weighting that reflects the value of the instance type to your application workload.</p> <p>Alternatively, you can specify that the Spot fleet distribute the target capacity across the Spot pools included in its launch specifications. By ensuring that the Spot instances in your Spot fleet are in different Spot pools, you can improve the availability of your fleet.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-fleet-requests.html">Spot Fleet Requests</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Creates a Spot Fleet request.</p> <p>You can submit a single request that includes multiple launch specifications that vary by instance type, AMI, Availability Zone, or subnet.</p> <p>By default, the Spot Fleet requests Spot Instances in the Spot pool where the price per unit is the lowest. Each launch specification can include its own instance weighting that reflects the value of the instance type to your application workload.</p> <p>Alternatively, you can specify that the Spot Fleet distribute the target capacity across the Spot pools included in its launch specifications. By ensuring that the Spot Instances in your Spot Fleet are in different Spot pools, you can improve the availability of your fleet.</p> <p>You can specify tags for the Spot Instances. You cannot tag other resource types in a Spot Fleet request; only the <code>instance</code> resource type is supported.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-fleet-requests.html">Spot Fleet Requests</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn request_spot_fleet(
         &self,
         input: &RequestSpotFleetRequest,
     ) -> Result<RequestSpotFleetResponse, RequestSpotFleetError>;
 
-    /// <p>Creates a Spot instance request. Spot instances are instances that Amazon EC2 launches when the bid price that you specify exceeds the current Spot price. Amazon EC2 periodically sets the Spot price based on available Spot Instance capacity and current Spot instance requests. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-requests.html">Spot Instance Requests</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Creates a Spot Instance request. Spot Instances are instances that Amazon EC2 launches when the maximum price that you specify exceeds the current Spot price. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-requests.html">Spot Instance Requests</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn request_spot_instances(
         &self,
         input: &RequestSpotInstancesRequest,
     ) -> Result<RequestSpotInstancesResult, RequestSpotInstancesError>;
+
+    /// <p>Resets the specified attribute of the specified Amazon FPGA Image (AFI) to its default value. You can only reset the load permission attribute.</p>
+    fn reset_fpga_image_attribute(
+        &self,
+        input: &ResetFpgaImageAttributeRequest,
+    ) -> Result<ResetFpgaImageAttributeResult, ResetFpgaImageAttributeError>;
 
     /// <p><p>Resets an attribute of an AMI to its default value.</p> <note> <p>The productCodes attribute can&#39;t be reset.</p> </note></p>
     fn reset_image_attribute(
@@ -61424,19 +72868,19 @@ pub trait Ec2 {
         input: &RestoreAddressToClassicRequest,
     ) -> Result<RestoreAddressToClassicResult, RestoreAddressToClassicError>;
 
-    /// <p>[EC2-VPC only] Removes one or more egress rules from a security group for EC2-VPC. This action doesn't apply to security groups for use in EC2-Classic. The values that you specify in the revoke request (for example, ports) must match the existing rule's values for the rule to be revoked.</p> <p>Each rule consists of the protocol and the IPv4 or IPv6 CIDR range or source security group. For the TCP and UDP protocols, you must also specify the destination port or range of ports. For the ICMP protocol, you must also specify the ICMP type and code.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p>
+    /// <p>[EC2-VPC only] Removes one or more egress rules from a security group for EC2-VPC. This action doesn't apply to security groups for use in EC2-Classic. To remove a rule, the values that you specify (for example, ports) must match the existing rule's values exactly.</p> <p>Each rule consists of the protocol and the IPv4 or IPv6 CIDR range or source security group. For the TCP and UDP protocols, you must also specify the destination port or range of ports. For the ICMP protocol, you must also specify the ICMP type and code. If the security group rule has a description, you do not have to specify the description to revoke the rule.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p>
     fn revoke_security_group_egress(
         &self,
         input: &RevokeSecurityGroupEgressRequest,
     ) -> Result<(), RevokeSecurityGroupEgressError>;
 
-    /// <p>Removes one or more ingress rules from a security group. The values that you specify in the revoke request (for example, ports) must match the existing rule's values for the rule to be removed.</p> <note> <p>[EC2-Classic security groups only] If the values you specify do not match the existing rule's values, no error is returned. Use <a>DescribeSecurityGroups</a> to verify that the rule has been removed.</p> </note> <p>Each rule consists of the protocol and the CIDR range or source security group. For the TCP and UDP protocols, you must also specify the destination port or range of ports. For the ICMP protocol, you must also specify the ICMP type and code.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p>
+    /// <p>Removes one or more ingress rules from a security group. To remove a rule, the values that you specify (for example, ports) must match the existing rule's values exactly.</p> <note> <p>[EC2-Classic security groups only] If the values you specify do not match the existing rule's values, no error is returned. Use <a>DescribeSecurityGroups</a> to verify that the rule has been removed.</p> </note> <p>Each rule consists of the protocol and the CIDR range or source security group. For the TCP and UDP protocols, you must also specify the destination port or range of ports. For the ICMP protocol, you must also specify the ICMP type and code. If the security group rule has a description, you do not have to specify the description to revoke the rule.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p>
     fn revoke_security_group_ingress(
         &self,
         input: &RevokeSecurityGroupIngressRequest,
     ) -> Result<(), RevokeSecurityGroupIngressError>;
 
-    /// <p>Launches the specified number of instances using an AMI for which you have permissions. </p> <p>You can specify a number of options, or leave the default options. The following rules apply:</p> <ul> <li> <p>[EC2-VPC] If you don't specify a subnet ID, we choose a default subnet from your default VPC for you. If you don't have a default VPC, you must specify a subnet ID in the request.</p> </li> <li> <p>[EC2-Classic] If don't specify an Availability Zone, we choose one for you.</p> </li> <li> <p>Some instance types must be launched into a VPC. If you do not have a default VPC, or if you do not specify a subnet ID, the request fails. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-vpc.html#vpc-only-instance-types">Instance Types Available Only in a VPC</a>.</p> </li> <li> <p>[EC2-VPC] All instances have a network interface with a primary private IPv4 address. If you don't specify this address, we choose one from the IPv4 range of your subnet.</p> </li> <li> <p>Not all instance types support IPv6 addresses. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html">Instance Types</a>.</p> </li> <li> <p>If you don't specify a security group ID, we use the default security group. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html">Security Groups</a>.</p> </li> <li> <p>If any of the AMIs have a product code attached for which the user has not subscribed, the request fails.</p> </li> </ul> <p>To ensure faster instance launches, break up large requests into smaller batches. For example, create 5 separate launch requests for 100 instances each instead of 1 launch request for 500 instances.</p> <p>An instance is ready for you to use when it's in the <code>running</code> state. You can check the state of your instance using <a>DescribeInstances</a>. You can tag instances and EBS volumes during launch, after launch, or both. For more information, see <a>CreateTags</a> and <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Amazon EC2 Resources</a>.</p> <p>Linux instances have access to the public key of the key pair at boot. You can use this key to provide secure access to the instance. Amazon EC2 public images use this feature to provide secure access without passwords. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>For troubleshooting, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_InstanceStraightToTerminated.html">What To Do If An Instance Immediately Terminates</a>, and <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstancesConnecting.html">Troubleshooting Connecting to Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Launches the specified number of instances using an AMI for which you have permissions. </p> <p>You can specify a number of options, or leave the default options. The following rules apply:</p> <ul> <li> <p>[EC2-VPC] If you don't specify a subnet ID, we choose a default subnet from your default VPC for you. If you don't have a default VPC, you must specify a subnet ID in the request.</p> </li> <li> <p>[EC2-Classic] If don't specify an Availability Zone, we choose one for you.</p> </li> <li> <p>Some instance types must be launched into a VPC. If you do not have a default VPC, or if you do not specify a subnet ID, the request fails. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-vpc.html#vpc-only-instance-types">Instance Types Available Only in a VPC</a>.</p> </li> <li> <p>[EC2-VPC] All instances have a network interface with a primary private IPv4 address. If you don't specify this address, we choose one from the IPv4 range of your subnet.</p> </li> <li> <p>Not all instance types support IPv6 addresses. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html">Instance Types</a>.</p> </li> <li> <p>If you don't specify a security group ID, we use the default security group. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html">Security Groups</a>.</p> </li> <li> <p>If any of the AMIs have a product code attached for which the user has not subscribed, the request fails.</p> </li> </ul> <p>You can create a <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html">launch template</a>, which is a resource that contains the parameters to launch an instance. When you launch an instance using <a>RunInstances</a>, you can specify the launch template instead of specifying the launch parameters.</p> <p>To ensure faster instance launches, break up large requests into smaller batches. For example, create five separate launch requests for 100 instances each instead of one launch request for 500 instances.</p> <p>An instance is ready for you to use when it's in the <code>running</code> state. You can check the state of your instance using <a>DescribeInstances</a>. You can tag instances and EBS volumes during launch, after launch, or both. For more information, see <a>CreateTags</a> and <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Amazon EC2 Resources</a>.</p> <p>Linux instances have access to the public key of the key pair at boot. You can use this key to provide secure access to the instance. Amazon EC2 public images use this feature to provide secure access without passwords. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>For troubleshooting, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_InstanceStraightToTerminated.html">What To Do If An Instance Immediately Terminates</a>, and <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstancesConnecting.html">Troubleshooting Connecting to Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn run_instances(&self, input: &RunInstancesRequest) -> Result<Reservation, RunInstancesError>;
 
     /// <p>Launches the specified Scheduled Instances.</p> <p>Before you can launch a Scheduled Instance, you must purchase it and obtain an identifier using <a>PurchaseScheduledInstances</a>.</p> <p>You must launch a Scheduled Instance during its scheduled time period. You can't stop or reboot a Scheduled Instance, but you can terminate it as needed. If you terminate a Scheduled Instance before the current scheduled time period ends, you can launch it again after a few minutes. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-scheduled-instances.html">Scheduled Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
@@ -61445,13 +72889,13 @@ pub trait Ec2 {
         input: &RunScheduledInstancesRequest,
     ) -> Result<RunScheduledInstancesResult, RunScheduledInstancesError>;
 
-    /// <p>Starts an Amazon EBS-backed AMI that you've previously stopped.</p> <p>Instances that use Amazon EBS volumes as their root devices can be quickly stopped and started. When an instance is stopped, the compute resources are released and you are not billed for hourly instance usage. However, your root partition Amazon EBS volume remains, continues to persist your data, and you are charged for Amazon EBS volume usage. You can restart your instance at any time. Each time you transition an instance from stopped to started, Amazon EC2 charges a full instance hour, even if transitions happen multiple times within a single hour.</p> <p>Before stopping an instance, make sure it is in a state from which it can be restarted. Stopping an instance does not preserve data stored in RAM.</p> <p>Performing this operation on an instance that uses an instance store as its root device returns an error.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Stop_Start.html">Stopping Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Starts an Amazon EBS-backed instance that you've previously stopped.</p> <p>Instances that use Amazon EBS volumes as their root devices can be quickly stopped and started. When an instance is stopped, the compute resources are released and you are not billed for instance usage. However, your root partition Amazon EBS volume remains and continues to persist your data, and you are charged for Amazon EBS volume usage. You can restart your instance at any time. Every time you start your Windows instance, Amazon EC2 charges you for a full instance hour. If you stop and restart your Windows instance, a new instance hour begins and Amazon EC2 charges you for another full instance hour even if you are still within the same 60-minute period when it was stopped. Every time you start your Linux instance, Amazon EC2 charges a one-minute minimum for instance usage, and thereafter charges per second for instance usage.</p> <p>Before stopping an instance, make sure it is in a state from which it can be restarted. Stopping an instance does not preserve data stored in RAM.</p> <p>Performing this operation on an instance that uses an instance store as its root device returns an error.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Stop_Start.html">Stopping Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn start_instances(
         &self,
         input: &StartInstancesRequest,
     ) -> Result<StartInstancesResult, StartInstancesError>;
 
-    /// <p>Stops an Amazon EBS-backed instance.</p> <p>We don't charge hourly usage for a stopped instance, or data transfer fees; however, your root partition Amazon EBS volume remains, continues to persist your data, and you are charged for Amazon EBS volume usage. Each time you transition an instance from stopped to started, Amazon EC2 charges a full instance hour, even if transitions happen multiple times within a single hour.</p> <p>You can't start or stop Spot instances, and you can't stop instance store-backed instances.</p> <p>When you stop an instance, we shut it down. You can restart your instance at any time. Before stopping an instance, make sure it is in a state from which it can be restarted. Stopping an instance does not preserve data stored in RAM.</p> <p>Stopping an instance is different to rebooting or terminating it. For example, when you stop an instance, the root device and any other devices attached to the instance persist. When you terminate an instance, the root device and any other devices attached during the instance launch are automatically deleted. For more information about the differences between rebooting, stopping, and terminating instances, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html">Instance Lifecycle</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>When you stop an instance, we attempt to shut it down forcibly after a short while. If your instance appears stuck in the stopping state after a period of time, there may be an issue with the underlying host computer. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstancesStopping.html">Troubleshooting Stopping Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Stops an Amazon EBS-backed instance.</p> <p>We don't charge usage for a stopped instance, or data transfer fees; however, your root partition Amazon EBS volume remains and continues to persist your data, and you are charged for Amazon EBS volume usage. Every time you start your Windows instance, Amazon EC2 charges you for a full instance hour. If you stop and restart your Windows instance, a new instance hour begins and Amazon EC2 charges you for another full instance hour even if you are still within the same 60-minute period when it was stopped. Every time you start your Linux instance, Amazon EC2 charges a one-minute minimum for instance usage, and thereafter charges per second for instance usage.</p> <p>You can't start or stop Spot Instances, and you can't stop instance store-backed instances.</p> <p>When you stop an instance, we shut it down. You can restart your instance at any time. Before stopping an instance, make sure it is in a state from which it can be restarted. Stopping an instance does not preserve data stored in RAM.</p> <p>Stopping an instance is different to rebooting or terminating it. For example, when you stop an instance, the root device and any other devices attached to the instance persist. When you terminate an instance, the root device and any other devices attached during the instance launch are automatically deleted. For more information about the differences between rebooting, stopping, and terminating instances, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html">Instance Lifecycle</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>When you stop an instance, we attempt to shut it down forcibly after a short while. If your instance appears stuck in the stopping state after a period of time, there may be an issue with the underlying host computer. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstancesStopping.html">Troubleshooting Stopping Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn stop_instances(
         &self,
         input: &StopInstancesRequest,
@@ -61480,6 +72924,24 @@ pub trait Ec2 {
         &self,
         input: &UnmonitorInstancesRequest,
     ) -> Result<UnmonitorInstancesResult, UnmonitorInstancesError>;
+
+    /// <p>[EC2-VPC only] Updates the description of an egress (outbound) security group rule. You can replace an existing description, or add a description to a rule that did not have one previously.</p> <p>You specify the description as part of the IP permissions structure. You can remove a description for a security group rule by omitting the description parameter in the request.</p>
+    fn update_security_group_rule_descriptions_egress(
+        &self,
+        input: &UpdateSecurityGroupRuleDescriptionsEgressRequest,
+    ) -> Result<
+        UpdateSecurityGroupRuleDescriptionsEgressResult,
+        UpdateSecurityGroupRuleDescriptionsEgressError,
+    >;
+
+    /// <p>Updates the description of an ingress (inbound) security group rule. You can replace an existing description, or add a description to a rule that did not have one previously.</p> <p>You specify the description as part of the IP permissions structure. You can remove a description for a security group rule by omitting the description parameter in the request.</p>
+    fn update_security_group_rule_descriptions_ingress(
+        &self,
+        input: &UpdateSecurityGroupRuleDescriptionsIngressRequest,
+    ) -> Result<
+        UpdateSecurityGroupRuleDescriptionsIngressResult,
+        UpdateSecurityGroupRuleDescriptionsIngressError,
+    >;
 }
 /// A client for the Amazon EC2 API.
 pub struct Ec2Client<P, D>
@@ -61562,7 +73024,57 @@ where
         }
     }
 
-    /// <p>Accept a VPC peering connection request. To accept a request, the VPC peering connection must be in the <code>pending-acceptance</code> state, and you must be the owner of the peer VPC. Use <a>DescribeVpcPeeringConnections</a> to view your outstanding VPC peering connection requests.</p>
+    /// <p>Accepts one or more interface VPC endpoint connection requests to your VPC endpoint service.</p>
+    fn accept_vpc_endpoint_connections(
+        &self,
+        input: &AcceptVpcEndpointConnectionsRequest,
+    ) -> Result<AcceptVpcEndpointConnectionsResult, AcceptVpcEndpointConnectionsError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "AcceptVpcEndpointConnections");
+        params.put("Version", "2016-11-15");
+        AcceptVpcEndpointConnectionsRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = AcceptVpcEndpointConnectionsResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(
+                        AcceptVpcEndpointConnectionsResultDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack
+                        )
+                    );
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(AcceptVpcEndpointConnectionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Accept a VPC peering connection request. To accept a request, the VPC peering connection must be in the <code>pending-acceptance</code> state, and you must be the owner of the peer VPC. Use <a>DescribeVpcPeeringConnections</a> to view your outstanding VPC peering connection requests.</p> <p>For an inter-region VPC peering connection request, you must accept the VPC peering connection in the region of the accepter VPC.</p>
     fn accept_vpc_peering_connection(
         &self,
         input: &AcceptVpcPeeringConnectionRequest,
@@ -62006,7 +73518,7 @@ where
         }
     }
 
-    /// <p>Associates a CIDR block with your VPC. You can only associate a single Amazon-provided IPv6 CIDR block with your VPC. The IPv6 CIDR block size is fixed at /56.</p>
+    /// <p>Associates a CIDR block with your VPC. You can associate a secondary IPv4 CIDR block, or you can associate an Amazon-provided IPv6 CIDR block. The IPv6 CIDR block size is fixed at /56.</p> <p>For more information about associating CIDR blocks with your VPC and applicable restrictions, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html#VPC_Sizing">VPC and Subnet Sizing</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn associate_vpc_cidr_block(
         &self,
         input: &AssociateVpcCidrBlockRequest,
@@ -62228,7 +73740,7 @@ where
         }
     }
 
-    /// <p>Attaches a virtual private gateway to a VPC. You can attach one virtual private gateway to one VPC at a time.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Attaches a virtual private gateway to a VPC. You can attach one virtual private gateway to one VPC at a time.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">AWS Managed VPN Connections</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn attach_vpn_gateway(
         &self,
         input: &AttachVpnGatewayRequest,
@@ -62276,7 +73788,7 @@ where
         }
     }
 
-    /// <p>[EC2-VPC only] Adds one or more egress rules to a security group for use with a VPC. Specifically, this action permits instances to send traffic to one or more destination IPv4 or IPv6 CIDR address ranges, or to one or more destination security groups for the same VPC. This action doesn't apply to security groups for use in EC2-Classic. For more information, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>. For more information about security group limits, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Appendix_Limits.html">Amazon VPC Limits</a>.</p> <p>Each rule consists of the protocol (for example, TCP), plus either a CIDR range or a source group. For the TCP and UDP protocols, you must also specify the destination port or port range. For the ICMP protocol, you must also specify the ICMP type and code. You can use -1 for the type or code to mean all types or all codes.</p> <p>Rule changes are propagated to affected instances as quickly as possible. However, a small delay might occur.</p>
+    /// <p>[EC2-VPC only] Adds one or more egress rules to a security group for use with a VPC. Specifically, this action permits instances to send traffic to one or more destination IPv4 or IPv6 CIDR address ranges, or to one or more destination security groups for the same VPC. This action doesn't apply to security groups for use in EC2-Classic. For more information, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_SecurityGroups.html">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>. For more information about security group limits, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Appendix_Limits.html">Amazon VPC Limits</a>.</p> <p>Each rule consists of the protocol (for example, TCP), plus either a CIDR range or a source group. For the TCP and UDP protocols, you must also specify the destination port or port range. For the ICMP protocol, you must also specify the ICMP type and code. You can use -1 for the type or code to mean all types or all codes. You can optionally specify a description for the rule.</p> <p>Rule changes are propagated to affected instances as quickly as possible. However, a small delay might occur.</p>
     fn authorize_security_group_egress(
         &self,
         input: &AuthorizeSecurityGroupEgressRequest,
@@ -62306,7 +73818,7 @@ where
         }
     }
 
-    /// <p>Adds one or more ingress rules to a security group.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p> <p>[EC2-Classic] This action gives one or more IPv4 CIDR address ranges permission to access a security group in your account, or gives one or more security groups (called the <i>source groups</i>) permission to access a security group for your account. A source group can be for your own AWS account, or another. You can have up to 100 rules per group.</p> <p>[EC2-VPC] This action gives one or more IPv4 or IPv6 CIDR address ranges permission to access a security group in your VPC, or gives one or more other security groups (called the <i>source groups</i>) permission to access a security group for your VPC. The security groups must all be for the same VPC or a peer VPC in a VPC peering connection. For more information about VPC security group limits, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Appendix_Limits.html">Amazon VPC Limits</a>.</p>
+    /// <p>Adds one or more ingress rules to a security group.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p> <p>[EC2-Classic] This action gives one or more IPv4 CIDR address ranges permission to access a security group in your account, or gives one or more security groups (called the <i>source groups</i>) permission to access a security group for your account. A source group can be for your own AWS account, or another. You can have up to 100 rules per group.</p> <p>[EC2-VPC] This action gives one or more IPv4 or IPv6 CIDR address ranges permission to access a security group in your VPC, or gives one or more other security groups (called the <i>source groups</i>) permission to access a security group for your VPC. The security groups must all be for the same VPC or a peer VPC in a VPC peering connection. For more information about VPC security group limits, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Appendix_Limits.html">Amazon VPC Limits</a>.</p> <p>You can optionally specify a description for the security group rule.</p>
     fn authorize_security_group_ingress(
         &self,
         input: &AuthorizeSecurityGroupIngressRequest,
@@ -62590,7 +74102,7 @@ where
         }
     }
 
-    /// <p>Cancels the specified Spot fleet requests.</p> <p>After you cancel a Spot fleet request, the Spot fleet launches no new Spot instances. You must specify whether the Spot fleet should also terminate its Spot instances. If you terminate the instances, the Spot fleet request enters the <code>cancelled_terminating</code> state. Otherwise, the Spot fleet request enters the <code>cancelled_running</code> state and the instances continue to run until they are interrupted or you terminate them manually.</p>
+    /// <p>Cancels the specified Spot Fleet requests.</p> <p>After you cancel a Spot Fleet request, the Spot Fleet launches no new Spot Instances. You must specify whether the Spot Fleet should also terminate its Spot Instances. If you terminate the instances, the Spot Fleet request enters the <code>cancelled_terminating</code> state. Otherwise, the Spot Fleet request enters the <code>cancelled_running</code> state and the instances continue to run until they are interrupted or you terminate them manually.</p>
     fn cancel_spot_fleet_requests(
         &self,
         input: &CancelSpotFleetRequestsRequest,
@@ -62638,7 +74150,7 @@ where
         }
     }
 
-    /// <p><p>Cancels one or more Spot instance requests. Spot instances are instances that Amazon EC2 starts on your behalf when the bid price that you specify exceeds the current Spot price. Amazon EC2 periodically sets the Spot price based on available Spot instance capacity and current Spot instance requests. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-requests.html">Spot Instance Requests</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <important> <p>Canceling a Spot instance request does not terminate running Spot instances associated with the request.</p> </important></p>
+    /// <p><p>Cancels one or more Spot Instance requests. Spot Instances are instances that Amazon EC2 starts on your behalf when the maximum price that you specify exceeds the current Spot price. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-requests.html">Spot Instance Requests</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <important> <p>Canceling a Spot Instance request does not terminate running Spot Instances associated with the request.</p> </important></p>
     fn cancel_spot_instance_requests(
         &self,
         input: &CancelSpotInstanceRequestsRequest,
@@ -62686,7 +74198,7 @@ where
         }
     }
 
-    /// <p>Determines whether a product code is associated with an instance. This action can only be used by the owner of the product code. It is useful when a product code owner needs to verify whether another user's instance is eligible for support.</p>
+    /// <p>Determines whether a product code is associated with an instance. This action can only be used by the owner of the product code. It is useful when a product code owner must verify whether another user's instance is eligible for support.</p>
     fn confirm_product_instance(
         &self,
         input: &ConfirmProductInstanceRequest,
@@ -62728,6 +74240,54 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(ConfirmProductInstanceError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Copies the specified Amazon FPGA Image (AFI) to the current region.</p>
+    fn copy_fpga_image(
+        &self,
+        input: &CopyFpgaImageRequest,
+    ) -> Result<CopyFpgaImageResult, CopyFpgaImageError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "CopyFpgaImage");
+        params.put("Version", "2016-11-15");
+        CopyFpgaImageRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = CopyFpgaImageResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(CopyFpgaImageResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CopyFpgaImageError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -62827,7 +74387,7 @@ where
         }
     }
 
-    /// <p><p>Provides information to AWS about your VPN customer gateway device. The customer gateway is the appliance at your end of the VPN connection. (The device on the AWS side of the VPN connection is the virtual private gateway.) You must provide the Internet-routable IP address of the customer gateway&#39;s external interface. The IP address must be static and may be behind a device performing network address translation (NAT).</p> <p>For devices that use Border Gateway Protocol (BGP), you can also provide the device&#39;s BGP Autonomous System Number (ASN). You can use an existing ASN assigned to your network. If you don&#39;t have an ASN already, you can use a private ASN (in the 64512 - 65534 range).</p> <note> <p>Amazon EC2 supports all 2-byte ASN numbers in the range of 1 - 65534, with the exception of 7224, which is reserved in the <code>us-east-1</code> region, and 9059, which is reserved in the <code>eu-west-1</code> region.</p> </note> <p>For more information about VPN customer gateways, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <important> <p>You cannot create more than one customer gateway with the same VPN type, IP address, and BGP ASN parameter values. If you run an identical request more than one time, the first request creates the customer gateway, and subsequent requests return information about the existing customer gateway. The subsequent requests do not create new customer gateway resources.</p> </important></p>
+    /// <p><p>Provides information to AWS about your VPN customer gateway device. The customer gateway is the appliance at your end of the VPN connection. (The device on the AWS side of the VPN connection is the virtual private gateway.) You must provide the Internet-routable IP address of the customer gateway&#39;s external interface. The IP address must be static and may be behind a device performing network address translation (NAT).</p> <p>For devices that use Border Gateway Protocol (BGP), you can also provide the device&#39;s BGP Autonomous System Number (ASN). You can use an existing ASN assigned to your network. If you don&#39;t have an ASN already, you can use a private ASN (in the 64512 - 65534 range).</p> <note> <p>Amazon EC2 supports all 2-byte ASN numbers in the range of 1 - 65534, with the exception of 7224, which is reserved in the <code>us-east-1</code> region, and 9059, which is reserved in the <code>eu-west-1</code> region.</p> </note> <p>For more information about VPN customer gateways, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">AWS Managed VPN Connections</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <important> <p>You cannot create more than one customer gateway with the same VPN type, IP address, and BGP ASN parameter values. If you run an identical request more than one time, the first request creates the customer gateway, and subsequent requests return information about the existing customer gateway. The subsequent requests do not create new customer gateway resources.</p> </important></p>
     fn create_customer_gateway(
         &self,
         input: &CreateCustomerGatewayRequest,
@@ -62869,6 +74429,54 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(CreateCustomerGatewayError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Creates a default subnet with a size <code>/20</code> IPv4 CIDR block in the specified Availability Zone in your default VPC. You can have only one default subnet per Availability Zone. For more information, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/default-vpc.html#create-default-subnet">Creating a Default Subnet</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    fn create_default_subnet(
+        &self,
+        input: &CreateDefaultSubnetRequest,
+    ) -> Result<CreateDefaultSubnetResult, CreateDefaultSubnetError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "CreateDefaultSubnet");
+        params.put("Version", "2016-11-15");
+        CreateDefaultSubnetRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = CreateDefaultSubnetResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(CreateDefaultSubnetResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateDefaultSubnetError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -63261,7 +74869,7 @@ where
         }
     }
 
-    /// <p>Creates a 2048-bit RSA key pair with the specified name. Amazon EC2 stores the public key and displays the private key for you to save to a file. The private key is returned as an unencrypted PEM encoded PKCS#8 private key. If a key with the specified name already exists, Amazon EC2 returns an error.</p> <p>You can have up to five thousand key pairs per region.</p> <p>The key pair returned to you is available only in the region in which you create it. To create a key pair that is available in all regions, use <a>ImportKeyPair</a>.</p> <p>For more information about key pairs, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Creates a 2048-bit RSA key pair with the specified name. Amazon EC2 stores the public key and displays the private key for you to save to a file. The private key is returned as an unencrypted PEM encoded PKCS#1 private key. If a key with the specified name already exists, Amazon EC2 returns an error.</p> <p>You can have up to five thousand key pairs per region.</p> <p>The key pair returned to you is available only in the region in which you create it. If you prefer, you can create your own key pair using a third-party tool and upload it to any region using <a>ImportKeyPair</a>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn create_key_pair(&self, input: &CreateKeyPairRequest) -> Result<KeyPair, CreateKeyPairError> {
         let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
         let mut params = Params::new();
@@ -63300,6 +74908,102 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(CreateKeyPairError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Creates a launch template. A launch template contains the parameters to launch an instance. When you launch an instance using <a>RunInstances</a>, you can specify a launch template instead of providing the launch parameters in the request.</p>
+    fn create_launch_template(
+        &self,
+        input: &CreateLaunchTemplateRequest,
+    ) -> Result<CreateLaunchTemplateResult, CreateLaunchTemplateError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "CreateLaunchTemplate");
+        params.put("Version", "2016-11-15");
+        CreateLaunchTemplateRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = CreateLaunchTemplateResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(CreateLaunchTemplateResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateLaunchTemplateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Creates a new version for a launch template. You can specify an existing version of launch template from which to base the new version.</p> <p>Launch template versions are numbered in the order in which they are created. You cannot specify, change, or replace the numbering of launch template versions.</p>
+    fn create_launch_template_version(
+        &self,
+        input: &CreateLaunchTemplateVersionRequest,
+    ) -> Result<CreateLaunchTemplateVersionResult, CreateLaunchTemplateVersionError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "CreateLaunchTemplateVersion");
+        params.put("Version", "2016-11-15");
+        CreateLaunchTemplateVersionRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = CreateLaunchTemplateVersionResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(CreateLaunchTemplateVersionResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateLaunchTemplateVersionError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -63530,7 +75234,7 @@ where
         }
     }
 
-    /// <p>Creates a placement group that you launch cluster instances into. You must give the group a name that's unique within the scope of your account.</p> <p>For more information about placement groups and cluster instances, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using_cluster_computing.html">Cluster Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Creates a placement group in which to launch instances. The strategy of the placement group determines how the instances are organized within the group. </p> <p>A <code>cluster</code> placement group is a logical grouping of instances within a single Availability Zone that benefit from low network latency, high network throughput. A <code>spread</code> placement group places instances on distinct hardware.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html">Placement Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn create_placement_group(
         &self,
         input: &CreatePlacementGroupRequest,
@@ -63802,7 +75506,7 @@ where
         }
     }
 
-    /// <p>Creates a data feed for Spot instances, enabling you to view Spot instance usage logs. You can create one data feed per AWS account. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-data-feeds.html">Spot Instance Data Feed</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Creates a data feed for Spot Instances, enabling you to view Spot Instance usage logs. You can create one data feed per AWS account. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-data-feeds.html">Spot Instance Data Feed</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn create_spot_datafeed_subscription(
         &self,
         input: &CreateSpotDatafeedSubscriptionRequest,
@@ -63852,7 +75556,7 @@ where
         }
     }
 
-    /// <p>Creates a subnet in an existing VPC.</p> <p>When you create each subnet, you provide the VPC ID and the CIDR block you want for the subnet. After you create a subnet, you can't change its CIDR block. The subnet's IPv4 CIDR block can be the same as the VPC's IPv4 CIDR block (assuming you want only a single subnet in the VPC), or a subset of the VPC's IPv4 CIDR block. If you create more than one subnet in a VPC, the subnets' CIDR blocks must not overlap. The smallest IPv4 subnet (and VPC) you can create uses a /28 netmask (16 IPv4 addresses), and the largest uses a /16 netmask (65,536 IPv4 addresses).</p> <p>If you've associated an IPv6 CIDR block with your VPC, you can create a subnet with an IPv6 CIDR block that uses a /64 prefix length. </p> <important> <p>AWS reserves both the first four and the last IPv4 address in each subnet's CIDR block. They're not available for use.</p> </important> <p>If you add more than one subnet to a VPC, they're set up in a star topology with a logical router in the middle.</p> <p>If you launch an instance in a VPC using an Amazon EBS-backed AMI, the IP address doesn't change if you stop and restart the instance (unlike a similar instance launched outside a VPC, which gets a new IP address when restarted). It's therefore possible to have a subnet with no running instances (they're all stopped), but no remaining IP addresses available.</p> <p>For more information about subnets, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html">Your VPC and Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Creates a subnet in an existing VPC.</p> <p>When you create each subnet, you provide the VPC ID and the IPv4 CIDR block you want for the subnet. After you create a subnet, you can't change its CIDR block. The size of the subnet's IPv4 CIDR block can be the same as a VPC's IPv4 CIDR block, or a subset of a VPC's IPv4 CIDR block. If you create more than one subnet in a VPC, the subnets' CIDR blocks must not overlap. The smallest IPv4 subnet (and VPC) you can create uses a /28 netmask (16 IPv4 addresses), and the largest uses a /16 netmask (65,536 IPv4 addresses).</p> <p>If you've associated an IPv6 CIDR block with your VPC, you can create a subnet with an IPv6 CIDR block that uses a /64 prefix length. </p> <important> <p>AWS reserves both the first four and the last IPv4 address in each subnet's CIDR block. They're not available for use.</p> </important> <p>If you add more than one subnet to a VPC, they're set up in a star topology with a logical router in the middle.</p> <p>If you launch an instance in a VPC using an Amazon EBS-backed AMI, the IP address doesn't change if you stop and restart the instance (unlike a similar instance launched outside a VPC, which gets a new IP address when restarted). It's therefore possible to have a subnet with no running instances (they're all stopped), but no remaining IP addresses available.</p> <p>For more information about subnets, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_Subnets.html">Your VPC and Subnets</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn create_subnet(
         &self,
         input: &CreateSubnetRequest,
@@ -64017,7 +75721,7 @@ where
         }
     }
 
-    /// <p>Creates a VPC endpoint for a specified AWS service. An endpoint enables you to create a private connection between your VPC and another AWS service in your account. You can specify an endpoint policy to attach to the endpoint that will control access to the service from your VPC. You can also specify the VPC route tables that use the endpoint.</p> <p>Use <a>DescribeVpcEndpointServices</a> to get a list of supported AWS services.</p>
+    /// <p>Creates a VPC endpoint for a specified service. An endpoint enables you to create a private connection between your VPC and the service. The service may be provided by AWS, an AWS Marketplace partner, or another AWS account. For more information, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-endpoints.html">VPC Endpoints</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>A <code>gateway</code> endpoint serves as a target for a route in your route table for traffic destined for the AWS service. You can specify an endpoint policy to attach to the endpoint that will control access to the service from your VPC. You can also specify the VPC route tables that use the endpoint.</p> <p>An <code>interface</code> endpoint is a network interface in your subnet that serves as an endpoint for communicating with the specified service. You can specify the subnets in which to create an endpoint, and the security groups to associate with the endpoint network interface.</p> <p>Use <a>DescribeVpcEndpointServices</a> to get a list of supported services.</p>
     fn create_vpc_endpoint(
         &self,
         input: &CreateVpcEndpointRequest,
@@ -64065,7 +75769,117 @@ where
         }
     }
 
-    /// <p>Requests a VPC peering connection between two VPCs: a requester VPC that you own and a peer VPC with which to create the connection. The peer VPC can belong to another AWS account. The requester VPC and peer VPC cannot have overlapping CIDR blocks.</p> <p>The owner of the peer VPC must accept the peering request to activate the peering connection. The VPC peering connection request expires after 7 days, after which it cannot be accepted or rejected.</p> <p>If you try to create a VPC peering connection between VPCs that have overlapping CIDR blocks, the VPC peering connection status goes to <code>failed</code>.</p>
+    /// <p>Creates a connection notification for a specified VPC endpoint or VPC endpoint service. A connection notification notifies you of specific endpoint events. You must create an SNS topic to receive notifications. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/CreateTopic.html">Create a Topic</a> in the <i>Amazon Simple Notification Service Developer Guide</i>.</p> <p>You can create a connection notification for interface endpoints only.</p>
+    fn create_vpc_endpoint_connection_notification(
+        &self,
+        input: &CreateVpcEndpointConnectionNotificationRequest,
+    ) -> Result<
+        CreateVpcEndpointConnectionNotificationResult,
+        CreateVpcEndpointConnectionNotificationError,
+    > {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "CreateVpcEndpointConnectionNotification");
+        params.put("Version", "2016-11-15");
+        CreateVpcEndpointConnectionNotificationRequestSerializer::serialize(
+            &mut params,
+            "",
+            &input,
+        );
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = CreateVpcEndpointConnectionNotificationResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(
+                        CreateVpcEndpointConnectionNotificationResultDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack
+                        )
+                    );
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateVpcEndpointConnectionNotificationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Creates a VPC endpoint service configuration to which service consumers (AWS accounts, IAM users, and IAM roles) can connect. Service consumers can create an interface VPC endpoint to connect to your service.</p> <p>To create an endpoint service configuration, you must first create a Network Load Balancer for your service. For more information, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/endpoint-service.html">VPC Endpoint Services</a> in the <i>Amazon Virtual Private Cloud User Guide</i>. </p>
+    fn create_vpc_endpoint_service_configuration(
+        &self,
+        input: &CreateVpcEndpointServiceConfigurationRequest,
+    ) -> Result<
+        CreateVpcEndpointServiceConfigurationResult,
+        CreateVpcEndpointServiceConfigurationError,
+    > {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "CreateVpcEndpointServiceConfiguration");
+        params.put("Version", "2016-11-15");
+        CreateVpcEndpointServiceConfigurationRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = CreateVpcEndpointServiceConfigurationResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(
+                        CreateVpcEndpointServiceConfigurationResultDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack
+                        )
+                    );
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(CreateVpcEndpointServiceConfigurationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Requests a VPC peering connection between two VPCs: a requester VPC that you own and an accepter VPC with which to create the connection. The accepter VPC can belong to another AWS account and can be in a different region to the requester VPC. The requester VPC and accepter VPC cannot have overlapping CIDR blocks.</p> <p>The owner of the accepter VPC must accept the peering request to activate the peering connection. The VPC peering connection request expires after 7 days, after which it cannot be accepted or rejected.</p> <p>If you create a VPC peering connection request between VPCs with overlapping CIDR blocks, the VPC peering connection has a status of <code>failed</code>.</p>
     fn create_vpc_peering_connection(
         &self,
         input: &CreateVpcPeeringConnectionRequest,
@@ -64113,7 +75927,7 @@ where
         }
     }
 
-    /// <p>Creates a VPN connection between an existing virtual private gateway and a VPN customer gateway. The only supported connection type is <code>ipsec.1</code>.</p> <p>The response includes information that you need to give to your network administrator to configure your customer gateway.</p> <important> <p>We strongly recommend that you use HTTPS when calling this operation because the response contains sensitive cryptographic information for configuring your customer gateway.</p> </important> <p>If you decide to shut down your VPN connection for any reason and later create a new VPN connection, you must reconfigure your customer gateway with the new information returned from this call.</p> <p>This is an idempotent operation. If you perform the operation more than once, Amazon EC2 doesn't return an error.</p> <p>For more information about VPN connections, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Creates a VPN connection between an existing virtual private gateway and a VPN customer gateway. The only supported connection type is <code>ipsec.1</code>.</p> <p>The response includes information that you need to give to your network administrator to configure your customer gateway.</p> <important> <p>We strongly recommend that you use HTTPS when calling this operation because the response contains sensitive cryptographic information for configuring your customer gateway.</p> </important> <p>If you decide to shut down your VPN connection for any reason and later create a new VPN connection, you must reconfigure your customer gateway with the new information returned from this call.</p> <p>This is an idempotent operation. If you perform the operation more than once, Amazon EC2 doesn't return an error.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">AWS Managed VPN Connections</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn create_vpn_connection(
         &self,
         input: &CreateVpnConnectionRequest,
@@ -64161,7 +75975,7 @@ where
         }
     }
 
-    /// <p>Creates a static route associated with a VPN connection between an existing virtual private gateway and a VPN customer gateway. The static route allows traffic to be routed from the virtual private gateway to the VPN customer gateway.</p> <p>For more information about VPN connections, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Creates a static route associated with a VPN connection between an existing virtual private gateway and a VPN customer gateway. The static route allows traffic to be routed from the virtual private gateway to the VPN customer gateway.</p> <p>For more information about VPN connections, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">AWS Managed VPN Connections</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn create_vpn_connection_route(
         &self,
         input: &CreateVpnConnectionRouteRequest,
@@ -64191,7 +76005,7 @@ where
         }
     }
 
-    /// <p>Creates a virtual private gateway. A virtual private gateway is the endpoint on the VPC side of your VPN connection. You can create a virtual private gateway before creating the VPC itself.</p> <p>For more information about virtual private gateways, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Creates a virtual private gateway. A virtual private gateway is the endpoint on the VPC side of your VPN connection. You can create a virtual private gateway before creating the VPC itself.</p> <p>For more information about virtual private gateways, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">AWS Managed VPN Connections</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn create_vpn_gateway(
         &self,
         input: &CreateVpnGatewayRequest,
@@ -64397,6 +76211,54 @@ where
         }
     }
 
+    /// <p>Deletes the specified Amazon FPGA Image (AFI).</p>
+    fn delete_fpga_image(
+        &self,
+        input: &DeleteFpgaImageRequest,
+    ) -> Result<DeleteFpgaImageResult, DeleteFpgaImageError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DeleteFpgaImage");
+        params.put("Version", "2016-11-15");
+        DeleteFpgaImageRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = DeleteFpgaImageResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(DeleteFpgaImageResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteFpgaImageError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Deletes the specified Internet gateway. You must detach the Internet gateway from the VPC before you can delete it.</p>
     fn delete_internet_gateway(
         &self,
@@ -64448,6 +76310,104 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(DeleteKeyPairError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Deletes a launch template. Deleting a launch template deletes all of its versions.</p>
+    fn delete_launch_template(
+        &self,
+        input: &DeleteLaunchTemplateRequest,
+    ) -> Result<DeleteLaunchTemplateResult, DeleteLaunchTemplateError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DeleteLaunchTemplate");
+        params.put("Version", "2016-11-15");
+        DeleteLaunchTemplateRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = DeleteLaunchTemplateResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(DeleteLaunchTemplateResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteLaunchTemplateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Deletes one or more versions of a launch template. You cannot delete the default version of a launch template; you must first assign a different version as the default. If the default version is the only version for the launch template, you must delete the entire launch template using <a>DeleteLaunchTemplate</a>.</p>
+    fn delete_launch_template_versions(
+        &self,
+        input: &DeleteLaunchTemplateVersionsRequest,
+    ) -> Result<DeleteLaunchTemplateVersionsResult, DeleteLaunchTemplateVersionsError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DeleteLaunchTemplateVersions");
+        params.put("Version", "2016-11-15");
+        DeleteLaunchTemplateVersionsRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = DeleteLaunchTemplateVersionsResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(
+                        DeleteLaunchTemplateVersionsResultDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack
+                        )
+                    );
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteLaunchTemplateVersionsError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -64642,7 +76602,7 @@ where
         }
     }
 
-    /// <p>Deletes the specified placement group. You must terminate all instances in the placement group before you can delete the placement group. For more information about placement groups and cluster instances, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using_cluster_computing.html">Cluster Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Deletes the specified placement group. You must terminate all instances in the placement group before you can delete the placement group. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html">Placement Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn delete_placement_group(
         &self,
         input: &DeletePlacementGroupRequest,
@@ -64786,7 +76746,7 @@ where
         }
     }
 
-    /// <p>Deletes the data feed for Spot instances.</p>
+    /// <p>Deletes the data feed for Spot Instances.</p>
     fn delete_spot_datafeed_subscription(
         &self,
         input: &DeleteSpotDatafeedSubscriptionRequest,
@@ -64843,7 +76803,7 @@ where
         }
     }
 
-    /// <p>Deletes the specified set of tags from the specified set of resources. This call is designed to follow a <code>DescribeTags</code> request.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Resources</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Deletes the specified set of tags from the specified set of resources.</p> <p>To list the current tags, use <a>DescribeTags</a>. For more information about tags, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Resources</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn delete_tags(&self, input: &DeleteTagsRequest) -> Result<(), DeleteTagsError> {
         let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
         let mut params = Params::new();
@@ -64924,7 +76884,117 @@ where
         }
     }
 
-    /// <p>Deletes one or more specified VPC endpoints. Deleting the endpoint also deletes the endpoint routes in the route tables that were associated with the endpoint.</p>
+    /// <p>Deletes one or more VPC endpoint connection notifications.</p>
+    fn delete_vpc_endpoint_connection_notifications(
+        &self,
+        input: &DeleteVpcEndpointConnectionNotificationsRequest,
+    ) -> Result<
+        DeleteVpcEndpointConnectionNotificationsResult,
+        DeleteVpcEndpointConnectionNotificationsError,
+    > {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DeleteVpcEndpointConnectionNotifications");
+        params.put("Version", "2016-11-15");
+        DeleteVpcEndpointConnectionNotificationsRequestSerializer::serialize(
+            &mut params,
+            "",
+            &input,
+        );
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = DeleteVpcEndpointConnectionNotificationsResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(
+                        DeleteVpcEndpointConnectionNotificationsResultDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack
+                        )
+                    );
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteVpcEndpointConnectionNotificationsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Deletes one or more VPC endpoint service configurations in your account. Before you delete the endpoint service configuration, you must reject any <code>Available</code> or <code>PendingAcceptance</code> interface endpoint connections that are attached to the service.</p>
+    fn delete_vpc_endpoint_service_configurations(
+        &self,
+        input: &DeleteVpcEndpointServiceConfigurationsRequest,
+    ) -> Result<
+        DeleteVpcEndpointServiceConfigurationsResult,
+        DeleteVpcEndpointServiceConfigurationsError,
+    > {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DeleteVpcEndpointServiceConfigurations");
+        params.put("Version", "2016-11-15");
+        DeleteVpcEndpointServiceConfigurationsRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = DeleteVpcEndpointServiceConfigurationsResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(
+                        DeleteVpcEndpointServiceConfigurationsResultDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack
+                        )
+                    );
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DeleteVpcEndpointServiceConfigurationsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Deletes one or more specified VPC endpoints. Deleting a gateway endpoint also deletes the endpoint routes in the route tables that were associated with the endpoint. Deleting an interface endpoint deletes the endpoint network interfaces.</p>
     fn delete_vpc_endpoints(
         &self,
         input: &DeleteVpcEndpointsRequest,
@@ -64972,7 +77042,7 @@ where
         }
     }
 
-    /// <p>Deletes a VPC peering connection. Either the owner of the requester VPC or the owner of the peer VPC can delete the VPC peering connection if it's in the <code>active</code> state. The owner of the requester VPC can delete a VPC peering connection in the <code>pending-acceptance</code> state. </p>
+    /// <p>Deletes a VPC peering connection. Either the owner of the requester VPC or the owner of the accepter VPC can delete the VPC peering connection if it's in the <code>active</code> state. The owner of the requester VPC can delete a VPC peering connection in the <code>pending-acceptance</code> state. </p>
     fn delete_vpc_peering_connection(
         &self,
         input: &DeleteVpcPeeringConnectionRequest,
@@ -65427,7 +77497,7 @@ where
         }
     }
 
-    /// <p>Describes one or more of your VPN customer gateways.</p> <p>For more information about VPN customer gateways, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Describes one or more of your VPN customer gateways.</p> <p>For more information about VPN customer gateways, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">AWS Managed VPN Connections</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn describe_customer_gateways(
         &self,
         input: &DescribeCustomerGatewaysRequest,
@@ -65574,7 +77644,7 @@ where
         }
     }
 
-    /// <p>Describes the Elastic GPUs associated with your instances. For more information about Elastic GPUs, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/elastic-gpus.html">Amazon EC2 Elastic GPUs</a>.</p>
+    /// <p>Describes the Elastic GPUs associated with your instances. For more information about Elastic GPUs, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/elastic-gpus.html">Amazon EC2 Elastic GPUs</a>.</p>
     fn describe_elastic_gpus(
         &self,
         input: &DescribeElasticGpusRequest,
@@ -65712,6 +77782,54 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(DescribeFlowLogsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Describes the specified attribute of the specified Amazon FPGA Image (AFI).</p>
+    fn describe_fpga_image_attribute(
+        &self,
+        input: &DescribeFpgaImageAttributeRequest,
+    ) -> Result<DescribeFpgaImageAttributeResult, DescribeFpgaImageAttributeError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeFpgaImageAttribute");
+        params.put("Version", "2016-11-15");
+        DescribeFpgaImageAttributeRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = DescribeFpgaImageAttributeResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(DescribeFpgaImageAttributeResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeFpgaImageAttributeError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -66301,6 +78419,57 @@ where
         }
     }
 
+    /// <p>Describes the credit option for CPU usage of one or more of your T2 instances. The credit options are <code>standard</code> and <code>unlimited</code>.</p> <p>If you do not specify an instance ID, Amazon EC2 returns only the T2 instances with the <code>unlimited</code> credit option. If you specify one or more instance IDs, Amazon EC2 returns the credit option (<code>standard</code> or <code>unlimited</code>) of those instances. If you specify an instance ID that is not valid, such as an instance that is not a T2 instance, an error is returned.</p> <p>Recently terminated instances might appear in the returned results. This interval is usually less than one hour.</p> <p>If an Availability Zone is experiencing a service disruption and you specify instance IDs in the affected zone, or do not specify any instance IDs at all, the call fails. If you specify only instance IDs in an unaffected zone, the call works normally.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/t2-instances.html">T2 Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    fn describe_instance_credit_specifications(
+        &self,
+        input: &DescribeInstanceCreditSpecificationsRequest,
+    ) -> Result<DescribeInstanceCreditSpecificationsResult, DescribeInstanceCreditSpecificationsError>
+    {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeInstanceCreditSpecifications");
+        params.put("Version", "2016-11-15");
+        DescribeInstanceCreditSpecificationsRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = DescribeInstanceCreditSpecificationsResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(
+                        DescribeInstanceCreditSpecificationsResultDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack
+                        )
+                    );
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeInstanceCreditSpecificationsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p><p>Describes the status of one or more instances. By default, only running instances are described, unless you specifically indicate to return the status of all instances.</p> <p>Instance status includes the following components:</p> <ul> <li> <p> <b>Status checks</b> - Amazon EC2 performs status checks on running EC2 instances to identify hardware and software issues. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-system-instance-status-check.html">Status Checks for Your Instances</a> and <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstances.html">Troubleshooting Instances with Failed Status Checks</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> <li> <p> <b>Scheduled events</b> - Amazon EC2 can schedule events (such as reboot, stop, or terminate) for your instances related to hardware issues, software updates, or system maintenance. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/monitoring-instances-status-check_sched.html">Scheduled Events for Your Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> <li> <p> <b>Instance state</b> - You can manage your instances from the moment you launch them through their termination. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html">Instance Lifecycle</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </li> </ul></p>
     fn describe_instance_status(
         &self,
@@ -66487,6 +78656,104 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(DescribeKeyPairsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Describes one or more versions of a specified launch template. You can describe all versions, individual versions, or a range of versions.</p>
+    fn describe_launch_template_versions(
+        &self,
+        input: &DescribeLaunchTemplateVersionsRequest,
+    ) -> Result<DescribeLaunchTemplateVersionsResult, DescribeLaunchTemplateVersionsError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeLaunchTemplateVersions");
+        params.put("Version", "2016-11-15");
+        DescribeLaunchTemplateVersionsRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = DescribeLaunchTemplateVersionsResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(
+                        DescribeLaunchTemplateVersionsResultDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack
+                        )
+                    );
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeLaunchTemplateVersionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Describes one or more launch templates.</p>
+    fn describe_launch_templates(
+        &self,
+        input: &DescribeLaunchTemplatesRequest,
+    ) -> Result<DescribeLaunchTemplatesResult, DescribeLaunchTemplatesError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeLaunchTemplates");
+        params.put("Version", "2016-11-15");
+        DescribeLaunchTemplatesRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = DescribeLaunchTemplatesResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(DescribeLaunchTemplatesResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeLaunchTemplatesError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -66787,7 +79054,7 @@ where
         }
     }
 
-    /// <p>Describes one or more of your placement groups. For more information about placement groups and cluster instances, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using_cluster_computing.html">Cluster Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Describes one or more of your placement groups. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html">Placement Groups</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn describe_placement_groups(
         &self,
         input: &DescribePlacementGroupsRequest,
@@ -66835,7 +79102,7 @@ where
         }
     }
 
-    /// <p>Describes available AWS services in a prefix list format, which includes the prefix list name and prefix list ID of the service and the IP address range for the service. A prefix list ID is required for creating an outbound security group rule that allows traffic from a VPC to access an AWS service through a VPC endpoint.</p>
+    /// <p>Describes available AWS services in a prefix list format, which includes the prefix list name and prefix list ID of the service and the IP address range for the service. A prefix list ID is required for creating an outbound security group rule that allows traffic from a VPC to access an AWS service through a gateway VPC endpoint.</p>
     fn describe_prefix_lists(
         &self,
         input: &DescribePrefixListsRequest,
@@ -67477,7 +79744,7 @@ where
         }
     }
 
-    /// <p>Describes the data feed for Spot instances. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-data-feeds.html">Spot Instance Data Feed</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Describes the data feed for Spot Instances. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-data-feeds.html">Spot Instance Data Feed</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn describe_spot_datafeed_subscription(
         &self,
         input: &DescribeSpotDatafeedSubscriptionRequest,
@@ -67527,7 +79794,7 @@ where
         }
     }
 
-    /// <p>Describes the running instances for the specified Spot fleet.</p>
+    /// <p>Describes the running instances for the specified Spot Fleet.</p>
     fn describe_spot_fleet_instances(
         &self,
         input: &DescribeSpotFleetInstancesRequest,
@@ -67577,7 +79844,7 @@ where
         }
     }
 
-    /// <p>Describes the events for the specified Spot fleet request during the specified time.</p> <p>Spot fleet events are delayed by up to 30 seconds before they can be described. This ensures that you can query by the last evaluated time and not miss a recorded event.</p>
+    /// <p>Describes the events for the specified Spot Fleet request during the specified time.</p> <p>Spot Fleet events are delayed by up to 30 seconds before they can be described. This ensures that you can query by the last evaluated time and not miss a recorded event.</p>
     fn describe_spot_fleet_request_history(
         &self,
         input: &DescribeSpotFleetRequestHistoryRequest,
@@ -67627,7 +79894,7 @@ where
         }
     }
 
-    /// <p>Describes your Spot fleet requests.</p> <p>Spot fleet requests are deleted 48 hours after they are canceled and their instances are terminated.</p>
+    /// <p>Describes your Spot Fleet requests.</p> <p>Spot Fleet requests are deleted 48 hours after they are canceled and their instances are terminated.</p>
     fn describe_spot_fleet_requests(
         &self,
         input: &DescribeSpotFleetRequestsRequest,
@@ -67675,7 +79942,7 @@ where
         }
     }
 
-    /// <p>Describes the Spot instance requests that belong to your account. Spot instances are instances that Amazon EC2 launches when the bid price that you specify exceeds the current Spot price. Amazon EC2 periodically sets the Spot price based on available Spot instance capacity and current Spot instance requests. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-requests.html">Spot Instance Requests</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>You can use <code>DescribeSpotInstanceRequests</code> to find a running Spot instance by examining the response. If the status of the Spot instance is <code>fulfilled</code>, the instance ID appears in the response and contains the identifier of the instance. Alternatively, you can use <a>DescribeInstances</a> with a filter to look for instances where the instance lifecycle is <code>spot</code>.</p> <p>Spot instance requests are deleted 4 hours after they are canceled and their instances are terminated.</p>
+    /// <p>Describes the Spot Instance requests that belong to your account. Spot Instances are instances that Amazon EC2 launches when the Spot price that you specify exceeds the current Spot price. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-requests.html">Spot Instance Requests</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>You can use <code>DescribeSpotInstanceRequests</code> to find a running Spot Instance by examining the response. If the status of the Spot Instance is <code>fulfilled</code>, the instance ID appears in the response and contains the identifier of the instance. Alternatively, you can use <a>DescribeInstances</a> with a filter to look for instances where the instance lifecycle is <code>spot</code>.</p> <p>Spot Instance requests are deleted 4 hours after they are canceled and their instances are terminated.</p>
     fn describe_spot_instance_requests(
         &self,
         input: &DescribeSpotInstanceRequestsRequest,
@@ -68257,7 +80524,224 @@ where
         }
     }
 
-    /// <p>Describes all supported AWS services that can be specified when creating a VPC endpoint.</p>
+    /// <p>Describes the connection notifications for VPC endpoints and VPC endpoint services.</p>
+    fn describe_vpc_endpoint_connection_notifications(
+        &self,
+        input: &DescribeVpcEndpointConnectionNotificationsRequest,
+    ) -> Result<
+        DescribeVpcEndpointConnectionNotificationsResult,
+        DescribeVpcEndpointConnectionNotificationsError,
+    > {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeVpcEndpointConnectionNotifications");
+        params.put("Version", "2016-11-15");
+        DescribeVpcEndpointConnectionNotificationsRequestSerializer::serialize(
+            &mut params,
+            "",
+            &input,
+        );
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = DescribeVpcEndpointConnectionNotificationsResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(
+                        DescribeVpcEndpointConnectionNotificationsResultDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack
+                        )
+                    );
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeVpcEndpointConnectionNotificationsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Describes the VPC endpoint connections to your VPC endpoint services, including any endpoints that are pending your acceptance.</p>
+    fn describe_vpc_endpoint_connections(
+        &self,
+        input: &DescribeVpcEndpointConnectionsRequest,
+    ) -> Result<DescribeVpcEndpointConnectionsResult, DescribeVpcEndpointConnectionsError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeVpcEndpointConnections");
+        params.put("Version", "2016-11-15");
+        DescribeVpcEndpointConnectionsRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = DescribeVpcEndpointConnectionsResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(
+                        DescribeVpcEndpointConnectionsResultDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack
+                        )
+                    );
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeVpcEndpointConnectionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Describes the VPC endpoint service configurations in your account (your services).</p>
+    fn describe_vpc_endpoint_service_configurations(
+        &self,
+        input: &DescribeVpcEndpointServiceConfigurationsRequest,
+    ) -> Result<
+        DescribeVpcEndpointServiceConfigurationsResult,
+        DescribeVpcEndpointServiceConfigurationsError,
+    > {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeVpcEndpointServiceConfigurations");
+        params.put("Version", "2016-11-15");
+        DescribeVpcEndpointServiceConfigurationsRequestSerializer::serialize(
+            &mut params,
+            "",
+            &input,
+        );
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = DescribeVpcEndpointServiceConfigurationsResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(
+                        DescribeVpcEndpointServiceConfigurationsResultDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack
+                        )
+                    );
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeVpcEndpointServiceConfigurationsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Describes the principals (service consumers) that are permitted to discover your VPC endpoint service.</p>
+    fn describe_vpc_endpoint_service_permissions(
+        &self,
+        input: &DescribeVpcEndpointServicePermissionsRequest,
+    ) -> Result<
+        DescribeVpcEndpointServicePermissionsResult,
+        DescribeVpcEndpointServicePermissionsError,
+    > {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeVpcEndpointServicePermissions");
+        params.put("Version", "2016-11-15");
+        DescribeVpcEndpointServicePermissionsRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = DescribeVpcEndpointServicePermissionsResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(
+                        DescribeVpcEndpointServicePermissionsResultDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack
+                        )
+                    );
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(DescribeVpcEndpointServicePermissionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Describes available services to which you can create a VPC endpoint.</p>
     fn describe_vpc_endpoint_services(
         &self,
         input: &DescribeVpcEndpointServicesRequest,
@@ -68451,7 +80935,7 @@ where
         }
     }
 
-    /// <p>Describes one or more of your VPN connections.</p> <p>For more information about VPN connections, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">Adding a Hardware Virtual Private Gateway to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Describes one or more of your VPN connections.</p> <p>For more information about VPN connections, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">AWS Managed VPN Connections</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn describe_vpn_connections(
         &self,
         input: &DescribeVpnConnectionsRequest,
@@ -68499,7 +80983,7 @@ where
         }
     }
 
-    /// <p>Describes one or more of your virtual private gateways.</p> <p>For more information about virtual private gateways, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">Adding an IPsec Hardware VPN to Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Describes one or more of your virtual private gateways.</p> <p>For more information about virtual private gateways, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_VPN.html">AWS Managed VPN Connections</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn describe_vpn_gateways(
         &self,
         input: &DescribeVpnGatewaysRequest,
@@ -69019,7 +81503,7 @@ where
         }
     }
 
-    /// <p>Disassociates a CIDR block from a VPC. Currently, you can disassociate an IPv6 CIDR block only. You must detach or delete all gateways and resources that are associated with the CIDR block before you can disassociate it. </p>
+    /// <p>Disassociates a CIDR block from a VPC. To disassociate the CIDR block, you must specify its association ID. You can get the association ID by using <a>DescribeVpcs</a>. You must detach or delete all gateways and resources that are associated with the CIDR block before you can disassociate it. </p> <p>You cannot disassociate the CIDR block with which you originally created the VPC (the primary CIDR block).</p>
     fn disassociate_vpc_cidr_block(
         &self,
         input: &DisassociateVpcCidrBlockRequest,
@@ -69222,7 +81706,7 @@ where
         }
     }
 
-    /// <p>Gets the console output for the specified instance.</p> <p>Instances do not have a physical monitor through which you can view their console output. They also lack physical controls that allow you to power up, reboot, or shut them down. To allow these actions, we provide them through the Amazon EC2 API and command line interface.</p> <p>Instance console output is buffered and posted shortly after instance boot, reboot, and termination. Amazon EC2 preserves the most recent 64 KB output which is available for at least one hour after the most recent post.</p> <p>For Linux instances, the instance console output displays the exact console output that would normally be displayed on a physical monitor attached to a computer. This output is buffered because the instance produces it and then posts it to a store where the instance's owner can retrieve it.</p> <p>For Windows instances, the instance console output includes output from the EC2Config service.</p>
+    /// <p>Gets the console output for the specified instance.</p> <p>Instances do not have a physical monitor through which you can view their console output. They also lack physical controls that allow you to power up, reboot, or shut them down. To allow these actions, we provide them through the Amazon EC2 API and command line interface.</p> <p>Instance console output is buffered and posted shortly after instance boot, reboot, and termination. Amazon EC2 preserves the most recent 64 KB output, which is available for at least one hour after the most recent post.</p> <p>For Linux instances, the instance console output displays the exact console output that would normally be displayed on a physical monitor attached to a computer. This output is buffered because the instance produces it and then posts it to a store where the instance's owner can retrieve it.</p> <p>For Windows instances, the instance console output includes output from the EC2Config service.</p>
     fn get_console_output(
         &self,
         input: &GetConsoleOutputRequest,
@@ -69369,7 +81853,55 @@ where
         }
     }
 
-    /// <p>Retrieves the encrypted administrator password for an instance running Windows.</p> <p>The Windows password is generated at boot if the <code>EC2Config</code> service plugin, <code>Ec2SetPassword</code>, is enabled. This usually only happens the first time an AMI is launched, and then <code>Ec2SetPassword</code> is automatically disabled. The password is not generated for rebundled AMIs unless <code>Ec2SetPassword</code> is enabled before bundling.</p> <p>The password is encrypted using the key pair that you specified when you launched the instance. You must provide the corresponding key pair file.</p> <p>Password generation and encryption takes a few moments. We recommend that you wait up to 15 minutes after launching an instance before trying to retrieve the generated password.</p>
+    /// <p>Retrieves the configuration data of the specified instance. You can use this data to create a launch template.</p>
+    fn get_launch_template_data(
+        &self,
+        input: &GetLaunchTemplateDataRequest,
+    ) -> Result<GetLaunchTemplateDataResult, GetLaunchTemplateDataError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "GetLaunchTemplateData");
+        params.put("Version", "2016-11-15");
+        GetLaunchTemplateDataRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = GetLaunchTemplateDataResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(GetLaunchTemplateDataResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(GetLaunchTemplateDataError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Retrieves the encrypted administrator password for a running Windows instance.</p> <p>The Windows password is generated at boot by the <code>EC2Config</code> service or <code>EC2Launch</code> scripts (Windows Server 2016 and later). This usually only happens the first time an instance is launched. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/UsingConfig_WinAMI.html">EC2Config</a> and <a href="http://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2launch.html">EC2Launch</a> in the Amazon Elastic Compute Cloud User Guide.</p> <p>For the <code>EC2Config</code> service, the password is not generated for rebundled AMIs unless <code>Ec2SetPassword</code> is enabled before bundling.</p> <p>The password is encrypted using the key pair that you specified when you launched the instance. You must provide the corresponding key pair file.</p> <p>When you launch an instance, password generation and encryption may take a few minutes. If you try to retrieve the password before it's available, the output returns an empty string. We recommend that you wait up to 15 minutes after launching an instance before trying to retrieve the generated password.</p>
     fn get_password_data(
         &self,
         input: &GetPasswordDataRequest,
@@ -69417,7 +81949,7 @@ where
         }
     }
 
-    /// <p>Returns details about the values and term of your specified Convertible Reserved Instances. When a target configuration is specified, it returns information about whether the exchange is valid and can be performed.</p>
+    /// <p>Returns a quote and exchange information for exchanging one or more specified Convertible Reserved Instances for a new Convertible Reserved Instance. If the exchange cannot be performed, the reason is returned in the response. Use <a>AcceptReservedInstancesExchangeQuote</a> to perform the exchange.</p>
     fn get_reserved_instances_exchange_quote(
         &self,
         input: &GetReservedInstancesExchangeQuoteRequest,
@@ -69708,6 +82240,54 @@ where
         }
     }
 
+    /// <p>Modifies the specified attribute of the specified Amazon FPGA Image (AFI).</p>
+    fn modify_fpga_image_attribute(
+        &self,
+        input: &ModifyFpgaImageAttributeRequest,
+    ) -> Result<ModifyFpgaImageAttributeResult, ModifyFpgaImageAttributeError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ModifyFpgaImageAttribute");
+        params.put("Version", "2016-11-15");
+        ModifyFpgaImageAttributeRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = ModifyFpgaImageAttributeResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(ModifyFpgaImageAttributeResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyFpgaImageAttributeError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Modify the auto-placement setting of a Dedicated Host. When auto-placement is enabled, AWS will place instances that you launch with a tenancy of <code>host</code>, but without targeting a specific host ID, onto any available Dedicated Host in your account which has auto-placement enabled. When auto-placement is disabled, you need to provide a host ID if you want the instance to launch onto a specific host. If no host ID is provided, the instance will be launched onto a suitable host which has auto-placement enabled.</p>
     fn modify_hosts(
         &self,
@@ -69813,7 +82393,7 @@ where
         }
     }
 
-    /// <p><p>Modifies the specified attribute of the specified AMI. You can specify only one attribute at a time.</p> <note> <p>AWS Marketplace product codes cannot be modified. Images with an AWS Marketplace product code cannot be made public.</p> </note> <note> <p>The SriovNetSupport enhanced networking attribute cannot be changed using this command. Instead, enable SriovNetSupport on an instance and create an AMI from the instance. This will result in an image with SriovNetSupport enabled.</p> </note></p>
+    /// <p>Modifies the specified attribute of the specified AMI. You can specify only one attribute at a time. You can use the <code>Attribute</code> parameter to specify the attribute or one of the following parameters: <code>Description</code>, <code>LaunchPermission</code>, or <code>ProductCode</code>.</p> <p>AWS Marketplace product codes cannot be modified. Images with an AWS Marketplace product code cannot be made public.</p> <p>To enable the SriovNetSupport enhanced networking attribute of an image, enable SriovNetSupport on an instance and create an AMI from the instance.</p>
     fn modify_image_attribute(
         &self,
         input: &ModifyImageAttributeRequest,
@@ -69873,6 +82453,57 @@ where
         }
     }
 
+    /// <p>Modifies the credit option for CPU usage on a running or stopped T2 instance. The credit options are <code>standard</code> and <code>unlimited</code>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/t2-instances.html">T2 Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    fn modify_instance_credit_specification(
+        &self,
+        input: &ModifyInstanceCreditSpecificationRequest,
+    ) -> Result<ModifyInstanceCreditSpecificationResult, ModifyInstanceCreditSpecificationError>
+    {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ModifyInstanceCreditSpecification");
+        params.put("Version", "2016-11-15");
+        ModifyInstanceCreditSpecificationRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = ModifyInstanceCreditSpecificationResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(
+                        ModifyInstanceCreditSpecificationResultDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack
+                        )
+                    );
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyInstanceCreditSpecificationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Set the instance affinity value for a specific stopped instance and modify the instance tenancy setting.</p> <p>Instance affinity is disabled by default. When instance affinity is <code>host</code> and it is not associated with a specific Dedicated Host, the next time it is launched it will automatically be associated with the host it lands on. This relationship will persist if the instance is stopped/started, or rebooted.</p> <p>You can modify the host ID associated with a stopped instance. If a stopped instance has a new host ID association, the instance will target that host when restarted.</p> <p>You can modify the tenancy of a stopped instance with a tenancy of <code>host</code> or <code>dedicated</code>.</p> <p>Affinity, hostID, and tenancy are not required parameters, but at least one of them must be specified in the request. Affinity and tenancy can be modified in the same request, but tenancy can only be modified on instances that are stopped.</p>
     fn modify_instance_placement(
         &self,
@@ -69921,6 +82552,54 @@ where
         }
     }
 
+    /// <p>Modifies a launch template. You can specify which version of the launch template to set as the default version. When launching an instance, the default version applies when a launch template version is not specified.</p>
+    fn modify_launch_template(
+        &self,
+        input: &ModifyLaunchTemplateRequest,
+    ) -> Result<ModifyLaunchTemplateResult, ModifyLaunchTemplateError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ModifyLaunchTemplate");
+        params.put("Version", "2016-11-15");
+        ModifyLaunchTemplateRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = ModifyLaunchTemplateResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(ModifyLaunchTemplateResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyLaunchTemplateError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Modifies the specified network interface attribute. You can specify only one attribute at a time.</p>
     fn modify_network_interface_attribute(
         &self,
@@ -69951,7 +82630,7 @@ where
         }
     }
 
-    /// <p>Modifies the Availability Zone, instance count, instance type, or network platform (EC2-Classic or EC2-VPC) of your Standard Reserved Instances. The Reserved Instances to be modified must be identical, except for Availability Zone, network platform, and instance type.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-modifying.html">Modifying Reserved Instances</a> in the Amazon Elastic Compute Cloud User Guide.</p>
+    /// <p>Modifies the Availability Zone, instance count, instance type, or network platform (EC2-Classic or EC2-VPC) of your Reserved Instances. The Reserved Instances to be modified must be identical, except for Availability Zone, network platform, and instance type.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ri-modifying.html">Modifying Reserved Instances</a> in the Amazon Elastic Compute Cloud User Guide.</p>
     fn modify_reserved_instances(
         &self,
         input: &ModifyReservedInstancesRequest,
@@ -70029,7 +82708,7 @@ where
         }
     }
 
-    /// <p>Modifies the specified Spot fleet request.</p> <p>While the Spot fleet request is being modified, it is in the <code>modifying</code> state.</p> <p>To scale up your Spot fleet, increase its target capacity. The Spot fleet launches the additional Spot instances according to the allocation strategy for the Spot fleet request. If the allocation strategy is <code>lowestPrice</code>, the Spot fleet launches instances using the Spot pool with the lowest price. If the allocation strategy is <code>diversified</code>, the Spot fleet distributes the instances across the Spot pools.</p> <p>To scale down your Spot fleet, decrease its target capacity. First, the Spot fleet cancels any open bids that exceed the new target capacity. You can request that the Spot fleet terminate Spot instances until the size of the fleet no longer exceeds the new target capacity. If the allocation strategy is <code>lowestPrice</code>, the Spot fleet terminates the instances with the highest price per unit. If the allocation strategy is <code>diversified</code>, the Spot fleet terminates instances across the Spot pools. Alternatively, you can request that the Spot fleet keep the fleet at its current size, but not replace any Spot instances that are interrupted or that you terminate manually.</p>
+    /// <p>Modifies the specified Spot Fleet request.</p> <p>While the Spot Fleet request is being modified, it is in the <code>modifying</code> state.</p> <p>To scale up your Spot Fleet, increase its target capacity. The Spot Fleet launches the additional Spot Instances according to the allocation strategy for the Spot Fleet request. If the allocation strategy is <code>lowestPrice</code>, the Spot Fleet launches instances using the Spot pool with the lowest price. If the allocation strategy is <code>diversified</code>, the Spot Fleet distributes the instances across the Spot pools.</p> <p>To scale down your Spot Fleet, decrease its target capacity. First, the Spot Fleet cancels any open requests that exceed the new target capacity. You can request that the Spot Fleet terminate Spot Instances until the size of the fleet no longer exceeds the new target capacity. If the allocation strategy is <code>lowestPrice</code>, the Spot Fleet terminates the instances with the highest price per unit. If the allocation strategy is <code>diversified</code>, the Spot Fleet terminates instances across the Spot pools. Alternatively, you can request that the Spot Fleet keep the fleet at its current size, but not replace any Spot Instances that are interrupted or that you terminate manually.</p> <p>If you are finished with your Spot Fleet for now, but will use it again later, you can set the target capacity to 0.</p>
     fn modify_spot_fleet_request(
         &self,
         input: &ModifySpotFleetRequestRequest,
@@ -70215,7 +82894,7 @@ where
         }
     }
 
-    /// <p>Modifies attributes of a specified VPC endpoint. You can modify the policy associated with the endpoint, and you can add and remove route tables associated with the endpoint.</p>
+    /// <p>Modifies attributes of a specified VPC endpoint. The attributes that you can modify depend on the type of VPC endpoint (interface or gateway). For more information, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpc-endpoints.html">VPC Endpoints</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     fn modify_vpc_endpoint(
         &self,
         input: &ModifyVpcEndpointRequest,
@@ -70257,6 +82936,167 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(ModifyVpcEndpointError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Modifies a connection notification for VPC endpoint or VPC endpoint service. You can change the SNS topic for the notification, or the events for which to be notified. </p>
+    fn modify_vpc_endpoint_connection_notification(
+        &self,
+        input: &ModifyVpcEndpointConnectionNotificationRequest,
+    ) -> Result<
+        ModifyVpcEndpointConnectionNotificationResult,
+        ModifyVpcEndpointConnectionNotificationError,
+    > {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ModifyVpcEndpointConnectionNotification");
+        params.put("Version", "2016-11-15");
+        ModifyVpcEndpointConnectionNotificationRequestSerializer::serialize(
+            &mut params,
+            "",
+            &input,
+        );
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = ModifyVpcEndpointConnectionNotificationResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(
+                        ModifyVpcEndpointConnectionNotificationResultDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack
+                        )
+                    );
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyVpcEndpointConnectionNotificationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Modifies the attributes of your VPC endpoint service configuration. You can change the Network Load Balancers for your service, and you can specify whether acceptance is required for requests to connect to your endpoint service through an interface VPC endpoint.</p>
+    fn modify_vpc_endpoint_service_configuration(
+        &self,
+        input: &ModifyVpcEndpointServiceConfigurationRequest,
+    ) -> Result<
+        ModifyVpcEndpointServiceConfigurationResult,
+        ModifyVpcEndpointServiceConfigurationError,
+    > {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ModifyVpcEndpointServiceConfiguration");
+        params.put("Version", "2016-11-15");
+        ModifyVpcEndpointServiceConfigurationRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = ModifyVpcEndpointServiceConfigurationResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(
+                        ModifyVpcEndpointServiceConfigurationResultDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack
+                        )
+                    );
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyVpcEndpointServiceConfigurationError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Modifies the permissions for your VPC endpoint service. You can add or remove permissions for service consumers (IAM users, IAM roles, and AWS accounts) to discover your endpoint service.</p>
+    fn modify_vpc_endpoint_service_permissions(
+        &self,
+        input: &ModifyVpcEndpointServicePermissionsRequest,
+    ) -> Result<ModifyVpcEndpointServicePermissionsResult, ModifyVpcEndpointServicePermissionsError>
+    {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ModifyVpcEndpointServicePermissions");
+        params.put("Version", "2016-11-15");
+        ModifyVpcEndpointServicePermissionsRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = ModifyVpcEndpointServicePermissionsResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(
+                        ModifyVpcEndpointServicePermissionsResultDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack
+                        )
+                    );
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyVpcEndpointServicePermissionsError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -70308,6 +83148,54 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(ModifyVpcPeeringConnectionOptionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Modifies the instance tenancy attribute of the specified VPC. You can change the instance tenancy attribute of a VPC to <code>default</code> only. You cannot change the instance tenancy attribute to <code>dedicated</code>.</p> <p>After you modify the tenancy of the VPC, any new instances that you launch into the VPC have a tenancy of <code>default</code>, unless you specify otherwise during launch. The tenancy of any existing instances in the VPC is not affected.</p> <p>For more information about Dedicated Instances, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/dedicated-instance.html">Dedicated Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    fn modify_vpc_tenancy(
+        &self,
+        input: &ModifyVpcTenancyRequest,
+    ) -> Result<ModifyVpcTenancyResult, ModifyVpcTenancyError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ModifyVpcTenancy");
+        params.put("Version", "2016-11-15");
+        ModifyVpcTenancyRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = ModifyVpcTenancyResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(ModifyVpcTenancyResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ModifyVpcTenancyError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -70632,6 +83520,56 @@ where
         }
     }
 
+    /// <p>Rejects one or more VPC endpoint connection requests to your VPC endpoint service.</p>
+    fn reject_vpc_endpoint_connections(
+        &self,
+        input: &RejectVpcEndpointConnectionsRequest,
+    ) -> Result<RejectVpcEndpointConnectionsResult, RejectVpcEndpointConnectionsError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "RejectVpcEndpointConnections");
+        params.put("Version", "2016-11-15");
+        RejectVpcEndpointConnectionsRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = RejectVpcEndpointConnectionsResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(
+                        RejectVpcEndpointConnectionsResultDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack
+                        )
+                    );
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(RejectVpcEndpointConnectionsError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Rejects a VPC peering connection request. The VPC peering connection must be in the <code>pending-acceptance</code> state. Use the <a>DescribeVpcPeeringConnections</a> request to view your outstanding VPC peering connection requests. To delete an active VPC peering connection, or to delete a VPC peering connection request that you initiated, use <a>DeleteVpcPeeringConnection</a>.</p>
     fn reject_vpc_peering_connection(
         &self,
@@ -70806,7 +83744,7 @@ where
         }
     }
 
-    /// <p>Changes which network ACL a subnet is associated with. By default when you create a subnet, it's automatically associated with the default network ACL. For more information about network ACLs, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_ACLs.html">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>Changes which network ACL a subnet is associated with. By default when you create a subnet, it's automatically associated with the default network ACL. For more information about network ACLs, see <a href="http://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/VPC_ACLs.html">Network ACLs</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p> <p>This is an idempotent operation.</p>
     fn replace_network_acl_association(
         &self,
         input: &ReplaceNetworkAclAssociationRequest,
@@ -70993,7 +83931,7 @@ where
         }
     }
 
-    /// <p>Creates a Spot fleet request.</p> <p>You can submit a single request that includes multiple launch specifications that vary by instance type, AMI, Availability Zone, or subnet.</p> <p>By default, the Spot fleet requests Spot instances in the Spot pool where the price per unit is the lowest. Each launch specification can include its own instance weighting that reflects the value of the instance type to your application workload.</p> <p>Alternatively, you can specify that the Spot fleet distribute the target capacity across the Spot pools included in its launch specifications. By ensuring that the Spot instances in your Spot fleet are in different Spot pools, you can improve the availability of your fleet.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-fleet-requests.html">Spot Fleet Requests</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Creates a Spot Fleet request.</p> <p>You can submit a single request that includes multiple launch specifications that vary by instance type, AMI, Availability Zone, or subnet.</p> <p>By default, the Spot Fleet requests Spot Instances in the Spot pool where the price per unit is the lowest. Each launch specification can include its own instance weighting that reflects the value of the instance type to your application workload.</p> <p>Alternatively, you can specify that the Spot Fleet distribute the target capacity across the Spot pools included in its launch specifications. By ensuring that the Spot Instances in your Spot Fleet are in different Spot pools, you can improve the availability of your fleet.</p> <p>You can specify tags for the Spot Instances. You cannot tag other resource types in a Spot Fleet request; only the <code>instance</code> resource type is supported.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-fleet-requests.html">Spot Fleet Requests</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn request_spot_fleet(
         &self,
         input: &RequestSpotFleetRequest,
@@ -71041,7 +83979,7 @@ where
         }
     }
 
-    /// <p>Creates a Spot instance request. Spot instances are instances that Amazon EC2 launches when the bid price that you specify exceeds the current Spot price. Amazon EC2 periodically sets the Spot price based on available Spot Instance capacity and current Spot instance requests. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-requests.html">Spot Instance Requests</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Creates a Spot Instance request. Spot Instances are instances that Amazon EC2 launches when the maximum price that you specify exceeds the current Spot price. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/spot-requests.html">Spot Instance Requests</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn request_spot_instances(
         &self,
         input: &RequestSpotInstancesRequest,
@@ -71083,6 +84021,54 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(RequestSpotInstancesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Resets the specified attribute of the specified Amazon FPGA Image (AFI) to its default value. You can only reset the load permission attribute.</p>
+    fn reset_fpga_image_attribute(
+        &self,
+        input: &ResetFpgaImageAttributeRequest,
+    ) -> Result<ResetFpgaImageAttributeResult, ResetFpgaImageAttributeError> {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ResetFpgaImageAttribute");
+        params.put("Version", "2016-11-15");
+        ResetFpgaImageAttributeRequestSerializer::serialize(&mut params, "", &input);
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = ResetFpgaImageAttributeResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(ResetFpgaImageAttributeResultDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack
+                    ));
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ResetFpgaImageAttributeError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }
@@ -71257,7 +84243,7 @@ where
         }
     }
 
-    /// <p>[EC2-VPC only] Removes one or more egress rules from a security group for EC2-VPC. This action doesn't apply to security groups for use in EC2-Classic. The values that you specify in the revoke request (for example, ports) must match the existing rule's values for the rule to be revoked.</p> <p>Each rule consists of the protocol and the IPv4 or IPv6 CIDR range or source security group. For the TCP and UDP protocols, you must also specify the destination port or range of ports. For the ICMP protocol, you must also specify the ICMP type and code.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p>
+    /// <p>[EC2-VPC only] Removes one or more egress rules from a security group for EC2-VPC. This action doesn't apply to security groups for use in EC2-Classic. To remove a rule, the values that you specify (for example, ports) must match the existing rule's values exactly.</p> <p>Each rule consists of the protocol and the IPv4 or IPv6 CIDR range or source security group. For the TCP and UDP protocols, you must also specify the destination port or range of ports. For the ICMP protocol, you must also specify the ICMP type and code. If the security group rule has a description, you do not have to specify the description to revoke the rule.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p>
     fn revoke_security_group_egress(
         &self,
         input: &RevokeSecurityGroupEgressRequest,
@@ -71287,7 +84273,7 @@ where
         }
     }
 
-    /// <p>Removes one or more ingress rules from a security group. The values that you specify in the revoke request (for example, ports) must match the existing rule's values for the rule to be removed.</p> <note> <p>[EC2-Classic security groups only] If the values you specify do not match the existing rule's values, no error is returned. Use <a>DescribeSecurityGroups</a> to verify that the rule has been removed.</p> </note> <p>Each rule consists of the protocol and the CIDR range or source security group. For the TCP and UDP protocols, you must also specify the destination port or range of ports. For the ICMP protocol, you must also specify the ICMP type and code.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p>
+    /// <p>Removes one or more ingress rules from a security group. To remove a rule, the values that you specify (for example, ports) must match the existing rule's values exactly.</p> <note> <p>[EC2-Classic security groups only] If the values you specify do not match the existing rule's values, no error is returned. Use <a>DescribeSecurityGroups</a> to verify that the rule has been removed.</p> </note> <p>Each rule consists of the protocol and the CIDR range or source security group. For the TCP and UDP protocols, you must also specify the destination port or range of ports. For the ICMP protocol, you must also specify the ICMP type and code. If the security group rule has a description, you do not have to specify the description to revoke the rule.</p> <p>Rule changes are propagated to instances within the security group as quickly as possible. However, a small delay might occur.</p>
     fn revoke_security_group_ingress(
         &self,
         input: &RevokeSecurityGroupIngressRequest,
@@ -71317,7 +84303,7 @@ where
         }
     }
 
-    /// <p>Launches the specified number of instances using an AMI for which you have permissions. </p> <p>You can specify a number of options, or leave the default options. The following rules apply:</p> <ul> <li> <p>[EC2-VPC] If you don't specify a subnet ID, we choose a default subnet from your default VPC for you. If you don't have a default VPC, you must specify a subnet ID in the request.</p> </li> <li> <p>[EC2-Classic] If don't specify an Availability Zone, we choose one for you.</p> </li> <li> <p>Some instance types must be launched into a VPC. If you do not have a default VPC, or if you do not specify a subnet ID, the request fails. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-vpc.html#vpc-only-instance-types">Instance Types Available Only in a VPC</a>.</p> </li> <li> <p>[EC2-VPC] All instances have a network interface with a primary private IPv4 address. If you don't specify this address, we choose one from the IPv4 range of your subnet.</p> </li> <li> <p>Not all instance types support IPv6 addresses. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html">Instance Types</a>.</p> </li> <li> <p>If you don't specify a security group ID, we use the default security group. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html">Security Groups</a>.</p> </li> <li> <p>If any of the AMIs have a product code attached for which the user has not subscribed, the request fails.</p> </li> </ul> <p>To ensure faster instance launches, break up large requests into smaller batches. For example, create 5 separate launch requests for 100 instances each instead of 1 launch request for 500 instances.</p> <p>An instance is ready for you to use when it's in the <code>running</code> state. You can check the state of your instance using <a>DescribeInstances</a>. You can tag instances and EBS volumes during launch, after launch, or both. For more information, see <a>CreateTags</a> and <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Amazon EC2 Resources</a>.</p> <p>Linux instances have access to the public key of the key pair at boot. You can use this key to provide secure access to the instance. Amazon EC2 public images use this feature to provide secure access without passwords. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>For troubleshooting, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_InstanceStraightToTerminated.html">What To Do If An Instance Immediately Terminates</a>, and <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstancesConnecting.html">Troubleshooting Connecting to Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Launches the specified number of instances using an AMI for which you have permissions. </p> <p>You can specify a number of options, or leave the default options. The following rules apply:</p> <ul> <li> <p>[EC2-VPC] If you don't specify a subnet ID, we choose a default subnet from your default VPC for you. If you don't have a default VPC, you must specify a subnet ID in the request.</p> </li> <li> <p>[EC2-Classic] If don't specify an Availability Zone, we choose one for you.</p> </li> <li> <p>Some instance types must be launched into a VPC. If you do not have a default VPC, or if you do not specify a subnet ID, the request fails. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-vpc.html#vpc-only-instance-types">Instance Types Available Only in a VPC</a>.</p> </li> <li> <p>[EC2-VPC] All instances have a network interface with a primary private IPv4 address. If you don't specify this address, we choose one from the IPv4 range of your subnet.</p> </li> <li> <p>Not all instance types support IPv6 addresses. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html">Instance Types</a>.</p> </li> <li> <p>If you don't specify a security group ID, we use the default security group. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html">Security Groups</a>.</p> </li> <li> <p>If any of the AMIs have a product code attached for which the user has not subscribed, the request fails.</p> </li> </ul> <p>You can create a <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html">launch template</a>, which is a resource that contains the parameters to launch an instance. When you launch an instance using <a>RunInstances</a>, you can specify the launch template instead of specifying the launch parameters.</p> <p>To ensure faster instance launches, break up large requests into smaller batches. For example, create five separate launch requests for 100 instances each instead of one launch request for 500 instances.</p> <p>An instance is ready for you to use when it's in the <code>running</code> state. You can check the state of your instance using <a>DescribeInstances</a>. You can tag instances and EBS volumes during launch, after launch, or both. For more information, see <a>CreateTags</a> and <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_Tags.html">Tagging Your Amazon EC2 Resources</a>.</p> <p>Linux instances have access to the public key of the key pair at boot. You can use this key to provide secure access to the instance. Amazon EC2 public images use this feature to provide secure access without passwords. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>For troubleshooting, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_InstanceStraightToTerminated.html">What To Do If An Instance Immediately Terminates</a>, and <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstancesConnecting.html">Troubleshooting Connecting to Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn run_instances(&self, input: &RunInstancesRequest) -> Result<Reservation, RunInstancesError> {
         let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
         let mut params = Params::new();
@@ -71410,7 +84396,7 @@ where
         }
     }
 
-    /// <p>Starts an Amazon EBS-backed AMI that you've previously stopped.</p> <p>Instances that use Amazon EBS volumes as their root devices can be quickly stopped and started. When an instance is stopped, the compute resources are released and you are not billed for hourly instance usage. However, your root partition Amazon EBS volume remains, continues to persist your data, and you are charged for Amazon EBS volume usage. You can restart your instance at any time. Each time you transition an instance from stopped to started, Amazon EC2 charges a full instance hour, even if transitions happen multiple times within a single hour.</p> <p>Before stopping an instance, make sure it is in a state from which it can be restarted. Stopping an instance does not preserve data stored in RAM.</p> <p>Performing this operation on an instance that uses an instance store as its root device returns an error.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Stop_Start.html">Stopping Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Starts an Amazon EBS-backed instance that you've previously stopped.</p> <p>Instances that use Amazon EBS volumes as their root devices can be quickly stopped and started. When an instance is stopped, the compute resources are released and you are not billed for instance usage. However, your root partition Amazon EBS volume remains and continues to persist your data, and you are charged for Amazon EBS volume usage. You can restart your instance at any time. Every time you start your Windows instance, Amazon EC2 charges you for a full instance hour. If you stop and restart your Windows instance, a new instance hour begins and Amazon EC2 charges you for another full instance hour even if you are still within the same 60-minute period when it was stopped. Every time you start your Linux instance, Amazon EC2 charges a one-minute minimum for instance usage, and thereafter charges per second for instance usage.</p> <p>Before stopping an instance, make sure it is in a state from which it can be restarted. Stopping an instance does not preserve data stored in RAM.</p> <p>Performing this operation on an instance that uses an instance store as its root device returns an error.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Stop_Start.html">Stopping Instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn start_instances(
         &self,
         input: &StartInstancesRequest,
@@ -71458,7 +84444,7 @@ where
         }
     }
 
-    /// <p>Stops an Amazon EBS-backed instance.</p> <p>We don't charge hourly usage for a stopped instance, or data transfer fees; however, your root partition Amazon EBS volume remains, continues to persist your data, and you are charged for Amazon EBS volume usage. Each time you transition an instance from stopped to started, Amazon EC2 charges a full instance hour, even if transitions happen multiple times within a single hour.</p> <p>You can't start or stop Spot instances, and you can't stop instance store-backed instances.</p> <p>When you stop an instance, we shut it down. You can restart your instance at any time. Before stopping an instance, make sure it is in a state from which it can be restarted. Stopping an instance does not preserve data stored in RAM.</p> <p>Stopping an instance is different to rebooting or terminating it. For example, when you stop an instance, the root device and any other devices attached to the instance persist. When you terminate an instance, the root device and any other devices attached during the instance launch are automatically deleted. For more information about the differences between rebooting, stopping, and terminating instances, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html">Instance Lifecycle</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>When you stop an instance, we attempt to shut it down forcibly after a short while. If your instance appears stuck in the stopping state after a period of time, there may be an issue with the underlying host computer. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstancesStopping.html">Troubleshooting Stopping Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
+    /// <p>Stops an Amazon EBS-backed instance.</p> <p>We don't charge usage for a stopped instance, or data transfer fees; however, your root partition Amazon EBS volume remains and continues to persist your data, and you are charged for Amazon EBS volume usage. Every time you start your Windows instance, Amazon EC2 charges you for a full instance hour. If you stop and restart your Windows instance, a new instance hour begins and Amazon EC2 charges you for another full instance hour even if you are still within the same 60-minute period when it was stopped. Every time you start your Linux instance, Amazon EC2 charges a one-minute minimum for instance usage, and thereafter charges per second for instance usage.</p> <p>You can't start or stop Spot Instances, and you can't stop instance store-backed instances.</p> <p>When you stop an instance, we shut it down. You can restart your instance at any time. Before stopping an instance, make sure it is in a state from which it can be restarted. Stopping an instance does not preserve data stored in RAM.</p> <p>Stopping an instance is different to rebooting or terminating it. For example, when you stop an instance, the root device and any other devices attached to the instance persist. When you terminate an instance, the root device and any other devices attached during the instance launch are automatically deleted. For more information about the differences between rebooting, stopping, and terminating instances, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-lifecycle.html">Instance Lifecycle</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> <p>When you stop an instance, we attempt to shut it down forcibly after a short while. If your instance appears stuck in the stopping state after a period of time, there may be an issue with the underlying host computer. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/TroubleshootingInstancesStopping.html">Troubleshooting Stopping Your Instance</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p>
     fn stop_instances(
         &self,
         input: &StopInstancesRequest,
@@ -71674,6 +84660,120 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(UnmonitorInstancesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>[EC2-VPC only] Updates the description of an egress (outbound) security group rule. You can replace an existing description, or add a description to a rule that did not have one previously.</p> <p>You specify the description as part of the IP permissions structure. You can remove a description for a security group rule by omitting the description parameter in the request.</p>
+    fn update_security_group_rule_descriptions_egress(
+        &self,
+        input: &UpdateSecurityGroupRuleDescriptionsEgressRequest,
+    ) -> Result<
+        UpdateSecurityGroupRuleDescriptionsEgressResult,
+        UpdateSecurityGroupRuleDescriptionsEgressError,
+    > {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "UpdateSecurityGroupRuleDescriptionsEgress");
+        params.put("Version", "2016-11-15");
+        UpdateSecurityGroupRuleDescriptionsEgressRequestSerializer::serialize(
+            &mut params,
+            "",
+            &input,
+        );
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = UpdateSecurityGroupRuleDescriptionsEgressResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(
+                        UpdateSecurityGroupRuleDescriptionsEgressResultDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack
+                        )
+                    );
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateSecurityGroupRuleDescriptionsEgressError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Updates the description of an ingress (inbound) security group rule. You can replace an existing description, or add a description to a rule that did not have one previously.</p> <p>You specify the description as part of the IP permissions structure. You can remove a description for a security group rule by omitting the description parameter in the request.</p>
+    fn update_security_group_rule_descriptions_ingress(
+        &self,
+        input: &UpdateSecurityGroupRuleDescriptionsIngressRequest,
+    ) -> Result<
+        UpdateSecurityGroupRuleDescriptionsIngressResult,
+        UpdateSecurityGroupRuleDescriptionsIngressError,
+    > {
+        let mut request = SignedRequest::new("POST", "ec2", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "UpdateSecurityGroupRuleDescriptionsIngress");
+        params.put("Version", "2016-11-15");
+        UpdateSecurityGroupRuleDescriptionsIngressRequestSerializer::serialize(
+            &mut params,
+            "",
+            &input,
+        );
+        request.set_params(params);
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+        let mut response = try!(self.dispatcher.dispatch(&request));
+        match response.status {
+            StatusCode::Ok => {
+                let result;
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+
+                if body.is_empty() {
+                    result = UpdateSecurityGroupRuleDescriptionsIngressResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = try!(peek_at_name(&mut stack));
+                    result = try!(
+                        UpdateSecurityGroupRuleDescriptionsIngressResultDeserializer::deserialize(
+                            &actual_tag_name,
+                            &mut stack
+                        )
+                    );
+                }
+                Ok(result)
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UpdateSecurityGroupRuleDescriptionsIngressError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }

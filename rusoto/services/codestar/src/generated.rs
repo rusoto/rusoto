@@ -29,7 +29,7 @@ use serde_json::Value as SerdeJsonValue;
 use serde_json::from_str;
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AssociateTeamMemberRequest {
-    /// <p>A user- or system-generated token that identifies the entity that requested the team member association to the project. This token can be used to repeat the request. </p>
+    /// <p>A user- or system-generated token that identifies the entity that requested the team member association to the project. This token can be used to repeat the request.</p>
     #[serde(rename = "clientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
@@ -43,14 +43,14 @@ pub struct AssociateTeamMemberRequest {
     #[serde(rename = "remoteAccessAllowed")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remote_access_allowed: Option<bool>,
-    /// <p>The Amazon Resource Name (ARN) for the IAM user you want to add to the DevHub project.</p>
+    /// <p>The Amazon Resource Name (ARN) for the IAM user you want to add to the AWS CodeStar project.</p>
     #[serde(rename = "userArn")]
     pub user_arn: String,
 }
 
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AssociateTeamMemberResult {
-    /// <p>The user- or system-generated token from the initial request that can be used to repeat the request. </p>
+    /// <p>The user- or system-generated token from the initial request that can be used to repeat the request.</p>
     #[serde(rename = "clientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
@@ -290,7 +290,7 @@ pub struct ListProjectsResult {
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListResourcesRequest {
-    /// <p>he maximum amount of data that can be contained in a single set of results.</p>
+    /// <p>The maximum amount of data that can be contained in a single set of results.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -313,6 +313,33 @@ pub struct ListResourcesResult {
     #[serde(rename = "resources")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resources: Option<Vec<Resource>>,
+}
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct ListTagsForProjectRequest {
+    /// <p>The ID of the project to get tags for.</p>
+    #[serde(rename = "id")]
+    pub id: String,
+    /// <p>Reserved for future use.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Reserved for future use.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct ListTagsForProjectResult {
+    /// <p>Reserved for future use.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The tags for the project.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, Serialize)]
@@ -385,10 +412,28 @@ pub struct Resource {
     pub id: String,
 }
 
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct TagProjectRequest {
+    /// <p>The ID of the project you want to add a tag to.</p>
+    #[serde(rename = "id")]
+    pub id: String,
+    /// <p>The tags you want to add to the project.</p>
+    #[serde(rename = "tags")]
+    pub tags: ::std::collections::HashMap<String, String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct TagProjectResult {
+    /// <p>The tags for the project.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
 /// <p>Information about a team member in a project.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct TeamMember {
-    /// <p>The role assigned to the user in the project. Project roles have different levels of access. For more information, see <a href="http://docs.aws.amazon.com/codestar/latest/userguide/working-with-teams.html">Working with Teams</a> in the AWS CodeStar User Guide. </p>
+    /// <p>The role assigned to the user in the project. Project roles have different levels of access. For more information, see <a href="http://docs.aws.amazon.com/codestar/latest/userguide/working-with-teams.html">Working with Teams</a> in the <i>AWS CodeStar User Guide</i>. </p>
     #[serde(rename = "projectRole")]
     pub project_role: String,
     /// <p>Whether the user is allowed to remotely access project resources using an SSH public/private key pair.</p>
@@ -399,6 +444,19 @@ pub struct TeamMember {
     #[serde(rename = "userArn")]
     pub user_arn: String,
 }
+
+#[derive(Default, Debug, Clone, Serialize)]
+pub struct UntagProjectRequest {
+    /// <p>The ID of the project to remove tags from.</p>
+    #[serde(rename = "id")]
+    pub id: String,
+    /// <p>The tags to remove from the project.</p>
+    #[serde(rename = "tags")]
+    pub tags: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct UntagProjectResult;
 
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdateProjectRequest {
@@ -423,7 +481,7 @@ pub struct UpdateTeamMemberRequest {
     /// <p>The ID of the project.</p>
     #[serde(rename = "projectId")]
     pub project_id: String,
-    /// <p>The role assigned to the user in the project. Project roles have different levels of access. For more information, see <a href="http://docs.aws.amazon.com/codestar/latest/userguide/working-with-teams.html">Working with Teams</a> in the AWS CodeStar User Guide.</p>
+    /// <p>The role assigned to the user in the project. Project roles have different levels of access. For more information, see <a href="http://docs.aws.amazon.com/codestar/latest/userguide/working-with-teams.html">Working with Teams</a> in the <i>AWS CodeStar User Guide</i>.</p>
     #[serde(rename = "projectRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub project_role: Option<String>,
@@ -1413,6 +1471,92 @@ impl Error for ListResourcesError {
         }
     }
 }
+/// Errors returned by ListTagsForProject
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForProjectError {
+    /// <p>The next token is not valid.</p>
+    InvalidNextToken(String),
+    /// <p>The specified AWS CodeStar project was not found.</p>
+    ProjectNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl ListTagsForProjectError {
+    pub fn from_body(body: &str) -> ListTagsForProjectError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "InvalidNextTokenException" => {
+                        ListTagsForProjectError::InvalidNextToken(String::from(error_message))
+                    }
+                    "ProjectNotFoundException" => {
+                        ListTagsForProjectError::ProjectNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        ListTagsForProjectError::Validation(error_message.to_string())
+                    }
+                    _ => ListTagsForProjectError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => ListTagsForProjectError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for ListTagsForProjectError {
+    fn from(err: serde_json::error::Error) -> ListTagsForProjectError {
+        ListTagsForProjectError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListTagsForProjectError {
+    fn from(err: CredentialsError) -> ListTagsForProjectError {
+        ListTagsForProjectError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListTagsForProjectError {
+    fn from(err: HttpDispatchError) -> ListTagsForProjectError {
+        ListTagsForProjectError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTagsForProjectError {
+    fn from(err: io::Error) -> ListTagsForProjectError {
+        ListTagsForProjectError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListTagsForProjectError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTagsForProjectError {
+    fn description(&self) -> &str {
+        match *self {
+            ListTagsForProjectError::InvalidNextToken(ref cause) => cause,
+            ListTagsForProjectError::ProjectNotFound(ref cause) => cause,
+            ListTagsForProjectError::Validation(ref cause) => cause,
+            ListTagsForProjectError::Credentials(ref err) => err.description(),
+            ListTagsForProjectError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListTagsForProjectError::Unknown(ref cause) => cause,
+        }
+    }
+}
 /// Errors returned by ListTeamMembers
 #[derive(Debug, PartialEq)]
 pub enum ListTeamMembersError {
@@ -1572,6 +1716,184 @@ impl Error for ListUserProfilesError {
             ListUserProfilesError::Credentials(ref err) => err.description(),
             ListUserProfilesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             ListUserProfilesError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by TagProject
+#[derive(Debug, PartialEq)]
+pub enum TagProjectError {
+    /// <p>Another modification is being made. That modification must complete before you can make your change.</p>
+    ConcurrentModification(String),
+    /// <p>A resource limit has been exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The specified AWS CodeStar project was not found.</p>
+    ProjectNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl TagProjectError {
+    pub fn from_body(body: &str) -> TagProjectError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ConcurrentModificationException" => {
+                        TagProjectError::ConcurrentModification(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        TagProjectError::LimitExceeded(String::from(error_message))
+                    }
+                    "ProjectNotFoundException" => {
+                        TagProjectError::ProjectNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => TagProjectError::Validation(error_message.to_string()),
+                    _ => TagProjectError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => TagProjectError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for TagProjectError {
+    fn from(err: serde_json::error::Error) -> TagProjectError {
+        TagProjectError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for TagProjectError {
+    fn from(err: CredentialsError) -> TagProjectError {
+        TagProjectError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for TagProjectError {
+    fn from(err: HttpDispatchError) -> TagProjectError {
+        TagProjectError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for TagProjectError {
+    fn from(err: io::Error) -> TagProjectError {
+        TagProjectError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for TagProjectError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TagProjectError {
+    fn description(&self) -> &str {
+        match *self {
+            TagProjectError::ConcurrentModification(ref cause) => cause,
+            TagProjectError::LimitExceeded(ref cause) => cause,
+            TagProjectError::ProjectNotFound(ref cause) => cause,
+            TagProjectError::Validation(ref cause) => cause,
+            TagProjectError::Credentials(ref err) => err.description(),
+            TagProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            TagProjectError::Unknown(ref cause) => cause,
+        }
+    }
+}
+/// Errors returned by UntagProject
+#[derive(Debug, PartialEq)]
+pub enum UntagProjectError {
+    /// <p>Another modification is being made. That modification must complete before you can make your change.</p>
+    ConcurrentModification(String),
+    /// <p>A resource limit has been exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The specified AWS CodeStar project was not found.</p>
+    ProjectNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(String),
+}
+
+impl UntagProjectError {
+    pub fn from_body(body: &str) -> UntagProjectError {
+        match from_str::<SerdeJsonValue>(body) {
+            Ok(json) => {
+                let raw_error_type = json.get("__type")
+                    .and_then(|e| e.as_str())
+                    .unwrap_or("Unknown");
+                let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or(body);
+
+                let pieces: Vec<&str> = raw_error_type.split("#").collect();
+                let error_type = pieces.last().expect("Expected error type");
+
+                match *error_type {
+                    "ConcurrentModificationException" => {
+                        UntagProjectError::ConcurrentModification(String::from(error_message))
+                    }
+                    "LimitExceededException" => {
+                        UntagProjectError::LimitExceeded(String::from(error_message))
+                    }
+                    "ProjectNotFoundException" => {
+                        UntagProjectError::ProjectNotFound(String::from(error_message))
+                    }
+                    "ValidationException" => {
+                        UntagProjectError::Validation(error_message.to_string())
+                    }
+                    _ => UntagProjectError::Unknown(String::from(body)),
+                }
+            }
+            Err(_) => UntagProjectError::Unknown(String::from(body)),
+        }
+    }
+}
+
+impl From<serde_json::error::Error> for UntagProjectError {
+    fn from(err: serde_json::error::Error) -> UntagProjectError {
+        UntagProjectError::Unknown(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UntagProjectError {
+    fn from(err: CredentialsError) -> UntagProjectError {
+        UntagProjectError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UntagProjectError {
+    fn from(err: HttpDispatchError) -> UntagProjectError {
+        UntagProjectError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UntagProjectError {
+    fn from(err: io::Error) -> UntagProjectError {
+        UntagProjectError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UntagProjectError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UntagProjectError {
+    fn description(&self) -> &str {
+        match *self {
+            UntagProjectError::ConcurrentModification(ref cause) => cause,
+            UntagProjectError::LimitExceeded(ref cause) => cause,
+            UntagProjectError::ProjectNotFound(ref cause) => cause,
+            UntagProjectError::Validation(ref cause) => cause,
+            UntagProjectError::Credentials(ref err) => err.description(),
+            UntagProjectError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UntagProjectError::Unknown(ref cause) => cause,
         }
     }
 }
@@ -1903,6 +2225,12 @@ pub trait CodeStar {
         input: &ListResourcesRequest,
     ) -> Result<ListResourcesResult, ListResourcesError>;
 
+    /// <p>Gets the tags for a project.</p>
+    fn list_tags_for_project(
+        &self,
+        input: &ListTagsForProjectRequest,
+    ) -> Result<ListTagsForProjectResult, ListTagsForProjectError>;
+
     /// <p>Lists all team members associated with a project.</p>
     fn list_team_members(
         &self,
@@ -1914,6 +2242,15 @@ pub trait CodeStar {
         &self,
         input: &ListUserProfilesRequest,
     ) -> Result<ListUserProfilesResult, ListUserProfilesError>;
+
+    /// <p>Adds tags to a project.</p>
+    fn tag_project(&self, input: &TagProjectRequest) -> Result<TagProjectResult, TagProjectError>;
+
+    /// <p>Removes tags from a project.</p>
+    fn untag_project(
+        &self,
+        input: &UntagProjectRequest,
+    ) -> Result<UntagProjectResult, UntagProjectError>;
 
     /// <p>Updates a project in AWS CodeStar.</p>
     fn update_project(
@@ -2303,6 +2640,40 @@ where
         }
     }
 
+    /// <p>Gets the tags for a project.</p>
+    fn list_tags_for_project(
+        &self,
+        input: &ListTagsForProjectRequest,
+    ) -> Result<ListTagsForProjectResult, ListTagsForProjectError> {
+        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeStar_20170419.ListTagsForProject");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<ListTagsForProjectResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(ListTagsForProjectError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
     /// <p>Lists all team members associated with a project.</p>
     fn list_team_members(
         &self,
@@ -2365,6 +2736,71 @@ where
                 let mut body: Vec<u8> = Vec::new();
                 try!(response.body.read_to_end(&mut body));
                 Err(ListUserProfilesError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Adds tags to a project.</p>
+    fn tag_project(&self, input: &TagProjectRequest) -> Result<TagProjectResult, TagProjectError> {
+        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeStar_20170419.TagProject");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<TagProjectResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(TagProjectError::from_body(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ))
+            }
+        }
+    }
+
+    /// <p>Removes tags from a project.</p>
+    fn untag_project(
+        &self,
+        input: &UntagProjectRequest,
+    ) -> Result<UntagProjectResult, UntagProjectError> {
+        let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeStar_20170419.UntagProject");
+        let encoded = serde_json::to_string(input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
+
+        let mut response = try!(self.dispatcher.dispatch(&request));
+
+        match response.status {
+            StatusCode::Ok => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Ok(serde_json::from_str::<UntagProjectResult>(
+                    String::from_utf8_lossy(&body).as_ref(),
+                ).unwrap())
+            }
+            _ => {
+                let mut body: Vec<u8> = Vec::new();
+                try!(response.body.read_to_end(&mut body));
+                Err(UntagProjectError::from_body(
                     String::from_utf8_lossy(&body).as_ref(),
                 ))
             }

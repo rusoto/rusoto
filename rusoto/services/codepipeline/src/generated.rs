@@ -41,7 +41,7 @@ pub struct AWSSessionCredentials {
     pub session_token: String,
 }
 
-/// <p>Represents the input of an acknowledge job action.</p>
+/// <p>Represents the input of an AcknowledgeJob action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AcknowledgeJobInput {
     /// <p>The unique system-generated ID of the job for which you want to confirm receipt.</p>
@@ -52,7 +52,7 @@ pub struct AcknowledgeJobInput {
     pub nonce: String,
 }
 
-/// <p>Represents the output of an acknowledge job action.</p>
+/// <p>Represents the output of an AcknowledgeJob action.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AcknowledgeJobOutput {
     /// <p>Whether the job worker has received the specified job.</p>
@@ -61,7 +61,7 @@ pub struct AcknowledgeJobOutput {
     pub status: Option<String>,
 }
 
-/// <p>Represents the input of an acknowledge third party job action.</p>
+/// <p>Represents the input of an AcknowledgeThirdPartyJob action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct AcknowledgeThirdPartyJobInput {
     /// <p>The clientToken portion of the clientId and clientToken pair used to verify that the calling entity is allowed access to the job and its details.</p>
@@ -75,7 +75,7 @@ pub struct AcknowledgeThirdPartyJobInput {
     pub nonce: String,
 }
 
-/// <p>Represents the output of an acknowledge third party job action.</p>
+/// <p>Represents the output of an AcknowledgeThirdPartyJob action.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct AcknowledgeThirdPartyJobOutput {
     /// <p>The status information for the third party job, if any.</p>
@@ -106,7 +106,7 @@ pub struct ActionConfigurationProperty {
     /// <p>The name of the action configuration property.</p>
     #[serde(rename = "name")]
     pub name: String,
-    /// <p>Indicates that the proprety will be used in conjunction with PollForJobs. When creating a custom action, an action can have up to one queryable property. If it has one, that property must be both required and not secret.</p> <p>If you create a pipeline with a custom action type, and that custom action contains a queryable property, the value for that configuration property is subject to additional restrictions. The value must be less than or equal to twenty (20) characters. The value can contain only alphanumeric characters, underscores, and hyphens.</p>
+    /// <p>Indicates that the property will be used in conjunction with PollForJobs. When creating a custom action, an action can have up to one queryable property. If it has one, that property must be both required and not secret.</p> <p>If you create a pipeline with a custom action type, and that custom action contains a queryable property, the value for that configuration property is subject to additional restrictions. The value must be less than or equal to twenty (20) characters. The value can contain only alphanumeric characters, underscores, and hyphens.</p>
     #[serde(rename = "queryable")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub queryable: Option<bool>,
@@ -409,7 +409,7 @@ pub struct BlockerDeclaration {
     pub type_: String,
 }
 
-/// <p>Represents the input of a create custom action operation.</p>
+/// <p>Represents the input of a CreateCustomActionType operation.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreateCustomActionTypeInput {
     /// <p><p>The category of the custom action, such as a build action or a test action.</p> <note> <p>Although Source and Approval are listed as valid values, they are not currently functional. These values are reserved for future use.</p> </note></p>
@@ -437,7 +437,7 @@ pub struct CreateCustomActionTypeInput {
     pub version: String,
 }
 
-/// <p>Represents the output of a create custom action operation.</p>
+/// <p>Represents the output of a CreateCustomActionType operation.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreateCustomActionTypeOutput {
     /// <p>Returns information about the details of an action type.</p>
@@ -445,7 +445,7 @@ pub struct CreateCustomActionTypeOutput {
     pub action_type: ActionType,
 }
 
-/// <p>Represents the input of a create pipeline action.</p>
+/// <p>Represents the input of a CreatePipeline action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct CreatePipelineInput {
     /// <p>Represents the structure of actions and stages to be performed in the pipeline. </p>
@@ -453,7 +453,7 @@ pub struct CreatePipelineInput {
     pub pipeline: PipelineDeclaration,
 }
 
-/// <p>Represents the output of a create pipeline action.</p>
+/// <p>Represents the output of a CreatePipeline action.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct CreatePipelineOutput {
     /// <p>Represents the structure of actions and stages to be performed in the pipeline. </p>
@@ -481,7 +481,7 @@ pub struct CurrentRevision {
     pub revision_summary: Option<String>,
 }
 
-/// <p>Represents the input of a delete custom action operation. The custom action will be marked as deleted.</p>
+/// <p>Represents the input of a DeleteCustomActionType operation. The custom action will be marked as deleted.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeleteCustomActionTypeInput {
     /// <p>The category of the custom action that you want to delete, such as source or deploy.</p>
@@ -495,7 +495,7 @@ pub struct DeleteCustomActionTypeInput {
     pub version: String,
 }
 
-/// <p>Represents the input of a delete pipeline action.</p>
+/// <p>Represents the input of a DeletePipeline action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DeletePipelineInput {
     /// <p>The name of the pipeline to be deleted.</p>
@@ -503,7 +503,7 @@ pub struct DeletePipelineInput {
     pub name: String,
 }
 
-/// <p>Represents the input of a disable stage transition input action.</p>
+/// <p>Represents the input of a DisableStageTransition action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct DisableStageTransitionInput {
     /// <p>The name of the pipeline in which you want to disable the flow of artifacts from one stage to another.</p>
@@ -520,7 +520,7 @@ pub struct DisableStageTransitionInput {
     pub transition_type: String,
 }
 
-/// <p>Represents the input of an enable stage transition action.</p>
+/// <p>Represents the input of an EnableStageTransition action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct EnableStageTransitionInput {
     /// <p>The name of the pipeline in which you want to enable the flow of artifacts from one stage to another.</p>
@@ -590,7 +590,7 @@ pub struct FailureDetails {
     pub type_: String,
 }
 
-/// <p>Represents the input of a get job details action.</p>
+/// <p>Represents the input of a GetJobDetails action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetJobDetailsInput {
     /// <p>The unique system-generated ID for the job.</p>
@@ -598,7 +598,7 @@ pub struct GetJobDetailsInput {
     pub job_id: String,
 }
 
-/// <p>Represents the output of a get job details action.</p>
+/// <p>Represents the output of a GetJobDetails action.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetJobDetailsOutput {
     /// <p><p>The details of the job.</p> <note> <p>If AWSSessionCredentials is used, a long-running job can call GetJobDetails again to obtain new credentials.</p> </note></p>
@@ -607,7 +607,7 @@ pub struct GetJobDetailsOutput {
     pub job_details: Option<JobDetails>,
 }
 
-/// <p>Represents the input of a get pipeline execution action.</p>
+/// <p>Represents the input of a GetPipelineExecution action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetPipelineExecutionInput {
     /// <p>The ID of the pipeline execution about which you want to get execution details.</p>
@@ -618,7 +618,7 @@ pub struct GetPipelineExecutionInput {
     pub pipeline_name: String,
 }
 
-/// <p>Represents the output of a get pipeline execution action.</p>
+/// <p>Represents the output of a GetPipelineExecution action.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetPipelineExecutionOutput {
     /// <p>Represents information about the execution of a pipeline.</p>
@@ -627,7 +627,7 @@ pub struct GetPipelineExecutionOutput {
     pub pipeline_execution: Option<PipelineExecution>,
 }
 
-/// <p>Represents the input of a get pipeline action.</p>
+/// <p>Represents the input of a GetPipeline action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetPipelineInput {
     /// <p>The name of the pipeline for which you want to get information. Pipeline names must be unique under an Amazon Web Services (AWS) user account.</p>
@@ -639,16 +639,20 @@ pub struct GetPipelineInput {
     pub version: Option<i64>,
 }
 
-/// <p>Represents the output of a get pipeline action.</p>
+/// <p>Represents the output of a GetPipeline action.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetPipelineOutput {
+    /// <p>Represents the pipeline metadata information returned as part of the output of a GetPipeline action.</p>
+    #[serde(rename = "metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<PipelineMetadata>,
     /// <p>Represents the structure of actions and stages to be performed in the pipeline. </p>
     #[serde(rename = "pipeline")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pipeline: Option<PipelineDeclaration>,
 }
 
-/// <p>Represents the input of a get pipeline state action.</p>
+/// <p>Represents the input of a GetPipelineState action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetPipelineStateInput {
     /// <p>The name of the pipeline about which you want to get information.</p>
@@ -656,7 +660,7 @@ pub struct GetPipelineStateInput {
     pub name: String,
 }
 
-/// <p>Represents the output of a get pipeline state action.</p>
+/// <p>Represents the output of a GetPipelineState action.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetPipelineStateOutput {
     /// <p>The date and time the pipeline was created, in timestamp format.</p>
@@ -681,7 +685,7 @@ pub struct GetPipelineStateOutput {
     pub updated: Option<f64>,
 }
 
-/// <p>Represents the input of a get third party job details action.</p>
+/// <p>Represents the input of a GetThirdPartyJobDetails action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct GetThirdPartyJobDetailsInput {
     /// <p>The clientToken portion of the clientId and clientToken pair used to verify that the calling entity is allowed access to the job and its details.</p>
@@ -692,7 +696,7 @@ pub struct GetThirdPartyJobDetailsInput {
     pub job_id: String,
 }
 
-/// <p>Represents the output of a get third party job details action.</p>
+/// <p>Represents the output of a GetThirdPartyJobDetails action.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct GetThirdPartyJobDetailsOutput {
     /// <p>The details of the job, including any protected values defined for the job.</p>
@@ -784,7 +788,7 @@ pub struct JobDetails {
     pub id: Option<String>,
 }
 
-/// <p>Represents the input of a list action types action.</p>
+/// <p>Represents the input of a ListActionTypes action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListActionTypesInput {
     /// <p>Filters the list of action types to those created by a specified entity.</p>
@@ -797,7 +801,7 @@ pub struct ListActionTypesInput {
     pub next_token: Option<String>,
 }
 
-/// <p>Represents the output of a list action types action.</p>
+/// <p>Represents the output of a ListActionTypes action.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListActionTypesOutput {
     /// <p>Provides details of the action types.</p>
@@ -809,14 +813,14 @@ pub struct ListActionTypesOutput {
     pub next_token: Option<String>,
 }
 
-/// <p>Represents the input of a list pipeline executions action.</p>
+/// <p>Represents the input of a ListPipelineExecutions action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListPipelineExecutionsInput {
     /// <p>The maximum number of results to return in a single call. To retrieve the remaining results, make another call with the returned nextToken value. The available pipeline execution history is limited to the most recent 12 months, based on pipeline execution start times. Default value is 100.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token that was returned from the previous list pipeline executions call, which can be used to return the next set of pipeline executions in the list.</p>
+    /// <p>The token that was returned from the previous ListPipelineExecutions call, which can be used to return the next set of pipeline executions in the list.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -825,10 +829,10 @@ pub struct ListPipelineExecutionsInput {
     pub pipeline_name: String,
 }
 
-/// <p>Represents the output of a list pipeline executions action. </p>
+/// <p>Represents the output of a ListPipelineExecutions action.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListPipelineExecutionsOutput {
-    /// <p>A token that can be used in the next list pipeline executions call to return the next set of pipeline executions. To view all items in the list, continue to call this operation with each subsequent token until no more nextToken values are returned.</p>
+    /// <p>A token that can be used in the next ListPipelineExecutions call. To view all items in the list, continue to call this operation with each subsequent token until no more nextToken values are returned.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -838,7 +842,7 @@ pub struct ListPipelineExecutionsOutput {
     pub pipeline_execution_summaries: Option<Vec<PipelineExecutionSummary>>,
 }
 
-/// <p>Represents the input of a list pipelines action.</p>
+/// <p>Represents the input of a ListPipelines action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct ListPipelinesInput {
     /// <p>An identifier that was returned from the previous list pipelines call, which can be used to return the next set of pipelines in the list.</p>
@@ -847,7 +851,7 @@ pub struct ListPipelinesInput {
     pub next_token: Option<String>,
 }
 
-/// <p>Represents the output of a list pipelines action.</p>
+/// <p>Represents the output of a ListPipelines action.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct ListPipelinesOutput {
     /// <p>If the amount of returned information is significantly large, an identifier is also returned which can be used in a subsequent list pipelines call to return the next set of pipelines in the list.</p>
@@ -871,7 +875,7 @@ pub struct OutputArtifact {
 /// <p>Represents information about a pipeline to a job worker.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct PipelineContext {
-    /// <p><p/></p>
+    /// <p>The context of an action to a job worker within the stage of a pipeline.</p>
     #[serde(rename = "action")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action: Option<ActionContext>,
@@ -888,7 +892,7 @@ pub struct PipelineContext {
 /// <p>Represents the structure of actions and stages to be performed in the pipeline.</p>
 #[derive(Default, Debug, Clone, Serialize, Deserialize)]
 pub struct PipelineDeclaration {
-    /// <p>Represents the context of an action within the stage of a pipeline to a job worker. </p>
+    /// <p>Represents information about the Amazon S3 bucket where artifacts are stored for the pipeline. </p>
     #[serde(rename = "artifactStore")]
     pub artifact_store: ArtifactStore,
     /// <p>The name of the action to be performed.</p>
@@ -925,7 +929,7 @@ pub struct PipelineExecution {
     #[serde(rename = "pipelineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pipeline_version: Option<i64>,
-    /// <p><p>The status of the pipeline execution.</p> <ul> <li> <p>InProgress: The pipeline execution is currently running.</p> </li> <li> <p>Succeeded: The pipeline execution completed successfully. </p> </li> <li> <p>Superseded: While this pipeline execution was waiting for the next stage to be completed, a newer pipeline execution caught up and continued through the pipeline instead. </p> </li> <li> <p>Failed: The pipeline execution did not complete successfully.</p> </li> </ul></p>
+    /// <p><p>The status of the pipeline execution.</p> <ul> <li> <p>InProgress: The pipeline execution is currently running.</p> </li> <li> <p>Succeeded: The pipeline execution was completed successfully. </p> </li> <li> <p>Superseded: While this pipeline execution was waiting for the next stage to be completed, a newer pipeline execution advanced and continued through the pipeline instead. </p> </li> <li> <p>Failed: The pipeline execution was not completed successfully.</p> </li> </ul></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -946,10 +950,27 @@ pub struct PipelineExecutionSummary {
     #[serde(rename = "startTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
-    /// <p><p>The status of the pipeline execution.</p> <ul> <li> <p>InProgress: The pipeline execution is currently running.</p> </li> <li> <p>Succeeded: The pipeline execution completed successfully. </p> </li> <li> <p>Superseded: While this pipeline execution was waiting for the next stage to be completed, a newer pipeline execution caught up and continued through the pipeline instead. </p> </li> <li> <p>Failed: The pipeline execution did not complete successfully.</p> </li> </ul></p>
+    /// <p><p>The status of the pipeline execution.</p> <ul> <li> <p>InProgress: The pipeline execution is currently running.</p> </li> <li> <p>Succeeded: The pipeline execution was completed successfully. </p> </li> <li> <p>Superseded: While this pipeline execution was waiting for the next stage to be completed, a newer pipeline execution advanced and continued through the pipeline instead. </p> </li> <li> <p>Failed: The pipeline execution was not completed successfully.</p> </li> </ul></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+}
+
+/// <p>Information about a pipeline.</p>
+#[derive(Default, Debug, Clone, Deserialize)]
+pub struct PipelineMetadata {
+    /// <p>The date and time the pipeline was created, in timestamp format.</p>
+    #[serde(rename = "created")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) of the pipeline.</p>
+    #[serde(rename = "pipelineArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_arn: Option<String>,
+    /// <p>The date and time the pipeline was last updated, in timestamp format.</p>
+    #[serde(rename = "updated")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub updated: Option<f64>,
 }
 
 /// <p>Returns a summary of a pipeline.</p>
@@ -973,7 +994,7 @@ pub struct PipelineSummary {
     pub version: Option<i64>,
 }
 
-/// <p>Represents the input of a poll for jobs action.</p>
+/// <p>Represents the input of a PollForJobs action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct PollForJobsInput {
     /// <p>Represents information about an action type.</p>
@@ -989,7 +1010,7 @@ pub struct PollForJobsInput {
     pub query_param: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p>Represents the output of a poll for jobs action.</p>
+/// <p>Represents the output of a PollForJobs action.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct PollForJobsOutput {
     /// <p>Information about the jobs to take action on.</p>
@@ -998,7 +1019,7 @@ pub struct PollForJobsOutput {
     pub jobs: Option<Vec<Job>>,
 }
 
-/// <p>Represents the input of a poll for third party jobs action.</p>
+/// <p>Represents the input of a PollForThirdPartyJobs action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct PollForThirdPartyJobsInput {
     /// <p>Represents information about an action type.</p>
@@ -1010,7 +1031,7 @@ pub struct PollForThirdPartyJobsInput {
     pub max_batch_size: Option<i64>,
 }
 
-/// <p>Represents the output of a poll for third party jobs action.</p>
+/// <p>Represents the output of a PollForThirdPartyJobs action.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct PollForThirdPartyJobsOutput {
     /// <p>Information about the jobs to take action on.</p>
@@ -1019,7 +1040,7 @@ pub struct PollForThirdPartyJobsOutput {
     pub jobs: Option<Vec<ThirdPartyJob>>,
 }
 
-/// <p>Represents the input of a put action revision action.</p>
+/// <p>Represents the input of a PutActionRevision action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct PutActionRevisionInput {
     /// <p>The name of the action that will process the revision.</p>
@@ -1036,7 +1057,7 @@ pub struct PutActionRevisionInput {
     pub stage_name: String,
 }
 
-/// <p>Represents the output of a put action revision action.</p>
+/// <p>Represents the output of a PutActionRevision action.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct PutActionRevisionOutput {
     /// <p>Indicates whether the artifact revision was previously used in an execution of the specified pipeline.</p>
@@ -1049,7 +1070,7 @@ pub struct PutActionRevisionOutput {
     pub pipeline_execution_id: Option<String>,
 }
 
-/// <p>Represents the input of a put approval result action.</p>
+/// <p>Represents the input of a PutApprovalResult action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct PutApprovalResultInput {
     /// <p>The name of the action for which approval is requested.</p>
@@ -1069,7 +1090,7 @@ pub struct PutApprovalResultInput {
     pub token: String,
 }
 
-/// <p>Represents the output of a put approval result action.</p>
+/// <p>Represents the output of a PutApprovalResult action.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct PutApprovalResultOutput {
     /// <p>The timestamp showing when the approval or rejection was submitted.</p>
@@ -1078,7 +1099,7 @@ pub struct PutApprovalResultOutput {
     pub approved_at: Option<f64>,
 }
 
-/// <p>Represents the input of a put job failure result action.</p>
+/// <p>Represents the input of a PutJobFailureResult action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct PutJobFailureResultInput {
     /// <p>The details about the failure of a job.</p>
@@ -1089,7 +1110,7 @@ pub struct PutJobFailureResultInput {
     pub job_id: String,
 }
 
-/// <p>Represents the input of a put job success result action.</p>
+/// <p>Represents the input of a PutJobSuccessResult action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct PutJobSuccessResultInput {
     /// <p>A token generated by a job worker, such as an AWS CodeDeploy deployment ID, that a successful job provides to identify a custom action in progress. Future jobs will use this token in order to identify the running instance of the action. It can be reused to return additional information about the progress of the custom action. When the action is complete, no continuation token should be supplied.</p>
@@ -1109,7 +1130,7 @@ pub struct PutJobSuccessResultInput {
     pub job_id: String,
 }
 
-/// <p>Represents the input of a third party job failure result action.</p>
+/// <p>Represents the input of a PutThirdPartyJobFailureResult action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct PutThirdPartyJobFailureResultInput {
     /// <p>The clientToken portion of the clientId and clientToken pair used to verify that the calling entity is allowed access to the job and its details.</p>
@@ -1123,7 +1144,7 @@ pub struct PutThirdPartyJobFailureResultInput {
     pub job_id: String,
 }
 
-/// <p>Represents the input of a put third party job success result action.</p>
+/// <p>Represents the input of a PutThirdPartyJobSuccessResult action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct PutThirdPartyJobSuccessResultInput {
     /// <p>The clientToken portion of the clientId and clientToken pair used to verify that the calling entity is allowed access to the job and its details.</p>
@@ -1146,7 +1167,7 @@ pub struct PutThirdPartyJobSuccessResultInput {
     pub job_id: String,
 }
 
-/// <p>Represents the input of a retry stage execution action.</p>
+/// <p>Represents the input of a RetryStageExecution action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct RetryStageExecutionInput {
     /// <p>The ID of the pipeline execution in the failed stage to be retried. Use the <a>GetPipelineState</a> action to retrieve the current pipelineExecutionId of the failed stage</p>
@@ -1163,7 +1184,7 @@ pub struct RetryStageExecutionInput {
     pub stage_name: String,
 }
 
-/// <p>Represents the output of a retry stage execution action.</p>
+/// <p>Represents the output of a RetryStageExecution action.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct RetryStageExecutionOutput {
     /// <p>The ID of the current workflow execution in the failed stage.</p>
@@ -1239,7 +1260,7 @@ pub struct StageState {
     pub stage_name: Option<String>,
 }
 
-/// <p>Represents the input of a start pipeline execution action.</p>
+/// <p>Represents the input of a StartPipelineExecution action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct StartPipelineExecutionInput {
     /// <p>The name of the pipeline to start.</p>
@@ -1247,7 +1268,7 @@ pub struct StartPipelineExecutionInput {
     pub name: String,
 }
 
-/// <p>Represents the output of a start pipeline execution action.</p>
+/// <p>Represents the output of a StartPipelineExecution action.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct StartPipelineExecutionOutput {
     /// <p>The unique system-generated ID of the pipeline execution that was started.</p>
@@ -1344,7 +1365,7 @@ pub struct TransitionState {
     pub last_changed_by: Option<String>,
 }
 
-/// <p>Represents the input of an update pipeline action.</p>
+/// <p>Represents the input of an UpdatePipeline action.</p>
 #[derive(Default, Debug, Clone, Serialize)]
 pub struct UpdatePipelineInput {
     /// <p>The name of the pipeline to be updated.</p>
@@ -1352,7 +1373,7 @@ pub struct UpdatePipelineInput {
     pub pipeline: PipelineDeclaration,
 }
 
-/// <p>Represents the output of an update pipeline action.</p>
+/// <p>Represents the output of an UpdatePipeline action.</p>
 #[derive(Default, Debug, Clone, Deserialize)]
 pub struct UpdatePipelineOutput {
     /// <p>The structure of the updated pipeline.</p>
