@@ -10,16 +10,19 @@
 //
 // =================================================================
 
+use std::error::Error;
+use std::fmt;
+use std::io;
+
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+use futures::Future;
+use hyper::StatusCode;
+use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::{ClientInner, RusotoFuture};
 
-use std::fmt;
-use std::error::Error;
-use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -13410,126 +13413,126 @@ pub trait ElasticBeanstalk {
     fn abort_environment_update(
         &self,
         input: &AbortEnvironmentUpdateMessage,
-    ) -> Result<(), AbortEnvironmentUpdateError>;
+    ) -> RusotoFuture<(), AbortEnvironmentUpdateError>;
 
     /// <p>Applies a scheduled managed action immediately. A managed action can be applied only if its status is <code>Scheduled</code>. Get the status and action ID of a managed action with <a>DescribeEnvironmentManagedActions</a>.</p>
     fn apply_environment_managed_action(
         &self,
         input: &ApplyEnvironmentManagedActionRequest,
-    ) -> Result<ApplyEnvironmentManagedActionResult, ApplyEnvironmentManagedActionError>;
+    ) -> RusotoFuture<ApplyEnvironmentManagedActionResult, ApplyEnvironmentManagedActionError>;
 
     /// <p>Checks if the specified CNAME is available.</p>
     fn check_dns_availability(
         &self,
         input: &CheckDNSAvailabilityMessage,
-    ) -> Result<CheckDNSAvailabilityResultMessage, CheckDNSAvailabilityError>;
+    ) -> RusotoFuture<CheckDNSAvailabilityResultMessage, CheckDNSAvailabilityError>;
 
     /// <p>Create or update a group of environments that each run a separate component of a single application. Takes a list of version labels that specify application source bundles for each of the environments to create or update. The name of each environment and other required information must be included in the source bundles in an environment manifest named <code>env.yaml</code>. See <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environment-mgmt-compose.html">Compose Environments</a> for details.</p>
     fn compose_environments(
         &self,
         input: &ComposeEnvironmentsMessage,
-    ) -> Result<EnvironmentDescriptionsMessage, ComposeEnvironmentsError>;
+    ) -> RusotoFuture<EnvironmentDescriptionsMessage, ComposeEnvironmentsError>;
 
     /// <p> Creates an application that has one configuration template named <code>default</code> and no application versions. </p>
     fn create_application(
         &self,
         input: &CreateApplicationMessage,
-    ) -> Result<ApplicationDescriptionMessage, CreateApplicationError>;
+    ) -> RusotoFuture<ApplicationDescriptionMessage, CreateApplicationError>;
 
     /// <p><p>Creates an application version for the specified application. You can create an application version from a source bundle in Amazon S3, a commit in AWS CodeCommit, or the output of an AWS CodeBuild build as follows:</p> <p>Specify a commit in an AWS CodeCommit repository with <code>SourceBuildInformation</code>.</p> <p>Specify a build in an AWS CodeBuild with <code>SourceBuildInformation</code> and <code>BuildConfiguration</code>.</p> <p>Specify a source bundle in S3 with <code>SourceBundle</code> </p> <p>Omit both <code>SourceBuildInformation</code> and <code>SourceBundle</code> to use the default sample application.</p> <note> <p>Once you create an application version with a specified Amazon S3 bucket and key location, you cannot change that Amazon S3 location. If you change the Amazon S3 location, you receive an exception when you attempt to launch an environment from the application version.</p> </note></p>
     fn create_application_version(
         &self,
         input: &CreateApplicationVersionMessage,
-    ) -> Result<ApplicationVersionDescriptionMessage, CreateApplicationVersionError>;
+    ) -> RusotoFuture<ApplicationVersionDescriptionMessage, CreateApplicationVersionError>;
 
     /// <p><p>Creates a configuration template. Templates are associated with a specific application and are used to deploy different versions of the application with the same configuration settings.</p> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> <li> <p> <a>DescribeConfigurationSettings</a> </p> </li> <li> <p> <a>ListAvailableSolutionStacks</a> </p> </li> </ul></p>
     fn create_configuration_template(
         &self,
         input: &CreateConfigurationTemplateMessage,
-    ) -> Result<ConfigurationSettingsDescription, CreateConfigurationTemplateError>;
+    ) -> RusotoFuture<ConfigurationSettingsDescription, CreateConfigurationTemplateError>;
 
     /// <p>Launches an environment for the specified application using the specified configuration.</p>
     fn create_environment(
         &self,
         input: &CreateEnvironmentMessage,
-    ) -> Result<EnvironmentDescription, CreateEnvironmentError>;
+    ) -> RusotoFuture<EnvironmentDescription, CreateEnvironmentError>;
 
     /// <p>Create a new version of your custom platform.</p>
     fn create_platform_version(
         &self,
         input: &CreatePlatformVersionRequest,
-    ) -> Result<CreatePlatformVersionResult, CreatePlatformVersionError>;
+    ) -> RusotoFuture<CreatePlatformVersionResult, CreatePlatformVersionError>;
 
     /// <p>Creates a bucket in Amazon S3 to store application versions, logs, and other files used by Elastic Beanstalk environments. The Elastic Beanstalk console and EB CLI call this API the first time you create an environment in a region. If the storage location already exists, <code>CreateStorageLocation</code> still returns the bucket name but does not create a new bucket.</p>
     fn create_storage_location(
         &self,
-    ) -> Result<CreateStorageLocationResultMessage, CreateStorageLocationError>;
+    ) -> RusotoFuture<CreateStorageLocationResultMessage, CreateStorageLocationError>;
 
     /// <p><p>Deletes the specified application along with all associated versions and configurations. The application versions will not be deleted from your Amazon S3 bucket.</p> <note> <p>You cannot delete an application that has a running environment.</p> </note></p>
     fn delete_application(
         &self,
         input: &DeleteApplicationMessage,
-    ) -> Result<(), DeleteApplicationError>;
+    ) -> RusotoFuture<(), DeleteApplicationError>;
 
     /// <p><p>Deletes the specified version from the specified application.</p> <note> <p>You cannot delete an application version that is associated with a running environment.</p> </note></p>
     fn delete_application_version(
         &self,
         input: &DeleteApplicationVersionMessage,
-    ) -> Result<(), DeleteApplicationVersionError>;
+    ) -> RusotoFuture<(), DeleteApplicationVersionError>;
 
     /// <p><p>Deletes the specified configuration template.</p> <note> <p>When you launch an environment using a configuration template, the environment gets a copy of the template. You can delete or modify the environment&#39;s copy of the template without affecting the running environment.</p> </note></p>
     fn delete_configuration_template(
         &self,
         input: &DeleteConfigurationTemplateMessage,
-    ) -> Result<(), DeleteConfigurationTemplateError>;
+    ) -> RusotoFuture<(), DeleteConfigurationTemplateError>;
 
     /// <p>Deletes the draft configuration associated with the running environment.</p> <p>Updating a running environment with any configuration changes creates a draft configuration set. You can get the draft configuration using <a>DescribeConfigurationSettings</a> while the update is in progress or if the update fails. The <code>DeploymentStatus</code> for the draft configuration indicates whether the deployment is in process or has failed. The draft configuration remains in existence until it is deleted with this action.</p>
     fn delete_environment_configuration(
         &self,
         input: &DeleteEnvironmentConfigurationMessage,
-    ) -> Result<(), DeleteEnvironmentConfigurationError>;
+    ) -> RusotoFuture<(), DeleteEnvironmentConfigurationError>;
 
     /// <p>Deletes the specified version of a custom platform.</p>
     fn delete_platform_version(
         &self,
         input: &DeletePlatformVersionRequest,
-    ) -> Result<DeletePlatformVersionResult, DeletePlatformVersionError>;
+    ) -> RusotoFuture<DeletePlatformVersionResult, DeletePlatformVersionError>;
 
     /// <p>Retrieve a list of application versions.</p>
     fn describe_application_versions(
         &self,
         input: &DescribeApplicationVersionsMessage,
-    ) -> Result<ApplicationVersionDescriptionsMessage, DescribeApplicationVersionsError>;
+    ) -> RusotoFuture<ApplicationVersionDescriptionsMessage, DescribeApplicationVersionsError>;
 
     /// <p>Returns the descriptions of existing applications.</p>
     fn describe_applications(
         &self,
         input: &DescribeApplicationsMessage,
-    ) -> Result<ApplicationDescriptionsMessage, DescribeApplicationsError>;
+    ) -> RusotoFuture<ApplicationDescriptionsMessage, DescribeApplicationsError>;
 
     /// <p>Describes the configuration options that are used in a particular configuration template or environment, or that a specified solution stack defines. The description includes the values the options, their default values, and an indication of the required action on a running environment if an option value is changed.</p>
     fn describe_configuration_options(
         &self,
         input: &DescribeConfigurationOptionsMessage,
-    ) -> Result<ConfigurationOptionsDescription, DescribeConfigurationOptionsError>;
+    ) -> RusotoFuture<ConfigurationOptionsDescription, DescribeConfigurationOptionsError>;
 
     /// <p><p>Returns a description of the settings for the specified configuration set, that is, either a configuration template or the configuration set associated with a running environment.</p> <p>When describing the settings for the configuration set associated with a running environment, it is possible to receive two sets of setting descriptions. One is the deployed configuration set, and the other is a draft configuration of an environment that is either in the process of deployment or that failed to deploy.</p> <p>Related Topics</p> <ul> <li> <p> <a>DeleteEnvironmentConfiguration</a> </p> </li> </ul></p>
     fn describe_configuration_settings(
         &self,
         input: &DescribeConfigurationSettingsMessage,
-    ) -> Result<ConfigurationSettingsDescriptions, DescribeConfigurationSettingsError>;
+    ) -> RusotoFuture<ConfigurationSettingsDescriptions, DescribeConfigurationSettingsError>;
 
     /// <p>Returns information about the overall health of the specified environment. The <b>DescribeEnvironmentHealth</b> operation is only available with AWS Elastic Beanstalk Enhanced Health.</p>
     fn describe_environment_health(
         &self,
         input: &DescribeEnvironmentHealthRequest,
-    ) -> Result<DescribeEnvironmentHealthResult, DescribeEnvironmentHealthError>;
+    ) -> RusotoFuture<DescribeEnvironmentHealthResult, DescribeEnvironmentHealthError>;
 
     /// <p>Lists an environment's completed and failed managed actions.</p>
     fn describe_environment_managed_action_history(
         &self,
         input: &DescribeEnvironmentManagedActionHistoryRequest,
-    ) -> Result<
+    ) -> RusotoFuture<
         DescribeEnvironmentManagedActionHistoryResult,
         DescribeEnvironmentManagedActionHistoryError,
     >;
@@ -13538,102 +13541,102 @@ pub trait ElasticBeanstalk {
     fn describe_environment_managed_actions(
         &self,
         input: &DescribeEnvironmentManagedActionsRequest,
-    ) -> Result<DescribeEnvironmentManagedActionsResult, DescribeEnvironmentManagedActionsError>;
+    ) -> RusotoFuture<DescribeEnvironmentManagedActionsResult, DescribeEnvironmentManagedActionsError>;
 
     /// <p>Returns AWS resources for this environment.</p>
     fn describe_environment_resources(
         &self,
         input: &DescribeEnvironmentResourcesMessage,
-    ) -> Result<EnvironmentResourceDescriptionsMessage, DescribeEnvironmentResourcesError>;
+    ) -> RusotoFuture<EnvironmentResourceDescriptionsMessage, DescribeEnvironmentResourcesError>;
 
     /// <p>Returns descriptions for existing environments.</p>
     fn describe_environments(
         &self,
         input: &DescribeEnvironmentsMessage,
-    ) -> Result<EnvironmentDescriptionsMessage, DescribeEnvironmentsError>;
+    ) -> RusotoFuture<EnvironmentDescriptionsMessage, DescribeEnvironmentsError>;
 
     /// <p><p>Returns list of event descriptions matching criteria up to the last 6 weeks.</p> <note> <p>This action returns the most recent 1,000 events from the specified <code>NextToken</code>.</p> </note></p>
     fn describe_events(
         &self,
         input: &DescribeEventsMessage,
-    ) -> Result<EventDescriptionsMessage, DescribeEventsError>;
+    ) -> RusotoFuture<EventDescriptionsMessage, DescribeEventsError>;
 
     /// <p>Retrives detailed information about the health of instances in your AWS Elastic Beanstalk. This operation requires <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced.html">enhanced health reporting</a>.</p>
     fn describe_instances_health(
         &self,
         input: &DescribeInstancesHealthRequest,
-    ) -> Result<DescribeInstancesHealthResult, DescribeInstancesHealthError>;
+    ) -> RusotoFuture<DescribeInstancesHealthResult, DescribeInstancesHealthError>;
 
     /// <p>Describes the version of the platform.</p>
     fn describe_platform_version(
         &self,
         input: &DescribePlatformVersionRequest,
-    ) -> Result<DescribePlatformVersionResult, DescribePlatformVersionError>;
+    ) -> RusotoFuture<DescribePlatformVersionResult, DescribePlatformVersionError>;
 
     /// <p>Returns a list of the available solution stack names, with the public version first and then in reverse chronological order.</p>
     fn list_available_solution_stacks(
         &self,
-    ) -> Result<ListAvailableSolutionStacksResultMessage, ListAvailableSolutionStacksError>;
+    ) -> RusotoFuture<ListAvailableSolutionStacksResultMessage, ListAvailableSolutionStacksError>;
 
     /// <p>Lists the available platforms.</p>
     fn list_platform_versions(
         &self,
         input: &ListPlatformVersionsRequest,
-    ) -> Result<ListPlatformVersionsResult, ListPlatformVersionsError>;
+    ) -> RusotoFuture<ListPlatformVersionsResult, ListPlatformVersionsError>;
 
     /// <p>Returns the tags applied to an AWS Elastic Beanstalk resource. The response contains a list of tag key-value pairs.</p> <p>Currently, Elastic Beanstalk only supports tagging of Elastic Beanstalk environments. For details about environment tagging, see <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.tagging.html">Tagging Resources in Your Elastic Beanstalk Environment</a>.</p>
     fn list_tags_for_resource(
         &self,
         input: &ListTagsForResourceMessage,
-    ) -> Result<ResourceTagsDescriptionMessage, ListTagsForResourceError>;
+    ) -> RusotoFuture<ResourceTagsDescriptionMessage, ListTagsForResourceError>;
 
     /// <p>Deletes and recreates all of the AWS resources (for example: the Auto Scaling group, load balancer, etc.) for a specified environment and forces a restart.</p>
     fn rebuild_environment(
         &self,
         input: &RebuildEnvironmentMessage,
-    ) -> Result<(), RebuildEnvironmentError>;
+    ) -> RusotoFuture<(), RebuildEnvironmentError>;
 
     /// <p><p>Initiates a request to compile the specified type of information of the deployed environment.</p> <p> Setting the <code>InfoType</code> to <code>tail</code> compiles the last lines from the application server log files of every Amazon EC2 instance in your environment. </p> <p> Setting the <code>InfoType</code> to <code>bundle</code> compresses the application server log files for every Amazon EC2 instance into a <code>.zip</code> file. Legacy and .NET containers do not support bundle logs. </p> <p> Use <a>RetrieveEnvironmentInfo</a> to obtain the set of logs. </p> <p>Related Topics</p> <ul> <li> <p> <a>RetrieveEnvironmentInfo</a> </p> </li> </ul></p>
     fn request_environment_info(
         &self,
         input: &RequestEnvironmentInfoMessage,
-    ) -> Result<(), RequestEnvironmentInfoError>;
+    ) -> RusotoFuture<(), RequestEnvironmentInfoError>;
 
     /// <p>Causes the environment to restart the application container server running on each Amazon EC2 instance.</p>
     fn restart_app_server(
         &self,
         input: &RestartAppServerMessage,
-    ) -> Result<(), RestartAppServerError>;
+    ) -> RusotoFuture<(), RestartAppServerError>;
 
     /// <p><p>Retrieves the compiled information from a <a>RequestEnvironmentInfo</a> request.</p> <p>Related Topics</p> <ul> <li> <p> <a>RequestEnvironmentInfo</a> </p> </li> </ul></p>
     fn retrieve_environment_info(
         &self,
         input: &RetrieveEnvironmentInfoMessage,
-    ) -> Result<RetrieveEnvironmentInfoResultMessage, RetrieveEnvironmentInfoError>;
+    ) -> RusotoFuture<RetrieveEnvironmentInfoResultMessage, RetrieveEnvironmentInfoError>;
 
     /// <p>Swaps the CNAMEs of two environments.</p>
     fn swap_environment_cnam_es(
         &self,
         input: &SwapEnvironmentCNAMEsMessage,
-    ) -> Result<(), SwapEnvironmentCNAMEsError>;
+    ) -> RusotoFuture<(), SwapEnvironmentCNAMEsError>;
 
     /// <p>Terminates the specified environment.</p>
     fn terminate_environment(
         &self,
         input: &TerminateEnvironmentMessage,
-    ) -> Result<EnvironmentDescription, TerminateEnvironmentError>;
+    ) -> RusotoFuture<EnvironmentDescription, TerminateEnvironmentError>;
 
     /// <p><p>Updates the specified application to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear these properties, specify an empty string.</p> </note></p>
     fn update_application(
         &self,
         input: &UpdateApplicationMessage,
-    ) -> Result<ApplicationDescriptionMessage, UpdateApplicationError>;
+    ) -> RusotoFuture<ApplicationDescriptionMessage, UpdateApplicationError>;
 
     /// <p>Modifies lifecycle settings for an application.</p>
     fn update_application_resource_lifecycle(
         &self,
         input: &UpdateApplicationResourceLifecycleMessage,
-    ) -> Result<
+    ) -> RusotoFuture<
         ApplicationResourceLifecycleDescriptionMessage,
         UpdateApplicationResourceLifecycleError,
     >;
@@ -13642,41 +13645,55 @@ pub trait ElasticBeanstalk {
     fn update_application_version(
         &self,
         input: &UpdateApplicationVersionMessage,
-    ) -> Result<ApplicationVersionDescriptionMessage, UpdateApplicationVersionError>;
+    ) -> RusotoFuture<ApplicationVersionDescriptionMessage, UpdateApplicationVersionError>;
 
     /// <p><p>Updates the specified configuration template to have the specified properties or configuration option values.</p> <note> <p>If a property (for example, <code>ApplicationName</code>) is not provided, its value remains unchanged. To clear such properties, specify an empty string.</p> </note> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> </ul></p>
     fn update_configuration_template(
         &self,
         input: &UpdateConfigurationTemplateMessage,
-    ) -> Result<ConfigurationSettingsDescription, UpdateConfigurationTemplateError>;
+    ) -> RusotoFuture<ConfigurationSettingsDescription, UpdateConfigurationTemplateError>;
 
     /// <p>Updates the environment description, deploys a new application version, updates the configuration settings to an entirely new configuration template, or updates select configuration option values in the running environment.</p> <p> Attempting to update both the release and configuration is not allowed and AWS Elastic Beanstalk returns an <code>InvalidParameterCombination</code> error. </p> <p> When updating the configuration settings to a new template or individual settings, a draft configuration is created and <a>DescribeConfigurationSettings</a> for this environment returns two setting descriptions with different <code>DeploymentStatus</code> values. </p>
     fn update_environment(
         &self,
         input: &UpdateEnvironmentMessage,
-    ) -> Result<EnvironmentDescription, UpdateEnvironmentError>;
+    ) -> RusotoFuture<EnvironmentDescription, UpdateEnvironmentError>;
 
     /// <p>Update the list of tags applied to an AWS Elastic Beanstalk resource. Two lists can be passed: <code>TagsToAdd</code> for tags to add or update, and <code>TagsToRemove</code>.</p> <p>Currently, Elastic Beanstalk only supports tagging of Elastic Beanstalk environments. For details about environment tagging, see <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.tagging.html">Tagging Resources in Your Elastic Beanstalk Environment</a>.</p> <p>If you create a custom IAM user policy to control permission to this operation, specify one of the following two virtual actions (or both) instead of the API operation name:</p> <dl> <dt>elasticbeanstalk:AddTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tags to add in the <code>TagsToAdd</code> parameter.</p> </dd> <dt>elasticbeanstalk:RemoveTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tag keys to remove in the <code>TagsToRemove</code> parameter.</p> </dd> </dl> <p>For details about creating a custom user policy, see <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/AWSHowTo.iam.managed-policies.html#AWSHowTo.iam.policies">Creating a Custom User Policy</a>.</p>
     fn update_tags_for_resource(
         &self,
         input: &UpdateTagsForResourceMessage,
-    ) -> Result<(), UpdateTagsForResourceError>;
+    ) -> RusotoFuture<(), UpdateTagsForResourceError>;
 
     /// <p>Takes a set of configuration settings and either a configuration template or environment, and determines whether those values are valid.</p> <p>This action returns a list of messages indicating any errors or warnings associated with the selection of option values.</p>
     fn validate_configuration_settings(
         &self,
         input: &ValidateConfigurationSettingsMessage,
-    ) -> Result<ConfigurationSettingsValidationMessages, ValidateConfigurationSettingsError>;
+    ) -> RusotoFuture<ConfigurationSettingsValidationMessages, ValidateConfigurationSettingsError>;
 }
 /// A client for the Elastic Beanstalk API.
-pub struct ElasticBeanstalkClient<P, D>
+pub struct ElasticBeanstalkClient<P = CredentialsProvider, D = RequestDispatcher>
 where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    credentials_provider: P,
+    inner: ClientInner<P, D>,
     region: region::Region,
-    dispatcher: D,
+}
+
+impl ElasticBeanstalkClient {
+    /// Creates a simple client backed by an implicit event loop.
+    ///
+    /// The client will use the default credentials provider and tls client.
+    ///
+    /// See the `rusoto_core::reactor` module for more details.
+    pub fn simple(region: region::Region) -> ElasticBeanstalkClient {
+        ElasticBeanstalkClient::new(
+            RequestDispatcher::default(),
+            CredentialsProvider::default(),
+            region,
+        )
+    }
 }
 
 impl<P, D> ElasticBeanstalkClient<P, D>
@@ -13686,23 +13703,22 @@ where
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         ElasticBeanstalkClient {
-            credentials_provider: credentials_provider,
+            inner: ClientInner::new(credentials_provider, request_dispatcher),
             region: region,
-            dispatcher: request_dispatcher,
         }
     }
 }
 
 impl<P, D> ElasticBeanstalk for ElasticBeanstalkClient<P, D>
 where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
+    P: ProvideAwsCredentials + 'static,
+    D: DispatchSignedRequest + 'static,
 {
     /// <p>Cancels in-progress environment configuration update or application version deployment.</p>
     fn abort_environment_update(
         &self,
         input: &AbortEnvironmentUpdateMessage,
-    ) -> Result<(), AbortEnvironmentUpdateError> {
+    ) -> RusotoFuture<(), AbortEnvironmentUpdateError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -13711,28 +13727,26 @@ where
         AbortEnvironmentUpdateMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(AbortEnvironmentUpdateError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AbortEnvironmentUpdateError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+
+            future::Either::A(future::ok(::std::mem::drop(response)))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Applies a scheduled managed action immediately. A managed action can be applied only if its status is <code>Scheduled</code>. Get the status and action ID of a managed action with <a>DescribeEnvironmentManagedActions</a>.</p>
     fn apply_environment_managed_action(
         &self,
         input: &ApplyEnvironmentManagedActionRequest,
-    ) -> Result<ApplyEnvironmentManagedActionResult, ApplyEnvironmentManagedActionError> {
+    ) -> RusotoFuture<ApplyEnvironmentManagedActionResult, ApplyEnvironmentManagedActionError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -13741,19 +13755,23 @@ where
         ApplyEnvironmentManagedActionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ApplyEnvironmentManagedActionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ApplyEnvironmentManagedActionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13769,23 +13787,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ApplyEnvironmentManagedActionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Checks if the specified CNAME is available.</p>
     fn check_dns_availability(
         &self,
         input: &CheckDNSAvailabilityMessage,
-    ) -> Result<CheckDNSAvailabilityResultMessage, CheckDNSAvailabilityError> {
+    ) -> RusotoFuture<CheckDNSAvailabilityResultMessage, CheckDNSAvailabilityError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -13794,19 +13808,23 @@ where
         CheckDNSAvailabilityMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CheckDNSAvailabilityError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = CheckDNSAvailabilityResultMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13820,23 +13838,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CheckDNSAvailabilityError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Create or update a group of environments that each run a separate component of a single application. Takes a list of version labels that specify application source bundles for each of the environments to create or update. The name of each environment and other required information must be included in the source bundles in an environment manifest named <code>env.yaml</code>. See <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/environment-mgmt-compose.html">Compose Environments</a> for details.</p>
     fn compose_environments(
         &self,
         input: &ComposeEnvironmentsMessage,
-    ) -> Result<EnvironmentDescriptionsMessage, ComposeEnvironmentsError> {
+    ) -> RusotoFuture<EnvironmentDescriptionsMessage, ComposeEnvironmentsError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -13845,19 +13859,23 @@ where
         ComposeEnvironmentsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ComposeEnvironmentsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = EnvironmentDescriptionsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13871,23 +13889,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ComposeEnvironmentsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p> Creates an application that has one configuration template named <code>default</code> and no application versions. </p>
     fn create_application(
         &self,
         input: &CreateApplicationMessage,
-    ) -> Result<ApplicationDescriptionMessage, CreateApplicationError> {
+    ) -> RusotoFuture<ApplicationDescriptionMessage, CreateApplicationError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -13896,19 +13910,23 @@ where
         CreateApplicationMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateApplicationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ApplicationDescriptionMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13922,23 +13940,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateApplicationError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p><p>Creates an application version for the specified application. You can create an application version from a source bundle in Amazon S3, a commit in AWS CodeCommit, or the output of an AWS CodeBuild build as follows:</p> <p>Specify a commit in an AWS CodeCommit repository with <code>SourceBuildInformation</code>.</p> <p>Specify a build in an AWS CodeBuild with <code>SourceBuildInformation</code> and <code>BuildConfiguration</code>.</p> <p>Specify a source bundle in S3 with <code>SourceBundle</code> </p> <p>Omit both <code>SourceBuildInformation</code> and <code>SourceBundle</code> to use the default sample application.</p> <note> <p>Once you create an application version with a specified Amazon S3 bucket and key location, you cannot change that Amazon S3 location. If you change the Amazon S3 location, you receive an exception when you attempt to launch an environment from the application version.</p> </note></p>
     fn create_application_version(
         &self,
         input: &CreateApplicationVersionMessage,
-    ) -> Result<ApplicationVersionDescriptionMessage, CreateApplicationVersionError> {
+    ) -> RusotoFuture<ApplicationVersionDescriptionMessage, CreateApplicationVersionError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -13947,19 +13961,23 @@ where
         CreateApplicationVersionMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateApplicationVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ApplicationVersionDescriptionMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -13975,23 +13993,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateApplicationVersionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p><p>Creates a configuration template. Templates are associated with a specific application and are used to deploy different versions of the application with the same configuration settings.</p> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> <li> <p> <a>DescribeConfigurationSettings</a> </p> </li> <li> <p> <a>ListAvailableSolutionStacks</a> </p> </li> </ul></p>
     fn create_configuration_template(
         &self,
         input: &CreateConfigurationTemplateMessage,
-    ) -> Result<ConfigurationSettingsDescription, CreateConfigurationTemplateError> {
+    ) -> RusotoFuture<ConfigurationSettingsDescription, CreateConfigurationTemplateError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -14000,19 +14014,23 @@ where
         CreateConfigurationTemplateMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateConfigurationTemplateError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ConfigurationSettingsDescription::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14026,23 +14044,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateConfigurationTemplateError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Launches an environment for the specified application using the specified configuration.</p>
     fn create_environment(
         &self,
         input: &CreateEnvironmentMessage,
-    ) -> Result<EnvironmentDescription, CreateEnvironmentError> {
+    ) -> RusotoFuture<EnvironmentDescription, CreateEnvironmentError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -14051,19 +14065,23 @@ where
         CreateEnvironmentMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateEnvironmentError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = EnvironmentDescription::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14077,23 +14095,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateEnvironmentError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Create a new version of your custom platform.</p>
     fn create_platform_version(
         &self,
         input: &CreatePlatformVersionRequest,
-    ) -> Result<CreatePlatformVersionResult, CreatePlatformVersionError> {
+    ) -> RusotoFuture<CreatePlatformVersionResult, CreatePlatformVersionError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -14102,19 +14116,23 @@ where
         CreatePlatformVersionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreatePlatformVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = CreatePlatformVersionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14128,22 +14146,18 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreatePlatformVersionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a bucket in Amazon S3 to store application versions, logs, and other files used by Elastic Beanstalk environments. The Elastic Beanstalk console and EB CLI call this API the first time you create an environment in a region. If the storage location already exists, <code>CreateStorageLocation</code> still returns the bucket name but does not create a new bucket.</p>
     fn create_storage_location(
         &self,
-    ) -> Result<CreateStorageLocationResultMessage, CreateStorageLocationError> {
+    ) -> RusotoFuture<CreateStorageLocationResultMessage, CreateStorageLocationError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -14152,19 +14166,23 @@ where
 
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateStorageLocationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = CreateStorageLocationResultMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14180,23 +14198,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateStorageLocationError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p><p>Deletes the specified application along with all associated versions and configurations. The application versions will not be deleted from your Amazon S3 bucket.</p> <note> <p>You cannot delete an application that has a running environment.</p> </note></p>
     fn delete_application(
         &self,
         input: &DeleteApplicationMessage,
-    ) -> Result<(), DeleteApplicationError> {
+    ) -> RusotoFuture<(), DeleteApplicationError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -14205,28 +14219,26 @@ where
         DeleteApplicationMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteApplicationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteApplicationError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+
+            future::Either::A(future::ok(::std::mem::drop(response)))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p><p>Deletes the specified version from the specified application.</p> <note> <p>You cannot delete an application version that is associated with a running environment.</p> </note></p>
     fn delete_application_version(
         &self,
         input: &DeleteApplicationVersionMessage,
-    ) -> Result<(), DeleteApplicationVersionError> {
+    ) -> RusotoFuture<(), DeleteApplicationVersionError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -14235,28 +14247,26 @@ where
         DeleteApplicationVersionMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteApplicationVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteApplicationVersionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+
+            future::Either::A(future::ok(::std::mem::drop(response)))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p><p>Deletes the specified configuration template.</p> <note> <p>When you launch an environment using a configuration template, the environment gets a copy of the template. You can delete or modify the environment&#39;s copy of the template without affecting the running environment.</p> </note></p>
     fn delete_configuration_template(
         &self,
         input: &DeleteConfigurationTemplateMessage,
-    ) -> Result<(), DeleteConfigurationTemplateError> {
+    ) -> RusotoFuture<(), DeleteConfigurationTemplateError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -14265,28 +14275,26 @@ where
         DeleteConfigurationTemplateMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteConfigurationTemplateError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteConfigurationTemplateError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+
+            future::Either::A(future::ok(::std::mem::drop(response)))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes the draft configuration associated with the running environment.</p> <p>Updating a running environment with any configuration changes creates a draft configuration set. You can get the draft configuration using <a>DescribeConfigurationSettings</a> while the update is in progress or if the update fails. The <code>DeploymentStatus</code> for the draft configuration indicates whether the deployment is in process or has failed. The draft configuration remains in existence until it is deleted with this action.</p>
     fn delete_environment_configuration(
         &self,
         input: &DeleteEnvironmentConfigurationMessage,
-    ) -> Result<(), DeleteEnvironmentConfigurationError> {
+    ) -> RusotoFuture<(), DeleteEnvironmentConfigurationError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -14295,28 +14303,26 @@ where
         DeleteEnvironmentConfigurationMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteEnvironmentConfigurationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteEnvironmentConfigurationError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+
+            future::Either::A(future::ok(::std::mem::drop(response)))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes the specified version of a custom platform.</p>
     fn delete_platform_version(
         &self,
         input: &DeletePlatformVersionRequest,
-    ) -> Result<DeletePlatformVersionResult, DeletePlatformVersionError> {
+    ) -> RusotoFuture<DeletePlatformVersionResult, DeletePlatformVersionError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -14325,19 +14331,23 @@ where
         DeletePlatformVersionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeletePlatformVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = DeletePlatformVersionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14351,23 +14361,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeletePlatformVersionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieve a list of application versions.</p>
     fn describe_application_versions(
         &self,
         input: &DescribeApplicationVersionsMessage,
-    ) -> Result<ApplicationVersionDescriptionsMessage, DescribeApplicationVersionsError> {
+    ) -> RusotoFuture<ApplicationVersionDescriptionsMessage, DescribeApplicationVersionsError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -14376,19 +14382,23 @@ where
         DescribeApplicationVersionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeApplicationVersionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ApplicationVersionDescriptionsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14404,23 +14414,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeApplicationVersionsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns the descriptions of existing applications.</p>
     fn describe_applications(
         &self,
         input: &DescribeApplicationsMessage,
-    ) -> Result<ApplicationDescriptionsMessage, DescribeApplicationsError> {
+    ) -> RusotoFuture<ApplicationDescriptionsMessage, DescribeApplicationsError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -14429,19 +14435,23 @@ where
         DescribeApplicationsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeApplicationsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ApplicationDescriptionsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14455,23 +14465,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeApplicationsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Describes the configuration options that are used in a particular configuration template or environment, or that a specified solution stack defines. The description includes the values the options, their default values, and an indication of the required action on a running environment if an option value is changed.</p>
     fn describe_configuration_options(
         &self,
         input: &DescribeConfigurationOptionsMessage,
-    ) -> Result<ConfigurationOptionsDescription, DescribeConfigurationOptionsError> {
+    ) -> RusotoFuture<ConfigurationOptionsDescription, DescribeConfigurationOptionsError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -14480,19 +14486,23 @@ where
         DescribeConfigurationOptionsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeConfigurationOptionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ConfigurationOptionsDescription::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14506,23 +14516,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeConfigurationOptionsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p><p>Returns a description of the settings for the specified configuration set, that is, either a configuration template or the configuration set associated with a running environment.</p> <p>When describing the settings for the configuration set associated with a running environment, it is possible to receive two sets of setting descriptions. One is the deployed configuration set, and the other is a draft configuration of an environment that is either in the process of deployment or that failed to deploy.</p> <p>Related Topics</p> <ul> <li> <p> <a>DeleteEnvironmentConfiguration</a> </p> </li> </ul></p>
     fn describe_configuration_settings(
         &self,
         input: &DescribeConfigurationSettingsMessage,
-    ) -> Result<ConfigurationSettingsDescriptions, DescribeConfigurationSettingsError> {
+    ) -> RusotoFuture<ConfigurationSettingsDescriptions, DescribeConfigurationSettingsError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -14531,19 +14537,23 @@ where
         DescribeConfigurationSettingsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeConfigurationSettingsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ConfigurationSettingsDescriptions::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14557,23 +14567,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeConfigurationSettingsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns information about the overall health of the specified environment. The <b>DescribeEnvironmentHealth</b> operation is only available with AWS Elastic Beanstalk Enhanced Health.</p>
     fn describe_environment_health(
         &self,
         input: &DescribeEnvironmentHealthRequest,
-    ) -> Result<DescribeEnvironmentHealthResult, DescribeEnvironmentHealthError> {
+    ) -> RusotoFuture<DescribeEnvironmentHealthResult, DescribeEnvironmentHealthError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -14582,19 +14588,23 @@ where
         DescribeEnvironmentHealthRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeEnvironmentHealthError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = DescribeEnvironmentHealthResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14608,23 +14618,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeEnvironmentHealthError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists an environment's completed and failed managed actions.</p>
     fn describe_environment_managed_action_history(
         &self,
         input: &DescribeEnvironmentManagedActionHistoryRequest,
-    ) -> Result<
+    ) -> RusotoFuture<
         DescribeEnvironmentManagedActionHistoryResult,
         DescribeEnvironmentManagedActionHistoryError,
     > {
@@ -14640,19 +14646,23 @@ where
         );
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeEnvironmentManagedActionHistoryError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = DescribeEnvironmentManagedActionHistoryResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14668,23 +14678,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeEnvironmentManagedActionHistoryError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists an environment's upcoming and in-progress managed actions.</p>
     fn describe_environment_managed_actions(
         &self,
         input: &DescribeEnvironmentManagedActionsRequest,
-    ) -> Result<DescribeEnvironmentManagedActionsResult, DescribeEnvironmentManagedActionsError>
+    ) -> RusotoFuture<DescribeEnvironmentManagedActionsResult, DescribeEnvironmentManagedActionsError>
     {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
@@ -14694,19 +14700,23 @@ where
         DescribeEnvironmentManagedActionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeEnvironmentManagedActionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = DescribeEnvironmentManagedActionsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14722,23 +14732,20 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeEnvironmentManagedActionsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns AWS resources for this environment.</p>
     fn describe_environment_resources(
         &self,
         input: &DescribeEnvironmentResourcesMessage,
-    ) -> Result<EnvironmentResourceDescriptionsMessage, DescribeEnvironmentResourcesError> {
+    ) -> RusotoFuture<EnvironmentResourceDescriptionsMessage, DescribeEnvironmentResourcesError>
+    {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -14747,19 +14754,23 @@ where
         DescribeEnvironmentResourcesMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeEnvironmentResourcesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = EnvironmentResourceDescriptionsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14775,23 +14786,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeEnvironmentResourcesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns descriptions for existing environments.</p>
     fn describe_environments(
         &self,
         input: &DescribeEnvironmentsMessage,
-    ) -> Result<EnvironmentDescriptionsMessage, DescribeEnvironmentsError> {
+    ) -> RusotoFuture<EnvironmentDescriptionsMessage, DescribeEnvironmentsError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -14800,19 +14807,23 @@ where
         DescribeEnvironmentsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeEnvironmentsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = EnvironmentDescriptionsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14826,23 +14837,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeEnvironmentsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p><p>Returns list of event descriptions matching criteria up to the last 6 weeks.</p> <note> <p>This action returns the most recent 1,000 events from the specified <code>NextToken</code>.</p> </note></p>
     fn describe_events(
         &self,
         input: &DescribeEventsMessage,
-    ) -> Result<EventDescriptionsMessage, DescribeEventsError> {
+    ) -> RusotoFuture<EventDescriptionsMessage, DescribeEventsError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -14851,19 +14858,23 @@ where
         DescribeEventsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeEventsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = EventDescriptionsMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14877,23 +14888,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeEventsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrives detailed information about the health of instances in your AWS Elastic Beanstalk. This operation requires <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced.html">enhanced health reporting</a>.</p>
     fn describe_instances_health(
         &self,
         input: &DescribeInstancesHealthRequest,
-    ) -> Result<DescribeInstancesHealthResult, DescribeInstancesHealthError> {
+    ) -> RusotoFuture<DescribeInstancesHealthResult, DescribeInstancesHealthError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -14902,19 +14909,23 @@ where
         DescribeInstancesHealthRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeInstancesHealthError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = DescribeInstancesHealthResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14928,23 +14939,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeInstancesHealthError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Describes the version of the platform.</p>
     fn describe_platform_version(
         &self,
         input: &DescribePlatformVersionRequest,
-    ) -> Result<DescribePlatformVersionResult, DescribePlatformVersionError> {
+    ) -> RusotoFuture<DescribePlatformVersionResult, DescribePlatformVersionError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -14953,19 +14960,23 @@ where
         DescribePlatformVersionRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribePlatformVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = DescribePlatformVersionResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -14979,22 +14990,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribePlatformVersionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns a list of the available solution stack names, with the public version first and then in reverse chronological order.</p>
     fn list_available_solution_stacks(
         &self,
-    ) -> Result<ListAvailableSolutionStacksResultMessage, ListAvailableSolutionStacksError> {
+    ) -> RusotoFuture<ListAvailableSolutionStacksResultMessage, ListAvailableSolutionStacksError>
+    {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -15003,19 +15011,23 @@ where
 
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListAvailableSolutionStacksError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ListAvailableSolutionStacksResultMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15031,23 +15043,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListAvailableSolutionStacksError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists the available platforms.</p>
     fn list_platform_versions(
         &self,
         input: &ListPlatformVersionsRequest,
-    ) -> Result<ListPlatformVersionsResult, ListPlatformVersionsError> {
+    ) -> RusotoFuture<ListPlatformVersionsResult, ListPlatformVersionsError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -15056,19 +15064,23 @@ where
         ListPlatformVersionsRequestSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListPlatformVersionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ListPlatformVersionsResult::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15082,23 +15094,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListPlatformVersionsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns the tags applied to an AWS Elastic Beanstalk resource. The response contains a list of tag key-value pairs.</p> <p>Currently, Elastic Beanstalk only supports tagging of Elastic Beanstalk environments. For details about environment tagging, see <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.tagging.html">Tagging Resources in Your Elastic Beanstalk Environment</a>.</p>
     fn list_tags_for_resource(
         &self,
         input: &ListTagsForResourceMessage,
-    ) -> Result<ResourceTagsDescriptionMessage, ListTagsForResourceError> {
+    ) -> RusotoFuture<ResourceTagsDescriptionMessage, ListTagsForResourceError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -15107,19 +15115,23 @@ where
         ListTagsForResourceMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListTagsForResourceError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ResourceTagsDescriptionMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15133,23 +15145,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListTagsForResourceError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes and recreates all of the AWS resources (for example: the Auto Scaling group, load balancer, etc.) for a specified environment and forces a restart.</p>
     fn rebuild_environment(
         &self,
         input: &RebuildEnvironmentMessage,
-    ) -> Result<(), RebuildEnvironmentError> {
+    ) -> RusotoFuture<(), RebuildEnvironmentError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -15158,28 +15166,26 @@ where
         RebuildEnvironmentMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(RebuildEnvironmentError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RebuildEnvironmentError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+
+            future::Either::A(future::ok(::std::mem::drop(response)))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p><p>Initiates a request to compile the specified type of information of the deployed environment.</p> <p> Setting the <code>InfoType</code> to <code>tail</code> compiles the last lines from the application server log files of every Amazon EC2 instance in your environment. </p> <p> Setting the <code>InfoType</code> to <code>bundle</code> compresses the application server log files for every Amazon EC2 instance into a <code>.zip</code> file. Legacy and .NET containers do not support bundle logs. </p> <p> Use <a>RetrieveEnvironmentInfo</a> to obtain the set of logs. </p> <p>Related Topics</p> <ul> <li> <p> <a>RetrieveEnvironmentInfo</a> </p> </li> </ul></p>
     fn request_environment_info(
         &self,
         input: &RequestEnvironmentInfoMessage,
-    ) -> Result<(), RequestEnvironmentInfoError> {
+    ) -> RusotoFuture<(), RequestEnvironmentInfoError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -15188,28 +15194,26 @@ where
         RequestEnvironmentInfoMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(RequestEnvironmentInfoError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RequestEnvironmentInfoError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+
+            future::Either::A(future::ok(::std::mem::drop(response)))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Causes the environment to restart the application container server running on each Amazon EC2 instance.</p>
     fn restart_app_server(
         &self,
         input: &RestartAppServerMessage,
-    ) -> Result<(), RestartAppServerError> {
+    ) -> RusotoFuture<(), RestartAppServerError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -15218,28 +15222,26 @@ where
         RestartAppServerMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(RestartAppServerError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RestartAppServerError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+
+            future::Either::A(future::ok(::std::mem::drop(response)))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p><p>Retrieves the compiled information from a <a>RequestEnvironmentInfo</a> request.</p> <p>Related Topics</p> <ul> <li> <p> <a>RequestEnvironmentInfo</a> </p> </li> </ul></p>
     fn retrieve_environment_info(
         &self,
         input: &RetrieveEnvironmentInfoMessage,
-    ) -> Result<RetrieveEnvironmentInfoResultMessage, RetrieveEnvironmentInfoError> {
+    ) -> RusotoFuture<RetrieveEnvironmentInfoResultMessage, RetrieveEnvironmentInfoError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -15248,19 +15250,23 @@ where
         RetrieveEnvironmentInfoMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(RetrieveEnvironmentInfoError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = RetrieveEnvironmentInfoResultMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15276,23 +15282,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RetrieveEnvironmentInfoError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Swaps the CNAMEs of two environments.</p>
     fn swap_environment_cnam_es(
         &self,
         input: &SwapEnvironmentCNAMEsMessage,
-    ) -> Result<(), SwapEnvironmentCNAMEsError> {
+    ) -> RusotoFuture<(), SwapEnvironmentCNAMEsError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -15301,28 +15303,26 @@ where
         SwapEnvironmentCNAMEsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(SwapEnvironmentCNAMEsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(SwapEnvironmentCNAMEsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+
+            future::Either::A(future::ok(::std::mem::drop(response)))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Terminates the specified environment.</p>
     fn terminate_environment(
         &self,
         input: &TerminateEnvironmentMessage,
-    ) -> Result<EnvironmentDescription, TerminateEnvironmentError> {
+    ) -> RusotoFuture<EnvironmentDescription, TerminateEnvironmentError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -15331,19 +15331,23 @@ where
         TerminateEnvironmentMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(TerminateEnvironmentError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = EnvironmentDescription::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15357,23 +15361,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(TerminateEnvironmentError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p><p>Updates the specified application to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear these properties, specify an empty string.</p> </note></p>
     fn update_application(
         &self,
         input: &UpdateApplicationMessage,
-    ) -> Result<ApplicationDescriptionMessage, UpdateApplicationError> {
+    ) -> RusotoFuture<ApplicationDescriptionMessage, UpdateApplicationError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -15382,19 +15382,23 @@ where
         UpdateApplicationMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateApplicationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ApplicationDescriptionMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15408,23 +15412,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateApplicationError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Modifies lifecycle settings for an application.</p>
     fn update_application_resource_lifecycle(
         &self,
         input: &UpdateApplicationResourceLifecycleMessage,
-    ) -> Result<
+    ) -> RusotoFuture<
         ApplicationResourceLifecycleDescriptionMessage,
         UpdateApplicationResourceLifecycleError,
     > {
@@ -15436,19 +15436,23 @@ where
         UpdateApplicationResourceLifecycleMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateApplicationResourceLifecycleError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ApplicationResourceLifecycleDescriptionMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15464,23 +15468,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateApplicationResourceLifecycleError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p><p>Updates the specified application version to have the specified properties.</p> <note> <p>If a property (for example, <code>description</code>) is not provided, the value remains unchanged. To clear properties, specify an empty string.</p> </note></p>
     fn update_application_version(
         &self,
         input: &UpdateApplicationVersionMessage,
-    ) -> Result<ApplicationVersionDescriptionMessage, UpdateApplicationVersionError> {
+    ) -> RusotoFuture<ApplicationVersionDescriptionMessage, UpdateApplicationVersionError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -15489,19 +15489,23 @@ where
         UpdateApplicationVersionMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateApplicationVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ApplicationVersionDescriptionMessage::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15517,23 +15521,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateApplicationVersionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p><p>Updates the specified configuration template to have the specified properties or configuration option values.</p> <note> <p>If a property (for example, <code>ApplicationName</code>) is not provided, its value remains unchanged. To clear such properties, specify an empty string.</p> </note> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> </ul></p>
     fn update_configuration_template(
         &self,
         input: &UpdateConfigurationTemplateMessage,
-    ) -> Result<ConfigurationSettingsDescription, UpdateConfigurationTemplateError> {
+    ) -> RusotoFuture<ConfigurationSettingsDescription, UpdateConfigurationTemplateError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -15542,19 +15542,23 @@ where
         UpdateConfigurationTemplateMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateConfigurationTemplateError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ConfigurationSettingsDescription::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15568,23 +15572,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateConfigurationTemplateError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates the environment description, deploys a new application version, updates the configuration settings to an entirely new configuration template, or updates select configuration option values in the running environment.</p> <p> Attempting to update both the release and configuration is not allowed and AWS Elastic Beanstalk returns an <code>InvalidParameterCombination</code> error. </p> <p> When updating the configuration settings to a new template or individual settings, a draft configuration is created and <a>DescribeConfigurationSettings</a> for this environment returns two setting descriptions with different <code>DeploymentStatus</code> values. </p>
     fn update_environment(
         &self,
         input: &UpdateEnvironmentMessage,
-    ) -> Result<EnvironmentDescription, UpdateEnvironmentError> {
+    ) -> RusotoFuture<EnvironmentDescription, UpdateEnvironmentError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -15593,19 +15593,23 @@ where
         UpdateEnvironmentMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateEnvironmentError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = EnvironmentDescription::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15619,23 +15623,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateEnvironmentError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Update the list of tags applied to an AWS Elastic Beanstalk resource. Two lists can be passed: <code>TagsToAdd</code> for tags to add or update, and <code>TagsToRemove</code>.</p> <p>Currently, Elastic Beanstalk only supports tagging of Elastic Beanstalk environments. For details about environment tagging, see <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features.tagging.html">Tagging Resources in Your Elastic Beanstalk Environment</a>.</p> <p>If you create a custom IAM user policy to control permission to this operation, specify one of the following two virtual actions (or both) instead of the API operation name:</p> <dl> <dt>elasticbeanstalk:AddTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tags to add in the <code>TagsToAdd</code> parameter.</p> </dd> <dt>elasticbeanstalk:RemoveTags</dt> <dd> <p>Controls permission to call <code>UpdateTagsForResource</code> and pass a list of tag keys to remove in the <code>TagsToRemove</code> parameter.</p> </dd> </dl> <p>For details about creating a custom user policy, see <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/AWSHowTo.iam.managed-policies.html#AWSHowTo.iam.policies">Creating a Custom User Policy</a>.</p>
     fn update_tags_for_resource(
         &self,
         input: &UpdateTagsForResourceMessage,
-    ) -> Result<(), UpdateTagsForResourceError> {
+    ) -> RusotoFuture<(), UpdateTagsForResourceError> {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -15644,28 +15644,27 @@ where
         UpdateTagsForResourceMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateTagsForResourceError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateTagsForResourceError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+
+            future::Either::A(future::ok(::std::mem::drop(response)))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Takes a set of configuration settings and either a configuration template or environment, and determines whether those values are valid.</p> <p>This action returns a list of messages indicating any errors or warnings associated with the selection of option values.</p>
     fn validate_configuration_settings(
         &self,
         input: &ValidateConfigurationSettingsMessage,
-    ) -> Result<ConfigurationSettingsValidationMessages, ValidateConfigurationSettingsError> {
+    ) -> RusotoFuture<ConfigurationSettingsValidationMessages, ValidateConfigurationSettingsError>
+    {
         let mut request = SignedRequest::new("POST", "elasticbeanstalk", &self.region, "/");
         let mut params = Params::new();
 
@@ -15674,19 +15673,23 @@ where
         ValidateConfigurationSettingsMessageSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ValidateConfigurationSettingsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ConfigurationSettingsValidationMessages::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -15702,16 +15705,12 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ValidateConfigurationSettingsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 }
 
@@ -15734,7 +15733,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CheckDNSAvailabilityMessage::default();
-        let result = client.check_dns_availability(&request);
+        let result = client.check_dns_availability(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -15748,7 +15747,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CreateApplicationVersionMessage::default();
-        let result = client.create_application_version(&request);
+        let result = client.create_application_version(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -15762,7 +15761,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CreateApplicationMessage::default();
-        let result = client.create_application(&request);
+        let result = client.create_application(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -15776,7 +15775,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CreateConfigurationTemplateMessage::default();
-        let result = client.create_configuration_template(&request);
+        let result = client.create_configuration_template(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -15790,7 +15789,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CreateEnvironmentMessage::default();
-        let result = client.create_environment(&request);
+        let result = client.create_environment(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -15804,7 +15803,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
 
-        let result = client.create_storage_location();
+        let result = client.create_storage_location().sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -15818,7 +15817,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DeleteApplicationMessage::default();
-        let result = client.delete_application(&request);
+        let result = client.delete_application(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -15832,7 +15831,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeApplicationVersionsMessage::default();
-        let result = client.describe_application_versions(&request);
+        let result = client.describe_application_versions(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -15846,7 +15845,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeApplicationsMessage::default();
-        let result = client.describe_applications(&request);
+        let result = client.describe_applications(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -15860,7 +15859,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeConfigurationOptionsMessage::default();
-        let result = client.describe_configuration_options(&request);
+        let result = client.describe_configuration_options(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -15874,7 +15873,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeEnvironmentsMessage::default();
-        let result = client.describe_environments(&request);
+        let result = client.describe_environments(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -15888,7 +15887,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DescribeEventsMessage::default();
-        let result = client.describe_events(&request);
+        let result = client.describe_events(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -15902,7 +15901,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
 
-        let result = client.list_available_solution_stacks();
+        let result = client.list_available_solution_stacks().sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -15916,7 +15915,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = RetrieveEnvironmentInfoMessage::default();
-        let result = client.retrieve_environment_info(&request);
+        let result = client.retrieve_environment_info(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -15930,7 +15929,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = TerminateEnvironmentMessage::default();
-        let result = client.terminate_environment(&request);
+        let result = client.terminate_environment(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -15944,7 +15943,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = UpdateApplicationVersionMessage::default();
-        let result = client.update_application_version(&request);
+        let result = client.update_application_version(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -15958,7 +15957,7 @@ mod protocol_tests {
         let client =
             ElasticBeanstalkClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = UpdateApplicationMessage::default();
-        let result = client.update_application(&request);
+        let result = client.update_application(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }

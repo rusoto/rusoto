@@ -10,16 +10,19 @@
 //
 // =================================================================
 
+use std::error::Error;
+use std::fmt;
+use std::io;
+
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+use futures::Future;
+use hyper::StatusCode;
+use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::{ClientInner, RusotoFuture};
 
-use std::fmt;
-use std::error::Error;
-use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -15066,579 +15069,636 @@ impl Error for UpdateVpcLinkError {
 /// Trait representing the capabilities of the Amazon API Gateway API. Amazon API Gateway clients implement this trait.
 pub trait ApiGateway {
     /// <p><p>Create an <a>ApiKey</a> resource. </p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/create-api-key.html">AWS CLI</a></div></p>
-    fn create_api_key(&self, input: &CreateApiKeyRequest) -> Result<ApiKey, CreateApiKeyError>;
+    fn create_api_key(
+        &self,
+        input: &CreateApiKeyRequest,
+    ) -> RusotoFuture<ApiKey, CreateApiKeyError>;
 
     /// <p><p>Adds a new <a>Authorizer</a> resource to an existing <a>RestApi</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/create-authorizer.html">AWS CLI</a></div></p>
     fn create_authorizer(
         &self,
         input: &CreateAuthorizerRequest,
-    ) -> Result<Authorizer, CreateAuthorizerError>;
+    ) -> RusotoFuture<Authorizer, CreateAuthorizerError>;
 
     /// <p>Creates a new <a>BasePathMapping</a> resource.</p>
     fn create_base_path_mapping(
         &self,
         input: &CreateBasePathMappingRequest,
-    ) -> Result<BasePathMapping, CreateBasePathMappingError>;
+    ) -> RusotoFuture<BasePathMapping, CreateBasePathMappingError>;
 
     /// <p>Creates a <a>Deployment</a> resource, which makes a specified <a>RestApi</a> callable over the internet.</p>
     fn create_deployment(
         &self,
         input: &CreateDeploymentRequest,
-    ) -> Result<Deployment, CreateDeploymentError>;
+    ) -> RusotoFuture<Deployment, CreateDeploymentError>;
 
     fn create_documentation_part(
         &self,
         input: &CreateDocumentationPartRequest,
-    ) -> Result<DocumentationPart, CreateDocumentationPartError>;
+    ) -> RusotoFuture<DocumentationPart, CreateDocumentationPartError>;
 
     fn create_documentation_version(
         &self,
         input: &CreateDocumentationVersionRequest,
-    ) -> Result<DocumentationVersion, CreateDocumentationVersionError>;
+    ) -> RusotoFuture<DocumentationVersion, CreateDocumentationVersionError>;
 
     /// <p>Creates a new domain name.</p>
     fn create_domain_name(
         &self,
         input: &CreateDomainNameRequest,
-    ) -> Result<DomainName, CreateDomainNameError>;
+    ) -> RusotoFuture<DomainName, CreateDomainNameError>;
 
     /// <p>Adds a new <a>Model</a> resource to an existing <a>RestApi</a> resource.</p>
-    fn create_model(&self, input: &CreateModelRequest) -> Result<Model, CreateModelError>;
+    fn create_model(&self, input: &CreateModelRequest) -> RusotoFuture<Model, CreateModelError>;
 
     /// <p>Creates a <a>ReqeustValidator</a> of a given <a>RestApi</a>.</p>
     fn create_request_validator(
         &self,
         input: &CreateRequestValidatorRequest,
-    ) -> Result<RequestValidator, CreateRequestValidatorError>;
+    ) -> RusotoFuture<RequestValidator, CreateRequestValidatorError>;
 
     /// <p>Creates a <a>Resource</a> resource.</p>
     fn create_resource(
         &self,
         input: &CreateResourceRequest,
-    ) -> Result<Resource, CreateResourceError>;
+    ) -> RusotoFuture<Resource, CreateResourceError>;
 
     /// <p>Creates a new <a>RestApi</a> resource.</p>
-    fn create_rest_api(&self, input: &CreateRestApiRequest) -> Result<RestApi, CreateRestApiError>;
+    fn create_rest_api(
+        &self,
+        input: &CreateRestApiRequest,
+    ) -> RusotoFuture<RestApi, CreateRestApiError>;
 
     /// <p>Creates a new <a>Stage</a> resource that references a pre-existing <a>Deployment</a> for the API. </p>
-    fn create_stage(&self, input: &CreateStageRequest) -> Result<Stage, CreateStageError>;
+    fn create_stage(&self, input: &CreateStageRequest) -> RusotoFuture<Stage, CreateStageError>;
 
     /// <p>Creates a usage plan with the throttle and quota limits, as well as the associated API stages, specified in the payload. </p>
     fn create_usage_plan(
         &self,
         input: &CreateUsagePlanRequest,
-    ) -> Result<UsagePlan, CreateUsagePlanError>;
+    ) -> RusotoFuture<UsagePlan, CreateUsagePlanError>;
 
     /// <p>Creates a usage plan key for adding an existing API key to a usage plan.</p>
     fn create_usage_plan_key(
         &self,
         input: &CreateUsagePlanKeyRequest,
-    ) -> Result<UsagePlanKey, CreateUsagePlanKeyError>;
+    ) -> RusotoFuture<UsagePlanKey, CreateUsagePlanKeyError>;
 
     /// <p>Creates a VPC link, under the caller's account in a selected region, in an asynchronous operation that typically takes 2-4 minutes to complete and become operational. The caller must have permissions to create and update VPC Endpoint services.</p>
-    fn create_vpc_link(&self, input: &CreateVpcLinkRequest) -> Result<VpcLink, CreateVpcLinkError>;
+    fn create_vpc_link(
+        &self,
+        input: &CreateVpcLinkRequest,
+    ) -> RusotoFuture<VpcLink, CreateVpcLinkError>;
 
     /// <p>Deletes the <a>ApiKey</a> resource.</p>
-    fn delete_api_key(&self, input: &DeleteApiKeyRequest) -> Result<(), DeleteApiKeyError>;
+    fn delete_api_key(&self, input: &DeleteApiKeyRequest) -> RusotoFuture<(), DeleteApiKeyError>;
 
     /// <p><p>Deletes an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/delete-authorizer.html">AWS CLI</a></div></p>
     fn delete_authorizer(
         &self,
         input: &DeleteAuthorizerRequest,
-    ) -> Result<(), DeleteAuthorizerError>;
+    ) -> RusotoFuture<(), DeleteAuthorizerError>;
 
     /// <p>Deletes the <a>BasePathMapping</a> resource.</p>
     fn delete_base_path_mapping(
         &self,
         input: &DeleteBasePathMappingRequest,
-    ) -> Result<(), DeleteBasePathMappingError>;
+    ) -> RusotoFuture<(), DeleteBasePathMappingError>;
 
     /// <p>Deletes the <a>ClientCertificate</a> resource.</p>
     fn delete_client_certificate(
         &self,
         input: &DeleteClientCertificateRequest,
-    ) -> Result<(), DeleteClientCertificateError>;
+    ) -> RusotoFuture<(), DeleteClientCertificateError>;
 
     /// <p>Deletes a <a>Deployment</a> resource. Deleting a deployment will only succeed if there are no <a>Stage</a> resources associated with it.</p>
     fn delete_deployment(
         &self,
         input: &DeleteDeploymentRequest,
-    ) -> Result<(), DeleteDeploymentError>;
+    ) -> RusotoFuture<(), DeleteDeploymentError>;
 
     fn delete_documentation_part(
         &self,
         input: &DeleteDocumentationPartRequest,
-    ) -> Result<(), DeleteDocumentationPartError>;
+    ) -> RusotoFuture<(), DeleteDocumentationPartError>;
 
     fn delete_documentation_version(
         &self,
         input: &DeleteDocumentationVersionRequest,
-    ) -> Result<(), DeleteDocumentationVersionError>;
+    ) -> RusotoFuture<(), DeleteDocumentationVersionError>;
 
     /// <p>Deletes the <a>DomainName</a> resource.</p>
     fn delete_domain_name(
         &self,
         input: &DeleteDomainNameRequest,
-    ) -> Result<(), DeleteDomainNameError>;
+    ) -> RusotoFuture<(), DeleteDomainNameError>;
 
     /// <p>Clears any customization of a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a> and resets it with the default settings.</p>
     fn delete_gateway_response(
         &self,
         input: &DeleteGatewayResponseRequest,
-    ) -> Result<(), DeleteGatewayResponseError>;
+    ) -> RusotoFuture<(), DeleteGatewayResponseError>;
 
     /// <p>Represents a delete integration.</p>
     fn delete_integration(
         &self,
         input: &DeleteIntegrationRequest,
-    ) -> Result<(), DeleteIntegrationError>;
+    ) -> RusotoFuture<(), DeleteIntegrationError>;
 
     /// <p>Represents a delete integration response.</p>
     fn delete_integration_response(
         &self,
         input: &DeleteIntegrationResponseRequest,
-    ) -> Result<(), DeleteIntegrationResponseError>;
+    ) -> RusotoFuture<(), DeleteIntegrationResponseError>;
 
     /// <p>Deletes an existing <a>Method</a> resource.</p>
-    fn delete_method(&self, input: &DeleteMethodRequest) -> Result<(), DeleteMethodError>;
+    fn delete_method(&self, input: &DeleteMethodRequest) -> RusotoFuture<(), DeleteMethodError>;
 
     /// <p>Deletes an existing <a>MethodResponse</a> resource.</p>
     fn delete_method_response(
         &self,
         input: &DeleteMethodResponseRequest,
-    ) -> Result<(), DeleteMethodResponseError>;
+    ) -> RusotoFuture<(), DeleteMethodResponseError>;
 
     /// <p>Deletes a model.</p>
-    fn delete_model(&self, input: &DeleteModelRequest) -> Result<(), DeleteModelError>;
+    fn delete_model(&self, input: &DeleteModelRequest) -> RusotoFuture<(), DeleteModelError>;
 
     /// <p>Deletes a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
     fn delete_request_validator(
         &self,
         input: &DeleteRequestValidatorRequest,
-    ) -> Result<(), DeleteRequestValidatorError>;
+    ) -> RusotoFuture<(), DeleteRequestValidatorError>;
 
     /// <p>Deletes a <a>Resource</a> resource.</p>
-    fn delete_resource(&self, input: &DeleteResourceRequest) -> Result<(), DeleteResourceError>;
+    fn delete_resource(
+        &self,
+        input: &DeleteResourceRequest,
+    ) -> RusotoFuture<(), DeleteResourceError>;
 
     /// <p>Deletes the specified API.</p>
-    fn delete_rest_api(&self, input: &DeleteRestApiRequest) -> Result<(), DeleteRestApiError>;
+    fn delete_rest_api(&self, input: &DeleteRestApiRequest)
+        -> RusotoFuture<(), DeleteRestApiError>;
 
     /// <p>Deletes a <a>Stage</a> resource.</p>
-    fn delete_stage(&self, input: &DeleteStageRequest) -> Result<(), DeleteStageError>;
+    fn delete_stage(&self, input: &DeleteStageRequest) -> RusotoFuture<(), DeleteStageError>;
 
     /// <p>Deletes a usage plan of a given plan Id.</p>
-    fn delete_usage_plan(&self, input: &DeleteUsagePlanRequest)
-        -> Result<(), DeleteUsagePlanError>;
+    fn delete_usage_plan(
+        &self,
+        input: &DeleteUsagePlanRequest,
+    ) -> RusotoFuture<(), DeleteUsagePlanError>;
 
     /// <p>Deletes a usage plan key and remove the underlying API key from the associated usage plan.</p>
     fn delete_usage_plan_key(
         &self,
         input: &DeleteUsagePlanKeyRequest,
-    ) -> Result<(), DeleteUsagePlanKeyError>;
+    ) -> RusotoFuture<(), DeleteUsagePlanKeyError>;
 
     /// <p>Deletes an existing <a>VpcLink</a> of a specified identifier.</p>
-    fn delete_vpc_link(&self, input: &DeleteVpcLinkRequest) -> Result<(), DeleteVpcLinkError>;
+    fn delete_vpc_link(&self, input: &DeleteVpcLinkRequest)
+        -> RusotoFuture<(), DeleteVpcLinkError>;
 
     /// <p>Flushes all authorizer cache entries on a stage.</p>
     fn flush_stage_authorizers_cache(
         &self,
         input: &FlushStageAuthorizersCacheRequest,
-    ) -> Result<(), FlushStageAuthorizersCacheError>;
+    ) -> RusotoFuture<(), FlushStageAuthorizersCacheError>;
 
     /// <p>Flushes a stage's cache.</p>
-    fn flush_stage_cache(&self, input: &FlushStageCacheRequest)
-        -> Result<(), FlushStageCacheError>;
+    fn flush_stage_cache(
+        &self,
+        input: &FlushStageCacheRequest,
+    ) -> RusotoFuture<(), FlushStageCacheError>;
 
     /// <p>Generates a <a>ClientCertificate</a> resource.</p>
     fn generate_client_certificate(
         &self,
         input: &GenerateClientCertificateRequest,
-    ) -> Result<ClientCertificate, GenerateClientCertificateError>;
+    ) -> RusotoFuture<ClientCertificate, GenerateClientCertificateError>;
 
     /// <p>Gets information about the current <a>Account</a> resource.</p>
-    fn get_account(&self) -> Result<Account, GetAccountError>;
+    fn get_account(&self) -> RusotoFuture<Account, GetAccountError>;
 
     /// <p>Gets information about the current <a>ApiKey</a> resource.</p>
-    fn get_api_key(&self, input: &GetApiKeyRequest) -> Result<ApiKey, GetApiKeyError>;
+    fn get_api_key(&self, input: &GetApiKeyRequest) -> RusotoFuture<ApiKey, GetApiKeyError>;
 
     /// <p>Gets information about the current <a>ApiKeys</a> resource.</p>
-    fn get_api_keys(&self, input: &GetApiKeysRequest) -> Result<ApiKeys, GetApiKeysError>;
+    fn get_api_keys(&self, input: &GetApiKeysRequest) -> RusotoFuture<ApiKeys, GetApiKeysError>;
 
     /// <p><p>Describe an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizer.html">AWS CLI</a></div></p>
     fn get_authorizer(
         &self,
         input: &GetAuthorizerRequest,
-    ) -> Result<Authorizer, GetAuthorizerError>;
+    ) -> RusotoFuture<Authorizer, GetAuthorizerError>;
 
     /// <p><p>Describe an existing <a>Authorizers</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizers.html">AWS CLI</a></div></p>
     fn get_authorizers(
         &self,
         input: &GetAuthorizersRequest,
-    ) -> Result<Authorizers, GetAuthorizersError>;
+    ) -> RusotoFuture<Authorizers, GetAuthorizersError>;
 
     /// <p>Describe a <a>BasePathMapping</a> resource.</p>
     fn get_base_path_mapping(
         &self,
         input: &GetBasePathMappingRequest,
-    ) -> Result<BasePathMapping, GetBasePathMappingError>;
+    ) -> RusotoFuture<BasePathMapping, GetBasePathMappingError>;
 
     /// <p>Represents a collection of <a>BasePathMapping</a> resources.</p>
     fn get_base_path_mappings(
         &self,
         input: &GetBasePathMappingsRequest,
-    ) -> Result<BasePathMappings, GetBasePathMappingsError>;
+    ) -> RusotoFuture<BasePathMappings, GetBasePathMappingsError>;
 
     /// <p>Gets information about the current <a>ClientCertificate</a> resource.</p>
     fn get_client_certificate(
         &self,
         input: &GetClientCertificateRequest,
-    ) -> Result<ClientCertificate, GetClientCertificateError>;
+    ) -> RusotoFuture<ClientCertificate, GetClientCertificateError>;
 
     /// <p>Gets a collection of <a>ClientCertificate</a> resources.</p>
     fn get_client_certificates(
         &self,
         input: &GetClientCertificatesRequest,
-    ) -> Result<ClientCertificates, GetClientCertificatesError>;
+    ) -> RusotoFuture<ClientCertificates, GetClientCertificatesError>;
 
     /// <p>Gets information about a <a>Deployment</a> resource.</p>
     fn get_deployment(
         &self,
         input: &GetDeploymentRequest,
-    ) -> Result<Deployment, GetDeploymentError>;
+    ) -> RusotoFuture<Deployment, GetDeploymentError>;
 
     /// <p>Gets information about a <a>Deployments</a> collection.</p>
     fn get_deployments(
         &self,
         input: &GetDeploymentsRequest,
-    ) -> Result<Deployments, GetDeploymentsError>;
+    ) -> RusotoFuture<Deployments, GetDeploymentsError>;
 
     fn get_documentation_part(
         &self,
         input: &GetDocumentationPartRequest,
-    ) -> Result<DocumentationPart, GetDocumentationPartError>;
+    ) -> RusotoFuture<DocumentationPart, GetDocumentationPartError>;
 
     fn get_documentation_parts(
         &self,
         input: &GetDocumentationPartsRequest,
-    ) -> Result<DocumentationParts, GetDocumentationPartsError>;
+    ) -> RusotoFuture<DocumentationParts, GetDocumentationPartsError>;
 
     fn get_documentation_version(
         &self,
         input: &GetDocumentationVersionRequest,
-    ) -> Result<DocumentationVersion, GetDocumentationVersionError>;
+    ) -> RusotoFuture<DocumentationVersion, GetDocumentationVersionError>;
 
     fn get_documentation_versions(
         &self,
         input: &GetDocumentationVersionsRequest,
-    ) -> Result<DocumentationVersions, GetDocumentationVersionsError>;
+    ) -> RusotoFuture<DocumentationVersions, GetDocumentationVersionsError>;
 
     /// <p>Represents a domain name that is contained in a simpler, more intuitive URL that can be called.</p>
     fn get_domain_name(
         &self,
         input: &GetDomainNameRequest,
-    ) -> Result<DomainName, GetDomainNameError>;
+    ) -> RusotoFuture<DomainName, GetDomainNameError>;
 
     /// <p>Represents a collection of <a>DomainName</a> resources.</p>
     fn get_domain_names(
         &self,
         input: &GetDomainNamesRequest,
-    ) -> Result<DomainNames, GetDomainNamesError>;
+    ) -> RusotoFuture<DomainNames, GetDomainNamesError>;
 
     /// <p>Exports a deployed version of a <a>RestApi</a> in a specified format.</p>
-    fn get_export(&self, input: &GetExportRequest) -> Result<ExportResponse, GetExportError>;
+    fn get_export(&self, input: &GetExportRequest) -> RusotoFuture<ExportResponse, GetExportError>;
 
     /// <p>Gets a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
     fn get_gateway_response(
         &self,
         input: &GetGatewayResponseRequest,
-    ) -> Result<GatewayResponse, GetGatewayResponseError>;
+    ) -> RusotoFuture<GatewayResponse, GetGatewayResponseError>;
 
     /// <p>Gets the <a>GatewayResponses</a> collection on the given <a>RestApi</a>. If an API developer has not added any definitions for gateway responses, the result will be the API Gateway-generated default <a>GatewayResponses</a> collection for the supported response types.</p>
     fn get_gateway_responses(
         &self,
         input: &GetGatewayResponsesRequest,
-    ) -> Result<GatewayResponses, GetGatewayResponsesError>;
+    ) -> RusotoFuture<GatewayResponses, GetGatewayResponsesError>;
 
     /// <p>Get the integration settings.</p>
     fn get_integration(
         &self,
         input: &GetIntegrationRequest,
-    ) -> Result<Integration, GetIntegrationError>;
+    ) -> RusotoFuture<Integration, GetIntegrationError>;
 
     /// <p>Represents a get integration response.</p>
     fn get_integration_response(
         &self,
         input: &GetIntegrationResponseRequest,
-    ) -> Result<IntegrationResponse, GetIntegrationResponseError>;
+    ) -> RusotoFuture<IntegrationResponse, GetIntegrationResponseError>;
 
     /// <p>Describe an existing <a>Method</a> resource.</p>
-    fn get_method(&self, input: &GetMethodRequest) -> Result<Method, GetMethodError>;
+    fn get_method(&self, input: &GetMethodRequest) -> RusotoFuture<Method, GetMethodError>;
 
     /// <p>Describes a <a>MethodResponse</a> resource.</p>
     fn get_method_response(
         &self,
         input: &GetMethodResponseRequest,
-    ) -> Result<MethodResponse, GetMethodResponseError>;
+    ) -> RusotoFuture<MethodResponse, GetMethodResponseError>;
 
     /// <p>Describes an existing model defined for a <a>RestApi</a> resource.</p>
-    fn get_model(&self, input: &GetModelRequest) -> Result<Model, GetModelError>;
+    fn get_model(&self, input: &GetModelRequest) -> RusotoFuture<Model, GetModelError>;
 
     /// <p>Generates a sample mapping template that can be used to transform a payload into the structure of a model.</p>
     fn get_model_template(
         &self,
         input: &GetModelTemplateRequest,
-    ) -> Result<Template, GetModelTemplateError>;
+    ) -> RusotoFuture<Template, GetModelTemplateError>;
 
     /// <p>Describes existing <a>Models</a> defined for a <a>RestApi</a> resource.</p>
-    fn get_models(&self, input: &GetModelsRequest) -> Result<Models, GetModelsError>;
+    fn get_models(&self, input: &GetModelsRequest) -> RusotoFuture<Models, GetModelsError>;
 
     /// <p>Gets a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
     fn get_request_validator(
         &self,
         input: &GetRequestValidatorRequest,
-    ) -> Result<RequestValidator, GetRequestValidatorError>;
+    ) -> RusotoFuture<RequestValidator, GetRequestValidatorError>;
 
     /// <p>Gets the <a>RequestValidators</a> collection of a given <a>RestApi</a>.</p>
     fn get_request_validators(
         &self,
         input: &GetRequestValidatorsRequest,
-    ) -> Result<RequestValidators, GetRequestValidatorsError>;
+    ) -> RusotoFuture<RequestValidators, GetRequestValidatorsError>;
 
     /// <p>Lists information about a resource.</p>
-    fn get_resource(&self, input: &GetResourceRequest) -> Result<Resource, GetResourceError>;
+    fn get_resource(&self, input: &GetResourceRequest) -> RusotoFuture<Resource, GetResourceError>;
 
     /// <p>Lists information about a collection of <a>Resource</a> resources.</p>
-    fn get_resources(&self, input: &GetResourcesRequest) -> Result<Resources, GetResourcesError>;
+    fn get_resources(
+        &self,
+        input: &GetResourcesRequest,
+    ) -> RusotoFuture<Resources, GetResourcesError>;
 
     /// <p>Lists the <a>RestApi</a> resource in the collection.</p>
-    fn get_rest_api(&self, input: &GetRestApiRequest) -> Result<RestApi, GetRestApiError>;
+    fn get_rest_api(&self, input: &GetRestApiRequest) -> RusotoFuture<RestApi, GetRestApiError>;
 
     /// <p>Lists the <a>RestApis</a> resources for your collection.</p>
-    fn get_rest_apis(&self, input: &GetRestApisRequest) -> Result<RestApis, GetRestApisError>;
+    fn get_rest_apis(&self, input: &GetRestApisRequest)
+        -> RusotoFuture<RestApis, GetRestApisError>;
 
     /// <p>Generates a client SDK for a <a>RestApi</a> and <a>Stage</a>.</p>
-    fn get_sdk(&self, input: &GetSdkRequest) -> Result<SdkResponse, GetSdkError>;
+    fn get_sdk(&self, input: &GetSdkRequest) -> RusotoFuture<SdkResponse, GetSdkError>;
 
-    fn get_sdk_type(&self, input: &GetSdkTypeRequest) -> Result<SdkType, GetSdkTypeError>;
+    fn get_sdk_type(&self, input: &GetSdkTypeRequest) -> RusotoFuture<SdkType, GetSdkTypeError>;
 
-    fn get_sdk_types(&self, input: &GetSdkTypesRequest) -> Result<SdkTypes, GetSdkTypesError>;
+    fn get_sdk_types(&self, input: &GetSdkTypesRequest)
+        -> RusotoFuture<SdkTypes, GetSdkTypesError>;
 
     /// <p>Gets information about a <a>Stage</a> resource.</p>
-    fn get_stage(&self, input: &GetStageRequest) -> Result<Stage, GetStageError>;
+    fn get_stage(&self, input: &GetStageRequest) -> RusotoFuture<Stage, GetStageError>;
 
     /// <p>Gets information about one or more <a>Stage</a> resources.</p>
-    fn get_stages(&self, input: &GetStagesRequest) -> Result<Stages, GetStagesError>;
+    fn get_stages(&self, input: &GetStagesRequest) -> RusotoFuture<Stages, GetStagesError>;
 
     /// <p>Gets the Tags collection for a given resource.</p>
-    fn get_tags(&self, input: &GetTagsRequest) -> Result<Tags, GetTagsError>;
+    fn get_tags(&self, input: &GetTagsRequest) -> RusotoFuture<Tags, GetTagsError>;
 
     /// <p>Gets the usage data of a usage plan in a specified time interval.</p>
-    fn get_usage(&self, input: &GetUsageRequest) -> Result<Usage, GetUsageError>;
+    fn get_usage(&self, input: &GetUsageRequest) -> RusotoFuture<Usage, GetUsageError>;
 
     /// <p>Gets a usage plan of a given plan identifier.</p>
-    fn get_usage_plan(&self, input: &GetUsagePlanRequest) -> Result<UsagePlan, GetUsagePlanError>;
+    fn get_usage_plan(
+        &self,
+        input: &GetUsagePlanRequest,
+    ) -> RusotoFuture<UsagePlan, GetUsagePlanError>;
 
     /// <p>Gets a usage plan key of a given key identifier.</p>
     fn get_usage_plan_key(
         &self,
         input: &GetUsagePlanKeyRequest,
-    ) -> Result<UsagePlanKey, GetUsagePlanKeyError>;
+    ) -> RusotoFuture<UsagePlanKey, GetUsagePlanKeyError>;
 
     /// <p>Gets all the usage plan keys representing the API keys added to a specified usage plan.</p>
     fn get_usage_plan_keys(
         &self,
         input: &GetUsagePlanKeysRequest,
-    ) -> Result<UsagePlanKeys, GetUsagePlanKeysError>;
+    ) -> RusotoFuture<UsagePlanKeys, GetUsagePlanKeysError>;
 
     /// <p>Gets all the usage plans of the caller's account.</p>
     fn get_usage_plans(
         &self,
         input: &GetUsagePlansRequest,
-    ) -> Result<UsagePlans, GetUsagePlansError>;
+    ) -> RusotoFuture<UsagePlans, GetUsagePlansError>;
 
     /// <p>Gets a specified VPC link under the caller's account in a region.</p>
-    fn get_vpc_link(&self, input: &GetVpcLinkRequest) -> Result<VpcLink, GetVpcLinkError>;
+    fn get_vpc_link(&self, input: &GetVpcLinkRequest) -> RusotoFuture<VpcLink, GetVpcLinkError>;
 
     /// <p>Gets the <a>VpcLinks</a> collection under the caller's account in a selected region.</p>
-    fn get_vpc_links(&self, input: &GetVpcLinksRequest) -> Result<VpcLinks, GetVpcLinksError>;
+    fn get_vpc_links(&self, input: &GetVpcLinksRequest)
+        -> RusotoFuture<VpcLinks, GetVpcLinksError>;
 
     /// <p>Import API keys from an external source, such as a CSV-formatted file.</p>
     fn import_api_keys(
         &self,
         input: &ImportApiKeysRequest,
-    ) -> Result<ApiKeyIds, ImportApiKeysError>;
+    ) -> RusotoFuture<ApiKeyIds, ImportApiKeysError>;
 
     fn import_documentation_parts(
         &self,
         input: &ImportDocumentationPartsRequest,
-    ) -> Result<DocumentationPartIds, ImportDocumentationPartsError>;
+    ) -> RusotoFuture<DocumentationPartIds, ImportDocumentationPartsError>;
 
     /// <p>A feature of the API Gateway control service for creating a new API from an external API definition file.</p>
-    fn import_rest_api(&self, input: &ImportRestApiRequest) -> Result<RestApi, ImportRestApiError>;
+    fn import_rest_api(
+        &self,
+        input: &ImportRestApiRequest,
+    ) -> RusotoFuture<RestApi, ImportRestApiError>;
 
     /// <p>Creates a customization of a <a>GatewayResponse</a> of a specified response type and status code on the given <a>RestApi</a>.</p>
     fn put_gateway_response(
         &self,
         input: &PutGatewayResponseRequest,
-    ) -> Result<GatewayResponse, PutGatewayResponseError>;
+    ) -> RusotoFuture<GatewayResponse, PutGatewayResponseError>;
 
     /// <p>Sets up a method's integration.</p>
     fn put_integration(
         &self,
         input: &PutIntegrationRequest,
-    ) -> Result<Integration, PutIntegrationError>;
+    ) -> RusotoFuture<Integration, PutIntegrationError>;
 
     /// <p>Represents a put integration.</p>
     fn put_integration_response(
         &self,
         input: &PutIntegrationResponseRequest,
-    ) -> Result<IntegrationResponse, PutIntegrationResponseError>;
+    ) -> RusotoFuture<IntegrationResponse, PutIntegrationResponseError>;
 
     /// <p>Add a method to an existing <a>Resource</a> resource.</p>
-    fn put_method(&self, input: &PutMethodRequest) -> Result<Method, PutMethodError>;
+    fn put_method(&self, input: &PutMethodRequest) -> RusotoFuture<Method, PutMethodError>;
 
     /// <p>Adds a <a>MethodResponse</a> to an existing <a>Method</a> resource.</p>
     fn put_method_response(
         &self,
         input: &PutMethodResponseRequest,
-    ) -> Result<MethodResponse, PutMethodResponseError>;
+    ) -> RusotoFuture<MethodResponse, PutMethodResponseError>;
 
     /// <p>A feature of the API Gateway control service for updating an existing API with an input of external API definitions. The update can take the form of merging the supplied definition into the existing API or overwriting the existing API.</p>
-    fn put_rest_api(&self, input: &PutRestApiRequest) -> Result<RestApi, PutRestApiError>;
+    fn put_rest_api(&self, input: &PutRestApiRequest) -> RusotoFuture<RestApi, PutRestApiError>;
 
     /// <p>Adds or updates Tags on a gievn resource.</p>
-    fn tag_resource(&self, input: &TagResourceRequest) -> Result<(), TagResourceError>;
+    fn tag_resource(&self, input: &TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
 
     /// <p><p>Simulate the execution of an <a>Authorizer</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html">Enable custom authorizers</a> </div></p>
     fn test_invoke_authorizer(
         &self,
         input: &TestInvokeAuthorizerRequest,
-    ) -> Result<TestInvokeAuthorizerResponse, TestInvokeAuthorizerError>;
+    ) -> RusotoFuture<TestInvokeAuthorizerResponse, TestInvokeAuthorizerError>;
 
     /// <p>Simulate the execution of a <a>Method</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p>
     fn test_invoke_method(
         &self,
         input: &TestInvokeMethodRequest,
-    ) -> Result<TestInvokeMethodResponse, TestInvokeMethodError>;
+    ) -> RusotoFuture<TestInvokeMethodResponse, TestInvokeMethodError>;
 
     /// <p>Removes Tags from a given resource.</p>
-    fn untag_resource(&self, input: &UntagResourceRequest) -> Result<(), UntagResourceError>;
+    fn untag_resource(&self, input: &UntagResourceRequest) -> RusotoFuture<(), UntagResourceError>;
 
     /// <p>Changes information about the current <a>Account</a> resource.</p>
-    fn update_account(&self, input: &UpdateAccountRequest) -> Result<Account, UpdateAccountError>;
+    fn update_account(
+        &self,
+        input: &UpdateAccountRequest,
+    ) -> RusotoFuture<Account, UpdateAccountError>;
 
     /// <p>Changes information about an <a>ApiKey</a> resource.</p>
-    fn update_api_key(&self, input: &UpdateApiKeyRequest) -> Result<ApiKey, UpdateApiKeyError>;
+    fn update_api_key(
+        &self,
+        input: &UpdateApiKeyRequest,
+    ) -> RusotoFuture<ApiKey, UpdateApiKeyError>;
 
     /// <p><p>Updates an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/update-authorizer.html">AWS CLI</a></div></p>
     fn update_authorizer(
         &self,
         input: &UpdateAuthorizerRequest,
-    ) -> Result<Authorizer, UpdateAuthorizerError>;
+    ) -> RusotoFuture<Authorizer, UpdateAuthorizerError>;
 
     /// <p>Changes information about the <a>BasePathMapping</a> resource.</p>
     fn update_base_path_mapping(
         &self,
         input: &UpdateBasePathMappingRequest,
-    ) -> Result<BasePathMapping, UpdateBasePathMappingError>;
+    ) -> RusotoFuture<BasePathMapping, UpdateBasePathMappingError>;
 
     /// <p>Changes information about an <a>ClientCertificate</a> resource.</p>
     fn update_client_certificate(
         &self,
         input: &UpdateClientCertificateRequest,
-    ) -> Result<ClientCertificate, UpdateClientCertificateError>;
+    ) -> RusotoFuture<ClientCertificate, UpdateClientCertificateError>;
 
     /// <p>Changes information about a <a>Deployment</a> resource.</p>
     fn update_deployment(
         &self,
         input: &UpdateDeploymentRequest,
-    ) -> Result<Deployment, UpdateDeploymentError>;
+    ) -> RusotoFuture<Deployment, UpdateDeploymentError>;
 
     fn update_documentation_part(
         &self,
         input: &UpdateDocumentationPartRequest,
-    ) -> Result<DocumentationPart, UpdateDocumentationPartError>;
+    ) -> RusotoFuture<DocumentationPart, UpdateDocumentationPartError>;
 
     fn update_documentation_version(
         &self,
         input: &UpdateDocumentationVersionRequest,
-    ) -> Result<DocumentationVersion, UpdateDocumentationVersionError>;
+    ) -> RusotoFuture<DocumentationVersion, UpdateDocumentationVersionError>;
 
     /// <p>Changes information about the <a>DomainName</a> resource.</p>
     fn update_domain_name(
         &self,
         input: &UpdateDomainNameRequest,
-    ) -> Result<DomainName, UpdateDomainNameError>;
+    ) -> RusotoFuture<DomainName, UpdateDomainNameError>;
 
     /// <p>Updates a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
     fn update_gateway_response(
         &self,
         input: &UpdateGatewayResponseRequest,
-    ) -> Result<GatewayResponse, UpdateGatewayResponseError>;
+    ) -> RusotoFuture<GatewayResponse, UpdateGatewayResponseError>;
 
     /// <p>Represents an update integration.</p>
     fn update_integration(
         &self,
         input: &UpdateIntegrationRequest,
-    ) -> Result<Integration, UpdateIntegrationError>;
+    ) -> RusotoFuture<Integration, UpdateIntegrationError>;
 
     /// <p>Represents an update integration response.</p>
     fn update_integration_response(
         &self,
         input: &UpdateIntegrationResponseRequest,
-    ) -> Result<IntegrationResponse, UpdateIntegrationResponseError>;
+    ) -> RusotoFuture<IntegrationResponse, UpdateIntegrationResponseError>;
 
     /// <p>Updates an existing <a>Method</a> resource.</p>
-    fn update_method(&self, input: &UpdateMethodRequest) -> Result<Method, UpdateMethodError>;
+    fn update_method(&self, input: &UpdateMethodRequest)
+        -> RusotoFuture<Method, UpdateMethodError>;
 
     /// <p>Updates an existing <a>MethodResponse</a> resource.</p>
     fn update_method_response(
         &self,
         input: &UpdateMethodResponseRequest,
-    ) -> Result<MethodResponse, UpdateMethodResponseError>;
+    ) -> RusotoFuture<MethodResponse, UpdateMethodResponseError>;
 
     /// <p>Changes information about a model.</p>
-    fn update_model(&self, input: &UpdateModelRequest) -> Result<Model, UpdateModelError>;
+    fn update_model(&self, input: &UpdateModelRequest) -> RusotoFuture<Model, UpdateModelError>;
 
     /// <p>Updates a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
     fn update_request_validator(
         &self,
         input: &UpdateRequestValidatorRequest,
-    ) -> Result<RequestValidator, UpdateRequestValidatorError>;
+    ) -> RusotoFuture<RequestValidator, UpdateRequestValidatorError>;
 
     /// <p>Changes information about a <a>Resource</a> resource.</p>
     fn update_resource(
         &self,
         input: &UpdateResourceRequest,
-    ) -> Result<Resource, UpdateResourceError>;
+    ) -> RusotoFuture<Resource, UpdateResourceError>;
 
     /// <p>Changes information about the specified API.</p>
-    fn update_rest_api(&self, input: &UpdateRestApiRequest) -> Result<RestApi, UpdateRestApiError>;
+    fn update_rest_api(
+        &self,
+        input: &UpdateRestApiRequest,
+    ) -> RusotoFuture<RestApi, UpdateRestApiError>;
 
     /// <p>Changes information about a <a>Stage</a> resource.</p>
-    fn update_stage(&self, input: &UpdateStageRequest) -> Result<Stage, UpdateStageError>;
+    fn update_stage(&self, input: &UpdateStageRequest) -> RusotoFuture<Stage, UpdateStageError>;
 
     /// <p>Grants a temporary extension to the remaining quota of a usage plan associated with a specified API key.</p>
-    fn update_usage(&self, input: &UpdateUsageRequest) -> Result<Usage, UpdateUsageError>;
+    fn update_usage(&self, input: &UpdateUsageRequest) -> RusotoFuture<Usage, UpdateUsageError>;
 
     /// <p>Updates a usage plan of a given plan Id.</p>
     fn update_usage_plan(
         &self,
         input: &UpdateUsagePlanRequest,
-    ) -> Result<UsagePlan, UpdateUsagePlanError>;
+    ) -> RusotoFuture<UsagePlan, UpdateUsagePlanError>;
 
     /// <p>Updates an existing <a>VpcLink</a> of a specified identifier.</p>
-    fn update_vpc_link(&self, input: &UpdateVpcLinkRequest) -> Result<VpcLink, UpdateVpcLinkError>;
+    fn update_vpc_link(
+        &self,
+        input: &UpdateVpcLinkRequest,
+    ) -> RusotoFuture<VpcLink, UpdateVpcLinkError>;
 }
 /// A client for the Amazon API Gateway API.
-pub struct ApiGatewayClient<P, D>
+pub struct ApiGatewayClient<P = CredentialsProvider, D = RequestDispatcher>
 where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    credentials_provider: P,
+    inner: ClientInner<P, D>,
     region: region::Region,
-    dispatcher: D,
+}
+
+impl ApiGatewayClient {
+    /// Creates a simple client backed by an implicit event loop.
+    ///
+    /// The client will use the default credentials provider and tls client.
+    ///
+    /// See the `rusoto_core::reactor` module for more details.
+    pub fn simple(region: region::Region) -> ApiGatewayClient {
+        ApiGatewayClient::new(
+            RequestDispatcher::default(),
+            CredentialsProvider::default(),
+            region,
+        )
+    }
 }
 
 impl<P, D> ApiGatewayClient<P, D>
@@ -15648,20 +15708,22 @@ where
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         ApiGatewayClient {
-            credentials_provider: credentials_provider,
+            inner: ClientInner::new(credentials_provider, request_dispatcher),
             region: region,
-            dispatcher: request_dispatcher,
         }
     }
 }
 
 impl<P, D> ApiGateway for ApiGatewayClient<P, D>
 where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
+    P: ProvideAwsCredentials + 'static,
+    D: DispatchSignedRequest + 'static,
 {
     /// <p><p>Create an <a>ApiKey</a> resource. </p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/create-api-key.html">AWS CLI</a></div></p>
-    fn create_api_key(&self, input: &CreateApiKeyRequest) -> Result<ApiKey, CreateApiKeyError> {
+    fn create_api_key(
+        &self,
+        input: &CreateApiKeyRequest,
+    ) -> RusotoFuture<ApiKey, CreateApiKeyError> {
         let request_uri = "/apikeys";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
@@ -15670,39 +15732,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Created {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Created => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ApiKey>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ApiKey>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateApiKeyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateApiKeyError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p><p>Adds a new <a>Authorizer</a> resource to an existing <a>RestApi</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/create-authorizer.html">AWS CLI</a></div></p>
     fn create_authorizer(
         &self,
         input: &CreateAuthorizerRequest,
-    ) -> Result<Authorizer, CreateAuthorizerError> {
+    ) -> RusotoFuture<Authorizer, CreateAuthorizerError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/authorizers",
             restapi_id = input.rest_api_id
@@ -15714,39 +15775,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Created {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Created => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Authorizer>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Authorizer>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateAuthorizerError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateAuthorizerError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a new <a>BasePathMapping</a> resource.</p>
     fn create_base_path_mapping(
         &self,
         input: &CreateBasePathMappingRequest,
-    ) -> Result<BasePathMapping, CreateBasePathMappingError> {
+    ) -> RusotoFuture<BasePathMapping, CreateBasePathMappingError> {
         let request_uri = format!(
             "/domainnames/{domain_name}/basepathmappings",
             domain_name = input.domain_name
@@ -15758,39 +15818,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Created {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Created => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<BasePathMapping>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<BasePathMapping>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateBasePathMappingError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateBasePathMappingError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a <a>Deployment</a> resource, which makes a specified <a>RestApi</a> callable over the internet.</p>
     fn create_deployment(
         &self,
         input: &CreateDeploymentRequest,
-    ) -> Result<Deployment, CreateDeploymentError> {
+    ) -> RusotoFuture<Deployment, CreateDeploymentError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/deployments",
             restapi_id = input.rest_api_id
@@ -15802,38 +15861,37 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Created {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Created => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Deployment>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Deployment>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateDeploymentError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateDeploymentError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     fn create_documentation_part(
         &self,
         input: &CreateDocumentationPartRequest,
-    ) -> Result<DocumentationPart, CreateDocumentationPartError> {
+    ) -> RusotoFuture<DocumentationPart, CreateDocumentationPartError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/parts",
             restapi_id = input.rest_api_id
@@ -15845,38 +15903,37 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Created {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Created => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DocumentationPart>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DocumentationPart>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateDocumentationPartError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateDocumentationPartError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     fn create_documentation_version(
         &self,
         input: &CreateDocumentationVersionRequest,
-    ) -> Result<DocumentationVersion, CreateDocumentationVersionError> {
+    ) -> RusotoFuture<DocumentationVersion, CreateDocumentationVersionError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/versions",
             restapi_id = input.rest_api_id
@@ -15888,39 +15945,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Created {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Created => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DocumentationVersion>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DocumentationVersion>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateDocumentationVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateDocumentationVersionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a new domain name.</p>
     fn create_domain_name(
         &self,
         input: &CreateDomainNameRequest,
-    ) -> Result<DomainName, CreateDomainNameError> {
+    ) -> RusotoFuture<DomainName, CreateDomainNameError> {
         let request_uri = "/domainnames";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
@@ -15929,36 +15985,35 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Created {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Created => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DomainName>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DomainName>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateDomainNameError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateDomainNameError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Adds a new <a>Model</a> resource to an existing <a>RestApi</a> resource.</p>
-    fn create_model(&self, input: &CreateModelRequest) -> Result<Model, CreateModelError> {
+    fn create_model(&self, input: &CreateModelRequest) -> RusotoFuture<Model, CreateModelError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/models",
             restapi_id = input.rest_api_id
@@ -15970,39 +16025,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Created {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Created => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Model>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Model>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateModelError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateModelError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a <a>ReqeustValidator</a> of a given <a>RestApi</a>.</p>
     fn create_request_validator(
         &self,
         input: &CreateRequestValidatorRequest,
-    ) -> Result<RequestValidator, CreateRequestValidatorError> {
+    ) -> RusotoFuture<RequestValidator, CreateRequestValidatorError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/requestvalidators",
             restapi_id = input.rest_api_id
@@ -16014,39 +16068,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Created {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Created => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<RequestValidator>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<RequestValidator>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateRequestValidatorError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateRequestValidatorError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a <a>Resource</a> resource.</p>
     fn create_resource(
         &self,
         input: &CreateResourceRequest,
-    ) -> Result<Resource, CreateResourceError> {
+    ) -> RusotoFuture<Resource, CreateResourceError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{parent_id}",
             parent_id = input.parent_id,
@@ -16059,36 +16112,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Created {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Created => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Resource>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Resource>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateResourceError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateResourceError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a new <a>RestApi</a> resource.</p>
-    fn create_rest_api(&self, input: &CreateRestApiRequest) -> Result<RestApi, CreateRestApiError> {
+    fn create_rest_api(
+        &self,
+        input: &CreateRestApiRequest,
+    ) -> RusotoFuture<RestApi, CreateRestApiError> {
         let request_uri = "/restapis";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
@@ -16097,36 +16152,35 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Created {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Created => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<RestApi>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<RestApi>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateRestApiError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateRestApiError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a new <a>Stage</a> resource that references a pre-existing <a>Deployment</a> for the API. </p>
-    fn create_stage(&self, input: &CreateStageRequest) -> Result<Stage, CreateStageError> {
+    fn create_stage(&self, input: &CreateStageRequest) -> RusotoFuture<Stage, CreateStageError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages",
             restapi_id = input.rest_api_id
@@ -16138,39 +16192,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Created {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Created => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Stage>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Stage>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateStageError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateStageError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a usage plan with the throttle and quota limits, as well as the associated API stages, specified in the payload. </p>
     fn create_usage_plan(
         &self,
         input: &CreateUsagePlanRequest,
-    ) -> Result<UsagePlan, CreateUsagePlanError> {
+    ) -> RusotoFuture<UsagePlan, CreateUsagePlanError> {
         let request_uri = "/usageplans";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
@@ -16179,39 +16232,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Created {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Created => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<UsagePlan>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<UsagePlan>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateUsagePlanError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateUsagePlanError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a usage plan key for adding an existing API key to a usage plan.</p>
     fn create_usage_plan_key(
         &self,
         input: &CreateUsagePlanKeyRequest,
-    ) -> Result<UsagePlanKey, CreateUsagePlanKeyError> {
+    ) -> RusotoFuture<UsagePlanKey, CreateUsagePlanKeyError> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}/keys",
             usageplan_id = input.usage_plan_id
@@ -16223,36 +16275,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Created {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Created => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<UsagePlanKey>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<UsagePlanKey>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateUsagePlanKeyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateUsagePlanKeyError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a VPC link, under the caller's account in a selected region, in an asynchronous operation that typically takes 2-4 minutes to complete and become operational. The caller must have permissions to create and update VPC Endpoint services.</p>
-    fn create_vpc_link(&self, input: &CreateVpcLinkRequest) -> Result<VpcLink, CreateVpcLinkError> {
+    fn create_vpc_link(
+        &self,
+        input: &CreateVpcLinkRequest,
+    ) -> RusotoFuture<VpcLink, CreateVpcLinkError> {
         let request_uri = "/vpclinks";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
@@ -16261,65 +16315,64 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Accepted {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Accepted => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<VpcLink>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<VpcLink>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateVpcLinkError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateVpcLinkError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes the <a>ApiKey</a> resource.</p>
-    fn delete_api_key(&self, input: &DeleteApiKeyRequest) -> Result<(), DeleteApiKeyError> {
+    fn delete_api_key(&self, input: &DeleteApiKeyRequest) -> RusotoFuture<(), DeleteApiKeyError> {
         let request_uri = format!("/apikeys/{api_key}", api_key = input.api_key);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Accepted {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Accepted => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteApiKeyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteApiKeyError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p><p>Deletes an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/delete-authorizer.html">AWS CLI</a></div></p>
     fn delete_authorizer(
         &self,
         input: &DeleteAuthorizerRequest,
-    ) -> Result<(), DeleteAuthorizerError> {
+    ) -> RusotoFuture<(), DeleteAuthorizerError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/authorizers/{authorizer_id}",
             authorizer_id = input.authorizer_id,
@@ -16329,30 +16382,30 @@ where
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Accepted {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Accepted => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteAuthorizerError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteAuthorizerError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes the <a>BasePathMapping</a> resource.</p>
     fn delete_base_path_mapping(
         &self,
         input: &DeleteBasePathMappingRequest,
-    ) -> Result<(), DeleteBasePathMappingError> {
+    ) -> RusotoFuture<(), DeleteBasePathMappingError> {
         let request_uri = format!(
             "/domainnames/{domain_name}/basepathmappings/{base_path}",
             base_path = input.base_path,
@@ -16362,30 +16415,30 @@ where
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Accepted {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Accepted => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteBasePathMappingError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteBasePathMappingError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes the <a>ClientCertificate</a> resource.</p>
     fn delete_client_certificate(
         &self,
         input: &DeleteClientCertificateRequest,
-    ) -> Result<(), DeleteClientCertificateError> {
+    ) -> RusotoFuture<(), DeleteClientCertificateError> {
         let request_uri = format!(
             "/clientcertificates/{clientcertificate_id}",
             clientcertificate_id = input.client_certificate_id
@@ -16394,30 +16447,30 @@ where
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Accepted {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Accepted => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteClientCertificateError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteClientCertificateError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a <a>Deployment</a> resource. Deleting a deployment will only succeed if there are no <a>Stage</a> resources associated with it.</p>
     fn delete_deployment(
         &self,
         input: &DeleteDeploymentRequest,
-    ) -> Result<(), DeleteDeploymentError> {
+    ) -> RusotoFuture<(), DeleteDeploymentError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/deployments/{deployment_id}",
             deployment_id = input.deployment_id,
@@ -16427,29 +16480,29 @@ where
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Accepted {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Accepted => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteDeploymentError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteDeploymentError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     fn delete_documentation_part(
         &self,
         input: &DeleteDocumentationPartRequest,
-    ) -> Result<(), DeleteDocumentationPartError> {
+    ) -> RusotoFuture<(), DeleteDocumentationPartError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/parts/{part_id}",
             part_id = input.documentation_part_id,
@@ -16459,29 +16512,29 @@ where
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Accepted {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Accepted => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteDocumentationPartError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteDocumentationPartError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     fn delete_documentation_version(
         &self,
         input: &DeleteDocumentationVersionRequest,
-    ) -> Result<(), DeleteDocumentationVersionError> {
+    ) -> RusotoFuture<(), DeleteDocumentationVersionError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/versions/{doc_version}",
             doc_version = input.documentation_version,
@@ -16491,30 +16544,30 @@ where
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Accepted {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Accepted => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteDocumentationVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteDocumentationVersionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes the <a>DomainName</a> resource.</p>
     fn delete_domain_name(
         &self,
         input: &DeleteDomainNameRequest,
-    ) -> Result<(), DeleteDomainNameError> {
+    ) -> RusotoFuture<(), DeleteDomainNameError> {
         let request_uri = format!(
             "/domainnames/{domain_name}",
             domain_name = input.domain_name
@@ -16523,30 +16576,30 @@ where
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Accepted {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Accepted => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteDomainNameError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteDomainNameError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Clears any customization of a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a> and resets it with the default settings.</p>
     fn delete_gateway_response(
         &self,
         input: &DeleteGatewayResponseRequest,
-    ) -> Result<(), DeleteGatewayResponseError> {
+    ) -> RusotoFuture<(), DeleteGatewayResponseError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/gatewayresponses/{response_type}",
             response_type = input.response_type,
@@ -16556,30 +16609,30 @@ where
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Accepted {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Accepted => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteGatewayResponseError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteGatewayResponseError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Represents a delete integration.</p>
     fn delete_integration(
         &self,
         input: &DeleteIntegrationRequest,
-    ) -> Result<(), DeleteIntegrationError> {
+    ) -> RusotoFuture<(), DeleteIntegrationError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration",
             http_method = input.http_method,
@@ -16590,56 +16643,56 @@ where
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::NoContent {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::NoContent => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteIntegrationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteIntegrationError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Represents a delete integration response.</p>
     fn delete_integration_response(
         &self,
         input: &DeleteIntegrationResponseRequest,
-    ) -> Result<(), DeleteIntegrationResponseError> {
+    ) -> RusotoFuture<(), DeleteIntegrationResponseError> {
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::NoContent {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::NoContent => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteIntegrationResponseError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteIntegrationResponseError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes an existing <a>Method</a> resource.</p>
-    fn delete_method(&self, input: &DeleteMethodRequest) -> Result<(), DeleteMethodError> {
+    fn delete_method(&self, input: &DeleteMethodRequest) -> RusotoFuture<(), DeleteMethodError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
             http_method = input.http_method,
@@ -16650,56 +16703,56 @@ where
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::NoContent {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::NoContent => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteMethodError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteMethodError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes an existing <a>MethodResponse</a> resource.</p>
     fn delete_method_response(
         &self,
         input: &DeleteMethodResponseRequest,
-    ) -> Result<(), DeleteMethodResponseError> {
+    ) -> RusotoFuture<(), DeleteMethodResponseError> {
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::NoContent {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::NoContent => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteMethodResponseError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteMethodResponseError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a model.</p>
-    fn delete_model(&self, input: &DeleteModelRequest) -> Result<(), DeleteModelError> {
+    fn delete_model(&self, input: &DeleteModelRequest) -> RusotoFuture<(), DeleteModelError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/models/{model_name}",
             model_name = input.model_name,
@@ -16709,30 +16762,30 @@ where
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Accepted {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Accepted => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteModelError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteModelError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
     fn delete_request_validator(
         &self,
         input: &DeleteRequestValidatorRequest,
-    ) -> Result<(), DeleteRequestValidatorError> {
+    ) -> RusotoFuture<(), DeleteRequestValidatorError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/requestvalidators/{requestvalidator_id}",
             requestvalidator_id = input.request_validator_id,
@@ -16742,27 +16795,30 @@ where
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Accepted {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Accepted => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteRequestValidatorError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteRequestValidatorError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a <a>Resource</a> resource.</p>
-    fn delete_resource(&self, input: &DeleteResourceRequest) -> Result<(), DeleteResourceError> {
+    fn delete_resource(
+        &self,
+        input: &DeleteResourceRequest,
+    ) -> RusotoFuture<(), DeleteResourceError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}",
             resource_id = input.resource_id,
@@ -16772,53 +16828,56 @@ where
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Accepted {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Accepted => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteResourceError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteResourceError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes the specified API.</p>
-    fn delete_rest_api(&self, input: &DeleteRestApiRequest) -> Result<(), DeleteRestApiError> {
+    fn delete_rest_api(
+        &self,
+        input: &DeleteRestApiRequest,
+    ) -> RusotoFuture<(), DeleteRestApiError> {
         let request_uri = format!("/restapis/{restapi_id}", restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Accepted {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Accepted => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteRestApiError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteRestApiError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a <a>Stage</a> resource.</p>
-    fn delete_stage(&self, input: &DeleteStageRequest) -> Result<(), DeleteStageError> {
+    fn delete_stage(&self, input: &DeleteStageRequest) -> RusotoFuture<(), DeleteStageError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}",
             restapi_id = input.rest_api_id,
@@ -16828,30 +16887,30 @@ where
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Accepted {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Accepted => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteStageError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteStageError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a usage plan of a given plan Id.</p>
     fn delete_usage_plan(
         &self,
         input: &DeleteUsagePlanRequest,
-    ) -> Result<(), DeleteUsagePlanError> {
+    ) -> RusotoFuture<(), DeleteUsagePlanError> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}",
             usageplan_id = input.usage_plan_id
@@ -16860,30 +16919,30 @@ where
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Accepted {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Accepted => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteUsagePlanError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteUsagePlanError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a usage plan key and remove the underlying API key from the associated usage plan.</p>
     fn delete_usage_plan_key(
         &self,
         input: &DeleteUsagePlanKeyRequest,
-    ) -> Result<(), DeleteUsagePlanKeyError> {
+    ) -> RusotoFuture<(), DeleteUsagePlanKeyError> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}/keys/{key_id}",
             key_id = input.key_id,
@@ -16893,56 +16952,59 @@ where
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Accepted {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Accepted => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteUsagePlanKeyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteUsagePlanKeyError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes an existing <a>VpcLink</a> of a specified identifier.</p>
-    fn delete_vpc_link(&self, input: &DeleteVpcLinkRequest) -> Result<(), DeleteVpcLinkError> {
+    fn delete_vpc_link(
+        &self,
+        input: &DeleteVpcLinkRequest,
+    ) -> RusotoFuture<(), DeleteVpcLinkError> {
         let request_uri = format!("/vpclinks/{vpclink_id}", vpclink_id = input.vpc_link_id);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Accepted {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Accepted => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteVpcLinkError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteVpcLinkError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Flushes all authorizer cache entries on a stage.</p>
     fn flush_stage_authorizers_cache(
         &self,
         input: &FlushStageAuthorizersCacheRequest,
-    ) -> Result<(), FlushStageAuthorizersCacheError> {
+    ) -> RusotoFuture<(), FlushStageAuthorizersCacheError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}/cache/authorizers",
             restapi_id = input.rest_api_id,
@@ -16952,30 +17014,30 @@ where
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Accepted {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Accepted => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(FlushStageAuthorizersCacheError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(FlushStageAuthorizersCacheError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Flushes a stage's cache.</p>
     fn flush_stage_cache(
         &self,
         input: &FlushStageCacheRequest,
-    ) -> Result<(), FlushStageCacheError> {
+    ) -> RusotoFuture<(), FlushStageCacheError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}/cache/data",
             restapi_id = input.rest_api_id,
@@ -16985,30 +17047,30 @@ where
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Accepted {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::Accepted => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(FlushStageCacheError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(FlushStageCacheError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Generates a <a>ClientCertificate</a> resource.</p>
     fn generate_client_certificate(
         &self,
         input: &GenerateClientCertificateRequest,
-    ) -> Result<ClientCertificate, GenerateClientCertificateError> {
+    ) -> RusotoFuture<ClientCertificate, GenerateClientCertificateError> {
         let request_uri = "/clientcertificates";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
@@ -17017,71 +17079,69 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Created {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Created => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ClientCertificate>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ClientCertificate>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GenerateClientCertificateError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GenerateClientCertificateError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets information about the current <a>Account</a> resource.</p>
-    fn get_account(&self) -> Result<Account, GetAccountError> {
+    fn get_account(&self) -> RusotoFuture<Account, GetAccountError> {
         let request_uri = "/account";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Account>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Account>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetAccountError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetAccountError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets information about the current <a>ApiKey</a> resource.</p>
-    fn get_api_key(&self, input: &GetApiKeyRequest) -> Result<ApiKey, GetApiKeyError> {
+    fn get_api_key(&self, input: &GetApiKeyRequest) -> RusotoFuture<ApiKey, GetApiKeyError> {
         let request_uri = format!("/apikeys/{api_key}", api_key = input.api_key);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -17093,36 +17153,35 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ApiKey>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ApiKey>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetApiKeyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetApiKeyError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets information about the current <a>ApiKeys</a> resource.</p>
-    fn get_api_keys(&self, input: &GetApiKeysRequest) -> Result<ApiKeys, GetApiKeysError> {
+    fn get_api_keys(&self, input: &GetApiKeysRequest) -> RusotoFuture<ApiKeys, GetApiKeysError> {
         let request_uri = "/apikeys";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -17146,39 +17205,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ApiKeys>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ApiKeys>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetApiKeysError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetApiKeysError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p><p>Describe an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizer.html">AWS CLI</a></div></p>
     fn get_authorizer(
         &self,
         input: &GetAuthorizerRequest,
-    ) -> Result<Authorizer, GetAuthorizerError> {
+    ) -> RusotoFuture<Authorizer, GetAuthorizerError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/authorizers/{authorizer_id}",
             authorizer_id = input.authorizer_id,
@@ -17188,39 +17246,38 @@ where
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Authorizer>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Authorizer>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetAuthorizerError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetAuthorizerError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p><p>Describe an existing <a>Authorizers</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/get-authorizers.html">AWS CLI</a></div></p>
     fn get_authorizers(
         &self,
         input: &GetAuthorizersRequest,
-    ) -> Result<Authorizers, GetAuthorizersError> {
+    ) -> RusotoFuture<Authorizers, GetAuthorizersError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/authorizers",
             restapi_id = input.rest_api_id
@@ -17238,39 +17295,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Authorizers>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Authorizers>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetAuthorizersError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetAuthorizersError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Describe a <a>BasePathMapping</a> resource.</p>
     fn get_base_path_mapping(
         &self,
         input: &GetBasePathMappingRequest,
-    ) -> Result<BasePathMapping, GetBasePathMappingError> {
+    ) -> RusotoFuture<BasePathMapping, GetBasePathMappingError> {
         let request_uri = format!(
             "/domainnames/{domain_name}/basepathmappings/{base_path}",
             base_path = input.base_path,
@@ -17280,39 +17336,38 @@ where
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<BasePathMapping>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<BasePathMapping>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetBasePathMappingError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetBasePathMappingError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Represents a collection of <a>BasePathMapping</a> resources.</p>
     fn get_base_path_mappings(
         &self,
         input: &GetBasePathMappingsRequest,
-    ) -> Result<BasePathMappings, GetBasePathMappingsError> {
+    ) -> RusotoFuture<BasePathMappings, GetBasePathMappingsError> {
         let request_uri = format!(
             "/domainnames/{domain_name}/basepathmappings",
             domain_name = input.domain_name
@@ -17330,39 +17385,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<BasePathMappings>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<BasePathMappings>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetBasePathMappingsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetBasePathMappingsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets information about the current <a>ClientCertificate</a> resource.</p>
     fn get_client_certificate(
         &self,
         input: &GetClientCertificateRequest,
-    ) -> Result<ClientCertificate, GetClientCertificateError> {
+    ) -> RusotoFuture<ClientCertificate, GetClientCertificateError> {
         let request_uri = format!(
             "/clientcertificates/{clientcertificate_id}",
             clientcertificate_id = input.client_certificate_id
@@ -17371,39 +17425,38 @@ where
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ClientCertificate>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ClientCertificate>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetClientCertificateError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetClientCertificateError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets a collection of <a>ClientCertificate</a> resources.</p>
     fn get_client_certificates(
         &self,
         input: &GetClientCertificatesRequest,
-    ) -> Result<ClientCertificates, GetClientCertificatesError> {
+    ) -> RusotoFuture<ClientCertificates, GetClientCertificatesError> {
         let request_uri = "/clientcertificates";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -17418,39 +17471,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ClientCertificates>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ClientCertificates>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetClientCertificatesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetClientCertificatesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets information about a <a>Deployment</a> resource.</p>
     fn get_deployment(
         &self,
         input: &GetDeploymentRequest,
-    ) -> Result<Deployment, GetDeploymentError> {
+    ) -> RusotoFuture<Deployment, GetDeploymentError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/deployments/{deployment_id}",
             deployment_id = input.deployment_id,
@@ -17468,39 +17520,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Deployment>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Deployment>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetDeploymentError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetDeploymentError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets information about a <a>Deployments</a> collection.</p>
     fn get_deployments(
         &self,
         input: &GetDeploymentsRequest,
-    ) -> Result<Deployments, GetDeploymentsError> {
+    ) -> RusotoFuture<Deployments, GetDeploymentsError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/deployments",
             restapi_id = input.rest_api_id
@@ -17518,38 +17569,37 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Deployments>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Deployments>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetDeploymentsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetDeploymentsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     fn get_documentation_part(
         &self,
         input: &GetDocumentationPartRequest,
-    ) -> Result<DocumentationPart, GetDocumentationPartError> {
+    ) -> RusotoFuture<DocumentationPart, GetDocumentationPartError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/parts/{part_id}",
             part_id = input.documentation_part_id,
@@ -17559,38 +17609,37 @@ where
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DocumentationPart>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DocumentationPart>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetDocumentationPartError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetDocumentationPartError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     fn get_documentation_parts(
         &self,
         input: &GetDocumentationPartsRequest,
-    ) -> Result<DocumentationParts, GetDocumentationPartsError> {
+    ) -> RusotoFuture<DocumentationParts, GetDocumentationPartsError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/parts",
             restapi_id = input.rest_api_id
@@ -17620,38 +17669,37 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DocumentationParts>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DocumentationParts>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetDocumentationPartsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetDocumentationPartsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     fn get_documentation_version(
         &self,
         input: &GetDocumentationVersionRequest,
-    ) -> Result<DocumentationVersion, GetDocumentationVersionError> {
+    ) -> RusotoFuture<DocumentationVersion, GetDocumentationVersionError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/versions/{doc_version}",
             doc_version = input.documentation_version,
@@ -17661,38 +17709,37 @@ where
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DocumentationVersion>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DocumentationVersion>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetDocumentationVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetDocumentationVersionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     fn get_documentation_versions(
         &self,
         input: &GetDocumentationVersionsRequest,
-    ) -> Result<DocumentationVersions, GetDocumentationVersionsError> {
+    ) -> RusotoFuture<DocumentationVersions, GetDocumentationVersionsError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/versions",
             restapi_id = input.rest_api_id
@@ -17710,39 +17757,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DocumentationVersions>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DocumentationVersions>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetDocumentationVersionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetDocumentationVersionsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Represents a domain name that is contained in a simpler, more intuitive URL that can be called.</p>
     fn get_domain_name(
         &self,
         input: &GetDomainNameRequest,
-    ) -> Result<DomainName, GetDomainNameError> {
+    ) -> RusotoFuture<DomainName, GetDomainNameError> {
         let request_uri = format!(
             "/domainnames/{domain_name}",
             domain_name = input.domain_name
@@ -17751,39 +17797,38 @@ where
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DomainName>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DomainName>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetDomainNameError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetDomainNameError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Represents a collection of <a>DomainName</a> resources.</p>
     fn get_domain_names(
         &self,
         input: &GetDomainNamesRequest,
-    ) -> Result<DomainNames, GetDomainNamesError> {
+    ) -> RusotoFuture<DomainNames, GetDomainNamesError> {
         let request_uri = "/domainnames";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -17798,36 +17843,35 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DomainNames>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DomainNames>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetDomainNamesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetDomainNamesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Exports a deployed version of a <a>RestApi</a> in a specified format.</p>
-    fn get_export(&self, input: &GetExportRequest) -> Result<ExportResponse, GetExportError> {
+    fn get_export(&self, input: &GetExportRequest) -> RusotoFuture<ExportResponse, GetExportError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}/exports/{export_type}",
             export_type = input.export_type,
@@ -17849,44 +17893,40 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut result = ExportResponse::default();
+                    result.body = Some(response.body);
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut result = ExportResponse::default();
+                    if let Some(content_disposition) = response.headers.get("Content-Disposition") {
+                        let value = content_disposition.to_owned();
+                        result.content_disposition = Some(value)
+                    };
+                    if let Some(content_type) = response.headers.get("Content-Type") {
+                        let value = content_type.to_owned();
+                        result.content_type = Some(value)
+                    };
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                result.body = Some(body);
-
-                if let Some(content_disposition) = response.headers.get("Content-Disposition") {
-                    let value = content_disposition.to_owned();
-                    result.content_disposition = Some(value)
-                };
-                if let Some(content_type) = response.headers.get("Content-Type") {
-                    let value = content_type.to_owned();
-                    result.content_type = Some(value)
-                };
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetExportError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetExportError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
     fn get_gateway_response(
         &self,
         input: &GetGatewayResponseRequest,
-    ) -> Result<GatewayResponse, GetGatewayResponseError> {
+    ) -> RusotoFuture<GatewayResponse, GetGatewayResponseError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/gatewayresponses/{response_type}",
             response_type = input.response_type,
@@ -17896,39 +17936,38 @@ where
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GatewayResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GatewayResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetGatewayResponseError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetGatewayResponseError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets the <a>GatewayResponses</a> collection on the given <a>RestApi</a>. If an API developer has not added any definitions for gateway responses, the result will be the API Gateway-generated default <a>GatewayResponses</a> collection for the supported response types.</p>
     fn get_gateway_responses(
         &self,
         input: &GetGatewayResponsesRequest,
-    ) -> Result<GatewayResponses, GetGatewayResponsesError> {
+    ) -> RusotoFuture<GatewayResponses, GetGatewayResponsesError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/gatewayresponses",
             restapi_id = input.rest_api_id
@@ -17946,39 +17985,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GatewayResponses>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GatewayResponses>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetGatewayResponsesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetGatewayResponsesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Get the integration settings.</p>
     fn get_integration(
         &self,
         input: &GetIntegrationRequest,
-    ) -> Result<Integration, GetIntegrationError> {
+    ) -> RusotoFuture<Integration, GetIntegrationError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration",
             http_method = input.http_method,
@@ -17989,74 +18027,72 @@ where
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Integration>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Integration>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetIntegrationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetIntegrationError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Represents a get integration response.</p>
     fn get_integration_response(
         &self,
         input: &GetIntegrationResponseRequest,
-    ) -> Result<IntegrationResponse, GetIntegrationResponseError> {
+    ) -> RusotoFuture<IntegrationResponse, GetIntegrationResponseError> {
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<IntegrationResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<IntegrationResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetIntegrationResponseError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetIntegrationResponseError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Describe an existing <a>Method</a> resource.</p>
-    fn get_method(&self, input: &GetMethodRequest) -> Result<Method, GetMethodError> {
+    fn get_method(&self, input: &GetMethodRequest) -> RusotoFuture<Method, GetMethodError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
             http_method = input.http_method,
@@ -18067,74 +18103,72 @@ where
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Method>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Method>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetMethodError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetMethodError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Describes a <a>MethodResponse</a> resource.</p>
     fn get_method_response(
         &self,
         input: &GetMethodResponseRequest,
-    ) -> Result<MethodResponse, GetMethodResponseError> {
+    ) -> RusotoFuture<MethodResponse, GetMethodResponseError> {
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<MethodResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<MethodResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetMethodResponseError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetMethodResponseError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Describes an existing model defined for a <a>RestApi</a> resource.</p>
-    fn get_model(&self, input: &GetModelRequest) -> Result<Model, GetModelError> {
+    fn get_model(&self, input: &GetModelRequest) -> RusotoFuture<Model, GetModelError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/models/{model_name}",
             model_name = input.model_name,
@@ -18150,39 +18184,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Model>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Model>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetModelError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetModelError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Generates a sample mapping template that can be used to transform a payload into the structure of a model.</p>
     fn get_model_template(
         &self,
         input: &GetModelTemplateRequest,
-    ) -> Result<Template, GetModelTemplateError> {
+    ) -> RusotoFuture<Template, GetModelTemplateError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/models/{model_name}/default_template",
             model_name = input.model_name,
@@ -18192,36 +18225,35 @@ where
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Template>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Template>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetModelTemplateError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetModelTemplateError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Describes existing <a>Models</a> defined for a <a>RestApi</a> resource.</p>
-    fn get_models(&self, input: &GetModelsRequest) -> Result<Models, GetModelsError> {
+    fn get_models(&self, input: &GetModelsRequest) -> RusotoFuture<Models, GetModelsError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/models",
             restapi_id = input.rest_api_id
@@ -18239,39 +18271,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Models>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Models>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetModelsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetModelsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
     fn get_request_validator(
         &self,
         input: &GetRequestValidatorRequest,
-    ) -> Result<RequestValidator, GetRequestValidatorError> {
+    ) -> RusotoFuture<RequestValidator, GetRequestValidatorError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/requestvalidators/{requestvalidator_id}",
             requestvalidator_id = input.request_validator_id,
@@ -18281,39 +18312,38 @@ where
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<RequestValidator>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<RequestValidator>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetRequestValidatorError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetRequestValidatorError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets the <a>RequestValidators</a> collection of a given <a>RestApi</a>.</p>
     fn get_request_validators(
         &self,
         input: &GetRequestValidatorsRequest,
-    ) -> Result<RequestValidators, GetRequestValidatorsError> {
+    ) -> RusotoFuture<RequestValidators, GetRequestValidatorsError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/requestvalidators",
             restapi_id = input.rest_api_id
@@ -18331,36 +18361,35 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<RequestValidators>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<RequestValidators>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetRequestValidatorsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetRequestValidatorsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists information about a resource.</p>
-    fn get_resource(&self, input: &GetResourceRequest) -> Result<Resource, GetResourceError> {
+    fn get_resource(&self, input: &GetResourceRequest) -> RusotoFuture<Resource, GetResourceError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}",
             resource_id = input.resource_id,
@@ -18378,36 +18407,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Resource>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Resource>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetResourceError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetResourceError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists information about a collection of <a>Resource</a> resources.</p>
-    fn get_resources(&self, input: &GetResourcesRequest) -> Result<Resources, GetResourcesError> {
+    fn get_resources(
+        &self,
+        input: &GetResourcesRequest,
+    ) -> RusotoFuture<Resources, GetResourcesError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources",
             restapi_id = input.rest_api_id
@@ -18430,71 +18461,72 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Resources>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Resources>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetResourcesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetResourcesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists the <a>RestApi</a> resource in the collection.</p>
-    fn get_rest_api(&self, input: &GetRestApiRequest) -> Result<RestApi, GetRestApiError> {
+    fn get_rest_api(&self, input: &GetRestApiRequest) -> RusotoFuture<RestApi, GetRestApiError> {
         let request_uri = format!("/restapis/{restapi_id}", restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<RestApi>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<RestApi>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetRestApiError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetRestApiError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists the <a>RestApis</a> resources for your collection.</p>
-    fn get_rest_apis(&self, input: &GetRestApisRequest) -> Result<RestApis, GetRestApisError> {
+    fn get_rest_apis(
+        &self,
+        input: &GetRestApisRequest,
+    ) -> RusotoFuture<RestApis, GetRestApisError> {
         let request_uri = "/restapis";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -18509,36 +18541,35 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<RestApis>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<RestApis>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetRestApisError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetRestApisError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Generates a client SDK for a <a>RestApi</a> and <a>Stage</a>.</p>
-    fn get_sdk(&self, input: &GetSdkRequest) -> Result<SdkResponse, GetSdkError> {
+    fn get_sdk(&self, input: &GetSdkRequest) -> RusotoFuture<SdkResponse, GetSdkError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}/sdks/{sdk_type}",
             restapi_id = input.rest_api_id,
@@ -18557,74 +18588,72 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut result = SdkResponse::default();
+                    result.body = Some(response.body);
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut result = SdkResponse::default();
+                    if let Some(content_disposition) = response.headers.get("Content-Disposition") {
+                        let value = content_disposition.to_owned();
+                        result.content_disposition = Some(value)
+                    };
+                    if let Some(content_type) = response.headers.get("Content-Type") {
+                        let value = content_type.to_owned();
+                        result.content_type = Some(value)
+                    };
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                result.body = Some(body);
-
-                if let Some(content_disposition) = response.headers.get("Content-Disposition") {
-                    let value = content_disposition.to_owned();
-                    result.content_disposition = Some(value)
-                };
-                if let Some(content_type) = response.headers.get("Content-Type") {
-                    let value = content_type.to_owned();
-                    result.content_type = Some(value)
-                };
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetSdkError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetSdkError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
-    fn get_sdk_type(&self, input: &GetSdkTypeRequest) -> Result<SdkType, GetSdkTypeError> {
+    fn get_sdk_type(&self, input: &GetSdkTypeRequest) -> RusotoFuture<SdkType, GetSdkTypeError> {
         let request_uri = format!("/sdktypes/{sdktype_id}", sdktype_id = input.id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<SdkType>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<SdkType>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetSdkTypeError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetSdkTypeError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
-    fn get_sdk_types(&self, input: &GetSdkTypesRequest) -> Result<SdkTypes, GetSdkTypesError> {
+    fn get_sdk_types(
+        &self,
+        input: &GetSdkTypesRequest,
+    ) -> RusotoFuture<SdkTypes, GetSdkTypesError> {
         let request_uri = "/sdktypes";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -18639,36 +18668,35 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<SdkTypes>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<SdkTypes>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetSdkTypesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetSdkTypesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets information about a <a>Stage</a> resource.</p>
-    fn get_stage(&self, input: &GetStageRequest) -> Result<Stage, GetStageError> {
+    fn get_stage(&self, input: &GetStageRequest) -> RusotoFuture<Stage, GetStageError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}",
             restapi_id = input.rest_api_id,
@@ -18678,36 +18706,35 @@ where
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Stage>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Stage>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetStageError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetStageError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets information about one or more <a>Stage</a> resources.</p>
-    fn get_stages(&self, input: &GetStagesRequest) -> Result<Stages, GetStagesError> {
+    fn get_stages(&self, input: &GetStagesRequest) -> RusotoFuture<Stages, GetStagesError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages",
             restapi_id = input.rest_api_id
@@ -18722,36 +18749,35 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Stages>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Stages>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetStagesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetStagesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets the Tags collection for a given resource.</p>
-    fn get_tags(&self, input: &GetTagsRequest) -> Result<Tags, GetTagsError> {
+    fn get_tags(&self, input: &GetTagsRequest) -> RusotoFuture<Tags, GetTagsError> {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -18766,36 +18792,35 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Tags>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Tags>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetTagsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetTagsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets the usage data of a usage plan in a specified time interval.</p>
-    fn get_usage(&self, input: &GetUsageRequest) -> Result<Usage, GetUsageError> {
+    fn get_usage(&self, input: &GetUsageRequest) -> RusotoFuture<Usage, GetUsageError> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}/usage",
             usageplan_id = input.usage_plan_id
@@ -18818,36 +18843,38 @@ where
         params.put("startDate", &input.start_date);
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Usage>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Usage>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetUsageError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetUsageError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets a usage plan of a given plan identifier.</p>
-    fn get_usage_plan(&self, input: &GetUsagePlanRequest) -> Result<UsagePlan, GetUsagePlanError> {
+    fn get_usage_plan(
+        &self,
+        input: &GetUsagePlanRequest,
+    ) -> RusotoFuture<UsagePlan, GetUsagePlanError> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}",
             usageplan_id = input.usage_plan_id
@@ -18856,39 +18883,38 @@ where
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<UsagePlan>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<UsagePlan>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetUsagePlanError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetUsagePlanError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets a usage plan key of a given key identifier.</p>
     fn get_usage_plan_key(
         &self,
         input: &GetUsagePlanKeyRequest,
-    ) -> Result<UsagePlanKey, GetUsagePlanKeyError> {
+    ) -> RusotoFuture<UsagePlanKey, GetUsagePlanKeyError> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}/keys/{key_id}",
             key_id = input.key_id,
@@ -18898,39 +18924,38 @@ where
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<UsagePlanKey>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<UsagePlanKey>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetUsagePlanKeyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetUsagePlanKeyError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets all the usage plan keys representing the API keys added to a specified usage plan.</p>
     fn get_usage_plan_keys(
         &self,
         input: &GetUsagePlanKeysRequest,
-    ) -> Result<UsagePlanKeys, GetUsagePlanKeysError> {
+    ) -> RusotoFuture<UsagePlanKeys, GetUsagePlanKeysError> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}/keys",
             usageplan_id = input.usage_plan_id
@@ -18951,39 +18976,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<UsagePlanKeys>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<UsagePlanKeys>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetUsagePlanKeysError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetUsagePlanKeysError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets all the usage plans of the caller's account.</p>
     fn get_usage_plans(
         &self,
         input: &GetUsagePlansRequest,
-    ) -> Result<UsagePlans, GetUsagePlansError> {
+    ) -> RusotoFuture<UsagePlans, GetUsagePlansError> {
         let request_uri = "/usageplans";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -19001,71 +19025,72 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<UsagePlans>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<UsagePlans>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetUsagePlansError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetUsagePlansError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets a specified VPC link under the caller's account in a region.</p>
-    fn get_vpc_link(&self, input: &GetVpcLinkRequest) -> Result<VpcLink, GetVpcLinkError> {
+    fn get_vpc_link(&self, input: &GetVpcLinkRequest) -> RusotoFuture<VpcLink, GetVpcLinkError> {
         let request_uri = format!("/vpclinks/{vpclink_id}", vpclink_id = input.vpc_link_id);
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<VpcLink>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<VpcLink>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetVpcLinkError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetVpcLinkError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets the <a>VpcLinks</a> collection under the caller's account in a selected region.</p>
-    fn get_vpc_links(&self, input: &GetVpcLinksRequest) -> Result<VpcLinks, GetVpcLinksError> {
+    fn get_vpc_links(
+        &self,
+        input: &GetVpcLinksRequest,
+    ) -> RusotoFuture<VpcLinks, GetVpcLinksError> {
         let request_uri = "/vpclinks";
 
         let mut request = SignedRequest::new("GET", "apigateway", &self.region, &request_uri);
@@ -19080,39 +19105,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<VpcLinks>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<VpcLinks>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetVpcLinksError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetVpcLinksError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Import API keys from an external source, such as a CSV-formatted file.</p>
     fn import_api_keys(
         &self,
         input: &ImportApiKeysRequest,
-    ) -> Result<ApiKeyIds, ImportApiKeysError> {
+    ) -> RusotoFuture<ApiKeyIds, ImportApiKeysError> {
         let request_uri = "/apikeys";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
@@ -19129,38 +19153,37 @@ where
         params.put("mode", "import");
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Created {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Created => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ApiKeyIds>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ApiKeyIds>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ImportApiKeysError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ImportApiKeysError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     fn import_documentation_parts(
         &self,
         input: &ImportDocumentationPartsRequest,
-    ) -> Result<DocumentationPartIds, ImportDocumentationPartsError> {
+    ) -> RusotoFuture<DocumentationPartIds, ImportDocumentationPartsError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/parts",
             restapi_id = input.rest_api_id
@@ -19181,36 +19204,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DocumentationPartIds>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DocumentationPartIds>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ImportDocumentationPartsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ImportDocumentationPartsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>A feature of the API Gateway control service for creating a new API from an external API definition file.</p>
-    fn import_rest_api(&self, input: &ImportRestApiRequest) -> Result<RestApi, ImportRestApiError> {
+    fn import_rest_api(
+        &self,
+        input: &ImportRestApiRequest,
+    ) -> RusotoFuture<RestApi, ImportRestApiError> {
         let request_uri = "/restapis";
 
         let mut request = SignedRequest::new("POST", "apigateway", &self.region, &request_uri);
@@ -19231,39 +19256,38 @@ where
         params.put("mode", "import");
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Created {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Created => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<RestApi>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<RestApi>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ImportRestApiError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ImportRestApiError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a customization of a <a>GatewayResponse</a> of a specified response type and status code on the given <a>RestApi</a>.</p>
     fn put_gateway_response(
         &self,
         input: &PutGatewayResponseRequest,
-    ) -> Result<GatewayResponse, PutGatewayResponseError> {
+    ) -> RusotoFuture<GatewayResponse, PutGatewayResponseError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/gatewayresponses/{response_type}",
             response_type = input.response_type,
@@ -19276,39 +19300,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Created {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Created => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GatewayResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GatewayResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(PutGatewayResponseError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutGatewayResponseError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Sets up a method's integration.</p>
     fn put_integration(
         &self,
         input: &PutIntegrationRequest,
-    ) -> Result<Integration, PutIntegrationError> {
+    ) -> RusotoFuture<Integration, PutIntegrationError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration",
             http_method = input.http_method,
@@ -19322,39 +19345,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Created {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Created => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Integration>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Integration>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(PutIntegrationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutIntegrationError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Represents a put integration.</p>
     fn put_integration_response(
         &self,
         input: &PutIntegrationResponseRequest,
-    ) -> Result<IntegrationResponse, PutIntegrationResponseError> {
+    ) -> RusotoFuture<IntegrationResponse, PutIntegrationResponseError> {
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
         let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
@@ -19363,36 +19385,35 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Created {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Created => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<IntegrationResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<IntegrationResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(PutIntegrationResponseError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutIntegrationResponseError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Add a method to an existing <a>Resource</a> resource.</p>
-    fn put_method(&self, input: &PutMethodRequest) -> Result<Method, PutMethodError> {
+    fn put_method(&self, input: &PutMethodRequest) -> RusotoFuture<Method, PutMethodError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
             http_method = input.http_method,
@@ -19406,39 +19427,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Created {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Created => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Method>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Method>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(PutMethodError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutMethodError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Adds a <a>MethodResponse</a> to an existing <a>Method</a> resource.</p>
     fn put_method_response(
         &self,
         input: &PutMethodResponseRequest,
-    ) -> Result<MethodResponse, PutMethodResponseError> {
+    ) -> RusotoFuture<MethodResponse, PutMethodResponseError> {
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
         let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
@@ -19447,36 +19467,35 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Created {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Created => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<MethodResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<MethodResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(PutMethodResponseError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutMethodResponseError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>A feature of the API Gateway control service for updating an existing API with an input of external API definitions. The update can take the form of merging the supplied definition into the existing API or overwriting the existing API.</p>
-    fn put_rest_api(&self, input: &PutRestApiRequest) -> Result<RestApi, PutRestApiError> {
+    fn put_rest_api(&self, input: &PutRestApiRequest) -> RusotoFuture<RestApi, PutRestApiError> {
         let request_uri = format!("/restapis/{restapi_id}", restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
@@ -19499,36 +19518,35 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<RestApi>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<RestApi>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(PutRestApiError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutRestApiError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Adds or updates Tags on a gievn resource.</p>
-    fn tag_resource(&self, input: &TagResourceRequest) -> Result<(), TagResourceError> {
+    fn tag_resource(&self, input: &TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("PUT", "apigateway", &self.region, &request_uri);
@@ -19537,30 +19555,30 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::NoContent {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::NoContent => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(TagResourceError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(TagResourceError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p><p>Simulate the execution of an <a>Authorizer</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p> <div class="seeAlso"> <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/use-custom-authorizer.html">Enable custom authorizers</a> </div></p>
     fn test_invoke_authorizer(
         &self,
         input: &TestInvokeAuthorizerRequest,
-    ) -> Result<TestInvokeAuthorizerResponse, TestInvokeAuthorizerError> {
+    ) -> RusotoFuture<TestInvokeAuthorizerResponse, TestInvokeAuthorizerError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/authorizers/{authorizer_id}",
             authorizer_id = input.authorizer_id,
@@ -19573,39 +19591,39 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<TestInvokeAuthorizerResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<TestInvokeAuthorizerResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(TestInvokeAuthorizerError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(TestInvokeAuthorizerError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Simulate the execution of a <a>Method</a> in your <a>RestApi</a> with headers, parameters, and an incoming request body.</p>
     fn test_invoke_method(
         &self,
         input: &TestInvokeMethodRequest,
-    ) -> Result<TestInvokeMethodResponse, TestInvokeMethodError> {
+    ) -> RusotoFuture<TestInvokeMethodResponse, TestInvokeMethodError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
             http_method = input.http_method,
@@ -19619,36 +19637,35 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<TestInvokeMethodResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<TestInvokeMethodResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(TestInvokeMethodError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(TestInvokeMethodError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Removes Tags from a given resource.</p>
-    fn untag_resource(&self, input: &UntagResourceRequest) -> Result<(), UntagResourceError> {
+    fn untag_resource(&self, input: &UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
         let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
 
         let mut request = SignedRequest::new("DELETE", "apigateway", &self.region, &request_uri);
@@ -19660,27 +19677,30 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::NoContent {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::NoContent => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UntagResourceError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UntagResourceError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Changes information about the current <a>Account</a> resource.</p>
-    fn update_account(&self, input: &UpdateAccountRequest) -> Result<Account, UpdateAccountError> {
+    fn update_account(
+        &self,
+        input: &UpdateAccountRequest,
+    ) -> RusotoFuture<Account, UpdateAccountError> {
         let request_uri = "/account";
 
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
@@ -19689,36 +19709,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Account>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Account>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateAccountError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateAccountError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Changes information about an <a>ApiKey</a> resource.</p>
-    fn update_api_key(&self, input: &UpdateApiKeyRequest) -> Result<ApiKey, UpdateApiKeyError> {
+    fn update_api_key(
+        &self,
+        input: &UpdateApiKeyRequest,
+    ) -> RusotoFuture<ApiKey, UpdateApiKeyError> {
         let request_uri = format!("/apikeys/{api_key}", api_key = input.api_key);
 
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
@@ -19727,39 +19749,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ApiKey>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ApiKey>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateApiKeyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateApiKeyError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p><p>Updates an existing <a>Authorizer</a> resource.</p> <div class="seeAlso"><a href="http://docs.aws.amazon.com/cli/latest/reference/apigateway/update-authorizer.html">AWS CLI</a></div></p>
     fn update_authorizer(
         &self,
         input: &UpdateAuthorizerRequest,
-    ) -> Result<Authorizer, UpdateAuthorizerError> {
+    ) -> RusotoFuture<Authorizer, UpdateAuthorizerError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/authorizers/{authorizer_id}",
             authorizer_id = input.authorizer_id,
@@ -19772,39 +19793,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Authorizer>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Authorizer>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateAuthorizerError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateAuthorizerError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Changes information about the <a>BasePathMapping</a> resource.</p>
     fn update_base_path_mapping(
         &self,
         input: &UpdateBasePathMappingRequest,
-    ) -> Result<BasePathMapping, UpdateBasePathMappingError> {
+    ) -> RusotoFuture<BasePathMapping, UpdateBasePathMappingError> {
         let request_uri = format!(
             "/domainnames/{domain_name}/basepathmappings/{base_path}",
             base_path = input.base_path,
@@ -19817,39 +19837,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<BasePathMapping>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<BasePathMapping>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateBasePathMappingError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateBasePathMappingError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Changes information about an <a>ClientCertificate</a> resource.</p>
     fn update_client_certificate(
         &self,
         input: &UpdateClientCertificateRequest,
-    ) -> Result<ClientCertificate, UpdateClientCertificateError> {
+    ) -> RusotoFuture<ClientCertificate, UpdateClientCertificateError> {
         let request_uri = format!(
             "/clientcertificates/{clientcertificate_id}",
             clientcertificate_id = input.client_certificate_id
@@ -19861,39 +19880,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ClientCertificate>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ClientCertificate>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateClientCertificateError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateClientCertificateError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Changes information about a <a>Deployment</a> resource.</p>
     fn update_deployment(
         &self,
         input: &UpdateDeploymentRequest,
-    ) -> Result<Deployment, UpdateDeploymentError> {
+    ) -> RusotoFuture<Deployment, UpdateDeploymentError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/deployments/{deployment_id}",
             deployment_id = input.deployment_id,
@@ -19906,38 +19924,37 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Deployment>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Deployment>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateDeploymentError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateDeploymentError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     fn update_documentation_part(
         &self,
         input: &UpdateDocumentationPartRequest,
-    ) -> Result<DocumentationPart, UpdateDocumentationPartError> {
+    ) -> RusotoFuture<DocumentationPart, UpdateDocumentationPartError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/parts/{part_id}",
             part_id = input.documentation_part_id,
@@ -19950,38 +19967,37 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DocumentationPart>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DocumentationPart>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateDocumentationPartError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateDocumentationPartError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     fn update_documentation_version(
         &self,
         input: &UpdateDocumentationVersionRequest,
-    ) -> Result<DocumentationVersion, UpdateDocumentationVersionError> {
+    ) -> RusotoFuture<DocumentationVersion, UpdateDocumentationVersionError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/documentation/versions/{doc_version}",
             doc_version = input.documentation_version,
@@ -19994,39 +20010,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DocumentationVersion>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DocumentationVersion>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateDocumentationVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateDocumentationVersionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Changes information about the <a>DomainName</a> resource.</p>
     fn update_domain_name(
         &self,
         input: &UpdateDomainNameRequest,
-    ) -> Result<DomainName, UpdateDomainNameError> {
+    ) -> RusotoFuture<DomainName, UpdateDomainNameError> {
         let request_uri = format!(
             "/domainnames/{domain_name}",
             domain_name = input.domain_name
@@ -20038,39 +20053,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DomainName>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DomainName>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateDomainNameError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateDomainNameError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates a <a>GatewayResponse</a> of a specified response type on the given <a>RestApi</a>.</p>
     fn update_gateway_response(
         &self,
         input: &UpdateGatewayResponseRequest,
-    ) -> Result<GatewayResponse, UpdateGatewayResponseError> {
+    ) -> RusotoFuture<GatewayResponse, UpdateGatewayResponseError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/gatewayresponses/{response_type}",
             response_type = input.response_type,
@@ -20083,39 +20097,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GatewayResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GatewayResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateGatewayResponseError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateGatewayResponseError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Represents an update integration.</p>
     fn update_integration(
         &self,
         input: &UpdateIntegrationRequest,
-    ) -> Result<Integration, UpdateIntegrationError> {
+    ) -> RusotoFuture<Integration, UpdateIntegrationError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration",
             http_method = input.http_method,
@@ -20129,39 +20142,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Integration>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Integration>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateIntegrationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateIntegrationError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Represents an update integration response.</p>
     fn update_integration_response(
         &self,
         input: &UpdateIntegrationResponseRequest,
-    ) -> Result<IntegrationResponse, UpdateIntegrationResponseError> {
+    ) -> RusotoFuture<IntegrationResponse, UpdateIntegrationResponseError> {
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/integration/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
@@ -20170,36 +20182,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<IntegrationResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<IntegrationResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateIntegrationResponseError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateIntegrationResponseError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates an existing <a>Method</a> resource.</p>
-    fn update_method(&self, input: &UpdateMethodRequest) -> Result<Method, UpdateMethodError> {
+    fn update_method(
+        &self,
+        input: &UpdateMethodRequest,
+    ) -> RusotoFuture<Method, UpdateMethodError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}",
             http_method = input.http_method,
@@ -20213,39 +20227,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Method>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Method>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateMethodError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateMethodError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates an existing <a>MethodResponse</a> resource.</p>
     fn update_method_response(
         &self,
         input: &UpdateMethodResponseRequest,
-    ) -> Result<MethodResponse, UpdateMethodResponseError> {
+    ) -> RusotoFuture<MethodResponse, UpdateMethodResponseError> {
         let request_uri = format!("/restapis/{restapi_id}/resources/{resource_id}/methods/{http_method}/responses/{status_code}", http_method = input.http_method, resource_id = input.resource_id, restapi_id = input.rest_api_id, status_code = input.status_code);
 
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
@@ -20254,36 +20267,35 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Created {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Created => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<MethodResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<MethodResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateMethodResponseError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateMethodResponseError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Changes information about a model.</p>
-    fn update_model(&self, input: &UpdateModelRequest) -> Result<Model, UpdateModelError> {
+    fn update_model(&self, input: &UpdateModelRequest) -> RusotoFuture<Model, UpdateModelError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/models/{model_name}",
             model_name = input.model_name,
@@ -20296,39 +20308,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Model>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Model>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateModelError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateModelError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates a <a>RequestValidator</a> of a given <a>RestApi</a>.</p>
     fn update_request_validator(
         &self,
         input: &UpdateRequestValidatorRequest,
-    ) -> Result<RequestValidator, UpdateRequestValidatorError> {
+    ) -> RusotoFuture<RequestValidator, UpdateRequestValidatorError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/requestvalidators/{requestvalidator_id}",
             requestvalidator_id = input.request_validator_id,
@@ -20341,39 +20352,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<RequestValidator>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<RequestValidator>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateRequestValidatorError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateRequestValidatorError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Changes information about a <a>Resource</a> resource.</p>
     fn update_resource(
         &self,
         input: &UpdateResourceRequest,
-    ) -> Result<Resource, UpdateResourceError> {
+    ) -> RusotoFuture<Resource, UpdateResourceError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/resources/{resource_id}",
             resource_id = input.resource_id,
@@ -20386,36 +20396,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Resource>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Resource>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateResourceError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateResourceError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Changes information about the specified API.</p>
-    fn update_rest_api(&self, input: &UpdateRestApiRequest) -> Result<RestApi, UpdateRestApiError> {
+    fn update_rest_api(
+        &self,
+        input: &UpdateRestApiRequest,
+    ) -> RusotoFuture<RestApi, UpdateRestApiError> {
         let request_uri = format!("/restapis/{restapi_id}", restapi_id = input.rest_api_id);
 
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
@@ -20424,36 +20436,35 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<RestApi>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<RestApi>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateRestApiError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateRestApiError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Changes information about a <a>Stage</a> resource.</p>
-    fn update_stage(&self, input: &UpdateStageRequest) -> Result<Stage, UpdateStageError> {
+    fn update_stage(&self, input: &UpdateStageRequest) -> RusotoFuture<Stage, UpdateStageError> {
         let request_uri = format!(
             "/restapis/{restapi_id}/stages/{stage_name}",
             restapi_id = input.rest_api_id,
@@ -20466,36 +20477,35 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Stage>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Stage>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateStageError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateStageError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Grants a temporary extension to the remaining quota of a usage plan associated with a specified API key.</p>
-    fn update_usage(&self, input: &UpdateUsageRequest) -> Result<Usage, UpdateUsageError> {
+    fn update_usage(&self, input: &UpdateUsageRequest) -> RusotoFuture<Usage, UpdateUsageError> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}/keys/{key_id}/usage",
             key_id = input.key_id,
@@ -20508,39 +20518,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Usage>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Usage>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateUsageError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateUsageError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates a usage plan of a given plan Id.</p>
     fn update_usage_plan(
         &self,
         input: &UpdateUsagePlanRequest,
-    ) -> Result<UsagePlan, UpdateUsagePlanError> {
+    ) -> RusotoFuture<UsagePlan, UpdateUsagePlanError> {
         let request_uri = format!(
             "/usageplans/{usageplan_id}",
             usageplan_id = input.usage_plan_id
@@ -20552,36 +20561,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<UsagePlan>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<UsagePlan>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateUsagePlanError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateUsagePlanError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates an existing <a>VpcLink</a> of a specified identifier.</p>
-    fn update_vpc_link(&self, input: &UpdateVpcLinkRequest) -> Result<VpcLink, UpdateVpcLinkError> {
+    fn update_vpc_link(
+        &self,
+        input: &UpdateVpcLinkRequest,
+    ) -> RusotoFuture<VpcLink, UpdateVpcLinkError> {
         let request_uri = format!("/vpclinks/{vpclink_id}", vpclink_id = input.vpc_link_id);
 
         let mut request = SignedRequest::new("PATCH", "apigateway", &self.region, &request_uri);
@@ -20590,32 +20601,31 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<VpcLink>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<VpcLink>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateVpcLinkError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateVpcLinkError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 }
 

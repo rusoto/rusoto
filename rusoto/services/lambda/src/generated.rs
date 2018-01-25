@@ -10,16 +10,19 @@
 //
 // =================================================================
 
+use std::error::Error;
+use std::fmt;
+use std::io;
+
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+use futures::Future;
+use hyper::StatusCode;
+use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::{ClientInner, RusotoFuture};
 
-use std::fmt;
-use std::error::Error;
-use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -4053,164 +4056,187 @@ pub trait Lambda {
     fn add_permission(
         &self,
         input: &AddPermissionRequest,
-    ) -> Result<AddPermissionResponse, AddPermissionError>;
+    ) -> RusotoFuture<AddPermissionResponse, AddPermissionError>;
 
     /// <p>Creates an alias that points to the specified Lambda function version. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html">Introduction to AWS Lambda Aliases</a>.</p> <p>Alias names are unique for a given function. This requires permission for the lambda:CreateAlias action.</p>
     fn create_alias(
         &self,
         input: &CreateAliasRequest,
-    ) -> Result<AliasConfiguration, CreateAliasError>;
+    ) -> RusotoFuture<AliasConfiguration, CreateAliasError>;
 
     /// <p>Identifies a stream as an event source for a Lambda function. It can be either an Amazon Kinesis stream or an Amazon DynamoDB stream. AWS Lambda invokes the specified function when records are posted to the stream.</p> <p>This association between a stream source and a Lambda function is called the event source mapping.</p> <important> <p>This event source mapping is relevant only in the AWS Lambda pull model, where AWS Lambda invokes the function. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/lambda-introduction.html">AWS Lambda: How it Works</a> in the <i>AWS Lambda Developer Guide</i>.</p> </important> <p>You provide mapping information (for example, which stream to read from and which Lambda function to invoke) in the request body.</p> <p>Each event source, such as an Amazon Kinesis or a DynamoDB stream, can be associated with multiple AWS Lambda function. A given Lambda function can be associated with multiple AWS event sources.</p> <p>If you are using versioning, you can specify a specific function version or an alias via the function name parameter. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:CreateEventSourceMapping</code> action.</p>
     fn create_event_source_mapping(
         &self,
         input: &CreateEventSourceMappingRequest,
-    ) -> Result<EventSourceMappingConfiguration, CreateEventSourceMappingError>;
+    ) -> RusotoFuture<EventSourceMappingConfiguration, CreateEventSourceMappingError>;
 
     /// <p>Creates a new Lambda function. The function metadata is created from the request parameters, and the code for the function is provided by a .zip file in the request body. If the function name already exists, the operation will fail. Note that the function name is case-sensitive.</p> <p> If you are using versioning, you can also publish a version of the Lambda function you are creating using the <code>Publish</code> parameter. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:CreateFunction</code> action.</p>
     fn create_function(
         &self,
         input: &CreateFunctionRequest,
-    ) -> Result<FunctionConfiguration, CreateFunctionError>;
+    ) -> RusotoFuture<FunctionConfiguration, CreateFunctionError>;
 
     /// <p>Deletes the specified Lambda function alias. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the lambda:DeleteAlias action.</p>
-    fn delete_alias(&self, input: &DeleteAliasRequest) -> Result<(), DeleteAliasError>;
+    fn delete_alias(&self, input: &DeleteAliasRequest) -> RusotoFuture<(), DeleteAliasError>;
 
     /// <p>Removes an event source mapping. This means AWS Lambda will no longer invoke the function for events in the associated source.</p> <p>This operation requires permission for the <code>lambda:DeleteEventSourceMapping</code> action.</p>
     fn delete_event_source_mapping(
         &self,
         input: &DeleteEventSourceMappingRequest,
-    ) -> Result<EventSourceMappingConfiguration, DeleteEventSourceMappingError>;
+    ) -> RusotoFuture<EventSourceMappingConfiguration, DeleteEventSourceMappingError>;
 
     /// <p>Deletes the specified Lambda function code and configuration.</p> <p>If you are using the versioning feature and you don't specify a function version in your <code>DeleteFunction</code> request, AWS Lambda will delete the function, including all its versions, and any aliases pointing to the function versions. To delete a specific function version, you must provide the function version via the <code>Qualifier</code> parameter. For information about function versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>When you delete a function the associated resource policy is also deleted. You will need to delete the event source mappings explicitly.</p> <p>This operation requires permission for the <code>lambda:DeleteFunction</code> action.</p>
-    fn delete_function(&self, input: &DeleteFunctionRequest) -> Result<(), DeleteFunctionError>;
+    fn delete_function(
+        &self,
+        input: &DeleteFunctionRequest,
+    ) -> RusotoFuture<(), DeleteFunctionError>;
 
     /// <p>Removes concurrent execution limits from this function.</p>
     fn delete_function_concurrency(
         &self,
         input: &DeleteFunctionConcurrencyRequest,
-    ) -> Result<(), DeleteFunctionConcurrencyError>;
+    ) -> RusotoFuture<(), DeleteFunctionConcurrencyError>;
 
     /// <p>Returns a customer's account settings.</p> <p>You can use this operation to retrieve Lambda limits information, such as code size and concurrency limits. For more information about limits, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/limits.html">AWS Lambda Limits</a>. You can also retrieve resource usage statistics, such as code storage usage and function count.</p>
-    fn get_account_settings(&self) -> Result<GetAccountSettingsResponse, GetAccountSettingsError>;
+    fn get_account_settings(
+        &self,
+    ) -> RusotoFuture<GetAccountSettingsResponse, GetAccountSettingsError>;
 
     /// <p>Returns the specified alias information such as the alias ARN, description, and function version it is pointing to. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the <code>lambda:GetAlias</code> action.</p>
-    fn get_alias(&self, input: &GetAliasRequest) -> Result<AliasConfiguration, GetAliasError>;
+    fn get_alias(&self, input: &GetAliasRequest)
+        -> RusotoFuture<AliasConfiguration, GetAliasError>;
 
     /// <p>Returns configuration information for the specified event source mapping (see <a>CreateEventSourceMapping</a>).</p> <p>This operation requires permission for the <code>lambda:GetEventSourceMapping</code> action.</p>
     fn get_event_source_mapping(
         &self,
         input: &GetEventSourceMappingRequest,
-    ) -> Result<EventSourceMappingConfiguration, GetEventSourceMappingError>;
+    ) -> RusotoFuture<EventSourceMappingConfiguration, GetEventSourceMappingError>;
 
     /// <p>Returns the configuration information of the Lambda function and a presigned URL link to the .zip file you uploaded with <a>CreateFunction</a> so you can download the .zip file. Note that the URL is valid for up to 10 minutes. The configuration information is the same information you provided as parameters when uploading the function.</p> <p>Using the optional <code>Qualifier</code> parameter, you can specify a specific function version for which you want this information. If you don't specify this parameter, the API uses unqualified function ARN which return information about the <code>$LATEST</code> version of the Lambda function. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>.</p> <p>This operation requires permission for the <code>lambda:GetFunction</code> action.</p>
     fn get_function(
         &self,
         input: &GetFunctionRequest,
-    ) -> Result<GetFunctionResponse, GetFunctionError>;
+    ) -> RusotoFuture<GetFunctionResponse, GetFunctionError>;
 
     /// <p>Returns the configuration information of the Lambda function. This the same information you provided as parameters when uploading the function by using <a>CreateFunction</a>.</p> <p>If you are using the versioning feature, you can retrieve this information for a specific function version by using the optional <code>Qualifier</code> parameter and specifying the function version or alias that points to it. If you don't provide it, the API returns information about the $LATEST version of the function. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>.</p> <p>This operation requires permission for the <code>lambda:GetFunctionConfiguration</code> operation.</p>
     fn get_function_configuration(
         &self,
         input: &GetFunctionConfigurationRequest,
-    ) -> Result<FunctionConfiguration, GetFunctionConfigurationError>;
+    ) -> RusotoFuture<FunctionConfiguration, GetFunctionConfigurationError>;
 
     /// <p>Returns the resource policy associated with the specified Lambda function.</p> <p> If you are using the versioning feature, you can get the resource policy associated with the specific Lambda function version or alias by specifying the version or alias name using the <code>Qualifier</code> parameter. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>You need permission for the <code>lambda:GetPolicy action.</code> </p>
-    fn get_policy(&self, input: &GetPolicyRequest) -> Result<GetPolicyResponse, GetPolicyError>;
+    fn get_policy(
+        &self,
+        input: &GetPolicyRequest,
+    ) -> RusotoFuture<GetPolicyResponse, GetPolicyError>;
 
     /// <p>Invokes a specific Lambda function. For an example, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/with-dynamodb-create-function.html#with-dbb-invoke-manually">Create the Lambda Function and Test It Manually</a>. </p> <p>If you are using the versioning feature, you can invoke the specific function version by providing function version or alias name that is pointing to the function version using the <code>Qualifier</code> parameter in the request. If you don't provide the <code>Qualifier</code> parameter, the <code>$LATEST</code> version of the Lambda function is invoked. Invocations occur at least once in response to an event and functions must be idempotent to handle this. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p>
-    fn invoke(&self, input: &InvocationRequest) -> Result<InvocationResponse, InvokeError>;
+    fn invoke(&self, input: &InvocationRequest) -> RusotoFuture<InvocationResponse, InvokeError>;
 
     /// <p><important> <p>This API is deprecated. We recommend you use <code>Invoke</code> API (see <a>Invoke</a>).</p> </important> <p>Submits an invocation request to AWS Lambda. Upon receiving the request, Lambda executes the specified function asynchronously. To see the logs generated by the Lambda function execution, see the CloudWatch Logs console.</p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p></p>
     fn invoke_async(
         &self,
         input: &InvokeAsyncRequest,
-    ) -> Result<InvokeAsyncResponse, InvokeAsyncError>;
+    ) -> RusotoFuture<InvokeAsyncResponse, InvokeAsyncError>;
 
     /// <p>Returns list of aliases created for a Lambda function. For each alias, the response includes information such as the alias ARN, description, alias name, and the function version to which it points. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the lambda:ListAliases action.</p>
     fn list_aliases(
         &self,
         input: &ListAliasesRequest,
-    ) -> Result<ListAliasesResponse, ListAliasesError>;
+    ) -> RusotoFuture<ListAliasesResponse, ListAliasesError>;
 
     /// <p>Returns a list of event source mappings you created using the <code>CreateEventSourceMapping</code> (see <a>CreateEventSourceMapping</a>). </p> <p>For each mapping, the API returns configuration information. You can optionally specify filters to retrieve specific event source mappings.</p> <p>If you are using the versioning feature, you can get list of event source mappings for a specific Lambda function version or an alias as described in the <code>FunctionName</code> parameter. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:ListEventSourceMappings</code> action.</p>
     fn list_event_source_mappings(
         &self,
         input: &ListEventSourceMappingsRequest,
-    ) -> Result<ListEventSourceMappingsResponse, ListEventSourceMappingsError>;
+    ) -> RusotoFuture<ListEventSourceMappingsResponse, ListEventSourceMappingsError>;
 
     /// <p>Returns a list of your Lambda functions. For each function, the response includes the function configuration information. You must use <a>GetFunction</a> to retrieve the code for your function.</p> <p>This operation requires permission for the <code>lambda:ListFunctions</code> action.</p> <p>If you are using the versioning feature, you can list all of your functions or only <code>$LATEST</code> versions. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p>
     fn list_functions(
         &self,
         input: &ListFunctionsRequest,
-    ) -> Result<ListFunctionsResponse, ListFunctionsError>;
+    ) -> RusotoFuture<ListFunctionsResponse, ListFunctionsError>;
 
     /// <p>Returns a list of tags assigned to a function when supplied the function ARN (Amazon Resource Name).</p>
-    fn list_tags(&self, input: &ListTagsRequest) -> Result<ListTagsResponse, ListTagsError>;
+    fn list_tags(&self, input: &ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError>;
 
     /// <p>List all versions of a function. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p>
     fn list_versions_by_function(
         &self,
         input: &ListVersionsByFunctionRequest,
-    ) -> Result<ListVersionsByFunctionResponse, ListVersionsByFunctionError>;
+    ) -> RusotoFuture<ListVersionsByFunctionResponse, ListVersionsByFunctionError>;
 
     /// <p>Publishes a version of your function from the current snapshot of $LATEST. That is, AWS Lambda takes a snapshot of the function code and configuration information from $LATEST and publishes a new version. The code and configuration cannot be modified after publication. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p>
     fn publish_version(
         &self,
         input: &PublishVersionRequest,
-    ) -> Result<FunctionConfiguration, PublishVersionError>;
+    ) -> RusotoFuture<FunctionConfiguration, PublishVersionError>;
 
     /// <p>Sets a limit on the number of concurrent executions available to this function. It is a subset of your account's total concurrent execution limit per region. Note that Lambda automatically reserves a buffer of 100 concurrent executions for functions without any reserved concurrency limit. This means if your account limit is 1000, you have a total of 900 available to allocate to individual functions.</p>
     fn put_function_concurrency(
         &self,
         input: &PutFunctionConcurrencyRequest,
-    ) -> Result<Concurrency, PutFunctionConcurrencyError>;
+    ) -> RusotoFuture<Concurrency, PutFunctionConcurrencyError>;
 
     /// <p>You can remove individual permissions from an resource policy associated with a Lambda function by providing a statement ID that you provided when you added the permission.</p> <p>If you are using versioning, the permissions you remove are specific to the Lambda function version or alias you specify in the <code>AddPermission</code> request via the <code>Qualifier</code> parameter. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>Note that removal of a permission will cause an active event source to lose permission to the function.</p> <p>You need permission for the <code>lambda:RemovePermission</code> action.</p>
     fn remove_permission(
         &self,
         input: &RemovePermissionRequest,
-    ) -> Result<(), RemovePermissionError>;
+    ) -> RusotoFuture<(), RemovePermissionError>;
 
     /// <p>Creates a list of tags (key-value pairs) on the Lambda function. Requires the Lambda function ARN (Amazon Resource Name). If a key is specified without a value, Lambda creates a tag with the specified key and a value of null. </p>
-    fn tag_resource(&self, input: &TagResourceRequest) -> Result<(), TagResourceError>;
+    fn tag_resource(&self, input: &TagResourceRequest) -> RusotoFuture<(), TagResourceError>;
 
     /// <p>Removes tags from a Lambda function. Requires the function ARN (Amazon Resource Name). </p>
-    fn untag_resource(&self, input: &UntagResourceRequest) -> Result<(), UntagResourceError>;
+    fn untag_resource(&self, input: &UntagResourceRequest) -> RusotoFuture<(), UntagResourceError>;
 
     /// <p>Using this API you can update the function version to which the alias points and the alias description. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the lambda:UpdateAlias action.</p>
     fn update_alias(
         &self,
         input: &UpdateAliasRequest,
-    ) -> Result<AliasConfiguration, UpdateAliasError>;
+    ) -> RusotoFuture<AliasConfiguration, UpdateAliasError>;
 
     /// <p>You can update an event source mapping. This is useful if you want to change the parameters of the existing mapping without losing your position in the stream. You can change which function will receive the stream records, but to change the stream itself, you must create a new mapping.</p> <p>If you are using the versioning feature, you can update the event source mapping to map to a specific Lambda function version or alias as described in the <code>FunctionName</code> parameter. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>If you disable the event source mapping, AWS Lambda stops polling. If you enable again, it will resume polling from the time it had stopped polling, so you don't lose processing of any records. However, if you delete event source mapping and create it again, it will reset.</p> <p>This operation requires permission for the <code>lambda:UpdateEventSourceMapping</code> action.</p>
     fn update_event_source_mapping(
         &self,
         input: &UpdateEventSourceMappingRequest,
-    ) -> Result<EventSourceMappingConfiguration, UpdateEventSourceMappingError>;
+    ) -> RusotoFuture<EventSourceMappingConfiguration, UpdateEventSourceMappingError>;
 
     /// <p>Updates the code for the specified Lambda function. This operation must only be used on an existing Lambda function and cannot be used to update the function configuration.</p> <p>If you are using the versioning feature, note this API will always update the $LATEST version of your Lambda function. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:UpdateFunctionCode</code> action.</p>
     fn update_function_code(
         &self,
         input: &UpdateFunctionCodeRequest,
-    ) -> Result<FunctionConfiguration, UpdateFunctionCodeError>;
+    ) -> RusotoFuture<FunctionConfiguration, UpdateFunctionCodeError>;
 
     /// <p>Updates the configuration parameters for the specified Lambda function by using the values provided in the request. You provide only the parameters you want to change. This operation must only be used on an existing Lambda function and cannot be used to update the function's code.</p> <p>If you are using the versioning feature, note this API will always update the $LATEST version of your Lambda function. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:UpdateFunctionConfiguration</code> action.</p>
     fn update_function_configuration(
         &self,
         input: &UpdateFunctionConfigurationRequest,
-    ) -> Result<FunctionConfiguration, UpdateFunctionConfigurationError>;
+    ) -> RusotoFuture<FunctionConfiguration, UpdateFunctionConfigurationError>;
 }
 /// A client for the AWS Lambda API.
-pub struct LambdaClient<P, D>
+pub struct LambdaClient<P = CredentialsProvider, D = RequestDispatcher>
 where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    credentials_provider: P,
+    inner: ClientInner<P, D>,
     region: region::Region,
-    dispatcher: D,
+}
+
+impl LambdaClient {
+    /// Creates a simple client backed by an implicit event loop.
+    ///
+    /// The client will use the default credentials provider and tls client.
+    ///
+    /// See the `rusoto_core::reactor` module for more details.
+    pub fn simple(region: region::Region) -> LambdaClient {
+        LambdaClient::new(
+            RequestDispatcher::default(),
+            CredentialsProvider::default(),
+            region,
+        )
+    }
 }
 
 impl<P, D> LambdaClient<P, D>
@@ -4220,23 +4246,22 @@ where
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         LambdaClient {
-            credentials_provider: credentials_provider,
+            inner: ClientInner::new(credentials_provider, request_dispatcher),
             region: region,
-            dispatcher: request_dispatcher,
         }
     }
 }
 
 impl<P, D> Lambda for LambdaClient<P, D>
 where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
+    P: ProvideAwsCredentials + 'static,
+    D: DispatchSignedRequest + 'static,
 {
     /// <p>Adds a permission to the resource policy associated with the specified AWS Lambda function. You use resource policies to grant permissions to event sources that use <i>push</i> model. In a <i>push</i> model, event sources (such as Amazon S3 and custom applications) invoke your Lambda function. Each permission you add to the resource policy allows an event source, permission to invoke the Lambda function. </p> <p>For information about the push model, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/lambda-introduction.html">AWS Lambda: How it Works</a>. </p> <p>If you are using versioning, the permissions you add are specific to the Lambda function version or alias you specify in the <code>AddPermission</code> request via the <code>Qualifier</code> parameter. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:AddPermission</code> action.</p>
     fn add_permission(
         &self,
         input: &AddPermissionRequest,
-    ) -> Result<AddPermissionResponse, AddPermissionError> {
+    ) -> RusotoFuture<AddPermissionResponse, AddPermissionError> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/policy",
             function_name = input.function_name
@@ -4254,39 +4279,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Created {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Created => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<AddPermissionResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<AddPermissionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(AddPermissionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AddPermissionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates an alias that points to the specified Lambda function version. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html">Introduction to AWS Lambda Aliases</a>.</p> <p>Alias names are unique for a given function. This requires permission for the lambda:CreateAlias action.</p>
     fn create_alias(
         &self,
         input: &CreateAliasRequest,
-    ) -> Result<AliasConfiguration, CreateAliasError> {
+    ) -> RusotoFuture<AliasConfiguration, CreateAliasError> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/aliases",
             function_name = input.function_name
@@ -4298,39 +4322,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Created {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Created => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<AliasConfiguration>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<AliasConfiguration>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateAliasError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateAliasError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Identifies a stream as an event source for a Lambda function. It can be either an Amazon Kinesis stream or an Amazon DynamoDB stream. AWS Lambda invokes the specified function when records are posted to the stream.</p> <p>This association between a stream source and a Lambda function is called the event source mapping.</p> <important> <p>This event source mapping is relevant only in the AWS Lambda pull model, where AWS Lambda invokes the function. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/lambda-introduction.html">AWS Lambda: How it Works</a> in the <i>AWS Lambda Developer Guide</i>.</p> </important> <p>You provide mapping information (for example, which stream to read from and which Lambda function to invoke) in the request body.</p> <p>Each event source, such as an Amazon Kinesis or a DynamoDB stream, can be associated with multiple AWS Lambda function. A given Lambda function can be associated with multiple AWS event sources.</p> <p>If you are using versioning, you can specify a specific function version or an alias via the function name parameter. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:CreateEventSourceMapping</code> action.</p>
     fn create_event_source_mapping(
         &self,
         input: &CreateEventSourceMappingRequest,
-    ) -> Result<EventSourceMappingConfiguration, CreateEventSourceMappingError> {
+    ) -> RusotoFuture<EventSourceMappingConfiguration, CreateEventSourceMappingError> {
         let request_uri = "/2015-03-31/event-source-mappings/";
 
         let mut request = SignedRequest::new("POST", "lambda", &self.region, &request_uri);
@@ -4339,40 +4362,39 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Accepted {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Accepted => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<EventSourceMappingConfiguration>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<EventSourceMappingConfiguration>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateEventSourceMappingError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateEventSourceMappingError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a new Lambda function. The function metadata is created from the request parameters, and the code for the function is provided by a .zip file in the request body. If the function name already exists, the operation will fail. Note that the function name is case-sensitive.</p> <p> If you are using versioning, you can also publish a version of the Lambda function you are creating using the <code>Publish</code> parameter. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:CreateFunction</code> action.</p>
     fn create_function(
         &self,
         input: &CreateFunctionRequest,
-    ) -> Result<FunctionConfiguration, CreateFunctionError> {
+    ) -> RusotoFuture<FunctionConfiguration, CreateFunctionError> {
         let request_uri = "/2015-03-31/functions";
 
         let mut request = SignedRequest::new("POST", "lambda", &self.region, &request_uri);
@@ -4381,36 +4403,35 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Created {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Created => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<FunctionConfiguration>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<FunctionConfiguration>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateFunctionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateFunctionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes the specified Lambda function alias. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the lambda:DeleteAlias action.</p>
-    fn delete_alias(&self, input: &DeleteAliasRequest) -> Result<(), DeleteAliasError> {
+    fn delete_alias(&self, input: &DeleteAliasRequest) -> RusotoFuture<(), DeleteAliasError> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/aliases/{name}",
             function_name = input.function_name,
@@ -4420,30 +4441,30 @@ where
         let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::NoContent {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::NoContent => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteAliasError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteAliasError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Removes an event source mapping. This means AWS Lambda will no longer invoke the function for events in the associated source.</p> <p>This operation requires permission for the <code>lambda:DeleteEventSourceMapping</code> action.</p>
     fn delete_event_source_mapping(
         &self,
         input: &DeleteEventSourceMappingRequest,
-    ) -> Result<EventSourceMappingConfiguration, DeleteEventSourceMappingError> {
+    ) -> RusotoFuture<EventSourceMappingConfiguration, DeleteEventSourceMappingError> {
         let request_uri = format!(
             "/2015-03-31/event-source-mappings/{uuid}",
             uuid = input.uuid
@@ -4452,37 +4473,39 @@ where
         let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Accepted {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Accepted => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<EventSourceMappingConfiguration>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<EventSourceMappingConfiguration>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteEventSourceMappingError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteEventSourceMappingError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes the specified Lambda function code and configuration.</p> <p>If you are using the versioning feature and you don't specify a function version in your <code>DeleteFunction</code> request, AWS Lambda will delete the function, including all its versions, and any aliases pointing to the function versions. To delete a specific function version, you must provide the function version via the <code>Qualifier</code> parameter. For information about function versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>When you delete a function the associated resource policy is also deleted. You will need to delete the event source mappings explicitly.</p> <p>This operation requires permission for the <code>lambda:DeleteFunction</code> action.</p>
-    fn delete_function(&self, input: &DeleteFunctionRequest) -> Result<(), DeleteFunctionError> {
+    fn delete_function(
+        &self,
+        input: &DeleteFunctionRequest,
+    ) -> RusotoFuture<(), DeleteFunctionError> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}",
             function_name = input.function_name
@@ -4497,30 +4520,30 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::NoContent {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::NoContent => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteFunctionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteFunctionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Removes concurrent execution limits from this function.</p>
     fn delete_function_concurrency(
         &self,
         input: &DeleteFunctionConcurrencyRequest,
-    ) -> Result<(), DeleteFunctionConcurrencyError> {
+    ) -> RusotoFuture<(), DeleteFunctionConcurrencyError> {
         let request_uri = format!(
             "/2017-10-31/functions/{function_name}/concurrency",
             function_name = input.function_name
@@ -4529,62 +4552,67 @@ where
         let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::NoContent {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::NoContent => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteFunctionConcurrencyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteFunctionConcurrencyError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns a customer's account settings.</p> <p>You can use this operation to retrieve Lambda limits information, such as code size and concurrency limits. For more information about limits, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/limits.html">AWS Lambda Limits</a>. You can also retrieve resource usage statistics, such as code storage usage and function count.</p>
-    fn get_account_settings(&self) -> Result<GetAccountSettingsResponse, GetAccountSettingsError> {
+    fn get_account_settings(
+        &self,
+    ) -> RusotoFuture<GetAccountSettingsResponse, GetAccountSettingsError> {
         let request_uri = "/2016-08-19/account-settings/";
 
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetAccountSettingsResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetAccountSettingsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetAccountSettingsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetAccountSettingsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns the specified alias information such as the alias ARN, description, and function version it is pointing to. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the <code>lambda:GetAlias</code> action.</p>
-    fn get_alias(&self, input: &GetAliasRequest) -> Result<AliasConfiguration, GetAliasError> {
+    fn get_alias(
+        &self,
+        input: &GetAliasRequest,
+    ) -> RusotoFuture<AliasConfiguration, GetAliasError> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/aliases/{name}",
             function_name = input.function_name,
@@ -4594,39 +4622,38 @@ where
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<AliasConfiguration>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<AliasConfiguration>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetAliasError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetAliasError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns configuration information for the specified event source mapping (see <a>CreateEventSourceMapping</a>).</p> <p>This operation requires permission for the <code>lambda:GetEventSourceMapping</code> action.</p>
     fn get_event_source_mapping(
         &self,
         input: &GetEventSourceMappingRequest,
-    ) -> Result<EventSourceMappingConfiguration, GetEventSourceMappingError> {
+    ) -> RusotoFuture<EventSourceMappingConfiguration, GetEventSourceMappingError> {
         let request_uri = format!(
             "/2015-03-31/event-source-mappings/{uuid}",
             uuid = input.uuid
@@ -4635,40 +4662,39 @@ where
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<EventSourceMappingConfiguration>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<EventSourceMappingConfiguration>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetEventSourceMappingError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetEventSourceMappingError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns the configuration information of the Lambda function and a presigned URL link to the .zip file you uploaded with <a>CreateFunction</a> so you can download the .zip file. Note that the URL is valid for up to 10 minutes. The configuration information is the same information you provided as parameters when uploading the function.</p> <p>Using the optional <code>Qualifier</code> parameter, you can specify a specific function version for which you want this information. If you don't specify this parameter, the API uses unqualified function ARN which return information about the <code>$LATEST</code> version of the Lambda function. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>.</p> <p>This operation requires permission for the <code>lambda:GetFunction</code> action.</p>
     fn get_function(
         &self,
         input: &GetFunctionRequest,
-    ) -> Result<GetFunctionResponse, GetFunctionError> {
+    ) -> RusotoFuture<GetFunctionResponse, GetFunctionError> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}",
             function_name = input.function_name
@@ -4683,39 +4709,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GetFunctionResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetFunctionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetFunctionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetFunctionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns the configuration information of the Lambda function. This the same information you provided as parameters when uploading the function by using <a>CreateFunction</a>.</p> <p>If you are using the versioning feature, you can retrieve this information for a specific function version by using the optional <code>Qualifier</code> parameter and specifying the function version or alias that points to it. If you don't provide it, the API returns information about the $LATEST version of the function. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>.</p> <p>This operation requires permission for the <code>lambda:GetFunctionConfiguration</code> operation.</p>
     fn get_function_configuration(
         &self,
         input: &GetFunctionConfigurationRequest,
-    ) -> Result<FunctionConfiguration, GetFunctionConfigurationError> {
+    ) -> RusotoFuture<FunctionConfiguration, GetFunctionConfigurationError> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/configuration",
             function_name = input.function_name
@@ -4730,36 +4755,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<FunctionConfiguration>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<FunctionConfiguration>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetFunctionConfigurationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetFunctionConfigurationError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns the resource policy associated with the specified Lambda function.</p> <p> If you are using the versioning feature, you can get the resource policy associated with the specific Lambda function version or alias by specifying the version or alias name using the <code>Qualifier</code> parameter. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>You need permission for the <code>lambda:GetPolicy action.</code> </p>
-    fn get_policy(&self, input: &GetPolicyRequest) -> Result<GetPolicyResponse, GetPolicyError> {
+    fn get_policy(
+        &self,
+        input: &GetPolicyRequest,
+    ) -> RusotoFuture<GetPolicyResponse, GetPolicyError> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/policy",
             function_name = input.function_name
@@ -4774,36 +4801,35 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GetPolicyResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetPolicyResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetPolicyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetPolicyError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Invokes a specific Lambda function. For an example, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/with-dynamodb-create-function.html#with-dbb-invoke-manually">Create the Lambda Function and Test It Manually</a>. </p> <p>If you are using the versioning feature, you can invoke the specific function version by providing function version or alias name that is pointing to the function version using the <code>Qualifier</code> parameter in the request. If you don't provide the <code>Qualifier</code> parameter, the <code>$LATEST</code> version of the Lambda function is invoked. Invocations occur at least once in response to an event and functions must be idempotent to handle this. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p>
-    fn invoke(&self, input: &InvocationRequest) -> Result<InvocationResponse, InvokeError> {
+    fn invoke(&self, input: &InvocationRequest) -> RusotoFuture<InvocationResponse, InvokeError> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/invocations",
             function_name = input.function_name
@@ -4836,48 +4862,44 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut result = InvocationResponse::default();
+                    result.payload = Some(response.body);
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut result = InvocationResponse::default();
-
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                result.payload = Some(body);
-
-                if let Some(executed_version) = response.headers.get("X-Amz-Executed-Version") {
-                    let value = executed_version.to_owned();
-                    result.executed_version = Some(value)
-                };
-                if let Some(function_error) = response.headers.get("X-Amz-Function-Error") {
-                    let value = function_error.to_owned();
-                    result.function_error = Some(value)
-                };
-                if let Some(log_result) = response.headers.get("X-Amz-Log-Result") {
-                    let value = log_result.to_owned();
-                    result.log_result = Some(value)
-                };
-                result.status_code = Some(StatusCode::to_u16(&response.status) as i64);
-                Ok(result)
+                    if let Some(executed_version) = response.headers.get("X-Amz-Executed-Version") {
+                        let value = executed_version.to_owned();
+                        result.executed_version = Some(value)
+                    };
+                    if let Some(function_error) = response.headers.get("X-Amz-Function-Error") {
+                        let value = function_error.to_owned();
+                        result.function_error = Some(value)
+                    };
+                    if let Some(log_result) = response.headers.get("X-Amz-Log-Result") {
+                        let value = log_result.to_owned();
+                        result.log_result = Some(value)
+                    };
+                    result.status_code = Some(response.status.as_u16() as i64);
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(InvokeError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(InvokeError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p><important> <p>This API is deprecated. We recommend you use <code>Invoke</code> API (see <a>Invoke</a>).</p> </important> <p>Submits an invocation request to AWS Lambda. Upon receiving the request, Lambda executes the specified function asynchronously. To see the logs generated by the Lambda function execution, see the CloudWatch Logs console.</p> <p>This operation requires permission for the <code>lambda:InvokeFunction</code> action.</p></p>
     fn invoke_async(
         &self,
         input: &InvokeAsyncRequest,
-    ) -> Result<InvokeAsyncResponse, InvokeAsyncError> {
+    ) -> RusotoFuture<InvokeAsyncResponse, InvokeAsyncError> {
         let request_uri = format!(
             "/2014-11-13/functions/{function_name}/invoke-async/",
             function_name = input.function_name
@@ -4889,40 +4911,39 @@ where
         let encoded = Some(input.invoke_args.to_owned());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Accepted {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Accepted => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let mut result = serde_json::from_slice::<InvokeAsyncResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let mut result = serde_json::from_slice::<InvokeAsyncResponse>(&body).unwrap();
-
-                result.status = Some(StatusCode::to_u16(&response.status) as i64);
-                Ok(result)
+                    result.status = Some(response.status.as_u16() as i64);
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(InvokeAsyncError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(InvokeAsyncError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns list of aliases created for a Lambda function. For each alias, the response includes information such as the alias ARN, description, alias name, and the function version to which it points. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the lambda:ListAliases action.</p>
     fn list_aliases(
         &self,
         input: &ListAliasesRequest,
-    ) -> Result<ListAliasesResponse, ListAliasesError> {
+    ) -> RusotoFuture<ListAliasesResponse, ListAliasesError> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/aliases",
             function_name = input.function_name
@@ -4943,39 +4964,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListAliasesResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListAliasesResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListAliasesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListAliasesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns a list of event source mappings you created using the <code>CreateEventSourceMapping</code> (see <a>CreateEventSourceMapping</a>). </p> <p>For each mapping, the API returns configuration information. You can optionally specify filters to retrieve specific event source mappings.</p> <p>If you are using the versioning feature, you can get list of event source mappings for a specific Lambda function version or an alias as described in the <code>FunctionName</code> parameter. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:ListEventSourceMappings</code> action.</p>
     fn list_event_source_mappings(
         &self,
         input: &ListEventSourceMappingsRequest,
-    ) -> Result<ListEventSourceMappingsResponse, ListEventSourceMappingsError> {
+    ) -> RusotoFuture<ListEventSourceMappingsResponse, ListEventSourceMappingsError> {
         let request_uri = "/2015-03-31/event-source-mappings/";
 
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
@@ -4996,40 +5016,39 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListEventSourceMappingsResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<ListEventSourceMappingsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListEventSourceMappingsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListEventSourceMappingsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns a list of your Lambda functions. For each function, the response includes the function configuration information. You must use <a>GetFunction</a> to retrieve the code for your function.</p> <p>This operation requires permission for the <code>lambda:ListFunctions</code> action.</p> <p>If you are using the versioning feature, you can list all of your functions or only <code>$LATEST</code> versions. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p>
     fn list_functions(
         &self,
         input: &ListFunctionsRequest,
-    ) -> Result<ListFunctionsResponse, ListFunctionsError> {
+    ) -> RusotoFuture<ListFunctionsResponse, ListFunctionsError> {
         let request_uri = "/2015-03-31/functions/";
 
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
@@ -5050,74 +5069,72 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListFunctionsResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListFunctionsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListFunctionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListFunctionsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns a list of tags assigned to a function when supplied the function ARN (Amazon Resource Name).</p>
-    fn list_tags(&self, input: &ListTagsRequest) -> Result<ListTagsResponse, ListTagsError> {
+    fn list_tags(&self, input: &ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError> {
         let request_uri = format!("/2017-03-31/tags/{arn}", arn = input.resource);
 
         let mut request = SignedRequest::new("GET", "lambda", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListTagsResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListTagsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListTagsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListTagsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>List all versions of a function. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p>
     fn list_versions_by_function(
         &self,
         input: &ListVersionsByFunctionRequest,
-    ) -> Result<ListVersionsByFunctionResponse, ListVersionsByFunctionError> {
+    ) -> RusotoFuture<ListVersionsByFunctionResponse, ListVersionsByFunctionError> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/versions",
             function_name = input.function_name
@@ -5135,40 +5152,39 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListVersionsByFunctionResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<ListVersionsByFunctionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListVersionsByFunctionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListVersionsByFunctionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Publishes a version of your function from the current snapshot of $LATEST. That is, AWS Lambda takes a snapshot of the function code and configuration information from $LATEST and publishes a new version. The code and configuration cannot be modified after publication. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p>
     fn publish_version(
         &self,
         input: &PublishVersionRequest,
-    ) -> Result<FunctionConfiguration, PublishVersionError> {
+    ) -> RusotoFuture<FunctionConfiguration, PublishVersionError> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/versions",
             function_name = input.function_name
@@ -5180,39 +5196,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Created {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Created => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<FunctionConfiguration>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<FunctionConfiguration>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(PublishVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PublishVersionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Sets a limit on the number of concurrent executions available to this function. It is a subset of your account's total concurrent execution limit per region. Note that Lambda automatically reserves a buffer of 100 concurrent executions for functions without any reserved concurrency limit. This means if your account limit is 1000, you have a total of 900 available to allocate to individual functions.</p>
     fn put_function_concurrency(
         &self,
         input: &PutFunctionConcurrencyRequest,
-    ) -> Result<Concurrency, PutFunctionConcurrencyError> {
+    ) -> RusotoFuture<Concurrency, PutFunctionConcurrencyError> {
         let request_uri = format!(
             "/2017-10-31/functions/{function_name}/concurrency",
             function_name = input.function_name
@@ -5224,39 +5239,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<Concurrency>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<Concurrency>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(PutFunctionConcurrencyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutFunctionConcurrencyError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>You can remove individual permissions from an resource policy associated with a Lambda function by providing a statement ID that you provided when you added the permission.</p> <p>If you are using versioning, the permissions you remove are specific to the Lambda function version or alias you specify in the <code>AddPermission</code> request via the <code>Qualifier</code> parameter. For more information about versioning, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>Note that removal of a permission will cause an active event source to lose permission to the function.</p> <p>You need permission for the <code>lambda:RemovePermission</code> action.</p>
     fn remove_permission(
         &self,
         input: &RemovePermissionRequest,
-    ) -> Result<(), RemovePermissionError> {
+    ) -> RusotoFuture<(), RemovePermissionError> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/policy/{statement_id}",
             function_name = input.function_name,
@@ -5272,27 +5286,27 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::NoContent {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::NoContent => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(RemovePermissionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RemovePermissionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a list of tags (key-value pairs) on the Lambda function. Requires the Lambda function ARN (Amazon Resource Name). If a key is specified without a value, Lambda creates a tag with the specified key and a value of null. </p>
-    fn tag_resource(&self, input: &TagResourceRequest) -> Result<(), TagResourceError> {
+    fn tag_resource(&self, input: &TagResourceRequest) -> RusotoFuture<(), TagResourceError> {
         let request_uri = format!("/2017-03-31/tags/{arn}", arn = input.resource);
 
         let mut request = SignedRequest::new("POST", "lambda", &self.region, &request_uri);
@@ -5301,27 +5315,27 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::NoContent {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::NoContent => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(TagResourceError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(TagResourceError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Removes tags from a Lambda function. Requires the function ARN (Amazon Resource Name). </p>
-    fn untag_resource(&self, input: &UntagResourceRequest) -> Result<(), UntagResourceError> {
+    fn untag_resource(&self, input: &UntagResourceRequest) -> RusotoFuture<(), UntagResourceError> {
         let request_uri = format!("/2017-03-31/tags/{arn}", arn = input.resource);
 
         let mut request = SignedRequest::new("DELETE", "lambda", &self.region, &request_uri);
@@ -5333,30 +5347,30 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::NoContent {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
 
-        match response.status {
-            StatusCode::NoContent => {
-                let result = ();
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UntagResourceError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
+            }
+        });
 
-                Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UntagResourceError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        RusotoFuture::new(future)
     }
 
     /// <p>Using this API you can update the function version to which the alias points and the alias description. For more information, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/aliases-intro.html">Introduction to AWS Lambda Aliases</a>.</p> <p>This requires permission for the lambda:UpdateAlias action.</p>
     fn update_alias(
         &self,
         input: &UpdateAliasRequest,
-    ) -> Result<AliasConfiguration, UpdateAliasError> {
+    ) -> RusotoFuture<AliasConfiguration, UpdateAliasError> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/aliases/{name}",
             function_name = input.function_name,
@@ -5369,39 +5383,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<AliasConfiguration>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<AliasConfiguration>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateAliasError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateAliasError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>You can update an event source mapping. This is useful if you want to change the parameters of the existing mapping without losing your position in the stream. You can change which function will receive the stream records, but to change the stream itself, you must create a new mapping.</p> <p>If you are using the versioning feature, you can update the event source mapping to map to a specific Lambda function version or alias as described in the <code>FunctionName</code> parameter. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>If you disable the event source mapping, AWS Lambda stops polling. If you enable again, it will resume polling from the time it had stopped polling, so you don't lose processing of any records. However, if you delete event source mapping and create it again, it will reset.</p> <p>This operation requires permission for the <code>lambda:UpdateEventSourceMapping</code> action.</p>
     fn update_event_source_mapping(
         &self,
         input: &UpdateEventSourceMappingRequest,
-    ) -> Result<EventSourceMappingConfiguration, UpdateEventSourceMappingError> {
+    ) -> RusotoFuture<EventSourceMappingConfiguration, UpdateEventSourceMappingError> {
         let request_uri = format!(
             "/2015-03-31/event-source-mappings/{uuid}",
             uuid = input.uuid
@@ -5413,40 +5426,39 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Accepted {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Accepted => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<EventSourceMappingConfiguration>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<EventSourceMappingConfiguration>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateEventSourceMappingError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateEventSourceMappingError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates the code for the specified Lambda function. This operation must only be used on an existing Lambda function and cannot be used to update the function configuration.</p> <p>If you are using the versioning feature, note this API will always update the $LATEST version of your Lambda function. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:UpdateFunctionCode</code> action.</p>
     fn update_function_code(
         &self,
         input: &UpdateFunctionCodeRequest,
-    ) -> Result<FunctionConfiguration, UpdateFunctionCodeError> {
+    ) -> RusotoFuture<FunctionConfiguration, UpdateFunctionCodeError> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/code",
             function_name = input.function_name
@@ -5458,39 +5470,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<FunctionConfiguration>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<FunctionConfiguration>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateFunctionCodeError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateFunctionCodeError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates the configuration parameters for the specified Lambda function by using the values provided in the request. You provide only the parameters you want to change. This operation must only be used on an existing Lambda function and cannot be used to update the function's code.</p> <p>If you are using the versioning feature, note this API will always update the $LATEST version of your Lambda function. For information about the versioning feature, see <a href="http://docs.aws.amazon.com/lambda/latest/dg/versioning-aliases.html">AWS Lambda Function Versioning and Aliases</a>. </p> <p>This operation requires permission for the <code>lambda:UpdateFunctionConfiguration</code> action.</p>
     fn update_function_configuration(
         &self,
         input: &UpdateFunctionConfigurationRequest,
-    ) -> Result<FunctionConfiguration, UpdateFunctionConfigurationError> {
+    ) -> RusotoFuture<FunctionConfiguration, UpdateFunctionConfigurationError> {
         let request_uri = format!(
             "/2015-03-31/functions/{function_name}/configuration",
             function_name = input.function_name
@@ -5502,32 +5513,31 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<FunctionConfiguration>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<FunctionConfiguration>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateFunctionConfigurationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateFunctionConfigurationError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 }
 

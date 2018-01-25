@@ -10,16 +10,19 @@
 //
 // =================================================================
 
+use std::error::Error;
+use std::fmt;
+use std::io;
+
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+use futures::Future;
+use hyper::StatusCode;
+use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::{ClientInner, RusotoFuture};
 
-use std::fmt;
-use std::error::Error;
-use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -2169,116 +2172,133 @@ pub trait CodeStar {
     fn associate_team_member(
         &self,
         input: &AssociateTeamMemberRequest,
-    ) -> Result<AssociateTeamMemberResult, AssociateTeamMemberError>;
+    ) -> RusotoFuture<AssociateTeamMemberResult, AssociateTeamMemberError>;
 
     /// <p>Reserved for future use. To create a project, use the AWS CodeStar console.</p>
     fn create_project(
         &self,
         input: &CreateProjectRequest,
-    ) -> Result<CreateProjectResult, CreateProjectError>;
+    ) -> RusotoFuture<CreateProjectResult, CreateProjectError>;
 
     /// <p>Creates a profile for a user that includes user preferences, such as the display name and email address assocciated with the user, in AWS CodeStar. The user profile is not project-specific. Information in the user profile is displayed wherever the user's information appears to other users in AWS CodeStar.</p>
     fn create_user_profile(
         &self,
         input: &CreateUserProfileRequest,
-    ) -> Result<CreateUserProfileResult, CreateUserProfileError>;
+    ) -> RusotoFuture<CreateUserProfileResult, CreateUserProfileError>;
 
     /// <p>Deletes a project, including project resources. Does not delete users associated with the project, but does delete the IAM roles that allowed access to the project.</p>
     fn delete_project(
         &self,
         input: &DeleteProjectRequest,
-    ) -> Result<DeleteProjectResult, DeleteProjectError>;
+    ) -> RusotoFuture<DeleteProjectResult, DeleteProjectError>;
 
     /// <p>Deletes a user profile in AWS CodeStar, including all personal preference data associated with that profile, such as display name and email address. It does not delete the history of that user, for example the history of commits made by that user.</p>
     fn delete_user_profile(
         &self,
         input: &DeleteUserProfileRequest,
-    ) -> Result<DeleteUserProfileResult, DeleteUserProfileError>;
+    ) -> RusotoFuture<DeleteUserProfileResult, DeleteUserProfileError>;
 
     /// <p>Describes a project and its resources.</p>
     fn describe_project(
         &self,
         input: &DescribeProjectRequest,
-    ) -> Result<DescribeProjectResult, DescribeProjectError>;
+    ) -> RusotoFuture<DescribeProjectResult, DescribeProjectError>;
 
     /// <p>Describes a user in AWS CodeStar and the user attributes across all projects.</p>
     fn describe_user_profile(
         &self,
         input: &DescribeUserProfileRequest,
-    ) -> Result<DescribeUserProfileResult, DescribeUserProfileError>;
+    ) -> RusotoFuture<DescribeUserProfileResult, DescribeUserProfileError>;
 
     /// <p>Removes a user from a project. Removing a user from a project also removes the IAM policies from that user that allowed access to the project and its resources. Disassociating a team member does not remove that user's profile from AWS CodeStar. It does not remove the user from IAM.</p>
     fn disassociate_team_member(
         &self,
         input: &DisassociateTeamMemberRequest,
-    ) -> Result<DisassociateTeamMemberResult, DisassociateTeamMemberError>;
+    ) -> RusotoFuture<DisassociateTeamMemberResult, DisassociateTeamMemberError>;
 
     /// <p>Lists all projects in AWS CodeStar associated with your AWS account.</p>
     fn list_projects(
         &self,
         input: &ListProjectsRequest,
-    ) -> Result<ListProjectsResult, ListProjectsError>;
+    ) -> RusotoFuture<ListProjectsResult, ListProjectsError>;
 
     /// <p>Lists resources associated with a project in AWS CodeStar.</p>
     fn list_resources(
         &self,
         input: &ListResourcesRequest,
-    ) -> Result<ListResourcesResult, ListResourcesError>;
+    ) -> RusotoFuture<ListResourcesResult, ListResourcesError>;
 
     /// <p>Gets the tags for a project.</p>
     fn list_tags_for_project(
         &self,
         input: &ListTagsForProjectRequest,
-    ) -> Result<ListTagsForProjectResult, ListTagsForProjectError>;
+    ) -> RusotoFuture<ListTagsForProjectResult, ListTagsForProjectError>;
 
     /// <p>Lists all team members associated with a project.</p>
     fn list_team_members(
         &self,
         input: &ListTeamMembersRequest,
-    ) -> Result<ListTeamMembersResult, ListTeamMembersError>;
+    ) -> RusotoFuture<ListTeamMembersResult, ListTeamMembersError>;
 
     /// <p>Lists all the user profiles configured for your AWS account in AWS CodeStar.</p>
     fn list_user_profiles(
         &self,
         input: &ListUserProfilesRequest,
-    ) -> Result<ListUserProfilesResult, ListUserProfilesError>;
+    ) -> RusotoFuture<ListUserProfilesResult, ListUserProfilesError>;
 
     /// <p>Adds tags to a project.</p>
-    fn tag_project(&self, input: &TagProjectRequest) -> Result<TagProjectResult, TagProjectError>;
+    fn tag_project(
+        &self,
+        input: &TagProjectRequest,
+    ) -> RusotoFuture<TagProjectResult, TagProjectError>;
 
     /// <p>Removes tags from a project.</p>
     fn untag_project(
         &self,
         input: &UntagProjectRequest,
-    ) -> Result<UntagProjectResult, UntagProjectError>;
+    ) -> RusotoFuture<UntagProjectResult, UntagProjectError>;
 
     /// <p>Updates a project in AWS CodeStar.</p>
     fn update_project(
         &self,
         input: &UpdateProjectRequest,
-    ) -> Result<UpdateProjectResult, UpdateProjectError>;
+    ) -> RusotoFuture<UpdateProjectResult, UpdateProjectError>;
 
     /// <p>Updates a team member's attributes in an AWS CodeStar project. For example, you can change a team member's role in the project, or change whether they have remote access to project resources.</p>
     fn update_team_member(
         &self,
         input: &UpdateTeamMemberRequest,
-    ) -> Result<UpdateTeamMemberResult, UpdateTeamMemberError>;
+    ) -> RusotoFuture<UpdateTeamMemberResult, UpdateTeamMemberError>;
 
     /// <p>Updates a user's profile in AWS CodeStar. The user profile is not project-specific. Information in the user profile is displayed wherever the user's information appears to other users in AWS CodeStar. </p>
     fn update_user_profile(
         &self,
         input: &UpdateUserProfileRequest,
-    ) -> Result<UpdateUserProfileResult, UpdateUserProfileError>;
+    ) -> RusotoFuture<UpdateUserProfileResult, UpdateUserProfileError>;
 }
 /// A client for the CodeStar API.
-pub struct CodeStarClient<P, D>
+pub struct CodeStarClient<P = CredentialsProvider, D = RequestDispatcher>
 where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    credentials_provider: P,
+    inner: ClientInner<P, D>,
     region: region::Region,
-    dispatcher: D,
+}
+
+impl CodeStarClient {
+    /// Creates a simple client backed by an implicit event loop.
+    ///
+    /// The client will use the default credentials provider and tls client.
+    ///
+    /// See the `rusoto_core::reactor` module for more details.
+    pub fn simple(region: region::Region) -> CodeStarClient {
+        CodeStarClient::new(
+            RequestDispatcher::default(),
+            CredentialsProvider::default(),
+            region,
+        )
+    }
 }
 
 impl<P, D> CodeStarClient<P, D>
@@ -2288,23 +2308,22 @@ where
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         CodeStarClient {
-            credentials_provider: credentials_provider,
+            inner: ClientInner::new(credentials_provider, request_dispatcher),
             region: region,
-            dispatcher: request_dispatcher,
         }
     }
 }
 
 impl<P, D> CodeStar for CodeStarClient<P, D>
 where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
+    P: ProvideAwsCredentials + 'static,
+    D: DispatchSignedRequest + 'static,
 {
     /// <p>Adds an IAM user to the team for an AWS CodeStar project.</p>
     fn associate_team_member(
         &self,
         input: &AssociateTeamMemberRequest,
-    ) -> Result<AssociateTeamMemberResult, AssociateTeamMemberError> {
+    ) -> RusotoFuture<AssociateTeamMemberResult, AssociateTeamMemberError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2312,33 +2331,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AssociateTeamMemberResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<AssociateTeamMemberResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(AssociateTeamMemberError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AssociateTeamMemberError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Reserved for future use. To create a project, use the AWS CodeStar console.</p>
     fn create_project(
         &self,
         input: &CreateProjectRequest,
-    ) -> Result<CreateProjectResult, CreateProjectError> {
+    ) -> RusotoFuture<CreateProjectResult, CreateProjectError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2346,33 +2362,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateProjectResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<CreateProjectResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateProjectError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateProjectError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a profile for a user that includes user preferences, such as the display name and email address assocciated with the user, in AWS CodeStar. The user profile is not project-specific. Information in the user profile is displayed wherever the user's information appears to other users in AWS CodeStar.</p>
     fn create_user_profile(
         &self,
         input: &CreateUserProfileRequest,
-    ) -> Result<CreateUserProfileResult, CreateUserProfileError> {
+    ) -> RusotoFuture<CreateUserProfileResult, CreateUserProfileError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2380,33 +2393,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateUserProfileResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<CreateUserProfileResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateUserProfileError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateUserProfileError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a project, including project resources. Does not delete users associated with the project, but does delete the IAM roles that allowed access to the project.</p>
     fn delete_project(
         &self,
         input: &DeleteProjectRequest,
-    ) -> Result<DeleteProjectResult, DeleteProjectError> {
+    ) -> RusotoFuture<DeleteProjectResult, DeleteProjectError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2414,33 +2424,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteProjectResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<DeleteProjectResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteProjectError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteProjectError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a user profile in AWS CodeStar, including all personal preference data associated with that profile, such as display name and email address. It does not delete the history of that user, for example the history of commits made by that user.</p>
     fn delete_user_profile(
         &self,
         input: &DeleteUserProfileRequest,
-    ) -> Result<DeleteUserProfileResult, DeleteUserProfileError> {
+    ) -> RusotoFuture<DeleteUserProfileResult, DeleteUserProfileError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2448,33 +2455,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteUserProfileResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<DeleteUserProfileResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteUserProfileError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteUserProfileError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Describes a project and its resources.</p>
     fn describe_project(
         &self,
         input: &DescribeProjectRequest,
-    ) -> Result<DescribeProjectResult, DescribeProjectError> {
+    ) -> RusotoFuture<DescribeProjectResult, DescribeProjectError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2482,33 +2486,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeProjectResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<DescribeProjectResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeProjectError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeProjectError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Describes a user in AWS CodeStar and the user attributes across all projects.</p>
     fn describe_user_profile(
         &self,
         input: &DescribeUserProfileRequest,
-    ) -> Result<DescribeUserProfileResult, DescribeUserProfileError> {
+    ) -> RusotoFuture<DescribeUserProfileResult, DescribeUserProfileError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2516,33 +2517,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeUserProfileResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<DescribeUserProfileResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeUserProfileError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeUserProfileError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Removes a user from a project. Removing a user from a project also removes the IAM policies from that user that allowed access to the project and its resources. Disassociating a team member does not remove that user's profile from AWS CodeStar. It does not remove the user from IAM.</p>
     fn disassociate_team_member(
         &self,
         input: &DisassociateTeamMemberRequest,
-    ) -> Result<DisassociateTeamMemberResult, DisassociateTeamMemberError> {
+    ) -> RusotoFuture<DisassociateTeamMemberResult, DisassociateTeamMemberError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2550,33 +2548,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DisassociateTeamMemberResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<DisassociateTeamMemberResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DisassociateTeamMemberError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DisassociateTeamMemberError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists all projects in AWS CodeStar associated with your AWS account.</p>
     fn list_projects(
         &self,
         input: &ListProjectsRequest,
-    ) -> Result<ListProjectsResult, ListProjectsError> {
+    ) -> RusotoFuture<ListProjectsResult, ListProjectsError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2584,33 +2579,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListProjectsResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<ListProjectsResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListProjectsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListProjectsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists resources associated with a project in AWS CodeStar.</p>
     fn list_resources(
         &self,
         input: &ListResourcesRequest,
-    ) -> Result<ListResourcesResult, ListResourcesError> {
+    ) -> RusotoFuture<ListResourcesResult, ListResourcesError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2618,33 +2610,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListResourcesResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<ListResourcesResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListResourcesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListResourcesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets the tags for a project.</p>
     fn list_tags_for_project(
         &self,
         input: &ListTagsForProjectRequest,
-    ) -> Result<ListTagsForProjectResult, ListTagsForProjectError> {
+    ) -> RusotoFuture<ListTagsForProjectResult, ListTagsForProjectError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2652,33 +2641,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListTagsForProjectResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<ListTagsForProjectResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListTagsForProjectError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListTagsForProjectError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists all team members associated with a project.</p>
     fn list_team_members(
         &self,
         input: &ListTeamMembersRequest,
-    ) -> Result<ListTeamMembersResult, ListTeamMembersError> {
+    ) -> RusotoFuture<ListTeamMembersResult, ListTeamMembersError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2686,33 +2672,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListTeamMembersResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<ListTeamMembersResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListTeamMembersError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListTeamMembersError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists all the user profiles configured for your AWS account in AWS CodeStar.</p>
     fn list_user_profiles(
         &self,
         input: &ListUserProfilesRequest,
-    ) -> Result<ListUserProfilesResult, ListUserProfilesError> {
+    ) -> RusotoFuture<ListUserProfilesResult, ListUserProfilesError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2720,30 +2703,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListUserProfilesResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<ListUserProfilesResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListUserProfilesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListUserProfilesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Adds tags to a project.</p>
-    fn tag_project(&self, input: &TagProjectRequest) -> Result<TagProjectResult, TagProjectError> {
+    fn tag_project(
+        &self,
+        input: &TagProjectRequest,
+    ) -> RusotoFuture<TagProjectResult, TagProjectError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2751,33 +2734,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<TagProjectResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<TagProjectResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(TagProjectError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(TagProjectError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Removes tags from a project.</p>
     fn untag_project(
         &self,
         input: &UntagProjectRequest,
-    ) -> Result<UntagProjectResult, UntagProjectError> {
+    ) -> RusotoFuture<UntagProjectResult, UntagProjectError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2785,33 +2765,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UntagProjectResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<UntagProjectResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UntagProjectError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UntagProjectError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates a project in AWS CodeStar.</p>
     fn update_project(
         &self,
         input: &UpdateProjectRequest,
-    ) -> Result<UpdateProjectResult, UpdateProjectError> {
+    ) -> RusotoFuture<UpdateProjectResult, UpdateProjectError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2819,33 +2796,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateProjectResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<UpdateProjectResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateProjectError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateProjectError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates a team member's attributes in an AWS CodeStar project. For example, you can change a team member's role in the project, or change whether they have remote access to project resources.</p>
     fn update_team_member(
         &self,
         input: &UpdateTeamMemberRequest,
-    ) -> Result<UpdateTeamMemberResult, UpdateTeamMemberError> {
+    ) -> RusotoFuture<UpdateTeamMemberResult, UpdateTeamMemberError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2853,33 +2827,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateTeamMemberResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<UpdateTeamMemberResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateTeamMemberError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateTeamMemberError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates a user's profile in AWS CodeStar. The user profile is not project-specific. Information in the user profile is displayed wherever the user's information appears to other users in AWS CodeStar. </p>
     fn update_user_profile(
         &self,
         input: &UpdateUserProfileRequest,
-    ) -> Result<UpdateUserProfileResult, UpdateUserProfileError> {
+    ) -> RusotoFuture<UpdateUserProfileResult, UpdateUserProfileError> {
         let mut request = SignedRequest::new("POST", "codestar", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2887,26 +2858,23 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateUserProfileResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<UpdateUserProfileResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateUserProfileError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateUserProfileError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 }
 

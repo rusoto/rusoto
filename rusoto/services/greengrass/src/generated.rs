@@ -10,16 +10,19 @@
 //
 // =================================================================
 
+use std::error::Error;
+use std::fmt;
+use std::io;
+
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+use futures::Future;
+use hyper::StatusCode;
+use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::{ClientInner, RusotoFuture};
 
-use std::fmt;
-use std::error::Error;
-use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -8552,448 +8555,476 @@ pub trait GreenGrass {
     fn associate_role_to_group(
         &self,
         input: &AssociateRoleToGroupRequest,
-    ) -> Result<AssociateRoleToGroupResponse, AssociateRoleToGroupError>;
+    ) -> RusotoFuture<AssociateRoleToGroupResponse, AssociateRoleToGroupError>;
 
     /// <p>Associates a role which is used by AWS Greengrass. AWS Greengrass uses the role to access your Lambda functions and AWS IoT resources. This is necessary for deployments to succeed. It needs to have minimum permissions in policy <code>AWSGreengrassResourceAccessRolePolicy</code></p>
     fn associate_service_role_to_account(
         &self,
         input: &AssociateServiceRoleToAccountRequest,
-    ) -> Result<AssociateServiceRoleToAccountResponse, AssociateServiceRoleToAccountError>;
+    ) -> RusotoFuture<AssociateServiceRoleToAccountResponse, AssociateServiceRoleToAccountError>;
 
     /// <p>Creates a core definition. You may optionally provide the initial version of the core definition or use &#39;&#39;CreateCoreDefinitionVersion&#39;&#39; at a later time. AWS Greengrass Groups must each contain exactly 1 AWS Greengrass Core.</p>
     fn create_core_definition(
         &self,
         input: &CreateCoreDefinitionRequest,
-    ) -> Result<CreateCoreDefinitionResponse, CreateCoreDefinitionError>;
+    ) -> RusotoFuture<CreateCoreDefinitionResponse, CreateCoreDefinitionError>;
 
     /// <p>Creates a version of a core definition that has already been defined. AWS Greengrass Groups must each contain exactly 1 AWS Greengrass Core.</p>
     fn create_core_definition_version(
         &self,
         input: &CreateCoreDefinitionVersionRequest,
-    ) -> Result<CreateCoreDefinitionVersionResponse, CreateCoreDefinitionVersionError>;
+    ) -> RusotoFuture<CreateCoreDefinitionVersionResponse, CreateCoreDefinitionVersionError>;
 
     /// <p>Creates a deployment.</p>
     fn create_deployment(
         &self,
         input: &CreateDeploymentRequest,
-    ) -> Result<CreateDeploymentResponse, CreateDeploymentError>;
+    ) -> RusotoFuture<CreateDeploymentResponse, CreateDeploymentError>;
 
     /// <p>Creates a device definition. You may optinally provide the initial version of the device definition or use <code>CreateDeviceDefinitionVersion</code> at a later time.</p>
     fn create_device_definition(
         &self,
         input: &CreateDeviceDefinitionRequest,
-    ) -> Result<CreateDeviceDefinitionResponse, CreateDeviceDefinitionError>;
+    ) -> RusotoFuture<CreateDeviceDefinitionResponse, CreateDeviceDefinitionError>;
 
     /// <p>Creates a version of a device definition that has already been defined.</p>
     fn create_device_definition_version(
         &self,
         input: &CreateDeviceDefinitionVersionRequest,
-    ) -> Result<CreateDeviceDefinitionVersionResponse, CreateDeviceDefinitionVersionError>;
+    ) -> RusotoFuture<CreateDeviceDefinitionVersionResponse, CreateDeviceDefinitionVersionError>;
 
     /// <p>Creates a Lambda function definition which contains a list of Lambda functions and their configurations to be used in a group. You can create an initial version of the definition by providing a list of Lambda functions and their configurations now, or use <code>CreateFunctionDefinitionVersion</code> later.</p>
     fn create_function_definition(
         &self,
         input: &CreateFunctionDefinitionRequest,
-    ) -> Result<CreateFunctionDefinitionResponse, CreateFunctionDefinitionError>;
+    ) -> RusotoFuture<CreateFunctionDefinitionResponse, CreateFunctionDefinitionError>;
 
     /// <p>Create a version of a Lambda function definition that has already been defined.</p>
     fn create_function_definition_version(
         &self,
         input: &CreateFunctionDefinitionVersionRequest,
-    ) -> Result<CreateFunctionDefinitionVersionResponse, CreateFunctionDefinitionVersionError>;
+    ) -> RusotoFuture<CreateFunctionDefinitionVersionResponse, CreateFunctionDefinitionVersionError>;
 
     /// <p>Creates a group. You may optionally provide the initial version of the group or use &#39;&#39;CreateGroupVersion&#39;&#39; at a later time.</p>
     fn create_group(
         &self,
         input: &CreateGroupRequest,
-    ) -> Result<CreateGroupResponse, CreateGroupError>;
+    ) -> RusotoFuture<CreateGroupResponse, CreateGroupError>;
 
     /// <p>Creates a CA for the group. If a CA already exists, it will rotate the existing CA.</p>
     fn create_group_certificate_authority(
         &self,
         input: &CreateGroupCertificateAuthorityRequest,
-    ) -> Result<CreateGroupCertificateAuthorityResponse, CreateGroupCertificateAuthorityError>;
+    ) -> RusotoFuture<CreateGroupCertificateAuthorityResponse, CreateGroupCertificateAuthorityError>;
 
     /// <p>Creates a version of a group which has already been defined.</p>
     fn create_group_version(
         &self,
         input: &CreateGroupVersionRequest,
-    ) -> Result<CreateGroupVersionResponse, CreateGroupVersionError>;
+    ) -> RusotoFuture<CreateGroupVersionResponse, CreateGroupVersionError>;
 
     /// <p>Creates a logger definition. You may optionally provide the initial version of the logger definition or use <code>CreateLoggerDefinitionVersion</code> at a later time.</p>
     fn create_logger_definition(
         &self,
         input: &CreateLoggerDefinitionRequest,
-    ) -> Result<CreateLoggerDefinitionResponse, CreateLoggerDefinitionError>;
+    ) -> RusotoFuture<CreateLoggerDefinitionResponse, CreateLoggerDefinitionError>;
 
     /// <p>Creates a version of a logger definition that has already been defined.</p>
     fn create_logger_definition_version(
         &self,
         input: &CreateLoggerDefinitionVersionRequest,
-    ) -> Result<CreateLoggerDefinitionVersionResponse, CreateLoggerDefinitionVersionError>;
+    ) -> RusotoFuture<CreateLoggerDefinitionVersionResponse, CreateLoggerDefinitionVersionError>;
 
     /// <p>Creates a resource definition which contains a list of resources to be used in a group. You can create an initial version of the definition by providing a list of resources now, or use <code>CreateResourceDefinitionVersion</code> later.</p>
     fn create_resource_definition(
         &self,
         input: &CreateResourceDefinitionRequest,
-    ) -> Result<CreateResourceDefinitionResponse, CreateResourceDefinitionError>;
+    ) -> RusotoFuture<CreateResourceDefinitionResponse, CreateResourceDefinitionError>;
 
     /// <p>Create a version of a resource definition that has already been defined.</p>
     fn create_resource_definition_version(
         &self,
         input: &CreateResourceDefinitionVersionRequest,
-    ) -> Result<CreateResourceDefinitionVersionResponse, CreateResourceDefinitionVersionError>;
+    ) -> RusotoFuture<CreateResourceDefinitionVersionResponse, CreateResourceDefinitionVersionError>;
 
     /// <p>Creates an Iot Job that will trigger your Greengrass Cores to update the software they are running.</p>
     fn create_software_update_job(
         &self,
         input: &CreateSoftwareUpdateJobRequest,
-    ) -> Result<CreateSoftwareUpdateJobResponse, CreateSoftwareUpdateJobError>;
+    ) -> RusotoFuture<CreateSoftwareUpdateJobResponse, CreateSoftwareUpdateJobError>;
 
     /// <p>Creates a subscription definition. You may optionally provide the initial version of the subscription definition or use <code>CreateSubscriptionDefinitionVersion</code> at a later time.</p>
     fn create_subscription_definition(
         &self,
         input: &CreateSubscriptionDefinitionRequest,
-    ) -> Result<CreateSubscriptionDefinitionResponse, CreateSubscriptionDefinitionError>;
+    ) -> RusotoFuture<CreateSubscriptionDefinitionResponse, CreateSubscriptionDefinitionError>;
 
     /// <p>Creates a version of a subscription definition which has already been defined.</p>
     fn create_subscription_definition_version(
         &self,
         input: &CreateSubscriptionDefinitionVersionRequest,
-    ) -> Result<CreateSubscriptionDefinitionVersionResponse, CreateSubscriptionDefinitionVersionError>;
+    ) -> RusotoFuture<
+        CreateSubscriptionDefinitionVersionResponse,
+        CreateSubscriptionDefinitionVersionError,
+    >;
 
     /// <p>Deletes a core definition. The core definition must not have been used in a deployment.</p>
     fn delete_core_definition(
         &self,
         input: &DeleteCoreDefinitionRequest,
-    ) -> Result<DeleteCoreDefinitionResponse, DeleteCoreDefinitionError>;
+    ) -> RusotoFuture<DeleteCoreDefinitionResponse, DeleteCoreDefinitionError>;
 
     /// <p>Deletes a device definition. The device definition must not have been used in a deployment.</p>
     fn delete_device_definition(
         &self,
         input: &DeleteDeviceDefinitionRequest,
-    ) -> Result<DeleteDeviceDefinitionResponse, DeleteDeviceDefinitionError>;
+    ) -> RusotoFuture<DeleteDeviceDefinitionResponse, DeleteDeviceDefinitionError>;
 
     /// <p>Deletes a Lambda function definition. The Lambda function definition must not have been used in a deployment.</p>
     fn delete_function_definition(
         &self,
         input: &DeleteFunctionDefinitionRequest,
-    ) -> Result<DeleteFunctionDefinitionResponse, DeleteFunctionDefinitionError>;
+    ) -> RusotoFuture<DeleteFunctionDefinitionResponse, DeleteFunctionDefinitionError>;
 
     /// <p>Deletes a group. The group must not have been used in deployment.</p>
     fn delete_group(
         &self,
         input: &DeleteGroupRequest,
-    ) -> Result<DeleteGroupResponse, DeleteGroupError>;
+    ) -> RusotoFuture<DeleteGroupResponse, DeleteGroupError>;
 
     /// <p>Deletes a logger definition. The logger definition must not have been used in a deployment.</p>
     fn delete_logger_definition(
         &self,
         input: &DeleteLoggerDefinitionRequest,
-    ) -> Result<DeleteLoggerDefinitionResponse, DeleteLoggerDefinitionError>;
+    ) -> RusotoFuture<DeleteLoggerDefinitionResponse, DeleteLoggerDefinitionError>;
 
     /// <p>Deletes a resource definition.</p>
     fn delete_resource_definition(
         &self,
         input: &DeleteResourceDefinitionRequest,
-    ) -> Result<DeleteResourceDefinitionResponse, DeleteResourceDefinitionError>;
+    ) -> RusotoFuture<DeleteResourceDefinitionResponse, DeleteResourceDefinitionError>;
 
     /// <p>Deletes a subscription definition. The subscription definition must not have been used in a deployment.</p>
     fn delete_subscription_definition(
         &self,
         input: &DeleteSubscriptionDefinitionRequest,
-    ) -> Result<DeleteSubscriptionDefinitionResponse, DeleteSubscriptionDefinitionError>;
+    ) -> RusotoFuture<DeleteSubscriptionDefinitionResponse, DeleteSubscriptionDefinitionError>;
 
     /// <p>Disassociates the role from a group.</p>
     fn disassociate_role_from_group(
         &self,
         input: &DisassociateRoleFromGroupRequest,
-    ) -> Result<DisassociateRoleFromGroupResponse, DisassociateRoleFromGroupError>;
+    ) -> RusotoFuture<DisassociateRoleFromGroupResponse, DisassociateRoleFromGroupError>;
 
     /// <p>Disassociates the service role from the account. Without a service role, deployments will not work.</p>
     fn disassociate_service_role_from_account(
         &self,
-    ) -> Result<DisassociateServiceRoleFromAccountResponse, DisassociateServiceRoleFromAccountError>;
+    ) -> RusotoFuture<
+        DisassociateServiceRoleFromAccountResponse,
+        DisassociateServiceRoleFromAccountError,
+    >;
 
     /// <p>Retrieves the role associated with a particular group.</p>
     fn get_associated_role(
         &self,
         input: &GetAssociatedRoleRequest,
-    ) -> Result<GetAssociatedRoleResponse, GetAssociatedRoleError>;
+    ) -> RusotoFuture<GetAssociatedRoleResponse, GetAssociatedRoleError>;
 
     /// <p>Retrieves the connectivity information for a core.</p>
     fn get_connectivity_info(
         &self,
         input: &GetConnectivityInfoRequest,
-    ) -> Result<GetConnectivityInfoResponse, GetConnectivityInfoError>;
+    ) -> RusotoFuture<GetConnectivityInfoResponse, GetConnectivityInfoError>;
 
     /// <p>Retrieves information about a core definition version.</p>
     fn get_core_definition(
         &self,
         input: &GetCoreDefinitionRequest,
-    ) -> Result<GetCoreDefinitionResponse, GetCoreDefinitionError>;
+    ) -> RusotoFuture<GetCoreDefinitionResponse, GetCoreDefinitionError>;
 
     /// <p>Retrieves information about a core definition version.</p>
     fn get_core_definition_version(
         &self,
         input: &GetCoreDefinitionVersionRequest,
-    ) -> Result<GetCoreDefinitionVersionResponse, GetCoreDefinitionVersionError>;
+    ) -> RusotoFuture<GetCoreDefinitionVersionResponse, GetCoreDefinitionVersionError>;
 
     /// <p>Returns the status of a deployment.</p>
     fn get_deployment_status(
         &self,
         input: &GetDeploymentStatusRequest,
-    ) -> Result<GetDeploymentStatusResponse, GetDeploymentStatusError>;
+    ) -> RusotoFuture<GetDeploymentStatusResponse, GetDeploymentStatusError>;
 
     /// <p>Retrieves information about a device definition.</p>
     fn get_device_definition(
         &self,
         input: &GetDeviceDefinitionRequest,
-    ) -> Result<GetDeviceDefinitionResponse, GetDeviceDefinitionError>;
+    ) -> RusotoFuture<GetDeviceDefinitionResponse, GetDeviceDefinitionError>;
 
     /// <p>Retrieves information about a device definition version.</p>
     fn get_device_definition_version(
         &self,
         input: &GetDeviceDefinitionVersionRequest,
-    ) -> Result<GetDeviceDefinitionVersionResponse, GetDeviceDefinitionVersionError>;
+    ) -> RusotoFuture<GetDeviceDefinitionVersionResponse, GetDeviceDefinitionVersionError>;
 
     /// <p>Retrieves information about a Lambda function definition, such as its creation time and latest version.</p>
     fn get_function_definition(
         &self,
         input: &GetFunctionDefinitionRequest,
-    ) -> Result<GetFunctionDefinitionResponse, GetFunctionDefinitionError>;
+    ) -> RusotoFuture<GetFunctionDefinitionResponse, GetFunctionDefinitionError>;
 
     /// <p>Retrieves information about a Lambda function definition version, such as which Lambda functions are included in the version and their configurations.</p>
     fn get_function_definition_version(
         &self,
         input: &GetFunctionDefinitionVersionRequest,
-    ) -> Result<GetFunctionDefinitionVersionResponse, GetFunctionDefinitionVersionError>;
+    ) -> RusotoFuture<GetFunctionDefinitionVersionResponse, GetFunctionDefinitionVersionError>;
 
     /// <p>Retrieves information about a group.</p>
-    fn get_group(&self, input: &GetGroupRequest) -> Result<GetGroupResponse, GetGroupError>;
+    fn get_group(&self, input: &GetGroupRequest) -> RusotoFuture<GetGroupResponse, GetGroupError>;
 
     /// <p>Retreives the CA associated with a group. Returns the public key of the CA.</p>
     fn get_group_certificate_authority(
         &self,
         input: &GetGroupCertificateAuthorityRequest,
-    ) -> Result<GetGroupCertificateAuthorityResponse, GetGroupCertificateAuthorityError>;
+    ) -> RusotoFuture<GetGroupCertificateAuthorityResponse, GetGroupCertificateAuthorityError>;
 
     /// <p>Retrieves the current configuration for the CA used by the group.</p>
     fn get_group_certificate_configuration(
         &self,
         input: &GetGroupCertificateConfigurationRequest,
-    ) -> Result<GetGroupCertificateConfigurationResponse, GetGroupCertificateConfigurationError>;
+    ) -> RusotoFuture<GetGroupCertificateConfigurationResponse, GetGroupCertificateConfigurationError>;
 
     /// <p>Retrieves information about a group version.</p>
     fn get_group_version(
         &self,
         input: &GetGroupVersionRequest,
-    ) -> Result<GetGroupVersionResponse, GetGroupVersionError>;
+    ) -> RusotoFuture<GetGroupVersionResponse, GetGroupVersionError>;
 
     /// <p>Retrieves information about a logger definition.</p>
     fn get_logger_definition(
         &self,
         input: &GetLoggerDefinitionRequest,
-    ) -> Result<GetLoggerDefinitionResponse, GetLoggerDefinitionError>;
+    ) -> RusotoFuture<GetLoggerDefinitionResponse, GetLoggerDefinitionError>;
 
     /// <p>Retrieves information about a logger definition version.</p>
     fn get_logger_definition_version(
         &self,
         input: &GetLoggerDefinitionVersionRequest,
-    ) -> Result<GetLoggerDefinitionVersionResponse, GetLoggerDefinitionVersionError>;
+    ) -> RusotoFuture<GetLoggerDefinitionVersionResponse, GetLoggerDefinitionVersionError>;
 
     /// <p>Retrieves information about a resource definition, such as its creation time and latest version.</p>
     fn get_resource_definition(
         &self,
         input: &GetResourceDefinitionRequest,
-    ) -> Result<GetResourceDefinitionResponse, GetResourceDefinitionError>;
+    ) -> RusotoFuture<GetResourceDefinitionResponse, GetResourceDefinitionError>;
 
     /// <p>Retrieves information about a resource definition version, such as which resources are included in the version.</p>
     fn get_resource_definition_version(
         &self,
         input: &GetResourceDefinitionVersionRequest,
-    ) -> Result<GetResourceDefinitionVersionResponse, GetResourceDefinitionVersionError>;
+    ) -> RusotoFuture<GetResourceDefinitionVersionResponse, GetResourceDefinitionVersionError>;
 
     /// <p>Retrieves the service role that is attached to the account.</p>
     fn get_service_role_for_account(
         &self,
-    ) -> Result<GetServiceRoleForAccountResponse, GetServiceRoleForAccountError>;
+    ) -> RusotoFuture<GetServiceRoleForAccountResponse, GetServiceRoleForAccountError>;
 
     /// <p>Retrieves information about a subscription definition.</p>
     fn get_subscription_definition(
         &self,
         input: &GetSubscriptionDefinitionRequest,
-    ) -> Result<GetSubscriptionDefinitionResponse, GetSubscriptionDefinitionError>;
+    ) -> RusotoFuture<GetSubscriptionDefinitionResponse, GetSubscriptionDefinitionError>;
 
     /// <p>Retrieves information about a subscription definition version.</p>
     fn get_subscription_definition_version(
         &self,
         input: &GetSubscriptionDefinitionVersionRequest,
-    ) -> Result<GetSubscriptionDefinitionVersionResponse, GetSubscriptionDefinitionVersionError>;
+    ) -> RusotoFuture<GetSubscriptionDefinitionVersionResponse, GetSubscriptionDefinitionVersionError>;
 
     /// <p>Lists versions of a core definition.</p>
     fn list_core_definition_versions(
         &self,
         input: &ListCoreDefinitionVersionsRequest,
-    ) -> Result<ListCoreDefinitionVersionsResponse, ListCoreDefinitionVersionsError>;
+    ) -> RusotoFuture<ListCoreDefinitionVersionsResponse, ListCoreDefinitionVersionsError>;
 
     /// <p>Retrieves a list of core definitions.</p>
     fn list_core_definitions(
         &self,
         input: &ListCoreDefinitionsRequest,
-    ) -> Result<ListCoreDefinitionsResponse, ListCoreDefinitionsError>;
+    ) -> RusotoFuture<ListCoreDefinitionsResponse, ListCoreDefinitionsError>;
 
     /// <p>Returns a history of deployments for the group.</p>
     fn list_deployments(
         &self,
         input: &ListDeploymentsRequest,
-    ) -> Result<ListDeploymentsResponse, ListDeploymentsError>;
+    ) -> RusotoFuture<ListDeploymentsResponse, ListDeploymentsError>;
 
     /// <p>Lists the versions of a device definition.</p>
     fn list_device_definition_versions(
         &self,
         input: &ListDeviceDefinitionVersionsRequest,
-    ) -> Result<ListDeviceDefinitionVersionsResponse, ListDeviceDefinitionVersionsError>;
+    ) -> RusotoFuture<ListDeviceDefinitionVersionsResponse, ListDeviceDefinitionVersionsError>;
 
     /// <p>Retrieves a list of device definitions.</p>
     fn list_device_definitions(
         &self,
         input: &ListDeviceDefinitionsRequest,
-    ) -> Result<ListDeviceDefinitionsResponse, ListDeviceDefinitionsError>;
+    ) -> RusotoFuture<ListDeviceDefinitionsResponse, ListDeviceDefinitionsError>;
 
     /// <p>Lists the versions of a Lambda function definition.</p>
     fn list_function_definition_versions(
         &self,
         input: &ListFunctionDefinitionVersionsRequest,
-    ) -> Result<ListFunctionDefinitionVersionsResponse, ListFunctionDefinitionVersionsError>;
+    ) -> RusotoFuture<ListFunctionDefinitionVersionsResponse, ListFunctionDefinitionVersionsError>;
 
     /// <p>Retrieves a list of Lambda function definitions.</p>
     fn list_function_definitions(
         &self,
         input: &ListFunctionDefinitionsRequest,
-    ) -> Result<ListFunctionDefinitionsResponse, ListFunctionDefinitionsError>;
+    ) -> RusotoFuture<ListFunctionDefinitionsResponse, ListFunctionDefinitionsError>;
 
     /// <p>Retrieves the current CAs for a group.</p>
     fn list_group_certificate_authorities(
         &self,
         input: &ListGroupCertificateAuthoritiesRequest,
-    ) -> Result<ListGroupCertificateAuthoritiesResponse, ListGroupCertificateAuthoritiesError>;
+    ) -> RusotoFuture<ListGroupCertificateAuthoritiesResponse, ListGroupCertificateAuthoritiesError>;
 
     /// <p>List the versions of a group.</p>
     fn list_group_versions(
         &self,
         input: &ListGroupVersionsRequest,
-    ) -> Result<ListGroupVersionsResponse, ListGroupVersionsError>;
+    ) -> RusotoFuture<ListGroupVersionsResponse, ListGroupVersionsError>;
 
     /// <p>Retrieves a list of groups.</p>
-    fn list_groups(&self, input: &ListGroupsRequest)
-        -> Result<ListGroupsResponse, ListGroupsError>;
+    fn list_groups(
+        &self,
+        input: &ListGroupsRequest,
+    ) -> RusotoFuture<ListGroupsResponse, ListGroupsError>;
 
     /// <p>Lists the versions of a logger definition.</p>
     fn list_logger_definition_versions(
         &self,
         input: &ListLoggerDefinitionVersionsRequest,
-    ) -> Result<ListLoggerDefinitionVersionsResponse, ListLoggerDefinitionVersionsError>;
+    ) -> RusotoFuture<ListLoggerDefinitionVersionsResponse, ListLoggerDefinitionVersionsError>;
 
     /// <p>Retrieves a list of logger definitions.</p>
     fn list_logger_definitions(
         &self,
         input: &ListLoggerDefinitionsRequest,
-    ) -> Result<ListLoggerDefinitionsResponse, ListLoggerDefinitionsError>;
+    ) -> RusotoFuture<ListLoggerDefinitionsResponse, ListLoggerDefinitionsError>;
 
     /// <p>Lists the versions of a resource definition.</p>
     fn list_resource_definition_versions(
         &self,
         input: &ListResourceDefinitionVersionsRequest,
-    ) -> Result<ListResourceDefinitionVersionsResponse, ListResourceDefinitionVersionsError>;
+    ) -> RusotoFuture<ListResourceDefinitionVersionsResponse, ListResourceDefinitionVersionsError>;
 
     /// <p>Retrieves a list of resource definitions.</p>
     fn list_resource_definitions(
         &self,
         input: &ListResourceDefinitionsRequest,
-    ) -> Result<ListResourceDefinitionsResponse, ListResourceDefinitionsError>;
+    ) -> RusotoFuture<ListResourceDefinitionsResponse, ListResourceDefinitionsError>;
 
     /// <p>Lists the versions of a subscription definition.</p>
     fn list_subscription_definition_versions(
         &self,
         input: &ListSubscriptionDefinitionVersionsRequest,
-    ) -> Result<ListSubscriptionDefinitionVersionsResponse, ListSubscriptionDefinitionVersionsError>;
+    ) -> RusotoFuture<
+        ListSubscriptionDefinitionVersionsResponse,
+        ListSubscriptionDefinitionVersionsError,
+    >;
 
     /// <p>Retrieves a list of subscription definitions.</p>
     fn list_subscription_definitions(
         &self,
         input: &ListSubscriptionDefinitionsRequest,
-    ) -> Result<ListSubscriptionDefinitionsResponse, ListSubscriptionDefinitionsError>;
+    ) -> RusotoFuture<ListSubscriptionDefinitionsResponse, ListSubscriptionDefinitionsError>;
 
     /// <p>Resets a group&#39;s deployments.</p>
     fn reset_deployments(
         &self,
         input: &ResetDeploymentsRequest,
-    ) -> Result<ResetDeploymentsResponse, ResetDeploymentsError>;
+    ) -> RusotoFuture<ResetDeploymentsResponse, ResetDeploymentsError>;
 
     /// <p>Updates the connectivity information for the core. Any devices that belong to the group which has this core will receive this information in order to find the location of the core and connect to it.</p>
     fn update_connectivity_info(
         &self,
         input: &UpdateConnectivityInfoRequest,
-    ) -> Result<UpdateConnectivityInfoResponse, UpdateConnectivityInfoError>;
+    ) -> RusotoFuture<UpdateConnectivityInfoResponse, UpdateConnectivityInfoError>;
 
     /// <p>Updates a core definition.</p>
     fn update_core_definition(
         &self,
         input: &UpdateCoreDefinitionRequest,
-    ) -> Result<UpdateCoreDefinitionResponse, UpdateCoreDefinitionError>;
+    ) -> RusotoFuture<UpdateCoreDefinitionResponse, UpdateCoreDefinitionError>;
 
     /// <p>Updates a device definition.</p>
     fn update_device_definition(
         &self,
         input: &UpdateDeviceDefinitionRequest,
-    ) -> Result<UpdateDeviceDefinitionResponse, UpdateDeviceDefinitionError>;
+    ) -> RusotoFuture<UpdateDeviceDefinitionResponse, UpdateDeviceDefinitionError>;
 
     /// <p>Updates a Lambda function definition.</p>
     fn update_function_definition(
         &self,
         input: &UpdateFunctionDefinitionRequest,
-    ) -> Result<UpdateFunctionDefinitionResponse, UpdateFunctionDefinitionError>;
+    ) -> RusotoFuture<UpdateFunctionDefinitionResponse, UpdateFunctionDefinitionError>;
 
     /// <p>Updates a group.</p>
     fn update_group(
         &self,
         input: &UpdateGroupRequest,
-    ) -> Result<UpdateGroupResponse, UpdateGroupError>;
+    ) -> RusotoFuture<UpdateGroupResponse, UpdateGroupError>;
 
     /// <p>Updates the Cert expiry time for a group.</p>
     fn update_group_certificate_configuration(
         &self,
         input: &UpdateGroupCertificateConfigurationRequest,
-    ) -> Result<UpdateGroupCertificateConfigurationResponse, UpdateGroupCertificateConfigurationError>;
+    ) -> RusotoFuture<
+        UpdateGroupCertificateConfigurationResponse,
+        UpdateGroupCertificateConfigurationError,
+    >;
 
     /// <p>Updates a logger definition.</p>
     fn update_logger_definition(
         &self,
         input: &UpdateLoggerDefinitionRequest,
-    ) -> Result<UpdateLoggerDefinitionResponse, UpdateLoggerDefinitionError>;
+    ) -> RusotoFuture<UpdateLoggerDefinitionResponse, UpdateLoggerDefinitionError>;
 
     /// <p>Updates a resource definition.</p>
     fn update_resource_definition(
         &self,
         input: &UpdateResourceDefinitionRequest,
-    ) -> Result<UpdateResourceDefinitionResponse, UpdateResourceDefinitionError>;
+    ) -> RusotoFuture<UpdateResourceDefinitionResponse, UpdateResourceDefinitionError>;
 
     /// <p>Updates a subscription definition.</p>
     fn update_subscription_definition(
         &self,
         input: &UpdateSubscriptionDefinitionRequest,
-    ) -> Result<UpdateSubscriptionDefinitionResponse, UpdateSubscriptionDefinitionError>;
+    ) -> RusotoFuture<UpdateSubscriptionDefinitionResponse, UpdateSubscriptionDefinitionError>;
 }
 /// A client for the AWS Greengrass API.
-pub struct GreenGrassClient<P, D>
+pub struct GreenGrassClient<P = CredentialsProvider, D = RequestDispatcher>
 where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    credentials_provider: P,
+    inner: ClientInner<P, D>,
     region: region::Region,
-    dispatcher: D,
+}
+
+impl GreenGrassClient {
+    /// Creates a simple client backed by an implicit event loop.
+    ///
+    /// The client will use the default credentials provider and tls client.
+    ///
+    /// See the `rusoto_core::reactor` module for more details.
+    pub fn simple(region: region::Region) -> GreenGrassClient {
+        GreenGrassClient::new(
+            RequestDispatcher::default(),
+            CredentialsProvider::default(),
+            region,
+        )
+    }
 }
 
 impl<P, D> GreenGrassClient<P, D>
@@ -9003,23 +9034,22 @@ where
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         GreenGrassClient {
-            credentials_provider: credentials_provider,
+            inner: ClientInner::new(credentials_provider, request_dispatcher),
             region: region,
-            dispatcher: request_dispatcher,
         }
     }
 }
 
 impl<P, D> GreenGrass for GreenGrassClient<P, D>
 where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
+    P: ProvideAwsCredentials + 'static,
+    D: DispatchSignedRequest + 'static,
 {
     /// <p>Associates a role with a group. The role will be used by the AWS Greengrass core in order to access AWS cloud services. The role&#39;s permissions will allow Greengrass core Lambda functions to perform actions against the cloud.</p>
     fn associate_role_to_group(
         &self,
         input: &AssociateRoleToGroupRequest,
-    ) -> Result<AssociateRoleToGroupResponse, AssociateRoleToGroupError> {
+    ) -> RusotoFuture<AssociateRoleToGroupResponse, AssociateRoleToGroupError> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/role",
             group_id = input.group_id
@@ -9031,39 +9061,40 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<AssociateRoleToGroupResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<AssociateRoleToGroupResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(AssociateRoleToGroupError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AssociateRoleToGroupError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Associates a role which is used by AWS Greengrass. AWS Greengrass uses the role to access your Lambda functions and AWS IoT resources. This is necessary for deployments to succeed. It needs to have minimum permissions in policy <code>AWSGreengrassResourceAccessRolePolicy</code></p>
     fn associate_service_role_to_account(
         &self,
         input: &AssociateServiceRoleToAccountRequest,
-    ) -> Result<AssociateServiceRoleToAccountResponse, AssociateServiceRoleToAccountError> {
+    ) -> RusotoFuture<AssociateServiceRoleToAccountResponse, AssociateServiceRoleToAccountError>
+    {
         let request_uri = "/greengrass/servicerole";
 
         let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
@@ -9072,40 +9103,40 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<AssociateServiceRoleToAccountResponse>(
+                        &body,
+                    ).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<AssociateServiceRoleToAccountResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(AssociateServiceRoleToAccountError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AssociateServiceRoleToAccountError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a core definition. You may optionally provide the initial version of the core definition or use &#39;&#39;CreateCoreDefinitionVersion&#39;&#39; at a later time. AWS Greengrass Groups must each contain exactly 1 AWS Greengrass Core.</p>
     fn create_core_definition(
         &self,
         input: &CreateCoreDefinitionRequest,
-    ) -> Result<CreateCoreDefinitionResponse, CreateCoreDefinitionError> {
+    ) -> RusotoFuture<CreateCoreDefinitionResponse, CreateCoreDefinitionError> {
         let request_uri = "/greengrass/definition/cores";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
@@ -9118,39 +9149,39 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<CreateCoreDefinitionResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreateCoreDefinitionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateCoreDefinitionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateCoreDefinitionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a version of a core definition that has already been defined. AWS Greengrass Groups must each contain exactly 1 AWS Greengrass Core.</p>
     fn create_core_definition_version(
         &self,
         input: &CreateCoreDefinitionVersionRequest,
-    ) -> Result<CreateCoreDefinitionVersionResponse, CreateCoreDefinitionVersionError> {
+    ) -> RusotoFuture<CreateCoreDefinitionVersionResponse, CreateCoreDefinitionVersionError> {
         let request_uri = format!(
             "/greengrass/definition/cores/{core_definition_id}/versions",
             core_definition_id = input.core_definition_id
@@ -9166,40 +9197,40 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<CreateCoreDefinitionVersionResponse>(
+                        &body,
+                    ).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<CreateCoreDefinitionVersionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateCoreDefinitionVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateCoreDefinitionVersionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a deployment.</p>
     fn create_deployment(
         &self,
         input: &CreateDeploymentRequest,
-    ) -> Result<CreateDeploymentResponse, CreateDeploymentError> {
+    ) -> RusotoFuture<CreateDeploymentResponse, CreateDeploymentError> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/deployments",
             group_id = input.group_id
@@ -9215,39 +9246,38 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<CreateDeploymentResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreateDeploymentResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateDeploymentError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateDeploymentError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a device definition. You may optinally provide the initial version of the device definition or use <code>CreateDeviceDefinitionVersion</code> at a later time.</p>
     fn create_device_definition(
         &self,
         input: &CreateDeviceDefinitionRequest,
-    ) -> Result<CreateDeviceDefinitionResponse, CreateDeviceDefinitionError> {
+    ) -> RusotoFuture<CreateDeviceDefinitionResponse, CreateDeviceDefinitionError> {
         let request_uri = "/greengrass/definition/devices";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
@@ -9260,40 +9290,40 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<CreateDeviceDefinitionResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<CreateDeviceDefinitionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateDeviceDefinitionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateDeviceDefinitionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a version of a device definition that has already been defined.</p>
     fn create_device_definition_version(
         &self,
         input: &CreateDeviceDefinitionVersionRequest,
-    ) -> Result<CreateDeviceDefinitionVersionResponse, CreateDeviceDefinitionVersionError> {
+    ) -> RusotoFuture<CreateDeviceDefinitionVersionResponse, CreateDeviceDefinitionVersionError>
+    {
         let request_uri = format!(
             "/greengrass/definition/devices/{device_definition_id}/versions",
             device_definition_id = input.device_definition_id
@@ -9309,40 +9339,40 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<CreateDeviceDefinitionVersionResponse>(
+                        &body,
+                    ).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<CreateDeviceDefinitionVersionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateDeviceDefinitionVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateDeviceDefinitionVersionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a Lambda function definition which contains a list of Lambda functions and their configurations to be used in a group. You can create an initial version of the definition by providing a list of Lambda functions and their configurations now, or use <code>CreateFunctionDefinitionVersion</code> later.</p>
     fn create_function_definition(
         &self,
         input: &CreateFunctionDefinitionRequest,
-    ) -> Result<CreateFunctionDefinitionResponse, CreateFunctionDefinitionError> {
+    ) -> RusotoFuture<CreateFunctionDefinitionResponse, CreateFunctionDefinitionError> {
         let request_uri = "/greengrass/definition/functions";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
@@ -9355,40 +9385,40 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<CreateFunctionDefinitionResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<CreateFunctionDefinitionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateFunctionDefinitionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateFunctionDefinitionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Create a version of a Lambda function definition that has already been defined.</p>
     fn create_function_definition_version(
         &self,
         input: &CreateFunctionDefinitionVersionRequest,
-    ) -> Result<CreateFunctionDefinitionVersionResponse, CreateFunctionDefinitionVersionError> {
+    ) -> RusotoFuture<CreateFunctionDefinitionVersionResponse, CreateFunctionDefinitionVersionError>
+    {
         let request_uri = format!(
             "/greengrass/definition/functions/{function_definition_id}/versions",
             function_definition_id = input.function_definition_id
@@ -9404,41 +9434,40 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<CreateFunctionDefinitionVersionResponse>(&body)
+                            .unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreateFunctionDefinitionVersionResponse>(
-                    &body,
-                ).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateFunctionDefinitionVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateFunctionDefinitionVersionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a group. You may optionally provide the initial version of the group or use &#39;&#39;CreateGroupVersion&#39;&#39; at a later time.</p>
     fn create_group(
         &self,
         input: &CreateGroupRequest,
-    ) -> Result<CreateGroupResponse, CreateGroupError> {
+    ) -> RusotoFuture<CreateGroupResponse, CreateGroupError> {
         let request_uri = "/greengrass/groups";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
@@ -9451,39 +9480,39 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<CreateGroupResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreateGroupResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateGroupError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateGroupError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a CA for the group. If a CA already exists, it will rotate the existing CA.</p>
     fn create_group_certificate_authority(
         &self,
         input: &CreateGroupCertificateAuthorityRequest,
-    ) -> Result<CreateGroupCertificateAuthorityResponse, CreateGroupCertificateAuthorityError> {
+    ) -> RusotoFuture<CreateGroupCertificateAuthorityResponse, CreateGroupCertificateAuthorityError>
+    {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/certificateauthorities",
             group_id = input.group_id
@@ -9496,41 +9525,40 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<CreateGroupCertificateAuthorityResponse>(&body)
+                            .unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreateGroupCertificateAuthorityResponse>(
-                    &body,
-                ).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateGroupCertificateAuthorityError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateGroupCertificateAuthorityError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a version of a group which has already been defined.</p>
     fn create_group_version(
         &self,
         input: &CreateGroupVersionRequest,
-    ) -> Result<CreateGroupVersionResponse, CreateGroupVersionError> {
+    ) -> RusotoFuture<CreateGroupVersionResponse, CreateGroupVersionError> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/versions",
             group_id = input.group_id
@@ -9546,39 +9574,39 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<CreateGroupVersionResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreateGroupVersionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateGroupVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateGroupVersionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a logger definition. You may optionally provide the initial version of the logger definition or use <code>CreateLoggerDefinitionVersion</code> at a later time.</p>
     fn create_logger_definition(
         &self,
         input: &CreateLoggerDefinitionRequest,
-    ) -> Result<CreateLoggerDefinitionResponse, CreateLoggerDefinitionError> {
+    ) -> RusotoFuture<CreateLoggerDefinitionResponse, CreateLoggerDefinitionError> {
         let request_uri = "/greengrass/definition/loggers";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
@@ -9591,40 +9619,40 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<CreateLoggerDefinitionResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<CreateLoggerDefinitionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateLoggerDefinitionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateLoggerDefinitionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a version of a logger definition that has already been defined.</p>
     fn create_logger_definition_version(
         &self,
         input: &CreateLoggerDefinitionVersionRequest,
-    ) -> Result<CreateLoggerDefinitionVersionResponse, CreateLoggerDefinitionVersionError> {
+    ) -> RusotoFuture<CreateLoggerDefinitionVersionResponse, CreateLoggerDefinitionVersionError>
+    {
         let request_uri = format!(
             "/greengrass/definition/loggers/{logger_definition_id}/versions",
             logger_definition_id = input.logger_definition_id
@@ -9640,40 +9668,40 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<CreateLoggerDefinitionVersionResponse>(
+                        &body,
+                    ).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<CreateLoggerDefinitionVersionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateLoggerDefinitionVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateLoggerDefinitionVersionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a resource definition which contains a list of resources to be used in a group. You can create an initial version of the definition by providing a list of resources now, or use <code>CreateResourceDefinitionVersion</code> later.</p>
     fn create_resource_definition(
         &self,
         input: &CreateResourceDefinitionRequest,
-    ) -> Result<CreateResourceDefinitionResponse, CreateResourceDefinitionError> {
+    ) -> RusotoFuture<CreateResourceDefinitionResponse, CreateResourceDefinitionError> {
         let request_uri = "/greengrass/definition/resources";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
@@ -9686,40 +9714,40 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<CreateResourceDefinitionResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<CreateResourceDefinitionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateResourceDefinitionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateResourceDefinitionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Create a version of a resource definition that has already been defined.</p>
     fn create_resource_definition_version(
         &self,
         input: &CreateResourceDefinitionVersionRequest,
-    ) -> Result<CreateResourceDefinitionVersionResponse, CreateResourceDefinitionVersionError> {
+    ) -> RusotoFuture<CreateResourceDefinitionVersionResponse, CreateResourceDefinitionVersionError>
+    {
         let request_uri = format!(
             "/greengrass/definition/resources/{resource_definition_id}/versions",
             resource_definition_id = input.resource_definition_id
@@ -9735,41 +9763,40 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<CreateResourceDefinitionVersionResponse>(&body)
+                            .unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<CreateResourceDefinitionVersionResponse>(
-                    &body,
-                ).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateResourceDefinitionVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateResourceDefinitionVersionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates an Iot Job that will trigger your Greengrass Cores to update the software they are running.</p>
     fn create_software_update_job(
         &self,
         input: &CreateSoftwareUpdateJobRequest,
-    ) -> Result<CreateSoftwareUpdateJobResponse, CreateSoftwareUpdateJobError> {
+    ) -> RusotoFuture<CreateSoftwareUpdateJobResponse, CreateSoftwareUpdateJobError> {
         let request_uri = "/greengrass/updates";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
@@ -9782,40 +9809,39 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<CreateSoftwareUpdateJobResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<CreateSoftwareUpdateJobResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateSoftwareUpdateJobError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateSoftwareUpdateJobError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a subscription definition. You may optionally provide the initial version of the subscription definition or use <code>CreateSubscriptionDefinitionVersion</code> at a later time.</p>
     fn create_subscription_definition(
         &self,
         input: &CreateSubscriptionDefinitionRequest,
-    ) -> Result<CreateSubscriptionDefinitionResponse, CreateSubscriptionDefinitionError> {
+    ) -> RusotoFuture<CreateSubscriptionDefinitionResponse, CreateSubscriptionDefinitionError> {
         let request_uri = "/greengrass/definition/subscriptions";
 
         let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
@@ -9828,41 +9854,43 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<CreateSubscriptionDefinitionResponse>(
+                        &body,
+                    ).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<CreateSubscriptionDefinitionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateSubscriptionDefinitionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateSubscriptionDefinitionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a version of a subscription definition which has already been defined.</p>
     fn create_subscription_definition_version(
         &self,
         input: &CreateSubscriptionDefinitionVersionRequest,
-    ) -> Result<CreateSubscriptionDefinitionVersionResponse, CreateSubscriptionDefinitionVersionError>
-    {
+    ) -> RusotoFuture<
+        CreateSubscriptionDefinitionVersionResponse,
+        CreateSubscriptionDefinitionVersionError,
+    > {
         let request_uri = format!(
             "/greengrass/definition/subscriptions/{subscription_definition_id}/versions",
             subscription_definition_id = input.subscription_definition_id
@@ -9878,41 +9906,41 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
-
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<CreateSubscriptionDefinitionVersionResponse>(&body)
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<
+                        CreateSubscriptionDefinitionVersionResponse,
+                    >(&body)
                         .unwrap();
 
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateSubscriptionDefinitionVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateSubscriptionDefinitionVersionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a core definition. The core definition must not have been used in a deployment.</p>
     fn delete_core_definition(
         &self,
         input: &DeleteCoreDefinitionRequest,
-    ) -> Result<DeleteCoreDefinitionResponse, DeleteCoreDefinitionError> {
+    ) -> RusotoFuture<DeleteCoreDefinitionResponse, DeleteCoreDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/cores/{core_definition_id}",
             core_definition_id = input.core_definition_id
@@ -9921,39 +9949,39 @@ where
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DeleteCoreDefinitionResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DeleteCoreDefinitionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteCoreDefinitionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteCoreDefinitionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a device definition. The device definition must not have been used in a deployment.</p>
     fn delete_device_definition(
         &self,
         input: &DeleteDeviceDefinitionRequest,
-    ) -> Result<DeleteDeviceDefinitionResponse, DeleteDeviceDefinitionError> {
+    ) -> RusotoFuture<DeleteDeviceDefinitionResponse, DeleteDeviceDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/devices/{device_definition_id}",
             device_definition_id = input.device_definition_id
@@ -9962,40 +9990,39 @@ where
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DeleteDeviceDefinitionResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<DeleteDeviceDefinitionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteDeviceDefinitionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteDeviceDefinitionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a Lambda function definition. The Lambda function definition must not have been used in a deployment.</p>
     fn delete_function_definition(
         &self,
         input: &DeleteFunctionDefinitionRequest,
-    ) -> Result<DeleteFunctionDefinitionResponse, DeleteFunctionDefinitionError> {
+    ) -> RusotoFuture<DeleteFunctionDefinitionResponse, DeleteFunctionDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/functions/{function_definition_id}",
             function_definition_id = input.function_definition_id
@@ -10004,78 +10031,76 @@ where
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DeleteFunctionDefinitionResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<DeleteFunctionDefinitionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteFunctionDefinitionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteFunctionDefinitionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a group. The group must not have been used in deployment.</p>
     fn delete_group(
         &self,
         input: &DeleteGroupRequest,
-    ) -> Result<DeleteGroupResponse, DeleteGroupError> {
+    ) -> RusotoFuture<DeleteGroupResponse, DeleteGroupError> {
         let request_uri = format!("/greengrass/groups/{group_id}", group_id = input.group_id);
 
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DeleteGroupResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DeleteGroupResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteGroupError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteGroupError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a logger definition. The logger definition must not have been used in a deployment.</p>
     fn delete_logger_definition(
         &self,
         input: &DeleteLoggerDefinitionRequest,
-    ) -> Result<DeleteLoggerDefinitionResponse, DeleteLoggerDefinitionError> {
+    ) -> RusotoFuture<DeleteLoggerDefinitionResponse, DeleteLoggerDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/loggers/{logger_definition_id}",
             logger_definition_id = input.logger_definition_id
@@ -10084,40 +10109,39 @@ where
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DeleteLoggerDefinitionResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<DeleteLoggerDefinitionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteLoggerDefinitionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteLoggerDefinitionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a resource definition.</p>
     fn delete_resource_definition(
         &self,
         input: &DeleteResourceDefinitionRequest,
-    ) -> Result<DeleteResourceDefinitionResponse, DeleteResourceDefinitionError> {
+    ) -> RusotoFuture<DeleteResourceDefinitionResponse, DeleteResourceDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/resources/{resource_definition_id}",
             resource_definition_id = input.resource_definition_id
@@ -10126,40 +10150,39 @@ where
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DeleteResourceDefinitionResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<DeleteResourceDefinitionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteResourceDefinitionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteResourceDefinitionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a subscription definition. The subscription definition must not have been used in a deployment.</p>
     fn delete_subscription_definition(
         &self,
         input: &DeleteSubscriptionDefinitionRequest,
-    ) -> Result<DeleteSubscriptionDefinitionResponse, DeleteSubscriptionDefinitionError> {
+    ) -> RusotoFuture<DeleteSubscriptionDefinitionResponse, DeleteSubscriptionDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/subscriptions/{subscription_definition_id}",
             subscription_definition_id = input.subscription_definition_id
@@ -10168,40 +10191,40 @@ where
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DeleteSubscriptionDefinitionResponse>(
+                        &body,
+                    ).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<DeleteSubscriptionDefinitionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteSubscriptionDefinitionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteSubscriptionDefinitionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Disassociates the role from a group.</p>
     fn disassociate_role_from_group(
         &self,
         input: &DisassociateRoleFromGroupRequest,
-    ) -> Result<DisassociateRoleFromGroupResponse, DisassociateRoleFromGroupError> {
+    ) -> RusotoFuture<DisassociateRoleFromGroupResponse, DisassociateRoleFromGroupError> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/role",
             group_id = input.group_id
@@ -10210,80 +10233,80 @@ where
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DisassociateRoleFromGroupResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<DisassociateRoleFromGroupResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DisassociateRoleFromGroupError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DisassociateRoleFromGroupError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Disassociates the service role from the account. Without a service role, deployments will not work.</p>
     fn disassociate_service_role_from_account(
         &self,
-    ) -> Result<DisassociateServiceRoleFromAccountResponse, DisassociateServiceRoleFromAccountError>
-    {
+    ) -> RusotoFuture<
+        DisassociateServiceRoleFromAccountResponse,
+        DisassociateServiceRoleFromAccountError,
+    > {
         let request_uri = "/greengrass/servicerole";
 
         let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DisassociateServiceRoleFromAccountResponse>(&body)
+                            .unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DisassociateServiceRoleFromAccountResponse>(
-                    &body,
-                ).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DisassociateServiceRoleFromAccountError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DisassociateServiceRoleFromAccountError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves the role associated with a particular group.</p>
     fn get_associated_role(
         &self,
         input: &GetAssociatedRoleRequest,
-    ) -> Result<GetAssociatedRoleResponse, GetAssociatedRoleError> {
+    ) -> RusotoFuture<GetAssociatedRoleResponse, GetAssociatedRoleError> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/role",
             group_id = input.group_id
@@ -10292,39 +10315,39 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetAssociatedRoleResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetAssociatedRoleResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetAssociatedRoleError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetAssociatedRoleError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves the connectivity information for a core.</p>
     fn get_connectivity_info(
         &self,
         input: &GetConnectivityInfoRequest,
-    ) -> Result<GetConnectivityInfoResponse, GetConnectivityInfoError> {
+    ) -> RusotoFuture<GetConnectivityInfoResponse, GetConnectivityInfoError> {
         let request_uri = format!(
             "/greengrass/things/{thing_name}/connectivityInfo",
             thing_name = input.thing_name
@@ -10333,39 +10356,39 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetConnectivityInfoResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetConnectivityInfoResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetConnectivityInfoError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetConnectivityInfoError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves information about a core definition version.</p>
     fn get_core_definition(
         &self,
         input: &GetCoreDefinitionRequest,
-    ) -> Result<GetCoreDefinitionResponse, GetCoreDefinitionError> {
+    ) -> RusotoFuture<GetCoreDefinitionResponse, GetCoreDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/cores/{core_definition_id}",
             core_definition_id = input.core_definition_id
@@ -10374,78 +10397,77 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetCoreDefinitionResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetCoreDefinitionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetCoreDefinitionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetCoreDefinitionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves information about a core definition version.</p>
     fn get_core_definition_version(
         &self,
         input: &GetCoreDefinitionVersionRequest,
-    ) -> Result<GetCoreDefinitionVersionResponse, GetCoreDefinitionVersionError> {
+    ) -> RusotoFuture<GetCoreDefinitionVersionResponse, GetCoreDefinitionVersionError> {
         let request_uri = format!("/greengrass/definition/cores/{core_definition_id}/versions/{core_definition_version_id}", core_definition_id = input.core_definition_id, core_definition_version_id = input.core_definition_version_id);
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetCoreDefinitionVersionResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<GetCoreDefinitionVersionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetCoreDefinitionVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetCoreDefinitionVersionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns the status of a deployment.</p>
     fn get_deployment_status(
         &self,
         input: &GetDeploymentStatusRequest,
-    ) -> Result<GetDeploymentStatusResponse, GetDeploymentStatusError> {
+    ) -> RusotoFuture<GetDeploymentStatusResponse, GetDeploymentStatusError> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/deployments/{deployment_id}/status",
             deployment_id = input.deployment_id,
@@ -10455,39 +10477,39 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetDeploymentStatusResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetDeploymentStatusResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetDeploymentStatusError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetDeploymentStatusError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves information about a device definition.</p>
     fn get_device_definition(
         &self,
         input: &GetDeviceDefinitionRequest,
-    ) -> Result<GetDeviceDefinitionResponse, GetDeviceDefinitionError> {
+    ) -> RusotoFuture<GetDeviceDefinitionResponse, GetDeviceDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/devices/{device_definition_id}",
             device_definition_id = input.device_definition_id
@@ -10496,78 +10518,78 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetDeviceDefinitionResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetDeviceDefinitionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetDeviceDefinitionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetDeviceDefinitionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves information about a device definition version.</p>
     fn get_device_definition_version(
         &self,
         input: &GetDeviceDefinitionVersionRequest,
-    ) -> Result<GetDeviceDefinitionVersionResponse, GetDeviceDefinitionVersionError> {
+    ) -> RusotoFuture<GetDeviceDefinitionVersionResponse, GetDeviceDefinitionVersionError> {
         let request_uri = format!("/greengrass/definition/devices/{device_definition_id}/versions/{device_definition_version_id}", device_definition_id = input.device_definition_id, device_definition_version_id = input.device_definition_version_id);
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GetDeviceDefinitionVersionResponse>(
+                        &body,
+                    ).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<GetDeviceDefinitionVersionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetDeviceDefinitionVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetDeviceDefinitionVersionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves information about a Lambda function definition, such as its creation time and latest version.</p>
     fn get_function_definition(
         &self,
         input: &GetFunctionDefinitionRequest,
-    ) -> Result<GetFunctionDefinitionResponse, GetFunctionDefinitionError> {
+    ) -> RusotoFuture<GetFunctionDefinitionResponse, GetFunctionDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/functions/{function_definition_id}",
             function_definition_id = input.function_definition_id
@@ -10576,114 +10598,112 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetFunctionDefinitionResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<GetFunctionDefinitionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetFunctionDefinitionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetFunctionDefinitionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves information about a Lambda function definition version, such as which Lambda functions are included in the version and their configurations.</p>
     fn get_function_definition_version(
         &self,
         input: &GetFunctionDefinitionVersionRequest,
-    ) -> Result<GetFunctionDefinitionVersionResponse, GetFunctionDefinitionVersionError> {
+    ) -> RusotoFuture<GetFunctionDefinitionVersionResponse, GetFunctionDefinitionVersionError> {
         let request_uri = format!("/greengrass/definition/functions/{function_definition_id}/versions/{function_definition_version_id}", function_definition_id = input.function_definition_id, function_definition_version_id = input.function_definition_version_id);
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GetFunctionDefinitionVersionResponse>(
+                        &body,
+                    ).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<GetFunctionDefinitionVersionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetFunctionDefinitionVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetFunctionDefinitionVersionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves information about a group.</p>
-    fn get_group(&self, input: &GetGroupRequest) -> Result<GetGroupResponse, GetGroupError> {
+    fn get_group(&self, input: &GetGroupRequest) -> RusotoFuture<GetGroupResponse, GetGroupError> {
         let request_uri = format!("/greengrass/groups/{group_id}", group_id = input.group_id);
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GetGroupResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetGroupResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetGroupError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetGroupError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retreives the CA associated with a group. Returns the public key of the CA.</p>
     fn get_group_certificate_authority(
         &self,
         input: &GetGroupCertificateAuthorityRequest,
-    ) -> Result<GetGroupCertificateAuthorityResponse, GetGroupCertificateAuthorityError> {
+    ) -> RusotoFuture<GetGroupCertificateAuthorityResponse, GetGroupCertificateAuthorityError> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/certificateauthorities/{certificate_authority_id}",
             certificate_authority_id = input.certificate_authority_id,
@@ -10693,40 +10713,40 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GetGroupCertificateAuthorityResponse>(
+                        &body,
+                    ).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<GetGroupCertificateAuthorityResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetGroupCertificateAuthorityError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetGroupCertificateAuthorityError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves the current configuration for the CA used by the group.</p>
     fn get_group_certificate_configuration(
         &self,
         input: &GetGroupCertificateConfigurationRequest,
-    ) -> Result<GetGroupCertificateConfigurationResponse, GetGroupCertificateConfigurationError>
+    ) -> RusotoFuture<GetGroupCertificateConfigurationResponse, GetGroupCertificateConfigurationError>
     {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/certificateauthorities/configuration/expiry",
@@ -10736,41 +10756,40 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetGroupCertificateConfigurationResponse>(&body)
+                            .unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetGroupCertificateConfigurationResponse>(
-                    &body,
-                ).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetGroupCertificateConfigurationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetGroupCertificateConfigurationError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves information about a group version.</p>
     fn get_group_version(
         &self,
         input: &GetGroupVersionRequest,
-    ) -> Result<GetGroupVersionResponse, GetGroupVersionError> {
+    ) -> RusotoFuture<GetGroupVersionResponse, GetGroupVersionError> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/versions/{group_version_id}",
             group_id = input.group_id,
@@ -10780,39 +10799,38 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GetGroupVersionResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetGroupVersionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetGroupVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetGroupVersionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves information about a logger definition.</p>
     fn get_logger_definition(
         &self,
         input: &GetLoggerDefinitionRequest,
-    ) -> Result<GetLoggerDefinitionResponse, GetLoggerDefinitionError> {
+    ) -> RusotoFuture<GetLoggerDefinitionResponse, GetLoggerDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/loggers/{logger_definition_id}",
             logger_definition_id = input.logger_definition_id
@@ -10821,78 +10839,78 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetLoggerDefinitionResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetLoggerDefinitionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetLoggerDefinitionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetLoggerDefinitionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves information about a logger definition version.</p>
     fn get_logger_definition_version(
         &self,
         input: &GetLoggerDefinitionVersionRequest,
-    ) -> Result<GetLoggerDefinitionVersionResponse, GetLoggerDefinitionVersionError> {
+    ) -> RusotoFuture<GetLoggerDefinitionVersionResponse, GetLoggerDefinitionVersionError> {
         let request_uri = format!("/greengrass/definition/loggers/{logger_definition_id}/versions/{logger_definition_version_id}", logger_definition_id = input.logger_definition_id, logger_definition_version_id = input.logger_definition_version_id);
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GetLoggerDefinitionVersionResponse>(
+                        &body,
+                    ).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<GetLoggerDefinitionVersionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetLoggerDefinitionVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetLoggerDefinitionVersionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves information about a resource definition, such as its creation time and latest version.</p>
     fn get_resource_definition(
         &self,
         input: &GetResourceDefinitionRequest,
-    ) -> Result<GetResourceDefinitionResponse, GetResourceDefinitionError> {
+    ) -> RusotoFuture<GetResourceDefinitionResponse, GetResourceDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/resources/{resource_definition_id}",
             resource_definition_id = input.resource_definition_id
@@ -10901,117 +10919,115 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetResourceDefinitionResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<GetResourceDefinitionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetResourceDefinitionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetResourceDefinitionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves information about a resource definition version, such as which resources are included in the version.</p>
     fn get_resource_definition_version(
         &self,
         input: &GetResourceDefinitionVersionRequest,
-    ) -> Result<GetResourceDefinitionVersionResponse, GetResourceDefinitionVersionError> {
+    ) -> RusotoFuture<GetResourceDefinitionVersionResponse, GetResourceDefinitionVersionError> {
         let request_uri = format!("/greengrass/definition/resources/{resource_definition_id}/versions/{resource_definition_version_id}", resource_definition_id = input.resource_definition_id, resource_definition_version_id = input.resource_definition_version_id);
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GetResourceDefinitionVersionResponse>(
+                        &body,
+                    ).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<GetResourceDefinitionVersionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetResourceDefinitionVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetResourceDefinitionVersionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves the service role that is attached to the account.</p>
     fn get_service_role_for_account(
         &self,
-    ) -> Result<GetServiceRoleForAccountResponse, GetServiceRoleForAccountError> {
+    ) -> RusotoFuture<GetServiceRoleForAccountResponse, GetServiceRoleForAccountError> {
         let request_uri = "/greengrass/servicerole";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetServiceRoleForAccountResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<GetServiceRoleForAccountResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetServiceRoleForAccountError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetServiceRoleForAccountError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves information about a subscription definition.</p>
     fn get_subscription_definition(
         &self,
         input: &GetSubscriptionDefinitionRequest,
-    ) -> Result<GetSubscriptionDefinitionResponse, GetSubscriptionDefinitionError> {
+    ) -> RusotoFuture<GetSubscriptionDefinitionResponse, GetSubscriptionDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/subscriptions/{subscription_definition_id}",
             subscription_definition_id = input.subscription_definition_id
@@ -11020,81 +11036,79 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetSubscriptionDefinitionResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<GetSubscriptionDefinitionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetSubscriptionDefinitionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetSubscriptionDefinitionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves information about a subscription definition version.</p>
     fn get_subscription_definition_version(
         &self,
         input: &GetSubscriptionDefinitionVersionRequest,
-    ) -> Result<GetSubscriptionDefinitionVersionResponse, GetSubscriptionDefinitionVersionError>
+    ) -> RusotoFuture<GetSubscriptionDefinitionVersionResponse, GetSubscriptionDefinitionVersionError>
     {
         let request_uri = format!("/greengrass/definition/subscriptions/{subscription_definition_id}/versions/{subscription_definition_version_id}", subscription_definition_id = input.subscription_definition_id, subscription_definition_version_id = input.subscription_definition_version_id);
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetSubscriptionDefinitionVersionResponse>(&body)
+                            .unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetSubscriptionDefinitionVersionResponse>(
-                    &body,
-                ).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetSubscriptionDefinitionVersionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetSubscriptionDefinitionVersionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists versions of a core definition.</p>
     fn list_core_definition_versions(
         &self,
         input: &ListCoreDefinitionVersionsRequest,
-    ) -> Result<ListCoreDefinitionVersionsResponse, ListCoreDefinitionVersionsError> {
+    ) -> RusotoFuture<ListCoreDefinitionVersionsResponse, ListCoreDefinitionVersionsError> {
         let request_uri = format!(
             "/greengrass/definition/cores/{core_definition_id}/versions",
             core_definition_id = input.core_definition_id
@@ -11112,40 +11126,40 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListCoreDefinitionVersionsResponse>(
+                        &body,
+                    ).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<ListCoreDefinitionVersionsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListCoreDefinitionVersionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListCoreDefinitionVersionsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves a list of core definitions.</p>
     fn list_core_definitions(
         &self,
         input: &ListCoreDefinitionsRequest,
-    ) -> Result<ListCoreDefinitionsResponse, ListCoreDefinitionsError> {
+    ) -> RusotoFuture<ListCoreDefinitionsResponse, ListCoreDefinitionsError> {
         let request_uri = "/greengrass/definition/cores";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -11160,39 +11174,39 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListCoreDefinitionsResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListCoreDefinitionsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListCoreDefinitionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListCoreDefinitionsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns a history of deployments for the group.</p>
     fn list_deployments(
         &self,
         input: &ListDeploymentsRequest,
-    ) -> Result<ListDeploymentsResponse, ListDeploymentsError> {
+    ) -> RusotoFuture<ListDeploymentsResponse, ListDeploymentsError> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/deployments",
             group_id = input.group_id
@@ -11210,39 +11224,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListDeploymentsResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListDeploymentsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListDeploymentsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListDeploymentsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists the versions of a device definition.</p>
     fn list_device_definition_versions(
         &self,
         input: &ListDeviceDefinitionVersionsRequest,
-    ) -> Result<ListDeviceDefinitionVersionsResponse, ListDeviceDefinitionVersionsError> {
+    ) -> RusotoFuture<ListDeviceDefinitionVersionsResponse, ListDeviceDefinitionVersionsError> {
         let request_uri = format!(
             "/greengrass/definition/devices/{device_definition_id}/versions",
             device_definition_id = input.device_definition_id
@@ -11260,40 +11273,40 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListDeviceDefinitionVersionsResponse>(
+                        &body,
+                    ).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<ListDeviceDefinitionVersionsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListDeviceDefinitionVersionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListDeviceDefinitionVersionsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves a list of device definitions.</p>
     fn list_device_definitions(
         &self,
         input: &ListDeviceDefinitionsRequest,
-    ) -> Result<ListDeviceDefinitionsResponse, ListDeviceDefinitionsError> {
+    ) -> RusotoFuture<ListDeviceDefinitionsResponse, ListDeviceDefinitionsError> {
         let request_uri = "/greengrass/definition/devices";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -11308,40 +11321,40 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListDeviceDefinitionsResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<ListDeviceDefinitionsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListDeviceDefinitionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListDeviceDefinitionsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists the versions of a Lambda function definition.</p>
     fn list_function_definition_versions(
         &self,
         input: &ListFunctionDefinitionVersionsRequest,
-    ) -> Result<ListFunctionDefinitionVersionsResponse, ListFunctionDefinitionVersionsError> {
+    ) -> RusotoFuture<ListFunctionDefinitionVersionsResponse, ListFunctionDefinitionVersionsError>
+    {
         let request_uri = format!(
             "/greengrass/definition/functions/{function_definition_id}/versions",
             function_definition_id = input.function_definition_id
@@ -11359,41 +11372,40 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListFunctionDefinitionVersionsResponse>(
+                        &body,
+                    ).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListFunctionDefinitionVersionsResponse>(
-                    &body,
-                ).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListFunctionDefinitionVersionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListFunctionDefinitionVersionsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves a list of Lambda function definitions.</p>
     fn list_function_definitions(
         &self,
         input: &ListFunctionDefinitionsRequest,
-    ) -> Result<ListFunctionDefinitionsResponse, ListFunctionDefinitionsError> {
+    ) -> RusotoFuture<ListFunctionDefinitionsResponse, ListFunctionDefinitionsError> {
         let request_uri = "/greengrass/definition/functions";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -11408,40 +11420,40 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListFunctionDefinitionsResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<ListFunctionDefinitionsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListFunctionDefinitionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListFunctionDefinitionsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves the current CAs for a group.</p>
     fn list_group_certificate_authorities(
         &self,
         input: &ListGroupCertificateAuthoritiesRequest,
-    ) -> Result<ListGroupCertificateAuthoritiesResponse, ListGroupCertificateAuthoritiesError> {
+    ) -> RusotoFuture<ListGroupCertificateAuthoritiesResponse, ListGroupCertificateAuthoritiesError>
+    {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/certificateauthorities",
             group_id = input.group_id
@@ -11450,41 +11462,40 @@ where
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListGroupCertificateAuthoritiesResponse>(&body)
+                            .unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListGroupCertificateAuthoritiesResponse>(
-                    &body,
-                ).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListGroupCertificateAuthoritiesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListGroupCertificateAuthoritiesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>List the versions of a group.</p>
     fn list_group_versions(
         &self,
         input: &ListGroupVersionsRequest,
-    ) -> Result<ListGroupVersionsResponse, ListGroupVersionsError> {
+    ) -> RusotoFuture<ListGroupVersionsResponse, ListGroupVersionsError> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/versions",
             group_id = input.group_id
@@ -11502,39 +11513,39 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListGroupVersionsResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListGroupVersionsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListGroupVersionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListGroupVersionsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves a list of groups.</p>
     fn list_groups(
         &self,
         input: &ListGroupsRequest,
-    ) -> Result<ListGroupsResponse, ListGroupsError> {
+    ) -> RusotoFuture<ListGroupsResponse, ListGroupsError> {
         let request_uri = "/greengrass/groups";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -11549,39 +11560,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListGroupsResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListGroupsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListGroupsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListGroupsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists the versions of a logger definition.</p>
     fn list_logger_definition_versions(
         &self,
         input: &ListLoggerDefinitionVersionsRequest,
-    ) -> Result<ListLoggerDefinitionVersionsResponse, ListLoggerDefinitionVersionsError> {
+    ) -> RusotoFuture<ListLoggerDefinitionVersionsResponse, ListLoggerDefinitionVersionsError> {
         let request_uri = format!(
             "/greengrass/definition/loggers/{logger_definition_id}/versions",
             logger_definition_id = input.logger_definition_id
@@ -11599,40 +11609,40 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListLoggerDefinitionVersionsResponse>(
+                        &body,
+                    ).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<ListLoggerDefinitionVersionsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListLoggerDefinitionVersionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListLoggerDefinitionVersionsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves a list of logger definitions.</p>
     fn list_logger_definitions(
         &self,
         input: &ListLoggerDefinitionsRequest,
-    ) -> Result<ListLoggerDefinitionsResponse, ListLoggerDefinitionsError> {
+    ) -> RusotoFuture<ListLoggerDefinitionsResponse, ListLoggerDefinitionsError> {
         let request_uri = "/greengrass/definition/loggers";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -11647,40 +11657,40 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListLoggerDefinitionsResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<ListLoggerDefinitionsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListLoggerDefinitionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListLoggerDefinitionsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists the versions of a resource definition.</p>
     fn list_resource_definition_versions(
         &self,
         input: &ListResourceDefinitionVersionsRequest,
-    ) -> Result<ListResourceDefinitionVersionsResponse, ListResourceDefinitionVersionsError> {
+    ) -> RusotoFuture<ListResourceDefinitionVersionsResponse, ListResourceDefinitionVersionsError>
+    {
         let request_uri = format!(
             "/greengrass/definition/resources/{resource_definition_id}/versions",
             resource_definition_id = input.resource_definition_id
@@ -11698,41 +11708,40 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListResourceDefinitionVersionsResponse>(
+                        &body,
+                    ).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListResourceDefinitionVersionsResponse>(
-                    &body,
-                ).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListResourceDefinitionVersionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListResourceDefinitionVersionsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves a list of resource definitions.</p>
     fn list_resource_definitions(
         &self,
         input: &ListResourceDefinitionsRequest,
-    ) -> Result<ListResourceDefinitionsResponse, ListResourceDefinitionsError> {
+    ) -> RusotoFuture<ListResourceDefinitionsResponse, ListResourceDefinitionsError> {
         let request_uri = "/greengrass/definition/resources";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -11747,41 +11756,42 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListResourceDefinitionsResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<ListResourceDefinitionsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListResourceDefinitionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListResourceDefinitionsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists the versions of a subscription definition.</p>
     fn list_subscription_definition_versions(
         &self,
         input: &ListSubscriptionDefinitionVersionsRequest,
-    ) -> Result<ListSubscriptionDefinitionVersionsResponse, ListSubscriptionDefinitionVersionsError>
-    {
+    ) -> RusotoFuture<
+        ListSubscriptionDefinitionVersionsResponse,
+        ListSubscriptionDefinitionVersionsError,
+    > {
         let request_uri = format!(
             "/greengrass/definition/subscriptions/{subscription_definition_id}/versions",
             subscription_definition_id = input.subscription_definition_id
@@ -11799,41 +11809,40 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListSubscriptionDefinitionVersionsResponse>(&body)
+                            .unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListSubscriptionDefinitionVersionsResponse>(
-                    &body,
-                ).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListSubscriptionDefinitionVersionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListSubscriptionDefinitionVersionsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves a list of subscription definitions.</p>
     fn list_subscription_definitions(
         &self,
         input: &ListSubscriptionDefinitionsRequest,
-    ) -> Result<ListSubscriptionDefinitionsResponse, ListSubscriptionDefinitionsError> {
+    ) -> RusotoFuture<ListSubscriptionDefinitionsResponse, ListSubscriptionDefinitionsError> {
         let request_uri = "/greengrass/definition/subscriptions";
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
@@ -11848,40 +11857,40 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListSubscriptionDefinitionsResponse>(
+                        &body,
+                    ).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<ListSubscriptionDefinitionsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListSubscriptionDefinitionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListSubscriptionDefinitionsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Resets a group&#39;s deployments.</p>
     fn reset_deployments(
         &self,
         input: &ResetDeploymentsRequest,
-    ) -> Result<ResetDeploymentsResponse, ResetDeploymentsError> {
+    ) -> RusotoFuture<ResetDeploymentsResponse, ResetDeploymentsError> {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/deployments/$reset",
             group_id = input.group_id
@@ -11897,39 +11906,38 @@ where
             request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
         }
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ResetDeploymentsResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ResetDeploymentsResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ResetDeploymentsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ResetDeploymentsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates the connectivity information for the core. Any devices that belong to the group which has this core will receive this information in order to find the location of the core and connect to it.</p>
     fn update_connectivity_info(
         &self,
         input: &UpdateConnectivityInfoRequest,
-    ) -> Result<UpdateConnectivityInfoResponse, UpdateConnectivityInfoError> {
+    ) -> RusotoFuture<UpdateConnectivityInfoResponse, UpdateConnectivityInfoError> {
         let request_uri = format!(
             "/greengrass/things/{thing_name}/connectivityInfo",
             thing_name = input.thing_name
@@ -11941,40 +11949,39 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<UpdateConnectivityInfoResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<UpdateConnectivityInfoResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateConnectivityInfoError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateConnectivityInfoError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates a core definition.</p>
     fn update_core_definition(
         &self,
         input: &UpdateCoreDefinitionRequest,
-    ) -> Result<UpdateCoreDefinitionResponse, UpdateCoreDefinitionError> {
+    ) -> RusotoFuture<UpdateCoreDefinitionResponse, UpdateCoreDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/cores/{core_definition_id}",
             core_definition_id = input.core_definition_id
@@ -11986,39 +11993,39 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<UpdateCoreDefinitionResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<UpdateCoreDefinitionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateCoreDefinitionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateCoreDefinitionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates a device definition.</p>
     fn update_device_definition(
         &self,
         input: &UpdateDeviceDefinitionRequest,
-    ) -> Result<UpdateDeviceDefinitionResponse, UpdateDeviceDefinitionError> {
+    ) -> RusotoFuture<UpdateDeviceDefinitionResponse, UpdateDeviceDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/devices/{device_definition_id}",
             device_definition_id = input.device_definition_id
@@ -12030,40 +12037,39 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<UpdateDeviceDefinitionResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<UpdateDeviceDefinitionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateDeviceDefinitionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateDeviceDefinitionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates a Lambda function definition.</p>
     fn update_function_definition(
         &self,
         input: &UpdateFunctionDefinitionRequest,
-    ) -> Result<UpdateFunctionDefinitionResponse, UpdateFunctionDefinitionError> {
+    ) -> RusotoFuture<UpdateFunctionDefinitionResponse, UpdateFunctionDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/functions/{function_definition_id}",
             function_definition_id = input.function_definition_id
@@ -12075,40 +12081,39 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<UpdateFunctionDefinitionResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<UpdateFunctionDefinitionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateFunctionDefinitionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateFunctionDefinitionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates a group.</p>
     fn update_group(
         &self,
         input: &UpdateGroupRequest,
-    ) -> Result<UpdateGroupResponse, UpdateGroupError> {
+    ) -> RusotoFuture<UpdateGroupResponse, UpdateGroupError> {
         let request_uri = format!("/greengrass/groups/{group_id}", group_id = input.group_id);
 
         let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
@@ -12117,40 +12122,41 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<UpdateGroupResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<UpdateGroupResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateGroupError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateGroupError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates the Cert expiry time for a group.</p>
     fn update_group_certificate_configuration(
         &self,
         input: &UpdateGroupCertificateConfigurationRequest,
-    ) -> Result<UpdateGroupCertificateConfigurationResponse, UpdateGroupCertificateConfigurationError>
-    {
+    ) -> RusotoFuture<
+        UpdateGroupCertificateConfigurationResponse,
+        UpdateGroupCertificateConfigurationError,
+    > {
         let request_uri = format!(
             "/greengrass/groups/{group_id}/certificateauthorities/configuration/expiry",
             group_id = input.group_id
@@ -12162,41 +12168,41 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
-
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<UpdateGroupCertificateConfigurationResponse>(&body)
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<
+                        UpdateGroupCertificateConfigurationResponse,
+                    >(&body)
                         .unwrap();
 
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateGroupCertificateConfigurationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateGroupCertificateConfigurationError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates a logger definition.</p>
     fn update_logger_definition(
         &self,
         input: &UpdateLoggerDefinitionRequest,
-    ) -> Result<UpdateLoggerDefinitionResponse, UpdateLoggerDefinitionError> {
+    ) -> RusotoFuture<UpdateLoggerDefinitionResponse, UpdateLoggerDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/loggers/{logger_definition_id}",
             logger_definition_id = input.logger_definition_id
@@ -12208,40 +12214,39 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<UpdateLoggerDefinitionResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<UpdateLoggerDefinitionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateLoggerDefinitionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateLoggerDefinitionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates a resource definition.</p>
     fn update_resource_definition(
         &self,
         input: &UpdateResourceDefinitionRequest,
-    ) -> Result<UpdateResourceDefinitionResponse, UpdateResourceDefinitionError> {
+    ) -> RusotoFuture<UpdateResourceDefinitionResponse, UpdateResourceDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/resources/{resource_definition_id}",
             resource_definition_id = input.resource_definition_id
@@ -12253,40 +12258,39 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<UpdateResourceDefinitionResponse>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<UpdateResourceDefinitionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateResourceDefinitionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateResourceDefinitionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates a subscription definition.</p>
     fn update_subscription_definition(
         &self,
         input: &UpdateSubscriptionDefinitionRequest,
-    ) -> Result<UpdateSubscriptionDefinitionResponse, UpdateSubscriptionDefinitionError> {
+    ) -> RusotoFuture<UpdateSubscriptionDefinitionResponse, UpdateSubscriptionDefinitionError> {
         let request_uri = format!(
             "/greengrass/definition/subscriptions/{subscription_definition_id}",
             subscription_definition_id = input.subscription_definition_id
@@ -12298,33 +12302,33 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<UpdateSubscriptionDefinitionResponse>(
+                        &body,
+                    ).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result =
-                    serde_json::from_slice::<UpdateSubscriptionDefinitionResponse>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateSubscriptionDefinitionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateSubscriptionDefinitionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 }
 

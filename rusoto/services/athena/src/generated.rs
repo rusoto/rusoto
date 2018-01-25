@@ -10,16 +10,19 @@
 //
 // =================================================================
 
+use std::error::Error;
+use std::fmt;
+use std::io;
+
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+use futures::Future;
+use hyper::StatusCode;
+use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::{ClientInner, RusotoFuture};
 
-use std::fmt;
-use std::error::Error;
-use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -1428,77 +1431,91 @@ pub trait Athena {
     fn batch_get_named_query(
         &self,
         input: &BatchGetNamedQueryInput,
-    ) -> Result<BatchGetNamedQueryOutput, BatchGetNamedQueryError>;
+    ) -> RusotoFuture<BatchGetNamedQueryOutput, BatchGetNamedQueryError>;
 
     /// <p>Returns the details of a single query execution or a list of up to 50 query executions, which you provide as an array of query execution ID strings. To get a list of query execution IDs, use <a>ListQueryExecutions</a>. Query executions are different from named (saved) queries. Use <a>BatchGetNamedQuery</a> to get details about named queries.</p>
     fn batch_get_query_execution(
         &self,
         input: &BatchGetQueryExecutionInput,
-    ) -> Result<BatchGetQueryExecutionOutput, BatchGetQueryExecutionError>;
+    ) -> RusotoFuture<BatchGetQueryExecutionOutput, BatchGetQueryExecutionError>;
 
     /// <p>Creates a named query.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn create_named_query(
         &self,
         input: &CreateNamedQueryInput,
-    ) -> Result<CreateNamedQueryOutput, CreateNamedQueryError>;
+    ) -> RusotoFuture<CreateNamedQueryOutput, CreateNamedQueryError>;
 
     /// <p>Deletes a named query.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn delete_named_query(
         &self,
         input: &DeleteNamedQueryInput,
-    ) -> Result<DeleteNamedQueryOutput, DeleteNamedQueryError>;
+    ) -> RusotoFuture<DeleteNamedQueryOutput, DeleteNamedQueryError>;
 
     /// <p>Returns information about a single query.</p>
     fn get_named_query(
         &self,
         input: &GetNamedQueryInput,
-    ) -> Result<GetNamedQueryOutput, GetNamedQueryError>;
+    ) -> RusotoFuture<GetNamedQueryOutput, GetNamedQueryError>;
 
     /// <p>Returns information about a single execution of a query. Each time a query executes, information about the query execution is saved with a unique ID.</p>
     fn get_query_execution(
         &self,
         input: &GetQueryExecutionInput,
-    ) -> Result<GetQueryExecutionOutput, GetQueryExecutionError>;
+    ) -> RusotoFuture<GetQueryExecutionOutput, GetQueryExecutionError>;
 
     /// <p>Returns the results of a single query execution specified by <code>QueryExecutionId</code>. This request does not execute the query but returns results. Use <a>StartQueryExecution</a> to run a query.</p>
     fn get_query_results(
         &self,
         input: &GetQueryResultsInput,
-    ) -> Result<GetQueryResultsOutput, GetQueryResultsError>;
+    ) -> RusotoFuture<GetQueryResultsOutput, GetQueryResultsError>;
 
     /// <p>Provides a list of all available query IDs.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn list_named_queries(
         &self,
         input: &ListNamedQueriesInput,
-    ) -> Result<ListNamedQueriesOutput, ListNamedQueriesError>;
+    ) -> RusotoFuture<ListNamedQueriesOutput, ListNamedQueriesError>;
 
     /// <p>Provides a list of all available query execution IDs.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn list_query_executions(
         &self,
         input: &ListQueryExecutionsInput,
-    ) -> Result<ListQueryExecutionsOutput, ListQueryExecutionsError>;
+    ) -> RusotoFuture<ListQueryExecutionsOutput, ListQueryExecutionsError>;
 
     /// <p>Runs (executes) the SQL query statements contained in the <code>Query</code> string.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn start_query_execution(
         &self,
         input: &StartQueryExecutionInput,
-    ) -> Result<StartQueryExecutionOutput, StartQueryExecutionError>;
+    ) -> RusotoFuture<StartQueryExecutionOutput, StartQueryExecutionError>;
 
     /// <p>Stops a query execution.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn stop_query_execution(
         &self,
         input: &StopQueryExecutionInput,
-    ) -> Result<StopQueryExecutionOutput, StopQueryExecutionError>;
+    ) -> RusotoFuture<StopQueryExecutionOutput, StopQueryExecutionError>;
 }
 /// A client for the Amazon Athena API.
-pub struct AthenaClient<P, D>
+pub struct AthenaClient<P = CredentialsProvider, D = RequestDispatcher>
 where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    credentials_provider: P,
+    inner: ClientInner<P, D>,
     region: region::Region,
-    dispatcher: D,
+}
+
+impl AthenaClient {
+    /// Creates a simple client backed by an implicit event loop.
+    ///
+    /// The client will use the default credentials provider and tls client.
+    ///
+    /// See the `rusoto_core::reactor` module for more details.
+    pub fn simple(region: region::Region) -> AthenaClient {
+        AthenaClient::new(
+            RequestDispatcher::default(),
+            CredentialsProvider::default(),
+            region,
+        )
+    }
 }
 
 impl<P, D> AthenaClient<P, D>
@@ -1508,23 +1525,22 @@ where
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         AthenaClient {
-            credentials_provider: credentials_provider,
+            inner: ClientInner::new(credentials_provider, request_dispatcher),
             region: region,
-            dispatcher: request_dispatcher,
         }
     }
 }
 
 impl<P, D> Athena for AthenaClient<P, D>
 where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
+    P: ProvideAwsCredentials + 'static,
+    D: DispatchSignedRequest + 'static,
 {
     /// <p>Returns the details of a single named query or a list of up to 50 queries, which you provide as an array of query ID strings. Use <a>ListNamedQueries</a> to get the list of named query IDs. If information could not be retrieved for a submitted query ID, information about the query ID submitted is listed under <a>UnprocessedNamedQueryId</a>. Named queries are different from executed queries. Use <a>BatchGetQueryExecution</a> to get details about each unique query execution, and <a>ListQueryExecutions</a> to get a list of query execution IDs.</p>
     fn batch_get_named_query(
         &self,
         input: &BatchGetNamedQueryInput,
-    ) -> Result<BatchGetNamedQueryOutput, BatchGetNamedQueryError> {
+    ) -> RusotoFuture<BatchGetNamedQueryOutput, BatchGetNamedQueryError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1532,33 +1548,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<BatchGetNamedQueryOutput>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<BatchGetNamedQueryOutput>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(BatchGetNamedQueryError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(BatchGetNamedQueryError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns the details of a single query execution or a list of up to 50 query executions, which you provide as an array of query execution ID strings. To get a list of query execution IDs, use <a>ListQueryExecutions</a>. Query executions are different from named (saved) queries. Use <a>BatchGetNamedQuery</a> to get details about named queries.</p>
     fn batch_get_query_execution(
         &self,
         input: &BatchGetQueryExecutionInput,
-    ) -> Result<BatchGetQueryExecutionOutput, BatchGetQueryExecutionError> {
+    ) -> RusotoFuture<BatchGetQueryExecutionOutput, BatchGetQueryExecutionError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1566,33 +1579,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<BatchGetQueryExecutionOutput>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<BatchGetQueryExecutionOutput>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(BatchGetQueryExecutionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(BatchGetQueryExecutionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a named query.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn create_named_query(
         &self,
         input: &CreateNamedQueryInput,
-    ) -> Result<CreateNamedQueryOutput, CreateNamedQueryError> {
+    ) -> RusotoFuture<CreateNamedQueryOutput, CreateNamedQueryError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1600,33 +1610,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateNamedQueryOutput>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<CreateNamedQueryOutput>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateNamedQueryError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateNamedQueryError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a named query.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn delete_named_query(
         &self,
         input: &DeleteNamedQueryInput,
-    ) -> Result<DeleteNamedQueryOutput, DeleteNamedQueryError> {
+    ) -> RusotoFuture<DeleteNamedQueryOutput, DeleteNamedQueryError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1634,33 +1641,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteNamedQueryOutput>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<DeleteNamedQueryOutput>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteNamedQueryError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteNamedQueryError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns information about a single query.</p>
     fn get_named_query(
         &self,
         input: &GetNamedQueryInput,
-    ) -> Result<GetNamedQueryOutput, GetNamedQueryError> {
+    ) -> RusotoFuture<GetNamedQueryOutput, GetNamedQueryError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1668,33 +1672,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetNamedQueryOutput>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<GetNamedQueryOutput>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetNamedQueryError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetNamedQueryError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns information about a single execution of a query. Each time a query executes, information about the query execution is saved with a unique ID.</p>
     fn get_query_execution(
         &self,
         input: &GetQueryExecutionInput,
-    ) -> Result<GetQueryExecutionOutput, GetQueryExecutionError> {
+    ) -> RusotoFuture<GetQueryExecutionOutput, GetQueryExecutionError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1702,33 +1703,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetQueryExecutionOutput>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<GetQueryExecutionOutput>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetQueryExecutionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetQueryExecutionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns the results of a single query execution specified by <code>QueryExecutionId</code>. This request does not execute the query but returns results. Use <a>StartQueryExecution</a> to run a query.</p>
     fn get_query_results(
         &self,
         input: &GetQueryResultsInput,
-    ) -> Result<GetQueryResultsOutput, GetQueryResultsError> {
+    ) -> RusotoFuture<GetQueryResultsOutput, GetQueryResultsError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1736,33 +1734,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetQueryResultsOutput>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<GetQueryResultsOutput>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetQueryResultsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetQueryResultsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Provides a list of all available query IDs.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn list_named_queries(
         &self,
         input: &ListNamedQueriesInput,
-    ) -> Result<ListNamedQueriesOutput, ListNamedQueriesError> {
+    ) -> RusotoFuture<ListNamedQueriesOutput, ListNamedQueriesError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1770,33 +1765,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListNamedQueriesOutput>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<ListNamedQueriesOutput>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListNamedQueriesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListNamedQueriesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Provides a list of all available query execution IDs.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn list_query_executions(
         &self,
         input: &ListQueryExecutionsInput,
-    ) -> Result<ListQueryExecutionsOutput, ListQueryExecutionsError> {
+    ) -> RusotoFuture<ListQueryExecutionsOutput, ListQueryExecutionsError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1804,33 +1796,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListQueryExecutionsOutput>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<ListQueryExecutionsOutput>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListQueryExecutionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListQueryExecutionsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Runs (executes) the SQL query statements contained in the <code>Query</code> string.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn start_query_execution(
         &self,
         input: &StartQueryExecutionInput,
-    ) -> Result<StartQueryExecutionOutput, StartQueryExecutionError> {
+    ) -> RusotoFuture<StartQueryExecutionOutput, StartQueryExecutionError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1838,33 +1827,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StartQueryExecutionOutput>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<StartQueryExecutionOutput>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(StartQueryExecutionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(StartQueryExecutionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Stops a query execution.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn stop_query_execution(
         &self,
         input: &StopQueryExecutionInput,
-    ) -> Result<StopQueryExecutionOutput, StopQueryExecutionError> {
+    ) -> RusotoFuture<StopQueryExecutionOutput, StopQueryExecutionError> {
         let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1872,26 +1858,23 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StopQueryExecutionOutput>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<StopQueryExecutionOutput>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(StopQueryExecutionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(StopQueryExecutionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 }
 

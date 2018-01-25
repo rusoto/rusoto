@@ -10,16 +10,19 @@
 //
 // =================================================================
 
+use std::error::Error;
+use std::fmt;
+use std::io;
+
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+use futures::Future;
+use hyper::StatusCode;
+use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::{ClientInner, RusotoFuture};
 
-use std::fmt;
-use std::error::Error;
-use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -803,41 +806,61 @@ pub trait Polly {
     fn delete_lexicon(
         &self,
         input: &DeleteLexiconInput,
-    ) -> Result<DeleteLexiconOutput, DeleteLexiconError>;
+    ) -> RusotoFuture<DeleteLexiconOutput, DeleteLexiconError>;
 
     /// <p>Returns the list of voices that are available for use when requesting speech synthesis. Each voice speaks a specified language, is either male or female, and is identified by an ID, which is the ASCII version of the voice name. </p> <p>When synthesizing speech ( <code>SynthesizeSpeech</code> ), you provide the voice ID for the voice you want from the list of voices returned by <code>DescribeVoices</code>.</p> <p>For example, you want your news reader application to read news in a specific language, but giving a user the option to choose the voice. Using the <code>DescribeVoices</code> operation you can provide the user with a list of available voices to select from.</p> <p> You can optionally specify a language code to filter the available voices. For example, if you specify <code>en-US</code>, the operation returns a list of all available US English voices. </p> <p>This operation requires permissions to perform the <code>polly:DescribeVoices</code> action.</p>
     fn describe_voices(
         &self,
         input: &DescribeVoicesInput,
-    ) -> Result<DescribeVoicesOutput, DescribeVoicesError>;
+    ) -> RusotoFuture<DescribeVoicesOutput, DescribeVoicesError>;
 
     /// <p>Returns the content of the specified pronunciation lexicon stored in an AWS Region. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
-    fn get_lexicon(&self, input: &GetLexiconInput) -> Result<GetLexiconOutput, GetLexiconError>;
+    fn get_lexicon(
+        &self,
+        input: &GetLexiconInput,
+    ) -> RusotoFuture<GetLexiconOutput, GetLexiconError>;
 
     /// <p>Returns a list of pronunciation lexicons stored in an AWS Region. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
     fn list_lexicons(
         &self,
         input: &ListLexiconsInput,
-    ) -> Result<ListLexiconsOutput, ListLexiconsError>;
+    ) -> RusotoFuture<ListLexiconsOutput, ListLexiconsError>;
 
     /// <p>Stores a pronunciation lexicon in an AWS Region. If a lexicon with the same name already exists in the region, it is overwritten by the new lexicon. Lexicon operations have eventual consistency, therefore, it might take some time before the lexicon is available to the SynthesizeSpeech operation.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
-    fn put_lexicon(&self, input: &PutLexiconInput) -> Result<PutLexiconOutput, PutLexiconError>;
+    fn put_lexicon(
+        &self,
+        input: &PutLexiconInput,
+    ) -> RusotoFuture<PutLexiconOutput, PutLexiconError>;
 
     /// <p>Synthesizes UTF-8 input, plain text or SSML, to a stream of bytes. SSML input must be valid, well-formed SSML. Some alphabets might not be available with all the voices (for example, Cyrillic might not be read at all by English voices) unless phoneme mapping is used. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/how-text-to-speech-works.html">How it Works</a>.</p>
     fn synthesize_speech(
         &self,
         input: &SynthesizeSpeechInput,
-    ) -> Result<SynthesizeSpeechOutput, SynthesizeSpeechError>;
+    ) -> RusotoFuture<SynthesizeSpeechOutput, SynthesizeSpeechError>;
 }
 /// A client for the Amazon Polly API.
-pub struct PollyClient<P, D>
+pub struct PollyClient<P = CredentialsProvider, D = RequestDispatcher>
 where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    credentials_provider: P,
+    inner: ClientInner<P, D>,
     region: region::Region,
-    dispatcher: D,
+}
+
+impl PollyClient {
+    /// Creates a simple client backed by an implicit event loop.
+    ///
+    /// The client will use the default credentials provider and tls client.
+    ///
+    /// See the `rusoto_core::reactor` module for more details.
+    pub fn simple(region: region::Region) -> PollyClient {
+        PollyClient::new(
+            RequestDispatcher::default(),
+            CredentialsProvider::default(),
+            region,
+        )
+    }
 }
 
 impl<P, D> PollyClient<P, D>
@@ -847,61 +870,59 @@ where
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         PollyClient {
-            credentials_provider: credentials_provider,
+            inner: ClientInner::new(credentials_provider, request_dispatcher),
             region: region,
-            dispatcher: request_dispatcher,
         }
     }
 }
 
 impl<P, D> Polly for PollyClient<P, D>
 where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
+    P: ProvideAwsCredentials + 'static,
+    D: DispatchSignedRequest + 'static,
 {
     /// <p>Deletes the specified pronunciation lexicon stored in an AWS Region. A lexicon which has been deleted is not available for speech synthesis, nor is it possible to retrieve it using either the <code>GetLexicon</code> or <code>ListLexicon</code> APIs.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
     fn delete_lexicon(
         &self,
         input: &DeleteLexiconInput,
-    ) -> Result<DeleteLexiconOutput, DeleteLexiconError> {
+    ) -> RusotoFuture<DeleteLexiconOutput, DeleteLexiconError> {
         let request_uri = format!("/v1/lexicons/{lexicon_name}", lexicon_name = input.name);
 
         let mut request = SignedRequest::new("DELETE", "polly", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DeleteLexiconOutput>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DeleteLexiconOutput>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteLexiconError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteLexiconError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns the list of voices that are available for use when requesting speech synthesis. Each voice speaks a specified language, is either male or female, and is identified by an ID, which is the ASCII version of the voice name. </p> <p>When synthesizing speech ( <code>SynthesizeSpeech</code> ), you provide the voice ID for the voice you want from the list of voices returned by <code>DescribeVoices</code>.</p> <p>For example, you want your news reader application to read news in a specific language, but giving a user the option to choose the voice. Using the <code>DescribeVoices</code> operation you can provide the user with a list of available voices to select from.</p> <p> You can optionally specify a language code to filter the available voices. For example, if you specify <code>en-US</code>, the operation returns a list of all available US English voices. </p> <p>This operation requires permissions to perform the <code>polly:DescribeVoices</code> action.</p>
     fn describe_voices(
         &self,
         input: &DescribeVoicesInput,
-    ) -> Result<DescribeVoicesOutput, DescribeVoicesError> {
+    ) -> RusotoFuture<DescribeVoicesOutput, DescribeVoicesError> {
         let request_uri = "/v1/voices";
 
         let mut request = SignedRequest::new("GET", "polly", &self.region, &request_uri);
@@ -916,74 +937,75 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DescribeVoicesOutput>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<DescribeVoicesOutput>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeVoicesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeVoicesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns the content of the specified pronunciation lexicon stored in an AWS Region. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
-    fn get_lexicon(&self, input: &GetLexiconInput) -> Result<GetLexiconOutput, GetLexiconError> {
+    fn get_lexicon(
+        &self,
+        input: &GetLexiconInput,
+    ) -> RusotoFuture<GetLexiconOutput, GetLexiconError> {
         let request_uri = format!("/v1/lexicons/{lexicon_name}", lexicon_name = input.name);
 
         let mut request = SignedRequest::new("GET", "polly", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GetLexiconOutput>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<GetLexiconOutput>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetLexiconError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetLexiconError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns a list of pronunciation lexicons stored in an AWS Region. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
     fn list_lexicons(
         &self,
         input: &ListLexiconsInput,
-    ) -> Result<ListLexiconsOutput, ListLexiconsError> {
+    ) -> RusotoFuture<ListLexiconsOutput, ListLexiconsError> {
         let request_uri = "/v1/lexicons";
 
         let mut request = SignedRequest::new("GET", "polly", &self.region, &request_uri);
@@ -995,36 +1017,38 @@ where
         }
         request.set_params(params);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListLexiconsOutput>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<ListLexiconsOutput>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListLexiconsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListLexiconsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Stores a pronunciation lexicon in an AWS Region. If a lexicon with the same name already exists in the region, it is overwritten by the new lexicon. Lexicon operations have eventual consistency, therefore, it might take some time before the lexicon is available to the SynthesizeSpeech operation.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/managing-lexicons.html">Managing Lexicons</a>.</p>
-    fn put_lexicon(&self, input: &PutLexiconInput) -> Result<PutLexiconOutput, PutLexiconError> {
+    fn put_lexicon(
+        &self,
+        input: &PutLexiconInput,
+    ) -> RusotoFuture<PutLexiconOutput, PutLexiconError> {
         let request_uri = format!("/v1/lexicons/{lexicon_name}", lexicon_name = input.name);
 
         let mut request = SignedRequest::new("PUT", "polly", &self.region, &request_uri);
@@ -1033,39 +1057,38 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+                    if body == b"{}" {
+                        body = b"null".to_vec();
+                    }
 
-                if body == b"{}" {
-                    body = b"null".to_vec();
-                }
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<PutLexiconOutput>(&body).unwrap();
 
-                debug!("Response body: {:?}", body);
-                debug!("Response status: {}", response.status);
-                let result = serde_json::from_slice::<PutLexiconOutput>(&body).unwrap();
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(PutLexiconError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutLexiconError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Synthesizes UTF-8 input, plain text or SSML, to a stream of bytes. SSML input must be valid, well-formed SSML. Some alphabets might not be available with all the voices (for example, Cyrillic might not be read at all by English voices) unless phoneme mapping is used. For more information, see <a href="http://docs.aws.amazon.com/polly/latest/dg/how-text-to-speech-works.html">How it Works</a>.</p>
     fn synthesize_speech(
         &self,
         input: &SynthesizeSpeechInput,
-    ) -> Result<SynthesizeSpeechOutput, SynthesizeSpeechError> {
+    ) -> RusotoFuture<SynthesizeSpeechOutput, SynthesizeSpeechError> {
         let request_uri = "/v1/speech";
 
         let mut request = SignedRequest::new("POST", "polly", &self.region, &request_uri);
@@ -1074,37 +1097,35 @@ where
         let encoded = Some(serde_json::to_vec(input).unwrap());
         request.set_payload(encoded);
 
-        request.sign_with_plus(&self.credentials_provider.credentials()?, true);
-        let mut response = self.dispatcher.dispatch(&request)?;
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    let mut result = SynthesizeSpeechOutput::default();
+                    result.audio_stream = Some(response.body);
 
-        match response.status {
-            StatusCode::Ok => {
-                let mut result = SynthesizeSpeechOutput::default();
+                    if let Some(content_type) = response.headers.get("Content-Type") {
+                        let value = content_type.to_owned();
+                        result.content_type = Some(value)
+                    };
+                    if let Some(request_characters) =
+                        response.headers.get("x-amzn-RequestCharacters")
+                    {
+                        let value = request_characters.to_owned();
+                        result.request_characters = Some(value.parse::<i64>().unwrap())
+                    };
 
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-
-                result.audio_stream = Some(body);
-
-                if let Some(content_type) = response.headers.get("Content-Type") {
-                    let value = content_type.to_owned();
-                    result.content_type = Some(value)
-                };
-                if let Some(request_characters) = response.headers.get("x-amzn-RequestCharacters") {
-                    let value = request_characters.to_owned();
-                    result.request_characters = Some(value.parse::<i64>().unwrap())
-                };
-
-                Ok(result)
+                    result
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(SynthesizeSpeechError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(SynthesizeSpeechError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 }
 

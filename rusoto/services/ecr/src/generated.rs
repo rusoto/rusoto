@@ -10,16 +10,19 @@
 //
 // =================================================================
 
+use std::error::Error;
+use std::fmt;
+use std::io;
+
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+use futures::Future;
+use hyper::StatusCode;
+use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::{ClientInner, RusotoFuture};
 
-use std::fmt;
-use std::error::Error;
-use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -3083,138 +3086,154 @@ pub trait Ecr {
     fn batch_check_layer_availability(
         &self,
         input: &BatchCheckLayerAvailabilityRequest,
-    ) -> Result<BatchCheckLayerAvailabilityResponse, BatchCheckLayerAvailabilityError>;
+    ) -> RusotoFuture<BatchCheckLayerAvailabilityResponse, BatchCheckLayerAvailabilityError>;
 
     /// <p>Deletes a list of specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p> <p>You can remove a tag from an image by specifying the image's tag in your request. When you remove the last tag from an image, the image is deleted from your repository.</p> <p>You can completely delete an image (and all of its tags) by specifying the image's digest in your request.</p>
     fn batch_delete_image(
         &self,
         input: &BatchDeleteImageRequest,
-    ) -> Result<BatchDeleteImageResponse, BatchDeleteImageError>;
+    ) -> RusotoFuture<BatchDeleteImageResponse, BatchDeleteImageError>;
 
     /// <p>Gets detailed information for specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p>
     fn batch_get_image(
         &self,
         input: &BatchGetImageRequest,
-    ) -> Result<BatchGetImageResponse, BatchGetImageError>;
+    ) -> RusotoFuture<BatchGetImageResponse, BatchGetImageError>;
 
     /// <p><p>Informs Amazon ECR that the image layer upload has completed for a specified registry, repository name, and upload ID. You can optionally provide a <code>sha256</code> digest of the image layer for data validation purposes.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn complete_layer_upload(
         &self,
         input: &CompleteLayerUploadRequest,
-    ) -> Result<CompleteLayerUploadResponse, CompleteLayerUploadError>;
+    ) -> RusotoFuture<CompleteLayerUploadResponse, CompleteLayerUploadError>;
 
     /// <p>Creates an image repository.</p>
     fn create_repository(
         &self,
         input: &CreateRepositoryRequest,
-    ) -> Result<CreateRepositoryResponse, CreateRepositoryError>;
+    ) -> RusotoFuture<CreateRepositoryResponse, CreateRepositoryError>;
 
     /// <p>Deletes the specified lifecycle policy.</p>
     fn delete_lifecycle_policy(
         &self,
         input: &DeleteLifecyclePolicyRequest,
-    ) -> Result<DeleteLifecyclePolicyResponse, DeleteLifecyclePolicyError>;
+    ) -> RusotoFuture<DeleteLifecyclePolicyResponse, DeleteLifecyclePolicyError>;
 
     /// <p>Deletes an existing image repository. If a repository contains images, you must use the <code>force</code> option to delete it.</p>
     fn delete_repository(
         &self,
         input: &DeleteRepositoryRequest,
-    ) -> Result<DeleteRepositoryResponse, DeleteRepositoryError>;
+    ) -> RusotoFuture<DeleteRepositoryResponse, DeleteRepositoryError>;
 
     /// <p>Deletes the repository policy from a specified repository.</p>
     fn delete_repository_policy(
         &self,
         input: &DeleteRepositoryPolicyRequest,
-    ) -> Result<DeleteRepositoryPolicyResponse, DeleteRepositoryPolicyError>;
+    ) -> RusotoFuture<DeleteRepositoryPolicyResponse, DeleteRepositoryPolicyError>;
 
     /// <p><p>Returns metadata about the images in a repository, including image size, image tags, and creation date.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note></p>
     fn describe_images(
         &self,
         input: &DescribeImagesRequest,
-    ) -> Result<DescribeImagesResponse, DescribeImagesError>;
+    ) -> RusotoFuture<DescribeImagesResponse, DescribeImagesError>;
 
     /// <p>Describes image repositories in a registry.</p>
     fn describe_repositories(
         &self,
         input: &DescribeRepositoriesRequest,
-    ) -> Result<DescribeRepositoriesResponse, DescribeRepositoriesError>;
+    ) -> RusotoFuture<DescribeRepositoriesResponse, DescribeRepositoriesError>;
 
     /// <p>Retrieves a token that is valid for a specified registry for 12 hours. This command allows you to use the <code>docker</code> CLI to push and pull images with Amazon ECR. If you do not specify a registry, the default registry is assumed.</p> <p>The <code>authorizationToken</code> returned for each registry specified is a base64 encoded string that can be decoded and used in a <code>docker login</code> command to authenticate to a registry. The AWS CLI offers an <code>aws ecr get-login</code> command that simplifies the login process.</p>
     fn get_authorization_token(
         &self,
         input: &GetAuthorizationTokenRequest,
-    ) -> Result<GetAuthorizationTokenResponse, GetAuthorizationTokenError>;
+    ) -> RusotoFuture<GetAuthorizationTokenResponse, GetAuthorizationTokenError>;
 
     /// <p><p>Retrieves the pre-signed Amazon S3 download URL corresponding to an image layer. You can only get URLs for image layers that are referenced in an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn get_download_url_for_layer(
         &self,
         input: &GetDownloadUrlForLayerRequest,
-    ) -> Result<GetDownloadUrlForLayerResponse, GetDownloadUrlForLayerError>;
+    ) -> RusotoFuture<GetDownloadUrlForLayerResponse, GetDownloadUrlForLayerError>;
 
     /// <p>Retrieves the specified lifecycle policy.</p>
     fn get_lifecycle_policy(
         &self,
         input: &GetLifecyclePolicyRequest,
-    ) -> Result<GetLifecyclePolicyResponse, GetLifecyclePolicyError>;
+    ) -> RusotoFuture<GetLifecyclePolicyResponse, GetLifecyclePolicyError>;
 
     /// <p>Retrieves the results of the specified lifecycle policy preview request.</p>
     fn get_lifecycle_policy_preview(
         &self,
         input: &GetLifecyclePolicyPreviewRequest,
-    ) -> Result<GetLifecyclePolicyPreviewResponse, GetLifecyclePolicyPreviewError>;
+    ) -> RusotoFuture<GetLifecyclePolicyPreviewResponse, GetLifecyclePolicyPreviewError>;
 
     /// <p>Retrieves the repository policy for a specified repository.</p>
     fn get_repository_policy(
         &self,
         input: &GetRepositoryPolicyRequest,
-    ) -> Result<GetRepositoryPolicyResponse, GetRepositoryPolicyError>;
+    ) -> RusotoFuture<GetRepositoryPolicyResponse, GetRepositoryPolicyError>;
 
     /// <p><p>Notify Amazon ECR that you intend to upload an image layer.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn initiate_layer_upload(
         &self,
         input: &InitiateLayerUploadRequest,
-    ) -> Result<InitiateLayerUploadResponse, InitiateLayerUploadError>;
+    ) -> RusotoFuture<InitiateLayerUploadResponse, InitiateLayerUploadError>;
 
     /// <p>Lists all the image IDs for a given repository.</p> <p>You can filter images based on whether or not they are tagged by setting the <code>tagStatus</code> parameter to <code>TAGGED</code> or <code>UNTAGGED</code>. For example, you can filter your results to return only <code>UNTAGGED</code> images and then pipe that result to a <a>BatchDeleteImage</a> operation to delete them. Or, you can filter your results to return only <code>TAGGED</code> images to list all of the tags in your repository.</p>
-    fn list_images(&self, input: &ListImagesRequest)
-        -> Result<ListImagesResponse, ListImagesError>;
+    fn list_images(
+        &self,
+        input: &ListImagesRequest,
+    ) -> RusotoFuture<ListImagesResponse, ListImagesError>;
 
     /// <p><p>Creates or updates the image manifest and tags associated with an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
-    fn put_image(&self, input: &PutImageRequest) -> Result<PutImageResponse, PutImageError>;
+    fn put_image(&self, input: &PutImageRequest) -> RusotoFuture<PutImageResponse, PutImageError>;
 
     /// <p>Creates or updates a lifecycle policy.</p>
     fn put_lifecycle_policy(
         &self,
         input: &PutLifecyclePolicyRequest,
-    ) -> Result<PutLifecyclePolicyResponse, PutLifecyclePolicyError>;
+    ) -> RusotoFuture<PutLifecyclePolicyResponse, PutLifecyclePolicyError>;
 
     /// <p>Applies a repository policy on a specified repository to control access permissions.</p>
     fn set_repository_policy(
         &self,
         input: &SetRepositoryPolicyRequest,
-    ) -> Result<SetRepositoryPolicyResponse, SetRepositoryPolicyError>;
+    ) -> RusotoFuture<SetRepositoryPolicyResponse, SetRepositoryPolicyError>;
 
     /// <p>Starts a preview of the specified lifecycle policy. This allows you to see the results before creating the lifecycle policy.</p>
     fn start_lifecycle_policy_preview(
         &self,
         input: &StartLifecyclePolicyPreviewRequest,
-    ) -> Result<StartLifecyclePolicyPreviewResponse, StartLifecyclePolicyPreviewError>;
+    ) -> RusotoFuture<StartLifecyclePolicyPreviewResponse, StartLifecyclePolicyPreviewError>;
 
     /// <p><p>Uploads an image layer part to Amazon ECR.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn upload_layer_part(
         &self,
         input: &UploadLayerPartRequest,
-    ) -> Result<UploadLayerPartResponse, UploadLayerPartError>;
+    ) -> RusotoFuture<UploadLayerPartResponse, UploadLayerPartError>;
 }
 /// A client for the Amazon ECR API.
-pub struct EcrClient<P, D>
+pub struct EcrClient<P = CredentialsProvider, D = RequestDispatcher>
 where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    credentials_provider: P,
+    inner: ClientInner<P, D>,
     region: region::Region,
-    dispatcher: D,
+}
+
+impl EcrClient {
+    /// Creates a simple client backed by an implicit event loop.
+    ///
+    /// The client will use the default credentials provider and tls client.
+    ///
+    /// See the `rusoto_core::reactor` module for more details.
+    pub fn simple(region: region::Region) -> EcrClient {
+        EcrClient::new(
+            RequestDispatcher::default(),
+            CredentialsProvider::default(),
+            region,
+        )
+    }
 }
 
 impl<P, D> EcrClient<P, D>
@@ -3224,23 +3243,22 @@ where
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         EcrClient {
-            credentials_provider: credentials_provider,
+            inner: ClientInner::new(credentials_provider, request_dispatcher),
             region: region,
-            dispatcher: request_dispatcher,
         }
     }
 }
 
 impl<P, D> Ecr for EcrClient<P, D>
 where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
+    P: ProvideAwsCredentials + 'static,
+    D: DispatchSignedRequest + 'static,
 {
     /// <p><p>Check the availability of multiple image layers in a specified registry and repository.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn batch_check_layer_availability(
         &self,
         input: &BatchCheckLayerAvailabilityRequest,
-    ) -> Result<BatchCheckLayerAvailabilityResponse, BatchCheckLayerAvailabilityError> {
+    ) -> RusotoFuture<BatchCheckLayerAvailabilityResponse, BatchCheckLayerAvailabilityError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3251,33 +3269,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<BatchCheckLayerAvailabilityResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<BatchCheckLayerAvailabilityResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(BatchCheckLayerAvailabilityError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(BatchCheckLayerAvailabilityError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a list of specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p> <p>You can remove a tag from an image by specifying the image's tag in your request. When you remove the last tag from an image, the image is deleted from your repository.</p> <p>You can completely delete an image (and all of its tags) by specifying the image's digest in your request.</p>
     fn batch_delete_image(
         &self,
         input: &BatchDeleteImageRequest,
-    ) -> Result<BatchDeleteImageResponse, BatchDeleteImageError> {
+    ) -> RusotoFuture<BatchDeleteImageResponse, BatchDeleteImageError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3288,33 +3303,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<BatchDeleteImageResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<BatchDeleteImageResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(BatchDeleteImageError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(BatchDeleteImageError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Gets detailed information for specified images within a specified repository. Images are specified with either <code>imageTag</code> or <code>imageDigest</code>.</p>
     fn batch_get_image(
         &self,
         input: &BatchGetImageRequest,
-    ) -> Result<BatchGetImageResponse, BatchGetImageError> {
+    ) -> RusotoFuture<BatchGetImageResponse, BatchGetImageError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3325,33 +3337,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<BatchGetImageResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<BatchGetImageResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(BatchGetImageError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(BatchGetImageError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p><p>Informs Amazon ECR that the image layer upload has completed for a specified registry, repository name, and upload ID. You can optionally provide a <code>sha256</code> digest of the image layer for data validation purposes.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn complete_layer_upload(
         &self,
         input: &CompleteLayerUploadRequest,
-    ) -> Result<CompleteLayerUploadResponse, CompleteLayerUploadError> {
+    ) -> RusotoFuture<CompleteLayerUploadResponse, CompleteLayerUploadError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3362,33 +3371,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CompleteLayerUploadResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<CompleteLayerUploadResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CompleteLayerUploadError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CompleteLayerUploadError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates an image repository.</p>
     fn create_repository(
         &self,
         input: &CreateRepositoryRequest,
-    ) -> Result<CreateRepositoryResponse, CreateRepositoryError> {
+    ) -> RusotoFuture<CreateRepositoryResponse, CreateRepositoryError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3399,33 +3405,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateRepositoryResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<CreateRepositoryResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateRepositoryError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateRepositoryError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes the specified lifecycle policy.</p>
     fn delete_lifecycle_policy(
         &self,
         input: &DeleteLifecyclePolicyRequest,
-    ) -> Result<DeleteLifecyclePolicyResponse, DeleteLifecyclePolicyError> {
+    ) -> RusotoFuture<DeleteLifecyclePolicyResponse, DeleteLifecyclePolicyError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3436,33 +3439,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteLifecyclePolicyResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<DeleteLifecyclePolicyResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteLifecyclePolicyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteLifecyclePolicyError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes an existing image repository. If a repository contains images, you must use the <code>force</code> option to delete it.</p>
     fn delete_repository(
         &self,
         input: &DeleteRepositoryRequest,
-    ) -> Result<DeleteRepositoryResponse, DeleteRepositoryError> {
+    ) -> RusotoFuture<DeleteRepositoryResponse, DeleteRepositoryError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3473,33 +3473,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteRepositoryResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<DeleteRepositoryResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteRepositoryError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteRepositoryError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes the repository policy from a specified repository.</p>
     fn delete_repository_policy(
         &self,
         input: &DeleteRepositoryPolicyRequest,
-    ) -> Result<DeleteRepositoryPolicyResponse, DeleteRepositoryPolicyError> {
+    ) -> RusotoFuture<DeleteRepositoryPolicyResponse, DeleteRepositoryPolicyError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3510,33 +3507,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteRepositoryPolicyResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<DeleteRepositoryPolicyResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteRepositoryPolicyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteRepositoryPolicyError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p><p>Returns metadata about the images in a repository, including image size, image tags, and creation date.</p> <note> <p>Beginning with Docker version 1.9, the Docker client compresses image layers before pushing them to a V2 Docker registry. The output of the <code>docker images</code> command shows the uncompressed image size, so it may return a larger image size than the image sizes returned by <a>DescribeImages</a>.</p> </note></p>
     fn describe_images(
         &self,
         input: &DescribeImagesRequest,
-    ) -> Result<DescribeImagesResponse, DescribeImagesError> {
+    ) -> RusotoFuture<DescribeImagesResponse, DescribeImagesError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3547,33 +3541,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeImagesResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<DescribeImagesResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeImagesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeImagesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Describes image repositories in a registry.</p>
     fn describe_repositories(
         &self,
         input: &DescribeRepositoriesRequest,
-    ) -> Result<DescribeRepositoriesResponse, DescribeRepositoriesError> {
+    ) -> RusotoFuture<DescribeRepositoriesResponse, DescribeRepositoriesError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3584,33 +3575,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeRepositoriesResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<DescribeRepositoriesResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeRepositoriesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeRepositoriesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves a token that is valid for a specified registry for 12 hours. This command allows you to use the <code>docker</code> CLI to push and pull images with Amazon ECR. If you do not specify a registry, the default registry is assumed.</p> <p>The <code>authorizationToken</code> returned for each registry specified is a base64 encoded string that can be decoded and used in a <code>docker login</code> command to authenticate to a registry. The AWS CLI offers an <code>aws ecr get-login</code> command that simplifies the login process.</p>
     fn get_authorization_token(
         &self,
         input: &GetAuthorizationTokenRequest,
-    ) -> Result<GetAuthorizationTokenResponse, GetAuthorizationTokenError> {
+    ) -> RusotoFuture<GetAuthorizationTokenResponse, GetAuthorizationTokenError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3621,33 +3609,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetAuthorizationTokenResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<GetAuthorizationTokenResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetAuthorizationTokenError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetAuthorizationTokenError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p><p>Retrieves the pre-signed Amazon S3 download URL corresponding to an image layer. You can only get URLs for image layers that are referenced in an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn get_download_url_for_layer(
         &self,
         input: &GetDownloadUrlForLayerRequest,
-    ) -> Result<GetDownloadUrlForLayerResponse, GetDownloadUrlForLayerError> {
+    ) -> RusotoFuture<GetDownloadUrlForLayerResponse, GetDownloadUrlForLayerError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3658,33 +3643,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetDownloadUrlForLayerResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<GetDownloadUrlForLayerResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetDownloadUrlForLayerError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetDownloadUrlForLayerError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves the specified lifecycle policy.</p>
     fn get_lifecycle_policy(
         &self,
         input: &GetLifecyclePolicyRequest,
-    ) -> Result<GetLifecyclePolicyResponse, GetLifecyclePolicyError> {
+    ) -> RusotoFuture<GetLifecyclePolicyResponse, GetLifecyclePolicyError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3695,33 +3677,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetLifecyclePolicyResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<GetLifecyclePolicyResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetLifecyclePolicyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetLifecyclePolicyError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves the results of the specified lifecycle policy preview request.</p>
     fn get_lifecycle_policy_preview(
         &self,
         input: &GetLifecyclePolicyPreviewRequest,
-    ) -> Result<GetLifecyclePolicyPreviewResponse, GetLifecyclePolicyPreviewError> {
+    ) -> RusotoFuture<GetLifecyclePolicyPreviewResponse, GetLifecyclePolicyPreviewError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3732,33 +3711,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetLifecyclePolicyPreviewResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<GetLifecyclePolicyPreviewResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetLifecyclePolicyPreviewError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetLifecyclePolicyPreviewError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves the repository policy for a specified repository.</p>
     fn get_repository_policy(
         &self,
         input: &GetRepositoryPolicyRequest,
-    ) -> Result<GetRepositoryPolicyResponse, GetRepositoryPolicyError> {
+    ) -> RusotoFuture<GetRepositoryPolicyResponse, GetRepositoryPolicyError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3769,33 +3745,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<GetRepositoryPolicyResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<GetRepositoryPolicyResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetRepositoryPolicyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetRepositoryPolicyError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p><p>Notify Amazon ECR that you intend to upload an image layer.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn initiate_layer_upload(
         &self,
         input: &InitiateLayerUploadRequest,
-    ) -> Result<InitiateLayerUploadResponse, InitiateLayerUploadError> {
+    ) -> RusotoFuture<InitiateLayerUploadResponse, InitiateLayerUploadError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3806,33 +3779,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<InitiateLayerUploadResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<InitiateLayerUploadResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(InitiateLayerUploadError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(InitiateLayerUploadError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists all the image IDs for a given repository.</p> <p>You can filter images based on whether or not they are tagged by setting the <code>tagStatus</code> parameter to <code>TAGGED</code> or <code>UNTAGGED</code>. For example, you can filter your results to return only <code>UNTAGGED</code> images and then pipe that result to a <a>BatchDeleteImage</a> operation to delete them. Or, you can filter your results to return only <code>TAGGED</code> images to list all of the tags in your repository.</p>
     fn list_images(
         &self,
         input: &ListImagesRequest,
-    ) -> Result<ListImagesResponse, ListImagesError> {
+    ) -> RusotoFuture<ListImagesResponse, ListImagesError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3843,30 +3813,27 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListImagesResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<ListImagesResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListImagesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListImagesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p><p>Creates or updates the image manifest and tags associated with an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
-    fn put_image(&self, input: &PutImageRequest) -> Result<PutImageResponse, PutImageError> {
+    fn put_image(&self, input: &PutImageRequest) -> RusotoFuture<PutImageResponse, PutImageError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3877,33 +3844,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<PutImageResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<PutImageResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(PutImageError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutImageError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates or updates a lifecycle policy.</p>
     fn put_lifecycle_policy(
         &self,
         input: &PutLifecyclePolicyRequest,
-    ) -> Result<PutLifecyclePolicyResponse, PutLifecyclePolicyError> {
+    ) -> RusotoFuture<PutLifecyclePolicyResponse, PutLifecyclePolicyError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3914,33 +3878,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<PutLifecyclePolicyResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<PutLifecyclePolicyResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(PutLifecyclePolicyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PutLifecyclePolicyError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Applies a repository policy on a specified repository to control access permissions.</p>
     fn set_repository_policy(
         &self,
         input: &SetRepositoryPolicyRequest,
-    ) -> Result<SetRepositoryPolicyResponse, SetRepositoryPolicyError> {
+    ) -> RusotoFuture<SetRepositoryPolicyResponse, SetRepositoryPolicyError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3951,33 +3912,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<SetRepositoryPolicyResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<SetRepositoryPolicyResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(SetRepositoryPolicyError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(SetRepositoryPolicyError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Starts a preview of the specified lifecycle policy. This allows you to see the results before creating the lifecycle policy.</p>
     fn start_lifecycle_policy_preview(
         &self,
         input: &StartLifecyclePolicyPreviewRequest,
-    ) -> Result<StartLifecyclePolicyPreviewResponse, StartLifecyclePolicyPreviewError> {
+    ) -> RusotoFuture<StartLifecyclePolicyPreviewResponse, StartLifecyclePolicyPreviewError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -3988,33 +3946,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StartLifecyclePolicyPreviewResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<StartLifecyclePolicyPreviewResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(StartLifecyclePolicyPreviewError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(StartLifecyclePolicyPreviewError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p><p>Uploads an image layer part to Amazon ECR.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn upload_layer_part(
         &self,
         input: &UploadLayerPartRequest,
-    ) -> Result<UploadLayerPartResponse, UploadLayerPartError> {
+    ) -> RusotoFuture<UploadLayerPartResponse, UploadLayerPartError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4025,26 +3980,23 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UploadLayerPartResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<UploadLayerPartResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UploadLayerPartError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UploadLayerPartError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 }
 

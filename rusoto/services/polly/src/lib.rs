@@ -15,6 +15,7 @@
 //!
 //! If you're using the service, you're probably looking for [PollyClient](struct.PollyClient.html) and [Polly](trait.Polly.html).
 
+extern crate futures;
 extern crate hyper;
 #[macro_use]
 extern crate log;
@@ -23,6 +24,7 @@ extern crate serde;
 #[macro_use]
 extern crate serde_derive;
 extern crate serde_json;
+extern crate tokio_core;
 
 mod generated;
 mod custom;

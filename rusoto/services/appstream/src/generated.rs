@@ -10,16 +10,19 @@
 //
 // =================================================================
 
+use std::error::Error;
+use std::fmt;
+use std::io;
+
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+use futures::Future;
+use hyper::StatusCode;
+use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::{ClientInner, RusotoFuture};
 
-use std::fmt;
-use std::error::Error;
-use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -4098,197 +4101,215 @@ pub trait AppStream {
     fn associate_fleet(
         &self,
         input: &AssociateFleetRequest,
-    ) -> Result<AssociateFleetResult, AssociateFleetError>;
+    ) -> RusotoFuture<AssociateFleetResult, AssociateFleetError>;
 
     /// <p>Creates a directory configuration.</p>
     fn create_directory_config(
         &self,
         input: &CreateDirectoryConfigRequest,
-    ) -> Result<CreateDirectoryConfigResult, CreateDirectoryConfigError>;
+    ) -> RusotoFuture<CreateDirectoryConfigResult, CreateDirectoryConfigError>;
 
     /// <p>Creates a fleet.</p>
     fn create_fleet(
         &self,
         input: &CreateFleetRequest,
-    ) -> Result<CreateFleetResult, CreateFleetError>;
+    ) -> RusotoFuture<CreateFleetResult, CreateFleetError>;
 
     /// <p>Creates an image builder.</p> <p>The initial state of the builder is <code>PENDING</code>. When it is ready, the state is <code>RUNNING</code>.</p>
     fn create_image_builder(
         &self,
         input: &CreateImageBuilderRequest,
-    ) -> Result<CreateImageBuilderResult, CreateImageBuilderError>;
+    ) -> RusotoFuture<CreateImageBuilderResult, CreateImageBuilderError>;
 
     /// <p>Creates a URL to start an image builder streaming session.</p>
     fn create_image_builder_streaming_url(
         &self,
         input: &CreateImageBuilderStreamingURLRequest,
-    ) -> Result<CreateImageBuilderStreamingURLResult, CreateImageBuilderStreamingURLError>;
+    ) -> RusotoFuture<CreateImageBuilderStreamingURLResult, CreateImageBuilderStreamingURLError>;
 
     /// <p>Creates a stack.</p>
     fn create_stack(
         &self,
         input: &CreateStackRequest,
-    ) -> Result<CreateStackResult, CreateStackError>;
+    ) -> RusotoFuture<CreateStackResult, CreateStackError>;
 
     /// <p>Creates a URL to start a streaming session for the specified user.</p>
     fn create_streaming_url(
         &self,
         input: &CreateStreamingURLRequest,
-    ) -> Result<CreateStreamingURLResult, CreateStreamingURLError>;
+    ) -> RusotoFuture<CreateStreamingURLResult, CreateStreamingURLError>;
 
     /// <p>Deletes the specified directory configuration.</p>
     fn delete_directory_config(
         &self,
         input: &DeleteDirectoryConfigRequest,
-    ) -> Result<DeleteDirectoryConfigResult, DeleteDirectoryConfigError>;
+    ) -> RusotoFuture<DeleteDirectoryConfigResult, DeleteDirectoryConfigError>;
 
     /// <p>Deletes the specified fleet.</p>
     fn delete_fleet(
         &self,
         input: &DeleteFleetRequest,
-    ) -> Result<DeleteFleetResult, DeleteFleetError>;
+    ) -> RusotoFuture<DeleteFleetResult, DeleteFleetError>;
 
     /// <p>Deletes the specified image. You cannot delete an image that is currently in use. After you delete an image, you cannot provision new capacity using the image.</p>
     fn delete_image(
         &self,
         input: &DeleteImageRequest,
-    ) -> Result<DeleteImageResult, DeleteImageError>;
+    ) -> RusotoFuture<DeleteImageResult, DeleteImageError>;
 
     /// <p>Deletes the specified image builder and releases the capacity.</p>
     fn delete_image_builder(
         &self,
         input: &DeleteImageBuilderRequest,
-    ) -> Result<DeleteImageBuilderResult, DeleteImageBuilderError>;
+    ) -> RusotoFuture<DeleteImageBuilderResult, DeleteImageBuilderError>;
 
     /// <p>Deletes the specified stack. After this operation completes, the environment can no longer be activated and any reservations made for the stack are released.</p>
     fn delete_stack(
         &self,
         input: &DeleteStackRequest,
-    ) -> Result<DeleteStackResult, DeleteStackError>;
+    ) -> RusotoFuture<DeleteStackResult, DeleteStackError>;
 
     /// <p>Describes the specified directory configurations.</p>
     fn describe_directory_configs(
         &self,
         input: &DescribeDirectoryConfigsRequest,
-    ) -> Result<DescribeDirectoryConfigsResult, DescribeDirectoryConfigsError>;
+    ) -> RusotoFuture<DescribeDirectoryConfigsResult, DescribeDirectoryConfigsError>;
 
     /// <p>Describes the specified fleets or all fleets in the account.</p>
     fn describe_fleets(
         &self,
         input: &DescribeFleetsRequest,
-    ) -> Result<DescribeFleetsResult, DescribeFleetsError>;
+    ) -> RusotoFuture<DescribeFleetsResult, DescribeFleetsError>;
 
     /// <p>Describes the specified image builders or all image builders in the account.</p>
     fn describe_image_builders(
         &self,
         input: &DescribeImageBuildersRequest,
-    ) -> Result<DescribeImageBuildersResult, DescribeImageBuildersError>;
+    ) -> RusotoFuture<DescribeImageBuildersResult, DescribeImageBuildersError>;
 
     /// <p>Describes the specified images or all images in the account.</p>
     fn describe_images(
         &self,
         input: &DescribeImagesRequest,
-    ) -> Result<DescribeImagesResult, DescribeImagesError>;
+    ) -> RusotoFuture<DescribeImagesResult, DescribeImagesError>;
 
     /// <p>Describes the streaming sessions for the specified stack and fleet. If a user ID is provided, only the streaming sessions for only that user are returned. If an authentication type is not provided, the default is to authenticate users using a streaming URL.</p>
     fn describe_sessions(
         &self,
         input: &DescribeSessionsRequest,
-    ) -> Result<DescribeSessionsResult, DescribeSessionsError>;
+    ) -> RusotoFuture<DescribeSessionsResult, DescribeSessionsError>;
 
     /// <p>Describes the specified stacks or all stacks in the account.</p>
     fn describe_stacks(
         &self,
         input: &DescribeStacksRequest,
-    ) -> Result<DescribeStacksResult, DescribeStacksError>;
+    ) -> RusotoFuture<DescribeStacksResult, DescribeStacksError>;
 
     /// <p>Disassociates the specified fleet from the specified stack.</p>
     fn disassociate_fleet(
         &self,
         input: &DisassociateFleetRequest,
-    ) -> Result<DisassociateFleetResult, DisassociateFleetError>;
+    ) -> RusotoFuture<DisassociateFleetResult, DisassociateFleetError>;
 
     /// <p>Stops the specified streaming session.</p>
     fn expire_session(
         &self,
         input: &ExpireSessionRequest,
-    ) -> Result<ExpireSessionResult, ExpireSessionError>;
+    ) -> RusotoFuture<ExpireSessionResult, ExpireSessionError>;
 
     /// <p>Lists the fleets associated with the specified stack.</p>
     fn list_associated_fleets(
         &self,
         input: &ListAssociatedFleetsRequest,
-    ) -> Result<ListAssociatedFleetsResult, ListAssociatedFleetsError>;
+    ) -> RusotoFuture<ListAssociatedFleetsResult, ListAssociatedFleetsError>;
 
     /// <p>Lists the stacks associated with the specified fleet.</p>
     fn list_associated_stacks(
         &self,
         input: &ListAssociatedStacksRequest,
-    ) -> Result<ListAssociatedStacksResult, ListAssociatedStacksError>;
+    ) -> RusotoFuture<ListAssociatedStacksResult, ListAssociatedStacksError>;
 
     /// <p>Lists the tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
     fn list_tags_for_resource(
         &self,
         input: &ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, ListTagsForResourceError>;
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
 
     /// <p>Starts the specified fleet.</p>
-    fn start_fleet(&self, input: &StartFleetRequest) -> Result<StartFleetResult, StartFleetError>;
+    fn start_fleet(
+        &self,
+        input: &StartFleetRequest,
+    ) -> RusotoFuture<StartFleetResult, StartFleetError>;
 
     /// <p>Starts the specified image builder.</p>
     fn start_image_builder(
         &self,
         input: &StartImageBuilderRequest,
-    ) -> Result<StartImageBuilderResult, StartImageBuilderError>;
+    ) -> RusotoFuture<StartImageBuilderResult, StartImageBuilderError>;
 
     /// <p>Stops the specified fleet.</p>
-    fn stop_fleet(&self, input: &StopFleetRequest) -> Result<StopFleetResult, StopFleetError>;
+    fn stop_fleet(&self, input: &StopFleetRequest)
+        -> RusotoFuture<StopFleetResult, StopFleetError>;
 
     /// <p>Stops the specified image builder.</p>
     fn stop_image_builder(
         &self,
         input: &StopImageBuilderRequest,
-    ) -> Result<StopImageBuilderResult, StopImageBuilderError>;
+    ) -> RusotoFuture<StopImageBuilderResult, StopImageBuilderError>;
 
     /// <p>Adds or overwrites one or more tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, this operation updates its value.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>. To disassociate tags from your resources, use <a>UntagResource</a>.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
     fn tag_resource(
         &self,
         input: &TagResourceRequest,
-    ) -> Result<TagResourceResponse, TagResourceError>;
+    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
 
     /// <p>Disassociates the specified tags from the specified AppStream 2.0 resource.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
     fn untag_resource(
         &self,
         input: &UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, UntagResourceError>;
+    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
 
     /// <p>Updates the specified directory configuration.</p>
     fn update_directory_config(
         &self,
         input: &UpdateDirectoryConfigRequest,
-    ) -> Result<UpdateDirectoryConfigResult, UpdateDirectoryConfigError>;
+    ) -> RusotoFuture<UpdateDirectoryConfigResult, UpdateDirectoryConfigError>;
 
     /// <p>Updates the specified fleet.</p> <p>If the fleet is in the <code>STOPPED</code> state, you can update any attribute except the fleet name. If the fleet is in the <code>RUNNING</code> state, you can update the <code>DisplayName</code> and <code>ComputeCapacity</code> attributes. If the fleet is in the <code>STARTING</code> or <code>STOPPING</code> state, you can't update it.</p>
     fn update_fleet(
         &self,
         input: &UpdateFleetRequest,
-    ) -> Result<UpdateFleetResult, UpdateFleetError>;
+    ) -> RusotoFuture<UpdateFleetResult, UpdateFleetError>;
 
     /// <p>Updates the specified stack.</p>
     fn update_stack(
         &self,
         input: &UpdateStackRequest,
-    ) -> Result<UpdateStackResult, UpdateStackError>;
+    ) -> RusotoFuture<UpdateStackResult, UpdateStackError>;
 }
 /// A client for the Amazon AppStream API.
-pub struct AppStreamClient<P, D>
+pub struct AppStreamClient<P = CredentialsProvider, D = RequestDispatcher>
 where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    credentials_provider: P,
+    inner: ClientInner<P, D>,
     region: region::Region,
-    dispatcher: D,
+}
+
+impl AppStreamClient {
+    /// Creates a simple client backed by an implicit event loop.
+    ///
+    /// The client will use the default credentials provider and tls client.
+    ///
+    /// See the `rusoto_core::reactor` module for more details.
+    pub fn simple(region: region::Region) -> AppStreamClient {
+        AppStreamClient::new(
+            RequestDispatcher::default(),
+            CredentialsProvider::default(),
+            region,
+        )
+    }
 }
 
 impl<P, D> AppStreamClient<P, D>
@@ -4298,23 +4319,22 @@ where
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         AppStreamClient {
-            credentials_provider: credentials_provider,
+            inner: ClientInner::new(credentials_provider, request_dispatcher),
             region: region,
-            dispatcher: request_dispatcher,
         }
     }
 }
 
 impl<P, D> AppStream for AppStreamClient<P, D>
 where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
+    P: ProvideAwsCredentials + 'static,
+    D: DispatchSignedRequest + 'static,
 {
     /// <p>Associates the specified fleet with the specified stack.</p>
     fn associate_fleet(
         &self,
         input: &AssociateFleetRequest,
-    ) -> Result<AssociateFleetResult, AssociateFleetError> {
+    ) -> RusotoFuture<AssociateFleetResult, AssociateFleetError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4322,33 +4342,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<AssociateFleetResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<AssociateFleetResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(AssociateFleetError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AssociateFleetError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a directory configuration.</p>
     fn create_directory_config(
         &self,
         input: &CreateDirectoryConfigRequest,
-    ) -> Result<CreateDirectoryConfigResult, CreateDirectoryConfigError> {
+    ) -> RusotoFuture<CreateDirectoryConfigResult, CreateDirectoryConfigError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4359,33 +4376,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateDirectoryConfigResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<CreateDirectoryConfigResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateDirectoryConfigError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateDirectoryConfigError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a fleet.</p>
     fn create_fleet(
         &self,
         input: &CreateFleetRequest,
-    ) -> Result<CreateFleetResult, CreateFleetError> {
+    ) -> RusotoFuture<CreateFleetResult, CreateFleetError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4393,33 +4407,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateFleetResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<CreateFleetResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateFleetError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateFleetError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates an image builder.</p> <p>The initial state of the builder is <code>PENDING</code>. When it is ready, the state is <code>RUNNING</code>.</p>
     fn create_image_builder(
         &self,
         input: &CreateImageBuilderRequest,
-    ) -> Result<CreateImageBuilderResult, CreateImageBuilderError> {
+    ) -> RusotoFuture<CreateImageBuilderResult, CreateImageBuilderError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4427,33 +4438,31 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateImageBuilderResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<CreateImageBuilderResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateImageBuilderError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateImageBuilderError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a URL to start an image builder streaming session.</p>
     fn create_image_builder_streaming_url(
         &self,
         input: &CreateImageBuilderStreamingURLRequest,
-    ) -> Result<CreateImageBuilderStreamingURLResult, CreateImageBuilderStreamingURLError> {
+    ) -> RusotoFuture<CreateImageBuilderStreamingURLResult, CreateImageBuilderStreamingURLError>
+    {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4464,35 +4473,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
                     serde_json::from_str::<CreateImageBuilderStreamingURLResult>(
-                        String::from_utf8_lossy(&body).as_ref(),
-                    ).unwrap(),
-                )
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateImageBuilderStreamingURLError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateImageBuilderStreamingURLError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a stack.</p>
     fn create_stack(
         &self,
         input: &CreateStackRequest,
-    ) -> Result<CreateStackResult, CreateStackError> {
+    ) -> RusotoFuture<CreateStackResult, CreateStackError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4500,33 +4504,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateStackResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<CreateStackResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateStackError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateStackError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a URL to start a streaming session for the specified user.</p>
     fn create_streaming_url(
         &self,
         input: &CreateStreamingURLRequest,
-    ) -> Result<CreateStreamingURLResult, CreateStreamingURLError> {
+    ) -> RusotoFuture<CreateStreamingURLResult, CreateStreamingURLError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4534,33 +4535,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateStreamingURLResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<CreateStreamingURLResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateStreamingURLError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateStreamingURLError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes the specified directory configuration.</p>
     fn delete_directory_config(
         &self,
         input: &DeleteDirectoryConfigRequest,
-    ) -> Result<DeleteDirectoryConfigResult, DeleteDirectoryConfigError> {
+    ) -> RusotoFuture<DeleteDirectoryConfigResult, DeleteDirectoryConfigError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4571,33 +4569,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteDirectoryConfigResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<DeleteDirectoryConfigResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteDirectoryConfigError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteDirectoryConfigError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes the specified fleet.</p>
     fn delete_fleet(
         &self,
         input: &DeleteFleetRequest,
-    ) -> Result<DeleteFleetResult, DeleteFleetError> {
+    ) -> RusotoFuture<DeleteFleetResult, DeleteFleetError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4605,33 +4600,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteFleetResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<DeleteFleetResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteFleetError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteFleetError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes the specified image. You cannot delete an image that is currently in use. After you delete an image, you cannot provision new capacity using the image.</p>
     fn delete_image(
         &self,
         input: &DeleteImageRequest,
-    ) -> Result<DeleteImageResult, DeleteImageError> {
+    ) -> RusotoFuture<DeleteImageResult, DeleteImageError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4639,33 +4631,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteImageResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<DeleteImageResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteImageError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteImageError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes the specified image builder and releases the capacity.</p>
     fn delete_image_builder(
         &self,
         input: &DeleteImageBuilderRequest,
-    ) -> Result<DeleteImageBuilderResult, DeleteImageBuilderError> {
+    ) -> RusotoFuture<DeleteImageBuilderResult, DeleteImageBuilderError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4673,33 +4662,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteImageBuilderResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<DeleteImageBuilderResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteImageBuilderError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteImageBuilderError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes the specified stack. After this operation completes, the environment can no longer be activated and any reservations made for the stack are released.</p>
     fn delete_stack(
         &self,
         input: &DeleteStackRequest,
-    ) -> Result<DeleteStackResult, DeleteStackError> {
+    ) -> RusotoFuture<DeleteStackResult, DeleteStackError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4707,33 +4693,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteStackResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<DeleteStackResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteStackError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteStackError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Describes the specified directory configurations.</p>
     fn describe_directory_configs(
         &self,
         input: &DescribeDirectoryConfigsRequest,
-    ) -> Result<DescribeDirectoryConfigsResult, DescribeDirectoryConfigsError> {
+    ) -> RusotoFuture<DescribeDirectoryConfigsResult, DescribeDirectoryConfigsError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4744,33 +4727,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeDirectoryConfigsResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<DescribeDirectoryConfigsResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeDirectoryConfigsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeDirectoryConfigsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Describes the specified fleets or all fleets in the account.</p>
     fn describe_fleets(
         &self,
         input: &DescribeFleetsRequest,
-    ) -> Result<DescribeFleetsResult, DescribeFleetsError> {
+    ) -> RusotoFuture<DescribeFleetsResult, DescribeFleetsError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4778,33 +4758,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeFleetsResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<DescribeFleetsResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeFleetsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeFleetsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Describes the specified image builders or all image builders in the account.</p>
     fn describe_image_builders(
         &self,
         input: &DescribeImageBuildersRequest,
-    ) -> Result<DescribeImageBuildersResult, DescribeImageBuildersError> {
+    ) -> RusotoFuture<DescribeImageBuildersResult, DescribeImageBuildersError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4815,33 +4792,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeImageBuildersResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<DescribeImageBuildersResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeImageBuildersError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeImageBuildersError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Describes the specified images or all images in the account.</p>
     fn describe_images(
         &self,
         input: &DescribeImagesRequest,
-    ) -> Result<DescribeImagesResult, DescribeImagesError> {
+    ) -> RusotoFuture<DescribeImagesResult, DescribeImagesError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4849,33 +4823,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeImagesResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<DescribeImagesResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeImagesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeImagesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Describes the streaming sessions for the specified stack and fleet. If a user ID is provided, only the streaming sessions for only that user are returned. If an authentication type is not provided, the default is to authenticate users using a streaming URL.</p>
     fn describe_sessions(
         &self,
         input: &DescribeSessionsRequest,
-    ) -> Result<DescribeSessionsResult, DescribeSessionsError> {
+    ) -> RusotoFuture<DescribeSessionsResult, DescribeSessionsError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4883,33 +4854,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeSessionsResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<DescribeSessionsResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeSessionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeSessionsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Describes the specified stacks or all stacks in the account.</p>
     fn describe_stacks(
         &self,
         input: &DescribeStacksRequest,
-    ) -> Result<DescribeStacksResult, DescribeStacksError> {
+    ) -> RusotoFuture<DescribeStacksResult, DescribeStacksError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4917,33 +4885,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeStacksResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<DescribeStacksResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeStacksError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeStacksError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Disassociates the specified fleet from the specified stack.</p>
     fn disassociate_fleet(
         &self,
         input: &DisassociateFleetRequest,
-    ) -> Result<DisassociateFleetResult, DisassociateFleetError> {
+    ) -> RusotoFuture<DisassociateFleetResult, DisassociateFleetError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4951,33 +4916,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DisassociateFleetResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<DisassociateFleetResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DisassociateFleetError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DisassociateFleetError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Stops the specified streaming session.</p>
     fn expire_session(
         &self,
         input: &ExpireSessionRequest,
-    ) -> Result<ExpireSessionResult, ExpireSessionError> {
+    ) -> RusotoFuture<ExpireSessionResult, ExpireSessionError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -4985,33 +4947,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ExpireSessionResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<ExpireSessionResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ExpireSessionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ExpireSessionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists the fleets associated with the specified stack.</p>
     fn list_associated_fleets(
         &self,
         input: &ListAssociatedFleetsRequest,
-    ) -> Result<ListAssociatedFleetsResult, ListAssociatedFleetsError> {
+    ) -> RusotoFuture<ListAssociatedFleetsResult, ListAssociatedFleetsError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5022,33 +4981,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListAssociatedFleetsResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<ListAssociatedFleetsResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListAssociatedFleetsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListAssociatedFleetsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists the stacks associated with the specified fleet.</p>
     fn list_associated_stacks(
         &self,
         input: &ListAssociatedStacksRequest,
-    ) -> Result<ListAssociatedStacksResult, ListAssociatedStacksError> {
+    ) -> RusotoFuture<ListAssociatedStacksResult, ListAssociatedStacksError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5059,33 +5015,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListAssociatedStacksResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<ListAssociatedStacksResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListAssociatedStacksError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListAssociatedStacksError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists the tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
     fn list_tags_for_resource(
         &self,
         input: &ListTagsForResourceRequest,
-    ) -> Result<ListTagsForResourceResponse, ListTagsForResourceError> {
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5096,30 +5049,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<ListTagsForResourceResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<ListTagsForResourceResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListTagsForResourceError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListTagsForResourceError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Starts the specified fleet.</p>
-    fn start_fleet(&self, input: &StartFleetRequest) -> Result<StartFleetResult, StartFleetError> {
+    fn start_fleet(
+        &self,
+        input: &StartFleetRequest,
+    ) -> RusotoFuture<StartFleetResult, StartFleetError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5127,33 +5080,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StartFleetResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<StartFleetResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(StartFleetError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(StartFleetError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Starts the specified image builder.</p>
     fn start_image_builder(
         &self,
         input: &StartImageBuilderRequest,
-    ) -> Result<StartImageBuilderResult, StartImageBuilderError> {
+    ) -> RusotoFuture<StartImageBuilderResult, StartImageBuilderError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5161,30 +5111,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StartImageBuilderResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<StartImageBuilderResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(StartImageBuilderError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(StartImageBuilderError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Stops the specified fleet.</p>
-    fn stop_fleet(&self, input: &StopFleetRequest) -> Result<StopFleetResult, StopFleetError> {
+    fn stop_fleet(
+        &self,
+        input: &StopFleetRequest,
+    ) -> RusotoFuture<StopFleetResult, StopFleetError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5192,35 +5142,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
                     serde_json::from_str::<StopFleetResult>(
-                        String::from_utf8_lossy(&body).as_ref(),
-                    ).unwrap(),
-                )
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(StopFleetError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(StopFleetError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Stops the specified image builder.</p>
     fn stop_image_builder(
         &self,
         input: &StopImageBuilderRequest,
-    ) -> Result<StopImageBuilderResult, StopImageBuilderError> {
+    ) -> RusotoFuture<StopImageBuilderResult, StopImageBuilderError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5228,33 +5173,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<StopImageBuilderResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<StopImageBuilderResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(StopImageBuilderError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(StopImageBuilderError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Adds or overwrites one or more tags for the specified AppStream 2.0 resource. You can tag AppStream 2.0 image builders, images, fleets, and stacks.</p> <p>Each tag consists of a key and an optional value. If a resource already has a tag with the same key, this operation updates its value.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>. To disassociate tags from your resources, use <a>UntagResource</a>.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
     fn tag_resource(
         &self,
         input: &TagResourceRequest,
-    ) -> Result<TagResourceResponse, TagResourceError> {
+    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5262,33 +5204,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<TagResourceResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<TagResourceResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(TagResourceError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(TagResourceError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Disassociates the specified tags from the specified AppStream 2.0 resource.</p> <p>To list the current tags for your resources, use <a>ListTagsForResource</a>.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/appstream2/latest/developerguide/tagging-basic">Tagging Your Resources</a> in the <i>Amazon AppStream 2.0 Developer Guide</i>.</p>
     fn untag_resource(
         &self,
         input: &UntagResourceRequest,
-    ) -> Result<UntagResourceResponse, UntagResourceError> {
+    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5296,33 +5235,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UntagResourceResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<UntagResourceResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UntagResourceError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UntagResourceError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates the specified directory configuration.</p>
     fn update_directory_config(
         &self,
         input: &UpdateDirectoryConfigRequest,
-    ) -> Result<UpdateDirectoryConfigResult, UpdateDirectoryConfigError> {
+    ) -> RusotoFuture<UpdateDirectoryConfigResult, UpdateDirectoryConfigError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5333,33 +5269,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateDirectoryConfigResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<UpdateDirectoryConfigResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateDirectoryConfigError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateDirectoryConfigError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates the specified fleet.</p> <p>If the fleet is in the <code>STOPPED</code> state, you can update any attribute except the fleet name. If the fleet is in the <code>RUNNING</code> state, you can update the <code>DisplayName</code> and <code>ComputeCapacity</code> attributes. If the fleet is in the <code>STARTING</code> or <code>STOPPING</code> state, you can't update it.</p>
     fn update_fleet(
         &self,
         input: &UpdateFleetRequest,
-    ) -> Result<UpdateFleetResult, UpdateFleetError> {
+    ) -> RusotoFuture<UpdateFleetResult, UpdateFleetError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5367,33 +5300,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateFleetResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<UpdateFleetResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateFleetError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateFleetError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Updates the specified stack.</p>
     fn update_stack(
         &self,
         input: &UpdateStackRequest,
-    ) -> Result<UpdateStackResult, UpdateStackError> {
+    ) -> RusotoFuture<UpdateStackResult, UpdateStackError> {
         let mut request = SignedRequest::new("POST", "appstream", &self.region, "/");
         request.set_endpoint_prefix("appstream2".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -5401,26 +5331,23 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateStackResult>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<UpdateStackResult>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateStackError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateStackError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 }
 

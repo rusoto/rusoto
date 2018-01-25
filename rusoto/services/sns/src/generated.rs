@@ -10,16 +10,19 @@
 //
 // =================================================================
 
+use std::error::Error;
+use std::fmt;
+use std::io;
+
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+use futures::Future;
+use hyper::StatusCode;
+use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::{ClientInner, RusotoFuture};
 
-use std::fmt;
-use std::error::Error;
-use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -5279,171 +5282,194 @@ impl Error for UnsubscribeError {
 /// Trait representing the capabilities of the Amazon SNS API. Amazon SNS clients implement this trait.
 pub trait Sns {
     /// <p>Adds a statement to a topic's access control policy, granting access for the specified AWS accounts to the specified actions.</p>
-    fn add_permission(&self, input: &AddPermissionInput) -> Result<(), AddPermissionError>;
+    fn add_permission(&self, input: &AddPermissionInput) -> RusotoFuture<(), AddPermissionError>;
 
     /// <p>Accepts a phone number and indicates whether the phone holder has opted out of receiving SMS messages from your account. You cannot send SMS messages to a number that is opted out.</p> <p>To resume sending messages, you can opt in the number by using the <code>OptInPhoneNumber</code> action.</p>
     fn check_if_phone_number_is_opted_out(
         &self,
         input: &CheckIfPhoneNumberIsOptedOutInput,
-    ) -> Result<CheckIfPhoneNumberIsOptedOutResponse, CheckIfPhoneNumberIsOptedOutError>;
+    ) -> RusotoFuture<CheckIfPhoneNumberIsOptedOutResponse, CheckIfPhoneNumberIsOptedOutError>;
 
     /// <p>Verifies an endpoint owner's intent to receive messages by validating the token sent to the endpoint by an earlier <code>Subscribe</code> action. If the token is valid, the action creates a new subscription and returns its Amazon Resource Name (ARN). This call requires an AWS signature only when the <code>AuthenticateOnUnsubscribe</code> flag is set to "true".</p>
     fn confirm_subscription(
         &self,
         input: &ConfirmSubscriptionInput,
-    ) -> Result<ConfirmSubscriptionResponse, ConfirmSubscriptionError>;
+    ) -> RusotoFuture<ConfirmSubscriptionResponse, ConfirmSubscriptionError>;
 
     /// <p>Creates a platform application object for one of the supported push notification services, such as APNS and GCM, to which devices and mobile apps may register. You must specify PlatformPrincipal and PlatformCredential attributes when using the <code>CreatePlatformApplication</code> action. The PlatformPrincipal is received from the notification service. For APNS/APNS_SANDBOX, PlatformPrincipal is "SSL certificate". For GCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is "client id". The PlatformCredential is also received from the notification service. For WNS, PlatformPrincipal is "Package Security Identifier". For MPNS, PlatformPrincipal is "TLS certificate". For Baidu, PlatformPrincipal is "API key".</p> <p>For APNS/APNS_SANDBOX, PlatformCredential is "private key". For GCM, PlatformCredential is "API key". For ADM, PlatformCredential is "client secret". For WNS, PlatformCredential is "secret key". For MPNS, PlatformCredential is "private key". For Baidu, PlatformCredential is "secret key". The PlatformApplicationArn that is returned when using <code>CreatePlatformApplication</code> is then used as an attribute for the <code>CreatePlatformEndpoint</code> action. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. For more information about obtaining the PlatformPrincipal and PlatformCredential for each of the supported push notification services, see <a href="http://docs.aws.amazon.com/sns/latest/dg/mobile-push-apns.html">Getting Started with Apple Push Notification Service</a>, <a href="http://docs.aws.amazon.com/sns/latest/dg/mobile-push-adm.html">Getting Started with Amazon Device Messaging</a>, <a href="http://docs.aws.amazon.com/sns/latest/dg/mobile-push-baidu.html">Getting Started with Baidu Cloud Push</a>, <a href="http://docs.aws.amazon.com/sns/latest/dg/mobile-push-gcm.html">Getting Started with Google Cloud Messaging for Android</a>, <a href="http://docs.aws.amazon.com/sns/latest/dg/mobile-push-mpns.html">Getting Started with MPNS</a>, or <a href="http://docs.aws.amazon.com/sns/latest/dg/mobile-push-wns.html">Getting Started with WNS</a>. </p>
     fn create_platform_application(
         &self,
         input: &CreatePlatformApplicationInput,
-    ) -> Result<CreatePlatformApplicationResponse, CreatePlatformApplicationError>;
+    ) -> RusotoFuture<CreatePlatformApplicationResponse, CreatePlatformApplicationError>;
 
     /// <p>Creates an endpoint for a device and mobile app on one of the supported push notification services, such as GCM and APNS. <code>CreatePlatformEndpoint</code> requires the PlatformApplicationArn that is returned from <code>CreatePlatformApplication</code>. The EndpointArn that is returned when using <code>CreatePlatformEndpoint</code> can then be used by the <code>Publish</code> action to send a message to a mobile app or by the <code>Subscribe</code> action for subscription to a topic. The <code>CreatePlatformEndpoint</code> action is idempotent, so if the requester already owns an endpoint with the same device token and attributes, that endpoint's ARN is returned without creating a new endpoint. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When using <code>CreatePlatformEndpoint</code> with Baidu, two attributes must be provided: ChannelId and UserId. The token field must also contain the ChannelId. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePushBaiduEndpoint.html">Creating an Amazon SNS Endpoint for Baidu</a>. </p>
     fn create_platform_endpoint(
         &self,
         input: &CreatePlatformEndpointInput,
-    ) -> Result<CreateEndpointResponse, CreatePlatformEndpointError>;
+    ) -> RusotoFuture<CreateEndpointResponse, CreatePlatformEndpointError>;
 
     /// <p>Creates a topic to which notifications can be published. Users can create at most 100,000 topics. For more information, see <a href="http://aws.amazon.com/sns/">http://aws.amazon.com/sns</a>. This action is idempotent, so if the requester already owns a topic with the specified name, that topic's ARN is returned without creating a new topic.</p>
     fn create_topic(
         &self,
         input: &CreateTopicInput,
-    ) -> Result<CreateTopicResponse, CreateTopicError>;
+    ) -> RusotoFuture<CreateTopicResponse, CreateTopicError>;
 
     /// <p>Deletes the endpoint for a device and mobile app from Amazon SNS. This action is idempotent. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When you delete an endpoint that is also subscribed to a topic, then you must also unsubscribe the endpoint from the topic.</p>
-    fn delete_endpoint(&self, input: &DeleteEndpointInput) -> Result<(), DeleteEndpointError>;
+    fn delete_endpoint(&self, input: &DeleteEndpointInput)
+        -> RusotoFuture<(), DeleteEndpointError>;
 
     /// <p>Deletes a platform application object for one of the supported push notification services, such as APNS and GCM. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn delete_platform_application(
         &self,
         input: &DeletePlatformApplicationInput,
-    ) -> Result<(), DeletePlatformApplicationError>;
+    ) -> RusotoFuture<(), DeletePlatformApplicationError>;
 
     /// <p>Deletes a topic and all its subscriptions. Deleting a topic might prevent some messages previously sent to the topic from being delivered to subscribers. This action is idempotent, so deleting a topic that does not exist does not result in an error.</p>
-    fn delete_topic(&self, input: &DeleteTopicInput) -> Result<(), DeleteTopicError>;
+    fn delete_topic(&self, input: &DeleteTopicInput) -> RusotoFuture<(), DeleteTopicError>;
 
     /// <p>Retrieves the endpoint attributes for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn get_endpoint_attributes(
         &self,
         input: &GetEndpointAttributesInput,
-    ) -> Result<GetEndpointAttributesResponse, GetEndpointAttributesError>;
+    ) -> RusotoFuture<GetEndpointAttributesResponse, GetEndpointAttributesError>;
 
     /// <p>Retrieves the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn get_platform_application_attributes(
         &self,
         input: &GetPlatformApplicationAttributesInput,
-    ) -> Result<GetPlatformApplicationAttributesResponse, GetPlatformApplicationAttributesError>;
+    ) -> RusotoFuture<GetPlatformApplicationAttributesResponse, GetPlatformApplicationAttributesError>;
 
     /// <p>Returns the settings for sending SMS messages from your account.</p> <p>These settings are set with the <code>SetSMSAttributes</code> action.</p>
     fn get_sms_attributes(
         &self,
         input: &GetSMSAttributesInput,
-    ) -> Result<GetSMSAttributesResponse, GetSMSAttributesError>;
+    ) -> RusotoFuture<GetSMSAttributesResponse, GetSMSAttributesError>;
 
     /// <p>Returns all of the properties of a subscription.</p>
     fn get_subscription_attributes(
         &self,
         input: &GetSubscriptionAttributesInput,
-    ) -> Result<GetSubscriptionAttributesResponse, GetSubscriptionAttributesError>;
+    ) -> RusotoFuture<GetSubscriptionAttributesResponse, GetSubscriptionAttributesError>;
 
     /// <p>Returns all of the properties of a topic. Topic properties returned might differ based on the authorization of the user.</p>
     fn get_topic_attributes(
         &self,
         input: &GetTopicAttributesInput,
-    ) -> Result<GetTopicAttributesResponse, GetTopicAttributesError>;
+    ) -> RusotoFuture<GetTopicAttributesResponse, GetTopicAttributesError>;
 
     /// <p>Lists the endpoints and endpoint attributes for devices in a supported push notification service, such as GCM and APNS. The results for <code>ListEndpointsByPlatformApplication</code> are paginated and return a limited list of endpoints, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListEndpointsByPlatformApplication</code> again using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn list_endpoints_by_platform_application(
         &self,
         input: &ListEndpointsByPlatformApplicationInput,
-    ) -> Result<ListEndpointsByPlatformApplicationResponse, ListEndpointsByPlatformApplicationError>;
+    ) -> RusotoFuture<
+        ListEndpointsByPlatformApplicationResponse,
+        ListEndpointsByPlatformApplicationError,
+    >;
 
     /// <p>Returns a list of phone numbers that are opted out, meaning you cannot send SMS messages to them.</p> <p>The results for <code>ListPhoneNumbersOptedOut</code> are paginated, and each page returns up to 100 phone numbers. If additional phone numbers are available after the first page of results, then a <code>NextToken</code> string will be returned. To receive the next page, you call <code>ListPhoneNumbersOptedOut</code> again using the <code>NextToken</code> string received from the previous call. When there are no more records to return, <code>NextToken</code> will be null.</p>
     fn list_phone_numbers_opted_out(
         &self,
         input: &ListPhoneNumbersOptedOutInput,
-    ) -> Result<ListPhoneNumbersOptedOutResponse, ListPhoneNumbersOptedOutError>;
+    ) -> RusotoFuture<ListPhoneNumbersOptedOutResponse, ListPhoneNumbersOptedOutError>;
 
     /// <p>Lists the platform application objects for the supported push notification services, such as APNS and GCM. The results for <code>ListPlatformApplications</code> are paginated and return a limited list of applications, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListPlatformApplications</code> using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn list_platform_applications(
         &self,
         input: &ListPlatformApplicationsInput,
-    ) -> Result<ListPlatformApplicationsResponse, ListPlatformApplicationsError>;
+    ) -> RusotoFuture<ListPlatformApplicationsResponse, ListPlatformApplicationsError>;
 
     /// <p>Returns a list of the requester's subscriptions. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptions</code> call to get further results.</p>
     fn list_subscriptions(
         &self,
         input: &ListSubscriptionsInput,
-    ) -> Result<ListSubscriptionsResponse, ListSubscriptionsError>;
+    ) -> RusotoFuture<ListSubscriptionsResponse, ListSubscriptionsError>;
 
     /// <p>Returns a list of the subscriptions to a specific topic. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptionsByTopic</code> call to get further results.</p>
     fn list_subscriptions_by_topic(
         &self,
         input: &ListSubscriptionsByTopicInput,
-    ) -> Result<ListSubscriptionsByTopicResponse, ListSubscriptionsByTopicError>;
+    ) -> RusotoFuture<ListSubscriptionsByTopicResponse, ListSubscriptionsByTopicError>;
 
     /// <p>Returns a list of the requester's topics. Each call returns a limited list of topics, up to 100. If there are more topics, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListTopics</code> call to get further results.</p>
-    fn list_topics(&self, input: &ListTopicsInput) -> Result<ListTopicsResponse, ListTopicsError>;
+    fn list_topics(
+        &self,
+        input: &ListTopicsInput,
+    ) -> RusotoFuture<ListTopicsResponse, ListTopicsError>;
 
     /// <p>Use this request to opt in a phone number that is opted out, which enables you to resume sending SMS messages to the number.</p> <p>You can opt in a phone number only once every 30 days.</p>
     fn opt_in_phone_number(
         &self,
         input: &OptInPhoneNumberInput,
-    ) -> Result<OptInPhoneNumberResponse, OptInPhoneNumberError>;
+    ) -> RusotoFuture<OptInPhoneNumberResponse, OptInPhoneNumberError>;
 
     /// <p>Sends a message to all of a topic's subscribed endpoints. When a <code>messageId</code> is returned, the message has been saved and Amazon SNS will attempt to deliver it to the topic's subscribers shortly. The format of the outgoing message to each subscribed endpoint depends on the notification protocol.</p> <p>To use the <code>Publish</code> action for sending a message to a mobile endpoint, such as an app on a Kindle device or mobile phone, you must specify the EndpointArn for the TargetArn parameter. The EndpointArn is returned when making a call with the <code>CreatePlatformEndpoint</code> action. </p> <p>For more information about formatting messages, see <a href="http://docs.aws.amazon.com/sns/latest/dg/mobile-push-send-custommessage.html">Send Custom Platform-Specific Payloads in Messages to Mobile Devices</a>. </p>
-    fn publish(&self, input: &PublishInput) -> Result<PublishResponse, PublishError>;
+    fn publish(&self, input: &PublishInput) -> RusotoFuture<PublishResponse, PublishError>;
 
     /// <p>Removes a statement from a topic's access control policy.</p>
-    fn remove_permission(&self, input: &RemovePermissionInput)
-        -> Result<(), RemovePermissionError>;
+    fn remove_permission(
+        &self,
+        input: &RemovePermissionInput,
+    ) -> RusotoFuture<(), RemovePermissionError>;
 
     /// <p>Sets the attributes for an endpoint for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn set_endpoint_attributes(
         &self,
         input: &SetEndpointAttributesInput,
-    ) -> Result<(), SetEndpointAttributesError>;
+    ) -> RusotoFuture<(), SetEndpointAttributesError>;
 
     /// <p>Sets the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. For information on configuring attributes for message delivery status, see <a href="http://docs.aws.amazon.com/sns/latest/dg/sns-msg-status.html">Using Amazon SNS Application Attributes for Message Delivery Status</a>. </p>
     fn set_platform_application_attributes(
         &self,
         input: &SetPlatformApplicationAttributesInput,
-    ) -> Result<(), SetPlatformApplicationAttributesError>;
+    ) -> RusotoFuture<(), SetPlatformApplicationAttributesError>;
 
     /// <p>Use this request to set the default settings for sending SMS messages and receiving daily SMS usage reports.</p> <p>You can override some of these settings for a single message when you use the <code>Publish</code> action with the <code>MessageAttributes.entry.N</code> parameter. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/sms_publish-to-phone.html">Sending an SMS Message</a> in the <i>Amazon SNS Developer Guide</i>.</p>
     fn set_sms_attributes(
         &self,
         input: &SetSMSAttributesInput,
-    ) -> Result<SetSMSAttributesResponse, SetSMSAttributesError>;
+    ) -> RusotoFuture<SetSMSAttributesResponse, SetSMSAttributesError>;
 
     /// <p>Allows a subscription owner to set an attribute of the topic to a new value.</p>
     fn set_subscription_attributes(
         &self,
         input: &SetSubscriptionAttributesInput,
-    ) -> Result<(), SetSubscriptionAttributesError>;
+    ) -> RusotoFuture<(), SetSubscriptionAttributesError>;
 
     /// <p>Allows a topic owner to set an attribute of the topic to a new value.</p>
     fn set_topic_attributes(
         &self,
         input: &SetTopicAttributesInput,
-    ) -> Result<(), SetTopicAttributesError>;
+    ) -> RusotoFuture<(), SetTopicAttributesError>;
 
     /// <p>Prepares to subscribe an endpoint by sending the endpoint a confirmation message. To actually create a subscription, the endpoint owner must call the <code>ConfirmSubscription</code> action with the token from the confirmation message. Confirmation tokens are valid for three days.</p>
-    fn subscribe(&self, input: &SubscribeInput) -> Result<SubscribeResponse, SubscribeError>;
+    fn subscribe(&self, input: &SubscribeInput) -> RusotoFuture<SubscribeResponse, SubscribeError>;
 
     /// <p>Deletes a subscription. If the subscription requires authentication for deletion, only the owner of the subscription or the topic's owner can unsubscribe, and an AWS signature is required. If the <code>Unsubscribe</code> call does not require authentication and the requester is not the subscription owner, a final cancellation message is delivered to the endpoint, so that the endpoint owner can easily resubscribe to the topic if the <code>Unsubscribe</code> request was unintended.</p>
-    fn unsubscribe(&self, input: &UnsubscribeInput) -> Result<(), UnsubscribeError>;
+    fn unsubscribe(&self, input: &UnsubscribeInput) -> RusotoFuture<(), UnsubscribeError>;
 }
 /// A client for the Amazon SNS API.
-pub struct SnsClient<P, D>
+pub struct SnsClient<P = CredentialsProvider, D = RequestDispatcher>
 where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    credentials_provider: P,
+    inner: ClientInner<P, D>,
     region: region::Region,
-    dispatcher: D,
+}
+
+impl SnsClient {
+    /// Creates a simple client backed by an implicit event loop.
+    ///
+    /// The client will use the default credentials provider and tls client.
+    ///
+    /// See the `rusoto_core::reactor` module for more details.
+    pub fn simple(region: region::Region) -> SnsClient {
+        SnsClient::new(
+            RequestDispatcher::default(),
+            CredentialsProvider::default(),
+            region,
+        )
+    }
 }
 
 impl<P, D> SnsClient<P, D>
@@ -5453,20 +5479,19 @@ where
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         SnsClient {
-            credentials_provider: credentials_provider,
+            inner: ClientInner::new(credentials_provider, request_dispatcher),
             region: region,
-            dispatcher: request_dispatcher,
         }
     }
 }
 
 impl<P, D> Sns for SnsClient<P, D>
 where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
+    P: ProvideAwsCredentials + 'static,
+    D: DispatchSignedRequest + 'static,
 {
     /// <p>Adds a statement to a topic's access control policy, granting access for the specified AWS accounts to the specified actions.</p>
-    fn add_permission(&self, input: &AddPermissionInput) -> Result<(), AddPermissionError> {
+    fn add_permission(&self, input: &AddPermissionInput) -> RusotoFuture<(), AddPermissionError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -5475,28 +5500,26 @@ where
         AddPermissionInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(AddPermissionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(AddPermissionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+
+            future::Either::A(future::ok(::std::mem::drop(response)))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Accepts a phone number and indicates whether the phone holder has opted out of receiving SMS messages from your account. You cannot send SMS messages to a number that is opted out.</p> <p>To resume sending messages, you can opt in the number by using the <code>OptInPhoneNumber</code> action.</p>
     fn check_if_phone_number_is_opted_out(
         &self,
         input: &CheckIfPhoneNumberIsOptedOutInput,
-    ) -> Result<CheckIfPhoneNumberIsOptedOutResponse, CheckIfPhoneNumberIsOptedOutError> {
+    ) -> RusotoFuture<CheckIfPhoneNumberIsOptedOutResponse, CheckIfPhoneNumberIsOptedOutError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -5505,19 +5528,23 @@ where
         CheckIfPhoneNumberIsOptedOutInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CheckIfPhoneNumberIsOptedOutError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = CheckIfPhoneNumberIsOptedOutResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5533,23 +5560,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CheckIfPhoneNumberIsOptedOutError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Verifies an endpoint owner's intent to receive messages by validating the token sent to the endpoint by an earlier <code>Subscribe</code> action. If the token is valid, the action creates a new subscription and returns its Amazon Resource Name (ARN). This call requires an AWS signature only when the <code>AuthenticateOnUnsubscribe</code> flag is set to "true".</p>
     fn confirm_subscription(
         &self,
         input: &ConfirmSubscriptionInput,
-    ) -> Result<ConfirmSubscriptionResponse, ConfirmSubscriptionError> {
+    ) -> RusotoFuture<ConfirmSubscriptionResponse, ConfirmSubscriptionError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -5558,19 +5581,23 @@ where
         ConfirmSubscriptionInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ConfirmSubscriptionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ConfirmSubscriptionResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5584,23 +5611,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ConfirmSubscriptionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a platform application object for one of the supported push notification services, such as APNS and GCM, to which devices and mobile apps may register. You must specify PlatformPrincipal and PlatformCredential attributes when using the <code>CreatePlatformApplication</code> action. The PlatformPrincipal is received from the notification service. For APNS/APNS_SANDBOX, PlatformPrincipal is "SSL certificate". For GCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is "client id". The PlatformCredential is also received from the notification service. For WNS, PlatformPrincipal is "Package Security Identifier". For MPNS, PlatformPrincipal is "TLS certificate". For Baidu, PlatformPrincipal is "API key".</p> <p>For APNS/APNS_SANDBOX, PlatformCredential is "private key". For GCM, PlatformCredential is "API key". For ADM, PlatformCredential is "client secret". For WNS, PlatformCredential is "secret key". For MPNS, PlatformCredential is "private key". For Baidu, PlatformCredential is "secret key". The PlatformApplicationArn that is returned when using <code>CreatePlatformApplication</code> is then used as an attribute for the <code>CreatePlatformEndpoint</code> action. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. For more information about obtaining the PlatformPrincipal and PlatformCredential for each of the supported push notification services, see <a href="http://docs.aws.amazon.com/sns/latest/dg/mobile-push-apns.html">Getting Started with Apple Push Notification Service</a>, <a href="http://docs.aws.amazon.com/sns/latest/dg/mobile-push-adm.html">Getting Started with Amazon Device Messaging</a>, <a href="http://docs.aws.amazon.com/sns/latest/dg/mobile-push-baidu.html">Getting Started with Baidu Cloud Push</a>, <a href="http://docs.aws.amazon.com/sns/latest/dg/mobile-push-gcm.html">Getting Started with Google Cloud Messaging for Android</a>, <a href="http://docs.aws.amazon.com/sns/latest/dg/mobile-push-mpns.html">Getting Started with MPNS</a>, or <a href="http://docs.aws.amazon.com/sns/latest/dg/mobile-push-wns.html">Getting Started with WNS</a>. </p>
     fn create_platform_application(
         &self,
         input: &CreatePlatformApplicationInput,
-    ) -> Result<CreatePlatformApplicationResponse, CreatePlatformApplicationError> {
+    ) -> RusotoFuture<CreatePlatformApplicationResponse, CreatePlatformApplicationError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -5609,19 +5632,23 @@ where
         CreatePlatformApplicationInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreatePlatformApplicationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = CreatePlatformApplicationResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5635,23 +5662,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreatePlatformApplicationError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates an endpoint for a device and mobile app on one of the supported push notification services, such as GCM and APNS. <code>CreatePlatformEndpoint</code> requires the PlatformApplicationArn that is returned from <code>CreatePlatformApplication</code>. The EndpointArn that is returned when using <code>CreatePlatformEndpoint</code> can then be used by the <code>Publish</code> action to send a message to a mobile app or by the <code>Subscribe</code> action for subscription to a topic. The <code>CreatePlatformEndpoint</code> action is idempotent, so if the requester already owns an endpoint with the same device token and attributes, that endpoint's ARN is returned without creating a new endpoint. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When using <code>CreatePlatformEndpoint</code> with Baidu, two attributes must be provided: ChannelId and UserId. The token field must also contain the ChannelId. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePushBaiduEndpoint.html">Creating an Amazon SNS Endpoint for Baidu</a>. </p>
     fn create_platform_endpoint(
         &self,
         input: &CreatePlatformEndpointInput,
-    ) -> Result<CreateEndpointResponse, CreatePlatformEndpointError> {
+    ) -> RusotoFuture<CreateEndpointResponse, CreatePlatformEndpointError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -5660,19 +5683,23 @@ where
         CreatePlatformEndpointInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreatePlatformEndpointError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = CreateEndpointResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5686,23 +5713,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreatePlatformEndpointError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Creates a topic to which notifications can be published. Users can create at most 100,000 topics. For more information, see <a href="http://aws.amazon.com/sns/">http://aws.amazon.com/sns</a>. This action is idempotent, so if the requester already owns a topic with the specified name, that topic's ARN is returned without creating a new topic.</p>
     fn create_topic(
         &self,
         input: &CreateTopicInput,
-    ) -> Result<CreateTopicResponse, CreateTopicError> {
+    ) -> RusotoFuture<CreateTopicResponse, CreateTopicError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -5711,19 +5734,23 @@ where
         CreateTopicInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateTopicError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = CreateTopicResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5737,20 +5764,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateTopicError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes the endpoint for a device and mobile app from Amazon SNS. This action is idempotent. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p> <p>When you delete an endpoint that is also subscribed to a topic, then you must also unsubscribe the endpoint from the topic.</p>
-    fn delete_endpoint(&self, input: &DeleteEndpointInput) -> Result<(), DeleteEndpointError> {
+    fn delete_endpoint(
+        &self,
+        input: &DeleteEndpointInput,
+    ) -> RusotoFuture<(), DeleteEndpointError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -5759,28 +5785,26 @@ where
         DeleteEndpointInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteEndpointError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteEndpointError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+
+            future::Either::A(future::ok(::std::mem::drop(response)))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a platform application object for one of the supported push notification services, such as APNS and GCM. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn delete_platform_application(
         &self,
         input: &DeletePlatformApplicationInput,
-    ) -> Result<(), DeletePlatformApplicationError> {
+    ) -> RusotoFuture<(), DeletePlatformApplicationError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -5789,25 +5813,23 @@ where
         DeletePlatformApplicationInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeletePlatformApplicationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeletePlatformApplicationError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+
+            future::Either::A(future::ok(::std::mem::drop(response)))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a topic and all its subscriptions. Deleting a topic might prevent some messages previously sent to the topic from being delivered to subscribers. This action is idempotent, so deleting a topic that does not exist does not result in an error.</p>
-    fn delete_topic(&self, input: &DeleteTopicInput) -> Result<(), DeleteTopicError> {
+    fn delete_topic(&self, input: &DeleteTopicInput) -> RusotoFuture<(), DeleteTopicError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -5816,28 +5838,26 @@ where
         DeleteTopicInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteTopicError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteTopicError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+
+            future::Either::A(future::ok(::std::mem::drop(response)))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves the endpoint attributes for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn get_endpoint_attributes(
         &self,
         input: &GetEndpointAttributesInput,
-    ) -> Result<GetEndpointAttributesResponse, GetEndpointAttributesError> {
+    ) -> RusotoFuture<GetEndpointAttributesResponse, GetEndpointAttributesError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -5846,19 +5866,23 @@ where
         GetEndpointAttributesInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetEndpointAttributesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = GetEndpointAttributesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5872,23 +5896,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetEndpointAttributesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Retrieves the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn get_platform_application_attributes(
         &self,
         input: &GetPlatformApplicationAttributesInput,
-    ) -> Result<GetPlatformApplicationAttributesResponse, GetPlatformApplicationAttributesError>
+    ) -> RusotoFuture<GetPlatformApplicationAttributesResponse, GetPlatformApplicationAttributesError>
     {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
@@ -5898,19 +5918,23 @@ where
         GetPlatformApplicationAttributesInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetPlatformApplicationAttributesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = GetPlatformApplicationAttributesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5926,23 +5950,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetPlatformApplicationAttributesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns the settings for sending SMS messages from your account.</p> <p>These settings are set with the <code>SetSMSAttributes</code> action.</p>
     fn get_sms_attributes(
         &self,
         input: &GetSMSAttributesInput,
-    ) -> Result<GetSMSAttributesResponse, GetSMSAttributesError> {
+    ) -> RusotoFuture<GetSMSAttributesResponse, GetSMSAttributesError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -5951,19 +5971,23 @@ where
         GetSMSAttributesInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetSMSAttributesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = GetSMSAttributesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -5977,23 +6001,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetSMSAttributesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns all of the properties of a subscription.</p>
     fn get_subscription_attributes(
         &self,
         input: &GetSubscriptionAttributesInput,
-    ) -> Result<GetSubscriptionAttributesResponse, GetSubscriptionAttributesError> {
+    ) -> RusotoFuture<GetSubscriptionAttributesResponse, GetSubscriptionAttributesError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6002,19 +6022,23 @@ where
         GetSubscriptionAttributesInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetSubscriptionAttributesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = GetSubscriptionAttributesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6028,23 +6052,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetSubscriptionAttributesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns all of the properties of a topic. Topic properties returned might differ based on the authorization of the user.</p>
     fn get_topic_attributes(
         &self,
         input: &GetTopicAttributesInput,
-    ) -> Result<GetTopicAttributesResponse, GetTopicAttributesError> {
+    ) -> RusotoFuture<GetTopicAttributesResponse, GetTopicAttributesError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6053,19 +6073,23 @@ where
         GetTopicAttributesInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(GetTopicAttributesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = GetTopicAttributesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6079,24 +6103,22 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(GetTopicAttributesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists the endpoints and endpoint attributes for devices in a supported push notification service, such as GCM and APNS. The results for <code>ListEndpointsByPlatformApplication</code> are paginated and return a limited list of endpoints, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListEndpointsByPlatformApplication</code> again using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn list_endpoints_by_platform_application(
         &self,
         input: &ListEndpointsByPlatformApplicationInput,
-    ) -> Result<ListEndpointsByPlatformApplicationResponse, ListEndpointsByPlatformApplicationError>
-    {
+    ) -> RusotoFuture<
+        ListEndpointsByPlatformApplicationResponse,
+        ListEndpointsByPlatformApplicationError,
+    > {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6105,19 +6127,23 @@ where
         ListEndpointsByPlatformApplicationInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListEndpointsByPlatformApplicationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ListEndpointsByPlatformApplicationResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6133,23 +6159,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListEndpointsByPlatformApplicationError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns a list of phone numbers that are opted out, meaning you cannot send SMS messages to them.</p> <p>The results for <code>ListPhoneNumbersOptedOut</code> are paginated, and each page returns up to 100 phone numbers. If additional phone numbers are available after the first page of results, then a <code>NextToken</code> string will be returned. To receive the next page, you call <code>ListPhoneNumbersOptedOut</code> again using the <code>NextToken</code> string received from the previous call. When there are no more records to return, <code>NextToken</code> will be null.</p>
     fn list_phone_numbers_opted_out(
         &self,
         input: &ListPhoneNumbersOptedOutInput,
-    ) -> Result<ListPhoneNumbersOptedOutResponse, ListPhoneNumbersOptedOutError> {
+    ) -> RusotoFuture<ListPhoneNumbersOptedOutResponse, ListPhoneNumbersOptedOutError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6158,19 +6180,23 @@ where
         ListPhoneNumbersOptedOutInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListPhoneNumbersOptedOutError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ListPhoneNumbersOptedOutResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6184,23 +6210,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListPhoneNumbersOptedOutError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Lists the platform application objects for the supported push notification services, such as APNS and GCM. The results for <code>ListPlatformApplications</code> are paginated and return a limited list of applications, up to 100. If additional records are available after the first page results, then a NextToken string will be returned. To receive the next page, you call <code>ListPlatformApplications</code> using the NextToken string received from the previous call. When there are no more records to return, NextToken will be null. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn list_platform_applications(
         &self,
         input: &ListPlatformApplicationsInput,
-    ) -> Result<ListPlatformApplicationsResponse, ListPlatformApplicationsError> {
+    ) -> RusotoFuture<ListPlatformApplicationsResponse, ListPlatformApplicationsError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6209,19 +6231,23 @@ where
         ListPlatformApplicationsInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListPlatformApplicationsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ListPlatformApplicationsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6235,23 +6261,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListPlatformApplicationsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns a list of the requester's subscriptions. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptions</code> call to get further results.</p>
     fn list_subscriptions(
         &self,
         input: &ListSubscriptionsInput,
-    ) -> Result<ListSubscriptionsResponse, ListSubscriptionsError> {
+    ) -> RusotoFuture<ListSubscriptionsResponse, ListSubscriptionsError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6260,19 +6282,23 @@ where
         ListSubscriptionsInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListSubscriptionsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ListSubscriptionsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6286,23 +6312,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListSubscriptionsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns a list of the subscriptions to a specific topic. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptionsByTopic</code> call to get further results.</p>
     fn list_subscriptions_by_topic(
         &self,
         input: &ListSubscriptionsByTopicInput,
-    ) -> Result<ListSubscriptionsByTopicResponse, ListSubscriptionsByTopicError> {
+    ) -> RusotoFuture<ListSubscriptionsByTopicResponse, ListSubscriptionsByTopicError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6311,19 +6333,23 @@ where
         ListSubscriptionsByTopicInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListSubscriptionsByTopicError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ListSubscriptionsByTopicResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6337,20 +6363,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListSubscriptionsByTopicError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Returns a list of the requester's topics. Each call returns a limited list of topics, up to 100. If there are more topics, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListTopics</code> call to get further results.</p>
-    fn list_topics(&self, input: &ListTopicsInput) -> Result<ListTopicsResponse, ListTopicsError> {
+    fn list_topics(
+        &self,
+        input: &ListTopicsInput,
+    ) -> RusotoFuture<ListTopicsResponse, ListTopicsError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6359,19 +6384,23 @@ where
         ListTopicsInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(ListTopicsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = ListTopicsResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6385,23 +6414,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(ListTopicsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Use this request to opt in a phone number that is opted out, which enables you to resume sending SMS messages to the number.</p> <p>You can opt in a phone number only once every 30 days.</p>
     fn opt_in_phone_number(
         &self,
         input: &OptInPhoneNumberInput,
-    ) -> Result<OptInPhoneNumberResponse, OptInPhoneNumberError> {
+    ) -> RusotoFuture<OptInPhoneNumberResponse, OptInPhoneNumberError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6410,19 +6435,23 @@ where
         OptInPhoneNumberInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(OptInPhoneNumberError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = OptInPhoneNumberResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6436,20 +6465,16 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(OptInPhoneNumberError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Sends a message to all of a topic's subscribed endpoints. When a <code>messageId</code> is returned, the message has been saved and Amazon SNS will attempt to deliver it to the topic's subscribers shortly. The format of the outgoing message to each subscribed endpoint depends on the notification protocol.</p> <p>To use the <code>Publish</code> action for sending a message to a mobile endpoint, such as an app on a Kindle device or mobile phone, you must specify the EndpointArn for the TargetArn parameter. The EndpointArn is returned when making a call with the <code>CreatePlatformEndpoint</code> action. </p> <p>For more information about formatting messages, see <a href="http://docs.aws.amazon.com/sns/latest/dg/mobile-push-send-custommessage.html">Send Custom Platform-Specific Payloads in Messages to Mobile Devices</a>. </p>
-    fn publish(&self, input: &PublishInput) -> Result<PublishResponse, PublishError> {
+    fn publish(&self, input: &PublishInput) -> RusotoFuture<PublishResponse, PublishError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6458,19 +6483,23 @@ where
         PublishInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(PublishError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = PublishResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6484,23 +6513,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(PublishError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Removes a statement from a topic's access control policy.</p>
     fn remove_permission(
         &self,
         input: &RemovePermissionInput,
-    ) -> Result<(), RemovePermissionError> {
+    ) -> RusotoFuture<(), RemovePermissionError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6509,28 +6534,26 @@ where
         RemovePermissionInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(RemovePermissionError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(RemovePermissionError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+
+            future::Either::A(future::ok(::std::mem::drop(response)))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Sets the attributes for an endpoint for a device on one of the supported push notification services, such as GCM and APNS. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. </p>
     fn set_endpoint_attributes(
         &self,
         input: &SetEndpointAttributesInput,
-    ) -> Result<(), SetEndpointAttributesError> {
+    ) -> RusotoFuture<(), SetEndpointAttributesError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6539,28 +6562,26 @@ where
         SetEndpointAttributesInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(SetEndpointAttributesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(SetEndpointAttributesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+
+            future::Either::A(future::ok(::std::mem::drop(response)))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Sets the attributes of the platform application object for the supported push notification services, such as APNS and GCM. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SNSMobilePush.html">Using Amazon SNS Mobile Push Notifications</a>. For information on configuring attributes for message delivery status, see <a href="http://docs.aws.amazon.com/sns/latest/dg/sns-msg-status.html">Using Amazon SNS Application Attributes for Message Delivery Status</a>. </p>
     fn set_platform_application_attributes(
         &self,
         input: &SetPlatformApplicationAttributesInput,
-    ) -> Result<(), SetPlatformApplicationAttributesError> {
+    ) -> RusotoFuture<(), SetPlatformApplicationAttributesError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6569,28 +6590,26 @@ where
         SetPlatformApplicationAttributesInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(SetPlatformApplicationAttributesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(SetPlatformApplicationAttributesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+
+            future::Either::A(future::ok(::std::mem::drop(response)))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Use this request to set the default settings for sending SMS messages and receiving daily SMS usage reports.</p> <p>You can override some of these settings for a single message when you use the <code>Publish</code> action with the <code>MessageAttributes.entry.N</code> parameter. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/sms_publish-to-phone.html">Sending an SMS Message</a> in the <i>Amazon SNS Developer Guide</i>.</p>
     fn set_sms_attributes(
         &self,
         input: &SetSMSAttributesInput,
-    ) -> Result<SetSMSAttributesResponse, SetSMSAttributesError> {
+    ) -> RusotoFuture<SetSMSAttributesResponse, SetSMSAttributesError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6599,19 +6618,23 @@ where
         SetSMSAttributesInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(SetSMSAttributesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = SetSMSAttributesResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6625,23 +6648,19 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(SetSMSAttributesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Allows a subscription owner to set an attribute of the topic to a new value.</p>
     fn set_subscription_attributes(
         &self,
         input: &SetSubscriptionAttributesInput,
-    ) -> Result<(), SetSubscriptionAttributesError> {
+    ) -> RusotoFuture<(), SetSubscriptionAttributesError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6650,28 +6669,26 @@ where
         SetSubscriptionAttributesInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(SetSubscriptionAttributesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(SetSubscriptionAttributesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+
+            future::Either::A(future::ok(::std::mem::drop(response)))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Allows a topic owner to set an attribute of the topic to a new value.</p>
     fn set_topic_attributes(
         &self,
         input: &SetTopicAttributesInput,
-    ) -> Result<(), SetTopicAttributesError> {
+    ) -> RusotoFuture<(), SetTopicAttributesError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6680,25 +6697,23 @@ where
         SetTopicAttributesInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(SetTopicAttributesError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(SetTopicAttributesError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+
+            future::Either::A(future::ok(::std::mem::drop(response)))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Prepares to subscribe an endpoint by sending the endpoint a confirmation message. To actually create a subscription, the endpoint owner must call the <code>ConfirmSubscription</code> action with the token from the confirmation message. Confirmation tokens are valid for three days.</p>
-    fn subscribe(&self, input: &SubscribeInput) -> Result<SubscribeResponse, SubscribeError> {
+    fn subscribe(&self, input: &SubscribeInput) -> RusotoFuture<SubscribeResponse, SubscribeError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6707,19 +6722,23 @@ where
         SubscribeInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result;
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(SubscribeError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
+            }
 
-                if body.is_empty() {
+            future::Either::A(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
                     result = SubscribeResponse::default();
                 } else {
                     let reader = EventReader::new_with_config(
-                        body.as_slice(),
+                        response.body.as_slice(),
                         ParserConfig::new().trim_whitespace(true),
                     );
                     let mut stack = XmlResponse::new(reader.into_iter().peekable());
@@ -6733,20 +6752,16 @@ where
                     skip_tree(&mut stack);
                     try!(end_element(&actual_tag_name, &mut stack));
                 }
+
                 Ok(result)
-            }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(SubscribeError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+            }))
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Deletes a subscription. If the subscription requires authentication for deletion, only the owner of the subscription or the topic's owner can unsubscribe, and an AWS signature is required. If the <code>Unsubscribe</code> call does not require authentication and the requester is not the subscription owner, a final cancellation message is delivered to the endpoint, so that the endpoint owner can easily resubscribe to the topic if the <code>Unsubscribe</code> request was unintended.</p>
-    fn unsubscribe(&self, input: &UnsubscribeInput) -> Result<(), UnsubscribeError> {
+    fn unsubscribe(&self, input: &UnsubscribeInput) -> RusotoFuture<(), UnsubscribeError> {
         let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
         let mut params = Params::new();
 
@@ -6755,21 +6770,19 @@ where
         UnsubscribeInputSerializer::serialize(&mut params, "", &input);
         request.set_params(params);
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-        let mut response = try!(self.dispatcher.dispatch(&request));
-        match response.status {
-            StatusCode::Ok => {
-                let result = ();
-                Ok(result)
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status != StatusCode::Ok {
+                return future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UnsubscribeError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }));
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UnsubscribeError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+
+            future::Either::A(future::ok(::std::mem::drop(response)))
+        });
+
+        RusotoFuture::new(future)
     }
 }
 
@@ -6791,7 +6804,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(400).with_body(&mock_response);
         let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = DeleteTopicInput::default();
-        let result = client.delete_topic(&request);
+        let result = client.delete_topic(&request).sync();
         assert!(!result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -6804,7 +6817,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = AddPermissionInput::default();
-        let result = client.add_permission(&request);
+        let result = client.add_permission(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -6817,7 +6830,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ConfirmSubscriptionInput::default();
-        let result = client.confirm_subscription(&request);
+        let result = client.confirm_subscription(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -6830,7 +6843,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = CreateTopicInput::default();
-        let result = client.create_topic(&request);
+        let result = client.create_topic(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -6843,7 +6856,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetSubscriptionAttributesInput::default();
-        let result = client.get_subscription_attributes(&request);
+        let result = client.get_subscription_attributes(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -6856,7 +6869,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = GetTopicAttributesInput::default();
-        let result = client.get_topic_attributes(&request);
+        let result = client.get_topic_attributes(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -6869,7 +6882,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListSubscriptionsByTopicInput::default();
-        let result = client.list_subscriptions_by_topic(&request);
+        let result = client.list_subscriptions_by_topic(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -6882,7 +6895,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListSubscriptionsInput::default();
-        let result = client.list_subscriptions(&request);
+        let result = client.list_subscriptions(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -6895,7 +6908,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = ListTopicsInput::default();
-        let result = client.list_topics(&request);
+        let result = client.list_topics(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -6906,7 +6919,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = PublishInput::default();
-        let result = client.publish(&request);
+        let result = client.publish(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 
@@ -6919,7 +6932,7 @@ mod protocol_tests {
         let mock = MockRequestDispatcher::with_status(200).with_body(&mock_response);
         let client = SnsClient::new(mock, MockCredentialsProvider, rusoto_region::UsEast1);
         let request = SubscribeInput::default();
-        let result = client.subscribe(&request);
+        let result = client.subscribe(&request).sync();
         assert!(result.is_ok(), "parse error: {:?}", result);
     }
 }

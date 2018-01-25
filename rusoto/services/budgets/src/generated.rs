@@ -10,16 +10,19 @@
 //
 // =================================================================
 
+use std::error::Error;
+use std::fmt;
+use std::io;
+
 #[allow(warnings)]
-use hyper::Client;
-use hyper::status::StatusCode;
+use futures::future;
+use futures::Future;
+use hyper::StatusCode;
+use rusoto_core::reactor::{CredentialsProvider, RequestDispatcher};
 use rusoto_core::request::DispatchSignedRequest;
 use rusoto_core::region;
+use rusoto_core::{ClientInner, RusotoFuture};
 
-use std::fmt;
-use std::error::Error;
-use std::io;
-use std::io::Read;
 use rusoto_core::request::HttpDispatchError;
 use rusoto_core::credential::{CredentialsError, ProvideAwsCredentials};
 
@@ -1667,89 +1670,106 @@ pub trait Budgets {
     fn create_budget(
         &self,
         input: &CreateBudgetRequest,
-    ) -> Result<CreateBudgetResponse, CreateBudgetError>;
+    ) -> RusotoFuture<CreateBudgetResponse, CreateBudgetError>;
 
     /// <p>Create a new Notification with subscribers for a budget</p>
     fn create_notification(
         &self,
         input: &CreateNotificationRequest,
-    ) -> Result<CreateNotificationResponse, CreateNotificationError>;
+    ) -> RusotoFuture<CreateNotificationResponse, CreateNotificationError>;
 
     /// <p>Create a new Subscriber for a notification</p>
     fn create_subscriber(
         &self,
         input: &CreateSubscriberRequest,
-    ) -> Result<CreateSubscriberResponse, CreateSubscriberError>;
+    ) -> RusotoFuture<CreateSubscriberResponse, CreateSubscriberError>;
 
     /// <p>Delete a budget and related notifications</p>
     fn delete_budget(
         &self,
         input: &DeleteBudgetRequest,
-    ) -> Result<DeleteBudgetResponse, DeleteBudgetError>;
+    ) -> RusotoFuture<DeleteBudgetResponse, DeleteBudgetError>;
 
     /// <p>Delete a notification and related subscribers</p>
     fn delete_notification(
         &self,
         input: &DeleteNotificationRequest,
-    ) -> Result<DeleteNotificationResponse, DeleteNotificationError>;
+    ) -> RusotoFuture<DeleteNotificationResponse, DeleteNotificationError>;
 
     /// <p>Delete a Subscriber for a notification</p>
     fn delete_subscriber(
         &self,
         input: &DeleteSubscriberRequest,
-    ) -> Result<DeleteSubscriberResponse, DeleteSubscriberError>;
+    ) -> RusotoFuture<DeleteSubscriberResponse, DeleteSubscriberError>;
 
     /// <p>Get a single budget</p>
     fn describe_budget(
         &self,
         input: &DescribeBudgetRequest,
-    ) -> Result<DescribeBudgetResponse, DescribeBudgetError>;
+    ) -> RusotoFuture<DescribeBudgetResponse, DescribeBudgetError>;
 
     /// <p>Get all budgets for an account</p>
     fn describe_budgets(
         &self,
         input: &DescribeBudgetsRequest,
-    ) -> Result<DescribeBudgetsResponse, DescribeBudgetsError>;
+    ) -> RusotoFuture<DescribeBudgetsResponse, DescribeBudgetsError>;
 
     /// <p>Get notifications of a budget</p>
     fn describe_notifications_for_budget(
         &self,
         input: &DescribeNotificationsForBudgetRequest,
-    ) -> Result<DescribeNotificationsForBudgetResponse, DescribeNotificationsForBudgetError>;
+    ) -> RusotoFuture<DescribeNotificationsForBudgetResponse, DescribeNotificationsForBudgetError>;
 
     /// <p>Get subscribers of a notification</p>
     fn describe_subscribers_for_notification(
         &self,
         input: &DescribeSubscribersForNotificationRequest,
-    ) -> Result<DescribeSubscribersForNotificationResponse, DescribeSubscribersForNotificationError>;
+    ) -> RusotoFuture<
+        DescribeSubscribersForNotificationResponse,
+        DescribeSubscribersForNotificationError,
+    >;
 
     /// <p>Update the information of a budget already created</p>
     fn update_budget(
         &self,
         input: &UpdateBudgetRequest,
-    ) -> Result<UpdateBudgetResponse, UpdateBudgetError>;
+    ) -> RusotoFuture<UpdateBudgetResponse, UpdateBudgetError>;
 
     /// <p>Update the information about a notification already created</p>
     fn update_notification(
         &self,
         input: &UpdateNotificationRequest,
-    ) -> Result<UpdateNotificationResponse, UpdateNotificationError>;
+    ) -> RusotoFuture<UpdateNotificationResponse, UpdateNotificationError>;
 
     /// <p>Update a subscriber</p>
     fn update_subscriber(
         &self,
         input: &UpdateSubscriberRequest,
-    ) -> Result<UpdateSubscriberResponse, UpdateSubscriberError>;
+    ) -> RusotoFuture<UpdateSubscriberResponse, UpdateSubscriberError>;
 }
 /// A client for the AWSBudgets API.
-pub struct BudgetsClient<P, D>
+pub struct BudgetsClient<P = CredentialsProvider, D = RequestDispatcher>
 where
     P: ProvideAwsCredentials,
     D: DispatchSignedRequest,
 {
-    credentials_provider: P,
+    inner: ClientInner<P, D>,
     region: region::Region,
-    dispatcher: D,
+}
+
+impl BudgetsClient {
+    /// Creates a simple client backed by an implicit event loop.
+    ///
+    /// The client will use the default credentials provider and tls client.
+    ///
+    /// See the `rusoto_core::reactor` module for more details.
+    pub fn simple(region: region::Region) -> BudgetsClient {
+        BudgetsClient::new(
+            RequestDispatcher::default(),
+            CredentialsProvider::default(),
+            region,
+        )
+    }
 }
 
 impl<P, D> BudgetsClient<P, D>
@@ -1759,23 +1779,22 @@ where
 {
     pub fn new(request_dispatcher: D, credentials_provider: P, region: region::Region) -> Self {
         BudgetsClient {
-            credentials_provider: credentials_provider,
+            inner: ClientInner::new(credentials_provider, request_dispatcher),
             region: region,
-            dispatcher: request_dispatcher,
         }
     }
 }
 
 impl<P, D> Budgets for BudgetsClient<P, D>
 where
-    P: ProvideAwsCredentials,
-    D: DispatchSignedRequest,
+    P: ProvideAwsCredentials + 'static,
+    D: DispatchSignedRequest + 'static,
 {
     /// <p>Create a new budget</p>
     fn create_budget(
         &self,
         input: &CreateBudgetRequest,
-    ) -> Result<CreateBudgetResponse, CreateBudgetError> {
+    ) -> RusotoFuture<CreateBudgetResponse, CreateBudgetError> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1783,33 +1802,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateBudgetResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<CreateBudgetResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateBudgetError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateBudgetError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Create a new Notification with subscribers for a budget</p>
     fn create_notification(
         &self,
         input: &CreateNotificationRequest,
-    ) -> Result<CreateNotificationResponse, CreateNotificationError> {
+    ) -> RusotoFuture<CreateNotificationResponse, CreateNotificationError> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1817,33 +1833,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateNotificationResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<CreateNotificationResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateNotificationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateNotificationError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Create a new Subscriber for a notification</p>
     fn create_subscriber(
         &self,
         input: &CreateSubscriberRequest,
-    ) -> Result<CreateSubscriberResponse, CreateSubscriberError> {
+    ) -> RusotoFuture<CreateSubscriberResponse, CreateSubscriberError> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1851,33 +1864,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<CreateSubscriberResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<CreateSubscriberResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(CreateSubscriberError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(CreateSubscriberError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Delete a budget and related notifications</p>
     fn delete_budget(
         &self,
         input: &DeleteBudgetRequest,
-    ) -> Result<DeleteBudgetResponse, DeleteBudgetError> {
+    ) -> RusotoFuture<DeleteBudgetResponse, DeleteBudgetError> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1885,33 +1895,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteBudgetResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<DeleteBudgetResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteBudgetError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteBudgetError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Delete a notification and related subscribers</p>
     fn delete_notification(
         &self,
         input: &DeleteNotificationRequest,
-    ) -> Result<DeleteNotificationResponse, DeleteNotificationError> {
+    ) -> RusotoFuture<DeleteNotificationResponse, DeleteNotificationError> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1919,33 +1926,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteNotificationResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<DeleteNotificationResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteNotificationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteNotificationError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Delete a Subscriber for a notification</p>
     fn delete_subscriber(
         &self,
         input: &DeleteSubscriberRequest,
-    ) -> Result<DeleteSubscriberResponse, DeleteSubscriberError> {
+    ) -> RusotoFuture<DeleteSubscriberResponse, DeleteSubscriberError> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1953,33 +1957,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DeleteSubscriberResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<DeleteSubscriberResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteSubscriberError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DeleteSubscriberError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Get a single budget</p>
     fn describe_budget(
         &self,
         input: &DescribeBudgetRequest,
-    ) -> Result<DescribeBudgetResponse, DescribeBudgetError> {
+    ) -> RusotoFuture<DescribeBudgetResponse, DescribeBudgetError> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -1987,33 +1988,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeBudgetResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<DescribeBudgetResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeBudgetError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeBudgetError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Get all budgets for an account</p>
     fn describe_budgets(
         &self,
         input: &DescribeBudgetsRequest,
-    ) -> Result<DescribeBudgetsResponse, DescribeBudgetsError> {
+    ) -> RusotoFuture<DescribeBudgetsResponse, DescribeBudgetsError> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2021,33 +2019,31 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<DescribeBudgetsResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<DescribeBudgetsResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeBudgetsError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeBudgetsError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Get notifications of a budget</p>
     fn describe_notifications_for_budget(
         &self,
         input: &DescribeNotificationsForBudgetRequest,
-    ) -> Result<DescribeNotificationsForBudgetResponse, DescribeNotificationsForBudgetError> {
+    ) -> RusotoFuture<DescribeNotificationsForBudgetResponse, DescribeNotificationsForBudgetError>
+    {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2058,36 +2054,33 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
                     serde_json::from_str::<DescribeNotificationsForBudgetResponse>(
-                        String::from_utf8_lossy(&body).as_ref(),
-                    ).unwrap(),
-                )
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeNotificationsForBudgetError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeNotificationsForBudgetError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Get subscribers of a notification</p>
     fn describe_subscribers_for_notification(
         &self,
         input: &DescribeSubscribersForNotificationRequest,
-    ) -> Result<DescribeSubscribersForNotificationResponse, DescribeSubscribersForNotificationError>
-    {
+    ) -> RusotoFuture<
+        DescribeSubscribersForNotificationResponse,
+        DescribeSubscribersForNotificationError,
+    > {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2098,35 +2091,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
                     serde_json::from_str::<DescribeSubscribersForNotificationResponse>(
-                        String::from_utf8_lossy(&body).as_ref(),
-                    ).unwrap(),
-                )
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeSubscribersForNotificationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(DescribeSubscribersForNotificationError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Update the information of a budget already created</p>
     fn update_budget(
         &self,
         input: &UpdateBudgetRequest,
-    ) -> Result<UpdateBudgetResponse, UpdateBudgetError> {
+    ) -> RusotoFuture<UpdateBudgetResponse, UpdateBudgetError> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2134,33 +2122,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateBudgetResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<UpdateBudgetResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateBudgetError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateBudgetError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Update the information about a notification already created</p>
     fn update_notification(
         &self,
         input: &UpdateNotificationRequest,
-    ) -> Result<UpdateNotificationResponse, UpdateNotificationError> {
+    ) -> RusotoFuture<UpdateNotificationResponse, UpdateNotificationError> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2168,33 +2153,30 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateNotificationResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<UpdateNotificationResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateNotificationError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateNotificationError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 
     /// <p>Update a subscriber</p>
     fn update_subscriber(
         &self,
         input: &UpdateSubscriberRequest,
-    ) -> Result<UpdateSubscriberResponse, UpdateSubscriberError> {
+    ) -> RusotoFuture<UpdateSubscriberResponse, UpdateSubscriberError> {
         let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
 
         request.set_content_type("application/x-amz-json-1.1".to_owned());
@@ -2202,26 +2184,23 @@ where
         let encoded = serde_json::to_string(input).unwrap();
         request.set_payload(Some(encoded.into_bytes()));
 
-        request.sign_with_plus(&try!(self.credentials_provider.credentials()), true);
-
-        let mut response = try!(self.dispatcher.dispatch(&request));
-
-        match response.status {
-            StatusCode::Ok => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Ok(serde_json::from_str::<UpdateSubscriberResponse>(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ).unwrap())
+        let future = self.inner.sign_and_dispatch(request).and_then(|response| {
+            if response.status == StatusCode::Ok {
+                future::Either::A(response.buffer().from_err().map(|response| {
+                    serde_json::from_str::<UpdateSubscriberResponse>(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ).unwrap()
+                }))
+            } else {
+                future::Either::B(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateSubscriberError::from_body(
+                        String::from_utf8_lossy(response.body.as_ref()).as_ref(),
+                    ))
+                }))
             }
-            _ => {
-                let mut body: Vec<u8> = Vec::new();
-                try!(response.body.read_to_end(&mut body));
-                Err(UpdateSubscriberError::from_body(
-                    String::from_utf8_lossy(&body).as_ref(),
-                ))
-            }
-        }
+        });
+
+        RusotoFuture::new(future)
     }
 }
 

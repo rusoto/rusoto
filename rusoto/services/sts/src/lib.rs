@@ -16,8 +16,10 @@
 //! If you're using the service, you're probably looking for [StsClient](struct.StsClient.html) and [Sts](trait.Sts.html).
 
 extern crate chrono;
+extern crate futures;
 extern crate hyper;
 extern crate rusoto_core;
+extern crate tokio_core;
 extern crate xml;
 
 mod generated;
