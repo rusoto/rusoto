@@ -20,40 +20,11 @@ pub struct ProfileProvider {
 }
 
 impl ProfileProvider {
+
     /// Create a new `ProfileProvider` for the default credentials file path and profile name.
     pub fn new() -> Result<ProfileProvider, CredentialsError> {
-        let profile_location = match env_var("AWS_SHARED_CREDENTIALS_FILE") {
-            Ok(path) => PathBuf::from(path),
-            Err(_) => {
-                match ProfileProvider::default_profile_location() {
-                    Ok(path) => path,
-                    Err(err) => return Err(err),
-                }
-            }
-        };
-
-        Ok(ProfileProvider {
-            file_path: profile_location,
-            profile: "default".to_owned(),
-        })
-    }
-
-    /// Default credentials file location:
-    /// `~/.aws/credentials` (Linux/Mac)
-    /// `%USERPROFILE%\.aws\credentials` (Windows)
-    fn default_profile_location() -> Result<PathBuf, CredentialsError> {
-        match home_dir() {
-            Some(home_path) => {
-                let mut credentials_path = PathBuf::from(".aws");
-
-                credentials_path.push("credentials");
-
-                Ok(home_path.join(credentials_path))
-            }
-            None => Err(CredentialsError::new(
-                "The environment variable HOME must be set.",
-            )),
-        }
+        let profile_location = ProfileProvider::default_profile_location()?;
+        Ok(ProfileProvider::with_default_configuration(profile_location))
     }
 
     /// Create a new `ProfileProvider` for the credentials file at the given path, using
@@ -67,6 +38,56 @@ impl ProfileProvider {
             file_path: file_path.into(),
             profile: profile.into(),
         }
+    }
+
+    /// Create a new `ProfileProvider` for the credentials file at the given path, using
+    /// the profile name from environment variable ```AWS_PROFILE``` or fall-back to ```"default"```
+    /// if ```AWS_PROFILE``` is not set.
+    pub fn with_default_configuration<F>(file_path: F) -> ProfileProvider
+    where
+        F: Into<PathBuf>
+    {
+        ProfileProvider::with_configuration(file_path, ProfileProvider::default_profile_name())
+    }
+
+    /// This is a helper function as Option<T>::filter is not yet stable (see issue #45860).
+    fn non_empty_env_var(name: &str) -> Option<String> {
+        match env_var(name) {
+            Ok(value) => if value.is_empty() { None } else { Some(value) },
+            Err(_) => None
+        }
+    }
+
+    /// Default credentials file location:
+    /// 1. if set and not empty, use value from environment variable ```AWS_SHARED_CREDENTIALS_FILE```
+    /// 2. otherwise return `~/.aws/credentials` (Linux/Mac) resp. `%USERPROFILE%\.aws\credentials` (Windows)
+    fn default_profile_location() -> Result<PathBuf, CredentialsError> {
+        let env = ProfileProvider::non_empty_env_var("AWS_SHARED_CREDENTIALS_FILE");
+        match env {
+            Some(path) => Ok(PathBuf::from(path)),
+            None => ProfileProvider::hardcoded_profile_location(),
+        }
+    }
+
+    fn hardcoded_profile_location() -> Result<PathBuf, CredentialsError> {
+        match home_dir() {
+            Some(mut home_path) => {
+                home_path.push(".aws");
+                home_path.push(".credentials");
+                Ok(home_path)
+            }
+            None => Err(CredentialsError::new(
+                "The environment variable HOME must be set.",
+            )),
+        }
+    }
+
+    /// Get the default profile name:
+    /// 1. if set and not empty, use value from environment variable ```AWS_PROFILE```
+    /// 2. otherwise return ```"default"```
+    /// see https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/credentials.html.
+    fn default_profile_name() -> String {
+         ProfileProvider::non_empty_env_var("AWS_PROFILE").unwrap_or("default".to_owned())
     }
 
     /// Get a reference to the credentials file path.
@@ -225,11 +246,29 @@ fn parse_credentials_file(
 
 #[cfg(test)]
 mod tests {
+
     use std::env;
     use std::path::Path;
 
     use {CredentialsError, ProvideAwsCredentials};
+    use std::sync::{Mutex, MutexGuard};
     use super::*;
+
+    // cargo runs tests in parallel, which leads to race conditions when changing
+    // environment variables. Therefore we use a global mutex for all tests which
+    // rely on environment variables.
+    lazy_static! {
+        static ref ENV_MUTEX: Mutex<()> = Mutex::new(());
+    }
+
+    // As failed (panic) tests will poisen the global mutex, we use a helper which
+    // recovers from poisoned mutex.
+    fn lock<'a, T>(mutex: &'a Mutex<T>) -> MutexGuard<'a,T> {
+        match mutex.lock() {
+            Ok(guard) => guard,
+            Err(poisoned) => poisoned.into_inner(),
+        }
+    }
 
     #[test]
     fn parse_credentials_file_default_profile() {
@@ -305,6 +344,7 @@ mod tests {
 
     #[test]
     fn profile_provider_via_environment_variable() {
+        let _guard = lock(&ENV_MUTEX);
         let credentials_path = "tests/sample-data/default_profile_credentials";
         env::set_var("AWS_SHARED_CREDENTIALS_FILE", credentials_path);
         let result = ProfileProvider::new();
@@ -313,6 +353,22 @@ mod tests {
         assert_eq!(provider.file_path().to_str().unwrap(), credentials_path);
         env::remove_var("AWS_SHARED_CREDENTIALS_FILE");
     }
+
+    #[test]
+    fn profile_provider_profile_name_via_environment_variable() {
+        let _guard = lock(&ENV_MUTEX);
+        let credentials_path = "tests/sample-data/multiple_profile_credentials";
+        env::set_var("AWS_SHARED_CREDENTIALS_FILE", credentials_path);
+        env::set_var("AWS_PROFILE", "bar");
+        let result = ProfileProvider::new();
+        assert!(result.is_ok());
+        let provider = result.unwrap();
+        assert_eq!(provider.file_path().to_str().unwrap(), credentials_path);
+        let creds = provider.credentials();
+        assert_eq!(creds.unwrap().aws_access_key_id(), "bar_access_key");
+        env::remove_var("AWS_SHARED_CREDENTIALS_FILE");
+        env::remove_var("AWS_PROFILE");
+    } 
 
     #[test]
     fn profile_provider_bad_profile() {
@@ -384,4 +440,51 @@ mod tests {
         assert_eq!(default_profile.aws_access_key_id(), "foo");
         assert_eq!(default_profile.aws_secret_access_key(), "bar");
     }
+
+    #[test]
+    fn default_profile_name_from_env_var(){
+        let _guard = lock(&ENV_MUTEX);
+        env::set_var("AWS_PROFILE", "bar");
+        assert_eq!("bar", ProfileProvider::default_profile_name());
+        env::remove_var("AWS_PROFILE");
+    }
+
+    #[test]
+    fn default_profile_name_from_empty_env_var(){
+        let _guard = lock(&ENV_MUTEX);
+        env::set_var("AWS_PROFILE", "");
+        assert_eq!("default", ProfileProvider::default_profile_name());
+        env::remove_var("AWS_PROFILE");
+    }
+
+    #[test]
+    fn default_profile_name(){
+        let _guard = lock(&ENV_MUTEX);
+        env::remove_var("AWS_PROFILE");
+        assert_eq!("default", ProfileProvider::default_profile_name());
+    }
+
+    #[test]
+    fn default_profile_location_from_env_var(){
+        let _guard = lock(&ENV_MUTEX);
+        env::set_var("AWS_SHARED_CREDENTIALS_FILE", "bar");
+        assert_eq!(Ok(PathBuf::from("bar")), ProfileProvider::default_profile_location());
+        env::remove_var("AWS_SHARED_CREDENTIALS_FILE");
+    }
+
+    #[test]
+    fn default_profile_location_from_empty_env_var(){
+        let _guard = lock(&ENV_MUTEX);
+        env::set_var("AWS_SHARED_CREDENTIALS_FILE", "");
+        assert_eq!(ProfileProvider::hardcoded_profile_location(), ProfileProvider::default_profile_location());
+        env::remove_var("AWS_SHARED_CREDENTIALS_FILE");
+    }
+
+    #[test]
+    fn default_profile_location(){
+        let _guard = lock(&ENV_MUTEX);
+        env::remove_var("AWS_SHARED_CREDENTIALS_FILE");
+        assert_eq!(ProfileProvider::hardcoded_profile_location(), ProfileProvider::default_profile_location());
+    }
+
 }

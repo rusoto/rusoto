@@ -3,6 +3,8 @@
 ## [Unreleased]
 (Please put an entry here in each PR)
 
+- Use ```$AWS_PROFILE``` to obtain default profile name 
+
 ## [0.31.0] - 2018-01-21
 
 - Update Rusoto Core ReadMe
