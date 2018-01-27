@@ -5,3 +5,5 @@ testfile.zip
 *.pyc
 venv
 *.rs.bk
+.idea
+rusoto.iml
