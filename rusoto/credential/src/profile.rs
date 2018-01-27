@@ -73,7 +73,7 @@ impl ProfileProvider {
         match home_dir() {
             Some(mut home_path) => {
                 home_path.push(".aws");
-                home_path.push(".credentials");
+                home_path.push("credentials");
                 Ok(home_path)
             }
             None => Err(CredentialsError::new(
