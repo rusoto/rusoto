@@ -384,7 +384,7 @@ mod tests {
         assert!(result.is_ok());
         let provider = result.unwrap();
         assert_eq!(provider.file_path().to_str().unwrap(), credentials_path);
-        let creds = provider.credentials();
+        let creds = provider.credentials().wait();
         assert_eq!(creds.unwrap().aws_access_key_id(), "bar_access_key");
         env::remove_var("AWS_SHARED_CREDENTIALS_FILE");
         env::remove_var("AWS_PROFILE");
